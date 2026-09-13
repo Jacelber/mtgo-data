@@ -80,6 +80,12 @@ def build_scope(args):
         if comparison['summary']['classifier_digest'] != review['classifier']['subject_digest']:
             raise ValueError('reference comparison and weekly review use different classifier inputs')
         data['reference_comparison'] = comparison
+    addendum = getattr(args, 'classification_addendum', None)
+    if addendum:
+        comparison = json.loads(addendum.read_text(encoding='utf-8'))
+        if comparison['summary']['candidate_digest'] != review['classifier']['subject_digest']:
+            raise ValueError('classification addendum and weekly review use different classifier inputs')
+        data['classification_addendum'] = comparison
     output.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(data, ensure_ascii=False).replace('<', '\\u003c')
     template = Path(__file__).with_name('weekly_review_web.html').read_text(encoding='utf-8')
@@ -104,11 +110,16 @@ def main():
     parser.add_argument('--name-review-bootstrap', action='store_true', help='Private first classification/name review, without Landing screening')
     parser.add_argument('--name-proposals', type=Path, help='Optional display-only Chinese proposals keyed by taxonomy identity_key')
     parser.add_argument('--reference-comparison', type=Path, help='Private reference comparison with explanations and the same classifier digest')
+    parser.add_argument('--classification-addendum', type=Path, help='Private grouped classification additions with the same classifier digest')
     args = parser.parse_args()
     if args.name_proposals and not args.name_review_bootstrap:
         parser.error('--name-proposals requires --name-review-bootstrap')
     if args.reference_comparison and not args.name_review_bootstrap:
         parser.error('--reference-comparison requires --name-review-bootstrap')
+    if args.classification_addendum and not args.name_review_bootstrap:
+        parser.error('--classification-addendum requires --name-review-bootstrap')
+    if args.classification_addendum and args.reference_comparison:
+        parser.error('select one private comparison view')
     if not args.scope:
         if not args.format or not args.week:
             parser.error('provide --scope or both --format and --week')
