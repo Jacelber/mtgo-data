@@ -122,12 +122,13 @@ function tabletopDeckDetail(identityId, options = {}) {
   });
 }
 
-function tabletopOverall(scope, advancementMetric) {
-  const counts = {
-    wins: scope.result_counts.played_win || 0,
-    losses: scope.result_counts.played_loss || 0,
-    draws: scope.result_counts.played_draw || 0,
-  };
+function tabletopOverall(scope, playedRecords) {
+  const counts = playedRecords.reduce((total, record) => {
+    total.wins += record.wins;
+    total.losses += record.losses;
+    total.draws += record.draws;
+    return total;
+  }, { wins: 0, losses: 0, draws: 0 });
   const record = ReviewData.literalRecord(counts);
   const dropRounds = scope.result_counts.drop_unplayed || 0;
   const completion = scope.theoretical_rounds
@@ -213,7 +214,9 @@ function tabletopGroups(scope) {
 function tabletopOverview(scope, presentation) {
   const advancementMetric = presentation.advancement_metric;
   const columnCount = advancementMetric ? 9 : 8;
-  const overall = tabletopOverall(scope, advancementMetric);
+  const overall = tabletopOverall(scope, currentContext.tabletopDecks.decks.map(
+    deck => deck.scopes[state.tabletopScope].played_record,
+  ));
   const identityNames = new Map();
   scope.archetypes.forEach(parent => {
     if (parent.archetype_id) {
@@ -413,7 +416,8 @@ async function tabletopView() {
     MtgoController,
     {
       includeMatchup: state.tabletopView === "matchup",
-      includeDecks: state.tabletopView === "overview"
+      includeDecks: state.tabletopView === "overview",
+      includeComparisonDecks: state.tabletopView === "overview"
         && Boolean(state.tabletopDetailIdentity),
       selectedEventIds: requestedEventIds,
     }

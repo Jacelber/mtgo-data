@@ -15,6 +15,7 @@ from mtgmeta.classifier_closure import (
     ClassifierClosureError,
     _allowed_refreshed_artifacts,
     _create_stage,
+    _inspect_landing,
     _inspect_melee,
     _materialize_with_rollback,
     converge_format,
@@ -54,6 +55,27 @@ def test_allowed_refresh_includes_dependent_publication_metadata() -> None:
         "stats/modern/mtgo/stats.json",
         "stats/modern/mtgo/meta.json",
     }
+
+
+def test_landing_refresh_declares_pinned_week_files(tmp_path: Path) -> None:
+    path = tmp_path / "stats/modern/mtgo/landing/current.json"
+    document = {"classifier": {"digest": "current"},
+                "review_binding": {"classifier_digest": "current"}}
+    _write_json(path, document)
+    original = _inspect_landing(tmp_path, "modern", "current")
+    assert original["state"] == CURRENT
+    document["data_files"] = {
+        name: f"weeks/2026-W36/{name}.json"
+        for name in ("range", "environment_decks", "feature_decks", "completeness")
+    }
+    _write_json(path, document)
+    refreshed = _inspect_landing(tmp_path, "modern", "current")
+    assert refreshed["state"] == CURRENT
+    assert set(refreshed["artifacts"]) == set(original["artifacts"]) | {
+        f"stats/modern/mtgo/landing/{relative}"
+        for relative in document["data_files"].values()
+    }
+    assert _inspect_landing(tmp_path, "modern", "new")["state"] == STALE
 
 
 def test_stage_creation_falls_back_after_preferred_parent_permission_error(

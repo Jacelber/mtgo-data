@@ -220,6 +220,7 @@
     {
       includeMatchup = false,
       includeDecks = false,
+      includeComparisonDecks = includeDecks,
       selectedEventIds = null,
     } = {}
   ) {
@@ -243,7 +244,7 @@
       includeDecks
         ? client.fetchJson(Runtime.joinPath(base, eventEntry.decks))
         : null,
-      includeDecks ? mtgoController.loadComparisonDecks(format) : null,
+      includeComparisonDecks ? mtgoController.loadComparisonDecks(format) : null,
     ]);
     const eventFormat = resolveEventFormat({
       requestedFormat: format,

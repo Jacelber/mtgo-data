@@ -2,7 +2,7 @@
   "schema_version": "1.1.0",
   "format": "modern",
   "source": "mtgo",
-  "classifier_digest": "c06c700e7b9b2ba4da1eab4aca18830cba7e2e1e138f9749b02ce8ba7f79587e",
+  "classifier_digest": "c8ab1ea6a997f8e28615887e73dc3debe5f5ccfca625d0177c5028a54a972d51",
   "period": {
     "type": "36w",
     "start": "2025-12-29",
@@ -562,6 +562,12 @@
         "subtype_ids": []
       },
       {
+        "id": "gruul-hexproof",
+        "name": "Gruul Hexproof",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "gruul-loam",
         "name": "Gruul Loam",
         "expandable": false,
@@ -598,6 +604,12 @@
         "subtype_ids": []
       },
       {
+        "id": "heliod-company",
+        "name": "Heliod Company",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "hollowvine",
         "name": "Hollowvine",
         "expandable": false,
@@ -606,9 +618,11 @@
       {
         "id": "infect",
         "name": "Infect",
-        "expandable": false,
+        "expandable": true,
         "subtype_ids": [
-          "infect/simic"
+          "infect/bant",
+          "infect/simic",
+          "infect/sultai"
         ]
       },
       {
@@ -2042,6 +2056,14 @@
         "subtype_id": null
       },
       {
+        "id": "gruul-hexproof",
+        "kind": "archetype",
+        "name": "Gruul Hexproof",
+        "display_name": "Gruul Hexproof",
+        "parent_id": "gruul-hexproof",
+        "subtype_id": null
+      },
+      {
         "id": "gruul-loam",
         "kind": "archetype",
         "name": "Gruul Loam",
@@ -2114,6 +2136,14 @@
         "subtype_id": null
       },
       {
+        "id": "heliod-company",
+        "kind": "archetype",
+        "name": "Heliod Company",
+        "display_name": "Heliod Company",
+        "parent_id": "heliod-company",
+        "subtype_id": null
+      },
+      {
         "id": "hollowvine",
         "kind": "archetype",
         "name": "Hollowvine",
@@ -2122,12 +2152,28 @@
         "subtype_id": null
       },
       {
+        "id": "infect/bant",
+        "kind": "subtype",
+        "name": "Bant",
+        "display_name": "Bant Infect",
+        "parent_id": "infect",
+        "subtype_id": "bant"
+      },
+      {
         "id": "infect/simic",
         "kind": "subtype",
         "name": "Simic",
         "display_name": "Simic Infect",
         "parent_id": "infect",
         "subtype_id": "simic"
+      },
+      {
+        "id": "infect/sultai",
+        "kind": "subtype",
+        "name": "Sultai",
+        "display_name": "Sultai Infect",
+        "parent_id": "infect",
+        "subtype_id": "sultai"
       },
       {
         "id": "izzet-artifact",
