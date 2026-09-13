@@ -62,16 +62,17 @@ def build_parser() -> argparse.ArgumentParser:
     match_parser.add_argument("event_ids", nargs="*", help="optional numeric event IDs")
     match_parser.add_argument("--force", action="store_true", help="replace existing event files")
 
-    commands.add_parser("build-statistics", help="build rolling MTGO statistics")
-    commands.add_parser(
-        "build-top8",
-        help="build retained complete-week MTGO Top 8 data",
-    )
-    commands.add_parser("build-matchups", help="build Videre matchup statistics")
-    commands.add_parser(
-        "build-completeness",
-        help="build range-specific MTGO source-completeness data",
-    )
+    for command, description in (
+        ("build-statistics", "build rolling MTGO statistics"),
+        ("build-top8", "build retained complete-week MTGO Top 8 data"),
+        ("build-matchups", "build Videre matchup statistics"),
+        ("build-completeness", "build range-specific MTGO source-completeness data"),
+    ):
+        product_parser = commands.add_parser(command, help=description)
+        product_parser.add_argument(
+            "--output-directory", type=Path,
+            help="alternate output directory; private formats retain publication-boundary checks",
+        )
     landing_parser = commands.add_parser(
         "build-landing",
         help="build the latest-only MTGO Landing document",
@@ -236,7 +237,10 @@ def _run_fetch_matches(args: argparse.Namespace, root: Path, registry: Path) -> 
 
 
 def _run_statistics(args: argparse.Namespace, root: Path, registry: Path) -> int:
-    written = stats.build_all_stats(root, args.format_id, registry_path=registry)
+    written = stats.build_all_stats(
+        root, args.format_id, registry_path=registry,
+        output_directory=args.output_directory,
+    )
     if not written:
         print(f"No complete MTGO event week is available for {args.format_id}.")
         return 0
@@ -245,7 +249,10 @@ def _run_statistics(args: argparse.Namespace, root: Path, registry: Path) -> int
 
 
 def _run_matchups(args: argparse.Namespace, root: Path, registry: Path) -> int:
-    written, statistics = matchup.build_all_matchups(root, args.format_id, registry_path=registry)
+    written, statistics = matchup.build_all_matchups(
+        root, args.format_id, registry_path=registry,
+        output_directory=args.output_directory,
+    )
     if not written:
         print(f"No complete MTGO event week is available for {args.format_id}.")
         return 0
@@ -255,7 +262,10 @@ def _run_matchups(args: argparse.Namespace, root: Path, registry: Path) -> int:
 
 
 def _run_top8(args: argparse.Namespace, root: Path, registry: Path) -> int:
-    written = top8.build_all_top8(root, args.format_id, registry_path=registry)
+    written = top8.build_all_top8(
+        root, args.format_id, registry_path=registry,
+        output_directory=args.output_directory,
+    )
     print(
         f"MTGO Top 8: format={args.format_id} "
         f"output={written['index.json'].parent}"
@@ -272,6 +282,7 @@ def _run_completeness(
         root,
         args.format_id,
         registry_path=registry,
+        output_directory=args.output_directory,
     )
     if not written:
         print(f"No complete MTGO event week is available for {args.format_id}.")
