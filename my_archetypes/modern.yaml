@@ -2799,7 +2799,7 @@ archetypes:
         min_count: 4
       - card: Eldrazi Temple
         zone: main
-        min_count: 4
+        min_count: 3
       - card: Forest
         zone: main
         min_count: 1
@@ -2809,38 +2809,6 @@ archetypes:
       - card: Talisman of Resilience
         zone: main
         min_count: 2
-  - id: eldrazi-tron-mono-green-three-temple
-    priority: 647890
-    subtype_id: mono-green
-    conditions:
-      all:
-      - card: Urza's Mine
-        zone: main
-        min_count: 4
-      - card: Urza's Power Plant
-        zone: main
-        min_count: 4
-      - card: Urza's Tower
-        zone: main
-        min_count: 4
-      - card: Eldrazi Temple
-        zone: main
-        min_count: 3
-      - card: Expedition Map
-        zone: main
-        min_count: 4
-      - card: Forest
-        zone: main
-        min_count: 1
-      - card: Malevolent Rumble
-        zone: main
-        min_count: 3
-      - card: Sowing Mycospawn
-        zone: main
-        min_count: 3
-      - card: Ugin's Labyrinth
-        zone: main
-        min_count: 4
   - id: eldrazi-tron-colorless
     priority: 647000
     subtype_id: colorless
@@ -6680,13 +6648,13 @@ archetypes:
       all:
       - card: Urza's Mine
         zone: main
-        min_count: 4
+        min_count: 3
       - card: Urza's Power Plant
         zone: main
-        min_count: 4
+        min_count: 3
       - card: Urza's Tower
         zone: main
-        min_count: 4
+        min_count: 3
       - card: Expedition Map
         zone: main
         min_count: 3
@@ -6786,6 +6754,10 @@ archetypes:
   subtypes:
   - id: simic
     name: Simic
+  - id: sultai
+    name: Sultai
+  - id: bant
+    name: Bant
   rules:
   - id: infect-simic
     priority: 689890
@@ -6827,6 +6799,46 @@ archetypes:
       - card: Scale Up
         zone: main
         min_count: 4
+  - id: infect-sultai
+    priority: 691020
+    subtype_id: sultai
+    conditions:
+      all:
+      - card: Blighted Agent
+        zone: main
+        min_count: 3
+      - card: Inkmoth Nexus
+        zone: main
+        min_count: 3
+      - card: Scale Up
+        zone: main
+        min_count: 3
+      - card: Phyrexian Crusader
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+  - id: infect-bant
+    priority: 691010
+    subtype_id: bant
+    conditions:
+      all:
+      - card: Blighted Agent
+        zone: main
+        min_count: 3
+      - card: Inkmoth Nexus
+        zone: main
+        min_count: 3
+      - card: Scale Up
+        zone: main
+        min_count: 3
+      - card: Teferi, Time Raveler
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
 - id: rakdos-phoenix
   name: Rakdos Phoenix
   priority: 689880
@@ -7611,3 +7623,42 @@ archetypes:
       - card: Sylvan Caryatid
         zone: main
         min_count: 4
+- id: heliod-company
+  name: Heliod Company
+  priority: 691040
+  rules:
+  - id: heliod-company-primary
+    priority: 691040
+    subtype_id: null
+    conditions:
+      all:
+      - card: Heliod, Sun-Crowned
+        zone: main
+        min_count: 3
+      - card: Collected Company
+        zone: main
+        min_count: 3
+      - card: Spike Feeder
+        zone: main
+        min_count: 2
+- id: gruul-hexproof
+  name: Gruul Hexproof
+  priority: 691030
+  rules:
+  - id: gruul-hexproof-primary
+    priority: 691030
+    subtype_id: null
+    conditions:
+      all:
+      - card: Gladecover Scout
+        zone: main
+        min_count: 3
+      - card: Silhana Ledgewalker
+        zone: main
+        min_count: 3
+      - card: Madcap Skills
+        zone: main
+        min_count: 3
+      - card: Temur Battle Rage
+        zone: main
+        min_count: 2

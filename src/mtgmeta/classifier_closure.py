@@ -222,12 +222,17 @@ def _inspect_reports(root: Path, format_id: str, desired: str) -> dict[str, Any]
 
 def _inspect_landing(root: Path, format_id: str, desired: str) -> dict[str, Any]:
     path = root / "stats" / format_id / "mtgo" / "landing" / "current.json"
+    artifacts = [path]
     issues: list[str] = []
     if not path.is_file():
         issues.append("missing current Landing")
     else:
         try:
             document = _json_object(path)
+            artifacts.extend(
+                path.parent / relative
+                for relative in document.get("data_files", {}).values()
+            )
             classifier = document.get("classifier")
             binding = document.get("review_binding")
             if not isinstance(classifier, Mapping) or classifier.get("digest") != desired:
@@ -236,7 +241,7 @@ def _inspect_landing(root: Path, format_id: str, desired: str) -> dict[str, Any]
                 issues.append("current Landing review binding is stale")
         except ClassifierClosureError as exc:
             issues.append(str(exc))
-    return _family("mtgo_landing", [path], root, issues)
+    return _family("mtgo_landing", artifacts, root, issues)
 
 
 def _enabled_melee_ids(root: Path, format_id: str) -> set[str]:
