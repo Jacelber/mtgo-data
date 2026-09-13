@@ -1,0 +1,1700 @@
+# Owner-reviewed private Pioneer classification baseline, 2026-09-13.
+schema_version: 1.0.0
+format: pioneer
+archetypes:
+- id: lotus-scapeshift
+  name: Lotus Scapeshift
+  priority: 100
+  rules:
+  - id: lotus-scapeshift-sultai-primary
+    priority: 100
+    subtype_id: sultai
+    conditions:
+      all:
+      - card: Lotus Field
+        zone: main
+        min_count: 1
+      - card: Scapeshift
+        zone: main
+        min_count: 1
+      - card: Spelunking
+        zone: main
+        min_count: 1
+      - card: Underground Mortuary
+        zone: main
+        min_count: 1
+  - id: lotus-scapeshift-simic-primary
+    priority: 100
+    subtype_id: simic
+    conditions:
+      all:
+      - card: Lotus Field
+        zone: main
+        min_count: 1
+      - card: Scapeshift
+        zone: main
+        min_count: 1
+      - card: Spelunking
+        zone: main
+        min_count: 1
+      - card: Underground Mortuary
+        zone: main
+        max_count: 0
+      - card: Swamp
+        zone: main
+        max_count: 0
+      - card: Abrupt Decay
+        zone: side
+        max_count: 0
+      - card: Culling Ritual
+        zone: side
+        max_count: 0
+      - card: Glissa Sunslayer
+        zone: side
+        max_count: 0
+  - id: lotus-scapeshift-sultai-swamp
+    priority: 100
+    subtype_id: sultai
+    conditions:
+      all:
+      - card: Lotus Field
+        zone: main
+        min_count: 1
+      - card: Scapeshift
+        zone: main
+        min_count: 1
+      - card: Spelunking
+        zone: main
+        min_count: 1
+      - card: Swamp
+        zone: main
+        min_count: 1
+  - id: lotus-scapeshift-sultai-abrupt-decay
+    priority: 100
+    subtype_id: sultai
+    conditions:
+      all:
+      - card: Lotus Field
+        zone: main
+        min_count: 1
+      - card: Scapeshift
+        zone: main
+        min_count: 1
+      - card: Spelunking
+        zone: main
+        min_count: 1
+      - card: Abrupt Decay
+        zone: side
+        min_count: 1
+  - id: lotus-scapeshift-sultai-culling-ritual
+    priority: 100
+    subtype_id: sultai
+    conditions:
+      all:
+      - card: Lotus Field
+        zone: main
+        min_count: 1
+      - card: Scapeshift
+        zone: main
+        min_count: 1
+      - card: Spelunking
+        zone: main
+        min_count: 1
+      - card: Culling Ritual
+        zone: side
+        min_count: 1
+  - id: lotus-scapeshift-sultai-glissa-sunslayer
+    priority: 100
+    subtype_id: sultai
+    conditions:
+      all:
+      - card: Lotus Field
+        zone: main
+        min_count: 1
+      - card: Scapeshift
+        zone: main
+        min_count: 1
+      - card: Spelunking
+        zone: main
+        min_count: 1
+      - card: Glissa Sunslayer
+        zone: side
+        min_count: 1
+  subtypes:
+  - id: sultai
+    name: Sultai
+  - id: simic
+    name: Simic
+- id: azorius-control
+  name: Azorius Control
+  priority: 100
+  rules:
+  - id: azorius-control-primary
+    priority: 100
+    subtype_id: non-yorion
+    conditions:
+      all:
+      - card: Teferi, Hero of Dominaria
+        zone: main
+        min_count: 1
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 1
+      - card: No More Lies
+        zone: main
+        min_count: 1
+      - card: Shiko, Paragon of the Way
+        zone: main
+        max_count: 0
+      - card: Gran-Gran
+        zone: main
+        max_count: 0
+      - card: Yorion, Sky Nomad
+        zone: side
+        max_count: 0
+      - card: Firebending Lesson
+        zone: main
+        max_count: 0
+  - id: azorius-control-yorion-primary
+    priority: 100
+    subtype_id: yorion
+    conditions:
+      all:
+      - card: Teferi, Hero of Dominaria
+        zone: main
+        min_count: 1
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 1
+      - card: No More Lies
+        zone: main
+        min_count: 1
+      - card: Shiko, Paragon of the Way
+        zone: main
+        max_count: 0
+      - card: Gran-Gran
+        zone: main
+        max_count: 0
+      - card: Yorion, Sky Nomad
+        zone: side
+        min_count: 1
+      - card: Firebending Lesson
+        zone: main
+        max_count: 0
+  subtypes:
+  - id: non-yorion
+    name: Azorius Control
+  - id: yorion
+    name: Yorion Azorius Control
+- id: izzet-prowess
+  name: Izzet Prowess
+  priority: 100
+  rules:
+  - id: izzet-prowess-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Monastery Swiftspear
+        zone: main
+        min_count: 1
+      - card: Stormchaser's Talent
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        min_count: 1
+- id: golgari-demons
+  name: Golgari Demons
+  priority: 100
+  rules:
+  - id: golgari-demons-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Unholy Annex // Ritual Chamber
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
+      - card: Fable of the Mirror-Breaker
+        zone: main
+        max_count: 0
+- id: mono-red-aggro
+  name: Mono-Red Aggro
+  priority: 100
+  rules:
+  - id: mono-red-aggro-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Monastery Swiftspear
+        zone: main
+        min_count: 1
+      - card: Soul-Scar Mage
+        zone: main
+        min_count: 1
+      - card: Ramunap Ruins
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        max_count: 0
+      - card: Stomping Ground
+        zone: main
+        max_count: 0
+      - card: Sacred Foundry
+        zone: main
+        max_count: 0
+      - card: Leyline of Resonance
+        zone: main
+        max_count: 0
+      - card: Favored Hoplite
+        zone: main
+        max_count: 0
+- id: orzhov-greasefang-monument
+  name: Orzhov Greasefang Monument
+  priority: 100
+  rules:
+  - id: orzhov-greasefang-monument-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Greasefang, Okiba Boss
+        zone: main
+        min_count: 1
+      - card: Monument to Endurance
+        zone: main
+        min_count: 1
+- id: abzan-greasefang
+  name: Abzan Greasefang
+  priority: 100
+  rules:
+  - id: abzan-greasefang-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Greasefang, Okiba Boss
+        zone: main
+        min_count: 1
+      - card: Esika's Chariot
+        zone: main
+        min_count: 1
+      - card: Temple Garden
+        zone: main
+        min_count: 1
+      - card: Monument to Endurance
+        zone: main
+        max_count: 0
+- id: selesnya-company
+  name: Selesnya Company
+  priority: 100
+  rules:
+  - id: selesnya-company-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Collected Company
+        zone: main
+        min_count: 1
+      - card: Skyclave Apparition
+        zone: main
+        min_count: 1
+      - card: Temple Garden
+        zone: main
+        min_count: 1
+      - card: Nykthos, Shrine to Nyx
+        zone: main
+        max_count: 0
+      - card: Righteous Valkyrie
+        zone: main
+        max_count: 0
+- id: izzet-phoenix
+  name: Izzet Phoenix
+  priority: 100
+  rules:
+  - id: izzet-phoenix-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Arclight Phoenix
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        min_count: 1
+- id: dimir-ninjas
+  name: Dimir Ninjas
+  priority: 100
+  rules:
+  - id: dimir-ninjas-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Kaito, Bane of Nightmares
+        zone: main
+        min_count: 1
+      - card: Moon-Circuit Hacker
+        zone: main
+        min_count: 1
+- id: izzet-lessons
+  name: Izzet Lessons
+  priority: 100
+  rules:
+  - id: izzet-lessons-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Gran-Gran
+        zone: main
+        min_count: 1
+      - card: Accumulate Wisdom
+        zone: main
+        min_count: 1
+      - card: Firebending Lesson
+        zone: main
+        min_count: 1
+      - card: Jeskai Revelation
+        zone: main
+        max_count: 0
+      - card: Questing Druid
+        zone: main
+        max_count: 0
+      - card: Monastery Swiftspear
+        zone: main
+        max_count: 0
+- id: izzet-cauldron
+  name: Izzet Cauldron
+  priority: 100
+  rules:
+  - id: izzet-cauldron-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Agatha's Soul Cauldron
+        zone: main
+        min_count: 1
+      - card: Vivi Ornitier
+        zone: main
+        min_count: 1
+- id: dimir-bounce
+  name: Dimir Bounce
+  priority: 100
+  rules:
+  - id: dimir-bounce-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Hopeless Nightmare
+        zone: main
+        min_count: 1
+      - card: This Town Ain't Big Enough
+        zone: main
+        min_count: 1
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Nurturing Pixie
+        zone: main
+        max_count: 0
+      - card: Blood Crypt
+        zone: main
+        max_count: 0
+- id: niv-to-light
+  name: Niv to Light
+  priority: 100
+  rules:
+  - id: niv-to-light-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Bring to Light
+        zone: main
+        min_count: 1
+      - card: Niv-Mizzet, Supreme
+        zone: main
+        min_count: 1
+- id: rakdos-demons
+  name: Rakdos Demons
+  priority: 100
+  rules:
+  - id: rakdos-demons-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Unholy Annex // Ritual Chamber
+        zone: main
+        min_count: 1
+      - card: Bloodtithe Harvester
+        zone: main
+        min_count: 1
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        max_count: 0
+- id: selesnya-offense
+  name: Selesnya Offense
+  priority: 100
+  rules:
+  - id: selesnya-offense-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Practiced Offense
+        zone: main
+        min_count: 1
+      - card: Badgermole Cub
+        zone: main
+        min_count: 1
+      - card: Temple Garden
+        zone: main
+        min_count: 1
+      - card: Collected Company
+        zone: main
+        max_count: 0
+- id: mono-green-devotion
+  name: Mono-Green Devotion
+  priority: 100
+  rules:
+  - id: mono-green-devotion-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nykthos, Shrine to Nyx
+        zone: main
+        min_count: 1
+      - card: Llanowar Elves
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        max_count: 0
+      - card: Breeding Pool
+        zone: main
+        max_count: 0
+      - card: Temple Garden
+        zone: main
+        max_count: 0
+      - card: Collected Company
+        zone: main
+        max_count: 0
+- id: jeskai-lessons
+  name: Jeskai Lessons
+  priority: 100
+  rules:
+  - id: jeskai-lessons-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Accumulate Wisdom
+        zone: main
+        min_count: 1
+      - card: Firebending Lesson
+        zone: main
+        min_count: 1
+      - card: Jeskai Revelation
+        zone: main
+        min_count: 1
+- id: golgari-devotion
+  name: Golgari Devotion
+  priority: 100
+  rules:
+  - id: golgari-devotion-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nykthos, Shrine to Nyx
+        zone: main
+        min_count: 1
+      - card: Llanowar Elves
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
+- id: jund-sacrifice
+  name: Jund Sacrifice
+  priority: 100
+  rules:
+  - id: jund-sacrifice-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Witch's Oven
+        zone: main
+        min_count: 1
+      - card: Cauldron Familiar
+        zone: main
+        min_count: 1
+      - card: Mayhem Devil
+        zone: main
+        min_count: 1
+- id: golgari-sacrifice
+  name: Golgari Sacrifice
+  priority: 100
+  rules:
+  - id: golgari-sacrifice-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Witch's Oven
+        zone: main
+        min_count: 1
+      - card: Cauldron Familiar
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
+      - card: Mayhem Devil
+        zone: main
+        max_count: 0
+- id: mono-black-demons
+  name: Mono-Black Demons
+  priority: 100
+  rules:
+  - id: mono-black-demons-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Unholy Annex // Ritual Chamber
+        zone: main
+        min_count: 1
+      - card: Gifted Aetherborn
+        zone: main
+        min_count: 1
+      - card: Swamp
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        max_count: 0
+      - card: Godless Shrine
+        zone: main
+        max_count: 0
+      - card: Blood Crypt
+        zone: main
+        max_count: 0
+      - card: Watery Grave
+        zone: main
+        max_count: 0
+- id: temur-lessons
+  name: Temur Lessons
+  priority: 100
+  rules:
+  - id: temur-lessons-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Accumulate Wisdom
+        zone: main
+        min_count: 1
+      - card: Firebending Lesson
+        zone: main
+        min_count: 1
+      - card: Questing Druid
+        zone: main
+        min_count: 1
+- id: lotus-field
+  name: Lotus Field
+  priority: 100
+  rules:
+  - id: lotus-field-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Lotus Field
+        zone: main
+        min_count: 1
+      - card: Hidden Strings
+        zone: main
+        min_count: 1
+      - card: Pore Over the Pages
+        zone: main
+        min_count: 1
+      - card: Artist's Talent
+        zone: main
+        max_count: 0
+- id: selesnya-angels
+  name: Selesnya Angels
+  priority: 100
+  rules:
+  - id: selesnya-angels-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Righteous Valkyrie
+        zone: main
+        min_count: 1
+      - card: Bishop of Wings
+        zone: main
+        min_count: 1
+      - card: Collected Company
+        zone: main
+        min_count: 1
+- id: mono-white-humans
+  name: Mono-White Humans
+  priority: 100
+  rules:
+  - id: mono-white-humans-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Coppercoat Vanguard
+        zone: main
+        min_count: 1
+      - card: Thalia's Lieutenant
+        zone: main
+        min_count: 1
+      - card: Adeline, Resplendent Cathar
+        zone: main
+        min_count: 1
+- id: boros-land-destruction
+  name: Boros Land Destruction
+  priority: 100
+  rules:
+  - id: boros-land-destruction-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Cleansing Wildfire
+        zone: main
+        min_count: 1
+      - card: Price of Freedom
+        zone: main
+        min_count: 1
+- id: simic-devotion
+  name: Simic Devotion
+  priority: 100
+  rules:
+  - id: simic-devotion-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nykthos, Shrine to Nyx
+        zone: main
+        min_count: 1
+      - card: Llanowar Elves
+        zone: main
+        min_count: 1
+      - card: Breeding Pool
+        zone: main
+        min_count: 1
+- id: azorius-momo
+  name: Azorius Momo
+  priority: 100
+  rules:
+  - id: azorius-momo-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Momo, Friendly Flier
+        zone: main
+        min_count: 1
+      - card: Daydream
+        zone: main
+        min_count: 1
+- id: boros-convoke
+  name: Boros Convoke
+  priority: 100
+  rules:
+  - id: boros-convoke-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Knight-Errant of Eos
+        zone: main
+        min_count: 1
+      - card: Venerated Loxodon
+        zone: main
+        min_count: 1
+      - card: Gleeful Demolition
+        zone: main
+        min_count: 1
+- id: izzet-elementals
+  name: Izzet Elementals
+  priority: 100
+  rules:
+  - id: izzet-elementals-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Hearth Elemental
+        zone: main
+        min_count: 1
+      - card: Eddymurk Crab
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        min_count: 1
+- id: azorius-spirits
+  name: Azorius Spirits
+  priority: 100
+  rules:
+  - id: azorius-spirits-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Supreme Phantom
+        zone: main
+        min_count: 1
+      - card: Mausoleum Wanderer
+        zone: main
+        min_count: 1
+      - card: Spell Queller
+        zone: main
+        min_count: 1
+- id: gruul-prowess
+  name: Gruul Prowess
+  priority: 100
+  rules:
+  - id: gruul-prowess-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Monastery Swiftspear
+        zone: main
+        min_count: 1
+      - card: Soul-Scar Mage
+        zone: main
+        min_count: 1
+      - card: Stomping Ground
+        zone: main
+        min_count: 1
+- id: dredge
+  name: Dredge
+  priority: 100
+  rules:
+  - id: dredge-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Creeping Chill
+        zone: main
+        min_count: 1
+      - card: Prized Amalgam
+        zone: main
+        min_count: 1
+      - card: Narcomoeba
+        zone: main
+        min_count: 1
+- id: boros-heroic
+  name: Boros Heroic
+  priority: 100
+  rules:
+  - id: boros-heroic-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Favored Hoplite
+        zone: main
+        min_count: 1
+      - card: Guiding Voice
+        zone: main
+        min_count: 1
+      - card: Sacred Foundry
+        zone: main
+        min_count: 1
+- id: five-color-legends
+  name: Five-Color Legends
+  priority: 100
+  rules:
+  - id: five-color-legends-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Relic of Legends
+        zone: main
+        min_count: 1
+      - card: Rona, Herald of Invasion
+        zone: main
+        min_count: 1
+      - card: Plaza of Heroes
+        zone: main
+        min_count: 1
+- id: izzet-lotus
+  name: Izzet Lotus
+  priority: 100
+  rules:
+  - id: izzet-lotus-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Lotus Field
+        zone: main
+        min_count: 1
+      - card: Hidden Strings
+        zone: main
+        min_count: 1
+      - card: Artist's Talent
+        zone: main
+        min_count: 1
+- id: desecrex-combo
+  name: Desecrex Combo
+  priority: 100
+  rules:
+  - id: desecrex-combo-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Carnage, Crimson Chaos
+        zone: main
+        min_count: 1
+      - card: Tinybones Joins Up
+        zone: main
+        min_count: 1
+      - card: Glasspool Mimic
+        zone: main
+        min_count: 1
+- id: izzet-creativity
+  name: Izzet Creativity
+  priority: 100
+  rules:
+  - id: izzet-creativity-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Indomitable Creativity
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        min_count: 1
+- id: four-color-tablet
+  name: Four-Color Tablet
+  priority: 100
+  rules:
+  - id: four-color-tablet-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Tablet of Discovery
+        zone: main
+        min_count: 1
+      - card: Jeskai Revelation
+        zone: main
+        min_count: 1
+      - card: Inevitable Defeat
+        zone: main
+        min_count: 1
+      - card: Firebending Lesson
+        zone: main
+        max_count: 0
+- id: quintorius-combo
+  name: Quintorius Combo
+  priority: 100
+  rules:
+  - id: quintorius-combo-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Quintorius Kand
+        zone: main
+        min_count: 1
+      - card: Spark Double
+        zone: main
+        min_count: 1
+      - card: Release to the Wind
+        zone: main
+        min_count: 1
+- id: green-devotion-company
+  name: Green Devotion Company
+  priority: 100
+  rules:
+  - id: green-devotion-company-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nykthos, Shrine to Nyx
+        zone: main
+        min_count: 1
+      - card: Collected Company
+        zone: main
+        min_count: 1
+      - card: Llanowar Elves
+        zone: main
+        min_count: 1
+      - card: Temple Garden
+        zone: main
+        max_count: 0
+      - card: Overgrown Tomb
+        zone: main
+        max_count: 0
+      - card: Breeding Pool
+        zone: main
+        max_count: 0
+- id: gruul-cauldron
+  name: Gruul Cauldron
+  priority: 100
+  rules:
+  - id: gruul-cauldron-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Agatha's Soul Cauldron
+        zone: main
+        min_count: 1
+      - card: Voldaren Thrillseeker
+        zone: main
+        min_count: 1
+      - card: Stomping Ground
+        zone: main
+        min_count: 1
+- id: boros-dwarves
+  name: Boros Dwarves
+  priority: 100
+  rules:
+  - id: boros-dwarves-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Magda, Brazen Outlaw
+        zone: main
+        min_count: 1
+      - card: Toolcraft Exemplar
+        zone: main
+        min_count: 1
+      - card: Veteran Motorist
+        zone: main
+        min_count: 1
+- id: selesnya-lifegain
+  name: Selesnya Lifegain
+  priority: 100
+  rules:
+  - id: selesnya-lifegain-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Trelasarra, Moon Dancer
+        zone: main
+        min_count: 1
+      - card: Prosperous Innkeeper
+        zone: main
+        min_count: 1
+      - card: Temple Garden
+        zone: main
+        min_count: 1
+- id: simic-beanstalk
+  name: Simic Beanstalk
+  priority: 100
+  rules:
+  - id: simic-beanstalk-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Up the Beanstalk
+        zone: main
+        min_count: 1
+      - card: Eddymurk Crab
+        zone: main
+        min_count: 1
+      - card: Breeding Pool
+        zone: main
+        min_count: 1
+- id: izzet-ensoul
+  name: Izzet Ensoul
+  priority: 100
+  rules:
+  - id: izzet-ensoul-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ensoul Artifact
+        zone: main
+        min_count: 1
+      - card: Shrapnel Blast
+        zone: main
+        min_count: 1
+      - card: Hallowed Fountain
+        zone: main
+        max_count: 0
+- id: boros-equipment
+  name: Boros Equipment
+  priority: 100
+  rules:
+  - id: boros-equipment-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Kazuul's Toll Collector
+        zone: main
+        min_count: 1
+      - card: Thran Power Suit
+        zone: main
+        min_count: 1
+      - card: Sacred Foundry
+        zone: main
+        min_count: 1
+- id: mardu-greasefang
+  name: Mardu Greasefang
+  priority: 100
+  rules:
+  - id: mardu-greasefang-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Greasefang, Okiba Boss
+        zone: main
+        min_count: 1
+      - card: Bloodtithe Harvester
+        zone: main
+        min_count: 1
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+- id: rakdos-leyline
+  name: Rakdos Leyline
+  priority: 100
+  rules:
+  - id: rakdos-leyline-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Leyline of Resonance
+        zone: main
+        min_count: 1
+      - card: Callous Sell-Sword
+        zone: main
+        min_count: 1
+      - card: Monastery Swiftspear
+        zone: main
+        min_count: 1
+- id: orzhov-demons
+  name: Orzhov Demons
+  priority: 100
+  rules:
+  - id: orzhov-demons-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Unholy Annex // Ritual Chamber
+        zone: main
+        min_count: 1
+      - card: Godless Shrine
+        zone: main
+        min_count: 1
+      - card: Thoughtseize
+        zone: main
+        min_count: 1
+- id: esper-bounce
+  name: Esper Bounce
+  priority: 100
+  rules:
+  - id: esper-bounce-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Hopeless Nightmare
+        zone: main
+        min_count: 1
+      - card: This Town Ain't Big Enough
+        zone: main
+        min_count: 1
+      - card: Nurturing Pixie
+        zone: main
+        min_count: 1
+      - card: Godless Shrine
+        zone: main
+        min_count: 1
+- id: orzhov-control
+  name: Orzhov Control
+  priority: 100
+  rules:
+  - id: orzhov-control-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: The Wandering Emperor
+        zone: main
+        min_count: 1
+      - card: Godless Shrine
+        zone: main
+        min_count: 1
+      - card: Pest Control
+        zone: main
+        min_count: 1
+      - card: Teferi, Hero of Dominaria
+        zone: main
+        max_count: 0
+- id: selesnya-rhythm
+  name: Selesnya Rhythm
+  priority: 100
+  rules:
+  - id: selesnya-rhythm-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nature's Rhythm
+        zone: main
+        min_count: 1
+      - card: Brightglass Gearhulk
+        zone: main
+        min_count: 1
+      - card: Temple Garden
+        zone: main
+        min_count: 1
+      - card: Nykthos, Shrine to Nyx
+        zone: main
+        max_count: 0
+- id: rakdos-transmogrify
+  name: Rakdos Transmogrify
+  priority: 100
+  rules:
+  - id: rakdos-transmogrify-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Transmogrify
+        zone: main
+        min_count: 1
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+- id: dimir-rona
+  name: Dimir Rona
+  priority: 100
+  rules:
+  - id: dimir-rona-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Rona, Herald of Invasion
+        zone: main
+        min_count: 1
+      - card: Retraction Helix
+        zone: main
+        min_count: 1
+      - card: Mox Amber
+        zone: main
+        min_count: 1
+- id: boros-dragons
+  name: Boros Dragons
+  priority: 100
+  rules:
+  - id: boros-dragons-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Draconic Roar
+        zone: main
+        min_count: 1
+      - card: Sarkhan, Dragon Ascendant
+        zone: main
+        min_count: 1
+      - card: Sacred Foundry
+        zone: main
+        min_count: 1
+- id: boros-hammer
+  name: Boros Hammer
+  priority: 100
+  rules:
+  - id: boros-hammer-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Colossus Hammer
+        zone: main
+        min_count: 1
+      - card: Sigarda's Aid
+        zone: main
+        min_count: 1
+      - card: Sacred Foundry
+        zone: main
+        min_count: 1
+- id: fight-rigging-cage
+  name: Fight Rigging Cage
+  priority: 100
+  rules:
+  - id: fight-rigging-cage-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Fight Rigging
+        zone: main
+        min_count: 1
+      - card: Collector's Cage
+        zone: main
+        min_count: 1
+      - card: Temple Garden
+        zone: main
+        min_count: 1
+      - card: Nykthos, Shrine to Nyx
+        zone: main
+        max_count: 0
+- id: selesnya-devotion
+  name: Selesnya Devotion
+  priority: 100
+  rules:
+  - id: selesnya-devotion-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nykthos, Shrine to Nyx
+        zone: main
+        min_count: 1
+      - card: Llanowar Elves
+        zone: main
+        min_count: 1
+      - card: Temple Garden
+        zone: main
+        min_count: 1
+      - card: Righteous Valkyrie
+        zone: main
+        max_count: 0
+- id: rakdos-goblins
+  name: Rakdos Goblins
+  priority: 100
+  rules:
+  - id: rakdos-goblins-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Conspicuous Snoop
+        zone: main
+        min_count: 1
+      - card: Rundvelt Hordemaster
+        zone: main
+        min_count: 1
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+- id: jund-demons
+  name: Jund Demons
+  priority: 100
+  rules:
+  - id: jund-demons-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Unholy Annex // Ritual Chamber
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
+      - card: Fable of the Mirror-Breaker
+        zone: main
+        min_count: 1
+- id: four-color-elementals
+  name: Four-Color Elementals
+  priority: 100
+  rules:
+  - id: four-color-elementals-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Risen Reef
+        zone: main
+        min_count: 1
+      - card: Flamebraider
+        zone: main
+        min_count: 1
+      - card: Omnath, Locus of Creation
+        zone: main
+        min_count: 1
+- id: mono-black-devotion
+  name: Mono-Black Devotion
+  priority: 100
+  rules:
+  - id: mono-black-devotion-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nykthos, Shrine to Nyx
+        zone: main
+        min_count: 1
+      - card: Gray Merchant of Asphodel
+        zone: main
+        min_count: 1
+- id: golgari-company
+  name: Golgari Company
+  priority: 100
+  rules:
+  - id: golgari-company-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Collected Company
+        zone: main
+        min_count: 1
+      - card: Fiend Artisan
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
+      - card: Nykthos, Shrine to Nyx
+        zone: main
+        max_count: 0
+- id: golgari-roots
+  name: Golgari Roots
+  priority: 100
+  rules:
+  - id: golgari-roots-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Insidious Roots
+        zone: main
+        min_count: 1
+      - card: Forsaken Miner
+        zone: main
+        min_count: 1
+- id: waste-not
+  name: Waste Not
+  priority: 100
+  rules:
+  - id: waste-not-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Waste Not
+        zone: main
+        min_count: 1
+      - card: Thoughtseize
+        zone: main
+        min_count: 1
+- id: jeskai-control
+  name: Jeskai Control
+  priority: 100
+  rules:
+  - id: jeskai-control-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Teferi, Hero of Dominaria
+        zone: main
+        min_count: 1
+      - card: Shiko, Paragon of the Way
+        zone: main
+        min_count: 1
+- id: jeskai-ensoul
+  name: Jeskai Ensoul
+  priority: 100
+  rules:
+  - id: jeskai-ensoul-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ensoul Artifact
+        zone: main
+        min_count: 1
+      - card: Shrapnel Blast
+        zone: main
+        min_count: 1
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 1
+- id: auras
+  name: Auras
+  priority: 100
+  rules:
+  - id: auras-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Light-Paws, Emperor's Voice
+        zone: main
+        min_count: 1
+      - card: Ethereal Armor
+        zone: main
+        min_count: 1
+- id: jund-citadel
+  name: Jund Citadel
+  priority: 100
+  rules:
+  - id: jund-citadel-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Bolas's Citadel
+        zone: main
+        min_count: 1
+      - card: Mayhem Devil
+        zone: main
+        min_count: 1
+      - card: Collected Company
+        zone: main
+        min_count: 1
+- id: azorius-midrange
+  name: Azorius Midrange
+  priority: 100
+  rules:
+  - id: azorius-midrange-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Aang, Swift Savior
+        zone: main
+        min_count: 1
+      - card: Quantum Riddler
+        zone: main
+        min_count: 1
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 1
+      - card: Momo, Friendly Flier
+        zone: main
+        max_count: 0
+      - card: Mausoleum Wanderer
+        zone: main
+        max_count: 0
+- id: dimir-control
+  name: Dimir Control
+  priority: 100
+  rules:
+  - id: dimir-control-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Deadly Cover-Up
+        zone: main
+        min_count: 1
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Narset, Parter of Veils
+        zone: main
+        min_count: 1
+      - card: Doomsday Excruciator
+        zone: main
+        max_count: 0
+      - card: Hopeless Nightmare
+        zone: main
+        max_count: 0
+- id: dimir-excruciator
+  name: Dimir Excruciator
+  priority: 100
+  rules:
+  - id: dimir-excruciator-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Doomsday Excruciator
+        zone: main
+        min_count: 1
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+- id: golgari-rhythm
+  name: Golgari Rhythm
+  priority: 100
+  rules:
+  - id: golgari-rhythm-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nature's Rhythm
+        zone: main
+        min_count: 1
+      - card: Fiend Artisan
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
+      - card: Nykthos, Shrine to Nyx
+        zone: main
+        max_count: 0
+      - card: Collected Company
+        zone: main
+        max_count: 0
+      - card: Insidious Roots
+        zone: main
+        max_count: 0
+- id: boros-monument
+  name: Boros Monument
+  priority: 100
+  rules:
+  - id: boros-monument-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Monument to Endurance
+        zone: main
+        min_count: 1
+      - card: Sacred Foundry
+        zone: main
+        min_count: 1
+      - card: Guardian of New Benalia
+        zone: main
+        min_count: 1
+      - card: Greasefang, Okiba Boss
+        zone: main
+        max_count: 0
+- id: boros-prowess
+  name: Boros Prowess
+  priority: 100
+  rules:
+  - id: boros-prowess-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Monastery Swiftspear
+        zone: main
+        min_count: 1
+      - card: Soul-Scar Mage
+        zone: main
+        min_count: 1
+      - card: Sacred Foundry
+        zone: main
+        min_count: 1
+      - card: Wizard's Lightning
+        zone: main
+        max_count: 0
+      - card: Favored Hoplite
+        zone: main
+        max_count: 0
+- id: boros-burn
+  name: Boros Burn
+  priority: 100
+  rules:
+  - id: boros-burn-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Wizard's Lightning
+        zone: main
+        min_count: 1
+      - card: Boros Charm
+        zone: main
+        min_count: 1
+      - card: Sacred Foundry
+        zone: main
+        min_count: 1
+- id: grixis-bounce
+  name: Grixis Bounce
+  priority: 100
+  rules:
+  - id: grixis-bounce-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Hopeless Nightmare
+        zone: main
+        min_count: 1
+      - card: This Town Ain't Big Enough
+        zone: main
+        min_count: 1
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+- id: dimir-oculus
+  name: Dimir Oculus
+  priority: 100
+  rules:
+  - id: dimir-oculus-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Abhorrent Oculus
+        zone: main
+        min_count: 1
+      - card: Monument to Endurance
+        zone: main
+        min_count: 1
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Carnage, Crimson Chaos
+        zone: main
+        max_count: 0
+- id: boros-creativity
+  name: Boros Creativity
+  priority: 100
+  rules:
+  - id: boros-creativity-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Indomitable Creativity
+        zone: main
+        min_count: 1
+      - card: Sacred Foundry
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        max_count: 0

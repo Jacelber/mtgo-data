@@ -13,22 +13,37 @@
 <dialog id="detail"><button class="close" id="close">关闭</button><div id="detail-body"></div><p id="toast" aria-live="polite"></p></dialog>
 <script id="review-data" type="application/json">__REVIEW_DATA__</script>
 <script>
-const D=JSON.parse(document.querySelector('#review-data').textContent),R=D.classification,S=D.subject;
+const D=JSON.parse(document.querySelector('#review-data').textContent),R=D.classification,B=R.document_type==='weekly_classification_name_bootstrap';
+if(B)R.records=R.records.map(r=>({...r,...D.deck_details[`${r.event_id}-${r.rank}`]}));
+const S=D.subject||{all_top8:R.records.filter(r=>r.rank<=8).map(r=>({event_id:r.event_id,final_rank:r.rank})),candidate_evidence:[]};
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const names=r=>r.identity.subtype_chinese||r.identity.parent_chinese||'未知（Unknown）';
+const identityKey=r=>`${R.format}|${r.identity.parent_id}|${r.identity.subtype_id||'none'}`;
+const names=r=>r.classification.status!=='classified'?({unknown:'未知（Unknown）',conflict:'分类冲突',invalid_deck:'无效牌表'}[r.classification.status]||'分类不可用'):r.identity.subtype_chinese||r.identity.parent_chinese||(B&&r.identity.parent_id?`${D.name_proposals?.[identityKey(r)]||r.identity.subtype_english||r.identity.parent_english}（待确认）`:'名称待定');
 const key=r=>`${r.event_id}-${r.rank}`, rows=new Map(R.records.map(r=>[key(r),r]));
 const label=r=>`${r.event_id} / 第${r.rank}名 · ${r.player} · ${names(r)}`;
-const flags={multiple_matches:'命中多个规则',overridden_matches:'存在被覆盖规则',unknown:'未知分类',conflict:'规则冲突',errors:'分类错误'};
+const flags={multiple_matches:'命中多个规则',overridden_matches:'存在被覆盖规则',unknown:'未知分类',conflict:'规则冲突',errors:'分类错误',classification_conflict:'分类冲突',subtype_conflict:'子类冲突',invalid_deck:'无效牌表'};
 const flag=r=>r.priority_reasons.map(x=>flags[x]||x).join('；');
 const cardName=n=>D.localization[n]?.zh_name||n;
 function card(c){const l=D.localization[c.name],u=l?.mtgch_url;return `<div class="card">${esc(c.qty)} × ${u&&u.startsWith('https://mtgch.com/')?`<a target="_blank" rel="noopener noreferrer" href="${esc(u)}">${esc(cardName(c.name))}</a>`:esc(cardName(c.name))}<small> ${esc(c.name)}</small></div>`}
 function deckButton(r,text){return `<button data-deck="${key(r)}">${text||esc(label(r))}</button>`}
-$('#title').textContent=`${R.week} · ${({standard:'标准',modern:'摩登',pauper:'纯铁'})[R.format]||R.format}周审阅`;
+$('#title').textContent=`${R.week} · ${({standard:'标准',modern:'摩登',pauper:'纯铁',pioneer:'先驱'})[R.format]||R.format}${B?'首次分类审阅':'周审阅'}`;
 $('#example').textContent=`${R.events[0].event_id} 第 2 名`;
 $('#stats').innerHTML=[[R.events.length,'赛事'],[R.records.length,'完整分类记录'],[R.events.reduce((n,e)=>n+e.high_score_count,0),'高分牌表'],[S.all_top8.length,'Top 8'],[S.candidate_evidence.length,'机械候选']].map(([n,t])=>`<div class="stat"><b>${n}</b>${t}</div>`).join('');
 $('#accepted').textContent=D.accepted_evidence.length?'分类与数据：本次分类摘要与已有接纳记录一致，供查阅和问题定位，不要求重新审核。':'分类：尚未找到与本次摘要完全一致的接纳记录，需要核对。';
-$('#provenance').textContent=`赛事：${R.event_ids.join('、')}\n分类摘要：${R.classification_review_digest}\n机器事实摘要：${S.machine_fact_digest}\n已有接纳依据：${D.accepted_evidence.map(x=>`${x.date||''} ${x.evidence||''}`).join('\n')}`;
+$('#provenance').textContent=B?`赛事：${R.event_ids.join('、')}\n候选摘要：${R.bootstrap_subject_digest}\n规则摘要：${R.classifier.subject_digest}\n状态：待 Owner 审阅；不是正式分类接纳或周维护完成依据。`:`赛事：${R.event_ids.join('、')}\n分类摘要：${R.classification_review_digest}\n机器事实摘要：${S.machine_fact_digest}\n已有接纳依据：${D.accepted_evidence.map(x=>`${x.date||''} ${x.evidence||''}`).join('\n')}`;
 $('#provenance').style.whiteSpace='pre-wrap';
+if(B){
+  $('#accepted').textContent='首次候选：全部分类身份及名称均待确认，尚未接纳任何赛事。';
+  $('#overview .note').textContent='先核对类别划分和名称。中文仅为候选显示，不写入正式名称表；两者确定后再准备 Landing 和 Feature。';
+  $('#stats .stat:last-child').remove();
+  $('#candidates').hidden=true;document.querySelector('nav a[href="#candidates"]').hidden=true;
+  const counts=new Map();for(const r of R.records)counts.set(identityKey(r),(counts.get(identityKey(r))||0)+1);
+  function condition(c){if(c.all||c.any)return (c.all||c.any).map(condition).join(c.all?'；且 ':'；或 ');return `${cardName(c.card)} (${c.card})：${c.min_count!==undefined?'至少 '+c.min_count+' 张':'最多 '+c.max_count+' 张'}（${c.zone==='side'?'备牌':'主牌'}）`}
+  const content=R.name_candidates.map(n=>{const rules=D.rule_candidates.find(a=>a.id===n.parent_id)?.rules.filter(r=>r.subtype_id===n.subtype_id)||[];const refs=R.records.filter(r=>identityKey(r)===n.identity_key);return `<article class="candidate"><h3>${esc(D.name_proposals?.[n.identity_key]||'中文待定')} · ${esc(n.english)} <small>待确认 · ${counts.get(n.identity_key)||0} 份</small></h3><details><summary>查看候选条件与本周全部引用</summary><p>${rules.map(r=>esc(condition(r.conditions))).join('<br>')}</p>${refs.map(r=>deckButton(r)).join(' ')}</details></article>`}).join('');
+  $('#classification').insertAdjacentHTML('beforebegin',`<section class="panel" id="names"><h2>分类与名称候选</h2><p class="muted">分类由当前候选规则生成，中文是待审建议。父类、子类和名称均可在对话中调整；命中规则不代表人工判断已通过。下方每项可展开全部对应牌表。</p>${content}</section>`);
+  document.querySelector('nav').insertAdjacentHTML('beforeend','<a href="#names">分类与名称候选</a>');
+  document.querySelector('main > p.muted').textContent='下一步：请在对话中指出分类和名称的修改，引用赛事 ID＋排名即可；本轮不需要选 Feature 或写正文。';
+}
 $('#matrix').style.minWidth=(65+R.events.length*240)+'px';
 let table='<thead><tr><th>排名</th>'+R.events.map(e=>`<th>${esc(e.event_name)}<br>${esc(e.event_id)}<br>${esc(e.date)}<br>参赛 ${e.player_count} 人<br>高分 ${e.high_score_count} 份 · 公布 ${e.review_record_count} 份</th>`).join('')+'</tr></thead><tbody>';
 for(let rank=1;rank<=32;rank++){table+=`<tr><th>${rank}</th>`;for(const e of R.events){const r=rows.get(`${e.event_id}-${rank}`);table+=r?`<td data-cell="${key(r)}">${deckButton(r,`<b>${esc(names(r))}</b><small>${esc(r.player)}</small>`)}${flag(r)?`<span class="flag">${esc(flag(r))}</span>`:''}</td>`:'<td class="muted">无公布记录</td>'}table+='</tr>'}$('#matrix').innerHTML=table+'</tbody>';
@@ -40,4 +55,51 @@ $('#candidate-list').innerHTML=S.candidate_evidence.map((c,i)=>{const d=S.all_to
 function filterTop(){const q=$('#top-search').value.trim().toLowerCase(),visible=topRows.filter(r=>label(r).toLowerCase().includes(q));$('#top-count').textContent=`${visible.length} / ${topRows.length} 份`;$('#top-list').innerHTML=visible.map(r=>`<div class="catalog-row">${deckButton(r)}<small>${r.date}</small></div>`).join('')||'<p>没有匹配的牌表。</p>'}$('#top-search').oninput=filterTop;filterTop();
 document.addEventListener('click',e=>{const b=e.target.closest('[data-deck]');if(!b)return;const r=rows.get(b.dataset.deck);$('#detail-body').innerHTML=`<h2>${esc(names(r))}</h2><p>${esc(label(r))}</p><p class="ref">${esc(r.reference)}</p><button id="copy-ref">复制引用编号</button><p class="muted">${flag(r)?esc(flag(r)):'无机器优先提示'} · ${D.accepted_evidence.length?'沿用已有分类接纳':'接纳状态待核对'}</p><details><summary>分类定位依据</summary><p>选中规则：${esc(r.classification.selected?.rule_id||'无')}<br>来源：${esc(r.source_locator)}</p></details><div class="zones">${[['main_deck','主牌'],['sideboard','备牌']].map(([k,t])=>`<section><h3>${t} · ${r[k].reduce((n,c)=>n+c.qty,0)} 张</h3>${r[k].map(card).join('')}</section>`).join('')}</div>`;$('#toast').textContent='';$('#detail').showModal();$('#copy-ref').onclick=async()=>{try{await navigator.clipboard.writeText(r.reference);$('#toast').textContent='引用编号已复制，可贴到对话中。'}catch{$('#toast').textContent='复制不可用，请选中上方引用编号复制。'}}});
 $('#close').onclick=()=>$('#detail').close();
+if(D.reference_comparison){
+  const C=D.reference_comparison,T=C.summary;
+  $('#title').textContent='先驱 · 人工分类对照与 W36 候选';
+  document.querySelector('header > p').textContent='先看差异，再按需查阅全部参考牌表；修改意见直接在对话中说明。';
+  document.querySelector('nav').insertAdjacentHTML('afterbegin','<a href="#reference">人工对照</a>');
+  const section=document.createElement('section');section.id='reference';section.className='panel';
+  section.innerHTML=`<h2>人工分类对照</h2><p>${esc(T.date_from)} — ${esc(T.date_to)} · ${T.events} 场赛事 · ${T.labels} 种人工标签</p><div class="summary">${[[T.records,'非空人工标签'],[T.same_subtype,'子类一致'],[T.differences,'逐条已说明的差异'],[T.missing,'人工空白']].map(([n,t])=>`<div class="stat"><b>${n}</b>${t}</div>`).join('')}</div><p class="note">这是待你判断的候选。原表标签和排名均保留；有解释不等于已经确认人工有误。</p><p>已按你的要求合并父类：苏勒台／蓝绿变境 → 莲花变境；约力昂／普通蓝白控 → 蓝白控。子类继续保留。</p><p class="muted">${esc(T.note)}</p><div class="toolbar"><input type="search" id="ref-search" aria-label="搜索人工对照" placeholder="单元格、人工标签、候选、牌手、赛事"><select id="ref-mode" aria-label="对照范围"><option value="diff">只看 17 处差异</option><option value="all">全部 2,291 条人工标签</option></select><span id="ref-count" aria-live="polite"></span></div><div id="ref-list"></div><div class="toolbar"><button id="ref-prev">上一页</button><span id="ref-page"></span><button id="ref-next">下一页</button></div><h3>人工空白 · 不计入一致或差异</h3><div id="ref-missing"></div><details><summary>参考之外仍待整理的牌表：${T.corpus.candidate_status.unknown} 份未识别、${T.corpus.candidate_status.conflict} 份冲突</summary><p>全体保留输入共 ${T.corpus.events} 场、${T.corpus.records} 份。这些牌表没有对应的非空人工标签，不能视为人工已确认；不会影响上面的参考对照计数。</p><div id="ref-outside"></div></details><details><summary>来源与候选版本</summary><p class="ref">工作簿 SHA256：${esc(T.source_sha256)}<br>规则摘要：${esc(T.classifier_digest)}</p></details><p>下一步：优先核对 BA 列、BL 列的疑似错位，再讨论操纵比赛、献力军伍等命名边界。直接引用单元格即可。</p>`;
+  document.querySelector('main').prepend(section);
+  let page=0;const pageSize=50;
+  function renderRef(){
+    const q=$('#ref-search').value.trim().toLowerCase(),all=$('#ref-mode').value==='all';
+    const visible=C.records.map((r,i)=>({r,i})).filter(({r})=>(all||!r.same_subtype)&&`${r.cell} ${r.event_id} ${r.player} ${r.human_label} ${r.classifier_label} ${r.explanation?.group||''}`.toLowerCase().includes(q));
+    const pages=Math.max(1,Math.ceil(visible.length/pageSize));page=Math.min(page,pages-1);
+    $('#ref-count').textContent=`${visible.length} 条`;
+    $('#ref-list').innerHTML=visible.slice(page*pageSize,(page+1)*pageSize).map(({r,i})=>`<article class="candidate" data-reference-cell="${esc(r.cell)}"><div class="candidate-head"><h3>${esc(r.cell)} · ${esc(r.human_label)} → ${esc(r.classifier_label)}</h3><span class="chip">${esc(r.explanation?.group||'子类一致')}</span></div><p class="muted">${esc(r.date)} · ${esc(r.event_id)} 第 ${r.rank} 名 · ${esc(r.player)}</p><p>父类：人工 ${esc(r.human_parent)} ／ 候选 ${esc(r.classifier_parent)}</p>${r.explanation?`<p>${esc(r.explanation.reason)}</p><p><b>建议：</b>${esc(r.explanation.proposal)}</p>`:''}<button data-reference="${i}">查看主备牌与规则依据</button></article>`).join('')||'<p>没有匹配的记录。</p>';
+    $('#ref-page').textContent=`${page+1} / ${pages}`;$('#ref-prev').disabled=page===0;$('#ref-next').disabled=page===pages-1;
+  }
+  $('#ref-mode option[value="diff"]').textContent=`只看 ${T.differences} 处差异`;
+  $('#ref-mode option[value="all"]').textContent=`全部 ${T.records.toLocaleString('en-US')} 条人工标签`;
+  $('#ref-search').oninput=$('#ref-mode').onchange=()=>{page=0;renderRef()};
+  $('#ref-prev').onclick=()=>{page--;renderRef()};$('#ref-next').onclick=()=>{page++;renderRef()};renderRef();
+  $('#ref-missing').innerHTML=C.missing.map((r,i)=>`<article class="candidate"><h3>${esc(r.cell)} · 人工未填 → 候选 ${esc(r.classifier_label)}</h3><p>${esc(r.event_id)} 第 ${r.rank} 名 · ${esc(r.player)}</p><p>${esc(r.reason)}</p><button data-missing="${i}">查看牌表</button></article>`).join('');
+  $('#ref-outside').innerHTML=C.unreferenced_unresolved.map((r,i)=>`<p><button data-outside="${i}">${esc(r.event_id)} 第 ${r.rank} 名 · ${r.after.status==='conflict'?'混合构筑冲突':'未识别'}</button></p>`).join('');
+  document.addEventListener('click',e=>{
+    const b=e.target.closest('[data-reference],[data-missing],[data-outside]');if(!b)return;
+    const outside=b.dataset.outside!==undefined;
+    const r=outside?C.unreferenced_unresolved[+b.dataset.outside]:b.dataset.missing!==undefined?C.missing[+b.dataset.missing]:C.records[+b.dataset.reference];
+    const result=outside?r.after:r.classification;
+    const ref=r.cell?`Sheet1!${r.cell} · ${r.event_id} 第 ${r.rank} 名`:`${r.event_id} 第 ${r.rank} 名`;
+    const ruleEvidence=result.matched_rules.map(m=>`<p><b>${esc(m.rule_id)}</b></p><ul>${m.evidence.map(c=>`<li>${esc(cardName(c.card))} · ${esc(c.card)}：${c.actual_count} 张（${c.zone==='side'?'备牌':'主牌'}；要求 ${c.min_count!==null?'至少 '+c.min_count:'最多 '+c.max_count} 张）</li>`).join('')}</ul>`).join('')||'<p>未命中现有规则；尚无人工参考，保留为未识别。</p>';
+    $('#detail-body').innerHTML=`<h2>${esc(ref)}</h2><p>${esc(r.player)} · ${esc(r.date)}</p><p>人工：${esc(r.human_label||'无人工标签')}<br>候选：${esc(r.classifier_label||result.status)}</p>${r.explanation?`<p>${esc(r.explanation.reason)}</p><p>${esc(r.explanation.proposal)}</p>`:''}<details><summary>实际命中规则与牌张数量</summary>${ruleEvidence}</details><div class="zones">${[['main_deck','主牌'],['sideboard','备牌']].map(([k,t])=>`<section><h3>${t} · ${r[k].reduce((n,c)=>n+c.qty,0)} 张</h3>${r[k].map(card).join('')}</section>`).join('')}</div>`;
+    $('#toast').textContent=T.owner_accepted?'分类决定已确认；原表标签保留供追溯。':'待人工判断；在对话中引用上方单元格或赛事与排名即可。';$('#detail').showModal();
+  });
+  if(T.owner_accepted){
+    $('#title').textContent='先驱 · 已确认分类基线';
+    $('#reference .note').textContent='分类决定已由 Owner 确认并落实。原表标签保留，下面的差异是已确认调整，不是新的待审事项。';
+    $('#ref-mode option[value="diff"]').textContent=`查看 ${T.differences} 处已确认调整`;
+    $('#reference .stat:nth-child(3)').innerHTML=`<b>${T.differences}</b>已确认调整`;
+    $('#reference > p:last-child').textContent='下一步：继续完善参考之外的未识别与混合构筑，再准备 Pioneer 产品处理。无需重复确认本轮分类。';
+    $('#accepted').textContent='分类与名称已确认；赛事公开接纳和完整产品上线另行完成。';
+    $('#provenance').textContent=`赛事：${R.event_ids.join('、')}\n私有材料摘要：${R.bootstrap_subject_digest}\n规则摘要：${R.classifier.subject_digest}\n分类与名称：Owner 已确认；这不是赛事公开接纳或周维护完成记录。`;
+    $('#overview .note').textContent='这是私有分类基线，不代表已公开 Pioneer 或已完成周维护。';
+    if($('#names'))$('#names').hidden=true;
+    const nameNav=document.querySelector('nav a[href="#names"]');if(nameNav)nameNav.hidden=true;
+    document.querySelector('main > p.muted').textContent='本轮分类已确认。后续继续补齐剩余分类及产品处理，Pioneer 保持不公开。';
+  }
+}
 </script></html>
