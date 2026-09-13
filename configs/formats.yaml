@@ -85,6 +85,11 @@ formats:
       event_collection_enabled: true
       capabilities:
         - "classification"
+        - "event_statistics"
+        - "range_statistics"
+        - "matchup_statistics"
+        - "weekly_top8"
+        - "completeness_reporting"
       paths:
         events: "data/pioneer"
         matches: "data/pioneer/mtgo/matches"

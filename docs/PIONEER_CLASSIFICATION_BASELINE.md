@@ -52,6 +52,7 @@
 部族核心、红白烧的不同直伤组合仍需替代分支；自磨三种不同进攻生物
 用三条规则表达“任一”条件，不复制分类执行机制。
 
-下一步推进 Pioneer MTGO 产品处理与统计验证。
+Pioneer MTGO 产品处理与统计验证已完成私有接入，结果与执行入口见
+[PIONEER_MTGO_PROCESSING.md](PIONEER_MTGO_PROCESSING.md)。
 Tabletop 赛事选择及接纳、Landing 和完整产品公开条件继续依 ROADMAP 与
 相应业务规范执行，不因本基线完成而提前公开。
