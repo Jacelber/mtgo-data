@@ -78,12 +78,13 @@ formats:
 
   - id: "pioneer"
     display_name: "Pioneer"
-    state: "planned"
+    state: "executable"
     public: false
     mtgo:
-      enabled: false
+      enabled: true
       event_collection_enabled: true
-      capabilities: []
+      capabilities:
+        - "classification"
       paths:
         events: "data/pioneer"
         matches: "data/pioneer/mtgo/matches"
