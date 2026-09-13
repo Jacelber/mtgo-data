@@ -55,6 +55,41 @@ $('#candidate-list').innerHTML=S.candidate_evidence.map((c,i)=>{const d=S.all_to
 function filterTop(){const q=$('#top-search').value.trim().toLowerCase(),visible=topRows.filter(r=>label(r).toLowerCase().includes(q));$('#top-count').textContent=`${visible.length} / ${topRows.length} 份`;$('#top-list').innerHTML=visible.map(r=>`<div class="catalog-row">${deckButton(r)}<small>${r.date}</small></div>`).join('')||'<p>没有匹配的牌表。</p>'}$('#top-search').oninput=filterTop;filterTop();
 document.addEventListener('click',e=>{const b=e.target.closest('[data-deck]');if(!b)return;const r=rows.get(b.dataset.deck);$('#detail-body').innerHTML=`<h2>${esc(names(r))}</h2><p>${esc(label(r))}</p><p class="ref">${esc(r.reference)}</p><button id="copy-ref">复制引用编号</button><p class="muted">${flag(r)?esc(flag(r)):'无机器优先提示'} · ${D.accepted_evidence.length?'沿用已有分类接纳':'接纳状态待核对'}</p><details><summary>分类定位依据</summary><p>选中规则：${esc(r.classification.selected?.rule_id||'无')}<br>来源：${esc(r.source_locator)}</p></details><div class="zones">${[['main_deck','主牌'],['sideboard','备牌']].map(([k,t])=>`<section><h3>${t} · ${r[k].reduce((n,c)=>n+c.qty,0)} 张</h3>${r[k].map(card).join('')}</section>`).join('')}</div>`;$('#toast').textContent='';$('#detail').showModal();$('#copy-ref').onclick=async()=>{try{await navigator.clipboard.writeText(r.reference);$('#toast').textContent='引用编号已复制，可贴到对话中。'}catch{$('#toast').textContent='复制不可用，请选中上方引用编号复制。'}}});
 $('#close').onclick=()=>$('#detail').close();
+if(D.classification_addendum){
+  const A=D.classification_addendum,T=A.summary;
+  $('#title').textContent='先驱 · 剩余分类候选';
+  document.querySelector('header > p').textContent='按构筑归组查看全部 60 份牌表；已有分类保持不变，新名称在对话中确认。';
+  document.querySelector('nav').innerHTML='<a href="#addendum">剩余候选</a><a href="../reference-final/">已确认基线</a>';
+  for(const panel of document.querySelectorAll('main > section'))panel.hidden=true;
+  document.querySelector('main > p.muted').hidden=true;
+  const panel=document.createElement('section');panel.className='panel';panel.id='addendum';
+  panel.innerHTML=`<h2>剩余牌表已归组</h2><div class="summary">${[[T.changed,'本轮牌表'],[T.repair_records,'归入既有类别'],[T.new_records,'新类别建议中的牌表'],[T.new_groups,'待确认类别／名称']].map(([n,t])=>`<div class="stat"><b>${n}</b>${t}</div>`).join('')}</div><p class="note">当前候选规则可识别全部 ${T.source_records} 份；原先已分类的 4,900 份身份不变。新类别和混合构筑划分仍待你确认，不能把机器命中视为人工正确性结论。</p><p>默认先列三个混合构筑，再列新类别与既有规则补充。每组提供原因和全部对应主备牌；直接引用 R 编号即可。</p><div class="toolbar"><input id="add-search" type="search" aria-label="搜索剩余候选" placeholder="R 编号、类别、赛事、牌手"><select id="add-mode" aria-label="剩余候选范围"><option value="all">全部</option><option value="mixed">三个混合构筑</option><option value="new">新类别</option><option value="repair">既有类别补充</option></select><span id="add-count" aria-live="polite"></span></div><div id="add-list"></div><details><summary>比较范围与版本</summary><p class="ref">基线规则：${esc(T.accepted_digest)}<br>本次候选：${esc(T.candidate_digest)}</p></details><p>下一步：请先看 R01—R03，再确认其余新类别名称；不需要重新确认已有的分类基线。</p>`;
+  document.querySelector('main').prepend(panel);
+  if(T.owner_accepted){
+    $('#title').textContent='先驱 · 剩余分类已确认';
+    document.querySelector('header > p').textContent='本轮分类与名称已落实；保留原 R 编号和完整牌表供查阅。';
+    $('#addendum .note').textContent=`全部 ${T.source_records} 份均已分类，无未识别或冲突。除原60份外，按自磨边界另调整1份历史发掘；其余 ${T.unchanged_records} 份身份不变。`;
+    $('#addendum .stat:last-child').innerHTML=`<b>${T.new_groups}</b>已确认类别／名称`;
+    $('#addendum > p:last-child').textContent='下一步：继续 Pioneer MTGO 产品处理和统计验证；本轮分类无需重复确认。';
+    $('#addendum > p:nth-of-type(2)').textContent='R 编号沿用原审阅页，R35 补入一份符合自磨边界的历史牌表。所有条目均已按 Owner 决定落实。';
+  }
+  $('#add-mode option[value="mixed"]').textContent='混合构筑';
+  const kindName=T.owner_accepted?{mixed:'已确认混合构筑',new:'已确认类别',repair:'既有类别规则补充'}:{mixed:'混合构筑待确认',new:'新类别／名称待确认',repair:'既有类别规则补充'};
+  function addFilter(){
+    const q=$('#add-search').value.trim().toLowerCase(),mode=$('#add-mode').value;
+    const groups=A.groups.filter(g=>(mode==='all'||g.kind===mode)&&`${g.id} ${g.name_zh} ${g.name_en} ${g.records.map(r=>`${r.event_id} ${r.player}`).join(' ')}`.toLowerCase().includes(q));
+    $('#add-count').textContent=`${groups.length} 组 · ${groups.reduce((n,g)=>n+g.records.length,0)} 份`;
+    $('#add-list').innerHTML=groups.map(g=>`<article class="candidate" data-add-group="${g.id}"><div class="candidate-head"><h3>${g.id} · ${esc(g.name_zh)} <small>${esc(g.name_en)}</small></h3><span class="chip">${kindName[g.kind]} · ${g.records.length} 份</span></div><p>${esc(g.reason)}</p>${g.records.map((r,i)=>`<p><button data-add-deck="${g.id}:${i}">${esc(r.date)} · ${esc(r.event_id)} 第 ${r.rank} 名 · ${esc(r.player)}</button></p>`).join('')}</article>`).join('')||'<p>没有匹配的候选。</p>';
+  }
+  $('#add-search').oninput=$('#add-mode').onchange=addFilter;addFilter();
+  document.addEventListener('click',e=>{
+    const b=e.target.closest('[data-add-deck]');if(!b)return;
+    const [id,i]=b.dataset.addDeck.split(':'),g=A.groups.find(x=>x.id===id),r=g.records[+i];
+    $('#detail-body').innerHTML=`<h2>${g.id} · ${esc(g.name_zh)}</h2><p>${esc(r.event_id)} 第 ${r.rank} 名 · ${esc(r.player)} · ${esc(r.date)}</p><p>原状态：${r.before.status==='conflict'?'冲突':r.before.status==='classified'?esc(r.before.archetype_name):'未识别'} → 候选：${esc(g.name_zh)}</p><p>${esc(g.reason)}</p><details><summary>命中条件与原冲突依据</summary><p>原来命中：${r.before.top_priority_matches.map(m=>esc(m.archetype_name)).join(' ／ ')||'无'}</p>${r.after.matched_rules.map(m=>`<p><b>${esc(m.rule_id)}</b></p><ul>${m.evidence.map(c=>`<li>${esc(c.card)}：${c.actual_count} 张（${c.zone==='side'?'备牌':'主牌'}；要求${c.min_count!==null?'至少 '+c.min_count:'最多 '+c.max_count} 张）</li>`).join('')}</ul>`).join('')}</details><div class="zones">${[['main_deck','主牌'],['sideboard','备牌']].map(([k,t])=>`<section><h3>${t} · ${r[k].reduce((n,c)=>n+c.qty,0)} 张</h3>${r[k].map(card).join('')}</section>`).join('')}</div>`;
+    if(r.before.status==='classified')$('#detail-body').insertAdjacentHTML('afterbegin',`<p class="note">此份原分类为 ${esc(r.before.archetype_name)}；按已确认自磨边界调整。</p>`);
+    $('#toast').textContent=T.owner_accepted?'分类与名称已按 Owner 决定落实。':g.kind==='repair'?'依已确认类别补充匹配；原先已分类牌表没有改变。':'类别与名称待确认；在对话中引用 R 编号或赛事＋排名即可。';$('#detail').showModal();
+  });
+}
 if(D.reference_comparison){
   const C=D.reference_comparison,T=C.summary;
   $('#title').textContent='先驱 · 人工分类对照与 W36 候选';
