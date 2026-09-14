@@ -94,6 +94,7 @@ class MeleeOverrideCompetitor:
     source_participant_id: str
     result_type: str
     match_points: int
+    participant_status: str | None = None
 
 
 @dataclass(frozen=True)
@@ -401,15 +402,20 @@ def _parse_reviewed_overrides(value: Any, path: str) -> tuple[MeleeMatchOverride
                 competitor_value,
                 competitor_path,
                 {"source_participant_id", "result_type", "match_points"},
+                {"participant_status"},
             )
             result_type = _require_string(competitor["result_type"], f"{competitor_path}.result_type")
             if result_type not in RESULT_TYPES:
                 raise _error(f"{competitor_path}.result_type", "is not a supported reviewed result")
+            participant_status = competitor.get("participant_status")
+            if "participant_status" in competitor and (participant_status != "no_show" or result_type != "no_show"):
+                raise _error(f"{competitor_path}.participant_status", "requires explicit no_show status and result")
             competitors.append(
                 MeleeOverrideCompetitor(
                     _require_string(competitor["source_participant_id"], f"{competitor_path}.source_participant_id"),
                     result_type,
                     _require_non_negative_int(competitor["match_points"], f"{competitor_path}.match_points"),
+                    participant_status,
                 )
             )
         participant_ids = [item.source_participant_id for item in competitors]

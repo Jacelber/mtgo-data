@@ -2,7 +2,7 @@
   "schema_version": "1.1.0",
   "format": "modern",
   "source": "mtgo",
-  "classifier_digest": "c8ab1ea6a997f8e28615887e73dc3debe5f5ccfca625d0177c5028a54a972d51",
+  "classifier_digest": "d9cd9a3c61e7087fef15a10432ac756e183b523323889f1fc956a8ef81387d1c",
   "period": {
     "type": "12w",
     "start": "2026-06-15",
@@ -121,6 +121,12 @@
         ]
       },
       {
+        "id": "bant-aggro",
+        "name": "Bant Aggro",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "bant-company",
         "name": "Bant Company",
         "expandable": false,
@@ -129,6 +135,12 @@
       {
         "id": "bant-reclamation",
         "name": "Bant Reclamation",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "battle-of-wits",
+        "name": "Battle of Wits",
         "expandable": false,
         "subtype_ids": []
       },
@@ -200,6 +212,7 @@
         "subtype_ids": [
           "coffers/dimir",
           "coffers/golgari",
+          "coffers/mono-black",
           "coffers/umori"
         ]
       },
@@ -249,6 +262,18 @@
       {
         "id": "dimir-asmo",
         "name": "Dimir Asmo",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "dimir-control",
+        "name": "Dimir Control",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "dimir-faeries",
+        "name": "Dimir Faeries",
         "expandable": false,
         "subtype_ids": []
       },
@@ -347,6 +372,7 @@
         "subtype_ids": [
           "eldrazi-ramp/golgari",
           "eldrazi-ramp/gruul",
+          "eldrazi-ramp/mono-green",
           "eldrazi-ramp/simic",
           "eldrazi-ramp/sultai",
           "eldrazi-ramp/temur"
@@ -366,6 +392,7 @@
           "eldrazi-tron/colorless",
           "eldrazi-tron/mono-black",
           "eldrazi-tron/mono-green",
+          "eldrazi-tron/selesnya",
           "eldrazi-tron/simic"
         ]
       },
@@ -402,6 +429,12 @@
       {
         "id": "esper-energy",
         "name": "Esper Energy",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "esper-flash",
+        "name": "Esper Flash",
         "expandable": false,
         "subtype_ids": []
       },
@@ -444,6 +477,12 @@
       {
         "id": "five-color-elementals",
         "name": "Five-Color Elementals",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "five-color-enigmatic",
+        "name": "Five-Color Enigmatic",
         "expandable": false,
         "subtype_ids": []
       },
@@ -591,6 +630,7 @@
         "expandable": true,
         "subtype_ids": [
           "hammer-time/azorius",
+          "hammer-time/bant",
           "hammer-time/boros",
           "hammer-time/jeskai",
           "hammer-time/mono-white",
@@ -740,6 +780,18 @@
         "subtype_ids": []
       },
       {
+        "id": "jund-goryos",
+        "name": "Jund Goryo's",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "jund-leyline",
+        "name": "Jund Leyline",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "jund-sagavan",
         "name": "Jund Sagavan",
         "expandable": false,
@@ -872,6 +924,12 @@
         "subtype_ids": []
       },
       {
+        "id": "mono-red-prison",
+        "name": "Mono-Red Prison",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "mono-white-blink",
         "name": "Mono-White Blink",
         "expandable": false,
@@ -982,6 +1040,12 @@
         "subtype_ids": []
       },
       {
+        "id": "rakdos-asmo",
+        "name": "Rakdos Asmo",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "rakdos-delirium",
         "name": "Rakdos Delirium",
         "expandable": false,
@@ -1071,6 +1135,12 @@
         "subtype_ids": []
       },
       {
+        "id": "selesnya-hatebears",
+        "name": "Selesnya Hatebears",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "sewer-combo",
         "name": "Sewer Combo",
         "expandable": true,
@@ -1096,6 +1166,12 @@
       {
         "id": "simic-neoform",
         "name": "Simic Neoform",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "smallpox",
+        "name": "Smallpox",
         "expandable": false,
         "subtype_ids": []
       },
@@ -1186,6 +1262,7 @@
         "name": "Tron",
         "expandable": true,
         "subtype_ids": [
+          "tron/izzet",
           "tron/mono-green",
           "tron/selesnya",
           "tron/simic"
@@ -1352,6 +1429,14 @@
         "subtype_id": "mono-green"
       },
       {
+        "id": "bant-aggro",
+        "kind": "archetype",
+        "name": "Bant Aggro",
+        "display_name": "Bant Aggro",
+        "parent_id": "bant-aggro",
+        "subtype_id": null
+      },
+      {
         "id": "bant-company",
         "kind": "archetype",
         "name": "Bant Company",
@@ -1365,6 +1450,14 @@
         "name": "Bant Reclamation",
         "display_name": "Bant Reclamation",
         "parent_id": "bant-reclamation",
+        "subtype_id": null
+      },
+      {
+        "id": "battle-of-wits",
+        "kind": "archetype",
+        "name": "Battle of Wits",
+        "display_name": "Battle of Wits",
+        "parent_id": "battle-of-wits",
         "subtype_id": null
       },
       {
@@ -1504,6 +1597,14 @@
         "subtype_id": "golgari"
       },
       {
+        "id": "coffers/mono-black",
+        "kind": "subtype",
+        "name": "Mono-Black",
+        "display_name": "Mono-Black Coffers",
+        "parent_id": "coffers",
+        "subtype_id": "mono-black"
+      },
+      {
         "id": "coffers/umori",
         "kind": "subtype",
         "name": "Umori",
@@ -1589,6 +1690,22 @@
         "name": "Dimir Asmo",
         "display_name": "Dimir Asmo",
         "parent_id": "dimir-asmo",
+        "subtype_id": null
+      },
+      {
+        "id": "dimir-control",
+        "kind": "archetype",
+        "name": "Dimir Control",
+        "display_name": "Dimir Control",
+        "parent_id": "dimir-control",
+        "subtype_id": null
+      },
+      {
+        "id": "dimir-faeries",
+        "kind": "archetype",
+        "name": "Dimir Faeries",
+        "display_name": "Dimir Faeries",
+        "parent_id": "dimir-faeries",
         "subtype_id": null
       },
       {
@@ -1736,6 +1853,14 @@
         "subtype_id": "gruul"
       },
       {
+        "id": "eldrazi-ramp/mono-green",
+        "kind": "subtype",
+        "name": "Mono-Green",
+        "display_name": "Mono-Green Eldrazi Ramp",
+        "parent_id": "eldrazi-ramp",
+        "subtype_id": "mono-green"
+      },
+      {
         "id": "eldrazi-ramp/simic",
         "kind": "subtype",
         "name": "Simic",
@@ -1790,6 +1915,14 @@
         "display_name": "Mono-Green Eldrazi Tron",
         "parent_id": "eldrazi-tron",
         "subtype_id": "mono-green"
+      },
+      {
+        "id": "eldrazi-tron/selesnya",
+        "kind": "subtype",
+        "name": "Selesnya",
+        "display_name": "Selesnya Eldrazi Tron",
+        "parent_id": "eldrazi-tron",
+        "subtype_id": "selesnya"
       },
       {
         "id": "eldrazi-tron/simic",
@@ -1848,6 +1981,14 @@
         "subtype_id": null
       },
       {
+        "id": "esper-flash",
+        "kind": "archetype",
+        "name": "Esper Flash",
+        "display_name": "Esper Flash",
+        "parent_id": "esper-flash",
+        "subtype_id": null
+      },
+      {
         "id": "esper-goryos",
         "kind": "archetype",
         "name": "Esper Goryo's",
@@ -1901,6 +2042,14 @@
         "name": "Five-Color Elementals",
         "display_name": "Five-Color Elementals",
         "parent_id": "five-color-elementals",
+        "subtype_id": null
+      },
+      {
+        "id": "five-color-enigmatic",
+        "kind": "archetype",
+        "name": "Five-Color Enigmatic",
+        "display_name": "Five-Color Enigmatic",
+        "parent_id": "five-color-enigmatic",
         "subtype_id": null
       },
       {
@@ -2094,6 +2243,14 @@
         "display_name": "Azorius Hammer Time",
         "parent_id": "hammer-time",
         "subtype_id": "azorius"
+      },
+      {
+        "id": "hammer-time/bant",
+        "kind": "subtype",
+        "name": "Bant",
+        "display_name": "Bant Hammer Time",
+        "parent_id": "hammer-time",
+        "subtype_id": "bant"
       },
       {
         "id": "hammer-time/boros",
@@ -2328,6 +2485,22 @@
         "subtype_id": null
       },
       {
+        "id": "jund-goryos",
+        "kind": "archetype",
+        "name": "Jund Goryo's",
+        "display_name": "Jund Goryo's",
+        "parent_id": "jund-goryos",
+        "subtype_id": null
+      },
+      {
+        "id": "jund-leyline",
+        "kind": "archetype",
+        "name": "Jund Leyline",
+        "display_name": "Jund Leyline",
+        "parent_id": "jund-leyline",
+        "subtype_id": null
+      },
+      {
         "id": "jund-sagavan",
         "kind": "archetype",
         "name": "Jund Sagavan",
@@ -2525,6 +2698,14 @@
         "name": "Mono-Red Artifact",
         "display_name": "Mono-Red Artifact",
         "parent_id": "mono-red-artifact",
+        "subtype_id": null
+      },
+      {
+        "id": "mono-red-prison",
+        "kind": "archetype",
+        "name": "Mono-Red Prison",
+        "display_name": "Mono-Red Prison",
+        "parent_id": "mono-red-prison",
         "subtype_id": null
       },
       {
@@ -2760,6 +2941,14 @@
         "subtype_id": null
       },
       {
+        "id": "rakdos-asmo",
+        "kind": "archetype",
+        "name": "Rakdos Asmo",
+        "display_name": "Rakdos Asmo",
+        "parent_id": "rakdos-asmo",
+        "subtype_id": null
+      },
+      {
         "id": "rakdos-delirium",
         "kind": "archetype",
         "name": "Rakdos Delirium",
@@ -2904,6 +3093,14 @@
         "subtype_id": null
       },
       {
+        "id": "selesnya-hatebears",
+        "kind": "archetype",
+        "name": "Selesnya Hatebears",
+        "display_name": "Selesnya Hatebears",
+        "parent_id": "selesnya-hatebears",
+        "subtype_id": null
+      },
+      {
         "id": "sewer-combo/azorius",
         "kind": "subtype",
         "name": "Azorius",
@@ -2957,6 +3154,14 @@
         "name": "Simic Neoform",
         "display_name": "Simic Neoform",
         "parent_id": "simic-neoform",
+        "subtype_id": null
+      },
+      {
+        "id": "smallpox",
+        "kind": "archetype",
+        "name": "Smallpox",
+        "display_name": "Smallpox",
+        "parent_id": "smallpox",
         "subtype_id": null
       },
       {
@@ -3086,6 +3291,14 @@
         "display_name": "Titan Breach",
         "parent_id": "titan-breach",
         "subtype_id": null
+      },
+      {
+        "id": "tron/izzet",
+        "kind": "subtype",
+        "name": "Izzet",
+        "display_name": "Izzet Tron",
+        "parent_id": "tron",
+        "subtype_id": "izzet"
       },
       {
         "id": "tron/mono-green",

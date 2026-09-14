@@ -190,6 +190,8 @@ def _source_opportunity(
         raise MeleeOpportunityError(
             f"match {match.get('id')} has a missing competitor result_type"
         )
+    if result_type == "administrative":
+        result_type = "administrative_result"
     if not isinstance(source_points, int) or isinstance(source_points, bool):
         raise MeleeOpportunityError(
             f"match {match.get('id')} has a non-integer competitor match_points"

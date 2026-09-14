@@ -88,6 +88,7 @@
             "required": ["source_participant_id", "result_type", "match_points"],
             "properties": {
               "source_participant_id": {"type": "string", "minLength": 1},
+              "participant_status": {"const": "no_show"},
               "result_type": {
                 "enum": [
                   "played_win", "played_loss", "played_draw", "intentional_draw", "bye",

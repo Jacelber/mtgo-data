@@ -1374,7 +1374,9 @@ def build_event_statistics_from_paths(
         taxonomy_path=_repository_relative(taxonomy_path, root),
         taxonomy_sha256=_sha256_bytes(taxonomy_bytes),
     )
-    apply_final_standings(documents["decks"], event_path, root)
+    rank_note = apply_final_standings(documents["decks"], event_path, root)
+    if rank_note:
+        documents["overview"]["final_rank_note"] = rank_note
     return documents
 
 
@@ -1408,6 +1410,7 @@ def apply_final_standings(document, event_path, root):
         "path": _repository_relative(final_path, root),
         "sha256": _sha256_bytes(final_bytes),
     }
+    return final.get("note")
 
 
 

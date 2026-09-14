@@ -326,8 +326,12 @@ def normalize_parsed_snapshot(
         resolved_rounds[source_id] = phase
 
     participant_documents = {item["source_id"]: item for item in document["participants"]}
+    reviewed_absent = {competitor.source_participant_id
+                       for override in event.reviewed_overrides
+                       for competitor in override.competitors
+                       if competitor.participant_status == "no_show"}
     for source_id, source in sorted(source_standings.items()):
-        status = _participant_status(source)
+        status = "no_show" if source_id in reviewed_absent else _participant_status(source)
         participant_documents[source_id]["status"] = status
         if status == "unknown":
             issues.append(
