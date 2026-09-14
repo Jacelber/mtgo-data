@@ -20,6 +20,12 @@
     "warnings"
   ],
   "properties": {
+    "final_rank_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["zh", "en"],
+      "properties": {"zh": {"type": "string"}, "en": {"type": "string"}}
+    },
     "schema_version": {"enum": ["1.0.0", "1.1.0"]},
     "document_type": {"const": "overview"},
     "source": {"const": "melee"},

@@ -22,7 +22,7 @@ function freshnessRatio(observed, expected, rate) {
   return `${freshnessNumber(observed)} / ${freshnessNumber(expected)} · ${freshnessPercent(rate)}`;
 }
 
-function freshnessStrip(items) {
+function freshnessStrip(items, note = null) {
   const facts = items.filter(Boolean);
   return `<section class="freshness-strip" aria-label="${escapeHtml(t("freshness.label"))}">
     <strong class="freshness-title">${escapeHtml(t("freshness.label"))}</strong>
@@ -35,6 +35,7 @@ function freshnessStrip(items) {
       return `<span class="freshness-fact${unknown}" data-freshness-key="${escapeHtml(key)}">
         <small>${escapeHtml(t(`freshness.${label}`))}</small><b>${escapeHtml(value)}</b></span>`;
     }).join("")}</span>
+    ${note ? `<p class="freshness-note" data-freshness-key="final-rank-note">${escapeHtml(note)}</p>` : ""}
   </section>`;
 }
 
@@ -135,5 +136,5 @@ function tabletopFreshness(scopeState, selectedEventIds, overview, scope, qualit
     ["scope-decks", "scope_decks", freshnessNumber(scope.participant_count)],
     ["submitted-decks", "submitted_decks", freshnessNumber(quality.counts.submitted_decklists)],
     ["unavailable-decks", "unavailable_decks", freshnessNumber(quality.counts.missing_or_unavailable_decklists)],
-  ]);
+  ], overview.final_rank_note?.[I18n.language()]);
 }
