@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "c8ab1ea6a997f8e28615887e73dc3debe5f5ccfca625d0177c5028a54a972d51"
+    "digest": "d9cd9a3c61e7087fef15a10432ac756e183b523323889f1fc956a8ef81387d1c"
   },
   "input": {
     "event_path": "data/modern/melee/events/441441.json",
@@ -18,11 +18,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "777d782c0fd9436aaa560e6d558677f83393d78b9d062968a53724be8397395a",
+    "rule_sha256": "51f2e3ef14c2954e1740270dd608590924c53802d3c5c355a6c4484f2de70c13",
     "rule_schema_version": "1.1.0",
-    "archetype_count": 179,
-    "rule_count": 310,
-    "subtype_count": 85
+    "archetype_count": 191,
+    "rule_count": 328,
+    "subtype_count": 90
   },
   "summary": {
     "total_records": 571,
@@ -30,8 +30,8 @@
     "unknown": 7,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 100,
-    "overridden_matches": 100,
+    "multiple_matches": 82,
+    "overridden_matches": 82,
     "selected_subtypes": 257,
     "parent_only": 307,
     "same_parent_multiple_subtype_matches": 3,
@@ -1645,84 +1645,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -1759,7 +1685,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -1796,82 +1722,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -1903,7 +1753,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -1934,6 +1784,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -2720,7 +2571,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -2764,7 +2615,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -3936,7 +3787,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -3980,7 +3831,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -7510,7 +7361,7 @@
               "card": "Psychic Frog",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -7554,7 +7405,7 @@
               "card": "Psychic Frog",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -7993,7 +7844,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -8063,7 +7914,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -10418,7 +10269,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -10462,7 +10313,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -10694,7 +10545,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -10738,7 +10589,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -11150,7 +11001,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -11218,7 +11069,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -11296,7 +11147,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -11366,7 +11217,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -11481,84 +11332,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -11595,7 +11372,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -11632,82 +11409,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -11739,7 +11440,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -11770,6 +11471,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -12020,7 +11722,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -12064,7 +11766,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -12484,84 +12186,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -12598,7 +12226,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -12635,82 +12263,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -12742,7 +12294,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -12773,6 +12325,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -13249,84 +12802,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -13363,7 +12842,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -13400,82 +12879,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -13507,7 +12910,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -13538,6 +12941,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -13592,7 +12996,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -13636,7 +13040,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -14392,84 +13796,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -14506,7 +13836,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -14543,82 +13873,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -14650,7 +13904,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -14681,6 +13935,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -14849,7 +14104,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -14919,7 +14174,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -16543,7 +15798,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -16587,7 +15842,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -17731,7 +16986,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -17775,7 +17030,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -18481,7 +17736,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -18551,7 +17806,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -18608,84 +17863,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -18722,7 +17903,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -18759,82 +17940,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -18866,7 +17971,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -18897,6 +18002,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -19439,7 +18545,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -19483,7 +18589,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -19627,7 +18733,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -19779,7 +18885,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -21429,7 +20535,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -21473,7 +20579,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -21609,7 +20715,7 @@
               "card": "Counterspell",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -21653,7 +20759,7 @@
               "card": "Counterspell",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -23655,7 +22761,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -23699,7 +22805,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -26179,84 +25285,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -26293,7 +25325,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -26330,82 +25362,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -26437,7 +25393,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -26468,6 +25424,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -26994,7 +25951,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -27038,7 +25995,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -27182,7 +26139,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -27334,7 +26291,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -27647,7 +26604,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -27691,7 +26648,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -28925,7 +27882,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -28969,7 +27926,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -29367,84 +28324,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -29481,7 +28364,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -29518,82 +28401,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -29625,7 +28432,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -29656,6 +28463,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -29880,7 +28688,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -29924,7 +28732,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -30108,7 +28916,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -30152,7 +28960,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -31734,84 +30542,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -31848,7 +30582,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -31885,82 +30619,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -31992,7 +30650,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -32023,6 +30681,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -32204,7 +30863,7 @@
               "card": "Counterspell",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -32248,7 +30907,7 @@
               "card": "Counterspell",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -32286,84 +30945,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 2,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -32400,7 +30985,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -32437,82 +31022,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 2,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -32544,7 +31053,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -32575,6 +31084,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -32822,6 +31332,136 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "archetype_name": "Eldrazi Ramp",
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "eldrazi-ramp-mono-green",
+          "priority": 646001,
+          "evidence": [
+            {
+              "card": "Sowing Mycospawn",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Eldrazi Temple",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ugin's Labyrinth",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Forest",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-white-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-blue-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Fight Rigging",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Eldrazi Linebreaker",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -32876,7 +31516,138 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "archetype_name": "Eldrazi Ramp",
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "eldrazi-ramp-mono-green",
+          "priority": 646001,
+          "evidence": [
+            {
+              "card": "Sowing Mycospawn",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Eldrazi Temple",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ugin's Labyrinth",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Forest",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-white-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-blue-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Fight Rigging",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Eldrazi Linebreaker",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -32965,7 +31736,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -33079,7 +31850,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -33166,7 +31937,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -33236,7 +32007,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -33415,7 +32186,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -33485,7 +32256,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -34648,7 +33419,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -34692,7 +33463,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -34852,84 +33623,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -34966,7 +33663,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -35003,82 +33700,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -35110,7 +33731,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -35141,6 +33762,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -35577,7 +34199,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -35621,7 +34243,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -35908,7 +34530,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -36060,7 +34682,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -36349,84 +34971,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -36463,7 +35011,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -36500,82 +35048,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -36607,7 +35079,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -36638,6 +35110,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -37916,7 +36389,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -37960,7 +36433,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -38192,7 +36665,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -38236,7 +36709,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -38865,7 +37338,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -38909,7 +37382,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -40202,7 +38675,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -40246,7 +38719,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -40300,7 +38773,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -40370,7 +38843,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -40427,84 +38900,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -40541,7 +38940,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -40578,82 +38977,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -40685,7 +39008,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -40716,6 +39039,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -41565,7 +39889,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -41609,7 +39933,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -42080,7 +40404,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -42124,7 +40448,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -42708,84 +41032,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -42822,7 +41072,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -42859,82 +41109,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -42966,7 +41140,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -42997,6 +41171,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -43443,7 +41618,7 @@
               "card": "Counterspell",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -43487,7 +41662,7 @@
               "card": "Counterspell",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -44024,84 +42199,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -44138,7 +42239,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -44175,82 +42276,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -44282,7 +42307,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -44313,6 +42338,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -44449,7 +42475,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -44601,7 +42627,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -45676,7 +43702,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -45746,7 +43772,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -46081,7 +44107,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -46125,7 +44151,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -46269,84 +44295,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -46383,7 +44335,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -46420,82 +44372,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -46527,7 +44403,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -46558,6 +44434,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -46612,7 +44489,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -46680,7 +44557,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -48214,7 +46091,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -48258,7 +46135,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -48978,7 +46855,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -49022,7 +46899,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -49912,7 +47789,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -49956,7 +47833,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -50248,84 +48125,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -50362,7 +48165,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -50399,82 +48202,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -50506,7 +48233,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -50537,6 +48264,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -51191,7 +48919,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -51235,7 +48963,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -51699,7 +49427,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -51769,7 +49497,7 @@
               "card": "Field of Ruin",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -52915,7 +50643,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -52959,7 +50687,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -54400,7 +52128,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -54444,7 +52172,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -54588,7 +52316,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -54740,7 +52468,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -55287,7 +53015,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -55331,7 +53059,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -56353,7 +54081,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -56397,7 +54125,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -58257,7 +55985,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -58301,7 +56029,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -58766,7 +56494,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -58810,7 +56538,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -60148,84 +57876,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -60262,7 +57916,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -60299,82 +57953,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -60406,7 +57984,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -60437,6 +58015,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -61061,84 +58640,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -61175,7 +58680,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -61212,82 +58717,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -61319,7 +58748,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -61350,6 +58779,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -61741,7 +59171,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -61785,7 +59215,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -62043,7 +59473,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -62087,7 +59517,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -62515,7 +59945,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -62559,7 +59989,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -64039,6 +61469,136 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "archetype_name": "Eldrazi Ramp",
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "eldrazi-ramp-mono-green",
+          "priority": 646001,
+          "evidence": [
+            {
+              "card": "Sowing Mycospawn",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Eldrazi Temple",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ugin's Labyrinth",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Forest",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-white-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-blue-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Fight Rigging",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Eldrazi Linebreaker",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -64093,7 +61653,138 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "archetype_name": "Eldrazi Ramp",
+          "subtype_id": "mono-green",
+          "subtype_name": "Mono-Green",
+          "rule_id": "eldrazi-ramp-mono-green",
+          "priority": 646001,
+          "evidence": [
+            {
+              "card": "Sowing Mycospawn",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Eldrazi Temple",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ugin's Labyrinth",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Forest",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-white-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-blue-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Fight Rigging",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Eldrazi Linebreaker",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -64360,7 +62051,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -64428,7 +62119,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -66820,7 +64511,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -66864,7 +64555,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -67610,7 +65301,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -67654,7 +65345,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -68671,7 +66362,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -68715,7 +66406,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -69766,84 +67457,10 @@
         "archetype_name": "Eldrazi Tron",
         "subtype_id": "colorless",
         "subtype_name": "Colorless",
-        "rule_id": "eldrazi-tron-colorless",
-        "priority": 647000
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
       },
       "matched_rules": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -69880,7 +67497,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -69917,82 +67534,6 @@
           "archetype_name": "Eldrazi Tron",
           "subtype_id": "colorless",
           "subtype_name": "Colorless",
-          "rule_id": "eldrazi-tron-colorless",
-          "priority": 647000,
-          "evidence": [
-            {
-              "card": "Thought-Knot Seer",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Power Plant",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Tower",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Eldrazi Temple",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 4,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Ugin, Eye of the Storms",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Karn, the Great Creator",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Forest",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eldrazi-tron",
-          "archetype_name": "Eldrazi Tron",
-          "subtype_id": "colorless",
-          "subtype_name": "Colorless",
           "rule_id": "eldrazi-tron-colorless-map",
           "priority": 646900,
           "evidence": [
@@ -70024,7 +67565,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -70055,6 +67596,7 @@
           ]
         }
       ],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -70973,7 +68515,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -71017,7 +68559,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -71596,7 +69138,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -71806,7 +69348,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -73110,7 +70652,7 @@
               "card": "Counterspell",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -73154,7 +70696,7 @@
               "card": "Counterspell",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -73664,7 +71206,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -73816,7 +71358,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -73901,7 +71443,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -73945,7 +71487,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -74750,7 +72292,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -74794,7 +72336,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -76510,7 +74052,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -76554,7 +74096,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -76616,7 +74158,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -76660,7 +74202,7 @@
               "card": "Ephemerate",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -76870,7 +74412,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -76938,7 +74480,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 4,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -77520,7 +75062,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -77672,7 +75214,7 @@
               "card": "Eldrazi Temple",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
