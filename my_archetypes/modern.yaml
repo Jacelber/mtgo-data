@@ -1543,9 +1543,6 @@ archetypes:
       - card: Basim Ibn Ishaq
         zone: main
         min_count: 3
-      - card: Bilbo, Thief in the Night
-        zone: main
-        min_count: 3
       - card: Emry, Lurker of the Loch
         zone: main
         min_count: 3
@@ -2252,7 +2249,7 @@ archetypes:
         min_count: 3
       - card: Field of Ruin
         zone: main
-        min_count: 2
+        min_count: 1
   - id: boros-land-destruction-boom-wildfire
     priority: 660990
     subtype_id: null
@@ -2533,9 +2530,6 @@ archetypes:
       - card: Omnath, Locus of Creation
         zone: main
         min_count: 3
-      - card: Elesh Norn, Mother of Machines
-        zone: main
-        min_count: 1
       - card: Magmatic Hellkite
         zone: main
         max_count: 2
@@ -2701,6 +2695,8 @@ archetypes:
     name: Mono-Black
   - id: simic
     name: Simic
+  - id: selesnya
+    name: Selesnya
   rules:
   - id: eldrazi-tron-simic
     priority: 649010
@@ -2799,7 +2795,7 @@ archetypes:
         min_count: 4
       - card: Eldrazi Temple
         zone: main
-        min_count: 3
+        min_count: 2
       - card: Forest
         zone: main
         min_count: 1
@@ -2809,35 +2805,6 @@ archetypes:
       - card: Talisman of Resilience
         zone: main
         min_count: 2
-  - id: eldrazi-tron-colorless
-    priority: 647000
-    subtype_id: colorless
-    conditions:
-      all:
-      - card: Thought-Knot Seer
-        zone: main
-        min_count: 3
-      - card: Urza's Mine
-        zone: main
-        min_count: 4
-      - card: Urza's Power Plant
-        zone: main
-        min_count: 4
-      - card: Urza's Tower
-        zone: main
-        min_count: 4
-      - card: Eldrazi Temple
-        zone: main
-        min_count: 4
-      - card: Ugin, Eye of the Storms
-        zone: main
-        min_count: 1
-      - card: Karn, the Great Creator
-        zone: main
-        min_count: 1
-      - card: Forest
-        zone: main
-        exact_count: 0
   - id: eldrazi-tron-colorless-map
     priority: 646900
     subtype_id: colorless
@@ -2854,7 +2821,7 @@ archetypes:
         min_count: 4
       - card: Eldrazi Temple
         zone: main
-        min_count: 4
+        min_count: 3
       - card: Expedition Map
         zone: main
         min_count: 3
@@ -2864,6 +2831,32 @@ archetypes:
       - card: Forest
         zone: main
         exact_count: 0
+  - id: eldrazi-tron-selesnya
+    priority: 649001
+    subtype_id: selesnya
+    conditions:
+      all:
+      - card: Urza's Mine
+        zone: main
+        min_count: 3
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 3
+      - card: Urza's Tower
+        zone: main
+        min_count: 3
+      - card: Eldrazi Temple
+        zone: main
+        min_count: 3
+      - card: Sowing Mycospawn
+        zone: main
+        min_count: 3
+      - card: Talisman of Unity
+        zone: main
+        min_count: 3
+      - card: Rest in Peace
+        zone: any
+        min_count: 1
 - id: tron
   name: Tron
   priority: 648100
@@ -2874,6 +2867,8 @@ archetypes:
     name: Selesnya
   - id: simic
     name: Simic
+  - id: izzet
+    name: Izzet
   rules:
   - id: tron-mono-green-zimone
     priority: 648100
@@ -2959,9 +2954,6 @@ archetypes:
       - card: Eldrazi Temple
         zone: main
         exact_count: 0
-      - card: Dress Down
-        zone: main
-        min_count: 3
       - card: Talisman of Curiosity
         zone: main
         min_count: 3
@@ -2994,6 +2986,41 @@ archetypes:
       - card: Eldrazi Temple
         zone: main
         exact_count: 0
+  - id: tron-izzet
+    priority: 648101
+    subtype_id: izzet
+    conditions:
+      all:
+      - card: Urza's Mine
+        zone: main
+        min_count: 3
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 3
+      - card: Urza's Tower
+        zone: main
+        min_count: 3
+      - card: Expedition Map
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-any-red-spell__
+        zone: any
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        min_count: 1
 - id: mono-black-eldrazi
   name: Mono-Black Eldrazi
   priority: 317000
@@ -3026,6 +3053,8 @@ archetypes:
     name: Simic
   - id: golgari
     name: Golgari
+  - id: mono-green
+    name: Mono-Green
   rules:
   - id: eldrazi-ramp-sultai
     priority: 646000
@@ -3148,6 +3177,56 @@ archetypes:
         zone: main
         exact_count: 0
       - card: Eldrazi Linebreaker
+        zone: main
+        exact_count: 0
+  - id: eldrazi-ramp-mono-green
+    priority: 646001
+    subtype_id: mono-green
+    conditions:
+      all:
+      - card: Sowing Mycospawn
+        zone: main
+        min_count: 3
+      - card: Eldrazi Temple
+        zone: main
+        min_count: 3
+      - card: Ugin's Labyrinth
+        zone: main
+        min_count: 3
+      - card: Forest
+        zone: main
+        min_count: 1
+      - card: Urza's Tower
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-any-white-spell__
+        zone: any
+        exact_count: 0
+      - card: __classifier-semantic-any-blue-spell__
+        zone: any
+        exact_count: 0
+      - card: __classifier-semantic-any-black-spell__
+        zone: any
+        exact_count: 0
+      - card: __classifier-semantic-any-red-spell__
+        zone: any
+        exact_count: 0
+      - card: Fight Rigging
+        zone: main
+        exact_count: 0
+      - card: Eldrazi Linebreaker
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
         zone: main
         exact_count: 0
 - id: mono-green-trudge
@@ -3880,6 +3959,8 @@ archetypes:
     name: Golgari
   - id: umori
     name: Umori
+  - id: mono-black
+    name: Mono-Black
   rules:
   - id: coffers-dimir
     priority: 636400
@@ -3939,6 +4020,38 @@ archetypes:
         zone: main
         exact_count: 0
       - card: Necrodominance
+        zone: main
+        exact_count: 0
+  - id: coffers-mono-black
+    priority: 636401
+    subtype_id: mono-black
+    conditions:
+      all:
+      - card: Cabal Coffers
+        zone: main
+        min_count: 3
+      - card: Urborg, Tomb of Yawgmoth
+        zone: main
+        min_count: 3
+      - card: Karn, the Great Creator
+        zone: main
+        min_count: 3
+      - card: Necrodominance
+        zone: main
+        max_count: 2
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
         zone: main
         exact_count: 0
 - id: eight-rack
@@ -4030,6 +4143,8 @@ archetypes:
     name: Mono-White
   - id: orzhov
     name: Orzhov
+  - id: bant
+    name: Bant
   rules:
   - id: hammer-time-orzhov
     priority: 626040
@@ -4307,6 +4422,35 @@ archetypes:
         exact_count: 0
       - card: __classifier-semantic-any-red-spell__
         zone: any
+        exact_count: 0
+  - id: hammer-time-bant
+    priority: 626041
+    subtype_id: bant
+    conditions:
+      all:
+      - card: Colossus Hammer
+        zone: main
+        min_count: 3
+      - card: Puresteel Paladin
+        zone: main
+        min_count: 3
+      - card: Stoneforge Mystic
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
         exact_count: 0
 - id: devoted-druid-combo
   name: Devoted Druid Combo
@@ -5503,7 +5647,7 @@ archetypes:
         min_count: 3
       - card: Ephemerate
         zone: main
-        min_count: 3
+        min_count: 1
 - id: golgari-goryos
   name: Golgari Goryo's
   priority: 641150
@@ -5554,7 +5698,7 @@ archetypes:
         min_count: 3
       - card: Psychic Frog
         zone: main
-        min_count: 3
+        min_count: 2
       - card: Ephemerate
         zone: main
         exact_count: 0
@@ -5815,6 +5959,26 @@ archetypes:
       - card: Death's Shadow
         zone: main
         exact_count: 0
+  - id: grixis-tempo-delver
+    priority: 638050
+    subtype_id: null
+    conditions:
+      all:
+      - card: Delver of Secrets
+        zone: main
+        min_count: 3
+      - card: Snapcaster Mage
+        zone: main
+        min_count: 3
+      - card: Lightning Bolt
+        zone: main
+        min_count: 3
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        min_count: 1
 - id: dimir-tempo
   name: Dimir Tempo
   priority: 638000
@@ -5885,7 +6049,7 @@ archetypes:
         min_count: 3
       - card: Counterspell
         zone: main
-        min_count: 3
+        min_count: 2
       - card: Watery Grave
         zone: main
         min_count: 1
@@ -6285,6 +6449,32 @@ archetypes:
         zone: main
         exact_count: 0
       - *id025
+  - id: mardu-blink-bolt
+    priority: 632399
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 3
+      - card: Lightning Bolt
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: Goryo's Vengeance
+        zone: main
+        exact_count: 0
 - id: orzhov-blink
   name: Orzhov Blink
   priority: 632300
@@ -6851,15 +7041,15 @@ archetypes:
       - card: Arclight Phoenix
         zone: main
         min_count: 3
-      - card: Buried Alive
-        zone: main
-        min_count: 3
       - card: Faithless Looting
         zone: main
         min_count: 3
       - card: Blood Crypt
         zone: main
         min_count: 1
+      - card: Stinkweed Imp
+        zone: main
+        exact_count: 0
 - id: ruby-ponza
   name: Ruby Ponza
   priority: 689870
@@ -7175,10 +7365,13 @@ archetypes:
         min_count: 4
       - card: Quantum Riddler
         zone: main
-        min_count: 3
+        min_count: 2
       - card: Mox Opal
         zone: main
         min_count: 4
+      - card: Cori-Steel Cutter
+        zone: main
+        max_count: 2
 - id: izzet-otters
   name: Izzet Otters
   priority: 690890
@@ -7662,3 +7855,282 @@ archetypes:
       - card: Temur Battle Rage
         zone: main
         min_count: 2
+- id: smallpox
+  name: Smallpox
+  priority: 692005
+  rules:
+  - id: smallpox-primary
+    priority: 692006
+    subtype_id: null
+    conditions:
+      all:
+      - card: Smallpox
+        zone: main
+        min_count: 3
+      - card: Cry of Contrition
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 3
+- id: esper-flash
+  name: Esper Flash
+  priority: 692006
+  rules:
+  - id: esper-flash-primary
+    priority: 692007
+    subtype_id: null
+    conditions:
+      all:
+      - card: Errant and Giada
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: Subtlety
+        zone: main
+        min_count: 3
+      - card: Counterspell
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+- id: dimir-control
+  name: Dimir Control
+  priority: 692007
+  rules:
+  - id: dimir-control-primary
+    priority: 692008
+    subtype_id: null
+    conditions:
+      all:
+      - card: Consult the Star Charts
+        zone: main
+        min_count: 3
+      - card: Wan Shi Tong, Librarian
+        zone: main
+        min_count: 3
+      - card: Counterspell
+        zone: main
+        min_count: 3
+      - card: Fatal Push
+        zone: main
+        min_count: 3
+      - card: Psychic Frog
+        zone: main
+        exact_count: 0
+      - card: Orcish Bowmasters
+        zone: main
+        max_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+- id: five-color-enigmatic
+  name: Five-Color Enigmatic
+  priority: 692008
+  rules:
+  - id: five-color-enigmatic-primary
+    priority: 692009
+    subtype_id: null
+    conditions:
+      all:
+      - card: Enigmatic Incarnation
+        zone: main
+        min_count: 3
+      - card: Leyline Binding
+        zone: main
+        min_count: 3
+      - card: Overlord of the Hauntwoods
+        zone: main
+        min_count: 3
+- id: selesnya-hatebears
+  name: Selesnya Hatebears
+  priority: 692009
+  rules:
+  - id: selesnya-hatebears-primary
+    priority: 692010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Collected Company
+        zone: main
+        min_count: 3
+      - card: Leonin Arbiter
+        zone: main
+        min_count: 3
+      - card: Archon of Emeria
+        zone: main
+        min_count: 3
+- id: mono-red-prison
+  name: Mono-Red Prison
+  priority: 692010
+  rules:
+  - id: mono-red-prison-primary
+    priority: 692011
+    subtype_id: null
+    conditions:
+      all:
+      - card: Blood Moon
+        zone: main
+        min_count: 3
+      - card: Ensnaring Bridge
+        zone: main
+        min_count: 2
+      - card: Chandra, Torch of Defiance
+        zone: main
+        min_count: 2
+- id: rakdos-asmo
+  name: Rakdos Asmo
+  priority: 692011
+  rules:
+  - id: rakdos-asmo-primary
+    priority: 692012
+    subtype_id: null
+    conditions:
+      all:
+      - card: Asmoranomardicadaistinaculdacar
+        zone: main
+        min_count: 3
+      - card: The Underworld Cookbook
+        zone: main
+        min_count: 3
+      - card: Monument to Endurance
+        zone: main
+        min_count: 3
+      - card: Persist
+        zone: main
+        exact_count: 0
+- id: jund-goryos
+  name: Jund Goryo's
+  priority: 692012
+  rules:
+  - id: jund-goryos-primary
+    priority: 692013
+    subtype_id: null
+    conditions:
+      all:
+      - card: Goryo's Vengeance
+        zone: main
+        min_count: 3
+      - card: Ghalta, Stampede Tyrant
+        zone: main
+        min_count: 3
+      - card: Persist
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        min_count: 1
+- id: bant-aggro
+  name: Bant Aggro
+  priority: 692013
+  rules:
+  - id: bant-aggro-primary
+    priority: 692014
+    subtype_id: null
+    conditions:
+      all:
+      - card: Aspect of Hydra
+        zone: main
+        min_count: 3
+      - card: Mightform Harmonizer
+        zone: main
+        min_count: 3
+      - card: Noble Hierarch
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        min_count: 1
+- id: battle-of-wits
+  name: Battle of Wits
+  priority: 692014
+  rules:
+  - id: battle-of-wits-primary
+    priority: 692015
+    subtype_id: null
+    conditions:
+      all:
+      - card: Battle of Wits
+        zone: main
+        min_count: 1
+- id: dimir-faeries
+  name: Dimir Faeries
+  priority: 692015
+  rules:
+  - id: dimir-faeries-primary
+    priority: 692016
+    subtype_id: null
+    conditions:
+      all:
+      - card: Scion of Oona
+        zone: main
+        min_count: 3
+      - card: Faerie Seer
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+- id: jund-leyline
+  name: Jund Leyline
+  priority: 692016
+  rules:
+  - id: jund-leyline-primary
+    priority: 692017
+    subtype_id: null
+    conditions:
+      all:
+      - card: Venerated Rotpriest
+        zone: main
+        min_count: 3
+      - card: Tainted Strike
+        zone: main
+        min_count: 3
+      - card: Leyline of Resonance
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        min_count: 1
