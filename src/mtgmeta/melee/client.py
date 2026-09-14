@@ -885,6 +885,20 @@ def _recover_finalized_checkpoint(
     return destination, records, planned
 
 
+def _standings_round(rounds: list[dict[str, Any]], review_round_id: str | None) -> str:
+    swiss = [(str(item["source_round_id"]), int(match.group(1)))
+             for item in rounds
+             if (match := re.fullmatch(r"Round\s+(\d+)", item["label"], re.IGNORECASE))]
+    if not swiss:
+        raise MeleeFetchError("tournament page did not expose a completed Swiss round")
+    if review_round_id is not None:
+        if review_round_id not in {round_id for round_id, _ in swiss}:
+            raise MeleeFetchError("review standings must select a completed Swiss round")
+        return review_round_id
+    finals = [str(item["source_round_id"]) for item in rounds if item["label"].casefold() == "finals"]
+    return finals[0] if len(finals) == 1 else max(swiss, key=lambda item: item[1])[0]
+
+
 def fetch_complete_event(
     event_id: str,
     registry: MeleeEventRegistry,
@@ -898,6 +912,7 @@ def fetch_complete_event(
     retry_delay: float = DEFAULT_RETRY_DELAY_SECONDS,
     request_delay: float = DEFAULT_COMPLETE_REQUEST_DELAY_SECONDS,
     progress: Callable[[dict[str, Any]], None] | None = None,
+    review_standings_round_id: str | None = None,
 ) -> MeleeRawFetchResult:
     """Collect or resume one minimized v4 snapshot through public endpoints."""
 
@@ -929,6 +944,11 @@ def fetch_complete_event(
         if recovered is None:
             raise MeleeArchiveError("complete-event checkpoint has no recoverable partial or final snapshot")
         destination, recovered_records, recovered_planned = recovered
+        tournament_record = next(item for item in recovered_records if item.resource_type == "tournament")
+        tournament = _json_mapping((destination / tournament_record.path).read_bytes(), "tournament")
+        selected_round = _standings_round(tournament["rounds"], review_standings_round_id)
+        if {item.source_round_id for item in recovered_records if item.resource_type == "standings"} != {selected_round}:
+            raise MeleeArchiveError("retained standings do not match the requested source round")
         report({
             "event_id": event.id,
             "stage": "complete",
@@ -1141,11 +1161,9 @@ def fetch_complete_event(
             for item in round_values
             if isinstance(item, dict)
         )
-        numeric_rounds = [(round_id, int(match.group(1))) for round_id, label in rounds if (match := re.fullmatch(r"Round\s+(\d+)", label, re.IGNORECASE))]
-        if not numeric_rounds:
-            raise MeleeFetchError("tournament page did not expose a completed Swiss round")
-        final_rounds = [round_id for round_id, label in rounds if label.casefold() == "finals"]
-        standings_round_id = final_rounds[0] if len(final_rounds) == 1 else max(numeric_rounds, key=lambda item: item[1])[0]
+        standings_round_id = _standings_round(round_values, review_standings_round_id)
+        if any(item.source_round_id != standings_round_id for item in records.values() if item.resource_type == "standings"):
+            raise MeleeArchiveError("checkpoint standings do not match the requested source round")
 
         decklists: dict[str, str] = {}
         standings_requests: list[_CompleteRequest] = []
@@ -1181,6 +1199,8 @@ def fetch_complete_event(
             if total is not None and reported_total != total:
                 raise MeleeFetchError("standings total changed during pagination")
             total = reported_total
+            if not rows:
+                raise MeleeFetchError(f"selected standings round {standings_round_id} returned an empty page; stopping before matches and decklists")
             for row in rows:
                 if not isinstance(row, dict):
                     raise MeleeFetchError("standings row must be a mapping")

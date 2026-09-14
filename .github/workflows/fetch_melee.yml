@@ -11,6 +11,11 @@ on:
         description: "Closed operation state: collect-new or resume-retained"
         required: true
         type: string
+      review_standings_round_id:
+        description: "Completed Swiss round ID; retain and classify only, without a public candidate"
+        required: false
+        default: ""
+        type: string
       retained_checkpoint:
         description: "Exact review-branch SHA required by resume-retained"
         required: false
@@ -34,6 +39,7 @@ jobs:
       PYTHONPATH: src
       EVENT_ID: ${{ inputs.event_id }}
       OPERATION: ${{ inputs.operation }}
+      REVIEW_ROUND: ${{ inputs.review_standings_round_id }}
       EXPECTED_CHECKPOINT: ${{ inputs.retained_checkpoint }}
     steps:
       - name: Check out full history for candidate publication
@@ -140,7 +146,9 @@ jobs:
               ;;
             collect-new)
               test ! -f "$EVENT_PATH" || { echo "collect-new refuses an existing normalized event" >&2; exit 1; }
-              RESULT="$(python -B -m mtgmeta.melee --event-id "$EVENT_ID" --complete --execute)"
+              REVIEW_ARGS=()
+              if [ -n "$REVIEW_ROUND" ]; then REVIEW_ARGS=(--review-standings-round-id "$REVIEW_ROUND"); fi
+              RESULT="$(python -B -m mtgmeta.melee --event-id "$EVENT_ID" --complete --execute "${REVIEW_ARGS[@]}")"
               printf '%s\n' "$RESULT"
               SNAPSHOT="$(printf '%s' "$RESULT" | python -c 'import json,sys; print(json.load(sys.stdin)["archive_path"])')"
               SOURCE_MODE="fetched"
@@ -189,38 +197,53 @@ jobs:
           --execute --strict
 
       - name: Build Constructed opportunity ledger
+        if: inputs.review_standings_round_id == ''
         run: >-
           python -B -m mtgmeta.melee.opportunities
           --root . --format "$FORMAT" --event-id "$EVENT_ID" --execute
 
       - name: Build event overview, decks, and quality
+        if: inputs.review_standings_round_id == ''
         run: >-
           python -B -m mtgmeta.melee.stats
           --root . --format "$FORMAT" --event-id "$EVENT_ID" --execute
 
       - name: Build hierarchical matchup statistics
+        if: inputs.review_standings_round_id == ''
         run: >-
           python -B -m mtgmeta.melee.matchup
           --root . --format "$FORMAT" --event-id "$EVENT_ID" --execute
 
       - name: Package event metadata and catalog
+        if: inputs.review_standings_round_id == ''
         run: >-
           python -B -m mtgmeta.melee.publish
           --root . --format "$FORMAT" --event-id "$EVENT_ID" --execute
 
       - name: Generate format-first consumer catalog
+        if: inputs.review_standings_round_id == ''
         run: python -B -m mtgmeta.catalog --root .
 
       - name: Validate Melee candidate scope
+        if: inputs.review_standings_round_id == ''
         run: >-
           python -B validate_melee_candidate.py validate
           --baseline "$RUNNER_TEMP/melee-baseline.json"
 
       - name: Stage validated candidate scope
+        if: inputs.review_standings_round_id == ''
         shell: bash
         run: |
           git add -- "data_raw/melee/${EVENT_ID}/" "data/${FORMAT}/melee/" "stats/${FORMAT}/melee/" "stats/${FORMAT}/archetype_names.json" "stats/catalog.json"
           git diff --quiet || { echo "Candidate contains unstaged changes outside the exact staged scope" >&2; exit 1; }
+
+      - name: Stage review-only classification
+        if: inputs.review_standings_round_id != ''
+        shell: bash
+        run: |
+          python -B -c 'import json,jsonschema,sys; jsonschema.validate(json.load(open(sys.argv[1])),json.load(open("schemas/melee-classification.schema.json")))' "data/${FORMAT}/melee/classifications/${EVENT_ID}.json"
+          git add -- "data/${FORMAT}/melee/classifications/${EVENT_ID}.json"
+          git diff --quiet || { echo "Review contains unexpected unstaged changes" >&2; exit 1; }
 
       - name: Bind exact staged candidate tree
         id: candidate-tree
@@ -232,6 +255,7 @@ jobs:
           echo "tree=$CANDIDATE_TREE" >> "$GITHUB_OUTPUT"
 
       - name: Check changed product outputs
+        if: inputs.review_standings_round_id == ''
         run: python -B tools/check_outputs.py --changed-from HEAD
 
       - name: Commit and push review branch
@@ -285,6 +309,7 @@ jobs:
             echo
             echo "- Event ID: ${EVENT_ID}"
             echo "- Format: ${FORMAT}"
+            echo "- Review-only Swiss round: ${REVIEW_ROUND:-not-applicable}"
             echo "- Requested operation: ${OPERATION}"
             echo "- Requested retained checkpoint: ${EXPECTED_CHECKPOINT:-not-applicable}"
             echo "- Source mode: ${{ steps.snapshot.outputs.source_mode || 'not-reached' }}"
