@@ -140,8 +140,11 @@ jobs:
           EVENT_PATH="data/${FORMAT}/melee/events/${EVENT_ID}.json"
           case "$OPERATION" in
             resume-retained)
-              test -f "$EVENT_PATH" || { echo "Authorized retained event is missing" >&2; exit 1; }
-              SNAPSHOT="$(python -c 'import json,pathlib,sys; p=json.load(open(sys.argv[1], encoding="utf-8"))["provenance"]["raw_artifacts"][0]["path"]; print(pathlib.Path(p).parent.as_posix())' "$EVENT_PATH")"
+              if [ -f "$EVENT_PATH" ]; then
+                SNAPSHOT="$(python -c 'import json,pathlib,sys; p=json.load(open(sys.argv[1], encoding="utf-8"))["provenance"]["raw_artifacts"][0]["path"]; print(pathlib.Path(p).parent.as_posix())' "$EVENT_PATH")"
+              else
+                SNAPSHOT="$(python -c 'import pathlib,sys; manifests=list(pathlib.Path("data_raw/melee",sys.argv[1]).glob("*/manifest.json")); assert len(manifests)==1, "Retained raw-only event must have one complete snapshot"; print(manifests[0].parent.as_posix())' "$EVENT_ID")"
+              fi
               SOURCE_MODE="retained"
               ;;
             collect-new)
@@ -159,13 +162,7 @@ jobs:
           echo "snapshot=$SNAPSHOT" >> "$GITHUB_OUTPUT"
           echo "source_mode=$SOURCE_MODE" >> "$GITHUB_OUTPUT"
 
-      - name: Retain normalized event
-        run: >-
-          python -B -m mtgmeta.melee.retention
-          --event-id "$EVENT_ID" --snapshot "${{ steps.snapshot.outputs.snapshot }}"
-          --execute
-
-      - name: Checkpoint immutable source and normalized event
+      - name: Checkpoint immutable source before normalization
         id: checkpoint
         if: steps.snapshot.outputs.source_mode == 'fetched' || steps.review-branch.outputs.resumed == 'true'
         shell: bash
@@ -175,7 +172,7 @@ jobs:
           BRANCH="${{ steps.review-branch.outputs.branch }}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -- "data_raw/melee/${EVENT_ID}/" "data/${FORMAT}/melee/events/${EVENT_ID}.json"
+          git add -- "data_raw/melee/${EVENT_ID}/"
           if ! git diff --cached --quiet; then
             git commit -m "chore: checkpoint Melee event ${EVENT_ID} source"
           fi
@@ -189,6 +186,13 @@ jobs:
         run: |
           REMOTE_SHA="$(git ls-remote origin "refs/heads/${{ steps.checkpoint.outputs.branch }}" | awk '{print $1}')"
           test "$REMOTE_SHA" = "${{ steps.checkpoint.outputs.commit }}"
+
+      - name: Retain normalized event
+        shell: bash
+        run: |
+          REVIEW_ARGS=()
+          if [ -n "$REVIEW_ROUND" ]; then REVIEW_ARGS=(--review-only); fi
+          python -B -m mtgmeta.melee.retention --event-id "$EVENT_ID" --snapshot "${{ steps.snapshot.outputs.snapshot }}" --execute "${REVIEW_ARGS[@]}"
 
       - name: Classify submitted decks strictly
         run: >-
@@ -242,7 +246,7 @@ jobs:
         shell: bash
         run: |
           python -B -c 'import json,jsonschema,sys; jsonschema.validate(json.load(open(sys.argv[1])),json.load(open("schemas/melee-classification.schema.json")))' "data/${FORMAT}/melee/classifications/${EVENT_ID}.json"
-          git add -- "data/${FORMAT}/melee/classifications/${EVENT_ID}.json"
+          git add -- "data/${FORMAT}/melee/events/${EVENT_ID}.json" "data/${FORMAT}/melee/classifications/${EVENT_ID}.json"
           git diff --quiet || { echo "Review contains unexpected unstaged changes" >&2; exit 1; }
 
       - name: Bind exact staged candidate tree

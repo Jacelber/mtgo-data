@@ -77,3 +77,50 @@ def test_review_workflow_skips_public_generation():
                  'Package event metadata and catalog', 'Generate format-first consumer catalog'):
         assert steps[name]['if'] == "inputs.review_standings_round_id == ''"
     assert steps['Stage review-only classification']['if'] == "inputs.review_standings_round_id != ''"
+
+
+def test_source_is_saved_before_normalization_can_fail():
+    workflow = yaml.safe_load((ROOT / ".github/workflows/fetch_melee.yml").read_text())
+    steps = workflow['jobs']['candidate']['steps']
+    names = [step['name'] for step in steps]
+    assert names.index('Checkpoint immutable source before normalization') < names.index('Retain normalized event')
+    checkpoint = steps[names.index('Checkpoint immutable source before normalization')]['run']
+    assert 'git add -- "data_raw/melee/${EVENT_ID}/"\n' in checkpoint
+    assert 'git commit' in checkpoint and 'push origin' in checkpoint
+    source = steps[names.index('Resolve explicitly selected event source')]['run']
+    assert 'glob("*/manifest.json")' in source
+    assert 'len(manifests)==1' in source
+
+
+def test_review_retention_preserves_publication_blocker(tmp_path, monkeypatch):
+    from mtgmeta.melee import retention
+    from mtgmeta.melee.quality import MeleePublicationBlocked, build_publication_payload
+
+    event = load_melee_event_registry(ROOT / 'configs/melee_events.yaml').require_fetchable('451148')
+    source_event = json.loads((ROOT / 'data/modern/melee/events/451148.json').read_bytes())
+    snapshot = (ROOT / source_event['provenance']['raw_artifacts'][0]['path']).parent
+    normalize = retention.normalize_parsed_snapshot
+
+    def unresolved(*args, **kwargs):
+        document = normalize(*args, **kwargs)
+        participant = document['participants'][0]
+        participant['status'] = 'unknown'
+        document['quality']['status'] = 'blocked'
+        document['quality']['issues'].append({
+            'code': 'unknown_participant_status', 'severity': 'error',
+            'entity_type': 'participant', 'entity_id': participant['id'],
+            'message': 'Status needs review.', 'blocking': True,
+            'source_evidence': ['status_text=Unenrolled (Payment)'],
+        })
+        return document
+
+    monkeypatch.setattr(retention, 'normalize_parsed_snapshot', unresolved)
+    result = retention.retain_normalized_event(event, snapshot, raw_root=ROOT / 'data_raw',
+                                               data_root=tmp_path, review_only=True)
+    retained = json.loads(result.normalized_path.read_bytes())
+    assert result.quality_status == 'blocked'
+    assert retained['quality']['publishable'] is False
+    assert retained['participants'][0]['status'] == 'unknown'
+    assert len(retained['decklists']) == len(source_event['decklists'])
+    with pytest.raises(MeleePublicationBlocked, match='unknown_participant_status'):
+        build_publication_payload(retained, event)
