@@ -345,7 +345,37 @@ events:
     advancement:
       day2_after_round: 9
       day2_minimum_match_points: 18
-    reviewed_overrides: []
+    reviewed_overrides:
+      - id: payment_no_show_ian_henry
+        source_match_id: "dcb58683-db54-439e-82b6-b4c300d50049"
+        review_status: verified
+        played: false
+        competitors:
+          - source_participant_id: "4340377"
+            result_type: administrative
+            match_points: 3
+          - source_participant_id: "4164478"
+            participant_status: no_show
+            result_type: no_show
+            match_points: 0
+        reason: "Owner reviewed this payment-unenrolled entry as nonparticipation; exclude both sides from played statistics and retain source points."
+        source_evidence:
+          - "https://melee.gg/Tournament/View/405588"
+      - id: payment_no_show_winks1795
+        source_match_id: "3249f10c-8be4-42b0-9eeb-b4c300d4fbd0"
+        review_status: verified
+        played: false
+        competitors:
+          - source_participant_id: "4345689"
+            result_type: administrative
+            match_points: 3
+          - source_participant_id: "4229378"
+            participant_status: no_show
+            result_type: no_show
+            match_points: 0
+        reason: "Owner reviewed this payment-unenrolled entry as nonparticipation; exclude both sides from played statistics and retain source points."
+        source_evidence:
+          - "https://melee.gg/Tournament/View/405588"
     statistics:
       default_match_scope: "all_constructed_swiss"
       constructed_game_format: "modern"

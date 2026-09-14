@@ -16,11 +16,11 @@ ROUNDS = [{"source_round_id": "15", "label": "Round 15"},
           {"source_round_id": "18", "label": "Finals"}]
 
 
-def test_payment_unenrollment_preserves_played_participation():
+def test_payment_unenrollment_needs_explicit_review():
     from types import SimpleNamespace
     from mtgmeta.melee.normalize import _participant_status
 
-    assert _participant_status(SimpleNamespace(status_text='Unenrolled (Payment)')) == 'dropped'
+    assert _participant_status(SimpleNamespace(status_text='Unenrolled (Payment)')) == 'unknown'
 
 
 def test_review_source_is_explicit():
