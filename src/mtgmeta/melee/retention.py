@@ -24,7 +24,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 from .config import MeleeConfigError, MeleeEventDefinition, load_melee_event_registry
 from .normalize import normalize_parsed_snapshot
 from .parser import MeleeSourceParseError, ParsedMeleeSnapshot, parse_raw_snapshot
-from .quality import MeleePublicationBlocked, MeleeQualityError, build_publication_payload
+from .quality import MeleePublicationBlocked, MeleeQualityError, build_publication_payload, finalize_event_quality
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -194,6 +194,7 @@ def retain_normalized_event(
     raw_root: str | Path = "data_raw",
     data_root: str | Path = "data",
     raw_schema_path: str | Path = DEFAULT_RAW_SCHEMA,
+    review_only: bool = False,
 ) -> MeleeRetentionResult:
     """Validate and atomically retain one complete snapshot's normalized event."""
 
@@ -212,7 +213,11 @@ def retain_normalized_event(
             normalized_at=parsed.fetched_at,
             raw_artifact_prefix=f"data_raw/melee/{event.id}/{snapshot.name}",
         )
-        payload = build_publication_payload(normalized, event)
+        if review_only:
+            assessed = finalize_event_quality(normalized, event)
+            payload = (json.dumps(assessed, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
+        else:
+            payload = build_publication_payload(normalized, event)
     except (MeleeSourceParseError, MeleeQualityError, MeleePublicationBlocked) as exc:
         raise MeleeRetentionError(f"snapshot failed normalized-event retention: {exc}") from exc
     target = _normalized_path(data_root, event)
@@ -286,6 +291,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--registry", type=Path, default=Path("configs/melee_events.yaml"))
     parser.add_argument("--raw-root", type=Path, default=Path("data_raw"))
     parser.add_argument("--data-root", type=Path, default=Path("data"))
+    parser.add_argument("--review-only", action="store_true", help="Retain assessed input for deck review, preserving all publication blockers")
     parser.add_argument(
         "--execute",
         action="store_true",
@@ -301,6 +307,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 args.snapshot,
                 raw_root=args.raw_root,
                 data_root=args.data_root,
+                review_only=args.review_only,
             )
             if args.execute
             else None
