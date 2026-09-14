@@ -75,6 +75,7 @@ def _participant_status(source: SourceStanding) -> str:
         return "active"
     if status in {
         "drop", "dropped", "withdrawn", "dropped (self)", "dropped (staff)",
+        "unenrolled (payment)",
     }:
         return "dropped"
     if status == "disqualified":
