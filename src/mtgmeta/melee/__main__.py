@@ -44,9 +44,12 @@ def main(
         action="store_true",
         help="Discover and collect the complete public event; requires --execute",
     )
+    parser.add_argument("--review-standings-round-id", help="Explicit completed Swiss round for review-only collection")
     args = parser.parse_args(argv)
     try:
         registry = load_melee_event_registry(args.registry)
+        if args.review_standings_round_id and not args.complete:
+            raise ValueError("--review-standings-round-id requires --complete --execute")
         if args.complete and not args.execute:
             raise ValueError("--complete requires --execute because its request plan is discovered live")
         if args.complete:
@@ -62,6 +65,7 @@ def main(
                 registry,
                 args.raw_root,
                 progress=report_progress,
+                **({"review_standings_round_id": args.review_standings_round_id} if args.review_standings_round_id else {}),
             )
         else:
             result = fetch(

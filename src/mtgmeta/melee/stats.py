@@ -1382,6 +1382,16 @@ def apply_final_standings(document, event_path, root):
     """Update ranks from a bound official source, preserving all other event facts."""
     final_path = event_path.parent.parent / "final_standings" / event_path.name
     if not final_path.exists():
+        event, _ = _read_json_object(event_path)
+        if any(item["source_label"].casefold() == "finals" for item in event["rounds"]):
+            snapshot = (root / event["provenance"]["raw_artifacts"][0]["path"]).parent
+            manifest, _ = _read_json_object(snapshot / "manifest.json")
+            tournament_record = next(item for item in manifest["responses"] if item["resource_type"] == "tournament")
+            tournament, _ = _read_json_object(snapshot / tournament_record["path"])
+            finals = {item["source_round_id"] for item in tournament["rounds"] if item["label"].casefold() == "finals"}
+            standings = {item["source_round_id"] for item in manifest["responses"] if item["resource_type"] == "standings"}
+            if len(finals) != 1 or standings != finals:
+                raise MeleeStatisticsError("Swiss review input requires official final standings before building a public candidate")
         return
     final, final_bytes = _read_json_object(final_path)
     ranks = final.get("ranks", {})
