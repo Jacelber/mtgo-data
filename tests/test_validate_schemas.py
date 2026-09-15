@@ -62,3 +62,58 @@ def test_selected_output_loads_only_its_schema_and_checks_referenced_values(tmp_
         checked, failures = validate_manifest(tmp_path, schemas / "manifest.json", {"selected.json"})
         assert checked == 1
         assert (not failures) == valid
+
+
+def test_reference_closure_loaded_once_and_errors_preserved(tmp_path, monkeypatch):
+    import validate_schemas as validator
+    from collections import Counter
+
+    def write(name, **body):
+        (tmp_path / name).write_text(json.dumps({
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "https://example.test/" + name, **body,
+        }), encoding="utf-8")
+
+    write("selected.schema.json", type="array",
+          items={"$ref": "value.schema.json"},
+          examples=[{"$ref": "not-a-schema.json"}])
+    write("value.schema.json", **{"$ref": "count.schema.json"})
+    write("count.schema.json", type="integer", minimum=0)
+    (tmp_path / "unrelated.schema.json").write_text("invalid JSON")
+    reads = Counter()
+    original = validator._read_json
+
+    def counted(path):
+        reads[path.name] += 1
+        return original(path)
+
+    monkeypatch.setattr(validator, "_read_json", counted)
+    schemas, registry = validator.load_schemas(tmp_path, {"selected.schema.json"})
+    for _ in range(2):
+        errors = validator.validate_instance([3] * 100 + [-1], schemas["selected.schema.json"], registry)
+        assert len(errors) == 1
+        assert errors[0].location == "$[100]"
+    assert reads == {"selected.schema.json": 1, "value.schema.json": 1, "count.schema.json": 1}
+
+    # A new invocation must see updated definitions, not stale process-wide cache.
+    write("count.schema.json", type="integer", minimum=4)
+    schemas, registry = validator.load_schemas(tmp_path, {"selected.schema.json"})
+    assert validator.validate_instance([3], schemas["selected.schema.json"], registry)
+
+
+def test_cyclic_schema_references_and_embedded_ids(tmp_path):
+    from validate_schemas import load_schemas, validate_instance
+
+    schema = {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://example.test/root.schema.json",
+        "$ref": "node.schema.json",
+        "$defs": {"node": {
+            "$id": "node.schema.json", "type": "object",
+            "properties": {"child": {"$ref": "root.schema.json"}},
+        }},
+    }
+    (tmp_path / "root.schema.json").write_text(json.dumps(schema))
+    schemas, registry = load_schemas(tmp_path, {"root.schema.json"})
+    assert not validate_instance({"child": {}}, schemas["root.schema.json"], registry)
+    assert validate_instance({"child": 1}, schemas["root.schema.json"], registry)

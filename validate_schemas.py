@@ -6,7 +6,7 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlsplit
+from urllib.parse import urldefrag, urljoin, urlsplit
 
 from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError
@@ -64,7 +64,28 @@ def load_schemas(schema_dir: Path, names: set[str] | None = None) -> tuple[dict[
         resources.append((schema["$id"], Resource.from_contents(schema)))
     if not schemas and names is None:
         raise SchemaError(f"no schemas found in {schema_dir}")
-    return schemas, Registry(retrieve=retrieve).with_resources(resources)
+    # Preload only the selected schemas' reference closure. Registry retrieval
+    # is immutable: a resource retrieved by one validation branch is not saved
+    # for its siblings, so lazy retrieval repeats parsing and schema checking.
+    registry = Registry().with_resources(resources).crawl()
+    pending = [(resource, uri) for uri, resource in resources]
+    while pending:
+        resource, base = pending.pop()
+        base = urljoin(base, resource.id() or "")
+        contents = resource.contents
+        if isinstance(contents, dict):
+            for keyword in ("$ref", "$dynamicRef"):
+                ref = contents.get(keyword)
+                if not isinstance(ref, str):
+                    continue
+                uri, _ = urldefrag(urljoin(base, ref))
+                if uri != urldefrag(base)[0] and uri not in registry:
+                    dependency = retrieve(uri)
+                    registry = registry.with_resource(uri, dependency).crawl()
+                    pending.append((dependency, uri))
+        # Only schema positions are visited; examples/defaults are instance data.
+        pending.extend((child, base) for child in resource.subresources())
+    return schemas, registry
 
 
 def validate_instance(
