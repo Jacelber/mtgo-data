@@ -34,9 +34,6 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: Gene Pollinator
-        zone: main
-        min_count: 3
       - card: Biotech Specialist
         zone: main
         min_count: 3
@@ -201,10 +198,10 @@ archetypes:
       all:
       - card: Dwarven Mauler
         zone: main
-        min_count: 4
+        min_count: 2
       - card: Dáin's Company
         zone: main
-        min_count: 4
+        min_count: 2
       - card: Sacred Foundry
         zone: main
         min_count: 1
@@ -375,10 +372,6 @@ archetypes:
       all:
       - card: Doomsday Excruciator
         min_count: 1
-      - card: Superior Spider-Man
-        min_count: 3
-      - card: Deceit
-        min_count: 3
 - id: bant-rhythm
   name: Bant Rhythm
   priority: 69000
@@ -568,9 +561,6 @@ archetypes:
     conditions:
       all:
       - card: Ashling, Rekindled
-        zone: main
-        min_count: 4
-      - card: Sunderflock
         zone: main
         min_count: 2
       - card: Vibrance
@@ -923,6 +913,26 @@ archetypes:
         min_count: 4
       - card: Ardyn, the Usurper
         min_count: 2
+  - id: sultai-reanimator-awaken
+    priority: 43000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Deceit
+        zone: main
+        min_count: 1
+      - card: Awaken the Honored Dead
+        zone: main
+        min_count: 1
+      - card: Superior Spider-Man
+        zone: main
+        min_count: 1
+      - card: Wistfulness
+        zone: main
+        min_count: 2
+      - card: Bringer of the Last Gift
+        zone: main
+        exact_count: 0
 - id: esper-pixie
   name: Esper Pixie
   priority: 42000
@@ -960,7 +970,7 @@ archetypes:
       - card: Three Steps Ahead
         min_count: 2
       - card: Consult the Star Charts
-        min_count: 3
+        min_count: 2
 - id: azorius-control
   name: Azorius Control
   priority: 39000
@@ -1014,9 +1024,6 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: Consult the Star Charts
-        zone: main
-        min_count: 3
       - card: Day of Judgment
         zone: main
         min_count: 2
@@ -2813,5 +2820,41 @@ archetypes:
         zone: main
         min_count: 1
       - card: __classifier-semantic-main-green-source__
+        zone: main
+        min_count: 1
+- id: gruul-meek-attack
+  name: Gruul Meek Attack
+  priority: 77140
+  rules:
+  - id: gruul-meek-attack-primary
+    priority: 77140
+    subtype_id: null
+    conditions:
+      all:
+      - card: Meek Attack
+        zone: main
+        min_count: 2
+      - card: Famished Worldsire
+        zone: main
+        min_count: 1
+      - card: Stomping Ground
+        zone: main
+        min_count: 1
+- id: orzhov-midrange
+  name: Orzhov Midrange
+  priority: 38020
+  rules:
+  - id: orzhov-midrange-primary
+    priority: 38020
+    subtype_id: null
+    conditions:
+      all:
+      - card: Enduring Innocence
+        zone: main
+        min_count: 2
+      - card: Caustic Bronco
+        zone: main
+        min_count: 2
+      - card: Godless Shrine
         zone: main
         min_count: 1
