@@ -17,7 +17,7 @@ from mtgmeta.classifier import classifier_digest
 from mtgmeta.mtgo.normalize import load_rules_for_format
 
 
-FORMATS = ("standard", "modern")
+LEGACY_FORMATS = ("standard", "modern")
 SCHEMA_VERSION = "1.6.0"
 INTENTIONAL_UNKNOWN_CONFIG = Path("configs/mtgo_intentional_unknowns.yaml")
 WEEKLY_REVIEW_COMPLETIONS_CONFIG = Path(
@@ -153,10 +153,11 @@ def _completion_state(root: Path, week_id: str, *, format_id: str | None = None)
     subjects = record.get("formats")
     if not isinstance(completed_on, str) or not isinstance(evidence, str):
         raise ValueError(f"Weekly review completion record for {week_id} is incomplete")
-    valid_formats = isinstance(subjects, dict) and bool(subjects) and set(subjects) <= set(FORMATS)
-    if not valid_formats or (registry_version != "1.2.0" and set(subjects) != set(FORMATS)):
+    supported_formats = registry.get("data_admissions", {}).get("formats", LEGACY_FORMATS)
+    valid_formats = isinstance(subjects, dict) and bool(subjects) and set(subjects) <= set(supported_formats)
+    if not valid_formats or (registry_version != "1.2.0" and set(subjects) != set(LEGACY_FORMATS)):
         raise ValueError(
-            f"Weekly review completion record for {week_id} must bind Standard and Modern"
+            f"Weekly review completion record for {week_id} has unsupported format bindings"
         )
     mismatches = []
     review_scope = record.get("review_scope", "top8_legacy")
@@ -658,7 +659,7 @@ def build_readiness(
             subject_builder(root, format_name, week_id),
             digest_builder(root, format_name),
         )
-        for format_name in FORMATS
+        for format_name in LEGACY_FORMATS
     ]
     formats = [item for item, _binding in results]
     bindings = [binding for _item, binding in results]
@@ -745,20 +746,31 @@ def _independent_readiness(root: Path, registry: dict[str, Any], *, publication_
     from mtgmeta.weekly_review import build_mtgo_weekly_review
     today = date.fromisoformat(generated_at[:10])
     results = []
-    accepted_unknowns = _intentional_unknowns(root)
-    for format_id in FORMATS:
+    maintenance = registry.get("weekly_maintenance", {fmt: {} for fmt in LEGACY_FORMATS})
+    if not isinstance(maintenance, dict) or not maintenance:
+        raise ValueError("weekly_maintenance must select at least one format")
+    accepted_unknowns = _intentional_unknowns(root, formats=tuple(maintenance))
+    for format_id, settings in maintenance.items():
+        if format_id not in registry["data_admissions"]["formats"]:
+            raise ValueError(f"{format_id} weekly maintenance requires existing data admission")
+        if not isinstance(settings, dict) or set(settings) - {"start_week"}:
+            raise ValueError(f"{format_id} weekly maintenance settings are invalid")
+        start = week_monday(settings["start_week"]) if "start_week" in settings else date.min
         scope = resolve_scope(root, format_id)
         events = retained_events(root, format_id)
         dates = {str(event["event_id"]): date.fromisoformat(event["starttime"][:10]) for _, event in events}
         pending_weeks = {day.strftime("%G-W%V") for item, day in dates.items()
                          if item in scope.pending_event_ids
-                         and week_monday(day.strftime("%G-W%V")) + timedelta(days=6) < today}
+                         and week_monday(day.strftime("%G-W%V")) + timedelta(days=6) < today
+                         and week_monday(day.strftime("%G-W%V")) >= start}
         admissions = registry["data_admissions"]["formats"][format_id]["weekly_acceptances"]
         recorded_weeks = {row["week"] for row in registry.get("records", [])
-                          if format_id in row.get("formats", {})}
+                          if format_id in row.get("formats", {})
+                          and week_monday(row["week"]) >= start}
         completed = {week for week in recorded_weeks
                      if _completion_state(root, week, format_id=format_id)["state"] == "verified"}
-        unfinished = {row["week"] for row in admissions} - completed
+        unfinished = {row["week"] for row in admissions
+                      if week_monday(row["week"]) >= start} - completed
         weeks = sorted(pending_weeks | unfinished)
         week = weeks[0] if weeks else None
         admission = next((row for row in admissions if row["week"] == week), None)
