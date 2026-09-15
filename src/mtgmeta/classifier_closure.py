@@ -55,6 +55,10 @@ class ClassifierClosureError(RuntimeError):
     """Raised when classifier closure cannot be proved or materialized safely."""
 
 
+class SchemaExecutionError(ClassifierClosureError):
+    """Validation did not complete; not a business-data rejection."""
+
+
 def _json_object(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
@@ -933,6 +937,8 @@ def _allowed_refreshed_artifacts(
 
 
 def _validate_staged_schemas(stage: Path, relative_paths: Sequence[str]) -> None:
+    from validate_schemas import schema_timeout_seconds
+    deadline = perf_counter() + schema_timeout_seconds()
     environment = os.environ.copy()
     source_path = str(stage / "src")
     existing = environment.get("PYTHONPATH")
@@ -960,6 +966,10 @@ def _validate_staged_schemas(stage: Path, relative_paths: Sequence[str]) -> None
                 "--root",
                 str(stage),
             ]
+        remaining = deadline - perf_counter()
+        if remaining <= 0:
+            raise SchemaExecutionError("schema validation operation timed out; stage retained")
+        command.extend(("--timeout-seconds", str(remaining)))
         if manifest is not None:
             command.extend(("--manifest", manifest))
         for relative in paths:
@@ -970,16 +980,17 @@ def _validate_staged_schemas(stage: Path, relative_paths: Sequence[str]) -> None
                 cwd=stage,
                 env=environment,
                 check=False,
-                capture_output=True,
+                stdout=subprocess.PIPE,
                 text=True,
             )
         except OSError as exc:
-            raise ClassifierClosureError(
+            raise SchemaExecutionError(
                 f"staged schema validation could not run: {exc}"
             ) from exc
         if completed.returncode != 0:
-            detail = (completed.stdout + completed.stderr).strip()
-            raise ClassifierClosureError(
+            detail = (completed.stdout + (completed.stderr or "")).strip()
+            error = SchemaExecutionError if completed.returncode == 2 else ClassifierClosureError
+            raise error(
                 f"staged schema validation failed: {detail or completed.returncode}"
             )
 
@@ -1070,11 +1081,42 @@ def _materialize_with_rollback(
                 path.unlink(missing_ok=True)
 
 
+def _resume_stage(root: Path, resume_stage: str | Path) -> Path:
+    stage = Path(resume_stage).resolve()
+    if stage == root or stage.is_relative_to(root) or not stage.is_dir():
+        raise ClassifierClosureError("resume stage must be an existing external directory")
+    # Generator changes invalidate generation; schema-validator changes do not.
+    for directory in ("src", "my_archetypes", "configs"):
+        def source_bytes(base):
+            return {p.relative_to(base).as_posix(): p.read_bytes()
+                    for p in (base / directory).rglob("*")
+                    if p.is_file() and "__pycache__" not in p.parts and p.suffix != ".pyc"}
+        if source_bytes(root) != source_bytes(stage):
+            raise ClassifierClosureError(f"resume generation inputs changed: {directory}")
+    for relative in ("requirements.txt", "pyproject.toml"):
+        left, right = root / relative, stage / relative
+        if (left.read_bytes() if left.exists() else None) != (right.read_bytes() if right.exists() else None):
+            raise ClassifierClosureError(f"resume generation dependencies changed: {relative}")
+    # Run the repaired validator from the current checkout on preserved files.
+    for name in ("validate_schemas.py", "validate_output_invariants.py"):
+        if (root / name).is_file():
+            shutil.copy2(root / name, stage / name)
+    # Validation dependencies may be repaired independently of generation.
+    schema_root, schema_stage = root / "schemas", stage / "schemas"
+    if schema_root.is_dir():
+        for target in schema_stage.rglob("*"):
+            if target.is_file() and not (schema_root / target.relative_to(schema_stage)).is_file():
+                target.unlink()
+        shutil.copytree(schema_root, schema_stage, dirs_exist_ok=True)
+    return stage
+
+
 def converge_format(
     repository_root: str | Path,
     format_id: str,
     *,
     execute: bool = False,
+    resume_stage: str | Path | None = None,
 ) -> dict[str, Any]:
     """Stage one format completely, then optionally materialize it atomically."""
 
@@ -1102,35 +1144,38 @@ def converge_format(
     phase_started = perf_counter()
     before_inputs = _protected_input_fingerprints(root, format_id)
     _report_phase(format_id, "fingerprint-inputs", phase_started)
-    phase_started = perf_counter()
-    try:
-        stage = _create_stage(root, format_id)
-    except (ClassifierClosureError, OSError) as exc:
-        return {
-            "format": format_id,
-            "state": INVALID,
-            "mode": "execute" if execute else "plan",
-            "changed_paths": [],
-            "stage": None,
-            "issues": [str(exc)],
-        }
-    _report_phase(format_id, "copy-stage", phase_started)
-    try:
+    if resume_stage is not None:
+        stage = _resume_stage(root, resume_stage)
+    else:
         phase_started = perf_counter()
-        _build_staged_format(stage, format_id, initial)
-        _report_phase(format_id, "generate-stage", phase_started)
-    except ClassifierClosureError as exc:
-        _report_phase(format_id, "generate-stage-blocked", phase_started)
-        state = BLOCKED_OWNER_REVIEW if str(exc).startswith("BLOCKED_OWNER_REVIEW:") else INVALID
-        return {
-            "format": format_id,
-            "state": state,
-            "mode": "execute" if execute else "plan",
-            "changed_paths": [],
-            "stage": str(stage),
-            "issues": [str(exc)],
-        }
-    phase_started = perf_counter()
+        try:
+            stage = _create_stage(root, format_id)
+        except (ClassifierClosureError, OSError) as exc:
+            return {
+                "format": format_id,
+                "state": INVALID,
+                "mode": "execute" if execute else "plan",
+                "changed_paths": [],
+                "stage": None,
+                "issues": [str(exc)],
+            }
+        _report_phase(format_id, "copy-stage", phase_started)
+        try:
+            phase_started = perf_counter()
+            _build_staged_format(stage, format_id, initial)
+            _report_phase(format_id, "generate-stage", phase_started)
+        except ClassifierClosureError as exc:
+            _report_phase(format_id, "generate-stage-blocked", phase_started)
+            state = BLOCKED_OWNER_REVIEW if str(exc).startswith("BLOCKED_OWNER_REVIEW:") else INVALID
+            return {
+                "format": format_id,
+                "state": state,
+                "mode": "execute" if execute else "plan",
+                "changed_paths": [],
+                "stage": str(stage),
+                "issues": [str(exc)],
+            }
+        phase_started = perf_counter()
     after_inputs = _protected_input_fingerprints(stage, format_id)
     _report_phase(format_id, "verify-staged-inputs", phase_started)
     if before_inputs != after_inputs:
@@ -1173,7 +1218,7 @@ def converge_format(
     except ClassifierClosureError as exc:
         return {
             "format": format_id,
-            "state": INVALID,
+            "state": "EXECUTION_FAILED" if isinstance(exc, SchemaExecutionError) else INVALID,
             "mode": "execute" if execute else "plan",
             "changed_paths": changed,
             "stage": str(stage),
@@ -1214,6 +1259,8 @@ def converge_format(
 
 def _exit_code(states: Iterable[str]) -> int:
     values = set(states)
+    if "EXECUTION_FAILED" in values:
+        return 2
     if INVALID in values:
         return 1
     if BLOCKED_OWNER_REVIEW in values:
@@ -1232,18 +1279,25 @@ def build_parser() -> argparse.ArgumentParser:
         command.add_argument("--format", dest="formats", action="append", required=True)
         if name == "converge":
             command.add_argument("--execute", action="store_true")
+            command.add_argument("--resume-stage", type=Path)
+            command.add_argument("--schema-timeout-seconds", type=float)
     return parser
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     root = args.root.resolve()
+    if args.command == "converge":
+        if args.resume_stage and len(args.formats) != 1:
+            raise ValueError("resume stage requires exactly one format")
+        if args.schema_timeout_seconds is not None:
+            os.environ["MTGO_SCHEMA_TIMEOUT_SECONDS"] = str(args.schema_timeout_seconds)
     if args.command == "inspect":
         result = inspect_repository(root, args.formats)
         states = [item["state"] for item in result["formats"]]
     else:
         formats = [
-            converge_format(root, format_id, execute=args.execute)
+            converge_format(root, format_id, execute=args.execute, resume_stage=args.resume_stage)
             for format_id in args.formats
         ]
         result = {

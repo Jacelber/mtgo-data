@@ -139,7 +139,7 @@ def retained_events(root: Path, format_id: str):
     return events
 
 
-def resolve_scope(repository_root: str | Path, format_id: str) -> PublicScope:
+def _resolve_scope(repository_root: str | Path, format_id: str):
     root = Path(repository_root).resolve()
     from ..config import load_format_registry
     definition = load_format_registry(root / "configs/formats.yaml").require_mtgo(format_id)
@@ -187,13 +187,19 @@ def resolve_scope(repository_root: str | Path, format_id: str) -> PublicScope:
             raise
         raise PublicationError(f"invalid data admission for {format_id}: {exc}") from exc
     return PublicScope(format_id, frontier, ids, frozenset(actual) - ids, manifest,
-                       _digest({"format": format_id, "week": frontier.isoformat(), "events": manifest}))
+                       _digest({"format": format_id, "week": frontier.isoformat(), "events": manifest})), sources
+
+
+def resolve_scope(repository_root: str | Path, format_id: str) -> PublicScope:
+    # Every independent call obtains fresh inputs, including final write checks.
+    root = Path(repository_root).resolve()
+    return _resolve_scope(root, format_id)[0]
 
 
 def public_events(repository_root: str | Path, format_id: str):
     root = Path(repository_root).resolve()
-    scope = resolve_scope(root, format_id)
-    return [(source, event) for source, event in retained_events(root, format_id)
+    scope, events = _resolve_scope(root, format_id)
+    return [(source, event) for source, event in events
             if str(event["event_id"]) in scope.event_ids]
 
 
@@ -317,6 +323,7 @@ def stage_publications(
     *,
     include_landing: bool = False,
     execute: bool = False,
+    resume_stage: str | Path | None = None,
 ) -> dict[str, Any]:
     """Stage one or more accepted formats and materialize them atomically."""
     import os
@@ -325,6 +332,7 @@ def stage_publications(
     from time import perf_counter
     from ..classifier_closure import (
         _copy_repository_to_stage,
+        _resume_stage,
         _materialize_with_rollback,
         _protected_input_fingerprints,
         inspect_format,
@@ -343,15 +351,18 @@ def stage_publications(
         for format_id in formats
     }
     stage_started = perf_counter()
-    stage = _copy_repository_to_stage(
-        root, f"mtgo-publication-{'-'.join(formats)}-"
-    )
+    if resume_stage is not None:
+        stage = _resume_stage(root, resume_stage)
+    else:
+        stage = _copy_repository_to_stage(
+            root, f"mtgo-publication-{'-'.join(formats)}-"
+        )
     print(
         json.dumps(
             {
                 "formats": list(formats),
                 "operation": "mtgo-publication-progress",
-                "phase": "copy-stage",
+                "phase": "reuse-stage" if resume_stage is not None else "copy-stage",
                 "seconds": round(perf_counter() - stage_started, 3),
             },
             sort_keys=True,
@@ -376,31 +387,32 @@ def stage_publications(
             before[path] = hashlib.sha256((root / path).read_bytes()).hexdigest()
     for path in ("stats/catalog.json",):
         before[path] = hashlib.sha256((root / path).read_bytes()).hexdigest()
-    for format_id in formats:
-        stats.build_all_stats(stage, format_id)
-        matchup.build_all_matchups(stage, format_id)
-        completeness.build_all_completeness(stage, format_id)
-        top8.build_all_top8(stage, format_id)
-        rules_updated = metadata.rules_last_commit_iso(
-            root, root / "my_archetypes" / f"{format_id}.yaml"
-        )
-        metadata.generate_hierarchy_catalog(
-            stage, format_id, rules_updated=rules_updated
-        )
-        landing_editorial.generate_public_name_contract(stage, format_id)
-        generate_reports(stage, format_id)
-        if include_landing:
-            result = landing.generate(stage, format_id)
-            if result["status"] in {
-                "stale_review_required",
-                "summary_review_required",
-            }:
-                raise PublicationError(
-                    f"BLOCKED_OWNER_REVIEW: {format_id}: {result['status']}; "
-                    f"stage retained at {stage}"
-                )
-        metadata.generate_metadata(stage, format_id, rules_updated=rules_updated)
-    write_catalog(stage)
+    if resume_stage is None:
+        for format_id in formats:
+            stats.build_all_stats(stage, format_id)
+            matchup.build_all_matchups(stage, format_id)
+            completeness.build_all_completeness(stage, format_id)
+            top8.build_all_top8(stage, format_id)
+            rules_updated = metadata.rules_last_commit_iso(
+                root, root / "my_archetypes" / f"{format_id}.yaml"
+            )
+            metadata.generate_hierarchy_catalog(
+                stage, format_id, rules_updated=rules_updated
+            )
+            landing_editorial.generate_public_name_contract(stage, format_id)
+            generate_reports(stage, format_id)
+            if include_landing:
+                result = landing.generate(stage, format_id)
+                if result["status"] in {
+                    "stale_review_required",
+                    "summary_review_required",
+                }:
+                    raise PublicationError(
+                        f"BLOCKED_OWNER_REVIEW: {format_id}: {result['status']}; "
+                        f"stage retained at {stage}"
+                    )
+            metadata.generate_metadata(stage, format_id, rules_updated=rules_updated)
+        write_catalog(stage)
     for format_id in formats:
         issues = inspect_publication(stage, format_id)
         if issues:
@@ -484,13 +496,13 @@ def stage_publications(
 
 
 def stage_publication(root: Path, format_id: str, *, include_landing: bool = False,
-                      execute: bool = False) -> dict[str, Any]:
+                      execute: bool = False, resume_stage: str | Path | None = None) -> dict[str, Any]:
     """Backward-compatible single-format publication staging."""
     result = stage_publications(
         root,
         (format_id,),
         include_landing=include_landing,
-        execute=execute,
+        execute=execute, resume_stage=resume_stage,
     )
     return {
         "format": format_id,

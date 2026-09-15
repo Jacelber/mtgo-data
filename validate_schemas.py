@@ -3,6 +3,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import subprocess
+import sys
+import tempfile
+from time import monotonic
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -99,7 +104,7 @@ def validate_instance(
     return [ValidationFailure(path, _location(list(error.absolute_path)), error.message) for error in errors]
 
 
-def validate_manifest(
+def _validate_manifest(
     repository_root: Path,
     manifest_path: Path,
     selected_paths: set[str] | None = None,
@@ -125,7 +130,11 @@ def validate_manifest(
             raise SchemaError(f"manifest pattern matched no files: {pattern}")
         if matches:
             selected_mappings.append((schema_name, matches))
+    started = monotonic()
+    print("Schema loading references", file=sys.stderr, flush=True)
     schemas, registry = load_schemas(manifest_path.parent, {name for name, _ in selected_mappings})
+    print(f"Schema references ready seconds={monotonic()-started:.3f}", file=sys.stderr, flush=True)
+    total = sum(len(paths) for _, paths in selected_mappings)
     checked = 0
     failures: list[ValidationFailure] = []
     seen: set[Path] = set()
@@ -133,6 +142,8 @@ def validate_manifest(
     for schema_name, matches in selected_mappings:
         for path in matches:
             relative = path.relative_to(repository_root).as_posix()
+            file_started = monotonic()
+            print(f"Schema start {checked}/{total} {relative}", file=sys.stderr, flush=True)
             if selected_paths is not None and relative not in selected_paths:
                 continue
             resolved = path.resolve()
@@ -165,11 +176,77 @@ def validate_manifest(
                     if not isinstance(instance, dict) or instance.get("format") != parts[1]:
                         failures.append(ValidationFailure(relative, "$.format", "must match the registered output path"))
             checked += 1
+            print(f"Schema done {checked}/{total} {relative} seconds={monotonic()-file_started:.3f}", file=sys.stderr, flush=True)
     return checked, failures
+
+
+# 43 real Standard files took 29.7s after reference reuse; allow a 4x margin.
+# Larger operations can override this per call/CLI or with the environment.
+DEFAULT_TIMEOUT_SECONDS = 120.0
+
+
+def schema_timeout_seconds(value: float | None = None) -> float:
+    import math
+    timeout = float(value if value is not None else
+                    os.environ.get("MTGO_SCHEMA_TIMEOUT_SECONDS", DEFAULT_TIMEOUT_SECONDS))
+    if not math.isfinite(timeout) or timeout <= 0:
+        raise ValueError("schema timeout must be finite and positive")
+    return timeout
+
+
+def validate_manifest(repository_root: Path, manifest_path: Path,
+                      selected_paths: set[str] | None = None, *,
+                      timeout_seconds: float | None = None) -> tuple[int, list[ValidationFailure]]:
+    """Bound the entire batch, including a stuck schema or single file.
+
+    The worker loads the schema registry once. The supervisor
+    terminates its process tree on timeout; temporary IPC is not a persistent cache.
+    """
+    timeout = schema_timeout_seconds(timeout_seconds)
+    with tempfile.TemporaryDirectory(prefix="schema-validation-") as temp:
+        request, result = Path(temp)/"request.json", Path(temp)/"result.json"
+        request.write_text(json.dumps({"root": str(repository_root.resolve()),
+            "manifest": str(manifest_path.resolve()),
+            "selected": sorted(selected_paths) if selected_paths is not None else None}), encoding="utf-8")
+        # Bypass Windows venv launchers while preserving this interpreter's exact
+        # import path. The actual Python worker does not create child processes.
+        executable = getattr(sys, "_base_executable", sys.executable)
+        bootstrap = "import runpy,sys; sys.path[:]=%r; sys.argv=sys.argv[1:]; runpy.run_path(sys.argv[0],run_name='__main__')" % sys.path
+        worker = subprocess.Popen([executable, "-B", "-c", bootstrap,
+            str(Path(__file__).resolve()), "--worker-request", str(request), str(result)],
+            stdout=subprocess.DEVNULL)
+        try:
+            code = worker.wait(timeout=timeout)
+        except BaseException as exc:
+            worker.kill()
+            worker.wait()
+            if isinstance(exc, subprocess.TimeoutExpired):
+                raise TimeoutError(f"Schema validation incomplete: exceeded {timeout:g}s; generated files retained") from exc
+            raise
+        if code:
+            raise RuntimeError(f"Schema validation worker failed: {code}")
+        value = json.loads(result.read_text(encoding="utf-8"))
+        if "error" in value:
+            kind = {"SchemaError": SchemaError, "ValueError": ValueError,
+                    "FileNotFoundError": FileNotFoundError, "OSError": OSError}.get(value["type"], RuntimeError)
+            raise kind(value["error"])
+        return value["checked"], [ValidationFailure(**row) for row in value["failures"]]
+
+
+def _worker(request: str, result: str) -> None:
+    args = json.loads(Path(request).read_text(encoding="utf-8"))
+    try:
+        count, failures = _validate_manifest(Path(args["root"]), Path(args["manifest"]),
+            set(args["selected"]) if args["selected"] is not None else None)
+        value = {"checked": count, "failures": [vars(row) for row in failures]}
+    except Exception as exc:
+        value = {"type": type(exc).__name__, "error": str(exc)}
+    Path(result).write_text(json.dumps(value), encoding="utf-8")
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Validate declared public JSON files against versioned schemas.")
+    parser.add_argument("--timeout-seconds", type=float, default=None)
     parser.add_argument("--root", type=Path, default=ROOT, help="repository root (default: script directory)")
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST, help="schema mapping manifest")
     parser.add_argument(
@@ -194,7 +271,7 @@ def main(argv: list[str] | None = None) -> int:
             if args.changed_from
             else set(args.paths) if args.paths else None
         )
-        checked, failures = validate_manifest(root, manifest.resolve(), selected)
+        checked, failures = validate_manifest(root, manifest.resolve(), selected, timeout_seconds=args.timeout_seconds)
         if args.paths and checked != len(selected):
             raise SchemaError(
                 "one or more requested --path values are not mapped by the selected manifest"
@@ -203,6 +280,7 @@ def main(argv: list[str] | None = None) -> int:
         OSError,
         UnicodeError,
         json.JSONDecodeError,
+        RuntimeError,
         InfrastructureError,
         SchemaError,
         ValueError,
@@ -220,4 +298,7 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    if len(sys.argv) == 4 and sys.argv[1] == "--worker-request":
+        _worker(sys.argv[2], sys.argv[3])
+    else:
+        raise SystemExit(main())

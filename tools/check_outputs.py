@@ -5,22 +5,24 @@ import argparse
 import json
 from pathlib import Path
 import sys
+from time import monotonic
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from tools.delivery.gitfacts import changed_files
-from validate_schemas import validate_manifest
+from validate_schemas import validate_manifest, schema_timeout_seconds
 from validate_output_invariants import validate_repository_output
 
 
-def check(root: Path, paths: list[str]) -> dict:
+def check(root: Path, paths: list[str], *, timeout_seconds: float | None = None) -> dict:
     selected = {path for path in paths if path.endswith(".json") and (root / path).is_file()
                 and (path.startswith(("stats/", "reports/")) or
                      (path.startswith("data/") and "/melee/" in path))}
+    deadline = monotonic() + schema_timeout_seconds(timeout_seconds)
     failures = []
     checked = 0
     for manifest in ("schemas/manifest.json", "schemas/melee-data-manifest.json"):
-        count, errors = validate_manifest(root, root / manifest, selected)
+        count, errors = validate_manifest(root, root / manifest, selected, timeout_seconds=max(0.001, deadline - monotonic()))
         checked += count
         failures.extend(f"{error.path} {error.location}: {error.message}" for error in errors)
     formats = {parts[1] for path in selected
@@ -33,11 +35,12 @@ def check(root: Path, paths: list[str]) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--schema-timeout-seconds", type=float)
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--changed-from", required=True)
     args = parser.parse_args()
     try:
-        result = check(args.root, changed_files(args.root, args.changed_from))
+        result = check(args.root, changed_files(args.root, args.changed_from), timeout_seconds=args.schema_timeout_seconds)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 1 if result["state"] == "failed" else 0
     except (OSError, ValueError, RuntimeError) as error:
