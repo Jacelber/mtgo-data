@@ -11,10 +11,11 @@
 Excel 是按需导出／批量修改的替代介质，不要求将同一决定或正文再填一次。
 已有表格接收能力保留；选择一种内容输入路径，不双重确认。
 
-1. Codex 批量准备各赛制的完整材料，一个入口按周次和赛制导航。各赛制可以
+1. Codex 批量准备各赛制当前阶段的完整材料，一个入口按周次和赛制导航。各赛制可以
    处在不同阶段或处理不同待审周。缺失材料明确说明，不阻止其它赛制审阅。
    程序输出全量供 Owner 查看；模型先读摘要，再按需读取牌表与理由。
-2. Owner 在对话中说明当前赛制，审阅分类并决定 Feature。机器只给机械候选与
+2. Owner 在对话中说明当前赛制，先审阅 Unknown 和完整分类。Codex 落实分类决定、
+   完成受影响验证并更新派生结果后，才准备 Feature 供 Owner 选择。机器只给机械候选与
    事实理由，不默认选牌表、展示牌、类别或代写中文；只有 Owner 明确要求时才建议。
    只读页保持材料快照，不同步选稿状态，不增加实时更新或审批控件。
 3. Owner 起草中文。“第一条／第二条”或编号列表各对应一个 bullet；明确要求
@@ -36,8 +37,14 @@ Excel 是按需导出／批量修改的替代介质，不要求将同一决定�
 只读入口生成命令（scope 可重复，不要求所有赛制同周）：
 
 ```text
-python tools/build_weekly_review_web.py --scope standard=2026-W36 --scope modern=2026-W36 --scope pauper=2026-W36 --output <private-directory> --localization <cards.json>
+python tools/build_weekly_review_web.py --scope standard=2026-W37 --scope modern=2026-W37 --scope pauper=2026-W37 --output <private-directory> --localization <cards.json>
 ```
+
+默认只生成分类阶段材料。完成下述分类与统计依赖后，对相应赛制使用
+`--include-feature` 重新生成；这只是 Codex 的技术操作，不增加一次 Owner 授权。
+工具核对既有 `data_admissions` 中当前赛制、周次、赛事和分类摘要的实际接纳依据，
+并通过现有消费者核对机械候选的统计摘要；缺失或过期时不提供 Feature 材料。
+机器能生成候选、Unknown 数量少或某场赛事单独审过，都不代表本周完整分类已验收。
 
 正文整理时使用 `tools/prepare_landing_copy.py --input <copy.json> --card-catalog
 <cards.json> --output <private-copy.json>`。Codex 将对话正文整理为 `items`（order、
@@ -86,6 +93,19 @@ Owner 决定类别、子类、名称和允许的 intentional Unknown；Codex 负
 类别内容变化按 QUALITY 的 R3 比较同一批完整同赛制 MTGO／Melee 保留牌表，
 核对全部已批准迁移及未解释的分类、子类、匹配、冲突和状态变化。有效结果复用；
 纯名称变化只检查名称和消费者，不机械重跑分类器。
+
+每个待审赛制依次满足以下依赖：
+
+- 先明确 Unknown 的归属或符合既定含义的 intentional Unknown，同时核对完整分类，
+  不能仅清零 Unknown 就推定全表正确。
+- 落实已确认规则和名称，完成相应影响验证；重新生成受影响分类材料，向 Owner
+  说明实际变化并取得完整分类验收。已确认且未变化的决定复用，不重复逐条询问。
+- 按既有机制记录实际分类接纳，更新受影响统计和机械候选，核对当前版本与范围后，
+  再进入 Feature、展示牌及正文审阅。分类再次变化时暂停受影响的 Feature 判断，
+  修复和重新生成对应材料；不能沿用旧占比、差异理由或候选排序。
+
+批量准备是多个赛制各自当前阶段的批量，不是把待定分类和下游选稿同时交给 Owner。
+续作先核对当前阶段及已有有效结论；已结束周次不因入口修复而重开。
 
 ```text
 python tools/compare_classifier_impact.py --format <format> --accepted-rules <accepted.yaml> --candidate-rules <candidate.yaml> --expected-changes <accepted-changes.json>
