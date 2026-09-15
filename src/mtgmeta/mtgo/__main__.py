@@ -169,6 +169,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     stage.add_argument("--include-landing", action="store_true")
     stage.add_argument("--execute", action="store_true")
+    stage.add_argument("--resume-stage", type=Path)
+    stage.add_argument("--schema-timeout-seconds", type=float)
     return parser
 
 
@@ -445,6 +447,9 @@ def _run_publication(args: argparse.Namespace, root: Path, registry: Path) -> in
     if args.publication_command == "inspect":
         print(json.dumps(publication.inspect(root, args.format_id), indent=2))
     elif args.publication_command == "stage":
+        if args.schema_timeout_seconds is not None:
+            import os
+            os.environ["MTGO_SCHEMA_TIMEOUT_SECONDS"] = str(args.schema_timeout_seconds)
         formats = (args.format_id, *args.co_stage_format)
         result = (
             publication.stage_publication(
@@ -452,6 +457,7 @@ def _run_publication(args: argparse.Namespace, root: Path, registry: Path) -> in
                 args.format_id,
                 include_landing=args.include_landing,
                 execute=args.execute,
+                resume_stage=args.resume_stage,
             )
             if len(formats) == 1
             else publication.stage_publications(
@@ -459,6 +465,7 @@ def _run_publication(args: argparse.Namespace, root: Path, registry: Path) -> in
                 formats,
                 include_landing=args.include_landing,
                 execute=args.execute,
+                resume_stage=args.resume_stage,
             )
         )
         print(json.dumps(result, indent=2))

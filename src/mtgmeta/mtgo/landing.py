@@ -1221,9 +1221,9 @@ def generate_week_data(
     bases, d99 = stats.build_base_pack(events, rules, monday, processed_events=processed)
     subtypes, _ = stats.build_subtype_base_pack(events, rules, monday, processed_events=processed)
     data, decks = stats.build_range(events, rules, monday, 1, bases, d99,
-                                   format_id=format_id, subtype_base_pack=subtypes)
+                                   format_id=format_id, subtype_base_pack=subtypes, processed_events=processed)
     _, reference = stats.build_range(events, rules, monday, 4, bases, d99,
-                                    format_id=format_id, subtype_base_pack=subtypes)
+                                    format_id=format_id, subtype_base_pack=subtypes, processed_events=processed)
     context = load_mtgo_context(root, format_id, "completeness_reporting", registry_path=registry_path)
     coverage = versioned({
         "document_type": "mtgo_completeness_range",

@@ -429,17 +429,15 @@ def load_events_from_directory(
             raise MTGOStatisticsError(
                 "repository_root is required when enforcing an event format"
             )
-        loaded, excluded = load_mtgo_events_for_format(
-            paths,
-            repository_root,
-            format_id,
-        )
         if public:
             from .publication import public_events
             context = load_mtgo_context(repository_root, format_id, "event_statistics")
             if Path(events_directory).resolve() != context.paths["events"].resolve():
                 raise MTGOStatisticsError("public statistics require canonical retained inputs")
             loaded = public_events(repository_root, format_id)
+            excluded = ()  # public_events enforces the same retained-input checks.
+        else:
+            loaded, excluded = load_mtgo_events_for_format(paths, repository_root, format_id)
         if excluded:
             details = ", ".join(
                 f"{item.source_file} ({item.actual_format})" for item in excluded
@@ -943,6 +941,7 @@ def build_range(
     *,
     format_id: str,
     subtype_base_pack=None,
+    processed_events: dict[int, dict[str, Any]] | None = None,
 ):
     """聚合区间统计，并用固定 4 周 base 计算每套牌的区间平均偏离度。"""
     from collections import defaultdict
@@ -952,7 +951,7 @@ def build_range(
     records = []
     for d, ev in events:
         if start_monday <= d <= end_sunday:
-            records.extend(process_event(ev, rules)["records"])
+            records.extend(_processed_event(ev, rules, processed_events)["records"])
 
     include_archetype_ids = True
     agg = aggregate(
@@ -965,6 +964,7 @@ def build_range(
             events,
             rules,
             end_monday,
+            processed_events=processed_events,
         )
 
     # 区间平均偏离度：该区间内该套牌所有牌表逐副对 4 周 base 算偏离，取平均
@@ -1103,12 +1103,15 @@ def build_all_stats(
     if end_monday is None:
         return {}
 
-    base_pack, d99 = build_base_pack(events, rules, end_monday, today=today)
+    # One immutable input/rule snapshot per operation; never persist this cache.
+    processed_events = {}
+    base_pack, d99 = build_base_pack(events, rules, end_monday, today=today, processed_events=processed_events)
     subtype_base_pack, _subtype_d99 = build_subtype_base_pack(
         events,
         rules,
         end_monday,
         today=today,
+        processed_events=processed_events,
     )
     out_dir = Path(output_directory) if output_directory is not None else context.paths["statistics"]
     require_product_output(context, out_dir)
@@ -1125,6 +1128,7 @@ def build_all_stats(
             d99,
             format_id=format_id,
             subtype_base_pack=subtype_base_pack,
+            processed_events=processed_events,
         )
         fname = f"range_{n}w.json"
         decks_fname = f"decks_{n}w.json"
