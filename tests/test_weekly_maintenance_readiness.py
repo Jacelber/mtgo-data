@@ -23,7 +23,7 @@ def test_independent_private_review_and_public_weeks(tmp_path, monkeypatch, mode
     from mtgmeta import weekly_review
     from tools import generate_weekly_maintenance_readiness as readiness
 
-    monkeypatch.setattr(readiness, "_intentional_unknowns", lambda root: {"standard": {}, "modern": {}})
+    monkeypatch.setattr(readiness, "_intentional_unknowns", lambda root, **kwargs: {"standard": {}, "modern": {}})
     monkeypatch.setattr(publication, "resolve_scope", lambda root, fmt: SimpleNamespace(
         week=date(2025, 1, 6) if fmt == "standard" else date(2024, 12, 30),
         pending_event_ids=frozenset({"200"}), event_ids=frozenset({"100"})))
@@ -62,13 +62,80 @@ def _write_json(path: Path, value: object) -> None:
     path.write_text(json.dumps(value), encoding="utf-8")
 
 
+def test_pauper_enrollment_starts_at_w37_without_reopening_closed_weeks(tmp_path, monkeypatch):
+    from datetime import date
+    from types import SimpleNamespace
+    from mtgmeta.mtgo import publication, classification
+    from mtgmeta import weekly_review
+    from tools import generate_weekly_maintenance_readiness as readiness
+
+    formats = ("standard", "modern", "pauper")
+    _write_intentional_unknowns(tmp_path)
+    monkeypatch.setattr(publication, "resolve_scope", lambda root, fmt: SimpleNamespace(
+        week=date(2026, 8, 31), pending_event_ids=frozenset({"200", "201"}),
+        event_ids=frozenset({"100"})))
+    monkeypatch.setattr(publication, "retained_events", lambda root, fmt: [
+        ("old.json", {"event_id": "200", "starttime": "2026-09-06"}),
+        ("new.json", {"event_id": "201", "starttime": "2026-09-07"})])
+
+    def build(root, fmt, week):
+        assert week == "2026-W37"
+        return {"event_ids": ["201"], "format": fmt, "week": week, "records": []}
+
+    def completion(root, week, *, format_id):
+        assert week == "2026-W37"  # Closed W36 is never revalidated or reopened.
+        return {"state": "unrecorded", "completed_on": None, "evidence": None, "mismatches": []}
+
+    monkeypatch.setattr(weekly_review, "build_mtgo_weekly_review", build)
+    monkeypatch.setattr(readiness, "_completion_state", completion)
+    monkeypatch.setattr(classification, "audit_mtgo_classification", lambda root, fmt: SimpleNamespace(
+        reports={"unknown_decks": {"records": []}, "index": {"summary": {"strict_validation": "pass"}}}))
+    for fmt in formats:
+        _write_json(tmp_path / "stats" / fmt / "mtgo/landing/current.json", {"week": {"id": "2026-W36"}})
+    registry = {
+        "weekly_maintenance": {fmt: {"start_week": "2026-W37"} for fmt in formats},
+        "records": [{"week": "2026-W36", "formats": {"modern": {}}}],
+        "data_admissions": {"formats": {
+            fmt: {"weekly_acceptances": [{"week": "2026-W36"}]} for fmt in (*formats, "pioneer")}},
+    }
+    before = json.dumps(registry, sort_keys=True)
+    document = readiness._independent_readiness(tmp_path, registry,
+        publication_sha="a" * 40, production_run_id="1", production_run_attempt="1",
+        source_sha="b" * 40, generated_at="2026-09-15T00:00:00Z")
+    assert [row["format"] for row in document["formats"]] == list(formats)
+    assert all(row["review_week"] == "2026-W37" for row in document["formats"])
+    assert all(row["pending_event_ids"] == ["200", "201"] for row in document["formats"])
+    assert all(row["public_week"] == "2026-W36" for row in document["formats"])
+    assert all(row["data_admission"] == "not_accepted" for row in document["formats"])
+    assert json.dumps(registry, sort_keys=True) == before
+    schema = json.loads((ROOT / "schemas/weekly-maintenance-readiness.schema.json").read_text())
+    jsonschema.Draft202012Validator(schema).validate(document)
+
+
+def test_pauper_completion_is_independent_of_legacy_formats(tmp_path, monkeypatch):
+    from tools import generate_weekly_maintenance_readiness as readiness
+    _write_json(tmp_path / "configs/mtgo_weekly_review_completions.yaml", {
+        "schema_version": "1.2.0", "data_admissions": {"formats": {"pauper": {}}},
+        "records": [{"week": "2026-W37", "completed_on": "2026-09-15", "evidence": "Owner review",
+                     "review_scope": "full_official_classification_v2", "formats": {"pauper": {
+                         "accepted_event_ids": ["201"], "accepted_classifier_subject": "a" * 64,
+                         "classification_review_digest": "b" * 64, "landing_content_digest": "c" * 64}}}],
+    })
+    monkeypatch.setattr("mtgmeta.weekly_review.build_mtgo_weekly_review", lambda *args: {
+        "event_ids": ["201"], "classifier": {"subject_digest": "a" * 64},
+        "classification_review_digest": "b" * 64})
+    monkeypatch.setattr(readiness, "_landing_content_digest", lambda *args: "c" * 64)
+    assert _completion_state(tmp_path, "2026-W37", format_id="pauper")["state"] == "verified"
+    assert _completion_state(tmp_path, "2026-W37", format_id="modern")["state"] == "unrecorded"
+
+
 def test_data_publication_landing_blocker_and_late_delta_are_independent(tmp_path, monkeypatch):
     from datetime import date
     from types import SimpleNamespace
     from mtgmeta.mtgo import publication, classification
     from mtgmeta import weekly_review
     from tools import generate_weekly_maintenance_readiness as readiness
-    monkeypatch.setattr(readiness, "_intentional_unknowns", lambda root: {"standard": {}, "modern": {}})
+    monkeypatch.setattr(readiness, "_intentional_unknowns", lambda root, **kwargs: {"standard": {}, "modern": {}})
     monkeypatch.setattr(readiness, "_completion_state", lambda *args, **kwargs: {
         "state": "unrecorded", "completed_on": None, "evidence": None, "mismatches": []})
     monkeypatch.setattr(publication, "resolve_scope", lambda root, fmt: SimpleNamespace(

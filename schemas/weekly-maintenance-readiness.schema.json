@@ -384,7 +384,7 @@
         "formats": {
           "type": "array",
           "minItems": 2,
-          "maxItems": 2,
+          "maxItems": 3,
           "items": {
             "type": "object",
             "additionalProperties": false,
@@ -409,7 +409,8 @@
               "format": {
                 "enum": [
                   "standard",
-                  "modern"
+                  "modern",
+                  "pauper"
                 ]
               },
               "review_week": {
