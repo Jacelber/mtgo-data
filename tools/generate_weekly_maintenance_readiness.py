@@ -198,7 +198,7 @@ def _completion_state(root: Path, week_id: str, *, format_id: str | None = None)
                     f"{week_id} {format_name} full classification completion is invalid"
                 )
             current_review = build_mtgo_weekly_review(root, format_name, week_id)
-            if current_review["event_ids"] != expected_events:
+            if sorted(current_review["event_ids"]) != sorted(expected_events):
                 mismatches.append(f"{format_name} accepted event IDs")
             if current_review["classifier"]["subject_digest"] != expected_classifier:
                 mismatches.append(f"{format_name} accepted classifier subject")

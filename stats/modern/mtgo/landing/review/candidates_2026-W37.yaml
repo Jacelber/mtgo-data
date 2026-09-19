@@ -8,7 +8,7 @@ selection_policy:
   build_shift: 20
   build_reference_minimum: 8
   active_release_sets: []
-machine_fact_digest: null
+machine_fact_digest: 20991ddb7743189d2d8864c6851979fefa62816a65b25992cf72e04e67406db7
 note: Machine candidates are evidence aids. The reviewer may select none, replace a candidate, and freely rewrite or remove all editorial copy.
 existing_changes:
 - identity_id: sewer-combo/azorius
@@ -24,14 +24,14 @@ existing_changes:
   swiss_score: 21
   player_count: 126
   starttime: '2026-09-09 16:00:00.0'
-  deviation: 17
+  deviation: 19
   source: existing
   candidate_reasons:
   - type: build_shift
     identity_level: subtype
     identity_id: sewer-combo/azorius
-    reference_sample_size: 9
-    score: 23
+    reference_sample_size: 10
+    score: 24
     difference:
       fewer:
       - name: Seachrome Coast
@@ -39,50 +39,50 @@ existing_changes:
         typical_qty: 2.9
       - name: Aether Spellbomb
         deck_qty: 0
-        typical_qty: 1.0
-      - name: Portable Hole
-        deck_qty: 2
-        typical_qty: 3.0
+        typical_qty: 0.9
+      - name: Orim's Chant
+        deck_qty: 0
+        typical_qty: 0.8
       - name: Oswald Fiddlebender
         deck_qty: 3
         typical_qty: 3.8
+      - name: Portable Hole
+        deck_qty: 2
+        typical_qty: 2.8
       - name: Pithing Needle
         deck_qty: 0
         typical_qty: 0.7
       - name: Hallowed Fountain
         deck_qty: 2
-        typical_qty: 2.7
+        typical_qty: 2.6
       - name: Expedition Map
         deck_qty: 0
         typical_qty: 0.4
-      - name: Orim's Chant
-        deck_qty: 0
-        typical_qty: 0.4
       more:
-      - name: Teferi, Time Raveler
-        deck_qty: 2
-        typical_qty: 0.0
+      - name: Metallic Rebuke
+        deck_qty: 4
+        typical_qty: 2.2
       - name: Misty Rainforest
         deck_qty: 2
         typical_qty: 0.3
-      - name: Metallic Rebuke
-        deck_qty: 4
-        typical_qty: 2.4
-      - name: Haywire Mite
-        deck_qty: 1
-        typical_qty: 0.0
-      - name: Breeding Pool
-        deck_qty: 1
-        typical_qty: 0.2
+      - name: Teferi, Time Raveler
+        deck_qty: 2
+        typical_qty: 0.4
       - name: Sewer-veillance Cam
         deck_qty: 3
-        typical_qty: 2.2
+        typical_qty: 2.1
+      - name: Haywire Mite
+        deck_qty: 1
+        typical_qty: 0.2
+      - name: Breeding Pool
+        deck_qty: 1
+        typical_qty: 0.3
+      - name: Loki, God of Mischief
+        deck_qty: 3
+        typical_qty: 2.4
       - name: Disruptor Flute
         deck_qty: 1
         typical_qty: 0.4
-      - name: Scrabbling Claws
-        deck_qty: 1
-        typical_qty: 0.6
   approved: false
   comment_zh: ''
   comment_en: ''
@@ -169,6 +169,155 @@ existing_changes:
   - name: Shadowspear
     qty: 1
   - name: Swan Song
+    qty: 1
+  - name: Vexing Bauble
+    qty: 1
+- identity_id: broodscale-combo/mono-green
+  archetype_id: broodscale-combo
+  subtype_id: mono-green
+  subtype: Mono-Green
+  event_id: '12854070'
+  deck_id: 8836976bf522b8fdfd36
+  deck_fingerprint_sha256: e32c86da1d81c128aab60eba2989913a52579ea40ca8e84cc812e8b45d7cf7fd
+  archetype: Broodscale Combo
+  player: Sodeq
+  final_rank: 1
+  swiss_score: 18
+  player_count: 87
+  starttime: '2026-09-11 15:00:00.0'
+  deviation: 28
+  source: existing
+  candidate_reasons:
+  - type: build_shift
+    identity_level: subtype
+    identity_id: broodscale-combo/mono-green
+    reference_sample_size: 105
+    score: 29
+    difference:
+      fewer:
+      - name: Forest
+        deck_qty: 0
+        typical_qty: 5.6
+      - name: Ugin's Labyrinth
+        deck_qty: 0
+        typical_qty: 1.6
+      - name: Devourer of Destiny
+        deck_qty: 0
+        typical_qty: 1.2
+      - name: Soul-Guide Lantern
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: Vexing Bauble
+        deck_qty: 1
+        typical_qty: 1.8
+      - name: Yavimaya, Cradle of Growth
+        deck_qty: 0
+        typical_qty: 0.6
+      - name: Gemstone Caverns
+        deck_qty: 0
+        typical_qty: 0.5
+      - name: Emrakul, the Promised End
+        deck_qty: 3
+        typical_qty: 3.3
+      more:
+      - name: Snow-Covered Forest
+        deck_qty: 5
+        typical_qty: 0.0
+      - name: Glaring Fleshraker
+        deck_qty: 4
+        typical_qty: 1.9
+      - name: Grove of the Burnwillows
+        deck_qty: 4
+        typical_qty: 2.3
+      - name: Delighted Halfling
+        deck_qty: 2
+        typical_qty: 0.9
+      - name: Blade of the Bloodchief
+        deck_qty: 4
+        typical_qty: 3.1
+      - name: The Mycosynth Gardens
+        deck_qty: 1
+        typical_qty: 0.4
+      - name: Shifting Woodland
+        deck_qty: 1
+        typical_qty: 0.6
+      - name: Ancient Stirrings
+        deck_qty: 4
+        typical_qty: 3.6
+  approved: false
+  comment_zh: ''
+  comment_en: ''
+  landing:
+    category: new_technology
+    order: null
+    headline_zh: ''
+    headline_en: ''
+    positioning_zh: ''
+    positioning_en: ''
+    featured_cards: []
+  main_deck:
+  - name: Ancient Stirrings
+    qty: 4
+  - name: Basking Broodscale
+    qty: 4
+  - name: Blade of the Bloodchief
+    qty: 4
+  - name: Boseiju, Who Endures
+    qty: 2
+  - name: Cavern of Souls
+    qty: 1
+  - name: Delighted Halfling
+    qty: 2
+  - name: Dismember
+    qty: 2
+  - name: Eldrazi Temple
+    qty: 4
+  - name: Emrakul, the Promised End
+    qty: 3
+  - name: Glaring Fleshraker
+    qty: 4
+  - name: Grove of the Burnwillows
+    qty: 4
+  - name: Haywire Mite
+    qty: 1
+  - name: Kozilek's Command
+    qty: 4
+  - name: Malevolent Rumble
+    qty: 4
+  - name: Shifting Woodland
+    qty: 1
+  - name: Snow-Covered Forest
+    qty: 5
+  - name: Sowing Mycospawn
+    qty: 4
+  - name: Springleaf Drum
+    qty: 1
+  - name: The Mycosynth Gardens
+    qty: 1
+  - name: Urza's Saga
+    qty: 4
+  - name: Vexing Bauble
+    qty: 1
+  side_deck:
+  - name: Damping Sphere
+    qty: 2
+  - name: Dismember
+    qty: 2
+  - name: Ghost Quarter
+    qty: 1
+  - name: Grafdigger's Cage
+    qty: 1
+  - name: Nature's Claim
+    qty: 2
+  - name: Pithing Needle
+    qty: 1
+  - name: Sire of Seven Deaths
+    qty: 1
+  - name: Six
+    qty: 2
+  - name: Soul-Guide Lantern
+    qty: 1
+  - name: Thief of Existence
     qty: 1
   - name: Vexing Bauble
     qty: 1
@@ -615,147 +764,6 @@ existing_changes:
     qty: 2
   - name: Unholy Heat
     qty: 2
-- identity_id: broodscale-combo/mono-green
-  archetype_id: broodscale-combo
-  subtype_id: mono-green
-  subtype: Mono-Green
-  event_id: '12853706'
-  deck_id: 47c9569ce5cf82a6f4a3
-  deck_fingerprint_sha256: 2a7af03a4257e4e2c24228a1856184796d4e9d1e68b2148bb92a8159b60e09b9
-  archetype: Broodscale Combo
-  player: toothymtg
-  final_rank: 4
-  swiss_score: 18
-  player_count: 109
-  starttime: '2026-09-07 01:00:00.0'
-  deviation: 21
-  source: existing
-  candidate_reasons:
-  - type: build_shift
-    identity_level: subtype
-    identity_id: broodscale-combo/mono-green
-    reference_sample_size: 106
-    score: 23
-    difference:
-      fewer:
-      - name: Glaring Fleshraker
-        deck_qty: 0
-        typical_qty: 1.9
-      - name: Dismember
-        deck_qty: 0
-        typical_qty: 1.7
-      - name: Forest
-        deck_qty: 4
-        typical_qty: 5.6
-      - name: Boseiju, Who Endures
-        deck_qty: 1
-        typical_qty: 1.9
-      - name: Delighted Halfling
-        deck_qty: 0
-        typical_qty: 0.9
-      - name: Yavimaya, Cradle of Growth
-        deck_qty: 0
-        typical_qty: 0.6
-      - name: Shifting Woodland
-        deck_qty: 0
-        typical_qty: 0.6
-      - name: The Mycosynth Gardens
-        deck_qty: 0
-        typical_qty: 0.4
-      more:
-      - name: Devourer of Destiny
-        deck_qty: 4
-        typical_qty: 1.2
-      - name: Ugin's Labyrinth
-        deck_qty: 4
-        typical_qty: 1.6
-      - name: Talisman of Resilience
-        deck_qty: 2
-        typical_qty: 0.0
-      - name: Vexing Bauble
-        deck_qty: 3
-        typical_qty: 1.8
-      - name: Grove of the Burnwillows
-        deck_qty: 3
-        typical_qty: 2.3
-      - name: Gemstone Caverns
-        deck_qty: 1
-        typical_qty: 0.5
-      - name: Ancient Stirrings
-        deck_qty: 4
-        typical_qty: 3.6
-      - name: Sowing Mycospawn
-        deck_qty: 4
-        typical_qty: 3.9
-  approved: false
-  comment_zh: ''
-  comment_en: ''
-  landing:
-    category: new_technology
-    order: null
-    headline_zh: ''
-    headline_en: ''
-    positioning_zh: ''
-    positioning_en: ''
-    featured_cards: []
-  main_deck:
-  - name: Ancient Stirrings
-    qty: 4
-  - name: Basking Broodscale
-    qty: 4
-  - name: Blade of the Bloodchief
-    qty: 3
-  - name: Boseiju, Who Endures
-    qty: 1
-  - name: Cavern of Souls
-    qty: 1
-  - name: Devourer of Destiny
-    qty: 4
-  - name: Eldrazi Temple
-    qty: 4
-  - name: Emrakul, the Promised End
-    qty: 3
-  - name: Forest
-    qty: 4
-  - name: Gemstone Caverns
-    qty: 1
-  - name: Grove of the Burnwillows
-    qty: 3
-  - name: Haywire Mite
-    qty: 1
-  - name: Kozilek's Command
-    qty: 4
-  - name: Malevolent Rumble
-    qty: 4
-  - name: Soul-Guide Lantern
-    qty: 1
-  - name: Sowing Mycospawn
-    qty: 4
-  - name: Springleaf Drum
-    qty: 1
-  - name: Talisman of Resilience
-    qty: 2
-  - name: Ugin's Labyrinth
-    qty: 4
-  - name: Urza's Saga
-    qty: 4
-  - name: Vexing Bauble
-    qty: 3
-  side_deck:
-  - name: Dismember
-    qty: 2
-  - name: Disruptor Flute
-    qty: 2
-  - name: Grafdigger's Cage
-    qty: 2
-  - name: Nature's Claim
-    qty: 3
-  - name: Sire of Seven Deaths
-    qty: 1
-  - name: Thief of Existence
-    qty: 2
-  - name: Trinisphere
-    qty: 3
 - identity_id: dimir-tempo/dimir
   archetype_id: dimir-tempo
   subtype_id: dimir
@@ -913,5 +921,6 @@ source_event_ids:
 - '12854076'
 - '12854081'
 - '12854091'
-classifier_digest: d9cd9a3c61e7087fef15a10432ac756e183b523323889f1fc956a8ef81387d1c
+classifier_digest: 10be27063f5e73c74d15d358b9ab9bfefa28893f0b0f924ae3b9466a7c00feab
 selection_policy_digest: 3541185e634bcab559bb3118ee3f29ece113552473d1f314bcde2a1e2f697a42
+link_catalog_digest: 25063241fff1049d6dd1d8c50fff5d7379fee093f18c736813161882aa080d13

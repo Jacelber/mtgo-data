@@ -29,6 +29,16 @@ def _write_or_print(value: object, output: Path | None) -> None:
     output.write_text(text, encoding="utf-8", newline="\n")
 
 
+def _same_event_ids(left: object, right: object) -> bool:
+    """Compare accepted event membership without assigning meaning to order."""
+
+    return (
+        isinstance(left, list)
+        and isinstance(right, list)
+        and sorted(left) == sorted(right)
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repository-root", type=Path, default=ROOT)
@@ -132,7 +142,8 @@ def main(argv: list[str] | None = None) -> int:
                 if not any(
                     row["week"] == args.week
                     and row["classification_review_digest"] == review["classification_review_digest"]
-                    and row["event_ids"] == review["event_ids"] for row in admissions
+                    and _same_event_ids(row["event_ids"], review["event_ids"])
+                    for row in admissions
                 ):
                     raise ValueError("completion requires the exact full-classification data acceptance")
                 scope = resolve_scope(root, args.format_id)

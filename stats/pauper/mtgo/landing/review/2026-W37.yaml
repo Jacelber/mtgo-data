@@ -1,0 +1,3232 @@
+schema_version: 1.2.0
+source: mtgo
+format: pauper
+week:
+  id: 2026-W37
+  start: '2026-09-07'
+  end: '2026-09-13'
+bindings:
+  source_event_ids:
+  - '12853710'
+  - '12853727'
+  - '12853785'
+  - '12854064'
+  - '12854069'
+  - '12854094'
+  classifier_digest: 596dc2f2f78125df30c5248700152a63595e3931591857e6f7ce77e1dd018316
+  selection_policy_digest: 3541185e634bcab559bb3118ee3f29ece113552473d1f314bcde2a1e2f697a42
+  machine_fact_digest: 67c006d994c86fb6013eecce4251977faf65e5b30b3cc8572c661141d0038dab
+  link_catalog_digest: dc1fe0cd2ae41eea2d98ccd1db575b0cc0db0b108006c381552723e3c7662806
+  bilingual_catalog_digest: 3d1d18d913e5f2a0ad07894aa98c7985101faf8ea968df9043ba26f6155803f4
+  content_sha256: 2eb6895ff6a9af517d51badfc4533de1da6f264fc70680be5492d7d92940ff57
+candidate_evidence:
+- token: deck:9138068c968f01620f2b
+  source_order: 1
+  reasons:
+  - type: new_archetype
+    known_state_match: false
+    continuity_alias_match: false
+    prior_record_count_under_current_classifier: 1
+- token: deck:5c7aae4bc5f4b7595bcc
+  source_order: 2
+  reasons:
+  - type: new_archetype
+    known_state_match: false
+    continuity_alias_match: false
+    prior_record_count_under_current_classifier: 0
+- token: deck:703dec5e054f8ab93980
+  source_order: 3
+  reasons:
+  - type: share_increase
+    current_high_score_count: 6
+    current_high_score_denominator: 100
+    current_share: 0.06
+    reference_high_score_count: 1
+    reference_high_score_denominator: 390
+    reference_share: 0.0026
+    delta_pp: 5.74
+- token: deck:ca504aa6e394b5b9704a
+  source_order: 4
+  reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: elves
+    reference_sample_size: 26
+    score: 21
+    difference:
+      fewer:
+      - name: Forest
+        deck_qty: 0
+        typical_qty: 7.9
+      - name: Timberwatch Elf
+        deck_qty: 3
+        typical_qty: 3.6
+      - name: Sagu Wildling
+        deck_qty: 2
+        typical_qty: 2.4
+      - name: Llanowar Elves
+        deck_qty: 3
+        typical_qty: 3.3
+      - name: Wellwisher
+        deck_qty: 0
+        typical_qty: 0.3
+      - name: Birchlore Rangers
+        deck_qty: 0
+        typical_qty: 0.2
+      - name: Elvish Vanguard
+        deck_qty: 0
+        typical_qty: 0.2
+      - name: Jaspera Sentinel
+        deck_qty: 0
+        typical_qty: 0.2
+      more:
+      - name: Snow-Covered Forest
+        deck_qty: 11
+        typical_qty: 3.5
+      - name: Fyndhorn Elves
+        deck_qty: 3
+        typical_qty: 2.1
+      - name: Land Grant
+        deck_qty: 2
+        typical_qty: 1.2
+      - name: Elvish Mystic
+        deck_qty: 3
+        typical_qty: 2.7
+      - name: Avenging Hunter
+        deck_qty: 4
+        typical_qty: 3.8
+      - name: Generous Ent
+        deck_qty: 4
+        typical_qty: 3.8
+      - name: Lead the Stampede
+        deck_qty: 4
+        typical_qty: 3.8
+      - name: Masked Vandal
+        deck_qty: 4
+        typical_qty: 3.8
+- token: deck:a23bf101e3850a564ad5
+  source_order: 5
+  reasons:
+  - type: build_shift
+    identity_level: subtype
+    identity_id: ephemerate/jeskai
+    reference_sample_size: 27
+    score: 22
+    difference:
+      fewer:
+      - name: Counterspell
+        deck_qty: 0
+        typical_qty: 3.6
+      - name: Murmuring Mystic
+        deck_qty: 0
+        typical_qty: 1.5
+      - name: Cleansing Wildfire
+        deck_qty: 0
+        typical_qty: 0.7
+      - name: Rustvale Bridge
+        deck_qty: 0
+        typical_qty: 0.7
+      - name: Silverbluff Bridge
+        deck_qty: 0
+        typical_qty: 0.7
+      - name: Ride's End
+        deck_qty: 1
+        typical_qty: 1.7
+      - name: Brainstorm
+        deck_qty: 0
+        typical_qty: 0.4
+      - name: Ash Barrens
+        deck_qty: 0
+        typical_qty: 0.4
+      more:
+      - name: Memory Lapse
+        deck_qty: 4
+        typical_qty: 0.4
+      - name: Bender's Waterskin
+        deck_qty: 3
+        typical_qty: 1.9
+      - name: Perilous Landscape
+        deck_qty: 4
+        typical_qty: 3.0
+      - name: Torch the Tower
+        deck_qty: 1
+        typical_qty: 0.0
+      - name: Behold the Multiverse
+        deck_qty: 1
+        typical_qty: 0.3
+      - name: Preordain
+        deck_qty: 4
+        typical_qty: 3.4
+      - name: Mulldrifter
+        deck_qty: 4
+        typical_qty: 3.5
+      - name: Snow-Covered Mountain
+        deck_qty: 2
+        typical_qty: 1.6
+- token: deck:a0abf31518d75150304d
+  source_order: 6
+  reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: gruul-ponza
+    reference_sample_size: 44
+    score: 40
+    difference:
+      fewer:
+      - name: Forest
+        deck_qty: 0
+        typical_qty: 13.5
+      - name: Malevolent Rumble
+        deck_qty: 0
+        typical_qty: 2.0
+      - name: Generous Ent
+        deck_qty: 0
+        typical_qty: 1.7
+      - name: Mountain
+        deck_qty: 0
+        typical_qty: 1.7
+      - name: Wooded Ridgeline
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: Eldrazi Repurposer
+        deck_qty: 2
+        typical_qty: 2.8
+      - name: Colossal Dreadmask
+        deck_qty: 0
+        typical_qty: 0.6
+      - name: Avenging Hunter
+        deck_qty: 3
+        typical_qty: 3.1
+      more:
+      - name: Snow-Covered Forest
+        deck_qty: 14
+        typical_qty: 0.6
+      - name: Skred
+        deck_qty: 2
+        typical_qty: 0.0
+      - name: Snow-Covered Mountain
+        deck_qty: 2
+        typical_qty: 0.0
+      - name: Sagu Wildling
+        deck_qty: 2
+        typical_qty: 0.2
+      - name: Highland Forest
+        deck_qty: 1
+        typical_qty: 0.0
+      - name: Bonder's Ornament
+        deck_qty: 2
+        typical_qty: 1.3
+      - name: Wild Growth
+        deck_qty: 3
+        typical_qty: 2.3
+      - name: Structural Distortion
+        deck_qty: 2
+        typical_qty: 1.7
+- token: deck:9599085d0eaabe7ac299
+  source_order: 7
+  reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: green-tron
+    reference_sample_size: 62
+    score: 25
+    difference:
+      fewer:
+      - name: Nyxborn Hydra
+        deck_qty: 0
+        typical_qty: 1.5
+      - name: Malevolent Rumble
+        deck_qty: 0
+        typical_qty: 1.4
+      - name: Candy Trail
+        deck_qty: 0
+        typical_qty: 1.2
+      - name: Rooftop Percher
+        deck_qty: 0
+        typical_qty: 1.0
+      - name: Unfathomable Truths
+        deck_qty: 2
+        typical_qty: 2.9
+      - name: Writhing Chrysalis
+        deck_qty: 0
+        typical_qty: 0.8
+      - name: Haunted Fengraf
+        deck_qty: 0
+        typical_qty: 0.6
+      - name: Prophetic Prism
+        deck_qty: 0
+        typical_qty: 0.5
+      more:
+      - name: Boulderbranch Golem
+        deck_qty: 4
+        typical_qty: 1.1
+      - name: Maelstrom Colossus
+        deck_qty: 4
+        typical_qty: 1.8
+      - name: Pinnacle Kill-Ship
+        deck_qty: 4
+        typical_qty: 2.0
+      - name: Generous Ent
+        deck_qty: 3
+        typical_qty: 1.7
+      - name: Barrels of Blasting Jelly
+        deck_qty: 4
+        typical_qty: 2.8
+      - name: Ancient Stirrings
+        deck_qty: 4
+        typical_qty: 3.1
+      - name: Forest
+        deck_qty: 3
+        typical_qty: 2.2
+      - name: Conduit Pylons
+        deck_qty: 2
+        typical_qty: 1.3
+all_top8:
+- token: deck:e5db68c7656b25ddadbc
+  event_id: '12853710'
+  deck_id: e5db68c7656b25ddadbc
+  deck_fingerprint_sha256: 46dd6729eb1ebd4af02253c4d5c0e94d9561b71516b6d6432512ba151bb01440
+  date: '2026-09-07'
+  starttime: '2026-09-07 17:00:00.0'
+  final_rank: 1
+  player_count: 63
+  player: TheJunkDog
+  parent_id: four-color-affinity
+  subtype_id: null
+  display_name: Four-Color Affinity
+  main_deck:
+  - name: Ancient Den
+    qty: 3
+  - name: Blood Fountain
+    qty: 2
+  - name: Cryogen Relic
+    qty: 4
+  - name: Galvanic Blast
+    qty: 4
+  - name: Giant's Boulder
+    qty: 4
+  - name: Glint Hawk
+    qty: 4
+  - name: Great Furnace
+    qty: 4
+  - name: Makeshift Munitions
+    qty: 1
+  - name: Mistvault Bridge
+    qty: 3
+  - name: Myr Enforcer
+    qty: 4
+  - name: Nihil Spellbomb
+    qty: 2
+  - name: Prophetic Prism
+    qty: 1
+  - name: Razortide Bridge
+    qty: 1
+  - name: Reckoner's Bargain
+    qty: 4
+  - name: Refurbished Familiar
+    qty: 4
+  - name: Seat of the Synod
+    qty: 4
+  - name: Thoughtcast
+    qty: 4
+  - name: Utrom Monitor
+    qty: 3
+  - name: Vault of Whispers
+    qty: 4
+  side_deck:
+  - name: Breath Weapon
+    qty: 1
+  - name: Extract a Confession
+    qty: 2
+  - name: Hydroblast
+    qty: 4
+  - name: Krark-Clan Shaman
+    qty: 2
+  - name: Nihil Spellbomb
+    qty: 2
+  - name: Pyroblast
+    qty: 4
+- token: deck:b3d77880f1970def2dc8
+  event_id: '12853710'
+  deck_id: b3d77880f1970def2dc8
+  deck_fingerprint_sha256: 376612b207dcd2e865d4fb13c65754d3e87927dca8fb0feb4e62f6cc47002715
+  date: '2026-09-07'
+  starttime: '2026-09-07 17:00:00.0'
+  final_rank: 2
+  player_count: 63
+  player: vangrind
+  parent_id: mono-red-madness
+  subtype_id: null
+  display_name: Mono-Red Madness
+  main_deck:
+  - name: Faithless Looting
+    qty: 3
+  - name: Fiery Temper
+    qty: 4
+  - name: Fireblast
+    qty: 3
+  - name: Grab the Prize
+    qty: 4
+  - name: Guttersnipe
+    qty: 3
+  - name: Highway Robbery
+    qty: 4
+  - name: Kessig Flamebreather
+    qty: 4
+  - name: Lava Dart
+    qty: 4
+  - name: Lightning Bolt
+    qty: 4
+  - name: Mountain
+    qty: 19
+  - name: Sneaky Snacker
+    qty: 4
+  - name: Voldaren Epicure
+    qty: 4
+  side_deck:
+  - name: Cast into the Fire
+    qty: 2
+  - name: Pyroblast
+    qty: 4
+  - name: Red Elemental Blast
+    qty: 1
+  - name: Relic of Progenitus
+    qty: 3
+  - name: Searing Blaze
+    qty: 3
+  - name: Smash to Smithereens
+    qty: 2
+- token: deck:dafedc72484aabe7328c
+  event_id: '12853710'
+  deck_id: dafedc72484aabe7328c
+  deck_fingerprint_sha256: b8094077a804fe7ad973e17838cee0697f241e67a2fdf635eca0205c851e833b
+  date: '2026-09-07'
+  starttime: '2026-09-07 17:00:00.0'
+  final_rank: 3
+  player_count: 63
+  player: Zabots
+  parent_id: battle-screech
+  subtype_id: mono-white
+  display_name: Battle Screech
+  main_deck:
+  - name: Battle Screech
+    qty: 4
+  - name: Guardians' Pledge
+    qty: 2
+  - name: Idyllic Grange
+    qty: 2
+  - name: Kor Skyfisher
+    qty: 4
+  - name: Leonardo, Big Brother
+    qty: 3
+  - name: Lunarch Veteran
+    qty: 4
+  - name: Novice Inspector
+    qty: 4
+  - name: Patient Instructor
+    qty: 3
+  - name: Plains
+    qty: 16
+  - name: Prismatic Strands
+    qty: 4
+  - name: Raffine's Informant
+    qty: 4
+  - name: 'Summon: Choco/Mog'
+    qty: 2
+  - name: Thraben Charm
+    qty: 4
+  - name: Thraben Inspector
+    qty: 4
+  side_deck:
+  - name: Destroy Evil
+    qty: 1
+  - name: Dust to Dust
+    qty: 4
+  - name: Holy Light
+    qty: 2
+  - name: Journey to Nowhere
+    qty: 2
+  - name: Martyr of Sands
+    qty: 3
+  - name: Standard Bearer
+    qty: 3
+- token: deck:cf10cbc2cf6af84973f5
+  event_id: '12853710'
+  deck_id: cf10cbc2cf6af84973f5
+  deck_fingerprint_sha256: d89c5e938ec4fd2d17a4f24c484e51d1dc6f87e924619ba20c1bd8ac8fa656b1
+  date: '2026-09-07'
+  starttime: '2026-09-07 17:00:00.0'
+  final_rank: 4
+  player_count: 63
+  player: xMatias
+  parent_id: golgari-gardens
+  subtype_id: null
+  display_name: Golgari Gardens
+  main_deck:
+  - name: Accursed Marauder
+    qty: 1
+  - name: Avenging Hunter
+    qty: 1
+  - name: Bojuka Bog
+    qty: 2
+  - name: Campfire
+    qty: 2
+  - name: Cast Down
+    qty: 4
+  - name: Crypt Rats
+    qty: 3
+  - name: Defile
+    qty: 3
+  - name: Eviscerator's Insight
+    qty: 4
+  - name: Fanatical Offering
+    qty: 4
+  - name: Fungal Infection
+    qty: 1
+  - name: Haunted Mire
+    qty: 1
+  - name: Ichor Wellspring
+    qty: 4
+  - name: Khalni Garden
+    qty: 4
+  - name: Lembas
+    qty: 2
+  - name: Nihil Spellbomb
+    qty: 3
+  - name: Sagu Wildling
+    qty: 1
+  - name: Snuff Out
+    qty: 1
+  - name: Spinning Darkness
+    qty: 1
+  - name: Suffocating Fumes
+    qty: 1
+  - name: Swamp
+    qty: 10
+  - name: Tithing Blade
+    qty: 2
+  - name: Troll of Khazad-dûm
+    qty: 3
+  - name: Witch's Cottage
+    qty: 2
+  side_deck:
+  - name: Avenging Hunter
+    qty: 1
+  - name: Drown in Sorrow
+    qty: 2
+  - name: Duress
+    qty: 3
+  - name: Faerie Macabre
+    qty: 2
+  - name: Troublemaker Ouphe
+    qty: 3
+  - name: Weather the Storm
+    qty: 4
+- token: deck:af818c7a522ceb824099
+  event_id: '12853710'
+  deck_id: af818c7a522ceb824099
+  deck_fingerprint_sha256: 7a690cb96c28362d21ddffd54a16d6a7500659a8876a3db09cabff1f2b61d806
+  date: '2026-09-07'
+  starttime: '2026-09-07 17:00:00.0'
+  final_rank: 5
+  player_count: 63
+  player: cabrabr12
+  parent_id: packbeast-swarm
+  subtype_id: selesnya
+  display_name: Packbeast Swarm
+  main_deck:
+  - name: Darval, Whose Web Protects
+    qty: 2
+  - name: Halo Hopper
+    qty: 4
+  - name: Holdout Settlement
+    qty: 1
+  - name: Khalni Garden
+    qty: 4
+  - name: Leonardo, Big Brother
+    qty: 4
+  - name: Martyr's Soul
+    qty: 4
+  - name: Novice Inspector
+    qty: 3
+  - name: Ornithopter
+    qty: 4
+  - name: Phyrexian Walker
+    qty: 4
+  - name: Plains
+    qty: 11
+  - name: Ramosian Rally
+    qty: 4
+  - name: Salt Road Packbeast
+    qty: 4
+  - name: Search Party Captain
+    qty: 4
+  - name: Thraben Inspector
+    qty: 4
+  - name: Winding Way
+    qty: 3
+  side_deck:
+  - name: Archon's Glory
+    qty: 4
+  - name: Dust to Dust
+    qty: 3
+  - name: Standard Bearer
+    qty: 2
+  - name: Thraben Charm
+    qty: 4
+  - name: Ultimate Alliance
+    qty: 2
+- token: deck:5366109972c52bf6659d
+  event_id: '12853710'
+  deck_id: 5366109972c52bf6659d
+  deck_fingerprint_sha256: 060813d4edd569509645eefbfb12a130cb708970b2d136d985582563e6b99841
+  date: '2026-09-07'
+  starttime: '2026-09-07 17:00:00.0'
+  final_rank: 6
+  player_count: 63
+  player: ziofrancone
+  parent_id: mono-red-madness
+  subtype_id: null
+  display_name: Mono-Red Madness
+  main_deck:
+  - name: Faithless Looting
+    qty: 4
+  - name: Fiery Temper
+    qty: 4
+  - name: Fireblast
+    qty: 4
+  - name: Grab the Prize
+    qty: 4
+  - name: Guttersnipe
+    qty: 4
+  - name: Highway Robbery
+    qty: 4
+  - name: Kessig Flamebreather
+    qty: 4
+  - name: Lava Dart
+    qty: 4
+  - name: Lightning Bolt
+    qty: 4
+  - name: Mountain
+    qty: 20
+  - name: Sneaky Snacker
+    qty: 4
+  side_deck:
+  - name: Cast into the Fire
+    qty: 3
+  - name: Pyroblast
+    qty: 4
+  - name: Red Elemental Blast
+    qty: 3
+  - name: Relic of Progenitus
+    qty: 3
+  - name: Searing Blaze
+    qty: 2
+- token: deck:236b8751777deafa3ce8
+  event_id: '12853710'
+  deck_id: 236b8751777deafa3ce8
+  deck_fingerprint_sha256: 16ce39d78b0777f822fba269f8a356356d736d04fc49e5a14020585621d57bf0
+  date: '2026-09-07'
+  starttime: '2026-09-07 17:00:00.0'
+  final_rank: 7
+  player_count: 63
+  player: theserge98
+  parent_id: mono-red-madness
+  subtype_id: null
+  display_name: Mono-Red Madness
+  main_deck:
+  - name: Faithless Looting
+    qty: 4
+  - name: Fiery Temper
+    qty: 4
+  - name: Fireblast
+    qty: 3
+  - name: Grab the Prize
+    qty: 4
+  - name: Guttersnipe
+    qty: 3
+  - name: Highway Robbery
+    qty: 4
+  - name: Kessig Flamebreather
+    qty: 4
+  - name: Lava Dart
+    qty: 4
+  - name: Lightning Bolt
+    qty: 4
+  - name: Mountain
+    qty: 18
+  - name: Sneaky Snacker
+    qty: 4
+  - name: Voldaren Epicure
+    qty: 4
+  side_deck:
+  - name: Cast into the Fire
+    qty: 2
+  - name: Pyroblast
+    qty: 4
+  - name: Relic of Progenitus
+    qty: 3
+  - name: Searing Blaze
+    qty: 4
+  - name: Smash to Smithereens
+    qty: 2
+- token: deck:b980f2c6dbf23603a1bb
+  event_id: '12853710'
+  deck_id: b980f2c6dbf23603a1bb
+  deck_fingerprint_sha256: 8e7b8e6e9a2765d742bf84194bc70ae64ef508ea8cf9125a59cb1f83fa5ef20f
+  date: '2026-09-07'
+  starttime: '2026-09-07 17:00:00.0'
+  final_rank: 8
+  player_count: 63
+  player: Denisevich
+  parent_id: dimir-faeries
+  subtype_id: null
+  display_name: Dimir Faeries
+  main_deck:
+  - name: Augur of Bolas
+    qty: 4
+  - name: Bojuka Bog
+    qty: 1
+  - name: Brainstorm
+    qty: 3
+  - name: Cast Down
+    qty: 3
+  - name: Contaminated Aquifer
+    qty: 4
+  - name: Counterspell
+    qty: 4
+  - name: Dispel
+    qty: 1
+  - name: Extract a Confession
+    qty: 1
+  - name: Faerie Seer
+    qty: 4
+  - name: Island
+    qty: 11
+  - name: Lórien Revealed
+    qty: 4
+  - name: Moon-Circuit Hacker
+    qty: 3
+  - name: Ninja of the Deep Hours
+    qty: 2
+  - name: Preordain
+    qty: 1
+  - name: Seething Landscape
+    qty: 1
+  - name: Sewer-veillance Cam
+    qty: 1
+  - name: Snuff Out
+    qty: 4
+  - name: Spellstutter Sprite
+    qty: 4
+  - name: Suffocating Fumes
+    qty: 1
+  - name: Swamp
+    qty: 1
+  - name: Thorn of the Black Rose
+    qty: 2
+  side_deck:
+  - name: Annul
+    qty: 2
+  - name: Arms of Hadar
+    qty: 1
+  - name: Azure Fleet Admiral
+    qty: 1
+  - name: Blue Elemental Blast
+    qty: 4
+  - name: Dispel
+    qty: 1
+  - name: Hydroblast
+    qty: 2
+  - name: Mukotai Ambusher
+    qty: 1
+  - name: Okiba-Gang Shinobi
+    qty: 1
+  - name: Relic of Progenitus
+    qty: 2
+- token: deck:f5379d9d183048e28477
+  event_id: '12853785'
+  deck_id: f5379d9d183048e28477
+  deck_fingerprint_sha256: cb34aac10774a13df252fad9a13577007515e7fb61b3fd3f1ceebc81b8f0fee9
+  date: '2026-09-08'
+  starttime: '2026-09-08 10:00:00.0'
+  final_rank: 1
+  player_count: 34
+  player: yahakara
+  parent_id: mono-red-madness
+  subtype_id: null
+  display_name: Mono-Red Madness
+  main_deck:
+  - name: Faithless Looting
+    qty: 4
+  - name: Fiery Temper
+    qty: 4
+  - name: Fireblast
+    qty: 2
+  - name: Grab the Prize
+    qty: 3
+  - name: Guttersnipe
+    qty: 4
+  - name: Highway Robbery
+    qty: 4
+  - name: Kiln Fiend
+    qty: 3
+  - name: Lava Dart
+    qty: 4
+  - name: Lightning Bolt
+    qty: 4
+  - name: Mountain
+    qty: 18
+  - name: Sneaky Snacker
+    qty: 4
+  - name: Vision of Love
+    qty: 2
+  - name: Voldaren Epicure
+    qty: 4
+  side_deck:
+  - name: Campfire
+    qty: 2
+  - name: Faerie Macabre
+    qty: 1
+  - name: Pyroblast
+    qty: 4
+  - name: Red Elemental Blast
+    qty: 4
+  - name: Relic of Progenitus
+    qty: 2
+  - name: Smash to Smithereens
+    qty: 2
+- token: deck:ca504aa6e394b5b9704a
+  event_id: '12853785'
+  deck_id: ca504aa6e394b5b9704a
+  deck_fingerprint_sha256: 08678327dda4e3205313e282f170e1c84610c9d21273352b883fb0705fa61a0f
+  date: '2026-09-08'
+  starttime: '2026-09-08 10:00:00.0'
+  final_rank: 2
+  player_count: 34
+  player: Shiib
+  parent_id: elves
+  subtype_id: null
+  display_name: Elves
+  main_deck:
+  - name: Avenging Hunter
+    qty: 4
+  - name: Elvish Mystic
+    qty: 3
+  - name: Fyndhorn Elves
+    qty: 3
+  - name: Generous Ent
+    qty: 4
+  - name: Gingerbread Cabin
+    qty: 1
+  - name: Land Grant
+    qty: 2
+  - name: Lead the Stampede
+    qty: 4
+  - name: Llanowar Elves
+    qty: 3
+  - name: Masked Vandal
+    qty: 4
+  - name: Nyxborn Hydra
+    qty: 4
+  - name: Priest of Titania
+    qty: 4
+  - name: Quirion Ranger
+    qty: 4
+  - name: Sagu Wildling
+    qty: 2
+  - name: Snow-Covered Forest
+    qty: 11
+  - name: Timberwatch Elf
+    qty: 3
+  - name: Winding Way
+    qty: 4
+  side_deck:
+  - name: Faerie Macabre
+    qty: 4
+  - name: Monstrous Emergence
+    qty: 4
+  - name: Sagu Wildling
+    qty: 1
+  - name: Spinewoods Paladin
+    qty: 3
+  - name: Vitu-Ghazi Inspector
+    qty: 3
+- token: deck:a23bf101e3850a564ad5
+  event_id: '12853785'
+  deck_id: a23bf101e3850a564ad5
+  deck_fingerprint_sha256: a648d03b0c4991ea09a24263ae763c3882acc34384f98653d8ec46f465e2d6d2
+  date: '2026-09-08'
+  starttime: '2026-09-08 10:00:00.0'
+  final_rank: 3
+  player_count: 34
+  player: ChaoticMTG
+  parent_id: ephemerate
+  subtype_id: jeskai
+  display_name: Jeskai Ephemerate
+  main_deck:
+  - name: Archaeomancer
+    qty: 3
+  - name: Augur of Bolas
+    qty: 4
+  - name: Behold the Multiverse
+    qty: 1
+  - name: Bender's Waterskin
+    qty: 3
+  - name: Dispel
+    qty: 2
+  - name: Ephemerate
+    qty: 4
+  - name: Glacial Floodplain
+    qty: 2
+  - name: Lórien Revealed
+    qty: 4
+  - name: Memory Lapse
+    qty: 4
+  - name: Mulldrifter
+    qty: 4
+  - name: Perilous Landscape
+    qty: 4
+  - name: Preordain
+    qty: 4
+  - name: Ride's End
+    qty: 1
+  - name: Skred
+    qty: 4
+  - name: Snow-Covered Island
+    qty: 7
+  - name: Snow-Covered Mountain
+    qty: 2
+  - name: Snow-Covered Plains
+    qty: 2
+  - name: Suplex
+    qty: 1
+  - name: Torch the Tower
+    qty: 1
+  - name: Union of the Third Path
+    qty: 1
+  - name: Volatile Fjord
+    qty: 2
+  side_deck:
+  - name: Annul
+    qty: 1
+  - name: Breath Weapon
+    qty: 1
+  - name: Cast into the Fire
+    qty: 1
+  - name: Destroy Evil
+    qty: 1
+  - name: Envelop
+    qty: 1
+  - name: Hydroblast
+    qty: 4
+  - name: Murmuring Mystic
+    qty: 1
+  - name: Pyroblast
+    qty: 4
+  - name: Thraben Charm
+    qty: 1
+- token: deck:adbf52d09e41339a1594
+  event_id: '12853785'
+  deck_id: adbf52d09e41339a1594
+  deck_fingerprint_sha256: 5995f95243accd1f7d8f1ea43421667d0640c4e01a6b1a7e70ef07ce7bfa165f
+  date: '2026-09-08'
+  starttime: '2026-09-08 10:00:00.0'
+  final_rank: 4
+  player_count: 34
+  player: LuffyDoChapeuDePalha
+  parent_id: grixis-affinity
+  subtype_id: null
+  display_name: Grixis Affinity
+  main_deck:
+  - name: Black Mage's Rod
+    qty: 3
+  - name: Blood Fountain
+    qty: 2
+  - name: Drossforge Bridge
+    qty: 4
+  - name: Galvanic Blast
+    qty: 4
+  - name: Great Furnace
+    qty: 2
+  - name: Ichor Wellspring
+    qty: 4
+  - name: Krark-Clan Shaman
+    qty: 3
+  - name: Makeshift Munitions
+    qty: 1
+  - name: Mistvault Bridge
+    qty: 4
+  - name: Mountain
+    qty: 1
+  - name: Myr Enforcer
+    qty: 4
+  - name: Nihil Spellbomb
+    qty: 2
+  - name: Reckoner's Bargain
+    qty: 4
+  - name: Refurbished Familiar
+    qty: 4
+  - name: Seat of the Synod
+    qty: 2
+  - name: Sewer-veillance Cam
+    qty: 1
+  - name: Silverbluff Bridge
+    qty: 2
+  - name: Thoughtcast
+    qty: 4
+  - name: Toxin Analysis
+    qty: 2
+  - name: Utrom Monitor
+    qty: 3
+  - name: Vault of Whispers
+    qty: 4
+  side_deck:
+  - name: Blue Elemental Blast
+    qty: 2
+  - name: Extract a Confession
+    qty: 2
+  - name: Hydroblast
+    qty: 4
+  - name: Krark-Clan Shaman
+    qty: 1
+  - name: Pyroblast
+    qty: 4
+  - name: Red Elemental Blast
+    qty: 1
+  - name: Unexpected Fangs
+    qty: 1
+- token: deck:fdef389bb60bb14b3056
+  event_id: '12853785'
+  deck_id: fdef389bb60bb14b3056
+  deck_fingerprint_sha256: 38a870dcb8817a055d28d067a0e17ba53e20a44dfea1ef18af91baf0b7857dab
+  date: '2026-09-08'
+  starttime: '2026-09-08 10:00:00.0'
+  final_rank: 5
+  player_count: 34
+  player: Auron94
+  parent_id: spy-combo
+  subtype_id: null
+  display_name: Spy Combo
+  main_deck:
+  - name: Balustrade Spy
+    qty: 4
+  - name: Dread Return
+    qty: 2
+  - name: Forest
+    qty: 3
+  - name: Gatecreeper Vine
+    qty: 2
+  - name: Generous Ent
+    qty: 4
+  - name: Land Grant
+    qty: 4
+  - name: Lead the Stampede
+    qty: 4
+  - name: Lotleth Giant
+    qty: 2
+  - name: Lotus Petal
+    qty: 2
+  - name: Masked Vandal
+    qty: 3
+  - name: Mesmeric Fiend
+    qty: 4
+  - name: Nyxborn Hydra
+    qty: 3
+  - name: Overgrown Battlement
+    qty: 4
+  - name: Quirion Ranger
+    qty: 2
+  - name: Sagu Wildling
+    qty: 4
+  - name: Saruli Caretaker
+    qty: 4
+  - name: Swamp
+    qty: 1
+  - name: Wall of Roots
+    qty: 4
+  - name: Winding Way
+    qty: 4
+  side_deck:
+  - name: Faerie Macabre
+    qty: 2
+  - name: Flaring Pain
+    qty: 1
+  - name: Jack-o'-Lantern
+    qty: 1
+  - name: Masked Vandal
+    qty: 1
+  - name: Mountain
+    qty: 1
+  - name: Nylea's Disciple
+    qty: 3
+  - name: Vitu-Ghazi Inspector
+    qty: 2
+  - name: Writhing Chrysalis
+    qty: 4
+- token: deck:2f273fa52e512d33804f
+  event_id: '12853785'
+  deck_id: 2f273fa52e512d33804f
+  deck_fingerprint_sha256: 6b84484ccc0b64e649d60f0d4a32ed3d2ddf2d1ddba3e730296693cbad7f10e8
+  date: '2026-09-08'
+  starttime: '2026-09-08 10:00:00.0'
+  final_rank: 6
+  player_count: 34
+  player: fallenangel02
+  parent_id: mono-blue-terror
+  subtype_id: null
+  display_name: Mono-Blue Terror
+  main_deck:
+  - name: Brainstorm
+    qty: 4
+  - name: Counterspell
+    qty: 4
+  - name: Cryptic Serpent
+    qty: 4
+  - name: Delver of Secrets
+    qty: 4
+  - name: Dispel
+    qty: 2
+  - name: Island
+    qty: 16
+  - name: Lórien Revealed
+    qty: 4
+  - name: Mental Note
+    qty: 4
+  - name: Ponder
+    qty: 4
+  - name: Sleep of the Dead
+    qty: 2
+  - name: Spell Pierce
+    qty: 4
+  - name: Thought Scour
+    qty: 4
+  - name: Tolarian Terror
+    qty: 4
+  side_deck:
+  - name: Annul
+    qty: 1
+  - name: Blue Elemental Blast
+    qty: 3
+  - name: Gut Shot
+    qty: 3
+  - name: Hydroblast
+    qty: 4
+  - name: Murmuring Mystic
+    qty: 1
+  - name: Steel Sabotage
+    qty: 3
+- token: deck:4107f90ed624b4b9f92f
+  event_id: '12853785'
+  deck_id: 4107f90ed624b4b9f92f
+  deck_fingerprint_sha256: 03004c3b893551ae853f18c7220facde1bbf422282cc78bcb383584fe79625bf
+  date: '2026-09-08'
+  starttime: '2026-09-08 10:00:00.0'
+  final_rank: 7
+  player_count: 34
+  player: hyuma
+  parent_id: mono-red-madness
+  subtype_id: null
+  display_name: Mono-Red Madness
+  main_deck:
+  - name: Faithless Looting
+    qty: 4
+  - name: Fiery Temper
+    qty: 4
+  - name: Fireblast
+    qty: 3
+  - name: Grab the Prize
+    qty: 4
+  - name: Guttersnipe
+    qty: 3
+  - name: Highway Robbery
+    qty: 4
+  - name: Kessig Flamebreather
+    qty: 4
+  - name: Lava Dart
+    qty: 4
+  - name: Lightning Bolt
+    qty: 4
+  - name: Mountain
+    qty: 18
+  - name: Sneaky Snacker
+    qty: 4
+  - name: Voldaren Epicure
+    qty: 4
+  side_deck:
+  - name: Cast into the Fire
+    qty: 3
+  - name: End the Festivities
+    qty: 2
+  - name: Pyroblast
+    qty: 4
+  - name: Relic of Progenitus
+    qty: 3
+  - name: Searing Blaze
+    qty: 3
+- token: deck:9599085d0eaabe7ac299
+  event_id: '12853785'
+  deck_id: 9599085d0eaabe7ac299
+  deck_fingerprint_sha256: 78c1a38c4b14f37ce6eae9167efb698e473250ec77789ee8776c93e21031faba
+  date: '2026-09-08'
+  starttime: '2026-09-08 10:00:00.0'
+  final_rank: 8
+  player_count: 34
+  player: Tsubasa_Cat
+  parent_id: green-tron
+  subtype_id: null
+  display_name: Monster Tron
+  main_deck:
+  - name: Ancient Stirrings
+    qty: 4
+  - name: Barrels of Blasting Jelly
+    qty: 4
+  - name: Bojuka Bog
+    qty: 1
+  - name: Bonder's Ornament
+    qty: 2
+  - name: Boulderbranch Golem
+    qty: 4
+  - name: Bramble Wurm
+    qty: 4
+  - name: Conduit Pylons
+    qty: 2
+  - name: Crop Rotation
+    qty: 3
+  - name: Expedition Map
+    qty: 4
+  - name: Forest
+    qty: 3
+  - name: Generous Ent
+    qty: 3
+  - name: Giant's Boulder
+    qty: 4
+  - name: Maelstrom Colossus
+    qty: 4
+  - name: Pinnacle Kill-Ship
+    qty: 4
+  - name: Unfathomable Truths
+    qty: 2
+  - name: Urza's Mine
+    qty: 4
+  - name: Urza's Power Plant
+    qty: 4
+  - name: Urza's Tower
+    qty: 4
+  side_deck:
+  - name: Breath Weapon
+    qty: 4
+  - name: Call Damage Control
+    qty: 2
+  - name: Earth Rift
+    qty: 2
+  - name: Relic of Progenitus
+    qty: 4
+  - name: Rooftop Percher
+    qty: 1
+  - name: Tangle
+    qty: 2
+- token: deck:9665b49e3a22bf4fb83b
+  event_id: '12853727'
+  deck_id: 9665b49e3a22bf4fb83b
+  deck_fingerprint_sha256: 5995f95243accd1f7d8f1ea43421667d0640c4e01a6b1a7e70ef07ce7bfa165f
+  date: '2026-09-09'
+  starttime: '2026-09-09 12:00:00.0'
+  final_rank: 1
+  player_count: 45
+  player: LuffyDoChapeuDePalha
+  parent_id: grixis-affinity
+  subtype_id: null
+  display_name: Grixis Affinity
+  main_deck:
+  - name: Black Mage's Rod
+    qty: 3
+  - name: Blood Fountain
+    qty: 2
+  - name: Drossforge Bridge
+    qty: 4
+  - name: Galvanic Blast
+    qty: 4
+  - name: Great Furnace
+    qty: 2
+  - name: Ichor Wellspring
+    qty: 4
+  - name: Krark-Clan Shaman
+    qty: 3
+  - name: Makeshift Munitions
+    qty: 1
+  - name: Mistvault Bridge
+    qty: 4
+  - name: Mountain
+    qty: 1
+  - name: Myr Enforcer
+    qty: 4
+  - name: Nihil Spellbomb
+    qty: 2
+  - name: Reckoner's Bargain
+    qty: 4
+  - name: Refurbished Familiar
+    qty: 4
+  - name: Seat of the Synod
+    qty: 2
+  - name: Sewer-veillance Cam
+    qty: 1
+  - name: Silverbluff Bridge
+    qty: 2
+  - name: Thoughtcast
+    qty: 4
+  - name: Toxin Analysis
+    qty: 2
+  - name: Utrom Monitor
+    qty: 3
+  - name: Vault of Whispers
+    qty: 4
+  side_deck:
+  - name: Blue Elemental Blast
+    qty: 2
+  - name: Extract a Confession
+    qty: 2
+  - name: Hydroblast
+    qty: 4
+  - name: Krark-Clan Shaman
+    qty: 1
+  - name: Pyroblast
+    qty: 4
+  - name: Red Elemental Blast
+    qty: 1
+  - name: Unexpected Fangs
+    qty: 1
+- token: deck:70e153fce685296a2949
+  event_id: '12853727'
+  deck_id: 70e153fce685296a2949
+  deck_fingerprint_sha256: e9f8522135f0bc4e21b6478544c69d6f8cbe69c140ec137d33b58b87e7acc06b
+  date: '2026-09-09'
+  starttime: '2026-09-09 12:00:00.0'
+  final_rank: 2
+  player_count: 45
+  player: PedraStone
+  parent_id: bogles
+  subtype_id: null
+  display_name: Bogles
+  main_deck:
+  - name: Abundant Growth
+    qty: 4
+  - name: Ancestral Mask
+    qty: 4
+  - name: Armadillo Cloak
+    qty: 4
+  - name: Ash Barrens
+    qty: 2
+  - name: Cartouche of Solidarity
+    qty: 1
+  - name: Ethereal Armor
+    qty: 4
+  - name: Forest
+    qty: 12
+  - name: Gladecover Scout
+    qty: 4
+  - name: Kruphix's Insight
+    qty: 1
+  - name: Lifelink
+    qty: 1
+  - name: Malevolent Rumble
+    qty: 4
+  - name: Plains
+    qty: 3
+  - name: Rancor
+    qty: 4
+  - name: Sentinel's Eyes
+    qty: 1
+  - name: Silhana Ledgewalker
+    qty: 3
+  - name: Slippery Bogle
+    qty: 4
+  - name: Utopia Sprawl
+    qty: 4
+  side_deck:
+  - name: Flaring Pain
+    qty: 2
+  - name: Mask of Law and Grace
+    qty: 3
+  - name: Ram Through
+    qty: 2
+  - name: Scattershot Archer
+    qty: 3
+  - name: Spirit Link
+    qty: 3
+  - name: Standard Bearer
+    qty: 2
+- token: deck:82f68dc4a76b376ebec0
+  event_id: '12853727'
+  deck_id: 82f68dc4a76b376ebec0
+  deck_fingerprint_sha256: 03e55a8ffe2433dd92d7cae83f1094bb3586b1af39a23665276f5ee38df4d013
+  date: '2026-09-09'
+  starttime: '2026-09-09 12:00:00.0'
+  final_rank: 3
+  player_count: 45
+  player: discoverN
+  parent_id: green-tron
+  subtype_id: null
+  display_name: Monster Tron
+  main_deck:
+  - name: Ancient Stirrings
+    qty: 4
+  - name: Barrels of Blasting Jelly
+    qty: 4
+  - name: Bonder's Ornament
+    qty: 1
+  - name: Bramble Wurm
+    qty: 4
+  - name: Candy Trail
+    qty: 1
+  - name: Conduit Pylons
+    qty: 1
+  - name: Crop Rotation
+    qty: 3
+  - name: Expedition Map
+    qty: 4
+  - name: Firebolt
+    qty: 1
+  - name: Forest
+    qty: 3
+  - name: Generous Ent
+    qty: 2
+  - name: Giant's Boulder
+    qty: 4
+  - name: Haunted Fengraf
+    qty: 1
+  - name: Maelstrom Colossus
+    qty: 2
+  - name: Malevolent Rumble
+    qty: 4
+  - name: Nyxborn Hydra
+    qty: 3
+  - name: Prophetic Prism
+    qty: 2
+  - name: Unfathomable Truths
+    qty: 4
+  - name: Urza's Mine
+    qty: 4
+  - name: Urza's Power Plant
+    qty: 4
+  - name: Urza's Tower
+    qty: 4
+  side_deck:
+  - name: Bojuka Bog
+    qty: 1
+  - name: Breath Weapon
+    qty: 3
+  - name: 'Circle of Protection: Red'
+    qty: 2
+  - name: Earth Rift
+    qty: 2
+  - name: Firebolt
+    qty: 1
+  - name: Hydroblast
+    qty: 3
+  - name: Relic of Progenitus
+    qty: 3
+- token: deck:a0abf31518d75150304d
+  event_id: '12853727'
+  deck_id: a0abf31518d75150304d
+  deck_fingerprint_sha256: 238d4a8d8e0f08d624942d8a45e23731b2f8013267fd30214945dd5f8c006a90
+  date: '2026-09-09'
+  starttime: '2026-09-09 12:00:00.0'
+  final_rank: 4
+  player_count: 45
+  player: Capitano_CL
+  parent_id: gruul-ponza
+  subtype_id: null
+  display_name: Gruul Ponza
+  main_deck:
+  - name: Annoyed Altisaur
+    qty: 3
+  - name: Arbor Elf
+    qty: 4
+  - name: Avenging Hunter
+    qty: 3
+  - name: Boarding Party
+    qty: 4
+  - name: Bonder's Ornament
+    qty: 2
+  - name: Eldrazi Repurposer
+    qty: 2
+  - name: Highland Forest
+    qty: 1
+  - name: Mwonvuli Acid-Moss
+    qty: 4
+  - name: Sagu Wildling
+    qty: 2
+  - name: Skred
+    qty: 2
+  - name: Snow-Covered Forest
+    qty: 14
+  - name: Snow-Covered Mountain
+    qty: 2
+  - name: Structural Distortion
+    qty: 2
+  - name: Thermokarst
+    qty: 4
+  - name: Utopia Sprawl
+    qty: 4
+  - name: Wild Growth
+    qty: 3
+  - name: Writhing Chrysalis
+    qty: 4
+  side_deck:
+  - name: Breath Weapon
+    qty: 4
+  - name: Cast into the Fire
+    qty: 1
+  - name: Deglamer
+    qty: 2
+  - name: Gorilla Shaman
+    qty: 1
+  - name: Monstrous Emergence
+    qty: 2
+  - name: Relic of Progenitus
+    qty: 2
+  - name: Suplex
+    qty: 1
+  - name: Weather the Storm
+    qty: 2
+- token: deck:52f8f6d8093e41c554ac
+  event_id: '12853727'
+  deck_id: 52f8f6d8093e41c554ac
+  deck_fingerprint_sha256: 10cc4cb18dc1f86b52526ebb7fe45d413cd22be6c7384e8aaa181026991ec0cd
+  date: '2026-09-09'
+  starttime: '2026-09-09 12:00:00.0'
+  final_rank: 5
+  player_count: 45
+  player: mehanske
+  parent_id: green-tron
+  subtype_id: null
+  display_name: Monster Tron
+  main_deck:
+  - name: Ancient Stirrings
+    qty: 4
+  - name: Barrels of Blasting Jelly
+    qty: 1
+  - name: Bojuka Bog
+    qty: 1
+  - name: Bonder's Ornament
+    qty: 2
+  - name: Boulderbranch Golem
+    qty: 2
+  - name: Bramble Wurm
+    qty: 4
+  - name: Breath Weapon
+    qty: 1
+  - name: Candy Trail
+    qty: 2
+  - name: Conduit Pylons
+    qty: 2
+  - name: Crop Rotation
+    qty: 3
+  - name: Expedition Map
+    qty: 4
+  - name: Forest
+    qty: 2
+  - name: Generous Ent
+    qty: 2
+  - name: Giant's Boulder
+    qty: 4
+  - name: Haunted Fengraf
+    qty: 1
+  - name: Kaervek's Torch
+    qty: 1
+  - name: Maelstrom Colossus
+    qty: 4
+  - name: Pinnacle Kill-Ship
+    qty: 4
+  - name: Rooftop Percher
+    qty: 2
+  - name: Unfathomable Truths
+    qty: 2
+  - name: Urza's Mine
+    qty: 4
+  - name: Urza's Power Plant
+    qty: 4
+  - name: Urza's Tower
+    qty: 4
+  side_deck:
+  - name: Blue Elemental Blast
+    qty: 2
+  - name: Breath Weapon
+    qty: 2
+  - name: Call Damage Control
+    qty: 2
+  - name: Hydroblast
+    qty: 1
+  - name: Relic of Progenitus
+    qty: 4
+  - name: Scour from Existence
+    qty: 2
+  - name: Tamiyo's Safekeeping
+    qty: 2
+- token: deck:7b61c80f9ac15bddb4d8
+  event_id: '12853727'
+  deck_id: 7b61c80f9ac15bddb4d8
+  deck_fingerprint_sha256: 573c09cceb8fd889b3d91cd6f26cefc3d22775cfef8c680728b5f25e5040ff0b
+  date: '2026-09-09'
+  starttime: '2026-09-09 12:00:00.0'
+  final_rank: 6
+  player_count: 45
+  player: Death_Lighter
+  parent_id: bogles
+  subtype_id: null
+  display_name: Bogles
+  main_deck:
+  - name: Abundant Growth
+    qty: 4
+  - name: Ancestral Mask
+    qty: 4
+  - name: Armadillo Cloak
+    qty: 4
+  - name: Ash Barrens
+    qty: 2
+  - name: Cartouche of Solidarity
+    qty: 1
+  - name: Ethereal Armor
+    qty: 4
+  - name: Forest
+    qty: 12
+  - name: Gladecover Scout
+    qty: 4
+  - name: Lifelink
+    qty: 1
+  - name: Malevolent Rumble
+    qty: 4
+  - name: Plains
+    qty: 3
+  - name: Rancor
+    qty: 4
+  - name: Sentinel's Eyes
+    qty: 1
+  - name: Silhana Ledgewalker
+    qty: 3
+  - name: Slippery Bogle
+    qty: 4
+  - name: Spirit Link
+    qty: 1
+  - name: Utopia Sprawl
+    qty: 4
+  side_deck:
+  - name: Faerie Macabre
+    qty: 2
+  - name: Flaring Pain
+    qty: 2
+  - name: Fling
+    qty: 1
+  - name: Mask of Law and Grace
+    qty: 3
+  - name: Ram Through
+    qty: 2
+  - name: Scattershot Archer
+    qty: 2
+  - name: Spirit Link
+    qty: 3
+- token: deck:55492a7bbfb7fa924c54
+  event_id: '12853727'
+  deck_id: 55492a7bbfb7fa924c54
+  deck_fingerprint_sha256: d719d9914109bdccfb6ab74ceca620c3d951fe1cb952f4a7e733023369bd121c
+  date: '2026-09-09'
+  starttime: '2026-09-09 12:00:00.0'
+  final_rank: 7
+  player_count: 45
+  player: yuxiaoyu
+  parent_id: dimir-terror
+  subtype_id: null
+  display_name: Dimir Terror
+  main_deck:
+  - name: Abandon Attachments
+    qty: 2
+  - name: Brainstorm
+    qty: 4
+  - name: Cast Down
+    qty: 2
+  - name: Contaminated Aquifer
+    qty: 4
+  - name: Counterspell
+    qty: 4
+  - name: Deep Analysis
+    qty: 1
+  - name: Dispel
+    qty: 2
+  - name: Gurmag Angler
+    qty: 2
+  - name: Ice Tunnel
+    qty: 2
+  - name: Island
+    qty: 10
+  - name: Lórien Revealed
+    qty: 4
+  - name: Mental Note
+    qty: 4
+  - name: Murmuring Mystic
+    qty: 1
+  - name: Sneaky Snacker
+    qty: 4
+  - name: Snuff Out
+    qty: 4
+  - name: Suffocating Fumes
+    qty: 1
+  - name: Thought Scour
+    qty: 4
+  - name: Tolarian Terror
+    qty: 4
+  - name: Unexpected Fangs
+    qty: 1
+  side_deck:
+  - name: Annul
+    qty: 3
+  - name: Arms of Hadar
+    qty: 2
+  - name: Blue Elemental Blast
+    qty: 1
+  - name: Hydroblast
+    qty: 4
+  - name: Nihil Spellbomb
+    qty: 2
+  - name: Steel Sabotage
+    qty: 2
+  - name: Unexpected Fangs
+    qty: 1
+- token: deck:fb07d36755774cc6a577
+  event_id: '12853727'
+  deck_id: fb07d36755774cc6a577
+  deck_fingerprint_sha256: df306ad43a880ee5d25c17ffbe277e1ba972ec75b42c13298e6e130a3dc785f8
+  date: '2026-09-09'
+  starttime: '2026-09-09 12:00:00.0'
+  final_rank: 8
+  player_count: 45
+  player: barff
+  parent_id: dimir-faeries
+  subtype_id: null
+  display_name: Dimir Faeries
+  main_deck:
+  - name: Augur of Bolas
+    qty: 4
+  - name: Bojuka Bog
+    qty: 2
+  - name: Brainstorm
+    qty: 4
+  - name: Cast Down
+    qty: 3
+  - name: Contaminated Aquifer
+    qty: 4
+  - name: Contaminated Landscape
+    qty: 1
+  - name: Counterspell
+    qty: 4
+  - name: Dispel
+    qty: 2
+  - name: Extract a Confession
+    qty: 1
+  - name: Faerie Seer
+    qty: 4
+  - name: Island
+    qty: 10
+  - name: Lórien Revealed
+    qty: 4
+  - name: Moon-Circuit Hacker
+    qty: 2
+  - name: Ninja of the Deep Hours
+    qty: 2
+  - name: Sewer-veillance Cam
+    qty: 1
+  - name: Snuff Out
+    qty: 4
+  - name: Spellstutter Sprite
+    qty: 4
+  - name: Suffocating Fumes
+    qty: 1
+  - name: Swamp
+    qty: 1
+  - name: Thorn of the Black Rose
+    qty: 2
+  side_deck:
+  - name: Annul
+    qty: 4
+  - name: Arms of Hadar
+    qty: 1
+  - name: Blue Elemental Blast
+    qty: 4
+  - name: Campfire
+    qty: 1
+  - name: Hydroblast
+    qty: 2
+  - name: Mukotai Ambusher
+    qty: 1
+  - name: Relic of Progenitus
+    qty: 2
+- token: deck:703dec5e054f8ab93980
+  event_id: '12854064'
+  deck_id: 703dec5e054f8ab93980
+  deck_fingerprint_sha256: d25116d50cce22c040cffbda0778720e7a203dedba7621bd62ece40dc6f73190
+  date: '2026-09-10'
+  starttime: '2026-09-10 19:00:00.0'
+  final_rank: 1
+  player_count: 44
+  player: cabrabr12
+  parent_id: packbeast-swarm
+  subtype_id: selesnya
+  display_name: Packbeast Swarm
+  main_deck:
+  - name: Darval, Whose Web Protects
+    qty: 2
+  - name: Halo Hopper
+    qty: 4
+  - name: Holdout Settlement
+    qty: 1
+  - name: Khalni Garden
+    qty: 4
+  - name: Leonardo, Big Brother
+    qty: 4
+  - name: Martyr's Soul
+    qty: 4
+  - name: Novice Inspector
+    qty: 3
+  - name: Ornithopter
+    qty: 4
+  - name: Phyrexian Walker
+    qty: 4
+  - name: Plains
+    qty: 11
+  - name: Ramosian Rally
+    qty: 4
+  - name: Salt Road Packbeast
+    qty: 4
+  - name: Search Party Captain
+    qty: 4
+  - name: Thraben Inspector
+    qty: 4
+  - name: Winding Way
+    qty: 3
+  side_deck:
+  - name: Dust to Dust
+    qty: 3
+  - name: Plains
+    qty: 3
+  - name: Standard Bearer
+    qty: 2
+  - name: Thraben Charm
+    qty: 3
+  - name: Ultimate Alliance
+    qty: 4
+- token: deck:4bb450d1d80377505346
+  event_id: '12854064'
+  deck_id: 4bb450d1d80377505346
+  deck_fingerprint_sha256: 37272fffdce45a1a441be7a0b4263ca73c030f2818fecc8dee066dfa63e14b21
+  date: '2026-09-10'
+  starttime: '2026-09-10 19:00:00.0'
+  final_rank: 2
+  player_count: 44
+  player: carvs
+  parent_id: mono-blue-terror
+  subtype_id: null
+  display_name: Mono-Blue Terror
+  main_deck:
+  - name: Artful Dodge
+    qty: 1
+  - name: Brainstorm
+    qty: 4
+  - name: Counterspell
+    qty: 4
+  - name: Cryptic Serpent
+    qty: 4
+  - name: Deem Inferior
+    qty: 3
+  - name: Deep Analysis
+    qty: 1
+  - name: Dispel
+    qty: 1
+  - name: Force Spike
+    qty: 3
+  - name: Island
+    qty: 16
+  - name: Lórien Revealed
+    qty: 4
+  - name: Mental Note
+    qty: 4
+  - name: Murmuring Mystic
+    qty: 2
+  - name: Ponder
+    qty: 3
+  - name: Sleep of the Dead
+    qty: 2
+  - name: Thought Scour
+    qty: 4
+  - name: Tolarian Terror
+    qty: 4
+  side_deck:
+  - name: Annul
+    qty: 2
+  - name: Azure Fleet Admiral
+    qty: 1
+  - name: Blue Elemental Blast
+    qty: 2
+  - name: Gut Shot
+    qty: 3
+  - name: Hydroblast
+    qty: 4
+  - name: Steel Sabotage
+    qty: 3
+- token: deck:5c7aae4bc5f4b7595bcc
+  event_id: '12854064'
+  deck_id: 5c7aae4bc5f4b7595bcc
+  deck_fingerprint_sha256: 7bff6e1bd4aea8a5d47d62a8a22b17a99ec9e1caa132901efe987e9c79eff36f
+  date: '2026-09-10'
+  starttime: '2026-09-10 19:00:00.0'
+  final_rank: 3
+  player_count: 44
+  player: seasonofmists
+  parent_id: naya-wildfire
+  subtype_id: null
+  display_name: Naya Wildfire
+  main_deck:
+  - name: Call Damage Control
+    qty: 2
+  - name: Cleansing Wildfire
+    qty: 4
+  - name: Forest
+    qty: 2
+  - name: Journey to Nowhere
+    qty: 3
+  - name: Lightning Bolt
+    qty: 4
+  - name: Lunarch Veteran
+    qty: 3
+  - name: Malevolent Rumble
+    qty: 4
+  - name: Mountain
+    qty: 3
+  - name: Nyxborn Hydra
+    qty: 2
+  - name: Plains
+    qty: 3
+  - name: Pulse of Murasa
+    qty: 1
+  - name: Pursue the Past
+    qty: 4
+  - name: Ragged Short Spear
+    qty: 4
+  - name: Rustvale Bridge
+    qty: 4
+  - name: Sheltering Landscape
+    qty: 4
+  - name: Slagwoods Bridge
+    qty: 4
+  - name: Sneaky Snacker
+    qty: 4
+  - name: Thraben Charm
+    qty: 1
+  - name: Writhing Chrysalis
+    qty: 4
+  side_deck:
+  - name: Breath Weapon
+    qty: 2
+  - name: Dust to Dust
+    qty: 4
+  - name: Pyroblast
+    qty: 4
+  - name: Thraben Charm
+    qty: 2
+  - name: Weather the Storm
+    qty: 3
+- token: deck:654f0a17e9ef6615bf69
+  event_id: '12854064'
+  deck_id: 654f0a17e9ef6615bf69
+  deck_fingerprint_sha256: eeef7eca0d9c0c592064e28d6f20a94aaf1662c3b335892672914438eda3937f
+  date: '2026-09-10'
+  starttime: '2026-09-10 19:00:00.0'
+  final_rank: 4
+  player_count: 44
+  player: xfile
+  parent_id: green-tron
+  subtype_id: null
+  display_name: Monster Tron
+  main_deck:
+  - name: Ancient Stirrings
+    qty: 4
+  - name: Barrels of Blasting Jelly
+    qty: 2
+  - name: Bojuka Bog
+    qty: 1
+  - name: Bonder's Ornament
+    qty: 2
+  - name: Boulderbranch Golem
+    qty: 2
+  - name: Bramble Wurm
+    qty: 4
+  - name: Crop Rotation
+    qty: 3
+  - name: Expedition Map
+    qty: 4
+  - name: Forest
+    qty: 2
+  - name: Generous Ent
+    qty: 2
+  - name: Giant's Boulder
+    qty: 4
+  - name: Haunted Fengraf
+    qty: 1
+  - name: Kaervek's Torch
+    qty: 1
+  - name: Maelstrom Colossus
+    qty: 4
+  - name: Pinnacle Kill-Ship
+    qty: 4
+  - name: Rooftop Percher
+    qty: 3
+  - name: Surveillance Room
+    qty: 2
+  - name: Unfathomable Truths
+    qty: 3
+  - name: Urza's Mine
+    qty: 4
+  - name: Urza's Power Plant
+    qty: 4
+  - name: Urza's Tower
+    qty: 4
+  side_deck:
+  - name: Breath Weapon
+    qty: 4
+  - name: Call Damage Control
+    qty: 2
+  - name: Hydroblast
+    qty: 4
+  - name: Relic of Progenitus
+    qty: 3
+  - name: Scour from Existence
+    qty: 2
+- token: deck:6a90654e4f91c4f20b7a
+  event_id: '12854064'
+  deck_id: 6a90654e4f91c4f20b7a
+  deck_fingerprint_sha256: 5995f95243accd1f7d8f1ea43421667d0640c4e01a6b1a7e70ef07ce7bfa165f
+  date: '2026-09-10'
+  starttime: '2026-09-10 19:00:00.0'
+  final_rank: 5
+  player_count: 44
+  player: LuffyDoChapeuDePalha
+  parent_id: grixis-affinity
+  subtype_id: null
+  display_name: Grixis Affinity
+  main_deck:
+  - name: Black Mage's Rod
+    qty: 3
+  - name: Blood Fountain
+    qty: 2
+  - name: Drossforge Bridge
+    qty: 4
+  - name: Galvanic Blast
+    qty: 4
+  - name: Great Furnace
+    qty: 2
+  - name: Ichor Wellspring
+    qty: 4
+  - name: Krark-Clan Shaman
+    qty: 3
+  - name: Makeshift Munitions
+    qty: 1
+  - name: Mistvault Bridge
+    qty: 4
+  - name: Mountain
+    qty: 1
+  - name: Myr Enforcer
+    qty: 4
+  - name: Nihil Spellbomb
+    qty: 2
+  - name: Reckoner's Bargain
+    qty: 4
+  - name: Refurbished Familiar
+    qty: 4
+  - name: Seat of the Synod
+    qty: 2
+  - name: Sewer-veillance Cam
+    qty: 1
+  - name: Silverbluff Bridge
+    qty: 2
+  - name: Thoughtcast
+    qty: 4
+  - name: Toxin Analysis
+    qty: 2
+  - name: Utrom Monitor
+    qty: 3
+  - name: Vault of Whispers
+    qty: 4
+  side_deck:
+  - name: Blue Elemental Blast
+    qty: 2
+  - name: Extract a Confession
+    qty: 2
+  - name: Hydroblast
+    qty: 4
+  - name: Krark-Clan Shaman
+    qty: 1
+  - name: Pyroblast
+    qty: 4
+  - name: Red Elemental Blast
+    qty: 1
+  - name: Unexpected Fangs
+    qty: 1
+- token: deck:8cf3ec12e0f7ca23167d
+  event_id: '12854064'
+  deck_id: 8cf3ec12e0f7ca23167d
+  deck_fingerprint_sha256: e5436683b0a90c9aafa6b8053e0ec181e50ac84e4716b94de23f43b8390fb59f
+  date: '2026-09-10'
+  starttime: '2026-09-10 19:00:00.0'
+  final_rank: 6
+  player_count: 44
+  player: Strongmind
+  parent_id: mono-blue-faeries
+  subtype_id: null
+  display_name: Mono-Blue Faeries
+  main_deck:
+  - name: Brinebarrow Intruder
+    qty: 4
+  - name: Counterspell
+    qty: 4
+  - name: Cryoshatter
+    qty: 3
+  - name: Dispel
+    qty: 1
+  - name: Faerie Miscreant
+    qty: 4
+  - name: Faerie Seer
+    qty: 4
+  - name: Harrier Strix
+    qty: 2
+  - name: Island
+    qty: 19
+  - name: Moon-Circuit Hacker
+    qty: 4
+  - name: Ninja of the Deep Hours
+    qty: 4
+  - name: Of One Mind
+    qty: 4
+  - name: Sewer-veillance Cam
+    qty: 3
+  - name: Spellstutter Sprite
+    qty: 4
+  side_deck:
+  - name: Annul
+    qty: 2
+  - name: Blue Elemental Blast
+    qty: 4
+  - name: Cryoshatter
+    qty: 1
+  - name: Dispel
+    qty: 1
+  - name: Hydroblast
+    qty: 2
+  - name: Relic of Progenitus
+    qty: 2
+  - name: Steel Sabotage
+    qty: 3
+- token: deck:19a5b4557d11e1827132
+  event_id: '12854064'
+  deck_id: 19a5b4557d11e1827132
+  deck_fingerprint_sha256: 8b6f900147346b3841962b6b2153888a5df528f1b171de8e8281d2aea8eef01e
+  date: '2026-09-10'
+  starttime: '2026-09-10 19:00:00.0'
+  final_rank: 7
+  player_count: 44
+  player: Ixidor29
+  parent_id: gruul-ponza
+  subtype_id: null
+  display_name: Gruul Ponza
+  main_deck:
+  - name: Annoyed Altisaur
+    qty: 3
+  - name: Arbor Elf
+    qty: 4
+  - name: Avenging Hunter
+    qty: 3
+  - name: Boarding Party
+    qty: 4
+  - name: Bonder's Ornament
+    qty: 1
+  - name: Colossal Dreadmask
+    qty: 1
+  - name: Eldrazi Repurposer
+    qty: 3
+  - name: Forest
+    qty: 14
+  - name: Generous Ent
+    qty: 2
+  - name: Malevolent Rumble
+    qty: 2
+  - name: Mountain
+    qty: 2
+  - name: Mwonvuli Acid-Moss
+    qty: 4
+  - name: Structural Distortion
+    qty: 2
+  - name: Thermokarst
+    qty: 4
+  - name: Utopia Sprawl
+    qty: 4
+  - name: Wild Growth
+    qty: 2
+  - name: Wooded Ridgeline
+    qty: 1
+  - name: Writhing Chrysalis
+    qty: 4
+  side_deck:
+  - name: Breath Weapon
+    qty: 3
+  - name: Deglamer
+    qty: 3
+  - name: Relic of Progenitus
+    qty: 3
+  - name: Suplex
+    qty: 3
+  - name: Weather the Storm
+    qty: 3
+- token: deck:8e15de85fefaff0579fb
+  event_id: '12854064'
+  deck_id: 8e15de85fefaff0579fb
+  deck_fingerprint_sha256: 4186d49a669590e56c9580d995ca1f6be186e93a88da60e60669b97daacb4e48
+  date: '2026-09-10'
+  starttime: '2026-09-10 19:00:00.0'
+  final_rank: 8
+  player_count: 44
+  player: Franzisco23195
+  parent_id: gruul-ponza
+  subtype_id: null
+  display_name: Gruul Ponza
+  main_deck:
+  - name: Annoyed Altisaur
+    qty: 3
+  - name: Arbor Elf
+    qty: 4
+  - name: Avenging Hunter
+    qty: 3
+  - name: Boarding Party
+    qty: 3
+  - name: Bonder's Ornament
+    qty: 2
+  - name: Colossal Dreadmask
+    qty: 1
+  - name: Eldrazi Repurposer
+    qty: 4
+  - name: Forest
+    qty: 15
+  - name: Mountain
+    qty: 2
+  - name: Mwonvuli Acid-Moss
+    qty: 4
+  - name: Sagu Wildling
+    qty: 2
+  - name: Structural Distortion
+    qty: 2
+  - name: Thermokarst
+    qty: 4
+  - name: Utopia Sprawl
+    qty: 4
+  - name: Wild Growth
+    qty: 3
+  - name: Writhing Chrysalis
+    qty: 4
+  side_deck:
+  - name: Breath Weapon
+    qty: 2
+  - name: Cast into the Fire
+    qty: 3
+  - name: Faerie Macabre
+    qty: 2
+  - name: Life Goes On
+    qty: 3
+  - name: Relic of Progenitus
+    qty: 2
+  - name: Weather the Storm
+    qty: 3
+- token: deck:a3445f421a55a2248997
+  event_id: '12854069'
+  deck_id: a3445f421a55a2248997
+  deck_fingerprint_sha256: 6fa1c0defd173e26494942fc7faafd2fb99973650def038ee013b91f447b1911
+  date: '2026-09-11'
+  starttime: '2026-09-11 13:00:00.0'
+  final_rank: 1
+  player_count: 52
+  player: SoterX
+  parent_id: mono-red-madness
+  subtype_id: null
+  display_name: Mono-Red Madness
+  main_deck:
+  - name: Faithless Looting
+    qty: 2
+  - name: Fiery Temper
+    qty: 4
+  - name: Fireblast
+    qty: 4
+  - name: Grab the Prize
+    qty: 4
+  - name: Guttersnipe
+    qty: 4
+  - name: Highway Robbery
+    qty: 4
+  - name: Kessig Flamebreather
+    qty: 3
+  - name: Lava Dart
+    qty: 4
+  - name: Lightning Bolt
+    qty: 4
+  - name: Melded Moxite
+    qty: 3
+  - name: Mountain
+    qty: 20
+  - name: Sneaky Snacker
+    qty: 4
+  side_deck:
+  - name: Campfire
+    qty: 3
+  - name: Pyroblast
+    qty: 2
+  - name: Red Elemental Blast
+    qty: 3
+  - name: Relic of Progenitus
+    qty: 3
+  - name: Smash to Smithereens
+    qty: 4
+- token: deck:e4f94e18879066b3285b
+  event_id: '12854069'
+  deck_id: e4f94e18879066b3285b
+  deck_fingerprint_sha256: 5995f95243accd1f7d8f1ea43421667d0640c4e01a6b1a7e70ef07ce7bfa165f
+  date: '2026-09-11'
+  starttime: '2026-09-11 13:00:00.0'
+  final_rank: 2
+  player_count: 52
+  player: LuffyDoChapeuDePalha
+  parent_id: grixis-affinity
+  subtype_id: null
+  display_name: Grixis Affinity
+  main_deck:
+  - name: Black Mage's Rod
+    qty: 3
+  - name: Blood Fountain
+    qty: 2
+  - name: Drossforge Bridge
+    qty: 4
+  - name: Galvanic Blast
+    qty: 4
+  - name: Great Furnace
+    qty: 2
+  - name: Ichor Wellspring
+    qty: 4
+  - name: Krark-Clan Shaman
+    qty: 3
+  - name: Makeshift Munitions
+    qty: 1
+  - name: Mistvault Bridge
+    qty: 4
+  - name: Mountain
+    qty: 1
+  - name: Myr Enforcer
+    qty: 4
+  - name: Nihil Spellbomb
+    qty: 2
+  - name: Reckoner's Bargain
+    qty: 4
+  - name: Refurbished Familiar
+    qty: 4
+  - name: Seat of the Synod
+    qty: 2
+  - name: Sewer-veillance Cam
+    qty: 1
+  - name: Silverbluff Bridge
+    qty: 2
+  - name: Thoughtcast
+    qty: 4
+  - name: Toxin Analysis
+    qty: 2
+  - name: Utrom Monitor
+    qty: 3
+  - name: Vault of Whispers
+    qty: 4
+  side_deck:
+  - name: Blue Elemental Blast
+    qty: 2
+  - name: Extract a Confession
+    qty: 2
+  - name: Hydroblast
+    qty: 4
+  - name: Krark-Clan Shaman
+    qty: 1
+  - name: Pyroblast
+    qty: 4
+  - name: Red Elemental Blast
+    qty: 1
+  - name: Unexpected Fangs
+    qty: 1
+- token: deck:8db5cfea29002fb8065e
+  event_id: '12854069'
+  deck_id: 8db5cfea29002fb8065e
+  deck_fingerprint_sha256: e5436683b0a90c9aafa6b8053e0ec181e50ac84e4716b94de23f43b8390fb59f
+  date: '2026-09-11'
+  starttime: '2026-09-11 13:00:00.0'
+  final_rank: 3
+  player_count: 52
+  player: Strongmind
+  parent_id: mono-blue-faeries
+  subtype_id: null
+  display_name: Mono-Blue Faeries
+  main_deck:
+  - name: Brinebarrow Intruder
+    qty: 4
+  - name: Counterspell
+    qty: 4
+  - name: Cryoshatter
+    qty: 3
+  - name: Dispel
+    qty: 1
+  - name: Faerie Miscreant
+    qty: 4
+  - name: Faerie Seer
+    qty: 4
+  - name: Harrier Strix
+    qty: 2
+  - name: Island
+    qty: 19
+  - name: Moon-Circuit Hacker
+    qty: 4
+  - name: Ninja of the Deep Hours
+    qty: 4
+  - name: Of One Mind
+    qty: 4
+  - name: Sewer-veillance Cam
+    qty: 3
+  - name: Spellstutter Sprite
+    qty: 4
+  side_deck:
+  - name: Annul
+    qty: 2
+  - name: Blue Elemental Blast
+    qty: 4
+  - name: Cryoshatter
+    qty: 1
+  - name: Dispel
+    qty: 1
+  - name: Hydroblast
+    qty: 2
+  - name: Relic of Progenitus
+    qty: 2
+  - name: Steel Sabotage
+    qty: 3
+- token: deck:07e4fba29d8166947408
+  event_id: '12854069'
+  deck_id: 07e4fba29d8166947408
+  deck_fingerprint_sha256: 32217b09ae20a18327ad777b917ec4dee9369928d1f22866b41cbefd138bfba2
+  date: '2026-09-11'
+  starttime: '2026-09-11 13:00:00.0'
+  final_rank: 4
+  player_count: 52
+  player: barff
+  parent_id: mono-blue-faeries
+  subtype_id: null
+  display_name: Mono-Blue Faeries
+  main_deck:
+  - name: Brinebarrow Intruder
+    qty: 4
+  - name: Counterspell
+    qty: 4
+  - name: Cryoshatter
+    qty: 3
+  - name: Dispel
+    qty: 1
+  - name: Faerie Miscreant
+    qty: 4
+  - name: Faerie Seer
+    qty: 4
+  - name: Harrier Strix
+    qty: 2
+  - name: Island
+    qty: 19
+  - name: Moon-Circuit Hacker
+    qty: 4
+  - name: Ninja of the Deep Hours
+    qty: 4
+  - name: Of One Mind
+    qty: 4
+  - name: Sewer-veillance Cam
+    qty: 3
+  - name: Spellstutter Sprite
+    qty: 4
+  side_deck:
+  - name: Annul
+    qty: 4
+  - name: Blue Elemental Blast
+    qty: 4
+  - name: Cryoshatter
+    qty: 1
+  - name: Dispel
+    qty: 1
+  - name: Envelop
+    qty: 1
+  - name: Hydroblast
+    qty: 2
+  - name: Relic of Progenitus
+    qty: 2
+- token: deck:d9f8dbcb2964a0e7cbeb
+  event_id: '12854069'
+  deck_id: d9f8dbcb2964a0e7cbeb
+  deck_fingerprint_sha256: 6ae3fa330c48dd2c8308871ed56037d88770eb50ff971dfd68a2510a98764be7
+  date: '2026-09-11'
+  starttime: '2026-09-11 13:00:00.0'
+  final_rank: 5
+  player_count: 52
+  player: MisterTwin
+  parent_id: mono-red-madness
+  subtype_id: null
+  display_name: Mono-Red Madness
+  main_deck:
+  - name: Faithless Looting
+    qty: 4
+  - name: Fiery Temper
+    qty: 4
+  - name: Fireblast
+    qty: 3
+  - name: Grab the Prize
+    qty: 4
+  - name: Guttersnipe
+    qty: 3
+  - name: Highway Robbery
+    qty: 4
+  - name: Kessig Flamebreather
+    qty: 4
+  - name: Lava Dart
+    qty: 4
+  - name: Lightning Bolt
+    qty: 4
+  - name: Mountain
+    qty: 19
+  - name: Sneaky Snacker
+    qty: 4
+  - name: Voldaren Epicure
+    qty: 4
+  side_deck:
+  - name: Cast into the Fire
+    qty: 4
+  - name: Cleansing Wildfire
+    qty: 2
+  - name: End the Festivities
+    qty: 2
+  - name: Pyroblast
+    qty: 4
+  - name: Relic of Progenitus
+    qty: 3
+- token: deck:1a0fbec258832a9de7ae
+  event_id: '12854069'
+  deck_id: 1a0fbec258832a9de7ae
+  deck_fingerprint_sha256: 02fd95edd8c8f85da315bc57f2246b6fa3494e9fb5871a8691f1c4db4a8d20d8
+  date: '2026-09-11'
+  starttime: '2026-09-11 13:00:00.0'
+  final_rank: 6
+  player_count: 52
+  player: QueMario
+  parent_id: elves
+  subtype_id: null
+  display_name: Elves
+  main_deck:
+  - name: Avenging Hunter
+    qty: 4
+  - name: Elvish Mystic
+    qty: 4
+  - name: Forest
+    qty: 13
+  - name: Fyndhorn Elves
+    qty: 1
+  - name: Generous Ent
+    qty: 4
+  - name: Gingerbread Cabin
+    qty: 1
+  - name: Lead the Stampede
+    qty: 4
+  - name: Llanowar Elves
+    qty: 4
+  - name: Masked Vandal
+    qty: 4
+  - name: Nyxborn Hydra
+    qty: 4
+  - name: Priest of Titania
+    qty: 4
+  - name: Quirion Ranger
+    qty: 4
+  - name: Sagu Wildling
+    qty: 1
+  - name: Timberwatch Elf
+    qty: 4
+  - name: Winding Way
+    qty: 4
+  side_deck:
+  - name: Faerie Macabre
+    qty: 3
+  - name: Monstrous Emergence
+    qty: 4
+  - name: Spinewoods Paladin
+    qty: 4
+  - name: Vitu-Ghazi Inspector
+    qty: 4
+- token: deck:daa9c5a8db94f5fc8228
+  event_id: '12854069'
+  deck_id: daa9c5a8db94f5fc8228
+  deck_fingerprint_sha256: d25116d50cce22c040cffbda0778720e7a203dedba7621bd62ece40dc6f73190
+  date: '2026-09-11'
+  starttime: '2026-09-11 13:00:00.0'
+  final_rank: 7
+  player_count: 52
+  player: cabrabr12
+  parent_id: packbeast-swarm
+  subtype_id: selesnya
+  display_name: Packbeast Swarm
+  main_deck:
+  - name: Darval, Whose Web Protects
+    qty: 2
+  - name: Halo Hopper
+    qty: 4
+  - name: Holdout Settlement
+    qty: 1
+  - name: Khalni Garden
+    qty: 4
+  - name: Leonardo, Big Brother
+    qty: 4
+  - name: Martyr's Soul
+    qty: 4
+  - name: Novice Inspector
+    qty: 3
+  - name: Ornithopter
+    qty: 4
+  - name: Phyrexian Walker
+    qty: 4
+  - name: Plains
+    qty: 11
+  - name: Ramosian Rally
+    qty: 4
+  - name: Salt Road Packbeast
+    qty: 4
+  - name: Search Party Captain
+    qty: 4
+  - name: Thraben Inspector
+    qty: 4
+  - name: Winding Way
+    qty: 3
+  side_deck:
+  - name: Dust to Dust
+    qty: 3
+  - name: Plains
+    qty: 3
+  - name: Standard Bearer
+    qty: 2
+  - name: Thraben Charm
+    qty: 3
+  - name: Ultimate Alliance
+    qty: 4
+- token: deck:2f024fd5a311538454fb
+  event_id: '12854069'
+  deck_id: 2f024fd5a311538454fb
+  deck_fingerprint_sha256: 1a3234bcedf3983206b17d2bb2202948a423f7a2cd53f6631114d08824256019
+  date: '2026-09-11'
+  starttime: '2026-09-11 13:00:00.0'
+  final_rank: 8
+  player_count: 52
+  player: Luminati
+  parent_id: mono-blue-terror
+  subtype_id: null
+  display_name: Mono-Blue Terror
+  main_deck:
+  - name: Brainstorm
+    qty: 4
+  - name: Counterspell
+    qty: 4
+  - name: Cryptic Serpent
+    qty: 4
+  - name: Deem Inferior
+    qty: 4
+  - name: Deep Analysis
+    qty: 1
+  - name: Delver of Secrets
+    qty: 4
+  - name: Island
+    qty: 16
+  - name: Lórien Revealed
+    qty: 4
+  - name: Mental Note
+    qty: 4
+  - name: Murmuring Mystic
+    qty: 2
+  - name: Ponder
+    qty: 3
+  - name: Sleep of the Dead
+    qty: 2
+  - name: Thought Scour
+    qty: 4
+  - name: Tolarian Terror
+    qty: 4
+  side_deck:
+  - name: Annul
+    qty: 4
+  - name: Blue Elemental Blast
+    qty: 4
+  - name: Envelop
+    qty: 1
+  - name: Gut Shot
+    qty: 2
+  - name: Hydroblast
+    qty: 4
+- token: deck:9138068c968f01620f2b
+  event_id: '12854094'
+  deck_id: 9138068c968f01620f2b
+  deck_fingerprint_sha256: c0072abe1f64245c2df0f3c28e19eabadf3ae7ff4037c087caadd6ddad190188
+  date: '2026-09-13'
+  starttime: '2026-09-13 17:00:00.0'
+  final_rank: 1
+  player_count: 64
+  player: TheJunkDog
+  parent_id: four-color-affinity
+  subtype_id: null
+  display_name: Four-Color Affinity
+  main_deck:
+  - name: Ancient Den
+    qty: 3
+  - name: Blood Fountain
+    qty: 2
+  - name: Cryogen Relic
+    qty: 4
+  - name: Drossforge Bridge
+    qty: 1
+  - name: Galvanic Blast
+    qty: 4
+  - name: Giant's Boulder
+    qty: 4
+  - name: Glint Hawk
+    qty: 4
+  - name: Great Furnace
+    qty: 3
+  - name: Makeshift Munitions
+    qty: 1
+  - name: Mistvault Bridge
+    qty: 3
+  - name: Myr Enforcer
+    qty: 4
+  - name: Nihil Spellbomb
+    qty: 2
+  - name: Razortide Bridge
+    qty: 1
+  - name: Reckoner's Bargain
+    qty: 4
+  - name: Refurbished Familiar
+    qty: 4
+  - name: Seat of the Synod
+    qty: 4
+  - name: Thoughtcast
+    qty: 4
+  - name: Tithing Blade
+    qty: 1
+  - name: Utrom Monitor
+    qty: 3
+  - name: Vault of Whispers
+    qty: 4
+  side_deck:
+  - name: Breath Weapon
+    qty: 1
+  - name: Extract a Confession
+    qty: 2
+  - name: Hydroblast
+    qty: 4
+  - name: Krark-Clan Shaman
+    qty: 2
+  - name: Nihil Spellbomb
+    qty: 2
+  - name: Pyroblast
+    qty: 4
+- token: deck:eb913fd60345d73411ad
+  event_id: '12854094'
+  deck_id: eb913fd60345d73411ad
+  deck_fingerprint_sha256: 4e863e29181705a7b926570f9b36ca7ba42142a98eb0e5f88dc80a84177c4b3e
+  date: '2026-09-13'
+  starttime: '2026-09-13 17:00:00.0'
+  final_rank: 2
+  player_count: 64
+  player: Mate_wosk
+  parent_id: mono-red-madness
+  subtype_id: null
+  display_name: Mono-Red Madness
+  main_deck:
+  - name: Faithless Looting
+    qty: 3
+  - name: Fiery Temper
+    qty: 4
+  - name: Fireblast
+    qty: 3
+  - name: Grab the Prize
+    qty: 4
+  - name: Guttersnipe
+    qty: 3
+  - name: Highway Robbery
+    qty: 4
+  - name: Kessig Flamebreather
+    qty: 4
+  - name: Lava Dart
+    qty: 4
+  - name: Lightning Bolt
+    qty: 4
+  - name: Mountain
+    qty: 19
+  - name: Sneaky Snacker
+    qty: 4
+  - name: Voldaren Epicure
+    qty: 4
+  side_deck:
+  - name: Cast into the Fire
+    qty: 2
+  - name: Pyroblast
+    qty: 3
+  - name: Red Elemental Blast
+    qty: 2
+  - name: Relic of Progenitus
+    qty: 3
+  - name: Searing Blaze
+    qty: 3
+  - name: Smash to Smithereens
+    qty: 2
+- token: deck:97e92db92fca9d1e2de8
+  event_id: '12854094'
+  deck_id: 97e92db92fca9d1e2de8
+  deck_fingerprint_sha256: d25116d50cce22c040cffbda0778720e7a203dedba7621bd62ece40dc6f73190
+  date: '2026-09-13'
+  starttime: '2026-09-13 17:00:00.0'
+  final_rank: 3
+  player_count: 64
+  player: cabrabr12
+  parent_id: packbeast-swarm
+  subtype_id: selesnya
+  display_name: Packbeast Swarm
+  main_deck:
+  - name: Darval, Whose Web Protects
+    qty: 2
+  - name: Halo Hopper
+    qty: 4
+  - name: Holdout Settlement
+    qty: 1
+  - name: Khalni Garden
+    qty: 4
+  - name: Leonardo, Big Brother
+    qty: 4
+  - name: Martyr's Soul
+    qty: 4
+  - name: Novice Inspector
+    qty: 3
+  - name: Ornithopter
+    qty: 4
+  - name: Phyrexian Walker
+    qty: 4
+  - name: Plains
+    qty: 11
+  - name: Ramosian Rally
+    qty: 4
+  - name: Salt Road Packbeast
+    qty: 4
+  - name: Search Party Captain
+    qty: 4
+  - name: Thraben Inspector
+    qty: 4
+  - name: Winding Way
+    qty: 3
+  side_deck:
+  - name: Dust to Dust
+    qty: 3
+  - name: Plains
+    qty: 3
+  - name: Standard Bearer
+    qty: 2
+  - name: Thraben Charm
+    qty: 3
+  - name: Ultimate Alliance
+    qty: 4
+- token: deck:348f41b85c63134b6844
+  event_id: '12854094'
+  deck_id: 348f41b85c63134b6844
+  deck_fingerprint_sha256: 02fd95edd8c8f85da315bc57f2246b6fa3494e9fb5871a8691f1c4db4a8d20d8
+  date: '2026-09-13'
+  starttime: '2026-09-13 17:00:00.0'
+  final_rank: 4
+  player_count: 64
+  player: QueMario
+  parent_id: elves
+  subtype_id: null
+  display_name: Elves
+  main_deck:
+  - name: Avenging Hunter
+    qty: 4
+  - name: Elvish Mystic
+    qty: 4
+  - name: Forest
+    qty: 13
+  - name: Fyndhorn Elves
+    qty: 1
+  - name: Generous Ent
+    qty: 4
+  - name: Gingerbread Cabin
+    qty: 1
+  - name: Lead the Stampede
+    qty: 4
+  - name: Llanowar Elves
+    qty: 4
+  - name: Masked Vandal
+    qty: 4
+  - name: Nyxborn Hydra
+    qty: 4
+  - name: Priest of Titania
+    qty: 4
+  - name: Quirion Ranger
+    qty: 4
+  - name: Sagu Wildling
+    qty: 1
+  - name: Timberwatch Elf
+    qty: 4
+  - name: Winding Way
+    qty: 4
+  side_deck:
+  - name: Faerie Macabre
+    qty: 3
+  - name: Monstrous Emergence
+    qty: 4
+  - name: Spinewoods Paladin
+    qty: 4
+  - name: Vitu-Ghazi Inspector
+    qty: 4
+- token: deck:95ad66dc720e56f40be7
+  event_id: '12854094'
+  deck_id: 95ad66dc720e56f40be7
+  deck_fingerprint_sha256: c91110adb17c6de5ee1897f98fe3a9b9a285c09986176ab3c84f5be9901f67b5
+  date: '2026-09-13'
+  starttime: '2026-09-13 17:00:00.0'
+  final_rank: 5
+  player_count: 64
+  player: AlessandroPiraccini
+  parent_id: mono-blue-terror
+  subtype_id: null
+  display_name: Mono-Blue Terror
+  main_deck:
+  - name: Artful Dodge
+    qty: 2
+  - name: Brainstorm
+    qty: 4
+  - name: Counterspell
+    qty: 4
+  - name: Cryptic Serpent
+    qty: 4
+  - name: Deem Inferior
+    qty: 3
+  - name: Delver of Secrets
+    qty: 4
+  - name: Island
+    qty: 16
+  - name: Lórien Revealed
+    qty: 4
+  - name: Mental Note
+    qty: 4
+  - name: Ponder
+    qty: 4
+  - name: Preordain
+    qty: 1
+  - name: Sleep of the Dead
+    qty: 2
+  - name: Thought Scour
+    qty: 4
+  - name: Tolarian Terror
+    qty: 4
+  side_deck:
+  - name: Annul
+    qty: 4
+  - name: Blue Elemental Blast
+    qty: 4
+  - name: Hydroblast
+    qty: 4
+  - name: Steel Sabotage
+    qty: 3
+- token: deck:9b01030faea3957752ca
+  event_id: '12854094'
+  deck_id: 9b01030faea3957752ca
+  deck_fingerprint_sha256: 1a3234bcedf3983206b17d2bb2202948a423f7a2cd53f6631114d08824256019
+  date: '2026-09-13'
+  starttime: '2026-09-13 17:00:00.0'
+  final_rank: 6
+  player_count: 64
+  player: boytriton
+  parent_id: mono-blue-terror
+  subtype_id: null
+  display_name: Mono-Blue Terror
+  main_deck:
+  - name: Brainstorm
+    qty: 4
+  - name: Counterspell
+    qty: 4
+  - name: Cryptic Serpent
+    qty: 4
+  - name: Deem Inferior
+    qty: 4
+  - name: Deep Analysis
+    qty: 1
+  - name: Delver of Secrets
+    qty: 4
+  - name: Island
+    qty: 16
+  - name: Lórien Revealed
+    qty: 4
+  - name: Mental Note
+    qty: 4
+  - name: Murmuring Mystic
+    qty: 2
+  - name: Ponder
+    qty: 3
+  - name: Sleep of the Dead
+    qty: 2
+  - name: Thought Scour
+    qty: 4
+  - name: Tolarian Terror
+    qty: 4
+  side_deck:
+  - name: Annul
+    qty: 4
+  - name: Blue Elemental Blast
+    qty: 4
+  - name: Envelop
+    qty: 1
+  - name: Gut Shot
+    qty: 2
+  - name: Hydroblast
+    qty: 4
+- token: deck:70351f9073d1b33e2129
+  event_id: '12854094'
+  deck_id: 70351f9073d1b33e2129
+  deck_fingerprint_sha256: b5dd6ce92d9edf49d7fb7d422f9d08bf6653f2cda167818fab9b4597ad1e35c9
+  date: '2026-09-13'
+  starttime: '2026-09-13 17:00:00.0'
+  final_rank: 7
+  player_count: 64
+  player: Ixidor29
+  parent_id: gruul-ponza
+  subtype_id: null
+  display_name: Gruul Ponza
+  main_deck:
+  - name: Annoyed Altisaur
+    qty: 3
+  - name: Arbor Elf
+    qty: 4
+  - name: Avenging Hunter
+    qty: 3
+  - name: Boarding Party
+    qty: 4
+  - name: Bonder's Ornament
+    qty: 1
+  - name: Colossal Dreadmask
+    qty: 1
+  - name: Eldrazi Repurposer
+    qty: 3
+  - name: Generous Ent
+    qty: 2
+  - name: Highland Forest
+    qty: 1
+  - name: Mwonvuli Acid-Moss
+    qty: 4
+  - name: Skred
+    qty: 2
+  - name: Snow-Covered Forest
+    qty: 14
+  - name: Snow-Covered Mountain
+    qty: 2
+  - name: Structural Distortion
+    qty: 2
+  - name: Thermokarst
+    qty: 4
+  - name: Utopia Sprawl
+    qty: 4
+  - name: Wild Growth
+    qty: 2
+  - name: Writhing Chrysalis
+    qty: 4
+  side_deck:
+  - name: Breath Weapon
+    qty: 3
+  - name: Cast into the Fire
+    qty: 2
+  - name: Deglamer
+    qty: 2
+  - name: Relic of Progenitus
+    qty: 3
+  - name: Suplex
+    qty: 2
+  - name: Weather the Storm
+    qty: 3
+- token: deck:ebce08002c6e76eab385
+  event_id: '12854094'
+  deck_id: ebce08002c6e76eab385
+  deck_fingerprint_sha256: 86fc5c5fa4e6bbaec6326bb348bc0a311daa71804299136cc6dc90a66c22dc01
+  date: '2026-09-13'
+  starttime: '2026-09-13 17:00:00.0'
+  final_rank: 8
+  player_count: 64
+  player: boom_bust
+  parent_id: mono-red-rally
+  subtype_id: null
+  display_name: Mono-Red Rally
+  main_deck:
+  - name: Burning-Tree Emissary
+    qty: 4
+  - name: Chain Lightning
+    qty: 2
+  - name: Clockwork Percussionist
+    qty: 4
+  - name: End the Festivities
+    qty: 2
+  - name: Experimental Synthesizer
+    qty: 3
+  - name: Galvanic Blast
+    qty: 4
+  - name: Goblin Bushwhacker
+    qty: 4
+  - name: Goblin Tomb Raider
+    qty: 4
+  - name: Great Furnace
+    qty: 4
+  - name: Lightning Bolt
+    qty: 4
+  - name: Mountain
+    qty: 14
+  - name: Rally at the Hornburg
+    qty: 4
+  - name: Reckless Impulse
+    qty: 3
+  - name: Voldaren Epicure
+    qty: 4
+  side_deck:
+  - name: Cast into the Fire
+    qty: 4
+  - name: Raze
+    qty: 3
+  - name: Red Elemental Blast
+    qty: 4
+  - name: Relic of Progenitus
+    qty: 4
+review:
+  top_copy:
+    reviewed: true
+    items:
+    - order: 1
+      text:
+        zh: '本周纯红疯魔依旧占比排名榜首，但数据没有前几周那么领先，也有很多新构筑加入环境。
+
+
+          首先是四色版本的共鸣，[[card:Giant''s Boulder|巨人抛石]]是神器而且可以调整牌库顶和调色，和这种多色偏控制的神器中速也很契合。本周同一牌手操控四色版本的共鸣席卷了两场比赛：deck:9138068c968f01620f2b。
+
+
+          另外驮兽铺场套牌本周也非常出彩。思路以纯白为主，之前出现过红白、黑白、玛尔都色组的版本。而本周以混绿带[[card:Winding Way|蜿蜒长路]]的形态席卷一场：deck:703dec5e054f8ab93980，占比也来到了5%以上。
+
+
+          还有一套纳雅色组的野火套牌本周拿下一个四强：deck:5c7aae4bc5f4b7595bcc。基本是勇德一套放弃了黑色[[card:Refurbished Familiar|复新佣兽]]和其他神器的配合，转进白色使用白色去除，并带[[card:Pursue the Past|追逐过往]]配合[[card:Sneaky Snacker|贪吃灵]]。'
+        en: 'Mono-Red Madness still held the largest metagame share this week, although its lead was smaller than in recent weeks. Several new builds also entered the field.
+
+
+          First came Four-Color Affinity. [[card:Giant''s Boulder|Giant’s Boulder]] is both an artifact and a way to smooth the top of the library while fixing mana, making it a natural fit for this slower, multicolor artifact-midrange strategy. The same player piloted the four-color build to wins in two events this week: deck:9138068c968f01620f2b.
+
+
+          Packbeast Swarm was another standout. The strategy is primarily white and has previously appeared in Boros, Orzhov, and Mardu color combinations. This week, a version splashing green for [[card:Winding Way|Winding Way]] won an event—deck:703dec5e054f8ab93980—and raised the archetype’s metagame share above 5%.
+
+
+          A Naya Wildfire deck also reached the Top 4 this week: deck:5c7aae4bc5f4b7595bcc. It starts from the Jund shell but cuts black, [[card:Refurbished Familiar|Refurbished Familiar]], and the other artifact synergies. In their place, it adds white removal and uses [[card:Pursue the Past|Pursue the Past]] together with [[card:Sneaky Snacker|Sneaky Snacker]].'
+  features:
+    reviewed: true
+    explicit_empty: false
+    items:
+    - source_order: 41
+      category: new_deck
+      destination_id: deck:9138068c968f01620f2b
+      parent_id: four-color-affinity
+      subtype_id: null
+      positioning:
+        zh: 本周由同一牌手操控席卷两场的四色共鸣。基本是格利极共鸣混白满编烁目鹰，同时使用巨人抛石调色。
+        en: The same player piloted Four-Color Affinity to wins in two events this week. The deck is essentially Grixis Affinity splashing white for a full playset of Glint Hawk, with Giant’s Boulder helping to fix its mana.
+      featured_cards:
+      - Glint Hawk
+      - Giant's Boulder
+      - Thoughtcast
+      - Refurbished Familiar
+      supporting_facts:
+      - type: new_archetype
+        known_state_match: false
+        continuity_alias_match: false
+        prior_record_count_under_current_classifier: 1
+    - source_order: 25
+      category: new_technology
+      destination_id: deck:703dec5e054f8ab93980
+      parent_id: packbeast-swarm
+      subtype_id: selesnya
+      positioning:
+        zh: 之前红白、黑白、玛尔都色组都出现过的驮兽铺场快攻，本周以混绿带蜿蜒长路的形态在环境中展现了不低的存在感。席卷一场，占比也来到了5%以上。
+        en: Packbeast Swarm has previously appeared in Boros, Orzhov, and Mardu color combinations. This week, a green splash for Winding Way gave the archetype a meaningful presence in the metagame. It won one event and rose above a 5% share.
+      featured_cards:
+      - Salt Road Packbeast
+      - Winding Way
+      - Ornithopter
+      - Ramosian Rally
+      supporting_facts:
+      - type: share_increase
+        current_high_score_count: 6
+        current_high_score_denominator: 100
+        current_share: 0.06
+        reference_high_score_count: 1
+        reference_high_score_denominator: 390
+        reference_share: 0.0026
+        delta_pp: 5.74
+    - source_order: 27
+      category: new_deck
+      destination_id: deck:5c7aae4bc5f4b7595bcc
+      parent_id: naya-wildfire
+      subtype_id: null
+      positioning:
+        zh: 进白带追逐过往和贪吃灵配合的纳雅版本野火套牌。基本是勇德一套放弃了复新佣兽和其他神器的配合，转进白色使用白色去除和贪吃灵。本周拿下一个四强。
+        en: A Naya Wildfire build that moves into white and pairs Pursue the Past with Sneaky Snacker. It starts from the Jund shell but cuts Refurbished Familiar and the other artifact synergies, replacing them with white removal and Sneaky Snacker. The deck reached the Top 4 this week.
+      featured_cards:
+      - Cleansing Wildfire
+      - Pursue the Past
+      - Sneaky Snacker
+      - Journey to Nowhere
+      supporting_facts:
+      - type: new_archetype
+        known_state_match: false
+        continuity_alias_match: false
+        prior_record_count_under_current_classifier: 0
+known_archetype_ids:
+- altar-tron
+- azorius-familiars
+- battle-screech
+- bogles
+- dimir-faeries
+- dimir-terror
+- domain-ephemerate
+- elves
+- ephemerate
+- food-gardens
+- four-color-affinity
+- golgari-gardens
+- green-tron
+- grixis-affinity
+- gruul-ponza
+- gruul-ramp
+- infect
+- izzet-terror
+- jeskai-affinity
+- jund-wildfire
+- mono-black-sacrifice
+- mono-blue-faeries
+- mono-blue-terror
+- mono-red-madness
+- mono-red-rally
+- naya-wildfire
+- orzhov-midrange
+- packbeast-swarm
+- rakdos-madness
+- spy-combo
+- turbo-fog

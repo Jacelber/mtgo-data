@@ -2,6 +2,7 @@
 from datetime import date
 from hashlib import sha256
 import json
+import os
 
 import pytest
 
@@ -280,9 +281,12 @@ def test_execute_materializes_only_after_existing_deterministic_validation(tmp_p
     _generate(tmp_path, "standard")
     before = {path.relative_to(tmp_path): path.read_bytes() for path in tmp_path.rglob("*") if path.is_file()}
     calls = []
+    environments = []
     def run(command, **kwargs):
         calls.append([str(part) for part in command])
+        environments.append(kwargs.get("env"))
         return SimpleNamespace(stdout="", returncode=0)
+    monkeypatch.setenv("PYTHONPATH", "sentinel-dependencies")
     monkeypatch.setattr(subprocess, "run", run)
     monkeypatch.setattr(metadata, "rules_last_commit_iso", lambda *args: "2025-02-03T00:00:00Z")
     monkeypatch.setattr(catalog, "write_catalog", lambda *args: None)
@@ -301,6 +305,14 @@ def test_execute_materializes_only_after_existing_deterministic_validation(tmp_p
         assert not any("--full" in command or "pytest" in command for command in calls)
         assert "playwright" not in executed
         assert "production-pages.spec.js" not in executed
+        validator_index = next(
+            index
+            for index, command in enumerate(calls)
+            if any("validate_schemas.py" in part for part in command)
+        )
+        assert environments[validator_index]["PYTHONPATH"].split(os.pathsep)[-1] == (
+            "sentinel-dependencies"
+        )
         assert all(path.startswith(("stats/standard/", "reports/standard/")) or path == "stats/catalog.json" for path in paths)
         materialize(root, stage, paths, **kwargs)
     monkeypatch.setattr(classifier_closure, "_materialize_with_rollback", replace)

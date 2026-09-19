@@ -118,11 +118,11 @@ def test_pauper_completion_is_independent_of_legacy_formats(tmp_path, monkeypatc
         "schema_version": "1.2.0", "data_admissions": {"formats": {"pauper": {}}},
         "records": [{"week": "2026-W37", "completed_on": "2026-09-15", "evidence": "Owner review",
                      "review_scope": "full_official_classification_v2", "formats": {"pauper": {
-                         "accepted_event_ids": ["201"], "accepted_classifier_subject": "a" * 64,
+                         "accepted_event_ids": ["201", "200"], "accepted_classifier_subject": "a" * 64,
                          "classification_review_digest": "b" * 64, "landing_content_digest": "c" * 64}}}],
     })
     monkeypatch.setattr("mtgmeta.weekly_review.build_mtgo_weekly_review", lambda *args: {
-        "event_ids": ["201"], "classifier": {"subject_digest": "a" * 64},
+        "event_ids": ["200", "201"], "classifier": {"subject_digest": "a" * 64},
         "classification_review_digest": "b" * 64})
     monkeypatch.setattr(readiness, "_landing_content_digest", lambda *args: "c" * 64)
     assert _completion_state(tmp_path, "2026-W37", format_id="pauper")["state"] == "verified"

@@ -579,6 +579,14 @@ def test_v2_completion_record_binds_full_review_subjects() -> None:
     }
 
 
+def test_completion_acceptance_event_membership_is_order_independent() -> None:
+    from tools.export_weekly_classification_review import _same_event_ids
+
+    assert _same_event_ids(["12853708", "12853715"], ["12853715", "12853708"])
+    assert not _same_event_ids(["12853708", "12853715"], ["12853708"])
+    assert not _same_event_ids(["12853708", "12853708"], ["12853708"])
+
+
 @pytest.mark.parametrize("with_formal_digest", [False, True])
 def test_v2_completion_rejects_name_bootstrap_even_with_formal_digest(
     with_formal_digest: bool,
