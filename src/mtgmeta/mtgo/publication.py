@@ -583,7 +583,7 @@ def acceptance_record(root: Path, format_id: str, week: str, *,
     all_events = retained_events(root, format_id)
     events = [(source, event) for source, event in all_events if str(event["event_id"]) in ids]
     reports = build_classification_reports(events, load_rule_set(root / "my_archetypes" / f"{format_id}.yaml"), format_id=format_id)
-    accepted_unknown = intentional_unknowns(root)[format_id]
+    accepted_unknown = intentional_unknowns(root, (format_id,))[format_id]
     if has_blocking_diagnostics(reports) or any(
         (str(item["event_id"]), str(item["deck_id"]), str(item["source_file"])) not in accepted_unknown
         for item in reports["unknown_decks"]["records"]

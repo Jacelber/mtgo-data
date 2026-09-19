@@ -126,7 +126,8 @@ def _generate(root, fmt):
     metadata.generate_metadata(root, fmt, data_updated=fixed["generated_at"], rules_updated=fixed["generated_at"])
 
 
-def test_all_public_producers_share_membership_and_standard_can_publish_before_landing(tmp_path):
+def test_all_public_producers_share_membership_and_standard_can_publish_before_landing(tmp_path, monkeypatch):
+    from mtgmeta.mtgo import publication
     from mtgmeta.mtgo.publication import acceptance_record, inspect_publication, resolve_scope
     from mtgmeta.weekly_review import build_mtgo_weekly_review
     registry = _repository(tmp_path)
@@ -143,8 +144,13 @@ def test_all_public_producers_share_membership_and_standard_can_publish_before_l
     old_landing = landing.read_bytes()
     review = build_mtgo_weekly_review(tmp_path, "standard", "2025-W03")
     assert review["event_ids"] == ["200"]  # private review is not the public Top 8 window
+    unknown_scopes = []
+    read_unknowns = publication.intentional_unknowns
+    monkeypatch.setattr(publication, "intentional_unknowns", lambda root, formats=None:
+                        unknown_scopes.append(formats) or read_unknowns(root, formats))
     row = acceptance_record(tmp_path, "standard", "2025-W03",
         expected_review_digest=review["classification_review_digest"], accepted_on="2025-02-03", evidence="synthetic Owner acceptance")
+    assert unknown_scopes == [("standard",)]
     registry["data_admissions"]["formats"]["standard"]["weekly_acceptances"].append(row)
     _write(tmp_path / "configs/mtgo_weekly_review_completions.yaml", registry)
     _generate(tmp_path, "standard")

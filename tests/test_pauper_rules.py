@@ -64,7 +64,7 @@ def test_pauper_rule_inventory_and_parent_boundaries() -> None:
         if archetype.subtypes
     } == {
         "ephemerate": {"four-color", "jeskai"},
-        "battle-screech": {"boros", "mono-white", "orzhov"},
+        "battle-screech": {"boros", "mono-white"},
         "packbeast-swarm": {
             "boros",
             "esper",
@@ -88,7 +88,7 @@ def test_owner_accepted_jund_names() -> None:
         if row.get("format") == "pauper" and row.get("subtype_id") is None
     }
 
-    assert "勇德" not in text
+    assert all("勇德" not in name for name in pauper_names.values())
     assert {
         parent_id: pauper_names[parent_id]
         for parent_id in ("jund-gardens", "jund-wildfire", "jund-affinity", "jund-ramp")

@@ -46,7 +46,10 @@ def test_allowed_refresh_includes_dependent_publication_metadata() -> None:
     staged = {
         "families": {
             "mtgo_statistics": {"artifacts": ["stats/modern/mtgo/stats.json"]},
-            "mtgo_publication": {"artifacts": ["stats/modern/mtgo/meta.json"]},
+            "mtgo_publication": {"artifacts": [
+                "stats/modern/mtgo/meta.json",
+                "stats/modern/mtgo/completeness/index.json",
+            ]},
             "melee": {"artifacts": ["stats/modern/melee/index.json"]},
         }
     }
@@ -54,6 +57,7 @@ def test_allowed_refresh_includes_dependent_publication_metadata() -> None:
     assert _allowed_refreshed_artifacts(initial, staged) == {
         "stats/modern/mtgo/stats.json",
         "stats/modern/mtgo/meta.json",
+        "stats/modern/mtgo/completeness/index.json",
     }
 
 

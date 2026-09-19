@@ -401,7 +401,7 @@ archetypes:
         min_count: 1
       - card: "Tangle"
         zone: main
-        min_count: 2
+        min_count: 1
 - id: persistent-petitioners
   name: "Petitioners Mill"
   priority: 9635
@@ -1286,8 +1286,25 @@ archetypes:
         min_count: 3
 - id: esper-affinity
   name: "Esper Affinity"
-  priority: 8700
+  priority: 8701
   rules:
+  - id: esper-affinity-spell-colors
+    priority: 8701
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Glint Hawk"
+        zone: main
+        min_count: 1
+      - card: "Thoughtcast"
+        zone: main
+        min_count: 1
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 1
+      - card: "Galvanic Blast"
+        zone: main
+        exact_count: 0
   - id: esper-affinity
     priority: 8700
     subtype_id: null
@@ -1415,8 +1432,28 @@ archetypes:
         exact_count: 0
 - id: four-color-affinity
   name: "Four-Color Affinity"
-  priority: 8680
+  priority: 8703
   rules:
+  - id: four-color-affinity-spell-colors
+    priority: 8703
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Myr Enforcer"
+        zone: main
+        min_count: 3
+      - card: "Glint Hawk"
+        zone: main
+        min_count: 1
+      - card: "Thoughtcast"
+        zone: main
+        min_count: 1
+      - card: "Galvanic Blast"
+        zone: main
+        min_count: 1
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 1
   - id: four-color-affinity
     priority: 8680
     subtype_id: null
@@ -1431,6 +1468,30 @@ archetypes:
       - card: "Mistvault Bridge"
         zone: main
         min_count: 1
+- id: jeskai-affinity
+  name: "Jeskai Affinity"
+  priority: 8702
+  rules:
+  - id: jeskai-affinity-spell-colors
+    priority: 8702
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Myr Enforcer"
+        zone: main
+        min_count: 3
+      - card: "Glint Hawk"
+        zone: main
+        min_count: 1
+      - card: "Thoughtcast"
+        zone: main
+        min_count: 1
+      - card: "Galvanic Blast"
+        zone: main
+        min_count: 1
+      - card: "Refurbished Familiar"
+        zone: main
+        exact_count: 0
 - id: rakdos-affinity
   name: "Rakdos Affinity"
   priority: 8670
@@ -1934,27 +1995,11 @@ archetypes:
   name: "Battle Screech"
   priority: 8100
   subtypes:
-  - id: orzhov
-    name: "Orzhov"
   - id: boros
     name: "Boros"
   - id: mono-white
     name: "Mono-White"
   rules:
-  - id: orzhov-battle-screech
-    priority: 8100
-    subtype_id: orzhov
-    conditions:
-      all:
-      - card: "Battle Screech"
-        zone: main
-        min_count: 3
-      - card: "Raffine's Informant"
-        zone: main
-        min_count: 3
-      - card: "Orzhov Basilica"
-        zone: main
-        min_count: 2
   - id: boros-battle-screech
     priority: 8090
     subtype_id: boros
@@ -2123,12 +2168,12 @@ archetypes:
       - card: "Leonardo, Big Brother"
         zone: main
         min_count: 3
-      - card: "Ardent Recruit"
-        zone: main
-        min_count: 3
       - card: "Novice Inspector"
         zone: main
         min_count: 3
+      - card: "Battle Screech"
+        zone: main
+        exact_count: 0
       - card: "Galvanic Blast"
         zone: main
         exact_count: 0
@@ -2307,6 +2352,24 @@ archetypes:
         zone: main
         min_count: 3
       - card: "Drossforge Bridge"
+        zone: main
+        min_count: 3
+      - card: "Slagwoods Bridge"
+        zone: main
+        min_count: 3
+- id: naya-wildfire
+  name: "Naya Wildfire"
+  priority: 7699
+  rules:
+  - id: naya-wildfire
+    priority: 7699
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Cleansing Wildfire"
+        zone: main
+        min_count: 3
+      - card: "Rustvale Bridge"
         zone: main
         min_count: 3
       - card: "Slagwoods Bridge"
