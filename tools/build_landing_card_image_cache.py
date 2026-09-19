@@ -296,7 +296,7 @@ def _bulk_lookup(
     for raw in cards:
         if not isinstance(raw, dict) or not isinstance(raw.get("name"), str):
             continue
-        if raw.get("layout") == "art_series":
+        if raw.get("layout") == "art_series" or raw.get("set_type") == "token":
             continue
         top = _candidate(raw, raw["name"], raw.get("image_uris"), None)
         if top is not None:
