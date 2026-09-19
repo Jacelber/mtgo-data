@@ -2,11 +2,11 @@
   "schema_version": "1.1.0",
   "format": "modern",
   "source": "mtgo",
-  "classifier_digest": "d9cd9a3c61e7087fef15a10432ac756e183b523323889f1fc956a8ef81387d1c",
+  "classifier_digest": "10be27063f5e73c74d15d358b9ab9bfefa28893f0b0f924ae3b9466a7c00feab",
   "rules_updated": "2026-09-14T11:17:28+09:00",
   "summary": {
-    "parents": 191,
-    "leaves": 257,
+    "parents": 193,
+    "leaves": 262,
     "expandable_parents": 23
   },
   "parents": [
@@ -113,12 +113,19 @@
       "subtype_ids": [
         "badgermole-combo/golgari",
         "badgermole-combo/landfall",
-        "badgermole-combo/mono-green"
+        "badgermole-combo/mono-green",
+        "badgermole-combo/selesnya"
       ]
     },
     {
       "id": "bant-aggro",
       "name": "Bant Aggro",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "bant-chant",
+      "name": "Bant Chant",
       "expandable": false,
       "subtype_ids": []
     },
@@ -503,6 +510,12 @@
     {
       "id": "fling-goyf",
       "name": "Fling Goyf",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "four-color-blink",
+      "name": "4-Color Blink",
       "expandable": false,
       "subtype_ids": []
     },
@@ -972,6 +985,8 @@
       "name": "Oculus Ritual",
       "expandable": true,
       "subtype_ids": [
+        "oculus-ritual/bant",
+        "oculus-ritual/four-color",
         "oculus-ritual/simic",
         "oculus-ritual/sultai",
         "oculus-ritual/temur"
@@ -1425,11 +1440,27 @@
       "subtype_id": "mono-green"
     },
     {
+      "id": "badgermole-combo/selesnya",
+      "kind": "subtype",
+      "name": "Selesnya",
+      "display_name": "Selesnya Badgermole Combo",
+      "parent_id": "badgermole-combo",
+      "subtype_id": "selesnya"
+    },
+    {
       "id": "bant-aggro",
       "kind": "archetype",
       "name": "Bant Aggro",
       "display_name": "Bant Aggro",
       "parent_id": "bant-aggro",
+      "subtype_id": null
+    },
+    {
+      "id": "bant-chant",
+      "kind": "archetype",
+      "name": "Bant Chant",
+      "display_name": "Bant Chant",
+      "parent_id": "bant-chant",
       "subtype_id": null
     },
     {
@@ -2078,6 +2109,14 @@
       "name": "Fling Goyf",
       "display_name": "Fling Goyf",
       "parent_id": "fling-goyf",
+      "subtype_id": null
+    },
+    {
+      "id": "four-color-blink",
+      "kind": "archetype",
+      "name": "4-Color Blink",
+      "display_name": "4-Color Blink",
+      "parent_id": "four-color-blink",
       "subtype_id": null
     },
     {
@@ -2783,6 +2822,22 @@
       "display_name": "Necrotic Ooze Combo",
       "parent_id": "necrotic-ooze-combo",
       "subtype_id": null
+    },
+    {
+      "id": "oculus-ritual/bant",
+      "kind": "subtype",
+      "name": "Bant",
+      "display_name": "Bant Oculus Ritual",
+      "parent_id": "oculus-ritual",
+      "subtype_id": "bant"
+    },
+    {
+      "id": "oculus-ritual/four-color",
+      "kind": "subtype",
+      "name": "4-Color",
+      "display_name": "4-Color Oculus Ritual",
+      "parent_id": "oculus-ritual",
+      "subtype_id": "four-color"
     },
     {
       "id": "oculus-ritual/simic",

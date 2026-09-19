@@ -3,47 +3,48 @@
   "report_type": "subtype_diagnostics",
   "format": "modern",
   "source": "mtgo",
-  "classifier_digest": "d9cd9a3c61e7087fef15a10432ac756e183b523323889f1fc956a8ef81387d1c",
+  "classifier_digest": "10be27063f5e73c74d15d358b9ab9bfefa28893f0b0f924ae3b9466a7c00feab",
   "scope": "all_admitted_events",
-  "event_count": 269,
-  "data_through": "2026-09-06 11:00:00.0",
+  "event_count": 282,
+  "data_through": "2026-09-13 11:00:00.0",
   "summary": {
-    "record_count": 3034,
+    "record_count": 3245,
     "blocking": false,
-    "selected_record_count": 2950,
+    "selected_record_count": 3155,
     "selected_by_subtype": {
       "badgermole-combo/golgari": 3,
       "badgermole-combo/landfall": 2,
-      "badgermole-combo/mono-green": 4,
-      "broodscale-combo/golgari": 4,
-      "broodscale-combo/gruul": 213,
-      "broodscale-combo/mono-green": 255,
+      "badgermole-combo/mono-green": 5,
+      "badgermole-combo/selesnya": 1,
+      "broodscale-combo/golgari": 6,
+      "broodscale-combo/gruul": 214,
+      "broodscale-combo/mono-green": 298,
       "broodscale-combo/simic": 3,
-      "burn/boros": 47,
-      "burn/mono-red": 4,
+      "burn/boros": 49,
+      "burn/mono-red": 10,
       "burn/rakdos": 18,
-      "chant-control/azorius": 138,
+      "chant-control/azorius": 134,
       "chant-control/esper": 1,
-      "chant-control/jeskai": 128,
+      "chant-control/jeskai": 132,
       "coffers/dimir": 1,
       "coffers/golgari": 1,
       "coffers/umori": 2,
       "deaths-shadow/dimir": 1,
       "deaths-shadow/grixis": 9,
       "deaths-shadow/rakdos": 4,
-      "devoted-druid-combo/abzan": 166,
-      "dimir-tempo/dimir": 220,
-      "dimir-tempo/esper": 32,
-      "dimir-tempo/grixis": 58,
-      "eldrazi-ramp/golgari": 9,
-      "eldrazi-ramp/gruul": 123,
+      "devoted-druid-combo/abzan": 186,
+      "dimir-tempo/dimir": 241,
+      "dimir-tempo/esper": 33,
+      "dimir-tempo/grixis": 60,
+      "eldrazi-ramp/golgari": 16,
+      "eldrazi-ramp/gruul": 129,
       "eldrazi-ramp/simic": 5,
       "eldrazi-ramp/sultai": 4,
       "eldrazi-ramp/temur": 6,
-      "eldrazi-tron/colorless": 306,
+      "eldrazi-tron/colorless": 308,
       "eldrazi-tron/mono-black": 3,
-      "eldrazi-tron/mono-green": 35,
-      "eldrazi-tron/simic": 3,
+      "eldrazi-tron/mono-green": 40,
+      "eldrazi-tron/simic": 6,
       "hammer-time/azorius": 21,
       "hammer-time/boros": 4,
       "hammer-time/jeskai": 3,
@@ -52,47 +53,48 @@
       "living-end/bant": 18,
       "living-end/four-color": 1,
       "living-end/rakdos": 3,
-      "living-end/sultai": 90,
-      "living-end/temur": 146,
+      "living-end/sultai": 91,
+      "living-end/temur": 156,
       "necrodominance/cosmogoyf": 9,
-      "necrodominance/dimir": 7,
-      "necrodominance/golgari": 33,
+      "necrodominance/dimir": 8,
+      "necrodominance/golgari": 35,
       "necrodominance/mono-black": 35,
       "necrodominance/rakdos": 1,
+      "oculus-ritual/bant": 5,
       "oculus-ritual/simic": 12,
       "oculus-ritual/sultai": 48,
       "oculus-ritual/temur": 5,
       "prowess/boros": 5,
-      "prowess/grixis": 26,
-      "prowess/izzet": 366,
-      "prowess/jeskai": 4,
+      "prowess/grixis": 29,
+      "prowess/izzet": 408,
+      "prowess/jeskai": 5,
       "prowess/lessons": 19,
       "prowess/mardu": 1,
       "prowess/mono-red": 3,
       "prowess/rakdos": 1,
-      "prowess/temur": 75,
+      "prowess/temur": 82,
       "rakdos-hollow-one/mardu": 3,
       "rakdos-hollow-one/rakdos": 46,
       "rhinos/domain": 9,
       "rhinos/temur": 12,
       "scapeshift/four-color": 1,
       "scapeshift/naya": 6,
-      "sewer-combo/azorius": 15,
+      "sewer-combo/azorius": 21,
       "sewer-combo/izzet": 1,
       "sewer-combo/mono-blue": 6,
       "sewer-combo/simic": 10,
       "soultrader/dimir": 3,
-      "soultrader/golgari": 7,
+      "soultrader/golgari": 8,
       "soultrader/orzhov": 5,
       "soultrader/sultai": 5,
-      "steel-cutter/izzet": 61,
+      "steel-cutter/izzet": 63,
       "steel-cutter/jeskai": 1,
       "thopter-sword/bant": 1,
       "tron/mono-green": 3,
       "tron/selesnya": 1,
-      "tron/simic": 6
+      "tron/simic": 7
     },
-    "same_parent_multiple_subtype_matches": 55
+    "same_parent_multiple_subtype_matches": 65
   },
   "records": [
     {
@@ -808,18 +810,22 @@
       "selected": {
         "archetype_id": "broodscale-combo",
         "archetype_name": "Broodscale Combo",
-        "subtype_id": "mono-green",
-        "subtype_name": "Mono-Green",
-        "rule_id": "broodscale-combo-mono-green",
-        "priority": 650000
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari",
+        "rule_id": "broodscale-combo-golgari-blade",
+        "priority": 652001
       },
       "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "golgari"
+        },
         {
           "archetype_id": "broodscale-combo",
           "subtype_id": "mono-green"
         }
       ],
-      "same_parent_multiple_subtype_matches": false
+      "same_parent_multiple_subtype_matches": true
     },
     {
       "deck_id": "99edda45bcc4bd1fbcc4",
@@ -1573,6 +1579,590 @@
         {
           "archetype_id": "tron",
           "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "0a7c3835575b562732ad",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "steel-cutter",
+        "archetype_name": "Izzet Steel-Cutter",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "steel-cutter-izzet",
+        "priority": 675000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "steel-cutter",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "35ebd188e7850e801b61",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "40b7652ddc7cc7dcb5b5",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "5fec69c3073365248bc3",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "62e7de6c472dec1c8bb3",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "chant-control",
+          "subtype_id": "azorius"
+        },
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "89f3061c71db48059c34",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari",
+        "rule_id": "eldrazi-ramp-golgari",
+        "priority": 645000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "golgari"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "95e00ab08628d21a7e3f",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "eldrazi-ramp-gruul",
+        "priority": 642000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "gruul"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "9f9488d531074d872f5f",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "badgermole-combo",
+        "archetype_name": "Badgermole Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "badgermole-combo-mono-green",
+        "priority": 624700
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "badgermole-combo",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "a1fa470d3f4d080feaba",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-frog",
+        "priority": 212010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "abccc5d7b2c79da14927",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "necrodominance",
+        "archetype_name": "Necrodominance",
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari",
+        "rule_id": "necrodominance-golgari",
+        "priority": 636000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "necrodominance",
+          "subtype_id": "golgari"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "be97ba74e0aa9d6e1bb2",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "d736bbd0a678622d9f90",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "living-end",
+        "archetype_name": "Living End",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "living-end-temur",
+        "priority": 113040
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "living-end",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "d9a253e161eef7ac1e09",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "f68013d3ec407407f201",
+      "event_id": "12853784",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-08 08:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12853784.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "0897dca99c8d1672295f",
+      "event_id": "12854076",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-12 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12854076.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "0de3822d75f389212d73",
+      "event_id": "12854076",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-12 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12854076.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "2051b6b97b554ac8038c",
+      "event_id": "12854076",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-12 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12854076.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "443113f1ef76e0df4e3a",
+      "event_id": "12854076",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-12 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12854076.json",
+      "selected": {
+        "archetype_id": "burn",
+        "archetype_name": "Burn",
+        "subtype_id": "mono-red",
+        "subtype_name": "Mono-Red",
+        "rule_id": "burn-mono-red",
+        "priority": 206100
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "burn",
+          "subtype_id": "mono-red"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "872f92bf852a746d2bf9",
+      "event_id": "12854076",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-12 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12854076.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "prowess-temur",
+        "priority": 672500
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "9d705390c38361f50805",
+      "event_id": "12854076",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-12 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12854076.json",
+      "selected": {
+        "archetype_id": "living-end",
+        "archetype_name": "Living End",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "living-end-temur",
+        "priority": 113040
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "living-end",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "a8b1ad5b1196abe0b410",
+      "event_id": "12854076",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-12 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12854076.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "grixis",
+        "subtype_name": "Grixis",
+        "rule_id": "prowess-grixis",
+        "priority": 672700
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "grixis"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "a8fe840d3fd87e4f5067",
+      "event_id": "12854076",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-12 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12854076.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-bowmasters",
+        "priority": 212000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "c39db9779ee8e8f4f408",
+      "event_id": "12854076",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-12 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12854076.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "d31b5a417f1757d27a25",
+      "event_id": "12854076",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-12 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12854076.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "f2ecd17493696272d287",
+      "event_id": "12854076",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-12 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12854076.json",
+      "selected": {
+        "archetype_id": "chant-control",
+        "archetype_name": "Chant Control",
+        "subtype_id": "jeskai",
+        "subtype_name": "Jeskai",
+        "rule_id": "chant-control-jeskai",
+        "priority": 306000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "chant-control",
+          "subtype_id": "jeskai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "ff75e84fbcb7f2ec5abb",
+      "event_id": "12854076",
+      "event_name": "Modern Challenge 16",
+      "event_start": "2026-09-12 06:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_16_12854076.json",
+      "selected": {
+        "archetype_id": "living-end",
+        "archetype_name": "Living End",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "living-end-temur",
+        "priority": 113040
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "living-end",
+          "subtype_id": "temur"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -5830,6 +6420,10 @@
         },
         {
           "archetype_id": "soultrader",
+          "subtype_id": "golgari"
+        },
+        {
+          "archetype_id": "soultrader",
           "subtype_id": "sultai"
         }
       ],
@@ -6271,6 +6865,10 @@
         {
           "archetype_id": "soultrader",
           "subtype_id": "dimir"
+        },
+        {
+          "archetype_id": "soultrader",
+          "subtype_id": "golgari"
         },
         {
           "archetype_id": "soultrader",
@@ -6792,12 +7390,12 @@
       "event_start": "2026-05-03 11:00:00.0",
       "source_file": "data/modern/Modern_Challenge_32_12841370.json",
       "selected": {
-        "archetype_id": "chant-control",
-        "archetype_name": "Chant Control",
-        "subtype_id": "azorius",
-        "subtype_name": "Azorius",
-        "rule_id": "chant-control-azorius",
-        "priority": 305900
+        "archetype_id": "bant-chant",
+        "archetype_name": "Bant Chant",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "bant-chant-witness",
+        "priority": 306100
       },
       "matched_subtypes": [
         {
@@ -15260,8 +15858,8 @@
         "archetype_name": "Broodscale Combo",
         "subtype_id": "golgari",
         "subtype_name": "Golgari",
-        "rule_id": "broodscale-combo-golgari",
-        "priority": 652000
+        "rule_id": "broodscale-combo-golgari-blade",
+        "priority": 652001
       },
       "matched_subtypes": [
         {
@@ -20632,12 +21230,12 @@
       "event_start": "2026-08-12 00:00:00.0",
       "source_file": "data/modern/Modern_Challenge_32_12851614.json",
       "selected": {
-        "archetype_id": "chant-control",
-        "archetype_name": "Chant Control",
-        "subtype_id": "azorius",
-        "subtype_name": "Azorius",
-        "rule_id": "chant-control-azorius",
-        "priority": 305900
+        "archetype_id": "bant-chant",
+        "archetype_name": "Bant Chant",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "bant-chant-witness",
+        "priority": 306100
       },
       "matched_subtypes": [
         {
@@ -22807,6 +23405,852 @@
         {
           "archetype_id": "broodscale-combo",
           "subtype_id": "gruul"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "077a9d05a94aaee726d4",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "16fefc5b72c4c536c330",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "burn",
+        "archetype_name": "Burn",
+        "subtype_id": "boros",
+        "subtype_name": "Boros",
+        "rule_id": "burn-boros",
+        "priority": 206300
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "burn",
+          "subtype_id": "boros"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "1f7494e14ce8f34a0ab3",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "oculus-ritual",
+        "archetype_name": "Oculus Ritual",
+        "subtype_id": "bant",
+        "subtype_name": "Bant",
+        "rule_id": "oculus-ritual-bant",
+        "priority": 658100
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "oculus-ritual",
+          "subtype_id": "bant"
+        },
+        {
+          "archetype_id": "oculus-ritual",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": true
+    },
+    {
+      "deck_id": "212d7c74b8d369f86ba2",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "chant-control",
+        "archetype_name": "Chant Control",
+        "subtype_id": "jeskai",
+        "subtype_name": "Jeskai",
+        "rule_id": "chant-control-jeskai",
+        "priority": 306000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "chant-control",
+          "subtype_id": "jeskai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "233acf82556ac4339c34",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "2ef91d6377467c42f736",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "470f21af07cfbcfebdce",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-frog",
+        "priority": 212010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "54d2e15c4b3fc09af29c",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-bowmasters",
+        "priority": 212000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "6452b80b263996bd5f2c",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "living-end",
+        "archetype_name": "Living End",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "living-end-temur",
+        "priority": 113040
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "living-end",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "6f60ae02447a49642495",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-frog",
+        "priority": 212010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "98ef9b08cf2bd73f14d6",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "c59defd4191db725a155",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "eldrazi-ramp-gruul",
+        "priority": 642000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "gruul"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "c83f355f5bb2c738f056",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "cbefc483984cc172c3ab",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "burn",
+        "archetype_name": "Burn",
+        "subtype_id": "mono-red",
+        "subtype_name": "Mono-Red",
+        "rule_id": "burn-mono-red",
+        "priority": 206100
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "burn",
+          "subtype_id": "mono-red"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "f4bb9bda935af69ddde6",
+      "event_id": "12853715",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-08 02:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853715.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "prowess-temur",
+        "priority": 672500
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "0077d3905a04f6df945d",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "07965c32b2a54cdbde34",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "living-end",
+        "archetype_name": "Living End",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "living-end-temur",
+        "priority": 113040
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "living-end",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "0d554d5ff08a2190d3f1",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "chant-control",
+        "archetype_name": "Chant Control",
+        "subtype_id": "jeskai",
+        "subtype_name": "Jeskai",
+        "rule_id": "chant-control-jeskai",
+        "priority": 306000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "chant-control",
+          "subtype_id": "jeskai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "104bd037a727dd8be640",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "1a1d160f612a2340211d",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "burn",
+        "archetype_name": "Burn",
+        "subtype_id": "mono-red",
+        "subtype_name": "Mono-Red",
+        "rule_id": "burn-mono-red",
+        "priority": 206100
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "burn",
+          "subtype_id": "mono-red"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "221c7c881b0555f4c107",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "esper",
+        "subtype_name": "Dimir White Splash",
+        "rule_id": "dimir-tempo-esper",
+        "priority": 637000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "esper"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "28d12275dfb5850483f6",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "3655ad584f5d55d6a944",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "47c198aaa20167beeb75",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "eldrazi-tron",
+        "archetype_name": "Eldrazi Tron",
+        "subtype_id": "colorless",
+        "subtype_name": "Colorless",
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "colorless"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "4a03e663806c159f484f",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "4a655a1dd0fa181e0dd7",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "6ba8c8cd96155635f2ed",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "7544b29fd3eb62c3ccde",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-bowmasters",
+        "priority": 212000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "754a2d78ad38aafc0003",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "7ca253e44d6ea9fadbb5",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "7db8a9b043f9bc0b7ac7",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "90740f55b9f7ffdcdfc0",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-frog",
+        "priority": 212010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "9cee2788337d5357e18e",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "de18fb4c53599d9d7c7e",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "e49537f97b451f465e60",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "eldrazi-tron",
+        "archetype_name": "Eldrazi Tron",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "eldrazi-tron-mono-green",
+        "priority": 648000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "eb1f9ec2c2d6f3540426",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "prowess-temur",
+        "priority": 672500
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "ef0f984f4a9a6871745c",
+      "event_id": "12853724",
+      "event_name": "Modern Challenge 32",
+      "event_start": "2026-09-09 00:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_32_12853724.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -30942,6 +32386,10 @@
         },
         {
           "archetype_id": "soultrader",
+          "subtype_id": "golgari"
+        },
+        {
+          "archetype_id": "soultrader",
           "subtype_id": "sultai"
         }
       ],
@@ -33801,6 +35249,10 @@
         {
           "archetype_id": "soultrader",
           "subtype_id": "dimir"
+        },
+        {
+          "archetype_id": "soultrader",
+          "subtype_id": "golgari"
         },
         {
           "archetype_id": "soultrader",
@@ -40138,8 +41590,8 @@
         "archetype_name": "Broodscale Combo",
         "subtype_id": "golgari",
         "subtype_name": "Golgari",
-        "rule_id": "broodscale-combo-golgari",
-        "priority": 652000
+        "rule_id": "broodscale-combo-golgari-blade",
+        "priority": 652001
       },
       "matched_subtypes": [
         {
@@ -40296,8 +41748,8 @@
         "archetype_name": "Broodscale Combo",
         "subtype_id": "golgari",
         "subtype_name": "Golgari",
-        "rule_id": "broodscale-combo-golgari",
-        "priority": 652000
+        "rule_id": "broodscale-combo-golgari-blade",
+        "priority": 652001
       },
       "matched_subtypes": [
         {
@@ -44872,18 +46324,22 @@
       "selected": {
         "archetype_id": "oculus-ritual",
         "archetype_name": "Oculus Ritual",
-        "subtype_id": "simic",
-        "subtype_name": "Simic",
-        "rule_id": "oculus-ritual-simic",
-        "priority": 658000
+        "subtype_id": "bant",
+        "subtype_name": "Bant",
+        "rule_id": "oculus-ritual-bant",
+        "priority": 658100
       },
       "matched_subtypes": [
+        {
+          "archetype_id": "oculus-ritual",
+          "subtype_id": "bant"
+        },
         {
           "archetype_id": "oculus-ritual",
           "subtype_id": "simic"
         }
       ],
-      "same_parent_multiple_subtype_matches": false
+      "same_parent_multiple_subtype_matches": true
     },
     {
       "deck_id": "8f7ecdaf8e76682ba3e1",
@@ -47026,6 +48482,10 @@
         },
         {
           "archetype_id": "soultrader",
+          "subtype_id": "golgari"
+        },
+        {
+          "archetype_id": "soultrader",
           "subtype_id": "sultai"
         }
       ],
@@ -48318,12 +49778,12 @@
       "event_start": "2026-08-04 20:00:00.0",
       "source_file": "data/modern/Modern_Challenge_64_12849507.json",
       "selected": {
-        "archetype_id": "chant-control",
-        "archetype_name": "Chant Control",
-        "subtype_id": "azorius",
-        "subtype_name": "Azorius",
-        "rule_id": "chant-control-azorius",
-        "priority": 305900
+        "archetype_id": "bant-chant",
+        "archetype_name": "Bant Chant",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "bant-chant-witness",
+        "priority": 306100
       },
       "matched_subtypes": [
         {
@@ -49814,12 +51274,12 @@
       "event_start": "2026-08-10 01:00:00.0",
       "source_file": "data/modern/Modern_Challenge_64_12851118.json",
       "selected": {
-        "archetype_id": "chant-control",
-        "archetype_name": "Chant Control",
-        "subtype_id": "azorius",
-        "subtype_name": "Azorius",
-        "rule_id": "chant-control-azorius",
-        "priority": 305900
+        "archetype_id": "bant-chant",
+        "archetype_name": "Bant Chant",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "bant-chant-witness",
+        "priority": 306100
       },
       "matched_subtypes": [
         {
@@ -51512,12 +52972,12 @@
       "event_start": "2026-08-15 01:00:00.0",
       "source_file": "data/modern/Modern_Challenge_64_12851658.json",
       "selected": {
-        "archetype_id": "chant-control",
-        "archetype_name": "Chant Control",
-        "subtype_id": "azorius",
-        "subtype_name": "Azorius",
-        "rule_id": "chant-control-azorius",
-        "priority": 305900
+        "archetype_id": "bant-chant",
+        "archetype_name": "Bant Chant",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "bant-chant-witness",
+        "priority": 306100
       },
       "matched_subtypes": [
         {
@@ -54370,8 +55830,8 @@
         "archetype_name": "Broodscale Combo",
         "subtype_id": "golgari",
         "subtype_name": "Golgari",
-        "rule_id": "broodscale-combo-golgari",
-        "priority": 652000
+        "rule_id": "broodscale-combo-golgari-blade",
+        "priority": 652001
       },
       "matched_subtypes": [
         {
@@ -59668,16 +61128,20 @@
       "event_start": "2026-09-06 11:00:00.0",
       "source_file": "data/modern/Modern_Challenge_64_12853698.json",
       "selected": {
-        "archetype_id": "chant-control",
-        "archetype_name": "Chant Control",
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
         "subtype_id": "azorius",
         "subtype_name": "Azorius",
-        "rule_id": "chant-control-azorius",
-        "priority": 305900
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
       },
       "matched_subtypes": [
         {
           "archetype_id": "chant-control",
+          "subtype_id": "azorius"
+        },
+        {
+          "archetype_id": "sewer-combo",
           "subtype_id": "azorius"
         }
       ],
@@ -59867,6 +61331,2700 @@
         {
           "archetype_id": "eldrazi-ramp",
           "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "08c13674bd28907d7483",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "tron",
+        "archetype_name": "Tron",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "tron-simic-dress-down",
+        "priority": 648080
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "tron",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "0c8420269c2c343ad638",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "burn",
+        "archetype_name": "Burn",
+        "subtype_id": "mono-red",
+        "subtype_name": "Mono-Red",
+        "rule_id": "burn-mono-red",
+        "priority": 206100
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "burn",
+          "subtype_id": "mono-red"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "0f9f964899b377d94aae",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-bowmasters",
+        "priority": 212000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "1733507a656c2c22e85e",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-frog",
+        "priority": 212010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "4e11707238e30f317eb9",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "grixis",
+        "subtype_name": "Grixis",
+        "rule_id": "prowess-grixis",
+        "priority": 672700
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "grixis"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "6061d7c28cc21d88626c",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "6d2bb6c8bb998114f1ef",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "eldrazi-ramp-gruul",
+        "priority": 642000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "gruul"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "7d07f32e541cfbba97c1",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari",
+        "rule_id": "broodscale-combo-golgari-blade",
+        "priority": 652001
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "golgari"
+        },
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": true
+    },
+    {
+      "deck_id": "8cc09c68dd74ff977185",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "chant-control",
+        "archetype_name": "Chant Control",
+        "subtype_id": "jeskai",
+        "subtype_name": "Jeskai",
+        "rule_id": "chant-control-jeskai",
+        "priority": 306000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "chant-control",
+          "subtype_id": "jeskai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "90feadccce608cad130f",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "97a22c69f313c12e43da",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "a1181f6b20ca4c6bbd0f",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "a5b9fb2c9c315ae5a75f",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "aebf4472755caac4008f",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-frog",
+        "priority": 212010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "c0fe5357a366101102c9",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "da47e35547d07a88ac40",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "dee2dec05055e960bb4d",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "ecabd8d6fd5228bf10d0",
+      "event_id": "12853706",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-07 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853706.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "prowess-temur",
+        "priority": 672500
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "0c446514c20f490f27bf",
+      "event_id": "12853722",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-08 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853722.json",
+      "selected": {
+        "archetype_id": "living-end",
+        "archetype_name": "Living End",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "living-end-temur",
+        "priority": 113040
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "living-end",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "29183d14de37c6315a37",
+      "event_id": "12853722",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-08 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853722.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "5b869748f2bdf66e22de",
+      "event_id": "12853722",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-08 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853722.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "765a57eba814d17802d2",
+      "event_id": "12853722",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-08 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853722.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "81b6304e96ee69b1c598",
+      "event_id": "12853722",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-08 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853722.json",
+      "selected": {
+        "archetype_id": "oculus-ritual",
+        "archetype_name": "Oculus Ritual",
+        "subtype_id": "bant",
+        "subtype_name": "Bant",
+        "rule_id": "oculus-ritual-bant",
+        "priority": 658100
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "oculus-ritual",
+          "subtype_id": "bant"
+        },
+        {
+          "archetype_id": "oculus-ritual",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": true
+    },
+    {
+      "deck_id": "911296a42451fc8f4875",
+      "event_id": "12853722",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-08 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853722.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "99a1c8c04b41d33963e5",
+      "event_id": "12853722",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-08 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853722.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "b9e45714d0375b49e2ef",
+      "event_id": "12853722",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-08 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853722.json",
+      "selected": {
+        "archetype_id": "eldrazi-tron",
+        "archetype_name": "Eldrazi Tron",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "eldrazi-tron-mono-green",
+        "priority": 648000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "cfe2bd7424d650ad2ad4",
+      "event_id": "12853722",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-08 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853722.json",
+      "selected": {
+        "archetype_id": "chant-control",
+        "archetype_name": "Chant Control",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "chant-control-azorius",
+        "priority": 305900
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "chant-control",
+          "subtype_id": "azorius"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "d261f66672eb40f117ed",
+      "event_id": "12853722",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-08 20:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12853722.json",
+      "selected": {
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari",
+        "rule_id": "eldrazi-ramp-golgari",
+        "priority": 645000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "golgari"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "0073cd6cec4531b6a6fa",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "burn",
+        "archetype_name": "Burn",
+        "subtype_id": "mono-red",
+        "subtype_name": "Mono-Red",
+        "rule_id": "burn-mono-red",
+        "priority": 206100
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "burn",
+          "subtype_id": "mono-red"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "038a36ef069d49020d76",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "07acafcd617a9508b6c4",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "2b815477093510217813",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "32aba59624a8a685de1e",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "3f40a7aeab8979a79220",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "5c65772cd37dafd11a32",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "60d32a195574f6ef5eaa",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "843343f61025087360b5",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "85e14cf27203be17fc12",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "living-end",
+        "archetype_name": "Living End",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "living-end-temur",
+        "priority": 113040
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "living-end",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "8a37d80ff6d772945bcc",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "eldrazi-ramp-gruul",
+        "priority": 642000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "gruul"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "96a383ab19a9b575bcae",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "b63a0b068693850f12e4",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "d9769d1de8f9be534702",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-frog",
+        "priority": 212010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "e07041ec78e971e079f8",
+      "event_id": "12854060",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-10 13:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854060.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "07df5041ed3c572a8d57",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari",
+        "rule_id": "eldrazi-ramp-golgari",
+        "priority": 645000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "golgari"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "142de29a7edd89c57e1a",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "17326b4245d0cff40279",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "203c9e5179b96c862de2",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-bowmasters",
+        "priority": 212000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "34288af30b80effec92a",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "499b0b8a338978502642",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "580e155fd99d69e03af3",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "613c8fc7917c57fd39db",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "7cf4fe94ac2d78526198",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "8d8ca780f3a6d5236469",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "97a09cf8b06ba0ffb746",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari",
+        "rule_id": "eldrazi-ramp-golgari",
+        "priority": 645000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "golgari"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "a21bc0ebae10e33b860d",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-bowmasters",
+        "priority": 212000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "a7cddc45463f0e53933a",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "ad3727d3ead2107fcd28",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "b7c2d3851788c7a33b6b",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "ca7f0d6ee4e66d4a00a0",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "soultrader",
+        "archetype_name": "Soultrader",
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari",
+        "rule_id": "soultrader-golgari",
+        "priority": 618800
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "soultrader",
+          "subtype_id": "golgari"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "db32f659e976805b9ca1",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "e09d3383a052c0dfa086",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "e887c324c6630798bd5d",
+      "event_id": "12854070",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-11 15:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854070.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "06438f89a4382d042689",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "149cad86523b02e491b9",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "196386ae99d76af329df",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "3110af70167afcca02aa",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "31e3001af547bdfc39c6",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-frog",
+        "priority": 212010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "43d3d709baa6d3cae38b",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "4b039f56b4acaf0398c8",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-frog",
+        "priority": 212010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "4c5e042dc0e04b96661f",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "living-end",
+        "archetype_name": "Living End",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "living-end-temur",
+        "priority": 113040
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "living-end",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "4d52cd1accbc82b64824",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-bowmasters",
+        "priority": 212000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "52e4c75a4c00c286b62b",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "necrodominance",
+        "archetype_name": "Necrodominance",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "necrodominance-dimir",
+        "priority": 635000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        },
+        {
+          "archetype_id": "necrodominance",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "5a2f6f8f502d8e21e1f4",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "badgermole-combo",
+        "archetype_name": "Badgermole Combo",
+        "subtype_id": "selesnya",
+        "subtype_name": "Selesnya",
+        "rule_id": "badgermole-combo-selesnya",
+        "priority": 624801
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "badgermole-combo",
+          "subtype_id": "selesnya"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "5a68b1a0fede7a7dad32",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "70a40532a418365dec84",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "a3c0223e613da359ef7c",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "c147e2936d5a581b42b3",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "d721f27c8d96324de6e4",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "df55643ea3c4718424ad",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "e11f8be6ffd5051cf49f",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "grixis",
+        "subtype_name": "Dimir Red Splash",
+        "rule_id": "dimir-tempo-grixis",
+        "priority": 638000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "grixis"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "f1a062751db737e92fed",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "eldrazi-ramp-gruul",
+        "priority": 642000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "gruul"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "f733da85ee7767f940c2",
+      "event_id": "12854075",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 01:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854075.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "jeskai",
+        "subtype_name": "Jeskai",
+        "rule_id": "prowess-jeskai",
+        "priority": 672600
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "jeskai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "0fce44fb5be506ab4f2b",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "eldrazi-tron",
+        "archetype_name": "Eldrazi Tron",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "eldrazi-tron-mono-green",
+        "priority": 648000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "120764da17aa094839e2",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "122e1f265f913be3ca4c",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "prowess-temur",
+        "priority": 672500
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "231ac4e001483f03783f",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "28b47c432fc8f490b0e6",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "broodscale-combo-gruul",
+        "priority": 651000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "gruul"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "290dd7c33db14f2e9384",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "burn",
+        "archetype_name": "Burn",
+        "subtype_id": "mono-red",
+        "subtype_name": "Mono-Red",
+        "rule_id": "burn-mono-red",
+        "priority": 206100
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "burn",
+          "subtype_id": "mono-red"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "334437ebf4b661cdba92",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "living-end",
+        "archetype_name": "Living End",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "living-end-temur",
+        "priority": 113040
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "living-end",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "33871585c20a01f6ea84",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "eldrazi-tron",
+        "archetype_name": "Eldrazi Tron",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "eldrazi-tron-simic",
+        "priority": 649010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": true
+    },
+    {
+      "deck_id": "39af301c68705a42f255",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "4aa06f330f153d96caa1",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "eldrazi-tron",
+        "archetype_name": "Eldrazi Tron",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "eldrazi-tron-mono-green",
+        "priority": 648000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "65fa8317d671e4cbd131",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari",
+        "rule_id": "eldrazi-ramp-golgari",
+        "priority": 645000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "golgari"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "69ab5106856707e6bb2e",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-frog",
+        "priority": 212010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "ac67c7d1a59ee03e9b27",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "e94e42184e5be41c71d6",
+      "event_id": "12854081",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-12 15:30:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854081.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "102218f608326d799360",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "10db037df0ca96cb5a6b",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari",
+        "rule_id": "eldrazi-ramp-golgari",
+        "priority": 645000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "golgari"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "29ff018f0807eccb9bb2",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "2f32336e0fd64471b532",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "eldrazi-tron",
+        "archetype_name": "Eldrazi Tron",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "eldrazi-tron-simic",
+        "priority": 649010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": true
+    },
+    {
+      "deck_id": "38a18713c017af6e3d63",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-frog",
+        "priority": 212010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "3de4aa5a4c1a09429a9d",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "4d214737240a3697d2ad",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "grixis",
+        "subtype_name": "Grixis",
+        "rule_id": "prowess-grixis",
+        "priority": 672700
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "grixis"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "50419f6548a88a519294",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "bant-chant",
+        "archetype_name": "Bant Chant",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "bant-chant-witness",
+        "priority": 306100
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "chant-control",
+          "subtype_id": "azorius"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "5ed7cd81d71ff7a0031b",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "6594ed044bedb01f2e35",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "oculus-ritual",
+        "archetype_name": "Oculus Ritual",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "oculus-ritual-simic",
+        "priority": 658000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "oculus-ritual",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "696e178c4b6ed355d851",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "74880d0ca4dac664c694",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "eldrazi-tron",
+        "archetype_name": "Eldrazi Tron",
+        "subtype_id": "colorless",
+        "subtype_name": "Colorless",
+        "rule_id": "eldrazi-tron-colorless-map",
+        "priority": 646900
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "colorless"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "7c28f6070a4b4f68b149",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "7ffa8a6021538d00236b",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "841dddca604f7423d7d9",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "9496815e60b7f2df1a2b",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "ba4b8d31575a4ed47dab",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "bc3a2b3b9368243e0015",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "necrodominance",
+        "archetype_name": "Necrodominance",
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari",
+        "rule_id": "necrodominance-golgari",
+        "priority": 636000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "necrodominance",
+          "subtype_id": "golgari"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "c2655d97c345d2c08ec1",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "e2a12c5f12672a72292a",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "eb9a62992ab7b7c07c12",
+      "event_id": "12854091",
+      "event_name": "Modern Challenge 64",
+      "event_start": "2026-09-13 11:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_64_12854091.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -64898,6 +69056,720 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
+      "deck_id": "183756cd9e635fc0c704",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "1dd5ed2488c333cafaa1",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "oculus-ritual",
+        "archetype_name": "Oculus Ritual",
+        "subtype_id": "bant",
+        "subtype_name": "Bant",
+        "rule_id": "oculus-ritual-bant",
+        "priority": 658100
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "oculus-ritual",
+          "subtype_id": "bant"
+        },
+        {
+          "archetype_id": "oculus-ritual",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": true
+    },
+    {
+      "deck_id": "1ebf56b7d79f2e4749a6",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "eldrazi-ramp-gruul",
+        "priority": 642000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "gruul"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "23aa6495d6913e8681af",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "36b6eb8447e4450a9e76",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "eldrazi-tron",
+        "archetype_name": "Eldrazi Tron",
+        "subtype_id": "simic",
+        "subtype_name": "Simic",
+        "rule_id": "eldrazi-tron-simic",
+        "priority": 649010
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": true
+    },
+    {
+      "deck_id": "6b7126374fcb4f373c74",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari",
+        "rule_id": "eldrazi-ramp-golgari",
+        "priority": 645000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "golgari"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "8afbf8588ef472b61699",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "99bd0b73ee4c4d82247d",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "eldrazi-tron",
+        "archetype_name": "Eldrazi Tron",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "eldrazi-tron-mono-green",
+        "priority": 648000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "a9ac2c901355d2a68e6a",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "b38ef683e83a0eb63356",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-bowmasters",
+        "priority": 212000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "b4e7b48e4932856ee1ec",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "burn",
+        "archetype_name": "Burn",
+        "subtype_id": "boros",
+        "subtype_name": "Boros",
+        "rule_id": "burn-boros",
+        "priority": 206300
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "burn",
+          "subtype_id": "boros"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "b62cdc1330412353ce32",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "be0a9bc2069229de510f",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "devoted-druid-combo",
+        "archetype_name": "Devoted Druid Combo",
+        "subtype_id": "abzan",
+        "subtype_name": "Abzan",
+        "rule_id": "devoted-druid-combo-primary",
+        "priority": 625000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "devoted-druid-combo",
+          "subtype_id": "abzan"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "c1d2d973a8217a191ddb",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "cb567857f6f571a29977",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "steel-cutter",
+        "archetype_name": "Izzet Steel-Cutter",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "steel-cutter-izzet",
+        "priority": 675000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "steel-cutter",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "d1c3ea3f11a4dbb8d4a8",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "prowess-temur",
+        "priority": 672500
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "d5b1b3c0d8dc00f92633",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "ed7532f3c132e86ef53a",
+      "event_id": "12853708",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-07 14:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853708.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "prowess-temur",
+        "priority": 672500
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "0a3990cfc407b374a2dc",
+      "event_id": "12853726",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-09 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853726.json",
+      "selected": {
+        "archetype_id": "sewer-combo",
+        "archetype_name": "Sewer Combo",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "sewer-combo-azorius",
+        "priority": 689930
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "sewer-combo",
+          "subtype_id": "azorius"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "1136118361604e4cb495",
+      "event_id": "12853726",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-09 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853726.json",
+      "selected": {
+        "archetype_id": "chant-control",
+        "archetype_name": "Chant Control",
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius",
+        "rule_id": "chant-control-azorius",
+        "priority": 305900
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "chant-control",
+          "subtype_id": "azorius"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "1ae9638c7571b683eca6",
+      "event_id": "12853726",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-09 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853726.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "355773820fc114e315c7",
+      "event_id": "12853726",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-09 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853726.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "4a56df4c9df4c8d7c5f6",
+      "event_id": "12853726",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-09 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853726.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "4bc7b53f8166010718cb",
+      "event_id": "12853726",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-09 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853726.json",
+      "selected": {
+        "archetype_id": "oculus-ritual",
+        "archetype_name": "Oculus Ritual",
+        "subtype_id": "bant",
+        "subtype_name": "Bant",
+        "rule_id": "oculus-ritual-bant",
+        "priority": 658100
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "oculus-ritual",
+          "subtype_id": "bant"
+        },
+        {
+          "archetype_id": "oculus-ritual",
+          "subtype_id": "simic"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": true
+    },
+    {
+      "deck_id": "5fd1878eccdd2cd75c67",
+      "event_id": "12853726",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-09 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853726.json",
+      "selected": {
+        "archetype_id": "living-end",
+        "archetype_name": "Living End",
+        "subtype_id": "sultai",
+        "subtype_name": "Sultai",
+        "rule_id": "living-end-sultai",
+        "priority": 113030
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "living-end",
+          "subtype_id": "sultai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "6007cb9bf4892cd6d383",
+      "event_id": "12853726",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-09 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853726.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-bowmasters",
+        "priority": 212000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "6786ba7f987d47519e24",
+      "event_id": "12853726",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-09 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853726.json",
+      "selected": {
+        "archetype_id": "prowess",
+        "archetype_name": "Prowess",
+        "subtype_id": "izzet",
+        "subtype_name": "Izzet",
+        "rule_id": "prowess-izzet",
+        "priority": 672200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "prowess",
+          "subtype_id": "izzet"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "b07d25c4491f6090465e",
+      "event_id": "12853726",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-09 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853726.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir",
+        "rule_id": "dimir-tempo-dimir-bowmasters",
+        "priority": 212000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "dimir"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "c2215446e3254f57b782",
+      "event_id": "12853726",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-09 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853726.json",
+      "selected": {
+        "archetype_id": "living-end",
+        "archetype_name": "Living End",
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "living-end-temur",
+        "priority": 113040
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "living-end",
+          "subtype_id": "temur"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "cd7c3655b7cac97ee905",
+      "event_id": "12853726",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-09 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853726.json",
+      "selected": {
+        "archetype_id": "dimir-tempo",
+        "archetype_name": "Dimir Tempo",
+        "subtype_id": "grixis",
+        "subtype_name": "Dimir Red Splash",
+        "rule_id": "dimir-tempo-grixis",
+        "priority": 638000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-tempo",
+          "subtype_id": "grixis"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "d21cc29b6ef378456afd",
+      "event_id": "12853726",
+      "event_name": "Modern Challenge 96",
+      "event_start": "2026-09-09 16:00:00.0",
+      "source_file": "data/modern/Modern_Challenge_96_12853726.json",
+      "selected": {
+        "archetype_id": "broodscale-combo",
+        "archetype_name": "Broodscale Combo",
+        "subtype_id": "mono-green",
+        "subtype_name": "Mono-Green",
+        "rule_id": "broodscale-combo-mono-green",
+        "priority": 650000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "broodscale-combo",
+          "subtype_id": "mono-green"
+        },
+        {
+          "archetype_id": "eldrazi-ramp",
+          "subtype_id": "mono-green"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
       "deck_id": "17e4a6261c885065b4ab",
       "event_id": "12842448",
       "event_name": "Modern RC Qualifier",
@@ -65465,6 +70337,10 @@
         {
           "archetype_id": "soultrader",
           "subtype_id": "dimir"
+        },
+        {
+          "archetype_id": "soultrader",
+          "subtype_id": "golgari"
         },
         {
           "archetype_id": "soultrader",

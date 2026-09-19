@@ -224,6 +224,33 @@ def _inspect_reports(root: Path, format_id: str, desired: str) -> dict[str, Any]
     return _family("classification_reports", paths, root, issues)
 
 
+def _retained_landing_is_bound(root: Path, format_id: str, document: Mapping[str, Any],
+                               artifacts: Sequence[Path]) -> bool:
+    """A data-only advance can retain the exact previously published week."""
+    from .mtgo.publication import resolve_scope, week_monday
+    try:
+        scope = resolve_scope(root, format_id)
+        week = document["week"]["id"]
+        digest = document["classifier"]["digest"]
+        files = document["data_files"]
+        if (week_monday(week) >= scope.week
+                or not digest
+                or document["review_binding"]["classifier_digest"] != digest
+                or set(files) != {"range", "environment_decks", "feature_decks", "completeness"}
+                or not set(document["source_event_ids"]) <= scope.event_ids):
+            return False
+        base = root / "stats" / format_id / "mtgo"
+        binding = _json_object(base / "meta.json")["publication"]["artifacts"]
+        for relative in files.values():
+            target = _safe_relative(base / "landing", relative, label="retained Landing")
+            if target.parent != base / "landing" / "weeks" / week:
+                return False
+        return all(path.is_file() and binding.get(_relative(root, path)) == _sha256(path)
+                   for path in artifacts)
+    except (OSError, ValueError, KeyError, TypeError, ClassifierClosureError):
+        return False
+
+
 def _inspect_landing(root: Path, format_id: str, desired: str) -> dict[str, Any]:
     path = root / "stats" / format_id / "mtgo" / "landing" / "current.json"
     artifacts = [path]
@@ -239,6 +266,8 @@ def _inspect_landing(root: Path, format_id: str, desired: str) -> dict[str, Any]
             )
             classifier = document.get("classifier")
             binding = document.get("review_binding")
+            if _retained_landing_is_bound(root, format_id, document, artifacts):
+                return _family("mtgo_landing", artifacts, root)
             if not isinstance(classifier, Mapping) or classifier.get("digest") != desired:
                 issues.append("current Landing classifier subject is stale")
             if not isinstance(binding, Mapping) or binding.get("classifier_digest") != desired:

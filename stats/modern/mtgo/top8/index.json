@@ -3,9 +3,9 @@
   "document_type": "top8_index",
   "source": "mtgo",
   "format": "modern",
-  "classifier_digest": "d9cd9a3c61e7087fef15a10432ac756e183b523323889f1fc956a8ef81387d1c",
-  "generated": "2026-09-18T13:38:12",
-  "latest_complete_week": "2026-08-31",
+  "classifier_digest": "10be27063f5e73c74d15d358b9ab9bfefa28893f0b0f924ae3b9466a7c00feab",
+  "generated": "2026-09-19T15:38:52",
+  "latest_complete_week": "2026-09-07",
   "history_policy": "source_immutable_classifier_restatement",
   "classification_impact": {
     "weeks": [
@@ -39,7 +39,9 @@
         "comparison_base_changes": {
           "added_identity_ids": [],
           "removed_identity_ids": [],
-          "changed_identity_ids": []
+          "changed_identity_ids": [
+            "chant-control/azorius"
+          ]
         }
       },
       {
@@ -50,7 +52,9 @@
         "comparison_base_changes": {
           "added_identity_ids": [],
           "removed_identity_ids": [],
-          "changed_identity_ids": []
+          "changed_identity_ids": [
+            "chant-control/azorius"
+          ]
         }
       },
       {
@@ -72,28 +76,115 @@
         "comparison_base_changes": {
           "added_identity_ids": [],
           "removed_identity_ids": [],
-          "changed_identity_ids": []
+          "changed_identity_ids": [
+            "broodscale-combo/mono-green"
+          ]
         }
       },
       {
         "week": "2026-08-31",
         "previous_classifier_digest": "d9cd9a3c61e7087fef15a10432ac756e183b523323889f1fc956a8ef81387d1c",
         "added_event_ids": [],
+        "classification_changes": [
+          {
+            "event_id": "12853698",
+            "rank": 3,
+            "before": "chant-control/azorius",
+            "after": "sewer-combo/azorius"
+          }
+        ],
+        "comparison_base_changes": {
+          "added_identity_ids": [
+            "sewer-combo/azorius"
+          ],
+          "removed_identity_ids": [
+            "chant-control/azorius"
+          ],
+          "changed_identity_ids": [
+            "broodscale-combo/mono-green"
+          ]
+        }
+      },
+      {
+        "week": "2026-09-07",
+        "previous_classifier_digest": null,
+        "added_event_ids": [
+          "12853706",
+          "12853708",
+          "12853715",
+          "12853722",
+          "12853724",
+          "12853726",
+          "12853784",
+          "12854060",
+          "12854070",
+          "12854075",
+          "12854076",
+          "12854081",
+          "12854091"
+        ],
         "classification_changes": [],
         "comparison_base_changes": {
-          "added_identity_ids": [],
+          "added_identity_ids": [
+            "affinity",
+            "amulet-titan",
+            "boros-energy",
+            "boros-land-destruction",
+            "broodscale-combo/mono-green",
+            "burn/mono-red",
+            "chant-control/jeskai",
+            "devoted-druid-combo/abzan",
+            "dimir-tempo/dimir",
+            "domain-zoo",
+            "dredge",
+            "eldrazi-aggro",
+            "eldrazi-ramp/golgari",
+            "eldrazi-ramp/gruul",
+            "eldrazi-tron/mono-green",
+            "eldrazi-tron/simic",
+            "esper-blink",
+            "esper-goryos",
+            "esper-ketramose",
+            "fight-rigging",
+            "five-color-elementals",
+            "grixis-tempo",
+            "hollowvine",
+            "izzet-tempo",
+            "living-end/temur",
+            "mono-black-eldrazi",
+            "mono-blue-belcher",
+            "necrodominance/dimir",
+            "necrodominance/golgari",
+            "oculus-ritual/bant",
+            "prowess/izzet",
+            "prowess/temur",
+            "ruby-storm",
+            "sewer-combo/azorius",
+            "simic-neoform",
+            "steel-cutter/izzet"
+          ],
           "removed_identity_ids": [],
           "changed_identity_ids": []
         }
       }
     ],
     "summary": {
-      "retained_week_count": 7,
-      "added_event_count": 0,
-      "classification_change_count": 0
+      "retained_week_count": 8,
+      "added_event_count": 13,
+      "classification_change_count": 1
     }
   },
   "weeks": [
+    {
+      "file": "2026-W37.json",
+      "comparison_bases_file": "2026-W37-bases.json",
+      "start": "2026-09-07",
+      "end": "2026-09-13",
+      "event_count": 13,
+      "status": "provisional",
+      "provisional_through": "2026-09-20",
+      "seal_on": "2026-09-21"
+    },
     {
       "file": "2026-W36.json",
       "comparison_bases_file": "2026-W36-bases.json",

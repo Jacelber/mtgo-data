@@ -109,6 +109,39 @@ def test_stage_creation_falls_back_after_preferred_parent_permission_error(
     assert not (stage / "node_modules").exists()
 
 
+@pytest.mark.parametrize("damage", [None, "dependency", "binding", "same_week"])
+def test_data_advance_retains_only_bound_older_landing(tmp_path, monkeypatch, damage):
+    from datetime import date
+    from types import SimpleNamespace
+    from mtgmeta.mtgo import publication
+
+    base = tmp_path / "stats/modern/mtgo"
+    files = {name: f"weeks/2026-W36/{name}.json" for name in
+             ("range", "environment_decks", "feature_decks", "completeness")}
+    document = {"week": {"id": "2026-W36"}, "classifier": {"digest": "old"},
+                "review_binding": {"classifier_digest": "old"},
+                "source_event_ids": ["123"], "data_files": files}
+    current = base / "landing/current.json"
+    _write_json(current, document)
+    paths = [current]
+    for relative in files.values():
+        path = base / "landing" / relative
+        _write_json(path, {"retained": True})
+        paths.append(path)
+    _write_json(base / "meta.json", {"publication": {"artifacts": {
+        p.relative_to(tmp_path).as_posix(): _digest(p) for p in paths}}})
+    monkeypatch.setattr(publication, "resolve_scope", lambda *args: SimpleNamespace(
+        week=date(2026, 8, 31) if damage == "same_week" else date(2026, 9, 7),
+        event_ids=frozenset({"123", "456"})))
+    if damage == "dependency":
+        _write_json(paths[1], {"retained": False})
+    elif damage == "binding":
+        document["review_binding"]["classifier_digest"] = "different"
+        _write_json(current, document)
+    result = _inspect_landing(tmp_path, "modern", "new")
+    assert result["state"] == (CURRENT if damage is None else STALE)
+
+
 def test_stage_creation_permission_failures_are_bounded(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
