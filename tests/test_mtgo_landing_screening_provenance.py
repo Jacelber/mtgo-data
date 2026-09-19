@@ -4,6 +4,7 @@ from types import SimpleNamespace
 import yaml
 
 from mtgmeta.mtgo import landing_editorial as editorial
+from mtgmeta.mtgo import landing
 from mtgmeta.mtgo import landing_screening as screening
 
 
@@ -23,6 +24,8 @@ POLICY = {
     "identity_continuity": {"standard": {}, "modern": {}},
     "release_sets": [],
 }
+MACHINE_FACT_DIGEST = "c" * 64
+LINK_CATALOG_DIGEST = screening.document_digest([])
 
 
 def _candidate_document(*, approved: bool = False) -> dict:
@@ -59,6 +62,12 @@ def _prepare_candidate_generation(monkeypatch, tmp_path, *, digest: str) -> None
     )
     monkeypatch.setattr(screening, "load_known", lambda *args, **kwargs: {"known"})
     monkeypatch.setattr(screening, "classifier_digest", lambda value: digest)
+    monkeypatch.setattr(screening, "week_records", lambda *args, **kwargs: [])
+    monkeypatch.setattr(
+        landing,
+        "machine_fact_digest_for_week",
+        lambda *args, **kwargs: MACHINE_FACT_DIGEST,
+    )
     monkeypatch.setattr(
         editorial,
         "build_candidate_documents",
@@ -166,6 +175,8 @@ def test_unreviewed_candidate_regenerates_when_classifier_digest_changes(
     assert result["skipped_existing"] is False
     assert result["review_required"] is False
     assert refreshed["classifier_digest"] == "b" * 64
+    assert refreshed["machine_fact_digest"] == MACHINE_FACT_DIGEST
+    assert refreshed["link_catalog_digest"] == LINK_CATALOG_DIGEST
 
 
 def test_unreviewed_candidate_regenerates_when_selection_policy_changes(
@@ -194,6 +205,35 @@ def test_unreviewed_candidate_regenerates_when_selection_policy_changes(
     assert result is not None
     assert result["skipped_existing"] is False
     assert refreshed["selection_policy_digest"] == screening.document_digest(POLICY)
+
+
+def test_unreviewed_candidate_regenerates_when_fact_binding_is_missing(
+    monkeypatch, tmp_path
+):
+    _prepare_candidate_generation(monkeypatch, tmp_path, digest="a" * 64)
+    candidate_path = tmp_path / "candidates_2026-W33.yaml"
+    stale = _candidate_document()
+    stale.update(
+        {
+            "source_event_ids": ["100"],
+            "classifier_digest": "a" * 64,
+            "selection_policy_digest": screening.document_digest(POLICY),
+        }
+    )
+    candidate_path.write_text(yaml.safe_dump(stale), encoding="utf-8")
+
+    result = screening.prepare_candidates(
+        tmp_path,
+        "standard",
+        today=date(2026, 8, 18),
+        preserve_existing=True,
+    )
+
+    refreshed = yaml.safe_load(candidate_path.read_text(encoding="utf-8"))
+    assert result is not None
+    assert result["skipped_existing"] is False
+    assert refreshed["machine_fact_digest"] == MACHINE_FACT_DIGEST
+    assert refreshed["link_catalog_digest"] == LINK_CATALOG_DIGEST
 
 
 def test_reviewed_candidate_is_preserved_but_requires_review_when_classifier_changes(

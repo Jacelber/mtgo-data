@@ -612,7 +612,8 @@ def prepare_candidates(
             INITIAL_KNOWN_WEEKS,
             stable_ids=True,
         )
-    from .landing_editorial import build_candidate_documents
+    from . import landing
+    from .landing_editorial import build_candidate_documents, build_top8_catalog
 
     candidates, base_reference, top8_count, deduplicated_count = (
         build_candidate_documents(
@@ -641,6 +642,23 @@ def prepare_candidates(
     base_reference.update(lifecycle)
     candidates["selection_policy_digest"] = policy_digest
     base_reference["selection_policy_digest"] = policy_digest
+    machine_fact_digest = landing.machine_fact_digest_for_week(
+        repository_root,
+        format_id,
+        candidates["week"],
+    )
+    top8_catalog = build_top8_catalog(
+        [
+            record
+            for record in week_records(events, rules, end_monday)
+            if record.get("is_top8")
+        ]
+    )
+    link_catalog_digest = document_digest(top8_catalog)
+    candidates["machine_fact_digest"] = machine_fact_digest
+    candidates["link_catalog_digest"] = link_catalog_digest
+    base_reference["machine_fact_digest"] = machine_fact_digest
+    base_reference["link_catalog_digest"] = link_catalog_digest
 
     output.mkdir(parents=True, exist_ok=True)
     week = candidates["week"]
@@ -659,6 +677,8 @@ def prepare_candidates(
         and existing_document.get("source_event_ids") == source_event_ids
         and existing_document.get("classifier_digest") == current_classifier_digest
         and existing_document.get("selection_policy_digest") == policy_digest
+        and existing_document.get("machine_fact_digest") == machine_fact_digest
+        and existing_document.get("link_catalog_digest") == link_catalog_digest
     )
     if preserve_existing and same_provenance:
         return {

@@ -429,7 +429,11 @@ def stage_publications(
                 f"staging changed a protected input for {format_id}; {stage}"
             )
     subprocess.run(["git", "-C", str(stage), "add", "--all"], check=True)
-    environment = dict(os.environ, PYTHONPATH=str(stage / "src"))
+    pythonpath = str(stage / "src")
+    inherited_pythonpath = os.environ.get("PYTHONPATH")
+    if inherited_pythonpath:
+        pythonpath += os.pathsep + inherited_pythonpath
+    environment = dict(os.environ, PYTHONPATH=pythonpath)
     # Validate this generated result. Data publication does not modify the
     # classifier engine or execute every other format's regression suite.
     selected_json = sorted({
