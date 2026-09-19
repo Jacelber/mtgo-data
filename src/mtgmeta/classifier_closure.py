@@ -169,6 +169,20 @@ def _discover_mtgo_paths(root: Path, format_id: str) -> dict[str, list[Path]]:
     return result
 
 
+def _discover_completeness_paths(root: Path, format_id: str) -> list[Path]:
+    base = root / "stats" / format_id / "mtgo" / "completeness"
+    index_path = base / "index.json"
+    paths = [index_path]
+    if index_path.is_file():
+        index = _json_object(index_path)
+        for item in index.get("ranges", []):
+            if isinstance(item, Mapping):
+                paths.append(
+                    _safe_relative(base, item.get("file"), label="completeness range")
+                )
+    return paths
+
+
 def _inspect_names(root: Path, format_id: str) -> dict[str, Any]:
     from .mtgo.landing_editorial import (
         MTGOLandingEditorialError,
@@ -635,8 +649,10 @@ def inspect_format(repository_root: str | Path, format_id: str) -> dict[str, Any
             root, format_id, desired
         )
         from .mtgo.publication import inspect_publication
+        publication_paths = [root / "stats" / format_id / "mtgo/meta.json"]
+        publication_paths.extend(_discover_completeness_paths(root, format_id))
         families["mtgo_publication"] = _family(
-            "mtgo_publication", [root / "stats" / format_id / "mtgo/meta.json"],
+            "mtgo_publication", publication_paths,
             root, inspect_publication(root, format_id))
         _format_entry, tabletop_path = _catalog_format(root, format_id)
         families["melee"] = _inspect_melee(

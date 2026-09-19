@@ -3,28 +3,27 @@
   "report_type": "subtype_diagnostics",
   "format": "pauper",
   "source": "mtgo",
-  "classifier_digest": "77d6f81ecd566dd316c36826a7339bdb96bf524398c96dcc7a28e7d4ffd715c3",
+  "classifier_digest": "596dc2f2f78125df30c5248700152a63595e3931591857e6f7ce77e1dd018316",
   "scope": "all_admitted_events",
-  "event_count": 109,
-  "data_through": "2026-09-06 17:00:00.0",
+  "event_count": 115,
+  "data_through": "2026-09-13 17:00:00.0",
   "summary": {
-    "record_count": 249,
+    "record_count": 264,
     "blocking": false,
-    "selected_record_count": 249,
+    "selected_record_count": 264,
     "selected_by_subtype": {
       "battle-screech/boros": 32,
-      "battle-screech/mono-white": 77,
-      "battle-screech/orzhov": 4,
+      "battle-screech/mono-white": 85,
       "ephemerate/four-color": 12,
-      "ephemerate/jeskai": 112,
+      "ephemerate/jeskai": 115,
       "packbeast-swarm/boros": 2,
       "packbeast-swarm/esper": 1,
       "packbeast-swarm/mardu": 3,
-      "packbeast-swarm/mono-white": 4,
+      "packbeast-swarm/mono-white": 5,
       "packbeast-swarm/mono-white-learn": 1,
-      "packbeast-swarm/selesnya": 1
+      "packbeast-swarm/selesnya": 8
     },
-    "same_parent_multiple_subtype_matches": 42
+    "same_parent_multiple_subtype_matches": 38
   },
   "records": [
     {
@@ -33,6 +32,72 @@
       "event_name": "Pauper Challenge 16",
       "event_start": "2026-09-01 10:00:00.0",
       "source_file": "data/pauper/Pauper_Challenge_16_12853221.json",
+      "selected": {
+        "archetype_id": "ephemerate",
+        "archetype_name": "Jeskai Ephemerate",
+        "subtype_id": "jeskai",
+        "subtype_name": "Jeskai",
+        "rule_id": "jeskai-ephemerate",
+        "priority": 8200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "ephemerate",
+          "subtype_id": "jeskai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "5ac92aea764113c59c02",
+      "event_id": "12853785",
+      "event_name": "Pauper Challenge 16",
+      "event_start": "2026-09-08 10:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_16_12853785.json",
+      "selected": {
+        "archetype_id": "battle-screech",
+        "archetype_name": "Battle Screech",
+        "subtype_id": "mono-white",
+        "subtype_name": "Mono-White",
+        "rule_id": "mono-white-battle-screech",
+        "priority": 8000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "battle-screech",
+          "subtype_id": "mono-white"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "ae01a8fbd11c1ac0d19a",
+      "event_id": "12853785",
+      "event_name": "Pauper Challenge 16",
+      "event_start": "2026-09-08 10:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_16_12853785.json",
+      "selected": {
+        "archetype_id": "ephemerate",
+        "archetype_name": "Jeskai Ephemerate",
+        "subtype_id": "jeskai",
+        "subtype_name": "Jeskai",
+        "rule_id": "jeskai-ephemerate",
+        "priority": 8200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "ephemerate",
+          "subtype_id": "jeskai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "b8bbc36b02a7f68c22a6",
+      "event_id": "12853785",
+      "event_name": "Pauper Challenge 16",
+      "event_start": "2026-09-08 10:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_16_12853785.json",
       "selected": {
         "archetype_id": "ephemerate",
         "archetype_name": "Jeskai Ephemerate",
@@ -80,22 +145,18 @@
       "selected": {
         "archetype_id": "battle-screech",
         "archetype_name": "Battle Screech",
-        "subtype_id": "orzhov",
-        "subtype_name": "Orzhov",
-        "rule_id": "orzhov-battle-screech",
-        "priority": 8100
+        "subtype_id": "mono-white",
+        "subtype_name": "Mono-White",
+        "rule_id": "mono-white-battle-screech",
+        "priority": 8000
       },
       "matched_subtypes": [
         {
           "archetype_id": "battle-screech",
           "subtype_id": "mono-white"
-        },
-        {
-          "archetype_id": "battle-screech",
-          "subtype_id": "orzhov"
         }
       ],
-      "same_parent_multiple_subtype_matches": true
+      "same_parent_multiple_subtype_matches": false
     },
     {
       "deck_id": "19746ab35471271c0a66",
@@ -1026,22 +1087,18 @@
       "selected": {
         "archetype_id": "battle-screech",
         "archetype_name": "Battle Screech",
-        "subtype_id": "orzhov",
-        "subtype_name": "Orzhov",
-        "rule_id": "orzhov-battle-screech",
-        "priority": 8100
+        "subtype_id": "mono-white",
+        "subtype_name": "Mono-White",
+        "rule_id": "mono-white-battle-screech",
+        "priority": 8000
       },
       "matched_subtypes": [
         {
           "archetype_id": "battle-screech",
           "subtype_id": "mono-white"
-        },
-        {
-          "archetype_id": "battle-screech",
-          "subtype_id": "orzhov"
         }
       ],
-      "same_parent_multiple_subtype_matches": true
+      "same_parent_multiple_subtype_matches": false
     },
     {
       "deck_id": "49ee5a4946a5623d8f39",
@@ -5218,22 +5275,18 @@
       "selected": {
         "archetype_id": "battle-screech",
         "archetype_name": "Battle Screech",
-        "subtype_id": "orzhov",
-        "subtype_name": "Orzhov",
-        "rule_id": "orzhov-battle-screech",
-        "priority": 8100
+        "subtype_id": "mono-white",
+        "subtype_name": "Mono-White",
+        "rule_id": "mono-white-battle-screech",
+        "priority": 8000
       },
       "matched_subtypes": [
         {
           "archetype_id": "battle-screech",
           "subtype_id": "mono-white"
-        },
-        {
-          "archetype_id": "battle-screech",
-          "subtype_id": "orzhov"
         }
       ],
-      "same_parent_multiple_subtype_matches": true
+      "same_parent_multiple_subtype_matches": false
     },
     {
       "deck_id": "f688f585f7575bbac577",
@@ -5266,22 +5319,18 @@
       "selected": {
         "archetype_id": "battle-screech",
         "archetype_name": "Battle Screech",
-        "subtype_id": "orzhov",
-        "subtype_name": "Orzhov",
-        "rule_id": "orzhov-battle-screech",
-        "priority": 8100
+        "subtype_id": "mono-white",
+        "subtype_name": "Mono-White",
+        "rule_id": "mono-white-battle-screech",
+        "priority": 8000
       },
       "matched_subtypes": [
         {
           "archetype_id": "battle-screech",
           "subtype_id": "mono-white"
-        },
-        {
-          "archetype_id": "battle-screech",
-          "subtype_id": "orzhov"
         }
       ],
-      "same_parent_multiple_subtype_matches": true
+      "same_parent_multiple_subtype_matches": false
     },
     {
       "deck_id": "9c8a3ecd9a223df01b3f",
@@ -5349,6 +5398,270 @@
         {
           "archetype_id": "ephemerate",
           "subtype_id": "jeskai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "372f13d6b9d8c61fc1a2",
+      "event_id": "12853710",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-07 17:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12853710.json",
+      "selected": {
+        "archetype_id": "battle-screech",
+        "archetype_name": "Battle Screech",
+        "subtype_id": "mono-white",
+        "subtype_name": "Mono-White",
+        "rule_id": "mono-white-battle-screech",
+        "priority": 8000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "battle-screech",
+          "subtype_id": "mono-white"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "63cb6920c81f2153b3d4",
+      "event_id": "12853710",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-07 17:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12853710.json",
+      "selected": {
+        "archetype_id": "ephemerate",
+        "archetype_name": "Jeskai Ephemerate",
+        "subtype_id": "jeskai",
+        "subtype_name": "Jeskai",
+        "rule_id": "jeskai-ephemerate",
+        "priority": 8200
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "ephemerate",
+          "subtype_id": "jeskai"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "7f4d33537dd05f7087aa",
+      "event_id": "12853710",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-07 17:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12853710.json",
+      "selected": {
+        "archetype_id": "battle-screech",
+        "archetype_name": "Battle Screech",
+        "subtype_id": "mono-white",
+        "subtype_name": "Mono-White",
+        "rule_id": "mono-white-battle-screech",
+        "priority": 8000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "battle-screech",
+          "subtype_id": "mono-white"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "bb3e447db466adec5cfd",
+      "event_id": "12853710",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-07 17:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12853710.json",
+      "selected": {
+        "archetype_id": "packbeast-swarm",
+        "archetype_name": "Packbeast Swarm",
+        "subtype_id": "selesnya",
+        "subtype_name": "Selesnya Packbeast Swarm",
+        "rule_id": "selesnya-packbeast-swarm",
+        "priority": 8005
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "packbeast-swarm",
+          "subtype_id": "selesnya"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "e2d721f6442e52988be6",
+      "event_id": "12853710",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-07 17:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12853710.json",
+      "selected": {
+        "archetype_id": "battle-screech",
+        "archetype_name": "Battle Screech",
+        "subtype_id": "mono-white",
+        "subtype_name": "Mono-White",
+        "rule_id": "mono-white-battle-screech",
+        "priority": 8000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "battle-screech",
+          "subtype_id": "mono-white"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "b0b160dea14d9cc19b5d",
+      "event_id": "12854064",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-10 19:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12854064.json",
+      "selected": {
+        "archetype_id": "packbeast-swarm",
+        "archetype_name": "Packbeast Swarm",
+        "subtype_id": "selesnya",
+        "subtype_name": "Selesnya Packbeast Swarm",
+        "rule_id": "selesnya-packbeast-swarm",
+        "priority": 8005
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "packbeast-swarm",
+          "subtype_id": "selesnya"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "49f8ae6c4536c6d3a722",
+      "event_id": "12854069",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-11 13:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12854069.json",
+      "selected": {
+        "archetype_id": "packbeast-swarm",
+        "archetype_name": "Packbeast Swarm",
+        "subtype_id": "selesnya",
+        "subtype_name": "Selesnya Packbeast Swarm",
+        "rule_id": "selesnya-packbeast-swarm",
+        "priority": 8005
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "packbeast-swarm",
+          "subtype_id": "selesnya"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "69e56654eb1aafca9d34",
+      "event_id": "12854069",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-11 13:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12854069.json",
+      "selected": {
+        "archetype_id": "packbeast-swarm",
+        "archetype_name": "Packbeast Swarm",
+        "subtype_id": "selesnya",
+        "subtype_name": "Selesnya Packbeast Swarm",
+        "rule_id": "selesnya-packbeast-swarm",
+        "priority": 8005
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "packbeast-swarm",
+          "subtype_id": "selesnya"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "b9f1464d7e301b4ec0da",
+      "event_id": "12854069",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-11 13:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12854069.json",
+      "selected": {
+        "archetype_id": "packbeast-swarm",
+        "archetype_name": "Packbeast Swarm",
+        "subtype_id": "selesnya",
+        "subtype_name": "Selesnya Packbeast Swarm",
+        "rule_id": "selesnya-packbeast-swarm",
+        "priority": 8005
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "packbeast-swarm",
+          "subtype_id": "selesnya"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "0c811694b7600a586f46",
+      "event_id": "12854094",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-13 17:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12854094.json",
+      "selected": {
+        "archetype_id": "packbeast-swarm",
+        "archetype_name": "Packbeast Swarm",
+        "subtype_id": "mono-white",
+        "subtype_name": "Mono-White Packbeast Swarm",
+        "rule_id": "mono-white-packbeast-swarm",
+        "priority": 8020
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "packbeast-swarm",
+          "subtype_id": "mono-white"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "535eb97aa03946bdaaa3",
+      "event_id": "12854094",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-13 17:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12854094.json",
+      "selected": {
+        "archetype_id": "packbeast-swarm",
+        "archetype_name": "Packbeast Swarm",
+        "subtype_id": "selesnya",
+        "subtype_name": "Selesnya Packbeast Swarm",
+        "rule_id": "selesnya-packbeast-swarm",
+        "priority": 8005
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "packbeast-swarm",
+          "subtype_id": "selesnya"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "efb47ec60f57927ad59e",
+      "event_id": "12854094",
+      "event_name": "Pauper Challenge 32",
+      "event_start": "2026-09-13 17:00:00.0",
+      "source_file": "data/pauper/Pauper_Challenge_32_12854094.json",
+      "selected": {
+        "archetype_id": "packbeast-swarm",
+        "archetype_name": "Packbeast Swarm",
+        "subtype_id": "selesnya",
+        "subtype_name": "Selesnya Packbeast Swarm",
+        "rule_id": "selesnya-packbeast-swarm",
+        "priority": 8005
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "packbeast-swarm",
+          "subtype_id": "selesnya"
         }
       ],
       "same_parent_multiple_subtype_matches": false
