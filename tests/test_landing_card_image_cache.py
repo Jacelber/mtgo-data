@@ -160,6 +160,14 @@ def test_explicit_private_format_isolated_from_public_default(tmp_path):
 def _bulk_cards() -> list[dict[str, object]]:
     return [
         {
+            "id": "88888888-8888-4888-8888-888888888888",
+            "oracle_id": "88888888-aaaa-4aaa-8aaa-888888888888",
+            "layout": "token",
+            "set_type": "token",
+            "name": "New Card",
+            "image_uris": {"normal": "https://cards.scryfall.io/normal/new-card-token.jpg"},
+        },
+        {
             "id": "99999999-9999-4999-8999-999999999999",
             "oracle_id": "99999999-aaaa-4aaa-8aaa-999999999999",
             "layout": "art_series",
