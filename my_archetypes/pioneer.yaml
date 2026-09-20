@@ -175,6 +175,32 @@ archetypes:
       - card: Firebending Lesson
         zone: main
         max_count: 0
+  - id: azorius-control-yorion-dovins-veto
+    priority: 100
+    subtype_id: yorion
+    conditions:
+      all:
+      - card: Teferi, Hero of Dominaria
+        zone: main
+        min_count: 1
+      - card: Dovin's Veto
+        zone: main
+        min_count: 1
+      - card: No More Lies
+        zone: main
+        max_count: 0
+      - card: Shiko, Paragon of the Way
+        zone: main
+        max_count: 0
+      - card: Gran-Gran
+        zone: main
+        max_count: 0
+      - card: Yorion, Sky Nomad
+        zone: side
+        min_count: 1
+      - card: Firebending Lesson
+        zone: main
+        max_count: 0
   - id: azorius-control-no-teferi-non-yorion
     priority: 100
     subtype_id: non-yorion
@@ -271,6 +297,24 @@ archetypes:
       - card: Fable of the Mirror-Breaker
         zone: main
         max_count: 0
+- id: golgari-midrange
+  name: Golgari Midrange
+  priority: 100
+  rules:
+  - id: golgari-midrange-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Candy Trail
+        zone: main
+        min_count: 1
+      - card: End of the Hunt
+        zone: main
+        min_count: 1
+      - card: Mosswood Dreadknight
+        zone: main
+        min_count: 1
 - id: mono-red-aggro
   name: Mono-Red Aggro
   priority: 100
@@ -593,6 +637,9 @@ archetypes:
         zone: main
         min_count: 1
       - card: Mayhem Devil
+        zone: main
+        min_count: 1
+      - card: Ygra, Eater of All
         zone: main
         min_count: 1
 - id: golgari-sacrifice
@@ -1190,6 +1237,27 @@ archetypes:
         zone: main
         min_count: 1
       - card: Overgrown Tomb
+        zone: main
+        max_count: 0
+- id: esper-legends
+  name: Esper Legends
+  priority: 110
+  rules:
+  - id: esper-legends-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Plaza of Heroes
+        zone: main
+        min_count: 4
+      - card: Loki, God of Mischief
+        zone: main
+        min_count: 1
+      - card: Raffine, Scheming Seer
+        zone: main
+        min_count: 1
+      - card: Carnage, Crimson Chaos
         zone: main
         max_count: 0
 - id: esper-bounce
@@ -2396,6 +2464,29 @@ archetypes:
       - card: Shambling Ghast
         zone: main
         min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        max_count: 0
+  - id: rakdos-sacrifice-oven-cat
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Witch's Oven
+        zone: main
+        min_count: 1
+      - card: Cauldron Familiar
+        zone: main
+        min_count: 1
+      - card: Mayhem Devil
+        zone: main
+        min_count: 1
+      - card: Deadly Dispute
+        zone: main
+        min_count: 1
+      - card: Ygra, Eater of All
+        zone: main
+        max_count: 0
       - card: Overgrown Tomb
         zone: main
         max_count: 0

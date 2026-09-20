@@ -155,11 +155,19 @@ def main(argv: list[str] | None = None) -> int:
                 import yaml
 
                 registry = yaml.safe_load((root / "configs/mtgo_weekly_review_completions.yaml").read_text(encoding="utf-8"))
-                admissions = registry["data_admissions"]["formats"][args.format_id]["weekly_acceptances"]
+                format_admissions = registry["data_admissions"]["formats"][args.format_id]
+                admissions = [
+                    format_admissions.get("initial", {}),
+                    *format_admissions.get("weekly_acceptances", []),
+                ]
                 if not any(
                     row["week"] == args.week
                     and row["classification_review_digest"] == review["classification_review_digest"]
-                    and _same_event_ids(row["event_ids"], review["event_ids"])
+                    and (
+                        set(review["event_ids"]) <= set(row["event_ids"])
+                        if row.get("kind") == "owner_accepted_initial_public_scope"
+                        else _same_event_ids(row["event_ids"], review["event_ids"])
+                    )
                     for row in admissions
                 ):
                     raise ValueError("completion requires the exact full-classification data acceptance")

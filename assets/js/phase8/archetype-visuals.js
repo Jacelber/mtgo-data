@@ -476,6 +476,22 @@ const manaIdentities = Object.freeze({
     "walls-combo": Object.freeze(["u", "g"]),
     "walls-ramp": Object.freeze(["r", "g"]),
   }),
+  pioneer: Object.freeze({
+    "izzet-prowess": Object.freeze(["u", "r"]),
+    "golgari-demons": Object.freeze(["b", "g"]),
+    "boros-land-destruction": Object.freeze(["w", "r"]),
+    "mono-red-aggro": Object.freeze(["r"]),
+    "azorius-control": Object.freeze(["w", "u"]),
+    "jeskai-lessons": Object.freeze(["w", "u", "r"]),
+    "izzet-cauldron": Object.freeze(["u", "r"]),
+    "izzet-phoenix": Object.freeze(["u", "r"]),
+    "izzet-elementals": Object.freeze(["u", "r"]),
+    "simic-devotion": Object.freeze(["u", "g"]),
+    "dimir-bounce": Object.freeze(["u", "b"]),
+    "lotus-scapeshift": Object.freeze(["u", "b", "g"]),
+    "lotus-scapeshift/sultai": Object.freeze(["u", "b", "g"]),
+    "rakdos-sacrifice": Object.freeze(["b", "r"]),
+  }),
 });
 
 const representativeCards = Object.freeze({
@@ -759,6 +775,52 @@ const representativeCards = Object.freeze({
     "spy-combo": Object.freeze([
       Object.freeze({"name": "Balustrade Spy", "image": "../images/representative-cards/pauper/balustrade-spy.jpg"}),
       Object.freeze({"name": "Dread Return", "image": "../images/representative-cards/pauper/dread-return.jpg"}),
+    ]),
+  }),
+  pioneer: Object.freeze({
+    "izzet-prowess": Object.freeze([
+      Object.freeze({"name": "Stormchaser's Talent", "image": "../images/representative-cards/pioneer/stormchasers-talent.jpg"}),
+      Object.freeze({"name": "Academic Dispute", "image": "../images/representative-cards/pioneer/academic-dispute.jpg"}),
+    ]),
+    "golgari-demons": Object.freeze([
+      Object.freeze({"name": "Unholy Annex // Ritual Chamber", "image": "../images/representative-cards/pioneer/unholy-annex-ritual-chamber.jpg"}),
+      Object.freeze({"name": "Professor Dellian Fel", "image": "../images/representative-cards/pioneer/professor-dellian-fel.jpg"}),
+    ]),
+    "boros-land-destruction": Object.freeze([
+      Object.freeze({"name": "Cleansing Wildfire", "image": "../images/representative-cards/pioneer/cleansing-wildfire.jpg"}),
+      Object.freeze({"name": "Field of Ruin", "image": "../images/representative-cards/pioneer/field-of-ruin.jpg"}),
+    ]),
+    "mono-red-aggro": Object.freeze([
+      Object.freeze({"name": "Kumano Faces Kakkazan", "image": "../images/representative-cards/pioneer/kumano-faces-kakkazan.jpg"}),
+      Object.freeze({"name": "Sunspine Lynx", "image": "../images/representative-cards/pioneer/sunspine-lynx.jpg"}),
+    ]),
+    "azorius-control": Object.freeze([
+      Object.freeze({"name": "Teferi, Hero of Dominaria", "image": "../images/representative-cards/pioneer/teferi-hero-of-dominaria.jpg"}),
+      Object.freeze({"name": "No More Lies", "image": "../images/representative-cards/pioneer/no-more-lies.jpg"}),
+    ]),
+    "jeskai-lessons": Object.freeze([
+      Object.freeze({"name": "Gran-Gran", "image": "../images/representative-cards/pioneer/gran-gran.jpg"}),
+      Object.freeze({"name": "Jeskai Revelation", "image": "../images/representative-cards/pioneer/jeskai-revelation.jpg"}),
+    ]),
+    "izzet-cauldron": Object.freeze([
+      Object.freeze({"name": "Agatha's Soul Cauldron", "image": "../images/representative-cards/pioneer/agathas-soul-cauldron.jpg"}),
+      Object.freeze({"name": "Vivi Ornitier", "image": "../images/representative-cards/pioneer/vivi-ornitier.jpg"}),
+    ]),
+    "izzet-phoenix": Object.freeze([
+      Object.freeze({"name": "Arclight Phoenix", "image": "../images/representative-cards/pioneer/arclight-phoenix.jpg"}),
+      Object.freeze({"name": "Treasure Cruise", "image": "../images/representative-cards/pioneer/treasure-cruise.jpg"}),
+    ]),
+    "izzet-elementals": Object.freeze([
+      Object.freeze({"name": "Hearth Elemental", "image": "../images/representative-cards/pioneer/hearth-elemental.jpg"}),
+      Object.freeze({"name": "Eddymurk Crab", "image": "../images/representative-cards/pioneer/eddymurk-crab.jpg"}),
+    ]),
+    "simic-devotion": Object.freeze([
+      Object.freeze({"name": "Badgermole Cub", "image": "../images/representative-cards/pioneer/badgermole-cub.jpg"}),
+      Object.freeze({"name": "Quantum Riddler", "image": "../images/representative-cards/pioneer/quantum-riddler.jpg"}),
+    ]),
+    "dimir-bounce": Object.freeze([
+      Object.freeze({"name": "Hopeless Nightmare", "image": "../images/representative-cards/pioneer/hopeless-nightmare.jpg"}),
+      Object.freeze({"name": "This Town Ain't Big Enough", "image": "../images/representative-cards/pioneer/this-town-aint-big-enough.jpg"}),
     ]),
   }),
 });
