@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Sequence
 
 from mtgmeta.public_contract import versioned
+from mtgmeta.mana_identity import require_complete_mana_identities
 
 from .config import (
     REQUIRED_MTGO_PRODUCT_CAPABILITIES,
@@ -103,6 +104,7 @@ def require_complete_public_format(
             f"public format {definition.id!r} is missing {requirement}: "
             + ", ".join(missing)
         )
+    require_complete_mana_identities(root, definition.id)
     return definition
 
 

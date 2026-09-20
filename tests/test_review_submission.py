@@ -83,22 +83,22 @@ def test_new_full_acceptance_is_not_an_individual_proposal_and_legacy_is_unchang
         review.validate_classification_acceptance(record, "modern")
 
 
-def test_visuals_colorless_and_explicit_empty_are_legal_and_scope_is_minimal(tmp_path):
+def test_visuals_colorless_requires_c_and_scope_is_minimal(tmp_path):
     source = tmp_path / "assets/js/phase8/archetype-visuals.js"
     source.parent.mkdir(parents=True)
     source.write_text('const manaIdentities = Object.freeze({\n  standard: Object.freeze({\n'
-                      '    "artifacts": Object.freeze([]),\n    "unrelated": Object.freeze(["r"]),\n  }),\n});')
+                      '    "artifacts": Object.freeze(["c"]),\n    "unrelated": Object.freeze(["r"]),\n  }),\n});')
     content = {"top_copy": {"items": []}, "features": {"explicit_empty": True, "items": []}}
     environment = {"rows": [{"archetype_id": "artifacts", "key_cards": [{"name": "A"}, {"name": "B"}]}]}
     names = {"names": [{"identity_key": "standard|artifacts|none", "english": "Artifacts", "chinese": "神器"}]}
     before = review.content_dimensions(tmp_path, "standard", content, environment, names)
     source.write_text(source.read_text().replace('["r"]', '["g"]'))
     assert review.content_dimensions(tmp_path, "standard", content, environment, names) == before
-    assert before["visual.environment.artifacts"]["colors"] == []
+    assert before["visual.environment.artifacts"]["colors"] == ["c"]
     assert before["features"] == before["copy.zh"] == []
-    source.write_text(source.read_text().replace('"artifacts": Object.freeze([])', '"artifacts": Object.freeze(["c"])'))
-    assert review.content_dimensions(tmp_path, "standard", content, environment, names)["visual.environment.artifacts"]["colors"] == ["c"]
     source.write_text(source.read_text().replace('"artifacts": Object.freeze(["c"])', '"artifacts": Object.freeze([])'))
+    with pytest.raises(ValueError, match="at least one indicator"):
+        review.content_dimensions(tmp_path, "standard", content, environment, names)
     source.write_text(source.read_text().replace('    "artifacts": Object.freeze([]),\n', ''))
     with pytest.raises(ValueError, match="Incomplete visual"):
         review.content_dimensions(tmp_path, "standard", content, environment, names)
@@ -146,7 +146,7 @@ def test_snapshot_is_portable_and_never_overwrites_submitted_material(tmp_path):
 
 
 def test_only_stable_choices_can_be_reused_across_weeks():
-    dimensions = {"visual.environment.a": {"colors": [], "cards": ["A", "B"]}, "copy.zh": "same"}
+    dimensions = {"visual.environment.a": {"colors": ["c"], "cards": ["A", "B"]}, "copy.zh": "same"}
     old = review.make_packet("content", "modern", "2026-W38", dimensions, bindings={})
     new = review.make_packet("content", "modern", "2026-W39", dimensions, bindings={})
     receipt = review.reuse_decisions(new, {"submission": old, "decisions": accept(old)})
@@ -158,7 +158,7 @@ def test_only_stable_choices_can_be_reused_across_weeks():
 def test_existing_approved_language_is_reused_but_pending_language_is_not(tmp_path):
     path = tmp_path / "assets/js/phase8/archetype-visuals.js"
     path.parent.mkdir(parents=True)
-    path.write_text('const manaIdentities = Object.freeze({\n  standard: Object.freeze({\n    "a": Object.freeze([]),\n  }),\n});')
+    path.write_text('const manaIdentities = Object.freeze({\n  standard: Object.freeze({\n    "a": Object.freeze(["c"]),\n  }),\n});')
     names = {"names": [{"identity_key": "standard|a|none", "chinese": "已确认", "english": "Pending",
                         "review_status": {"chinese": "approved", "english": "pending_owner_review"}}]}
     packet = review.make_content_packet(tmp_path, "standard", "2026-W38",

@@ -12,6 +12,10 @@ function manaIdentityHtml(identityId) {
   </span>`;
 }
 
+function matchupAxisNameHtml(name, identityId, className = "axis-name") {
+  return `<span class="${className}" title="${escapeHtml(name)}">${escapeHtml(name)}${manaIdentityHtml(identityId)}</span>`;
+}
+
 function locateDeck(decksDocument, identityId) {
   for (const value of Object.values(decksDocument.decks || {})) {
     if (value.archetype_id === identityId) {
@@ -849,8 +853,8 @@ function matrixHtml(document) {
           ? `<button type="button" class="axis-disclosure-button column-axis-controls" data-matchup-column="${escapeHtml(column.parentId)}"
               aria-label="${escapeHtml(`${open ? t("matchup.collapse") : t("matchup.expand")}${column.name}`)}">
               <span class="column-axis-toggle" aria-hidden="true">${open ? "−" : "+"}</span>
-              <span class="axis-name">${escapeHtml(column.name)}</span></button>`
-          : `<div class="column-axis-controls"><span class="axis-name">${escapeHtml(column.name)}</span></div>`;
+              ${matchupAxisNameHtml(column.name, column.id)}</button>`
+          : `<div class="column-axis-controls">${matchupAxisNameHtml(column.name, column.id)}</div>`;
         return `<th class="column-head ${column.kind === "subtype" ? "subtype-head" : ""}">
           ${content}</th>`;
       }).join("")}
@@ -861,11 +865,11 @@ function matrixHtml(document) {
           ? `<button type="button" class="axis-disclosure-button row-axis-controls" data-matchup-row="${escapeHtml(row.parentId)}"
               aria-label="${escapeHtml(`${open ? t("matchup.collapse") : t("matchup.expand")}${row.name}`)}">
               <span class="row-axis-toggle" aria-hidden="true">${open ? "−" : "+"}</span>
-              <span class="row-axis-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}${state.product === "tabletop-major-events" ? manaIdentityHtml(row.id) : ""}</span></button>`
+              ${matchupAxisNameHtml(row.name, row.id, "row-axis-name")}</button>`
           : `<div class="row-axis-controls"><a class="row-axis-detail-link"
               href="${escapeHtml(matchupDetailUrl(matchupDetailIdentity(document, row)))}" target="_blank" rel="noopener"
               aria-label="${escapeHtml(t("matchup.open_detail", { name: row.name }))}">
-              <span class="row-axis-detail-content"><span class="row-axis-name" title="${escapeHtml(row.name)}">${escapeHtml(row.name)}${state.product === "tabletop-major-events" ? manaIdentityHtml(row.id) : ""}</span>
+              <span class="row-axis-detail-content">${matchupAxisNameHtml(row.name, row.id, "row-axis-name")}
               <svg class="axis-detail-external" viewBox="0 0 16 16" aria-hidden="true"><path d="M9 2h5v5M14 2 8 8M12 9v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h4" /></svg></span></a></div>`;
         return `<tr data-matchup-row-identity="${escapeHtml(row.id)}">
           <th class="row-head ${row.kind === "subtype" ? "subtype-head" : ""}">
