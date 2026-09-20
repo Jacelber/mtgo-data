@@ -383,8 +383,7 @@
         },
         "formats": {
           "type": "array",
-          "minItems": 2,
-          "maxItems": 3,
+          "minItems": 1,
           "items": {
             "type": "object",
             "additionalProperties": false,
@@ -407,11 +406,7 @@
             ],
             "properties": {
               "format": {
-                "enum": [
-                  "standard",
-                  "modern",
-                  "pauper"
-                ]
+                "$ref": "#/$defs/stableId"
               },
               "review_week": {
                 "type": [
@@ -547,35 +542,7 @@
                 ]
               }
             }
-          },
-          "allOf": [
-            {
-              "contains": {
-                "type": "object",
-                "properties": {
-                  "format": {
-                    "const": "standard"
-                  }
-                },
-                "required": [
-                  "format"
-                ]
-              }
-            },
-            {
-              "contains": {
-                "type": "object",
-                "properties": {
-                  "format": {
-                    "const": "modern"
-                  }
-                },
-                "required": [
-                  "format"
-                ]
-              }
-            }
-          ]
+          }
         },
         "workflow": {
           "type": "object",

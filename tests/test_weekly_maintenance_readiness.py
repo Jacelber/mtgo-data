@@ -112,6 +112,77 @@ def test_pauper_enrollment_starts_at_w37_without_reopening_closed_weeks(tmp_path
     jsonschema.Draft202012Validator(schema).validate(document)
 
 
+def test_four_configured_formats_validate_when_no_review_is_ready(tmp_path, monkeypatch):
+    from datetime import date
+    from types import SimpleNamespace
+    from mtgmeta.mtgo import publication, classification
+    from tools import generate_weekly_maintenance_readiness as readiness
+
+    formats = ("standard", "modern", "pauper", "pioneer")
+    monkeypatch.setattr(
+        readiness,
+        "_intentional_unknowns",
+        lambda root, **kwargs: {format_id: {} for format_id in formats},
+    )
+    monkeypatch.setattr(
+        publication,
+        "resolve_scope",
+        lambda root, format_id: SimpleNamespace(
+            week=date(2026, 9, 14),
+            pending_event_ids=frozenset(),
+            event_ids=frozenset({"100"}),
+        ),
+    )
+    monkeypatch.setattr(publication, "retained_events", lambda root, format_id: [])
+    monkeypatch.setattr(
+        classification,
+        "audit_mtgo_classification",
+        lambda root, format_id: SimpleNamespace(
+            reports={
+                "unknown_decks": {"records": []},
+                "index": {"summary": {"strict_validation": "pass"}},
+            }
+        ),
+    )
+    for format_id in formats:
+        _write_json(
+            tmp_path / "stats" / format_id / "mtgo" / "landing" / "current.json",
+            {"week": {"id": "2026-W37"}},
+        )
+    registry = {
+        "weekly_maintenance": {
+            "standard": {"start_week": "2026-W37"},
+            "modern": {"start_week": "2026-W37"},
+            "pauper": {"start_week": "2026-W37"},
+            "pioneer": {"start_week": "2026-W38"},
+        },
+        "records": [],
+        "data_admissions": {
+            "formats": {
+                format_id: {"weekly_acceptances": []} for format_id in formats
+            }
+        },
+    }
+
+    document = readiness._independent_readiness(
+        tmp_path,
+        registry,
+        publication_sha="a" * 40,
+        production_run_id="1",
+        production_run_attempt="1",
+        source_sha="b" * 40,
+        generated_at="2026-09-20T13:40:09Z",
+    )
+
+    assert document["status"] == "no_review_ready"
+    assert [item["format"] for item in document["formats"]] == list(formats)
+    assert all(item["review_week"] is None for item in document["formats"])
+    schema = json.loads(
+        (ROOT / "schemas/weekly-maintenance-readiness.schema.json").read_text()
+    )
+    jsonschema.Draft202012Validator(schema).validate(document)
+
+
 def test_pauper_completion_is_independent_of_legacy_formats(tmp_path, monkeypatch):
     from tools import generate_weekly_maintenance_readiness as readiness
     _write_json(tmp_path / "configs/mtgo_weekly_review_completions.yaml", {
