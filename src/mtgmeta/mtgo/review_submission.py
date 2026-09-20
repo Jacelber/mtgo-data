@@ -431,9 +431,12 @@ def resume_summary(root: Path, format_id: str, week: str, *, envelope: dict | No
     if accepted:
         from mtgmeta.weekly_review import build_mtgo_weekly_review
         current = build_mtgo_weekly_review(root, format_id, week)
+        current_event_ids = set(current["event_ids"])
         valid = [item for item in accepted if item.get("classification_review_digest") == current["classification_review_digest"]
                  and item.get("accepted_classifier_subject") == current["classifier"]["subject_digest"]
-                 and set(item.get("event_ids", [])) == set(current["event_ids"])]
+                 and (current_event_ids <= set(item.get("event_ids", []))
+                      if item.get("kind") == "owner_accepted_initial_public_scope"
+                      else current_event_ids == set(item.get("event_ids", [])))]
         for item in list(valid):
             try:
                 validate_classification_acceptance(item, format_id)
