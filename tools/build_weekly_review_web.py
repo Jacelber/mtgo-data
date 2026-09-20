@@ -17,6 +17,7 @@ from mtgmeta.mtgo import load_mtgo_context
 from mtgmeta.mtgo.landing_editorial import build_top8_subject, MTGOLandingEditorialError
 from mtgmeta.mtgo.publication import require_private_output
 from mtgmeta.mtgo.stats import normalize_legacy_card_name
+from mtgmeta.mtgo import review_submission as submissions
 
 
 class FeatureReviewUnavailable(ValueError):
@@ -35,6 +36,10 @@ def accepted_classification(registry, review):
                 and item.get('accepted_classifier_subject') == review['classifier']['subject_digest']
                 and set(review['event_ids']).issubset(set(item.get('event_ids', [])))
                 and item.get('evidence') and item.get('accepted_on')):
+            try:
+                submissions.validate_classification_acceptance(item, review['format'])
+            except (ValueError, KeyError):
+                continue
             accepted.append(item)
     return accepted
 
@@ -60,6 +65,8 @@ def build_scope(args):
     output = args.output.resolve()
     require_private_output(ROOT, output / 'index.html')
     bootstrap = getattr(args, 'name_review_bootstrap', False)
+    if not bootstrap and submissions.applies(args.week) and output.exists() and any(output.iterdir()):
+        raise ValueError('已提交材料使用新目录保存下一版本，不能覆盖 W38 起的审阅快照。')
     if bootstrap and output.is_relative_to(ROOT):
         raise ValueError('name review bootstrap output must be outside the repository')
     review = build_mtgo_weekly_review(ROOT, args.format, args.week, name_review_bootstrap=bootstrap)
@@ -84,7 +91,10 @@ def build_scope(args):
         assert int(player['final_rank']) == row['rank']
         assert (player.get('player') or player.get('name')) == row['player']
         row['main_deck'] = player['main_deck']
-        row['sideboard'] = player.get('sideboard', [])
+        # A missing zone is unavailable material, not an explicitly empty board.
+        if 'sideboard' not in player:
+            raise ValueError(f"{file}#{locator}: sideboard material is unavailable")
+        row['sideboard'] = player['sideboard']
         row['reference'] = f"{args.week}-{args.format}-{row['event_id']}-{row['rank']:02d}"
         used_names.update(c['name'] for zone in ('main_deck', 'sideboard') for c in row[zone])
     by_key = {(r['event_id'], r['rank']): r for r in review['records']}
@@ -122,6 +132,10 @@ def build_scope(args):
             raise ValueError('classification addendum and weekly review use different classifier inputs')
         data['classification_addendum'] = comparison
     output.mkdir(parents=True, exist_ok=True)
+    if not bootstrap and submissions.applies(review['week']):
+        data['full_classification_submission'] = submissions.full_classification_packet(review)
+        (output / 'full-classification-submission.json').write_text(
+            json.dumps(data['full_classification_submission'], ensure_ascii=False, indent=2), encoding='utf-8')
     payload = json.dumps(data, ensure_ascii=False).replace('<', '\\u003c')
     template = Path(__file__).with_name('weekly_review_web.html').read_text(encoding='utf-8')
     if getattr(args, 'multi_scope', False):

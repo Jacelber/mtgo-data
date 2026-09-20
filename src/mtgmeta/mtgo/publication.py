@@ -102,7 +102,9 @@ def _digest(value: Any) -> str:
                                      ensure_ascii=False).encode("utf-8")).hexdigest()
 
 
-def _validate_owner_classification_acceptance(record: Mapping[str, Any]) -> None:
+def _validate_owner_classification_acceptance(record: Mapping[str, Any], format_id: str | None = None) -> None:
+    from .review_submission import validate_classification_acceptance
+    validate_classification_acceptance(dict(record), format_id)
     for key in ("accepted_classifier_subject", "classification_review_digest"):
         value = record.get(key)
         if (
@@ -156,7 +158,7 @@ def _resolve_scope(repository_root: str | Path, format_id: str):
         initial = config["initial"]
         initial_kind = initial.get("kind")
         if initial_kind == "owner_accepted_initial_public_scope":
-            _validate_owner_classification_acceptance(initial)
+            _validate_owner_classification_acceptance(initial, format_id)
         elif initial_kind != "grandfathered_existing_public_scope":
             raise PublicationError("unsupported initial public scope admission")
         reviews = config["weekly_acceptances"]
@@ -165,7 +167,7 @@ def _resolve_scope(repository_root: str | Path, format_id: str):
         for review in reviews:
             if review.get("kind") != "owner_accepted_full_classification":
                 raise PublicationError("a completion is not a classification admission")
-            _validate_owner_classification_acceptance(review)
+            _validate_owner_classification_acceptance(review, format_id)
         records = [initial, *reviews]
         sources = retained_events(root, format_id)
         event_dates = {str(event["event_id"]): date.fromisoformat(event["starttime"][:10])

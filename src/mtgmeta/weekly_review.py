@@ -59,6 +59,7 @@ def _positive_integer(value: Any, *, label: str) -> int:
 
 
 def _name_authority(root: Path, format_id: str) -> dict[tuple[str, str | None], dict[str, str]]:
+    from .mtgo.review_submission import names_approved
     path = root / NAME_CATALOG
     value = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict) or not isinstance(value.get("names"), list):
@@ -76,7 +77,7 @@ def _name_authority(root: Path, format_id: str) -> dict[tuple[str, str | None], 
             or (subtype_id is not None and not isinstance(subtype_id, str))
             or not isinstance(english, str)
             or not isinstance(chinese, str)
-            or item.get("review_status") != "approved"
+            or not names_approved(item.get("review_status"))
         ):
             continue
         result[(parent_id, subtype_id)] = {"english": english, "chinese": chinese}
@@ -175,6 +176,8 @@ def build_mtgo_weekly_review(
     name_review_bootstrap: bool = False,
 ) -> dict[str, Any]:
     """Return every officially published weekly record, capped at rank 32."""
+    from .mtgo.review_submission import applies
+    bind_deck_material = applies(week_id)
 
     root = Path(repository_root).resolve()
     from datetime import timedelta
@@ -266,6 +269,11 @@ def build_mtgo_weekly_review(
                 "priority_reasons": _priority_reasons(result),
                 "source_locator": f"{source_file}#players/{index}",
             }
+            if bind_deck_material:
+                # New submissions cover the displayed full deck even if a
+                # changed non-signature card leaves its classification intact.
+                row["deck_material_digest"] = _sha256_json(
+                    {zone: player.get(zone) for zone in ("main_deck", "sideboard")})
             event_rows.append((row, score >= threshold))
         event_rows.sort(key=lambda item: (item[0]["rank"], item[0]["source_locator"]))
         high_score_count = sum(is_high for _row, is_high in event_rows)

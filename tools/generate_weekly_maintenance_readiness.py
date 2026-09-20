@@ -206,6 +206,11 @@ def _completion_state(root: Path, week_id: str, *, format_id: str | None = None)
                 mismatches.append(f"{format_name} full classification review subject")
         if _landing_content_digest(root, format_name, week_id) != expected_landing:
             mismatches.append(f"{format_name} Landing content")
+        from mtgmeta.mtgo.review_submission import validate_completion
+        try:
+            validate_completion(root, format_name, week_id, expected)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            mismatches.append(f"{format_name} final preview/publication: {exc}")
     return {
         "state": "stale" if mismatches else "verified",
         "completed_on": completed_on,

@@ -594,6 +594,7 @@ def _validate_name_catalog_document(
 ) -> dict[str, int]:
     """Validate one in-memory bilingual catalog against the current taxonomy."""
 
+    from .review_submission import names_approved
     root = repository_root.resolve()
     _validate_schema(document, root / DEFAULT_NAME_SCHEMA, "bilingual name catalog")
     selected = formats or {"standard", "modern"}
@@ -620,7 +621,7 @@ def _validate_name_catalog_document(
         or actual[key].get("parent_id") != expected[key]["parent_id"]
         or actual[key].get("subtype_id") != expected[key]["subtype_id"]
         or actual[key].get("english") != expected[key]["english"]
-        or actual[key].get("review_status") != "approved"
+        or not names_approved(actual[key].get("review_status"))
         or not str(actual[key].get("chinese") or "").strip()
     )
     if missing or extra or mismatched:
@@ -1150,10 +1151,13 @@ def copy_deck_tokens(items: list[Mapping[str, Any]]) -> list[str]:
 
 def validate_review_document(document: Mapping[str, Any], schema_path: str | Path) -> None:
     _validate_schema(document, Path(schema_path), "Landing review document")
-    if document['schema_version'] == '1.2.0':
+    if document['schema_version'] in {'1.2.0', '1.3.0'}:
         content = {key: document[key] for key in ('format', 'week', 'review')}
         if document_digest(content) != document['bindings']['content_sha256']:
             raise MTGOLandingEditorialError('Conversation content digest changed')
+    if document['schema_version'] == '1.3.0':
+        from .review_submission import validate_content_acceptance
+        validate_content_acceptance(dict(document))
     top8_tokens = [item["token"] for item in document["all_top8"]]
     if top8_tokens != sorted(
         top8_tokens,
@@ -1221,6 +1225,9 @@ def load_review_document(
     )
     if resolved_schema is not None:
         validate_review_document(document, resolved_schema)
+    from .review_submission import applies
+    if applies(document["week"]["id"]) and document.get("schema_version") != "1.3.0":
+        raise MTGOLandingEditorialError("W38 onward requires scoped content acceptance; legacy weeks are unchanged")
     return document
 
 
@@ -1524,6 +1531,25 @@ def import_review_workbook(
         stage="bilingual",
     )
     reviews = validated["reviews"]
+    from . import review_submission as submissions
+    new_scopes = [scope for scope in reviews if submissions.applies(scope[1])]
+    if new_scopes:
+        # Excel remains an input medium. Its accepted decisions use the same
+        # portable content packet as conversation imports, not another approval.
+        sidecar = Path(workbook_path).with_suffix(".submissions.json")
+        receipts = json.loads(sidecar.read_text(encoding="utf-8"))
+        for format_id, week in new_scopes:
+            document = reviews[(format_id, week)]
+            acceptance = receipts[f"{format_id}/{week}"]
+            current = submissions.content_packet(root, document)
+            submissions.require_accepted(acceptance["submission"], acceptance["decisions"], current=current)
+            document["schema_version"] = "1.3.0"
+            document["bindings"].pop("workbook_sha256")
+            document["bindings"]["content_sha256"] = document_digest(
+                {key: document[key] for key in ("format", "week", "review")})
+            document["bindings"]["bilingual_catalog_digest"] = submissions.name_digest(current)
+            document["acceptance"] = acceptance
+            validate_review_document(document, root / DEFAULT_REVIEW_SCHEMA)
     source_catalog_path = root / DEFAULT_NAME_CATALOG
     catalog_path = output / DEFAULT_NAME_CATALOG
     if catalog_path != source_catalog_path:

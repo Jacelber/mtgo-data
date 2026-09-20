@@ -119,6 +119,16 @@ def test_initial_acceptance_can_cover_a_larger_historical_scope(scope):
     assert web.accepted_classification(registry, scope.review) == [scope.acceptance]
 
 
+def test_new_week_cannot_overwrite_submitted_web_material(scope):
+    scope.args.week = '2026-W38'
+    scope.args.output.mkdir()
+    page = scope.args.output / 'index.html'
+    page.write_text('already submitted')
+    with pytest.raises(ValueError, match='不能覆盖'):
+        web.build_scope(scope.args)
+    assert page.read_text() == 'already submitted'
+
+
 def test_multi_scope_refusal_keeps_other_scope_and_current_classification_link(scope, monkeypatch):
     scope.registry_path.write_text(yaml.safe_dump(scope.registry), encoding='utf-8')
     def review_for_format(root, format_id, week, **kwargs):

@@ -9,6 +9,7 @@ import re
 from typing import Any
 
 from mtgmeta.mtgo.landing import MTGOLandingError, validate_document as validate_landing
+from mtgmeta.mtgo.landing_bundle import inspect_bundle
 
 
 def _rounded_share(count: int, total: int) -> float:
@@ -136,7 +137,8 @@ def validate_repository_output(root: Path, formats: list[str] | None = None) -> 
         document = json.loads(path.read_text(encoding="utf-8"))
         try:
             validate_landing(document)
-        except (KeyError, TypeError, MTGOLandingError) as exc:
+            inspect_bundle(root, document["format"])
+        except (OSError, ValueError, KeyError, TypeError, MTGOLandingError) as exc:
             failures.append(f"{path.as_posix()}: {exc}")
     return failures
 
