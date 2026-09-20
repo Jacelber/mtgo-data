@@ -33,7 +33,19 @@
         },
         "english": {"type": "string", "minLength": 1},
         "chinese": {"type": "string", "minLength": 1},
-        "review_status": {"const": "approved"},
+        "review_status": {
+          "oneOf": [
+            {"const": "approved"},
+            {
+              "type": "object", "additionalProperties": false,
+              "required": ["english", "chinese"],
+              "properties": {
+                "english": {"enum": ["approved", "pending_owner_review"]},
+                "chinese": {"enum": ["approved", "pending_owner_review"]}
+              }
+            }
+          ]
+        },
         "identity_key": {
           "type": "string",
           "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\|[a-z0-9]+(?:-[a-z0-9]+)*\\|(?:none|[a-z0-9]+(?:-[a-z0-9]+)*)$"

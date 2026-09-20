@@ -143,11 +143,13 @@ def _rule_evidence(
     main_counts: Mapping[str, int],
     side_counts: Mapping[str, int],
 ) -> tuple[ConditionEvidence, ...] | None:
-    evidence = tuple(
-        _condition_evidence(condition, main_counts, side_counts)
-        for condition in rule.conditions
-    )
-    return evidence if all(condition_matches(item) for item in evidence) else None
+    evidence = []
+    for condition in rule.conditions:
+        item = _condition_evidence(condition, main_counts, side_counts)
+        if not condition_matches(item):
+            return None
+        evidence.append(item)
+    return tuple(evidence)
 
 
 def _match_sort_key(match: RuleMatch) -> tuple[int, str, str, str]:

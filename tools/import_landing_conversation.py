@@ -8,6 +8,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
 from mtgmeta.mtgo import landing_editorial as editorial
+from mtgmeta.mtgo import review_submission as submissions
 
 
 def import_content(root, source):
@@ -22,11 +23,22 @@ def import_content(root, source):
     bindings = {key: subject[key] for key in ('source_event_ids','classifier_digest','selection_policy_digest','machine_fact_digest','link_catalog_digest')}
     if any(source['bindings'].get(key) != value for key, value in bindings.items()):
         raise ValueError('Accepted conversation references a different machine subject')
-    bindings['bilingual_catalog_digest'] = editorial.name_catalog_binding_digest(catalog, review_schema_version='1.2.0', format_id=format_id)
+    acceptance = None
+    if submissions.applies(subject['week']['id']):
+        acceptance = source.get('acceptance')
+        if not isinstance(acceptance, dict):
+            raise ValueError('W38 onward requires the actually submitted content and scoped decisions')
+        current = submissions.content_packet(root, source)
+        submissions.require_accepted(acceptance['submission'], acceptance['decisions'], current=current)
+        bindings['bilingual_catalog_digest'] = submissions.name_digest(current)
+    else:
+        bindings['bilingual_catalog_digest'] = editorial.name_catalog_binding_digest(catalog, review_schema_version='1.2.0', format_id=format_id)
     bindings['content_sha256'] = editorial.document_digest({key: source[key] for key in ('format','week','review')})
-    document = {'schema_version':'1.2.0','source':'mtgo','format':format_id,'week':subject['week'],
+    document = {'schema_version':'1.3.0' if acceptance else '1.2.0','source':'mtgo','format':format_id,'week':subject['week'],
                 'bindings':bindings,'candidate_evidence':subject['candidate_evidence'],
                 'all_top8':subject['all_top8'],'review':review,'known_archetype_ids':subject['known_archetype_ids']}
+    if acceptance:
+        document['acceptance'] = acceptance
     editorial.validate_review_document(document,root/editorial.DEFAULT_REVIEW_SCHEMA)
     destination = root/'stats'/format_id/'mtgo/landing/review'/f"{subject['week']['id']}.yaml"
     editorial._write_yaml(destination,document)

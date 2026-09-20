@@ -930,6 +930,19 @@ def build_document(
                 review_path,
                 root / editorial.DEFAULT_REVIEW_SCHEMA,
             )
+            scoped_name_digest = None
+            if review["schema_version"] == "1.3.0":
+                from . import review_submission as submissions
+                packet = submissions.make_content_packet(root, format_id, week,
+                    review["review"], environment, name_document,
+                    bindings={key: review["bindings"][key] for key in
+                              ("source_event_ids", "classifier_digest", "selection_policy_digest",
+                               "machine_fact_digest", "link_catalog_digest")})
+                submissions.require_accepted(review["acceptance"]["submission"],
+                                             review["acceptance"]["decisions"], current=packet)
+                scoped_name_digest = submissions.name_digest(packet)
+                visual_metadata_digest = submissions.digest({key: value for key, value in packet["dimensions"].items()
+                                                             if key.startswith("visual.")})
             current_catalog = editorial.build_top8_catalog(current_top8)
             current_binding = {
                 **{key: review["bindings"][key] for key in ("workbook_sha256", "content_sha256") if key in review["bindings"]},
@@ -938,7 +951,7 @@ def build_document(
                 "selection_policy_digest": selection_policy_digest,
                 "machine_fact_digest": machine_fact_digest,
                 "link_catalog_digest": editorial.document_digest(current_catalog),
-                "bilingual_catalog_digest": editorial.name_catalog_binding_digest(
+                "bilingual_catalog_digest": scoped_name_digest or editorial.name_catalog_binding_digest(
                     name_document,
                     review_schema_version=str(review["schema_version"]),
                     format_id=format_id,
@@ -1299,6 +1312,12 @@ def generate(
             raise MTGOLandingError(
                 "Landing review is incomplete or stale and no admitted current document exists"
             )
+        if not private:
+            from .landing_bundle import inspect_bundle
+            try:
+                inspect_bundle(root, format_id, landing_directory=output)
+            except (OSError, ValueError, KeyError, TypeError) as exc:
+                raise MTGOLandingError(f"Retained Landing dependencies are incomplete: {exc}") from exc
         return {
             "status": review_status,
             "path": destination,

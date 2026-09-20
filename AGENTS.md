@@ -6,6 +6,7 @@ problem, concrete action and expected result in plain language.
 ## Start or resume
 
 - Recover the current Owner instruction and confirmed plan for this delivery.
+  Apply GOVERNANCE's audit, implementation and scoped acceptance boundaries.
 - Read [STATUS](docs/STATUS.yaml) for durable facts, not permissions.
 - Use [GOVERNANCE](docs/GOVERNANCE.md) for responsibility, authorization,
   acceptance, failure handling and completion. Reuse valid context.
@@ -19,7 +20,7 @@ problem, concrete action and expected result in plain language.
 | Question | Source |
 | --- | --- |
 | What product should exist? | [PROJECT_SCOPE](docs/PROJECT_SCOPE.md) |
-| Weekly review, Feature/Landing content, or a bug fix touching that workflow? | [WEEKLY_MAINTENANCE](docs/WEEKLY_MAINTENANCE.md) |
+| Weekly review, submitted decisions, cross-device continuation, or a related fix? | [WEEKLY_MAINTENANCE](docs/WEEKLY_MAINTENANCE.md) |
 | What do numbers and missing states mean? | [STATISTICS_SPEC](docs/STATISTICS_SPEC.md) |
 | What data, identities and visibility apply? | [DATA_ARCHITECTURE](docs/DATA_ARCHITECTURE.md) |
 | Which result needs which proof? | [QUALITY](docs/QUALITY.md) |
