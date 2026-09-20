@@ -208,20 +208,12 @@ def validate_classification_acceptance(record: dict, format_id: str | None = Non
 
 
 def visual_colors(root: Path, format_id: str) -> dict:
-    # This is a generated literal map, not arbitrary JavaScript evaluation.
-    text = (root / "assets/js/phase8/archetype-visuals.js").read_text(encoding="utf-8")
-    section = text.split("const manaIdentities = Object.freeze({", 1)[1].split("\n});", 1)[0]
-    match = re.search(rf"^  {re.escape(format_id)}: Object\.freeze\(\{{\n(.*?)^  \}}\),", section, re.M | re.S)
-    if not match:
-        raise ValueError(f"Missing rendered color map: {format_id}")
-    colors = {}
-    for line in match[1].splitlines():
-        item = re.fullmatch(r'\s*"([^"]+)": Object\.freeze\((\[[^\n]*\])\),\s*', line)
-        if line.strip() and not item:
-            raise ValueError("Rendered color map is no longer a supported generated literal")
-        if item:
-            colors[item[1]] = json.loads(item[2])
-    return colors
+    from mtgmeta.mana_identity import rendered_mana_identities
+
+    return {
+        identity_id: list(colors)
+        for identity_id, colors in rendered_mana_identities(root, format_id).items()
+    }
 
 
 def content_dimensions(root: Path, format_id: str, review: dict, environment: dict, names: dict) -> dict:
@@ -253,11 +245,12 @@ def content_dimensions(root: Path, format_id: str, review: dict, environment: di
     for key, value in dimensions.items():
         if key.startswith("visual."):
             expected = 2 if key.startswith("visual.environment.") else 4
-            if (not isinstance(value["colors"], list)
+            if (not isinstance(value["colors"], list) or not value["colors"]
                     or len(set(value["colors"])) != len(value["colors"])
                     or any(color not in "wubrgc" or len(color) != 1 for color in value["colors"])
+                    or ("c" in value["colors"] and value["colors"] != ["c"])
                     or len(value["cards"]) != expected or len(set(value["cards"])) != expected):
-                raise ValueError(f"Incomplete visual material: {key}; explicit colorless [] is allowed")
+                raise ValueError(f"Incomplete visual material: {key}; colorless must use ['c']")
     for parent, subtype in sorted(identities, key=lambda item: (item[0], item[1] or "")):
         identity = f"{format_id}|{parent}|{subtype or 'none'}"
         selected = next((item for item in names["names"] if item["identity_key"] == identity), None)

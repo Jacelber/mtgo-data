@@ -798,6 +798,25 @@ jobs:
             }
 
             const readiness = JSON.parse(fs.readFileSync(process.env.READINESS_PATH, "utf8"));
+            const failureMarker = "<!-- weekly-maintenance-readiness-failure -->";
+            const resolvedFailure = issues.find(
+              (issue) => !issue.pull_request && issue.body?.includes(failureMarker) && issue.state === "open",
+            );
+            if (resolvedFailure) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: resolvedFailure.number,
+                body: `Weekly maintenance readiness succeeded in [run ${context.runId}](${runUrl}); closing this failure record.`,
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: resolvedFailure.number,
+                state: "closed",
+                state_reason: "completed",
+              });
+            }
             if (readiness.schema_version === "1.7.0") {
               // A legacy shared notice requires verified completion of both formats.
               const legacyWeeks = readiness.formats.find(item => item.format === "standard")?.completed_reviews || [];
