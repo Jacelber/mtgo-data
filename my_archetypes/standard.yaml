@@ -772,6 +772,26 @@ archetypes:
         min_count: 3
       - card: Steam Vents
         min_count: 2
+  - id: izzet-prowess-drake-hatcher-flow-state
+    priority: 51009
+    subtype_id: null
+    conditions:
+      all:
+      - card: Drake Hatcher
+        zone: main
+        min_count: 3
+      - card: Slickshot Show-Off
+        zone: main
+        min_count: 3
+      - card: Gandalf, Goblins' Bane
+        zone: main
+        exact_count: 2
+      - card: Flow State
+        zone: main
+        min_count: 3
+      - card: Steam Vents
+        zone: main
+        min_count: 2
   - id: izzet-prowess-colorstorm
     priority: 50990
     subtype_id: null
@@ -1056,6 +1076,35 @@ archetypes:
       - card: Day of Judgment
         zone: main
         min_count: 3
+  - id: azorius-control-day-stock
+    priority: 38989
+    subtype_id: null
+    conditions:
+      all:
+      - card: No More Lies
+        zone: main
+        min_count: 3
+      - card: Seam Rip
+        zone: main
+        min_count: 3
+      - card: Get Lost
+        zone: main
+        min_count: 3
+      - card: Day of Judgment
+        zone: main
+        min_count: 2
+      - card: Stock Up
+        zone: main
+        min_count: 2
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 2
+      - card: Jeskai Revelation
+        zone: any
+        exact_count: 0
+      - card: Consult the Star Charts
+        zone: any
+        exact_count: 0
 - id: mono-white-momo
   name: Mono-White Momo
   priority: 38000
@@ -1920,7 +1969,7 @@ archetypes:
         min_count: 1
 - id: azorius-prison
   name: Azorius Prison
-  priority: 65000
+  priority: 65001
   rules:
   - id: azorius-prison-primary
     priority: 65000
@@ -1929,6 +1978,20 @@ archetypes:
       all:
       - card: High Noon
         zone: main
+        min_count: 3
+      - card: Aang, Swift Savior
+        zone: main
+        min_count: 2
+      - card: Aven Interrupter
+        zone: main
+        min_count: 3
+  - id: azorius-prison-high-noon-sideboard
+    priority: 65001
+    subtype_id: null
+    conditions:
+      all:
+      - card: High Noon
+        zone: side
         min_count: 3
       - card: Aang, Swift Savior
         zone: main
@@ -2282,7 +2345,7 @@ archetypes:
         min_count: 3
 - id: izzet-burn
   name: Izzet Burn
-  priority: 63990
+  priority: 63991
   rules:
   - id: izzet-burn-primary
     priority: 63990
@@ -2293,6 +2356,23 @@ archetypes:
         zone: main
         min_count: 3
       - card: Plasma Bolt
+        zone: main
+        min_count: 3
+      - card: Boltwave
+        zone: main
+        min_count: 3
+      - card: Steam Vents
+        zone: main
+        min_count: 2
+  - id: izzet-burn-wizards
+    priority: 63991
+    subtype_id: null
+    conditions:
+      all:
+      - card: Viashino Pyromancer
+        zone: main
+        min_count: 3
+      - card: Ghitu Lavarunner
         zone: main
         min_count: 3
       - card: Boltwave
@@ -2636,7 +2716,7 @@ archetypes:
         min_count: 3
 - id: jeskai-equipment
   name: Jeskai Equipment
-  priority: 67960
+  priority: 67961
   rules:
   - id: jeskai-equipment-primary
     priority: 67960
@@ -2652,6 +2732,20 @@ archetypes:
       - card: Mjölnir, Hammer of Thor
         zone: main
         min_count: 3
+  - id: jeskai-equipment-cloud
+    priority: 67961
+    subtype_id: null
+    conditions:
+      all:
+      - card: The Mighty Thor, Jane Foster
+        zone: main
+        min_count: 3
+      - card: Cloud, Midgar Mercenary
+        zone: main
+        min_count: 3
+      - card: Mjölnir, Hammer of Thor
+        zone: main
+        min_count: 2
 - id: orzhov-momo
   name: Orzhov Momo
   priority: 38010
@@ -2858,3 +2952,147 @@ archetypes:
       - card: Godless Shrine
         zone: main
         min_count: 1
+- id: naya-delirium
+  name: Naya Delirium
+  priority: 77190
+  rules:
+  - id: naya-delirium-primary
+    priority: 77190
+    subtype_id: null
+    conditions:
+      all:
+      - card: Patchwork Beastie
+        zone: main
+        min_count: 3
+      - card: Wildfire Wickerfolk
+        zone: main
+        min_count: 3
+      - card: Temple Garden
+        zone: main
+        min_count: 1
+      - card: Stomping Ground
+        zone: main
+        min_count: 1
+      - card: Inti, Seneschal of the Sun
+        zone: main
+        min_count: 2
+- id: azorius-prepare-control
+  name: Azorius Prepare Control
+  priority: 77200
+  rules:
+  - id: azorius-prepare-control-primary
+    priority: 77200
+    subtype_id: null
+    conditions:
+      all:
+      - card: Emeritus of Truce
+        zone: main
+        min_count: 3
+      - card: Emeritus of Ideation
+        zone: main
+        min_count: 3
+      - card: Skycoach Waypoint
+        zone: main
+        min_count: 2
+      - card: Day of Judgment
+        zone: any
+        exact_count: 0
+- id: boros-ponza
+  name: Boros Ponza
+  priority: 77180
+  rules:
+  - id: boros-ponza-primary
+    priority: 77180
+    subtype_id: null
+    conditions:
+      all:
+      - card: Price of Freedom
+        zone: main
+        min_count: 3
+      - card: Avengers Disassembled
+        zone: main
+        min_count: 3
+      - card: Demolition Field
+        zone: main
+        min_count: 3
+      - card: Sacred Foundry
+        zone: main
+        min_count: 2
+- id: jeskai-opus
+  name: Jeskai Opus
+  priority: 77170
+  rules:
+  - id: jeskai-opus-primary
+    priority: 77170
+    subtype_id: null
+    conditions:
+      all:
+      - card: Molten-Core Maestro
+        zone: main
+        min_count: 2
+      - card: Sanar, Unfinished Genius
+        zone: main
+        min_count: 2
+      - card: Colorstorm Stallion
+        zone: main
+        min_count: 3
+      - card: Ashling's Command
+        zone: main
+        min_count: 2
+      - card: Jeskai Revelation
+        zone: main
+        min_count: 1
+      - card: Impractical Joke
+        zone: main
+        min_count: 1
+- id: azorius-flyers
+  name: Azorius Flyers
+  priority: 77160
+  rules:
+  - id: azorius-flyers-primary
+    priority: 77160
+    subtype_id: null
+    conditions:
+      all:
+      - card: Air Nomad Legacy
+        zone: main
+        min_count: 3
+      - card: Spectral Sailor
+        zone: main
+        min_count: 3
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 2
+- id: dimir-bilbo
+  name: Dimir Bilbo
+  priority: 77150
+  rules:
+  - id: dimir-bilbo-primary
+    priority: 77150
+    subtype_id: null
+    conditions:
+      all:
+      - card: Bilbo, Thief in the Night
+        zone: main
+        min_count: 2
+      - card: Ruthless Negotiation
+        zone: any
+        min_count: 2
+- id: dimir-aggro
+  name: Dimir Aggro
+  priority: 77145
+  rules:
+  - id: dimir-aggro-primary
+    priority: 77145
+    subtype_id: null
+    conditions:
+      all:
+      - card: Forsaken Miner
+        zone: main
+        min_count: 3
+      - card: Corpses of the Lost
+        zone: main
+        min_count: 3
+      - card: Watery Grave
+        zone: main
+        min_count: 2
