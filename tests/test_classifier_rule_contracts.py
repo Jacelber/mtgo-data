@@ -113,7 +113,7 @@ def _deck(*cards: tuple[str, int]) -> dict[str, list[dict[str, object]]]:
                 ("Emeritus of Ideation", 3),
                 ("Skycoach Waypoint", 2),
             ),
-            "azorius-prepare-control",
+            "azorius-control",
         ),
         (
             (
@@ -252,7 +252,29 @@ def test_standard_prepare_control_keeps_day_of_judgment_build_in_parent() -> Non
         ),
     )
 
-    assert (result.status, result.archetype_id) == ("classified", "azorius-control")
+    assert (result.status, result.archetype_id, result.subtype_id) == (
+        "classified",
+        "azorius-control",
+        "traditional",
+    )
+
+
+def test_standard_prepare_control_is_azorius_control_subtype() -> None:
+    result = classify_deck(
+        load_rule_set(ROOT / "my_archetypes/standard.yaml"),
+        _deck(
+            ("Emeritus of Truce", 4),
+            ("Emeritus of Ideation", 4),
+            ("Skycoach Waypoint", 2),
+        ),
+    )
+
+    assert (
+        result.status,
+        result.archetype_id,
+        result.subtype_id,
+        result.selected_rule_id,
+    ) == ("classified", "azorius-control", "prepare", "azorius-control-prepare")
 
 
 def test_melee_split_card_adapter_contract() -> None:

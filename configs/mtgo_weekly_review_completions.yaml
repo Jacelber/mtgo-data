@@ -353,11 +353,14 @@ data_admissions:
         - '12854503'
         - '12854521'
         source_manifest_digest: 9655288e2aef0877aa0fe032a79a9da8c4a89236d00bb7a55cc1d84bed8b926d
-        accepted_classifier_subject: b44647bf7389c010105f236a63879829dbeb0c13125e629a423856df0533e6e2
-        classification_review_digest: 59626b7c7d0b566183a2a1e77cabfc6924f207c141303cd3f8faf73453f7122c
+        accepted_classifier_subject: c34f8b605ba75ecf0fc9291592776ba79cd9245be74f715bcf0a1cb936226c91
+        classification_review_digest: c4cf094d4a5d56a87bea7c7c88ff544d1d8b111e28e5f03c67ece85cad6cc20d
         accepted_on: '2026-09-21'
-        evidence: Owner confirmed the submitted Standard 2026-W38 full classification
-          in the active Codex conversation on 2026-09-21.
+        evidence: Owner explicitly corrected Azorius Prepare Control to be a child
+          of Azorius Control and authorized the repair on 2026-09-21. Full retained-corpus
+          verification found only the 17 previously accepted W38 migrations plus 24
+          parent-preserving Azorius Control subtype migrations, with no new unknown,
+          conflict, or classification loss.
         observed_empty_weeks: []
         classification_acceptance:
           submission:
@@ -376,8 +379,8 @@ data_admissions:
               - '12854503'
               - '12854521'
               record_count: 247
-              classifier: b44647bf7389c010105f236a63879829dbeb0c13125e629a423856df0533e6e2
-              classification_review_digest: 59626b7c7d0b566183a2a1e77cabfc6924f207c141303cd3f8faf73453f7122c
+              classifier: c34f8b605ba75ecf0fc9291592776ba79cd9245be74f715bcf0a1cb936226c91
+              classification_review_digest: c4cf094d4a5d56a87bea7c7c88ff544d1d8b111e28e5f03c67ece85cad6cc20d
             dimensions:
               full_classification:
                 event_ids:
@@ -390,21 +393,24 @@ data_admissions:
                 - '12854503'
                 - '12854521'
                 record_count: 247
-                classifier: b44647bf7389c010105f236a63879829dbeb0c13125e629a423856df0533e6e2
-                classification_review_digest: 59626b7c7d0b566183a2a1e77cabfc6924f207c141303cd3f8faf73453f7122c
-            digest: 41b5a06fd44dc6ca22c20dac2dbfae824fa170b97f75cb2a96d6f23bb375a020
+                classifier: c34f8b605ba75ecf0fc9291592776ba79cd9245be74f715bcf0a1cb936226c91
+                classification_review_digest: c4cf094d4a5d56a87bea7c7c88ff544d1d8b111e28e5f03c67ece85cad6cc20d
+            digest: 6bc89e225bbc83e49fb63e470ac259b0270dc7e513d49554f0df253428997d5f
           decisions:
             format: standard
             week: 2026-W38
             kind: full_classification
             decisions:
               full_classification:
-                subject: 22b9cc9c07d8cb0ca273c987c9aa36306567d8f1f79e20fe74b6593d4341b138
-                evidence: Owner confirmed the submitted Standard 2026-W38 full classification
-                  in the active Codex conversation on 2026-09-21.
+                subject: f6ce57f1fd28abe7c36b970de73c539c398cacf37e20e994d2f017be62e7be87
+                evidence: Owner explicitly corrected Azorius Prepare Control to be a
+                  child of Azorius Control and authorized the repair on 2026-09-21.
+                  Full retained-corpus verification found only the 17 previously accepted
+                  W38 migrations plus 24 parent-preserving Azorius Control subtype migrations,
+                  with no new unknown, conflict, or classification loss.
                 accepted_on: '2026-09-21'
-                entrypoint: http://127.0.0.1:8766/standard/2026-W38/index.html
-                submitted_digest: 41b5a06fd44dc6ca22c20dac2dbfae824fa170b97f75cb2a96d6f23bb375a020
+                entrypoint: 'Codex current task: Owner messages 蓝白备法控不是蓝白控的子类别吗？ and 请修正'
+                submitted_digest: 6bc89e225bbc83e49fb63e470ac259b0270dc7e513d49554f0df253428997d5f
       - week: 2026-W37
         kind: owner_accepted_full_classification
         event_ids:

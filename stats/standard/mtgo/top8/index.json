@@ -3,8 +3,8 @@
   "document_type": "top8_index",
   "source": "mtgo",
   "format": "standard",
-  "classifier_digest": "b44647bf7389c010105f236a63879829dbeb0c13125e629a423856df0533e6e2",
-  "generated": "2026-09-21T16:25:20",
+  "classifier_digest": "c34f8b605ba75ecf0fc9291592776ba79cd9245be74f715bcf0a1cb936226c91",
+  "generated": "2026-09-21T19:04:43",
   "latest_complete_week": "2026-09-14",
   "history_policy": "source_immutable_classifier_restatement",
   "classification_impact": {
@@ -68,10 +68,27 @@
         "week": "2026-08-24",
         "previous_classifier_digest": "b44647bf7389c010105f236a63879829dbeb0c13125e629a423856df0533e6e2",
         "added_event_ids": [],
-        "classification_changes": [],
+        "classification_changes": [
+          {
+            "event_id": "12852766",
+            "rank": 4,
+            "before": "azorius-control",
+            "after": "azorius-control/traditional"
+          },
+          {
+            "event_id": "12853190",
+            "rank": 6,
+            "before": "azorius-control",
+            "after": "azorius-control/traditional"
+          }
+        ],
         "comparison_base_changes": {
-          "added_identity_ids": [],
-          "removed_identity_ids": [],
+          "added_identity_ids": [
+            "azorius-control/traditional"
+          ],
+          "removed_identity_ids": [
+            "azorius-control"
+          ],
           "changed_identity_ids": []
         }
       },
@@ -90,10 +107,27 @@
         "week": "2026-09-07",
         "previous_classifier_digest": "b44647bf7389c010105f236a63879829dbeb0c13125e629a423856df0533e6e2",
         "added_event_ids": [],
-        "classification_changes": [],
+        "classification_changes": [
+          {
+            "event_id": "12854067",
+            "rank": 8,
+            "before": "azorius-control",
+            "after": "azorius-control/traditional"
+          },
+          {
+            "event_id": "12854072",
+            "rank": 1,
+            "before": "azorius-control",
+            "after": "azorius-control/traditional"
+          }
+        ],
         "comparison_base_changes": {
-          "added_identity_ids": [],
-          "removed_identity_ids": [],
+          "added_identity_ids": [
+            "azorius-control/traditional"
+          ],
+          "removed_identity_ids": [
+            "azorius-control"
+          ],
           "changed_identity_ids": []
         }
       },
@@ -101,10 +135,41 @@
         "week": "2026-09-14",
         "previous_classifier_digest": "b44647bf7389c010105f236a63879829dbeb0c13125e629a423856df0533e6e2",
         "added_event_ids": [],
-        "classification_changes": [],
+        "classification_changes": [
+          {
+            "event_id": "12854114",
+            "rank": 2,
+            "before": "azorius-control",
+            "after": "azorius-control/traditional"
+          },
+          {
+            "event_id": "12854114",
+            "rank": 5,
+            "before": "azorius-prepare-control",
+            "after": "azorius-control/prepare"
+          },
+          {
+            "event_id": "12854483",
+            "rank": 8,
+            "before": "azorius-control",
+            "after": "azorius-control/traditional"
+          },
+          {
+            "event_id": "12854491",
+            "rank": 5,
+            "before": "azorius-control",
+            "after": "azorius-control/traditional"
+          }
+        ],
         "comparison_base_changes": {
-          "added_identity_ids": [],
-          "removed_identity_ids": [],
+          "added_identity_ids": [
+            "azorius-control/prepare",
+            "azorius-control/traditional"
+          ],
+          "removed_identity_ids": [
+            "azorius-control",
+            "azorius-prepare-control"
+          ],
           "changed_identity_ids": []
         }
       }
@@ -112,7 +177,7 @@
     "summary": {
       "retained_week_count": 9,
       "added_event_count": 0,
-      "classification_change_count": 0
+      "classification_change_count": 8
     }
   },
   "weeks": [
