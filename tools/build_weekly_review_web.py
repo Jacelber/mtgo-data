@@ -1,6 +1,7 @@
 """Build a private, read-only weekly review site from existing machine evidence."""
 from pathlib import Path
 import argparse
+from datetime import datetime, timedelta
 import json
 import sys
 import html
@@ -14,7 +15,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
 from mtgmeta.weekly_review import build_mtgo_weekly_review
 from mtgmeta.mtgo import load_mtgo_context
+from mtgmeta.mtgo import landing_screening, stats
 from mtgmeta.mtgo.landing_editorial import build_top8_subject, MTGOLandingEditorialError
+from mtgmeta.mtgo.normalize import load_rules_for_format
 from mtgmeta.mtgo.publication import require_private_output
 from mtgmeta.mtgo.stats import normalize_legacy_card_name
 from mtgmeta.mtgo import review_submission as submissions
@@ -22,6 +25,123 @@ from mtgmeta.mtgo import review_submission as submissions
 
 class FeatureReviewUnavailable(ValueError):
     """Requested Feature review was replaced with current classification material."""
+
+
+def _period(monday, weeks):
+    start = monday - timedelta(weeks=weeks - 1)
+    return {
+        'start': start.isoformat(),
+        'end': (monday + timedelta(days=6)).isoformat(),
+        'weeks': weeks,
+    }
+
+
+def _share_values(index, archetype_id, aggregate):
+    item = index.get(archetype_id)
+    if item is None:
+        return {
+            'high_score_count': 0,
+            'high_score_share': 0.0 if aggregate['total_high_score'] else None,
+            'top8_count': 0,
+            'top8_share': 0.0 if aggregate['total_top8'] else None,
+        }
+    return {key: item[key] for key in (
+        'high_score_count', 'high_score_share', 'top8_count', 'top8_share')}
+
+
+def select_feature_share_rows(current, previous, rolling, names, *, threshold=0.02):
+    """Select parent archetypes for the Feature context table using official shares."""
+    aggregates = {'current': current, 'previous': previous, 'rolling': rolling}
+    indexes = {
+        key: {str(item['id']): item for item in aggregate['archetypes']}
+        for key, aggregate in aggregates.items()
+    }
+    identity_ids = set().union(*(index.keys() for index in indexes.values()))
+    rows = []
+    for archetype_id in identity_ids:
+        values = {
+            key: _share_values(indexes[key], archetype_id, aggregates[key])
+            for key in aggregates
+        }
+        current_above = (
+            current['total_high_score'] > 0
+            and values['current']['high_score_count'] / current['total_high_score'] > threshold
+        )
+        rolling_above = (
+            rolling['total_high_score'] > 0
+            and values['rolling']['high_score_count'] / rolling['total_high_score'] > threshold
+        )
+        if not (current_above or rolling_above):
+            continue
+        fallback = next(
+            (indexes[key][archetype_id]['name'] for key in aggregates
+             if archetype_id in indexes[key]),
+            archetype_id,
+        )
+        display = names.get(archetype_id, {'en': fallback, 'zh': ''})
+        rows.append({
+            'archetype_id': archetype_id,
+            'display': {'en': display.get('en') or fallback,
+                        'zh': display.get('zh') or ''},
+            **values,
+        })
+    rows.sort(key=lambda row: (
+        -(row['current']['high_score_share'] or 0),
+        row['display']['zh'] or row['display']['en'],
+        row['archetype_id'],
+    ))
+    return rows
+
+
+def build_feature_share_table(review):
+    """Build reusable current/previous/four-week Feature context with stats formulas."""
+    format_id, week = review['format'], review['week']
+    try:
+        monday = datetime.strptime(f'{week}-1', '%G-W%V-%u').date()
+    except ValueError as exc:
+        raise ValueError(f'无效的 ISO 周次：{week}') from exc
+    rules = load_rules_for_format(ROOT, format_id)
+    if stats.classifier_digest(rules) != review['classifier']['subject_digest']:
+        raise ValueError('Feature 占比表与分类审阅使用的分类器版本不同。')
+    events = stats.load_all_events(ROOT, format_id, public=False)
+    weekly_records = [
+        landing_screening.week_records(events, rules, monday - timedelta(weeks=offset))
+        for offset in range(4)
+    ]
+    current_event_ids = sorted({record['event_id'] for record in weekly_records[0]})
+    if current_event_ids != sorted(review['event_ids']):
+        raise ValueError('Feature 占比表与分类审阅的本周赛事范围不同。')
+
+    def aggregate(records):
+        return stats.aggregate(records, include_archetype_ids=True, rules=rules)
+
+    current = aggregate(weekly_records[0])
+    previous = aggregate(weekly_records[1])
+    rolling = aggregate([
+        record for records in weekly_records for record in records
+    ])
+    names_path = ROOT / 'stats' / format_id / 'archetype_names.json'
+    names_document = json.loads(names_path.read_text(encoding='utf-8'))
+    names = {
+        str(item['parent_id']): item['display']
+        for item in names_document.get('names', [])
+        if item.get('subtype_id') is None
+    }
+    return {
+        'threshold': 0.02,
+        'periods': {
+            'current': {**_period(monday, 1),
+                        'total_high_score': current['total_high_score'],
+                        'total_top8': current['total_top8']},
+            'previous': {**_period(monday - timedelta(weeks=1), 1),
+                         'total_high_score': previous['total_high_score'],
+                         'total_top8': previous['total_top8']},
+            'rolling': {**_period(monday, 4),
+                        'total_high_score': rolling['total_high_score'],
+                        'total_top8': rolling['total_top8']},
+        },
+        'rows': select_feature_share_rows(current, previous, rolling, names),
+    }
 
 
 def accepted_classification(registry, review):
@@ -80,6 +200,7 @@ def build_scope(args):
     if include_feature:
         try:
             subject = feature_subject(review, accepted)
+            subject['share_table'] = build_feature_share_table(review)
         except (ValueError, AssertionError, OSError, MTGOLandingEditorialError) as exc:
             feature_error = str(exc)
     localization = json.loads(args.localization.read_text(encoding='utf-8'))
