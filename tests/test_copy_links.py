@@ -1,5 +1,5 @@
 import pytest
-from mtgmeta.mtgo.copy_links import link_card_names, prepare_copy
+from mtgmeta.mtgo.copy_links import link_card_names, prepare_copy, validate_card_tokens
 
 CATALOG = {'Dread Return': {'zh_name': '颤栗再现'}, 'Consider': {'zh_name': '思虑'}, 'Return': {'zh_name': '返回'}}
 
@@ -10,6 +10,14 @@ def test_exact_names_preserve_prose_and_existing_tokens():
     assert linked == '探子[[card:Dread Return|颤栗再现]]\n[[card:Dread Return|Dread Return]]; [[card:Consider|思虑]]'
     assert not questions
     assert link_card_names(linked, CATALOG)[0] == linked
+
+
+def test_manually_authored_card_tokens_must_match_canonical_localization():
+    validate_card_tokens('[[card:Dread Return|颤栗再现]] and [[card:Consider|Consider]]', CATALOG)
+    with pytest.raises(ValueError, match='name mismatch'):
+        validate_card_tokens('[[card:Consider|颤栗再现]]', CATALOG)
+    with pytest.raises(ValueError, match='absent from the canonical localization'):
+        validate_card_tokens('[[card:Missing Card|不存在]]', CATALOG)
 
 
 def test_ambiguous_and_embedded_english_not_guessed():

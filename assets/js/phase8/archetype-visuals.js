@@ -666,6 +666,10 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Inevitable Defeat", "image": "../images/representative-cards/standard/inevitable-defeat.jpg"}),
       Object.freeze({"name": "Tablet of Discovery", "image": "../images/representative-cards/standard/tablet-of-discovery.jpg"}),
     ]),
+    "azorius-control": Object.freeze([
+      Object.freeze({"name": "No More Lies", "image": "../images/representative-cards/standard/no-more-lies.jpg"}),
+      Object.freeze({"name": "Emeritus of Ideation", "image": "../images/representative-cards/standard/emeritus-of-ideation.jpg"}),
+    ]),
     "azorius-momo": Object.freeze([
       Object.freeze({"name": "Momo, Friendly Flier", "image": "../images/representative-cards/standard/momo-friendly-flier.jpg"}),
       Object.freeze({"name": "Quantum Riddler", "image": "../images/representative-cards/standard/quantum-riddler.jpg"}),
@@ -765,6 +769,10 @@ const representativeCards = Object.freeze({
     "temur-spellementals": Object.freeze([
       Object.freeze({"name": "Sunderflock", "image": "../images/representative-cards/standard/sunderflock.jpg"}),
       Object.freeze({"name": "Analyze the Pollen", "image": "../images/representative-cards/standard/analyze-the-pollen.jpg"}),
+    ]),
+    "azorius-control/prepare": Object.freeze([
+      Object.freeze({"name": "Emeritus of Ideation", "image": "../images/representative-cards/standard/emeritus-of-ideation.jpg"}),
+      Object.freeze({"name": "Skycoach Waypoint", "image": "../images/representative-cards/standard/skycoach-waypoint.jpg"}),
     ]),
   }),
   modern: Object.freeze({
