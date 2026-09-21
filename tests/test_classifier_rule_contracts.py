@@ -107,6 +107,105 @@ def _deck(*cards: tuple[str, int]) -> dict[str, list[dict[str, object]]]:
             ),
             "abzan-offense",
         ),
+        (
+            (
+                ("Emeritus of Truce", 3),
+                ("Emeritus of Ideation", 3),
+                ("Skycoach Waypoint", 2),
+            ),
+            "azorius-prepare-control",
+        ),
+        (
+            (
+                ("Viashino Pyromancer", 3),
+                ("Ghitu Lavarunner", 3),
+                ("Boltwave", 3),
+                ("Steam Vents", 2),
+            ),
+            "izzet-burn",
+        ),
+        (
+            (
+                ("Patchwork Beastie", 3),
+                ("Wildfire Wickerfolk", 3),
+                ("Temple Garden", 1),
+                ("Stomping Ground", 1),
+                ("Inti, Seneschal of the Sun", 2),
+            ),
+            "naya-delirium",
+        ),
+        (
+            (
+                ("Price of Freedom", 3),
+                ("Avengers Disassembled", 3),
+                ("Demolition Field", 3),
+                ("Sacred Foundry", 2),
+            ),
+            "boros-ponza",
+        ),
+        (
+            (
+                ("Molten-Core Maestro", 2),
+                ("Sanar, Unfinished Genius", 2),
+                ("Colorstorm Stallion", 3),
+                ("Ashling's Command", 2),
+                ("Jeskai Revelation", 1),
+                ("Impractical Joke", 1),
+            ),
+            "jeskai-opus",
+        ),
+        (
+            (
+                ("Air Nomad Legacy", 3),
+                ("Spectral Sailor", 3),
+                ("Hallowed Fountain", 2),
+            ),
+            "azorius-flyers",
+        ),
+        (
+            (
+                ("Bilbo, Thief in the Night", 2),
+                ("Ruthless Negotiation", 2),
+            ),
+            "dimir-bilbo",
+        ),
+        (
+            (
+                ("The Mighty Thor, Jane Foster", 3),
+                ("Cloud, Midgar Mercenary", 3),
+                ("Mjölnir, Hammer of Thor", 2),
+            ),
+            "jeskai-equipment",
+        ),
+        (
+            (
+                ("Forsaken Miner", 3),
+                ("Corpses of the Lost", 3),
+                ("Watery Grave", 2),
+            ),
+            "dimir-aggro",
+        ),
+        (
+            (
+                ("No More Lies", 3),
+                ("Seam Rip", 3),
+                ("Get Lost", 3),
+                ("Day of Judgment", 2),
+                ("Stock Up", 2),
+                ("Hallowed Fountain", 2),
+            ),
+            "azorius-control",
+        ),
+        (
+            (
+                ("Drake Hatcher", 3),
+                ("Slickshot Show-Off", 3),
+                ("Gandalf, Goblins' Bane", 2),
+                ("Flow State", 3),
+                ("Steam Vents", 2),
+            ),
+            "izzet-prowess",
+        ),
     ),
 )
 def test_standard_owner_rule_contracts(
@@ -118,6 +217,42 @@ def test_standard_owner_rule_contracts(
     )
 
     assert (result.status, result.archetype_id) == ("classified", expected_parent)
+
+
+def test_standard_azorius_prison_accepts_high_noon_from_sideboard() -> None:
+    deck = _deck(
+        ("Aang, Swift Savior", 2),
+        ("Aven Interrupter", 3),
+    )
+    deck["sideboard"] = [{"name": "High Noon", "qty": 4}]
+
+    result = classify_deck(
+        load_rule_set(ROOT / "my_archetypes/standard.yaml"),
+        deck,
+    )
+
+    assert (result.status, result.archetype_id, result.selected_rule_id) == (
+        "classified",
+        "azorius-prison",
+        "azorius-prison-high-noon-sideboard",
+    )
+
+
+def test_standard_prepare_control_keeps_day_of_judgment_build_in_parent() -> None:
+    result = classify_deck(
+        load_rule_set(ROOT / "my_archetypes/standard.yaml"),
+        _deck(
+            ("Emeritus of Truce", 4),
+            ("Emeritus of Ideation", 4),
+            ("Skycoach Waypoint", 3),
+            ("Day of Judgment", 2),
+            ("No More Lies", 2),
+            ("Hallowed Fountain", 2),
+            ("Ugin, Eye of the Storms", 1),
+        ),
+    )
+
+    assert (result.status, result.archetype_id) == ("classified", "azorius-control")
 
 
 def test_melee_split_card_adapter_contract() -> None:
