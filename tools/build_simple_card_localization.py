@@ -81,6 +81,14 @@ RESOLVER_CONTRACT_FUNCTIONS = frozenset(
         "resolve_lookup",
     }
 )
+CARD_NAME_CONTRACT_FUNCTIONS = frozenset(
+    {
+        "_load_card_aliases",
+        "normalize_card_name",
+        "front_face_card_name",
+        "card_name_lookup_candidates",
+    }
+)
 RESOLVER_CONTRACT_CONSTANTS = frozenset(
     {
         "BATCH_SIZE",
@@ -187,6 +195,29 @@ def _resolver_ast_sha256(builder_source: bytes) -> str:
     )
 
 
+def _card_name_resolver_ast_sha256(card_name_source: bytes) -> str:
+    try:
+        tree = ast.parse(card_name_source.decode("utf-8"))
+    except (UnicodeDecodeError, SyntaxError) as exc:
+        raise LocalizationBuildError("card-name resolver is not valid UTF-8 Python") from exc
+    selected = [
+        node
+        for node in tree.body
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        and node.name in CARD_NAME_CONTRACT_FUNCTIONS
+    ]
+    found = {node.name for node in selected}
+    if found != CARD_NAME_CONTRACT_FUNCTIONS:
+        missing = sorted(CARD_NAME_CONTRACT_FUNCTIONS - found)
+        raise LocalizationBuildError(
+            "card-name resolver lacks functions: " + ", ".join(missing)
+        )
+    contract = ast.Module(body=selected, type_ignores=[])
+    return _sha256_bytes(
+        ast.dump(contract, annotate_fields=True, include_attributes=False).encode("utf-8")
+    )
+
+
 def seed_compatibility(root: Path, source_commit: str | None = None) -> dict[str, str]:
     """Bind reusable mappings to only their direct resolver semantics."""
 
@@ -203,7 +234,7 @@ def seed_compatibility(root: Path, source_commit: str | None = None) -> dict[str
     contract = {
         "schema_version": SEED_SCHEMA_VERSION,
         "resolver_ast_sha256": _resolver_ast_sha256(builder),
-        "card_names_sha256": _sha256_bytes(card_names),
+        "card_name_resolver_ast_sha256": _card_name_resolver_ast_sha256(card_names),
         "card_name_aliases_sha256": _sha256_bytes(aliases),
     }
     canonical = json.dumps(contract, separators=(",", ":"), sort_keys=True)
