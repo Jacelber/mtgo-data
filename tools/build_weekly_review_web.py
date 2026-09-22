@@ -167,18 +167,40 @@ def accepted_classification(registry, review):
 def feature_subject(review, accepted):
     if not accepted:
         raise ValueError('Feature 尚不可审阅：先完成当前赛事与分类版本的完整分类验收。')
+    subject = build_top8_subject(ROOT, review['format'], review['week'])
+    if (set(review['event_ids']) != set(subject['source_event_ids'])
+            or review['classifier']['subject_digest'] != subject['classifier_digest']):
+        raise ValueError('Feature 当前赛事或分类与已验收材料不一致。')
     context = load_mtgo_context(ROOT, review['format'], 'landing_generation')
     candidate_path = context.paths['statistics'] / 'landing' / 'review' / f"candidates_{review['week']}.yaml"
-    if not candidate_path.is_file():
-        raise ValueError('Feature 尚不可审阅：先生成当前分类下的统计与机械候选。')
-    candidate = yaml.safe_load(candidate_path.read_text(encoding='utf-8'))
-    if not isinstance(candidate, dict) or not candidate.get('machine_fact_digest'):
-        raise ValueError('Feature 候选缺少统计版本依据，请重新生成。')
-    # This consumer recomputes current machine facts and rejects stale candidate digests.
-    subject = build_top8_subject(ROOT, review['format'], review['week'])
-    assert set(review['event_ids']) == set(subject['source_event_ids']), 'Classification and Top 8 event scopes differ'
-    assert review['classifier']['subject_digest'] == subject['classifier_digest'], 'Classifier subjects differ'
+    keys = ('source_event_ids', 'classifier_digest', 'selection_policy_digest',
+            'machine_fact_digest', 'link_catalog_digest')
+    def read_candidate():
+        if not candidate_path.is_file():
+            return {}
+        value = yaml.safe_load(candidate_path.read_text(encoding='utf-8'))
+        return value if isinstance(value, dict) else {}
+    candidate = read_candidate()
+    if any(candidate.get(key) != subject.get(key) for key in keys):
+        # Existing submitted Web snapshots remain immutable. The generator also
+        # preserves any candidate containing manual decisions.
+        result = landing_screening.prepare_candidates(ROOT, review['format'],
+                            week=review['week'], preserve_existing=True)
+        if not result or result.get('review_required'):
+            raise ValueError('旧候选包含人工决定，已保留；请按现有提交机制处理受影响材料。')
+        candidate = read_candidate()
+        if any(candidate.get(key) != subject.get(key) for key in keys):
+            raise ValueError('Feature 候选与当前事实不一致，不能提交。')
+    tokens = {item['token'] for item in subject['all_top8']}
+    evidence = []
+    for item in [*candidate.get('new_archetypes', []), *candidate.get('existing_changes', [])]:
+        token = f"deck:{item.get('deck_id')}"
+        if token in tokens:
+            evidence.append({'token': token, 'source_order': len(evidence) + 1,
+                             'reasons': item.get('candidate_reasons', [])})
+    subject['candidate_evidence'] = evidence
     return subject
+
 
 
 def build_scope(args):

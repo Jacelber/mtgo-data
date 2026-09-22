@@ -14,6 +14,18 @@ on:
         description: Continue automatic delivery after preparation; respects the recovery pause
         type: boolean
         default: false
+      archived_package:
+        description: Resume this already archived package without localization, build, encryption or upload
+        type: string
+        default: ''
+      archived_base:
+        description: Original preparation base of the archived package; never replace with current base to bypass a conflict
+        type: string
+        default: ''
+      archived_preparation:
+        description: Exact preparation record for archived_package; required when that package has multiple records
+        type: string
+        default: ''
 permissions:
   contents: read
   actions: read
@@ -25,9 +37,16 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     environment: product-archive
+    permissions:
+      contents: read
+      actions: read
+      deployments: read
+      pages: read
     outputs:
       operation: ${{ steps.base.outputs.operation }}
       source: ${{ steps.base.outputs.source }}
+      package: ${{ steps.base.outputs.package }}
+      preparation: ${{ steps.base.outputs.preparation }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
@@ -39,6 +58,10 @@ jobs:
           ARCHIVE_TOKEN: ${{ secrets.ARCHIVE_TOKEN }}
           GH_TOKEN: ${{ github.token }}
           REQUESTED_SOURCE: ${{ inputs.source || github.sha }}
+          ARCHIVED_PACKAGE: ${{ inputs.archived_package }}
+          ARCHIVED_BASE: ${{ inputs.archived_base }}
+          ARCHIVED_PREPARATION: ${{ inputs.archived_preparation }}
+          PREPARATION: ${{ inputs.operation }}
         run: |
           git fetch --no-tags origin master
           python - <<'PY'
@@ -48,9 +71,26 @@ jobs:
           from pathlib import Path
           from tools.pages_writer import context
           from tools.delivery.gitfacts import preparation_source
+          from tools.delivery.commands import preflight
+          result = preflight('Jacelber/mtgo-data', os.environ['PREPARATION'],
+                             archived_package=os.environ['ARCHIVED_PACKAGE'] or None,
+                             archived_base=os.environ['ARCHIVED_BASE'] or None,
+                             archived_preparation=os.environ['ARCHIVED_PREPARATION'] or None)
+          if result['state'] != 'ready':
+              raise RuntimeError('Preparation deferred; continue the existing operation: ' + json.dumps(result))
+          package = result.get('package')
+          if package:
+              base = result['candidate_base']
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+                  output.write('operation=' + (base or '') + '\n')
+                  output.write('package=' + package + '\n')
+                  output.write('preparation=' + result['preparation'] + '\n')
+              raise SystemExit(0)
           archive, _ = context('Jacelber/mtgo-data')
           archive.private()
           state, _ = archive.load_state()
+          if state['pending'] or state['recovery'] or (state['current']['operation'] if state['current'] else None) != result['base']:
+              raise RuntimeError('Delivery changed after preflight; query again before preparing')
           deployed = None
           if state['current']:
               package = state['current']['package']
@@ -70,6 +110,7 @@ jobs:
           PY
   localization-cache:
     needs: base
+    if: needs.base.outputs.package == ''
     name: Prepare simple card localization cache
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -274,6 +315,7 @@ jobs:
           retention-days: 1
 
   build:
+    if: needs.base.outputs.package == ''
     name: Prepare one fixed candidate without archive credentials
     needs: [base, localization-cache]
     runs-on: ubuntu-latest
@@ -388,12 +430,15 @@ jobs:
           if-no-files-found: error
           retention-days: 7
   archive:
+    if: needs.base.outputs.package == ''
     needs: [base, build]
     runs-on: ubuntu-latest
     environment: product-archive
     permissions:
       contents: read
       actions: write
+      deployments: read
+      pages: read
     steps:
       - name: Check out trusted upload tools, not candidate code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
@@ -408,6 +453,7 @@ jobs:
           ARCHIVE_TOKEN: ${{ secrets.ARCHIVE_TOKEN }}
           ARCHIVE_HANDOFF_KEY: ${{ secrets.ARCHIVE_HANDOFF_KEY }}
           BASE: ${{ needs.base.outputs.operation }}
+          PREPARATION: ${{ inputs.operation }}
         run: |
           python tools/archive_product.py --token-env ARCHIVE_TOKEN upload incoming/candidate.cms --encrypted > "$RUNNER_TEMP/archive-result.json"
           python - <<'PY'
@@ -418,6 +464,8 @@ jobs:
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
               output.write('Candidate privately archived. Select this exact package for delivery.\n')
               output.write('Package: `' + result['id'] + '`; preparation base: `' + os.environ['BASE'] + '`.\n')
+          from tools.delivery.commands import remember_candidate
+          remember_candidate('Jacelber/mtgo-data', os.environ['PREPARATION'], result['id'], os.environ['BASE'] or None)
           PY
       - name: Continue automatic publication when enabled
         if: inputs.publish_automatically
@@ -434,10 +482,47 @@ jobs:
           from tools.delivery.commands import dispatch
           candidate = json.loads((Path(os.environ['RUNNER_TEMP']) / 'archive-result.json').read_text())
           result = dispatch('Jacelber/mtgo-data', os.environ['OPERATION'], candidate['id'],
-                            os.environ['BASE'] or None, 'publish', automatic=True)
+                            os.environ['BASE'] or None, 'publish', automatic=True, preparation=os.environ['OPERATION'])
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
               output.write('\nAutomatic publication: `' + result['state'] + '`.\n')
               if result['state'] == 'publication_paused':
                   output.write('Candidate retained; the Owner-directed recovery pause remains in force.\n')
+          print(json.dumps(result))
+          PY
+  reuse:
+    needs: base
+    if: needs.base.outputs.package != ''
+    runs-on: ubuntu-latest
+    environment: product-archive
+    permissions:
+      contents: read
+      actions: write
+      deployments: read
+      pages: read
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          persist-credentials: false
+      - name: Continue the selected archived candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARCHIVE_TOKEN: ${{ secrets.ARCHIVE_TOKEN }}
+          PACKAGE: ${{ needs.base.outputs.package }}
+          BASE: ${{ needs.base.outputs.operation }}
+          OPERATION: ${{ inputs.operation }}
+          PREPARATION: ${{ needs.base.outputs.preparation }}
+          PUBLISH: ${{ inputs.publish_automatically }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from tools.delivery.commands import dispatch
+          if os.environ['PUBLISH'] == 'true':
+              result = dispatch('Jacelber/mtgo-data', os.environ['OPERATION'], os.environ['PACKAGE'],
+                                os.environ['BASE'] or None, 'publish', automatic=True, preparation=os.environ['PREPARATION'])
+          else:
+              result = {'state': 'candidate_retained', 'package': os.environ['PACKAGE'], 'base': os.environ['BASE']}
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
+              output.write('Archived candidate continuation: `' + json.dumps(result) + '`. No product preparation.\n')
           print(json.dumps(result))
           PY

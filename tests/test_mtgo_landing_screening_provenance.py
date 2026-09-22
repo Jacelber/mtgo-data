@@ -28,6 +28,22 @@ MACHINE_FACT_DIGEST = "c" * 64
 LINK_CATALOG_DIGEST = screening.document_digest([])
 
 
+def test_current_subject_is_independent_of_stale_or_broken_machine_candidate(monkeypatch, tmp_path):
+    monkeypatch.setattr(editorial, 'load_rules_for_format', lambda *args: object())
+    monkeypatch.setattr(editorial, 'classifier_digest', lambda *args: 'current-classifier')
+    monkeypatch.setattr(editorial.stats, 'load_all_events', lambda *args, **kwargs: [])
+    monkeypatch.setattr(screening, 'load_screening_policy', lambda *args: POLICY)
+    monkeypatch.setattr(landing, 'machine_fact_digest_for_week', lambda *args: MACHINE_FACT_DIGEST)
+    original = editorial.build_top8_subject(tmp_path, 'standard', '2026-W38')
+    candidate = tmp_path / 'stats/standard/mtgo/landing/review/candidates_2026-W38.yaml'
+    candidate.parent.mkdir(parents=True)
+    for text in ('machine_fact_digest: old\n', 'invalid: ['):
+        candidate.write_text(text, encoding='utf-8')
+        assert editorial.build_top8_subject(tmp_path, 'standard', '2026-W38') == original
+        assert candidate.read_text(encoding='utf-8') == text
+    assert original['machine_fact_digest'] == MACHINE_FACT_DIGEST
+
+
 def _candidate_document(*, approved: bool = False) -> dict:
     return {
         "week": "2026-W33",

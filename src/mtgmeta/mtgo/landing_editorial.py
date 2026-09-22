@@ -766,7 +766,6 @@ def build_top8_subject(
     """Build the exact classified Top 8 and provenance subject for one week."""
 
     root = Path(repository_root).resolve()
-    context = load_mtgo_context(root, format_id, "landing_generation")
     rules = load_rules_for_format(root, format_id)
     events = stats.load_all_events(root, format_id, public=False)
     monday = _week_monday(week)
@@ -787,54 +786,9 @@ def build_top8_subject(
     known_archetype_ids = sorted(
         {str(record["archetype_id"]) for record in week_records}
     )
-    candidate_path = (
-        context.paths["statistics"]
-        / "landing"
-        / "review"
-        / f"candidates_{week}.yaml"
-    )
-    candidate: Mapping[str, Any] | None = None
-    if candidate_path.is_file():
-        loaded = yaml.safe_load(candidate_path.read_text(encoding="utf-8"))
-        if isinstance(loaded, Mapping):
-            candidate = loaded
-    candidate_evidence: list[dict[str, Any]] = []
-    if candidate is not None:
-        source_order = 0
-        for collection in ("new_archetypes", "existing_changes"):
-            for item in candidate.get(collection, []):
-                if not isinstance(item, Mapping):
-                    continue
-                source_order += 1
-                token = f"deck:{item.get('deck_id')}"
-                if token not in set(item["token"] for item in catalog):
-                    continue
-                candidate_evidence.append(
-                    {
-                        "token": token,
-                        "source_order": source_order,
-                        "reasons": [
-                            dict(reason)
-                            for reason in item.get("candidate_reasons", [])
-                            if isinstance(reason, Mapping)
-                        ],
-                    }
-                )
     from . import landing
 
     machine_fact_digest = landing.machine_fact_digest_for_week(root, format_id, week)
-    candidate_machine_fact_digest = (
-        str(candidate.get("machine_fact_digest"))
-        if candidate is not None and isinstance(candidate.get("machine_fact_digest"), str)
-        else None
-    )
-    if (
-        candidate_machine_fact_digest is not None
-        and candidate_machine_fact_digest != machine_fact_digest
-    ):
-        raise MTGOLandingEditorialError(
-            f"{candidate_path}: machine_fact_digest is stale"
-        )
     return {
         "format": format_id,
         "week": {
@@ -847,7 +801,7 @@ def build_top8_subject(
         "selection_policy_digest": document_digest(screening.load_screening_policy(root)),
         "machine_fact_digest": machine_fact_digest,
         "link_catalog_digest": document_digest(catalog),
-        "candidate_evidence": candidate_evidence,
+        "candidate_evidence": [],
         "all_top8": catalog,
         "known_archetype_ids": known_archetype_ids,
     }

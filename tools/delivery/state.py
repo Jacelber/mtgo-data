@@ -18,6 +18,26 @@ def current_id(state: dict) -> str | None:
     return state["current"]["operation"] if state["current"] else None
 
 
+def archived_preparation(state: dict, package: str, base: str | None,
+                         preparation: str | None = None) -> dict:
+    """Resolve an immutable preparation fact; caller base is only an assertion."""
+    info = state['packages'].get(package, {})
+    records = info.get('preparations', {})
+    if not info.get('complete') or not records:
+        raise Conflict(f'Candidate {package} retained: no trusted preparation/base record; '
+                       'investigate its source and combination. Do not rebuild or rebase.')
+    if preparation is None:
+        if len(records) != 1:
+            raise Conflict(f'Candidate {package} retained: specify its exact preparation record')
+        preparation = next(iter(records))
+    if preparation not in records:
+        raise Conflict(f'Candidate {package} retained: preparation {preparation!r} does not belong to this package')
+    recorded_base = records[preparation]
+    if base != recorded_base:
+        raise Conflict(f'Candidate {package} retained: supplied base does not match recorded preparation {preparation!r}')
+    return {'package': package, 'preparation': preparation, 'candidate_base': recorded_base}
+
+
 def request_recovery(state: dict, *, intent: str, failed_operation: str, package: str, reason: str) -> dict:
     """Execute an Owner-directed restore; the caller establishes that instruction."""
     state = deepcopy(state)

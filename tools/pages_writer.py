@@ -67,6 +67,54 @@ def resume_completed(archive, pages, state: dict, sha: str, *, target: str,
     return {"state": "confirmed", "operation": operation, "package": current["package"]}
 
 
+def reconcile_pending(archive, pages, state: dict, sha: str, *, target: str) -> dict:
+    """Observe an ended attempt; never construct a product or send a request."""
+    pending = state["pending"]
+    operation = pending["operation"]
+    remote = pending.get("remote")
+    if not remote:
+        if (pending["phase"] == "claimed" and pending.get("run") and pending.get("attempt")
+                and pages.attempt_never_sent(pending["run"], pending["attempt"])):
+            archive.save_state(transitions.no_write(state, operation, terminal_without_write=True), sha)
+            return {"state": "not_sent", "operation": operation}
+        return {"state": "unknown", "operation": operation, "next": "Identify the original request; do not resend"}
+    remote_status = pages.query(remote["pages_id"])
+    platform_status = remote_status.get("status")
+    if platform_status not in {"succeed", "deployment_failed", "cancelled", "canceled"}:
+        return {"state": "unconfirmed", "operation": operation, "remote_status": remote_status}
+    record = pages.operation_record(pending["run"], pending["attempt"])
+    if not record:
+        return {"state": "unknown", "operation": operation, "remote_status": remote_status}
+    if remote.get("deployment_id") not in (None, record):
+        raise transitions.Conflict("Completed record differs from the identified operation")
+    pages.current(expected=record)
+    with tempfile.TemporaryDirectory(prefix="resume-product-") as temporary:
+        manifest = archive.retrieve(pending["package"], Path(temporary) / "candidate", target=target)
+        if manifest["id"] != pending["package"]:
+            raise transitions.Conflict("Confirmation refers to another package")
+        observation = observe_content(pages.site_url(), manifest, operation)
+    latest, latest_sha = archive.load_state()
+    if latest_sha != sha or latest != state:
+        raise transitions.Conflict("Operation state changed during reconciliation; query again")
+    pages.current(expected=record)
+    bound = {**remote, "deployment_id": record}
+    state = deepcopy(state)
+    state["pending"]["remote"] = bound
+    updated = transitions.deployed(state, operation, bound)
+    updated["current"]["platform_status"] = platform_status
+    if platform_status == "succeed" and observation["state"] == "matching":
+        updated = transitions.confirmed(updated, operation, health="passed", observed_operation=operation)
+        result = {"state": "confirmed", "operation": operation, "package": manifest["id"]}
+    else:
+        if platform_status != "succeed":
+            observation = {"state": "unconfirmed", "platform_status": platform_status, "served": observation}
+        updated = transitions.end_completed_write(updated, operation, observation=observation, terminal=True)
+        result = {"state": "unconfirmed", "operation": operation, "platform_status": platform_status,
+                  "service": observation, "write_completed": True}
+    archive.save_state(updated, sha)
+    return result
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--target", default="Jacelber/mtgo-data")
@@ -75,12 +123,14 @@ def main() -> int:
     request = sub.add_parser("request", help="Register recovery intent before entering the writer queue")
     request.add_argument("--package", required=True)
     request.add_argument("--base", default="")
+    request.add_argument("--preparation", default="")
     request.add_argument("--recovery", action="store_true")
     request.add_argument("--reason", default="")
     request.add_argument("--automatic", action="store_true")
     claim = sub.add_parser("claim", help="Claim the target, retrieve the archived package, and extract it")
     claim.add_argument("--package", required=True)
     claim.add_argument("--base", default="")
+    claim.add_argument("--preparation", default="")
     claim.add_argument("--recovery", action="store_true")
     claim.add_argument("--automatic", action="store_true")
     claim.add_argument("--output", type=Path, required=True)
@@ -125,12 +175,15 @@ def main() -> int:
                                                      package=args.package, reason=args.reason)
                 archive.save_state(state, sha)
             else:
+                transitions.archived_preparation(state, args.package, args.base or None, args.preparation or None)
                 transitions.require_publication_enabled(state, automatic=args.automatic)
             result = {"state": "requested", "operation": args.operation}
             if output := os.environ.get("GITHUB_OUTPUT"):
                 with Path(output).open("a") as handle:
                     handle.write("allowed=true\n")
         elif args.command == "claim":
+            if not state['pending'] and not args.recovery:
+                transitions.archived_preparation(state, args.package, args.base or None, args.preparation or None)
             if state["packages"].get(args.package, {}).get("target") != args.target:
                 raise transitions.Conflict("Candidate belongs to a different deployment target")
             current = state["current"]

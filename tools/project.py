@@ -43,17 +43,18 @@ def main(argv: list[str] | None = None) -> int:
                         choices=("Jacelber/mtgo-data", "Jacelber/mtgo-data-governance-verification"))
     enable.add_argument("--recovery", required=True, help="The specific recovery pause being released")
     enable.add_argument("--reason", required=True, help="Owner instruction or fulfilled prior authorization context")
-    for name in ("deliver", "restore", "resume", "status"):
+    for name in ("deliver", "restore", "resume", "status", "preflight"):
         operation = sub.add_parser(name, help=f"{name} an archived candidate or existing operation through the current writer")
         operation.add_argument("--target", default="Jacelber/mtgo-data",
                                choices=("Jacelber/mtgo-data", "Jacelber/mtgo-data-governance-verification"))
-        operation.add_argument("--operation", required=name != "status", help="Stable ID retained across retries")
+        operation.add_argument("--operation", required=name not in {"status", "preflight"}, help="Stable ID retained across retries")
         if name in {"deliver", "restore"}:
             operation.add_argument("--package", required=True)
             operation.add_argument("--base", required=True, help="Actual preparation-base operation; empty only for first publication")
         if name == "restore":
             operation.add_argument("--reason", required=True)
         if name == "deliver":
+            operation.add_argument("--preparation", help="Exact archived preparation; required when a package has multiple records")
             operation.add_argument("--automatic", action="store_true", help="Required for unattended automatic callers")
     args = parser.parse_args(argv)
     try:
@@ -72,9 +73,11 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "seal":
             packages.seal_candidate(args.candidate, args.output, args.certificate, target=args.target, openssl=args.openssl)
             result = {"state": "encrypted", "path": str(args.output)}
-        elif args.command in {"deliver", "restore", "resume", "status", "enable-automatic"}:
+        elif args.command in {"deliver", "restore", "resume", "status", "preflight", "enable-automatic"}:
             from tools.delivery import commands
-            if args.command == "status":
+            if args.command == "preflight":
+                result = commands.preflight(args.target, args.operation)
+            elif args.command == "status":
                 result = commands.status(args.target, args.operation)
             elif args.command == "enable-automatic":
                 result = commands.enable_automatic(args.target, args.recovery, args.reason)
@@ -82,7 +85,8 @@ def main(argv: list[str] | None = None) -> int:
                 result = commands.dispatch(args.target, args.operation, getattr(args, "package", ""),
                     getattr(args, "base", None) or None,
                     {"deliver": "publish", "restore": "recovery", "resume": "resume"}[args.command],
-                    getattr(args, "reason", ""), automatic=getattr(args, "automatic", False))
+                    getattr(args, "reason", ""), automatic=getattr(args, "automatic", False),
+                    preparation=getattr(args, "preparation", None))
         else:
             manifest = json.loads((args.candidate / "manifest.json").read_text(encoding="utf-8"))
             package = args.candidate / "product.tar.gz"
@@ -92,7 +96,8 @@ def main(argv: list[str] | None = None) -> int:
             else:
                 result = packages.verify(package, manifest, target=args.target)
         print(json.dumps(result, ensure_ascii=False, indent=2))
-        return {"execution_failed": 2, "failed": 1, "unknown": 3, "unconfirmed": 3}.get(result.get("state"), 0)
+        return {"execution_failed": 2, "failed": 1, "unknown": 3, "unconfirmed": 3,
+                "waiting": 3, "recovery_required": 3}.get(result.get("state"), 0)
     except (OSError, ValueError, RuntimeError) as error:
         print(json.dumps({"state": "execution_failed", "error": str(error)}, ensure_ascii=False))
         return 2
