@@ -100,3 +100,35 @@ Feature 准备、内容读取/导入、Landing 接纳、分类续作和完成导
 关闭补充事项，不依据 historical_changes，也不只看当前选中的最早待审周。仅有历史
 技术差异时仍保留差异报告；旧 handoff 缺少该队列时不推断补充事项已经完成。
 最终页面资源绑定范围和既有归档/发布校验未因这项改动放宽。
+
+
+## 已完成周的追加式补充完成
+
+已完成周新增赛事，沿用既有分类接纳、数据验证和按实际影响范围的内容/页面验收。
+完成时只追加新的事实，不修改原 `completed_on`、`evidence`、`accepted_event_ids`、
+分类、Landing 或预览/发布绑定，也不新增同周同赛制的第二条普通 completion。
+
+```text
+python tools/review_submission.py --root <validated-repository> supplement-completion --format <format> --week <week> --candidate <confirmed-package-directory> --publication-state <confirmed-state.json> --completed-on <actual-date> --evidence <actual-closeout-evidence> --output <new-private-fact.json>
+```
+
+入口从现有 registry 查找唯一原完成，读取真实本周 review 和已有完整分类接纳。
+`covered_event_ids` 由当前已接纳范围减去有效历史覆盖推导，不接收调用者手填覆盖集合。
+它验证当前数据输出，再解包读取同一个已确认的不可变产品包，核对该赛制的产物集合、
+文件字节、发布绑定和实际预览；不执行归档程序，不重新采集、生成或发布。
+
+当前归档中的页面与上一有效完成预览相同时，只保存比较快照与原决定引用，
+不制造新的 Landing 或页面 Owner 验收。页面变化时增加 `--preview-acceptance <file>`，
+使用该实际页面的已验收快照；入口同时核对当前页面周对应的正式内容及其维度验收。
+未变化维度可以沿用既有决定，不需要重新签发日期。缺少依据或发布未确认时不输出事实。
+
+输出是一个独立补充对象。按当前交付的授权，将完整输出追加到原 registry 的
+`records[week].formats[format].supplements` 列表末尾。入口自身只导出新的私有文件，
+不直接写 registry；旧事实及此前 supplements 保留。对象内的 `base_completion`
+绑定原周/赛制对象，`previous` 绑定上一有效补充，自己的日期、证据和增量范围单独保存。
+共享校验拒绝错周/错赛制、重叠覆盖、错序、缺失验收、未确认发布及变化页面冒充沿用。
+
+Readiness 与 resume 汇总原完成加有效补充的覆盖，当前比较使用最新有效补充的材料；
+无效补充单独报告，不抹去原完成，也不为未证明完成的赛事关闭补充通知。新一轮晚到
+赛事继续产生新的补充事项。旧周缺少本入口要求的原完成依据时报告需查明，不迁移、
+重建或回填 W38 之前的材料。记录的摘要用于定位与一致性核对，不是新的授权制度。

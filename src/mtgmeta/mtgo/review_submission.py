@@ -527,6 +527,7 @@ def resume_summary(root: Path, format_id: str, week: str, *, envelope: dict | No
               "data_publication": "unknown", "content": "not_recorded", "preview": "not_recorded",
               "features": "not_recorded", "copy": "not_recorded", "visuals": "not_recorded",
               "completion": "not_recorded", "pending_decisions": [], "next_actions": []}
+    current_event_ids = None
     if accepted:
         from mtgmeta.weekly_review import build_mtgo_weekly_review
         current = build_mtgo_weekly_review(root, format_id, week)
@@ -586,15 +587,34 @@ def resume_summary(root: Path, format_id: str, week: str, *, envelope: dict | No
     if completed:
         try:
             validate_completion(root, format_id, week, completed[-1]["formats"][format_id], check_current=False)
+            effective = completed[-1]["formats"][format_id]
+            if applies(week):
+                from . import supplement_completion
+                coverage = supplement_completion.coverage(root, completed[-1], format_id)
+                effective = coverage["effective"]
+                status["supplement_completion"] = {key: coverage[key] for key in
+                    ("covered_event_ids", "valid_supplements", "problems")}
+                try:
+                    if current_event_ids is None:
+                        from mtgmeta.weekly_review import build_mtgo_weekly_review
+                        current_event_ids = set(build_mtgo_weekly_review(root, format_id, week)["event_ids"])
+                    status["supplement_completion"]["pending_event_ids"] = sorted(
+                        current_event_ids - set(coverage["covered_event_ids"]))
+                except (OSError, ValueError, KeyError, TypeError) as exc:
+                    status["supplement_completion"]["pending_event_ids"] = None
+                    status["supplement_completion"]["problems"].append(f"Current event scope unavailable: {exc}")
             try:
-                validate_completion(root, format_id, week, completed[-1]["formats"][format_id])
+                if status.get("supplement_completion", {}).get("valid_supplements"):
+                    supplement_completion.validate_current_preview(root, format_id, effective)
+                else:
+                    validate_completion(root, format_id, week, effective)
                 status["current_product"] = "matches_recorded_preview"
             except (OSError, ValueError, KeyError, TypeError) as exc:
                 status["current_product"] = "needs_investigation"
                 status["current_product_problem"] = str(exc)
             status["completion"] = "legacy_recorded" if not applies(week) else "confirmed_recorded"
             if applies(week):
-                status["publication_evidence"] = completed[-1]["formats"][format_id]["preview_acceptance"]["publication"]
+                status["publication_evidence"] = effective["preview_acceptance"]["publication"]
                 status["data_publication"] = "confirmed_recorded"
         except (OSError, ValueError, KeyError, TypeError) as exc:
             status["completion"] = "needs_repair"
@@ -609,6 +629,9 @@ def resume_summary(root: Path, format_id: str, week: str, *, envelope: dict | No
             status["next_actions"].append("历史完成不撤销；当前差异单独核查，有真实增量时仅处理该增量")
         if status["completion"] == "legacy_recorded":
             status["preview"] = status["visuals"] = "not_separately_recorded_legacy"
+    supplement = status.get("supplement_completion", {})
+    if supplement.get("pending_event_ids") or supplement.get("problems"):
+        status["next_actions"].append("保留原完成事实；补充事项仍未完成或证据需查明，不关闭补充通知")
     status["next_actions"].append("如需核对当前线上状态，查询原发布操作；本地记录不等于实时线上查询")
     return status
 

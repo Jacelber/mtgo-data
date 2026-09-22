@@ -742,3 +742,260 @@ def test_legacy_raw_review_completion_keeps_its_existing_evidence_contract(tmp_p
         evidence="synthetic", landing_content_digests={"standard": "c" * 64}, independent_format=True)
     assert "classification_submission" not in completed["formats"]["standard"]
     assert completed["formats"]["standard"]["classification_review_digest"] == raw["classification_review_digest"]
+
+
+@pytest.fixture
+def supplement_case(tmp_path, monkeypatch):
+    """Real review producer, preview reader, package extraction and completion validator."""
+    from copy import deepcopy
+    from datetime import date
+    from types import SimpleNamespace
+    from mtgmeta.mtgo import publication, review_submission as review
+    from tools.delivery import packages
+
+    root = _synthetic_root(tmp_path / "repo", [_player(1, "Alpha Card")])
+    source = root / "data/standard/event.json"
+    original_event = json.loads(source.read_text(encoding="utf-8"))
+    original_event["starttime"] = "2026-09-15T00:00:00Z"
+    _write_json(source, original_event)
+    week = {"id": "2026-W38", "start": "2026-09-14", "end": "2026-09-20"}
+    landing = root / "stats/standard/mtgo/landing"
+    files = {key: f"weeks/2026-W38/{key}.json" for key in ("range", "completeness", "environment_decks", "feature_decks")}
+    page = {"week": week, "format": "standard", "classifier": {"digest": "fixture"},
+            "data_files": files, "features": {"items": []}, "environment": {"rows": []}}
+    _write_json(landing / "current.json", page)
+    _write_json(landing / "features/2026-W38.json", {"week": week, "format": "standard",
+                "features": {"items": []}, "content_digest": "c" * 64})
+    _write_json(landing / "features/index.json", {"format": "standard", "weeks": [
+        {"week": week["id"], "file": "2026-W38.json", "feature_count": 0}]})
+    for key, relative in files.items():
+        _write_json(landing / relative, {"format": "standard", "classifier_digest": "fixture",
+            "period": {"start": "2026-08-24" if key == "feature_decks" else week["start"], "end": week["end"]}})
+    for relative, text in {"index.html": "synthetic", "melee/index.html": "synthetic", "stats/catalog.json": "{}",
+        "stats/standard/archetype_names.json": '{"names":[]}', "assets/js/phase8/app.js": "/* synthetic */",
+        "assets/js/phase8/archetype-visuals.js": 'const manaIdentities = Object.freeze({\n  standard: Object.freeze({\n  }),\n});'}.items():
+        path = root / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+    def accept(packet):
+        return review.record_decision(packet, None, list(packet["dimensions"]), evidence="synthetic Owner acceptance",
+            accepted_on="2026-09-21", entrypoint="https://example.invalid/synthetic")
+    raw = build_mtgo_weekly_review(root, "standard", week["id"])
+    completion = build_v2_completion_record([raw], week_id=week["id"], completed_on="2026-09-21",
+        evidence="original synthetic completion", landing_content_digests={"standard": "c" * 64}, independent_format=True)
+    preview = review.preview_packet(root, "standard")
+    completion["formats"]["standard"]["preview_acceptance"] = {"submission": preview, "decisions": accept(preview),
+        "publication": {"health": "passed", "operation": "original-op", "package": "original-package", "preview_digest": preview["digest"]}}
+    original = deepcopy(completion)
+    registry = {"schema_version": "1.2.0", "records": [completion],
+        "weekly_maintenance": {"standard": {"start_week": "2026-W38"}},
+        "data_admissions": {"formats": {"standard": {"weekly_acceptances": []}}}}
+    ids = {"10"}
+    monkeypatch.setattr(publication, "resolve_scope", lambda *a: SimpleNamespace(week=date(2026,9,14),
+        event_ids=ids, pending_event_ids=set(), subject_digest=review.digest(sorted(ids))))
+    # Admission selection and generated-output audit have their own tests. Here
+    # only these external prerequisites are substituted; bytes are checked for real.
+    monkeypatch.setattr(publication, "inspect_publication", lambda *a: [])
+    def advance(event_id):
+        event = deepcopy(original_event)
+        event["event_id"] = event_id
+        _write_json(root / f"data/standard/{event_id}.json", event)
+        ids.add(event_id)
+        current = build_mtgo_weekly_review(root, "standard", week["id"])
+        enriched = deepcopy(current)
+        for row in enriched["records"]:
+            row.update(main_deck=event["players"][0]["main_deck"], sideboard=event["players"][0]["sideboard"],
+                       reference=f"event-{row['event_id']}")
+        packet = review.full_classification_packet(enriched)
+        admission = {"week": week["id"], "kind": "owner_accepted_full_classification", "event_ids": current["event_ids"],
+            "accepted_classifier_subject": current["classifier"]["subject_digest"],
+            "classification_review_digest": current["classification_review_digest"], "evidence": "synthetic", "accepted_on": "2026-09-28",
+            "classification_acceptance": {"submission": packet, "decisions": accept(packet)}}
+        registry["data_admissions"]["formats"]["standard"]["weekly_acceptances"] = [admission]
+        _write_yaml(root / "configs/mtgo_weekly_review_completions.yaml", registry)
+        _write_json(root / "stats/standard/mtgo/events.json", {"event_ids": sorted(ids)})
+        _write_json(root / "stats/standard/mtgo/meta.json", {"publication": publication.publication_binding(root, "standard")})
+        candidate = tmp_path / f"package-{event_id}"
+        manifest = packages.prepare(root, candidate, target="Jacelber/mtgo-data", source="synthetic")
+        state = {"pending": None, "current": {"health": "passed", "operation": f"op-{event_id}", "package": manifest["id"]}}
+        return candidate, state
+    return SimpleNamespace(root=root, registry=registry, completion=completion, original=original,
+        advance=advance, accept=accept, tmp=tmp_path)
+
+
+def test_supplement_cli_appends_two_facts_and_closes_readiness_without_rewriting_history(supplement_case, monkeypatch):
+    from copy import deepcopy
+    import sys
+    from types import SimpleNamespace
+    from mtgmeta.mtgo import supplement_completion as supplement, review_submission as review, classification
+    from tools import review_submission as cli, generate_weekly_maintenance_readiness as ready
+    case = supplement_case
+    monkeypatch.setattr(ready, "_intentional_unknowns", lambda *a, **k: {"standard": {}})
+    monkeypatch.setattr(classification, "audit_mtgo_classification", lambda *a: SimpleNamespace(reports={
+        "unknown_decks": {"records": []}, "index": {"summary": {"strict_validation": "pass"}}}))
+    def readiness():
+        result = ready._independent_readiness(case.root, case.registry, publication_sha="a"*40, production_run_id="1",
+            production_run_attempt="1", source_sha="b"*40, generated_at="2026-10-05T00:00:00Z")
+        import jsonschema
+        jsonschema.validate(result, json.loads((Path(__file__).resolve().parents[1] /
+            "schemas/weekly-maintenance-readiness.schema.json").read_text(encoding="utf-8")))
+        return result["formats"][0]
+    prior_id = None
+    for event_id, completed_on in [("11", "2026-09-29"), ("12", "2026-10-01")]:
+        candidate, state = case.advance(event_id)
+        assert readiness()["outstanding_supplement_weeks"] == ["2026-W38"]
+        assert review.resume_summary(case.root, "standard", "2026-W38")["supplement_completion"]["pending_event_ids"] == [event_id]
+        registry_path = case.root / "configs/mtgo_weekly_review_completions.yaml"
+        saved = registry_path.read_bytes()
+        state_path, output = case.tmp / f"state-{event_id}.json", case.tmp / f"fact-{event_id}.json"
+        _write_json(state_path, state)
+        monkeypatch.setattr(sys, "argv", ["review_submission", "--root", str(case.root), "supplement-completion",
+            "--format", "standard", "--week", "2026-W38", "--candidate", str(candidate), "--publication-state", str(state_path),
+            "--completed-on", completed_on, "--evidence", "synthetic supplement closeout", "--output", str(output)])
+        cli.main()
+        assert registry_path.read_bytes() == saved
+        fact = json.loads(output.read_text(encoding="utf-8"))
+        assert fact["covered_event_ids"] == [event_id]
+        assert fact["preview"]["mode"] == "retained"
+        assert "content_acceptance" not in fact and "acceptance" not in fact["preview"]
+        if prior_id: assert fact["previous"] == prior_id
+        prior_id = fact["id"]
+        case.completion["formats"]["standard"].setdefault("supplements", []).append(fact)
+        _write_yaml(registry_path, case.registry)
+        result = readiness()
+        assert result["outstanding_supplement_weeks"] == [] and result["review_week"] is None
+        assert result["completed_reviews"] == ["2026-W38"]
+        assert ready._completion_state(case.root, "2026-W38", format_id="standard")["state"] == "verified"
+        resumed = review.resume_summary(case.root, "standard", "2026-W38")
+        assert resumed["completion"] == "confirmed_recorded"
+        assert resumed["supplement_completion"]["pending_event_ids"] == []
+        assert resumed["publication_evidence"]["package"] == state["current"]["package"]
+        preserved = deepcopy(case.completion)
+        preserved["formats"]["standard"].pop("supplements")
+        assert preserved == case.original
+    proof = supplement.coverage(case.root, case.completion, "standard")
+    assert proof["covered_event_ids"] == ["10", "11", "12"] and len(proof["valid_supplements"]) == 2
+
+
+@pytest.mark.parametrize("failure", ["unknown", "pending", "wrong_package", "changed_bytes", "missing_admission", "changed_page"])
+def test_supplement_export_requires_actual_acceptance_and_confirmed_package(supplement_case, failure):
+    from mtgmeta.mtgo import supplement_completion as supplement
+    case = supplement_case
+    candidate, state = case.advance("11")
+    if failure == "unknown": state["current"]["health"] = "unknown"
+    elif failure == "pending": state["pending"] = {"operation": "other"}
+    elif failure == "wrong_package": state["current"]["package"] = "other"
+    elif failure == "changed_bytes": _write_json(case.root / "stats/standard/mtgo/events.json", {"event_ids": ["10"]})
+    elif failure == "missing_admission":
+        case.registry["data_admissions"]["formats"]["standard"]["weekly_acceptances"] = []
+        _write_yaml(case.root / "configs/mtgo_weekly_review_completions.yaml", case.registry)
+    else:
+        (case.root / "assets/js/phase8/app.js").write_text("/* changed page */")
+        from tools.delivery import packages
+        candidate = case.tmp / "changed-page-package"
+        manifest = packages.prepare(case.root, candidate, target="Jacelber/mtgo-data", source="synthetic")
+        state["current"]["package"] = manifest["id"]
+    with pytest.raises(ValueError):
+        supplement.build(case.root, case.completion, "standard", candidate=candidate, state=state,
+                         completed_on="2026-09-29", evidence="synthetic")
+    assert case.completion == case.original
+
+
+@pytest.mark.parametrize("failure", ["wrong_week", "wrong_format", "missing_evidence", "unknown", "wrong_base", "duplicate", "classification", "retained_changed", "missing_publication", "wrong_data_scope"])
+def test_invalid_supplements_never_extend_coverage_or_revoke_original(supplement_case, failure):
+    from copy import deepcopy
+    from mtgmeta.mtgo import supplement_completion as supplement, review_submission as review
+    from tools import generate_weekly_maintenance_readiness as ready
+    case = supplement_case
+    candidate, state = case.advance("11")
+    fact = supplement.build(case.root, case.completion, "standard", candidate=candidate, state=state,
+                            completed_on="2026-09-29", evidence="synthetic")
+    if failure == "wrong_week": fact["week"] = "2026-W39"
+    elif failure == "wrong_format": fact["format"] = "modern"
+    elif failure == "missing_evidence": fact["evidence"] = ""
+    elif failure == "unknown": fact["publication"]["health"] = "unknown"
+    elif failure == "wrong_base": fact["base_completion"] = "f" * 64
+    elif failure == "duplicate": fact["covered_event_ids"] = ["10"]
+    elif failure == "classification": fact["classification_admission"]["event_ids"] = ["10"]
+    elif failure == "missing_publication": fact.pop("publication")
+    elif failure == "wrong_data_scope": fact["data_publication"]["event_ids"] = ["10"]
+    else:
+        fact["preview"]["submission"]["dimensions"]["final_page"]["product_digest"] = "changed"
+        packet = fact["preview"]["submission"]
+        packet["digest"] = review.digest({k:v for k,v in packet.items() if k != "digest"})
+    fact["id"] = review.digest({k:v for k,v in fact.items() if k != "id"})
+    case.completion["formats"]["standard"]["supplements"] = [fact]
+    _write_yaml(case.root / "configs/mtgo_weekly_review_completions.yaml", case.registry)
+    result = supplement.coverage(case.root, case.completion, "standard")
+    assert result["covered_event_ids"] == ["10"] and result["problems"]
+    assert ready._completion_state(case.root, "2026-W38", format_id="standard")["historical_state"] == "verified"
+    preserved = deepcopy(case.completion)
+    preserved["formats"]["standard"].pop("supplements")
+    assert preserved == case.original
+
+
+@pytest.mark.parametrize("acceptance", ["none", "preview_only", "both"])
+def test_changed_supplement_page_requires_corresponding_accepted_dimensions(supplement_case, monkeypatch, acceptance):
+    from copy import deepcopy
+    from mtgmeta.mtgo import supplement_completion as supplement, review_submission as review
+    from tools.delivery import packages
+    case = supplement_case
+    case.advance("11")
+    (case.root / "assets/js/phase8/app.js").write_text("/* actual changed renderer */")
+    actual = review.preview_packet(case.root, "standard")
+    envelope = {"submission": actual, "decisions": case.accept(actual)}
+    body = {"top_copy": {"items": []}, "features": {"items": [], "explicit_empty": True}}
+    content = review.make_content_packet(case.root, "standard", "2026-W38", body, {"rows": []}, {"names": []}, bindings={})
+    source = {"format": "standard", "week": {"id": "2026-W38"}, "review": body,
+        "bindings": {"bilingual_catalog_digest": review.name_digest(content)},
+        "acceptance": {"submission": content, "decisions": case.accept(content)}}
+    if acceptance == "preview_only": source["acceptance"]["decisions"]["decisions"] = {}
+    _write_yaml(case.root / "stats/standard/mtgo/landing/review/2026-W38.yaml", source)
+    # Only the statistics/selection producer is substituted; document validation,
+    # scoped decisions, actual preview and archive checks remain real.
+    monkeypatch.setattr(review, "content_packet", lambda *a: deepcopy(content))
+    candidate = case.tmp / "changed-page"
+    manifest = packages.prepare(case.root, candidate, target="Jacelber/mtgo-data", source="synthetic")
+    state = {"pending": None, "current": {"health": "passed", "operation": "changed", "package": manifest["id"]}}
+    kwargs = dict(candidate=candidate, state=state, completed_on="2026-09-29", evidence="synthetic",
+                  preview_acceptance=envelope if acceptance != "none" else None)
+    if acceptance != "both":
+        with pytest.raises(ValueError): supplement.build(case.root, case.completion, "standard", **kwargs)
+        return
+    fact = supplement.build(case.root, case.completion, "standard", **kwargs)
+    assert fact["preview"]["mode"] == "accepted"
+    assert fact["preview"]["acceptance"] == envelope
+    assert fact["content_acceptance"] == source["acceptance"]
+    assert case.completion == case.original
+    case.completion["formats"]["standard"]["supplements"] = [fact]
+    _write_yaml(case.root / "configs/mtgo_weekly_review_completions.yaml", case.registry)
+    result = supplement.coverage(case.root, case.completion, "standard")
+    assert result["covered_event_ids"] == ["10", "11"] and not result["problems"]
+    supplement.validate_current_preview(case.root, "standard", result["effective"])
+    from tools import generate_weekly_maintenance_readiness as ready
+    assert ready._completion_state(case.root, "2026-W38", format_id="standard")["state"] == "verified"
+
+
+def test_supplement_chain_rejects_reordering_and_preserves_first_valid_fact(supplement_case):
+    from copy import deepcopy
+    from mtgmeta.mtgo import supplement_completion as supplement
+    case = supplement_case
+    candidate, state = case.advance("11")
+    first = supplement.build(case.root, case.completion, "standard", candidate=candidate, state=state,
+                             completed_on="2026-09-29", evidence="synthetic first")
+    subject = case.completion["formats"]["standard"]
+    subject["supplements"] = [first]
+    candidate, state = case.advance("12")
+    second = supplement.build(case.root, case.completion, "standard", candidate=candidate, state=state,
+                              completed_on="2026-10-01", evidence="synthetic second")
+    subject["supplements"] = [second, first]
+    result = supplement.coverage(case.root, case.completion, "standard")
+    assert result["covered_event_ids"] == ["10", "11"] and result["problems"]
+    subject["supplements"] = [first, deepcopy(first)]
+    result = supplement.coverage(case.root, case.completion, "standard")
+    assert result["covered_event_ids"] == ["10", "11"] and len(result["valid_supplements"]) == 1
+    assert result["problems"]
+    subject["supplements"] = [first, second]
+    case.completion["completed_on"] = "2026-09-22"
+    result = supplement.coverage(case.root, case.completion, "standard")
+    assert result["covered_event_ids"] == ["10"] and len(result["problems"]) == 2

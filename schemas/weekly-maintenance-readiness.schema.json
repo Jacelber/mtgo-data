@@ -213,6 +213,15 @@
           "properties": {
             "historical_state": {"enum": ["verified", "invalid"]},
             "historical_problems": {"type": "array", "items": {"type": "string"}},
+            "supplement_coverage": {"type": "object", "additionalProperties": {
+              "type": "object", "additionalProperties": false,
+              "required": ["covered_event_ids", "valid_supplements", "problems"],
+              "properties": {
+                "covered_event_ids": {"type": "array", "items": {"type": "string"}},
+                "valid_supplements": {"type": "array", "items": {"type": "string"}},
+                "problems": {"type": "array", "items": {"type": "string"}}
+              }
+            }},
             "state": {
               "enum": [
                 "unrecorded",

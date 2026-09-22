@@ -161,6 +161,7 @@ def _completion_state(root: Path, week_id: str, *, format_id: str | None = None)
         )
     mismatches = []
     historical_problems = []
+    supplement_coverage = {}
     review_scope = record.get("review_scope", "top8_legacy")
     if review_scope not in {"top8_legacy", "full_official_classification_v2"}:
         raise ValueError(f"Weekly review completion record for {week_id} has invalid scope")
@@ -170,6 +171,17 @@ def _completion_state(root: Path, week_id: str, *, format_id: str | None = None)
         expected = subjects.get(format_name)
         if not isinstance(expected, dict):
             raise ValueError(f"{week_id} {format_name} completion subject is invalid")
+        original = expected
+        if "supplements" in expected:
+            from mtgmeta.mtgo import supplement_completion
+            try:
+                result = supplement_completion.coverage(root, record, format_name)
+                supplement_coverage[format_name] = {key: result[key] for key in
+                    ("covered_event_ids", "valid_supplements", "problems")}
+                mismatches.extend(f"{format_name} {problem}" for problem in result["problems"])
+                expected = result["effective"]
+            except (OSError, ValueError, KeyError, TypeError) as exc:
+                mismatches.append(f"{format_name} supplement coverage unavailable: {exc}")
         expected_landing = expected.get("landing_content_digest")
         if not _is_sha256(expected_landing):
             raise ValueError(f"{week_id} {format_name} completion digests are invalid")
@@ -221,17 +233,21 @@ def _completion_state(root: Path, week_id: str, *, format_id: str | None = None)
             mismatches.append(f"{format_name} current Landing unavailable: {exc}")
         from mtgmeta.mtgo.review_submission import validate_completion
         try:
-            validate_completion(root, format_name, week_id, expected, check_current=False)
+            validate_completion(root, format_name, week_id, original, check_current=False)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             historical_problems.append(f"{format_name}: {exc}")
         try:
-            validate_completion(root, format_name, week_id, expected)
+            if supplement_coverage.get(format_name, {}).get("valid_supplements"):
+                supplement_completion.validate_current_preview(root, format_name, expected)
+            else:
+                validate_completion(root, format_name, week_id, original)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             mismatches.append(f"{format_name} final preview/publication: {exc}")
     return {
         "state": "stale" if mismatches else "verified",
         "historical_state": "invalid" if historical_problems else "verified",
         "historical_problems": historical_problems,
+        "supplement_coverage": supplement_coverage,
         "completed_on": completed_on,
         "evidence": evidence,
         "mismatches": mismatches,
@@ -806,7 +822,8 @@ def _independent_readiness(root: Path, registry: dict[str, Any], *, publication_
                                if row["week"] in completed and format_id in row.get("formats", {})}
         outstanding_supplements = pending_weeks & completed
         for row in admissions:
-            covered = completion_subjects.get(row["week"], {}).get("accepted_event_ids")
+            covered = history.get(row["week"], {}).get("supplement_coverage", {}).get(format_id, {}).get(
+                "covered_event_ids", completion_subjects.get(row["week"], {}).get("accepted_event_ids"))
             if isinstance(covered, list) and set(row["event_ids"]) - set(covered):
                 outstanding_supplements.add(row["week"])
         weeks = sorted(pending_weeks | unfinished | outstanding_supplements)
