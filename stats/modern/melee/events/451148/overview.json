@@ -10,13 +10,13 @@
     "event_sha256": "9d91b89439af3b4df79ad95c7cc8ef59fc7a7d57941a3d910b7d9e50c37a8bac",
     "event_schema_version": "2.2.0",
     "classification_path": "data/modern/melee/classifications/451148.json",
-    "classification_sha256": "839bdd824bb7a5bc2aeaa2ed85d35d0d56738ff1c3d7ba012857e14fdf1799b6",
+    "classification_sha256": "b2d45f6445b0484c989bfb8fcd0eb32d49cf0c76928c75f559d98e205aef23a6",
     "classification_schema_version": "1.1.0",
     "opportunity_path": "data/modern/melee/opportunities/451148.json",
-    "opportunity_sha256": "23b7596528f7938b3000170be39e2f7972e7bf95688d67319fd40d97af40afa3",
+    "opportunity_sha256": "0f266b86637ff9fad8e65d0bee1ac8a430f8a51c688e4971aaf3cf4c5bf0b1e9",
     "opportunity_schema_version": "1.1.0",
     "taxonomy_path": "my_archetypes/modern.yaml",
-    "taxonomy_sha256": "6d3313c1909b5011a525cae8d2540c68b474a23c78b95df372a97fe173696c46",
+    "taxonomy_sha256": "cd8dc53954126fbe86dcbf9a7d60b263a0235fff1cd241808d5acd4b8bd249e9",
     "taxonomy_schema_version": "1.1.0"
   },
   "event": {
@@ -2067,29 +2067,117 @@
           "subtypes": []
         },
         {
+          "group_id": "archetype:boros-energy",
+          "classification_status": "classified",
+          "archetype_id": "boros-energy",
+          "archetype_name": "Boros Energy",
+          "expandable": false,
+          "deck_count": 16,
+          "metagame_share": 0.039604,
+          "constructed_points": 177,
+          "theoretical_rounds": 144,
+          "effective_theoretical_rounds": 144,
+          "average_points_per_effective_round": 1.229167,
+          "completed_or_officially_exempt_rounds": 111,
+          "completion_rate": 0.770833,
+          "played_match_participations": 111,
+          "source_match_count": 110,
+          "result_counts": {
+            "drop_unplayed": 33,
+            "played_loss": 52,
+            "played_win": 59
+          },
+          "drop_player_count": 8,
+          "drop_unplayed_rounds": 33,
+          "intentional_draw_opportunities": 0,
+          "bye_count": 0,
+          "top8_lock_player_count": 0,
+          "top8_lock_exemptions": 0,
+          "disqualified_player_count": 0,
+          "high_score": {
+            "count": 6,
+            "field_share": 0.043796,
+            "high_score_conversion": 0.375,
+            "day2_high_score_rate": null,
+            "effective_round_distribution": {
+              "9": 16
+            }
+          },
+          "match_record": {
+            "all_matches": {
+              "wins": 59,
+              "losses": 52,
+              "draws": 0,
+              "matches": 111,
+              "win_rate": 0.531532,
+              "confidence_interval_95": {
+                "lower": 0.439206,
+                "upper": 0.621748
+              },
+              "literal_record": {
+                "wins": 59,
+                "losses": 52,
+                "draws": 0,
+                "matches": 111,
+                "win_rate": 0.531532,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.439204,
+                  "upper": 0.621749
+                }
+              }
+            },
+            "non_mirror": {
+              "wins": 58,
+              "losses": 51,
+              "draws": 0,
+              "matches": 109,
+              "win_rate": 0.53211,
+              "confidence_interval_95": {
+                "lower": 0.438947,
+                "upper": 0.623087
+              },
+              "literal_record": {
+                "wins": 58,
+                "losses": 51,
+                "draws": 0,
+                "matches": 109,
+                "win_rate": 0.53211,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.438946,
+                  "upper": 0.623088
+                }
+              }
+            },
+            "mirror_match_count": 1
+          },
+          "subtypes": []
+        },
+        {
           "group_id": "archetype:dimir-tempo",
           "classification_status": "classified",
           "archetype_id": "dimir-tempo",
           "archetype_name": "Dimir Tempo",
           "expandable": true,
-          "deck_count": 17,
-          "metagame_share": 0.042079,
+          "deck_count": 16,
+          "metagame_share": 0.039604,
           "constructed_points": 143,
-          "theoretical_rounds": 153,
-          "effective_theoretical_rounds": 153,
-          "average_points_per_effective_round": 0.934641,
-          "completed_or_officially_exempt_rounds": 107,
-          "completion_rate": 0.699346,
-          "played_match_participations": 107,
-          "source_match_count": 106,
+          "theoretical_rounds": 144,
+          "effective_theoretical_rounds": 144,
+          "average_points_per_effective_round": 0.993056,
+          "completed_or_officially_exempt_rounds": 105,
+          "completion_rate": 0.729167,
+          "played_match_participations": 105,
+          "source_match_count": 104,
           "result_counts": {
-            "drop_unplayed": 46,
+            "drop_unplayed": 39,
             "played_draw": 2,
-            "played_loss": 58,
+            "played_loss": 56,
             "played_win": 47
           },
-          "drop_player_count": 11,
-          "drop_unplayed_rounds": 46,
+          "drop_player_count": 10,
+          "drop_unplayed_rounds": 39,
           "intentional_draw_opportunities": 0,
           "bye_count": 0,
           "top8_lock_player_count": 0,
@@ -2098,56 +2186,56 @@
           "high_score": {
             "count": 4,
             "field_share": 0.029197,
-            "high_score_conversion": 0.235294,
+            "high_score_conversion": 0.25,
             "day2_high_score_rate": null,
             "effective_round_distribution": {
-              "9": 17
+              "9": 16
             }
           },
           "match_record": {
             "all_matches": {
               "wins": 47,
-              "losses": 58,
+              "losses": 56,
               "draws": 2,
-              "matches": 107,
-              "win_rate": 0.448598,
+              "matches": 105,
+              "win_rate": 0.457143,
               "confidence_interval_95": {
-                "lower": 0.357773,
-                "upper": 0.542986
+                "lower": 0.365055,
+                "upper": 0.552256
               },
               "literal_record": {
                 "wins": 47,
-                "losses": 58,
+                "losses": 56,
                 "draws": 2,
-                "matches": 107,
-                "win_rate": 0.439252,
+                "matches": 105,
+                "win_rate": 0.447619,
                 "win_rate_method": "wins_over_valid_matches",
                 "confidence_interval_95": {
-                  "lower": 0.348939,
-                  "upper": 0.533776
+                  "lower": 0.356031,
+                  "upper": 0.542905
                 }
               }
             },
             "non_mirror": {
               "wins": 46,
-              "losses": 57,
+              "losses": 55,
               "draws": 2,
-              "matches": 105,
-              "win_rate": 0.447619,
+              "matches": 103,
+              "win_rate": 0.456311,
               "confidence_interval_95": {
-                "lower": 0.356033,
-                "upper": 0.542903
+                "lower": 0.363422,
+                "upper": 0.552341
               },
               "literal_record": {
                 "wins": 46,
-                "losses": 57,
+                "losses": 55,
                 "draws": 2,
-                "matches": 105,
-                "win_rate": 0.438095,
+                "matches": 103,
+                "win_rate": 0.446602,
                 "win_rate_method": "wins_over_valid_matches",
                 "confidence_interval_95": {
-                  "lower": 0.347042,
-                  "upper": 0.533518
+                  "lower": 0.354234,
+                  "upper": 0.54281
                 }
               }
             },
@@ -2314,22 +2402,19 @@
               "subtype_id": "esper",
               "subtype_name": "Dimir White Splash",
               "display_name": "Dimir White Splash Tempo",
-              "deck_count": 1,
-              "metagame_share": 0.002475,
+              "deck_count": 0,
+              "metagame_share": 0.0,
               "constructed_points": 0,
-              "theoretical_rounds": 9,
-              "effective_theoretical_rounds": 9,
-              "average_points_per_effective_round": 0.0,
-              "completed_or_officially_exempt_rounds": 2,
-              "completion_rate": 0.222222,
-              "played_match_participations": 2,
-              "source_match_count": 2,
-              "result_counts": {
-                "drop_unplayed": 7,
-                "played_loss": 2
-              },
-              "drop_player_count": 1,
-              "drop_unplayed_rounds": 7,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
               "intentional_draw_opportunities": 0,
               "bye_count": 0,
               "top8_lock_player_count": 0,
@@ -2338,241 +2423,49 @@
               "high_score": {
                 "count": 0,
                 "field_share": 0.0,
-                "high_score_conversion": 0.0,
+                "high_score_conversion": null,
                 "day2_high_score_rate": null,
-                "effective_round_distribution": {
-                  "9": 1
-                }
+                "effective_round_distribution": {}
               },
               "match_record": {
                 "all_matches": {
                   "wins": 0,
-                  "losses": 2,
+                  "losses": 0,
                   "draws": 0,
-                  "matches": 2,
-                  "win_rate": 0.0,
-                  "confidence_interval_95": {
-                    "lower": 0.0,
-                    "upper": 0.65762
-                  },
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
                   "literal_record": {
                     "wins": 0,
-                    "losses": 2,
+                    "losses": 0,
                     "draws": 0,
-                    "matches": 2,
-                    "win_rate": 0.0,
+                    "matches": 0,
+                    "win_rate": null,
                     "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": {
-                      "lower": 0.0,
-                      "upper": 0.657628
-                    }
+                    "confidence_interval_95": null
                   }
                 },
                 "non_mirror": {
                   "wins": 0,
-                  "losses": 2,
+                  "losses": 0,
                   "draws": 0,
-                  "matches": 2,
-                  "win_rate": 0.0,
-                  "confidence_interval_95": {
-                    "lower": 0.0,
-                    "upper": 0.65762
-                  },
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
                   "literal_record": {
                     "wins": 0,
-                    "losses": 2,
+                    "losses": 0,
                     "draws": 0,
-                    "matches": 2,
-                    "win_rate": 0.0,
+                    "matches": 0,
+                    "win_rate": null,
                     "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": {
-                      "lower": 0.0,
-                      "upper": 0.657628
-                    }
+                    "confidence_interval_95": null
                   }
                 },
                 "mirror_match_count": 0
               }
             }
           ]
-        },
-        {
-          "group_id": "archetype:boros-energy",
-          "classification_status": "classified",
-          "archetype_id": "boros-energy",
-          "archetype_name": "Boros Energy",
-          "expandable": false,
-          "deck_count": 16,
-          "metagame_share": 0.039604,
-          "constructed_points": 177,
-          "theoretical_rounds": 144,
-          "effective_theoretical_rounds": 144,
-          "average_points_per_effective_round": 1.229167,
-          "completed_or_officially_exempt_rounds": 111,
-          "completion_rate": 0.770833,
-          "played_match_participations": 111,
-          "source_match_count": 110,
-          "result_counts": {
-            "drop_unplayed": 33,
-            "played_loss": 52,
-            "played_win": 59
-          },
-          "drop_player_count": 8,
-          "drop_unplayed_rounds": 33,
-          "intentional_draw_opportunities": 0,
-          "bye_count": 0,
-          "top8_lock_player_count": 0,
-          "top8_lock_exemptions": 0,
-          "disqualified_player_count": 0,
-          "high_score": {
-            "count": 6,
-            "field_share": 0.043796,
-            "high_score_conversion": 0.375,
-            "day2_high_score_rate": null,
-            "effective_round_distribution": {
-              "9": 16
-            }
-          },
-          "match_record": {
-            "all_matches": {
-              "wins": 59,
-              "losses": 52,
-              "draws": 0,
-              "matches": 111,
-              "win_rate": 0.531532,
-              "confidence_interval_95": {
-                "lower": 0.439206,
-                "upper": 0.621748
-              },
-              "literal_record": {
-                "wins": 59,
-                "losses": 52,
-                "draws": 0,
-                "matches": 111,
-                "win_rate": 0.531532,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.439204,
-                  "upper": 0.621749
-                }
-              }
-            },
-            "non_mirror": {
-              "wins": 58,
-              "losses": 51,
-              "draws": 0,
-              "matches": 109,
-              "win_rate": 0.53211,
-              "confidence_interval_95": {
-                "lower": 0.438947,
-                "upper": 0.623087
-              },
-              "literal_record": {
-                "wins": 58,
-                "losses": 51,
-                "draws": 0,
-                "matches": 109,
-                "win_rate": 0.53211,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.438946,
-                  "upper": 0.623088
-                }
-              }
-            },
-            "mirror_match_count": 1
-          },
-          "subtypes": []
-        },
-        {
-          "group_id": "archetype:boros-land-destruction",
-          "classification_status": "classified",
-          "archetype_id": "boros-land-destruction",
-          "archetype_name": "Boros Ponza",
-          "expandable": false,
-          "deck_count": 13,
-          "metagame_share": 0.032178,
-          "constructed_points": 141,
-          "theoretical_rounds": 117,
-          "effective_theoretical_rounds": 117,
-          "average_points_per_effective_round": 1.205128,
-          "completed_or_officially_exempt_rounds": 91,
-          "completion_rate": 0.777778,
-          "played_match_participations": 87,
-          "source_match_count": 91,
-          "result_counts": {
-            "drop_unplayed": 26,
-            "intentional_draw": 2,
-            "played_draw": 4,
-            "played_loss": 40,
-            "played_win": 45
-          },
-          "drop_player_count": 7,
-          "drop_unplayed_rounds": 26,
-          "intentional_draw_opportunities": 2,
-          "bye_count": 0,
-          "top8_lock_player_count": 0,
-          "top8_lock_exemptions": 0,
-          "disqualified_player_count": 0,
-          "high_score": {
-            "count": 4,
-            "field_share": 0.029197,
-            "high_score_conversion": 0.307692,
-            "day2_high_score_rate": null,
-            "effective_round_distribution": {
-              "9": 13
-            }
-          },
-          "match_record": {
-            "all_matches": {
-              "wins": 44,
-              "losses": 39,
-              "draws": 4,
-              "matches": 87,
-              "win_rate": 0.528736,
-              "confidence_interval_95": {
-                "lower": 0.424864,
-                "upper": 0.630177
-              },
-              "literal_record": {
-                "wins": 44,
-                "losses": 39,
-                "draws": 4,
-                "matches": 87,
-                "win_rate": 0.505747,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.402689,
-                  "upper": 0.608319
-                }
-              }
-            },
-            "non_mirror": {
-              "wins": 44,
-              "losses": 39,
-              "draws": 4,
-              "matches": 87,
-              "win_rate": 0.528736,
-              "confidence_interval_95": {
-                "lower": 0.424864,
-                "upper": 0.630177
-              },
-              "literal_record": {
-                "wins": 44,
-                "losses": 39,
-                "draws": 4,
-                "matches": 87,
-                "win_rate": 0.505747,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.402689,
-                  "upper": 0.608319
-                }
-              }
-            },
-            "mirror_match_count": 0
-          },
-          "subtypes": []
         },
         {
           "group_id": "archetype:devoted-druid-combo",
@@ -2902,6 +2795,96 @@
                 "confidence_interval_95": {
                   "lower": 0.337687,
                   "upper": 0.566214
+                }
+              }
+            },
+            "mirror_match_count": 0
+          },
+          "subtypes": []
+        },
+        {
+          "group_id": "archetype:boros-land-destruction",
+          "classification_status": "classified",
+          "archetype_id": "boros-land-destruction",
+          "archetype_name": "Boros Ponza",
+          "expandable": false,
+          "deck_count": 12,
+          "metagame_share": 0.029703,
+          "constructed_points": 136,
+          "theoretical_rounds": 108,
+          "effective_theoretical_rounds": 108,
+          "average_points_per_effective_round": 1.259259,
+          "completed_or_officially_exempt_rounds": 85,
+          "completion_rate": 0.787037,
+          "played_match_participations": 81,
+          "source_match_count": 85,
+          "result_counts": {
+            "drop_unplayed": 23,
+            "intentional_draw": 2,
+            "played_draw": 2,
+            "played_loss": 37,
+            "played_win": 44
+          },
+          "drop_player_count": 6,
+          "drop_unplayed_rounds": 23,
+          "intentional_draw_opportunities": 2,
+          "bye_count": 0,
+          "top8_lock_player_count": 0,
+          "top8_lock_exemptions": 0,
+          "disqualified_player_count": 0,
+          "high_score": {
+            "count": 4,
+            "field_share": 0.029197,
+            "high_score_conversion": 0.333333,
+            "day2_high_score_rate": null,
+            "effective_round_distribution": {
+              "9": 12
+            }
+          },
+          "match_record": {
+            "all_matches": {
+              "wins": 43,
+              "losses": 36,
+              "draws": 2,
+              "matches": 81,
+              "win_rate": 0.54321,
+              "confidence_interval_95": {
+                "lower": 0.43524,
+                "upper": 0.647267
+              },
+              "literal_record": {
+                "wins": 43,
+                "losses": 36,
+                "draws": 2,
+                "matches": 81,
+                "win_rate": 0.530864,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.423265,
+                  "upper": 0.635668
+                }
+              }
+            },
+            "non_mirror": {
+              "wins": 43,
+              "losses": 36,
+              "draws": 2,
+              "matches": 81,
+              "win_rate": 0.54321,
+              "confidence_interval_95": {
+                "lower": 0.43524,
+                "upper": 0.647267
+              },
+              "literal_record": {
+                "wins": 43,
+                "losses": 36,
+                "draws": 2,
+                "matches": 81,
+                "win_rate": 0.530864,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.423265,
+                  "upper": 0.635668
                 }
               }
             },
@@ -7771,6 +7754,93 @@
           ]
         },
         {
+          "group_id": "archetype:esper-control",
+          "classification_status": "classified",
+          "archetype_id": "esper-control",
+          "archetype_name": "Esper Control",
+          "expandable": false,
+          "deck_count": 1,
+          "metagame_share": 0.002475,
+          "constructed_points": 0,
+          "theoretical_rounds": 9,
+          "effective_theoretical_rounds": 9,
+          "average_points_per_effective_round": 0.0,
+          "completed_or_officially_exempt_rounds": 2,
+          "completion_rate": 0.222222,
+          "played_match_participations": 2,
+          "source_match_count": 2,
+          "result_counts": {
+            "drop_unplayed": 7,
+            "played_loss": 2
+          },
+          "drop_player_count": 1,
+          "drop_unplayed_rounds": 7,
+          "intentional_draw_opportunities": 0,
+          "bye_count": 0,
+          "top8_lock_player_count": 0,
+          "top8_lock_exemptions": 0,
+          "disqualified_player_count": 0,
+          "high_score": {
+            "count": 0,
+            "field_share": 0.0,
+            "high_score_conversion": 0.0,
+            "day2_high_score_rate": null,
+            "effective_round_distribution": {
+              "9": 1
+            }
+          },
+          "match_record": {
+            "all_matches": {
+              "wins": 0,
+              "losses": 2,
+              "draws": 0,
+              "matches": 2,
+              "win_rate": 0.0,
+              "confidence_interval_95": {
+                "lower": 0.0,
+                "upper": 0.65762
+              },
+              "literal_record": {
+                "wins": 0,
+                "losses": 2,
+                "draws": 0,
+                "matches": 2,
+                "win_rate": 0.0,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.0,
+                  "upper": 0.657628
+                }
+              }
+            },
+            "non_mirror": {
+              "wins": 0,
+              "losses": 2,
+              "draws": 0,
+              "matches": 2,
+              "win_rate": 0.0,
+              "confidence_interval_95": {
+                "lower": 0.0,
+                "upper": 0.65762
+              },
+              "literal_record": {
+                "wins": 0,
+                "losses": 2,
+                "draws": 0,
+                "matches": 2,
+                "win_rate": 0.0,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.0,
+                  "upper": 0.657628
+                }
+              }
+            },
+            "mirror_match_count": 0
+          },
+          "subtypes": []
+        },
+        {
           "group_id": "archetype:grixis-tempo",
           "classification_status": "classified",
           "archetype_id": "grixis-tempo",
@@ -8355,6 +8425,95 @@
                 "confidence_interval_95": {
                   "lower": 0.250454,
                   "upper": 0.841783
+                }
+              }
+            },
+            "mirror_match_count": 0
+          },
+          "subtypes": []
+        },
+        {
+          "group_id": "archetype:jeskai-ponza",
+          "classification_status": "classified",
+          "archetype_id": "jeskai-ponza",
+          "archetype_name": "Jeskai Ponza",
+          "expandable": false,
+          "deck_count": 1,
+          "metagame_share": 0.002475,
+          "constructed_points": 5,
+          "theoretical_rounds": 9,
+          "effective_theoretical_rounds": 9,
+          "average_points_per_effective_round": 0.555556,
+          "completed_or_officially_exempt_rounds": 6,
+          "completion_rate": 0.666667,
+          "played_match_participations": 6,
+          "source_match_count": 6,
+          "result_counts": {
+            "drop_unplayed": 3,
+            "played_draw": 2,
+            "played_loss": 3,
+            "played_win": 1
+          },
+          "drop_player_count": 1,
+          "drop_unplayed_rounds": 3,
+          "intentional_draw_opportunities": 0,
+          "bye_count": 0,
+          "top8_lock_player_count": 0,
+          "top8_lock_exemptions": 0,
+          "disqualified_player_count": 0,
+          "high_score": {
+            "count": 0,
+            "field_share": 0.0,
+            "high_score_conversion": 0.0,
+            "day2_high_score_rate": null,
+            "effective_round_distribution": {
+              "9": 1
+            }
+          },
+          "match_record": {
+            "all_matches": {
+              "wins": 1,
+              "losses": 3,
+              "draws": 2,
+              "matches": 6,
+              "win_rate": 0.333333,
+              "confidence_interval_95": {
+                "lower": 0.096771,
+                "upper": 0.700007
+              },
+              "literal_record": {
+                "wins": 1,
+                "losses": 3,
+                "draws": 2,
+                "matches": 6,
+                "win_rate": 0.166667,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.030053,
+                  "upper": 0.563509
+                }
+              }
+            },
+            "non_mirror": {
+              "wins": 1,
+              "losses": 3,
+              "draws": 2,
+              "matches": 6,
+              "win_rate": 0.333333,
+              "confidence_interval_95": {
+                "lower": 0.096771,
+                "upper": 0.700007
+              },
+              "literal_record": {
+                "wins": 1,
+                "losses": 3,
+                "draws": 2,
+                "matches": 6,
+                "win_rate": 0.166667,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.030053,
+                  "upper": 0.563509
                 }
               }
             },

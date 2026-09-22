@@ -145,6 +145,18 @@ def test_snapshot_is_portable_and_never_overwrites_submitted_material(tmp_path):
         review.write_materials(subject, tmp_path / "one")
 
 
+def test_final_preview_material_renders_archetype_color_mapping(tmp_path):
+    subject = review.make_packet("preview", "standard", "2026-W38", {
+        "final_page": {
+            "colors": {"4-color-demons": ["w", "u", "b", "r"]},
+            "selected_local_images": {},
+        },
+    }, bindings={})
+    output = tmp_path / "preview"
+    review.write_materials(subject, output, preview_entrypoint="http://127.0.0.1:8773/index.html")
+    assert (output / "index.html").is_file()
+
+
 def test_only_stable_choices_can_be_reused_across_weeks():
     dimensions = {"visual.environment.a": {"colors": ["c"], "cards": ["A", "B"]}, "copy.zh": "same"}
     old = review.make_packet("content", "modern", "2026-W38", dimensions, bindings={})

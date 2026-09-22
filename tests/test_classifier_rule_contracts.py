@@ -113,7 +113,7 @@ def _deck(*cards: tuple[str, int]) -> dict[str, list[dict[str, object]]]:
                 ("Emeritus of Ideation", 3),
                 ("Skycoach Waypoint", 2),
             ),
-            "azorius-prepare-control",
+            "azorius-control",
         ),
         (
             (
@@ -252,7 +252,29 @@ def test_standard_prepare_control_keeps_day_of_judgment_build_in_parent() -> Non
         ),
     )
 
-    assert (result.status, result.archetype_id) == ("classified", "azorius-control")
+    assert (result.status, result.archetype_id, result.subtype_id) == (
+        "classified",
+        "azorius-control",
+        "traditional",
+    )
+
+
+def test_standard_prepare_control_is_azorius_control_subtype() -> None:
+    result = classify_deck(
+        load_rule_set(ROOT / "my_archetypes/standard.yaml"),
+        _deck(
+            ("Emeritus of Truce", 4),
+            ("Emeritus of Ideation", 4),
+            ("Skycoach Waypoint", 2),
+        ),
+    )
+
+    assert (
+        result.status,
+        result.archetype_id,
+        result.subtype_id,
+        result.selected_rule_id,
+    ) == ("classified", "azorius-control", "prepare", "azorius-control-prepare")
 
 
 def test_melee_split_card_adapter_contract() -> None:
@@ -519,3 +541,226 @@ def test_modern_owner_rule_contracts(
     )
 
     assert (result.status, result.archetype_id, result.subtype_id) == expected
+
+
+@pytest.mark.parametrize(
+    ("main_cards", "sideboard_cards", "expected"),
+    (
+        (
+            (
+                ("Sowing Mycospawn", 3),
+                ("Eldrazi Temple", 3),
+                ("Talisman of Resilience", 1),
+                ("Overgrown Tomb", 1),
+            ),
+            (("Consign to Memory", 3),),
+            ("eldrazi-ramp", "sultai"),
+        ),
+        (
+            (
+                ("Sowing Mycospawn", 3),
+                ("Eldrazi Temple", 3),
+                ("Breeding Pool", 1),
+                ("Talisman of Curiosity", 3),
+                ("Kozilek's Return", 1),
+            ),
+            (("Consign to Memory", 3),),
+            ("eldrazi-ramp", "temur"),
+        ),
+        (
+            (
+                ("Amulet of Vigor", 4),
+                ("Arboreal Grazer", 4),
+                ("Spelunking", 3),
+                ("Cultivator Colossus", 3),
+                ("Mind into Matter", 3),
+            ),
+            (),
+            ("amulet-ramp", None),
+        ),
+        (
+            (
+                ("Ral, Monsoon Mage", 3),
+                ("Ruby Medallion", 3),
+                ("Orim's Chant", 3),
+                ("Manamorphose", 3),
+            ),
+            (),
+            ("ruby-storm", None),
+        ),
+        (
+            (
+                ("Indomitable Creativity", 3),
+                ("Dwarven Mine", 1),
+                ("Archon of Cruelty", 1),
+                ("Wrenn and Six", 3),
+                ("Fatal Push", 3),
+            ),
+            (),
+            ("jund-creativity", None),
+        ),
+        (
+            (
+                ("Cleansing Wildfire", 3),
+                ("Price of Freedom", 3),
+                ("Hallowed Fountain", 1),
+                ("Field of Ruin", 1),
+            ),
+            (("Consign to Memory", 3),),
+            ("jeskai-ponza", None),
+        ),
+        (
+            (
+                ("Urza's Mine", 4),
+                ("Urza's Power Plant", 4),
+                ("Urza's Tower", 4),
+                ("Eldrazi Temple", 1),
+                ("Talisman of Curiosity", 3),
+                ("Forest", 1),
+                ("Island", 1),
+            ),
+            (),
+            ("tron", "simic"),
+        ),
+        (
+            (
+                ("Urza's Mine", 4),
+                ("Urza's Power Plant", 4),
+                ("Urza's Tower", 4),
+                ("Eldrazi Temple", 3),
+                ("Talisman of Curiosity", 3),
+                ("Snow-Covered Island", 1),
+                ("Portent of Calamity", 2),
+            ),
+            (),
+            ("eldrazi-tron", "simic"),
+        ),
+        (
+            (
+                ("Urza's Mine", 3),
+                ("Urza's Power Plant", 3),
+                ("Urza's Tower", 3),
+                ("Eldrazi Temple", 3),
+                ("Talisman of Unity", 3),
+                ("Plains", 1),
+                ("Orim's Chant", 3),
+            ),
+            (),
+            ("eldrazi-tron", "selesnya"),
+        ),
+        (
+            (
+                ("Urza's Mine", 4),
+                ("Urza's Power Plant", 4),
+                ("Urza's Tower", 4),
+                ("Eldrazi Temple", 3),
+                ("Forest", 1),
+                ("Sowing Mycospawn", 3),
+                ("Expedition Map", 3),
+            ),
+            (),
+            ("eldrazi-tron", "mono-green"),
+        ),
+        (
+            (
+                ("Wrath of the Skies", 3),
+                ("Watery Grave", 1),
+                ("Hallowed Fountain", 1),
+                ("Counterspell", 3),
+                ("Fatal Push", 3),
+                ("Teferi, Hero of Dominaria", 2),
+                ("Snapcaster Mage", 2),
+            ),
+            (),
+            ("esper-control", None),
+        ),
+        (
+            (
+                ("Jace Reawakened", 3),
+                ("Valki, God of Lies", 3),
+                ("Ancestral Vision", 3),
+                ("Tablet of Discovery", 3),
+                ("Cruel Ultimatum", 2),
+            ),
+            (),
+            ("grixis-jace-control", None),
+        ),
+    ),
+)
+def test_modern_w38_owner_corrections(
+    main_cards: tuple[tuple[str, int], ...],
+    sideboard_cards: tuple[tuple[str, int], ...],
+    expected: tuple[str, str | None],
+) -> None:
+    deck = _deck(*main_cards)
+    deck["sideboard"] = [
+        {"name": name, "qty": quantity} for name, quantity in sideboard_cards
+    ]
+
+    result = classify_deck(
+        load_rule_set(ROOT / "my_archetypes/modern.yaml"),
+        deck,
+    )
+
+    assert (result.archetype_id, result.subtype_id) == expected
+
+
+@pytest.mark.parametrize(
+    ("main_cards", "expected"),
+    (
+        (
+            (
+                ("Ephemerate", 4),
+                ("Archaeomancer", 3),
+                ("Glacial Floodplain", 2),
+                ("Skred", 2),
+            ),
+            ("ephemerate", "jeskai"),
+        ),
+        (
+            (
+                ("Salt Road Packbeast", 4),
+                ("Leonardo, Big Brother", 4),
+                ("Winding Way", 2),
+                ("Khalni Garden", 4),
+            ),
+            ("packbeast-swarm", "selesnya"),
+        ),
+        (
+            (
+                ("Salt Road Packbeast", 4),
+                ("Leonardo, Big Brother", 4),
+                ("Winding Way", 4),
+                ("Ardent Recruit", 4),
+            ),
+            ("packbeast-swarm", "selesnya"),
+        ),
+        (
+            (
+                ("Experimental Synthesizer", 4),
+                ("Black Mage's Rod", 4),
+                ("Kessig Flamebreather", 4),
+            ),
+            ("rakdos-synthesizer", None),
+        ),
+        (
+            (
+                ("Thermo-Alchemist", 4),
+                ("Guttersnipe", 3),
+                ("Lava Dart", 4),
+                ("Galvanic Blast", 4),
+            ),
+            ("mono-red-burn", None),
+        ),
+    ),
+)
+def test_pauper_w38_owner_corrections(
+    main_cards: tuple[tuple[str, int], ...],
+    expected: tuple[str, str | None],
+) -> None:
+    result = classify_deck(
+        load_rule_set(ROOT / "my_archetypes/pauper.yaml"),
+        _deck(*main_cards),
+    )
+
+    assert (result.archetype_id, result.subtype_id) == expected

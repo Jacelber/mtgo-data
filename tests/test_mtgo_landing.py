@@ -119,7 +119,7 @@ def test_no_event_document_is_schema_shaped_without_candidates(monkeypatch, tmp_
     assert list(Draft202012Validator(schema).iter_errors(document)) == []
 
 
-def test_public_landing_schema_admits_pauper_without_opening_format_enum():
+def test_public_landing_schema_admits_maintained_formats_without_opening_format_enum():
     schema = json.loads(
         (ROOT / "schemas" / "mtgo-landing.schema.json").read_text(encoding="utf-8")
     )
@@ -134,6 +134,7 @@ def test_public_landing_schema_admits_pauper_without_opening_format_enum():
         "standard",
         "modern",
         "pauper",
+        "pioneer",
     ]
 
 

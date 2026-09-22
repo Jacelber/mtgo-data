@@ -8,6 +8,8 @@ from pathlib import Path
 
 import yaml  # type: ignore[import-untyped]
 
+from .card_names import canonical_basic_land_name
+
 
 COLORS = ("white", "blue", "black", "red", "green")
 FEATURE_PREFIX = "__classifier-semantic-"
@@ -145,6 +147,8 @@ def augment_semantic_counts(
     for name, quantity in main_counts.items():
         features = manifest.cards.get(name)
         if features is None:
+            features = manifest.cards.get(canonical_basic_land_name(name))
+        if features is None:
             continue
         for color in features.mana_sources:
             marker = mana_source_marker(color, prefix=prefix)
@@ -159,6 +163,8 @@ def augment_semantic_counts(
 
     for name, quantity in side_counts.items():
         features = manifest.cards.get(name)
+        if features is None:
+            features = manifest.cards.get(canonical_basic_land_name(name))
         if features is None or features.phyrexian_color_neutral:
             continue
         for color in features.spell_colors:

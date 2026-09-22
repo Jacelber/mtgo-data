@@ -353,11 +353,14 @@ data_admissions:
         - '12854503'
         - '12854521'
         source_manifest_digest: 9655288e2aef0877aa0fe032a79a9da8c4a89236d00bb7a55cc1d84bed8b926d
-        accepted_classifier_subject: b44647bf7389c010105f236a63879829dbeb0c13125e629a423856df0533e6e2
-        classification_review_digest: 59626b7c7d0b566183a2a1e77cabfc6924f207c141303cd3f8faf73453f7122c
+        accepted_classifier_subject: c34f8b605ba75ecf0fc9291592776ba79cd9245be74f715bcf0a1cb936226c91
+        classification_review_digest: c4cf094d4a5d56a87bea7c7c88ff544d1d8b111e28e5f03c67ece85cad6cc20d
         accepted_on: '2026-09-21'
-        evidence: Owner confirmed the submitted Standard 2026-W38 full classification
-          in the active Codex conversation on 2026-09-21.
+        evidence: Owner explicitly corrected Azorius Prepare Control to be a child
+          of Azorius Control and authorized the repair on 2026-09-21. Full retained-corpus
+          verification found only the 17 previously accepted W38 migrations plus 24
+          parent-preserving Azorius Control subtype migrations, with no new unknown,
+          conflict, or classification loss.
         observed_empty_weeks: []
         classification_acceptance:
           submission:
@@ -376,8 +379,8 @@ data_admissions:
               - '12854503'
               - '12854521'
               record_count: 247
-              classifier: b44647bf7389c010105f236a63879829dbeb0c13125e629a423856df0533e6e2
-              classification_review_digest: 59626b7c7d0b566183a2a1e77cabfc6924f207c141303cd3f8faf73453f7122c
+              classifier: c34f8b605ba75ecf0fc9291592776ba79cd9245be74f715bcf0a1cb936226c91
+              classification_review_digest: c4cf094d4a5d56a87bea7c7c88ff544d1d8b111e28e5f03c67ece85cad6cc20d
             dimensions:
               full_classification:
                 event_ids:
@@ -390,21 +393,24 @@ data_admissions:
                 - '12854503'
                 - '12854521'
                 record_count: 247
-                classifier: b44647bf7389c010105f236a63879829dbeb0c13125e629a423856df0533e6e2
-                classification_review_digest: 59626b7c7d0b566183a2a1e77cabfc6924f207c141303cd3f8faf73453f7122c
-            digest: 41b5a06fd44dc6ca22c20dac2dbfae824fa170b97f75cb2a96d6f23bb375a020
+                classifier: c34f8b605ba75ecf0fc9291592776ba79cd9245be74f715bcf0a1cb936226c91
+                classification_review_digest: c4cf094d4a5d56a87bea7c7c88ff544d1d8b111e28e5f03c67ece85cad6cc20d
+            digest: 6bc89e225bbc83e49fb63e470ac259b0270dc7e513d49554f0df253428997d5f
           decisions:
             format: standard
             week: 2026-W38
             kind: full_classification
             decisions:
               full_classification:
-                subject: 22b9cc9c07d8cb0ca273c987c9aa36306567d8f1f79e20fe74b6593d4341b138
-                evidence: Owner confirmed the submitted Standard 2026-W38 full classification
-                  in the active Codex conversation on 2026-09-21.
+                subject: f6ce57f1fd28abe7c36b970de73c539c398cacf37e20e994d2f017be62e7be87
+                evidence: Owner explicitly corrected Azorius Prepare Control to be a
+                  child of Azorius Control and authorized the repair on 2026-09-21.
+                  Full retained-corpus verification found only the 17 previously accepted
+                  W38 migrations plus 24 parent-preserving Azorius Control subtype migrations,
+                  with no new unknown, conflict, or classification loss.
                 accepted_on: '2026-09-21'
-                entrypoint: http://127.0.0.1:8766/standard/2026-W38/index.html
-                submitted_digest: 41b5a06fd44dc6ca22c20dac2dbfae824fa170b97f75cb2a96d6f23bb375a020
+                entrypoint: 'Codex current task: Owner messages 蓝白备法控不是蓝白控的子类别吗？ and 请修正'
+                submitted_digest: 6bc89e225bbc83e49fb63e470ac259b0270dc7e513d49554f0df253428997d5f
       - week: 2026-W37
         kind: owner_accepted_full_classification
         event_ids:
@@ -583,6 +589,73 @@ data_admissions:
           Affinity, Jeskai Affinity, and Mono-White Battle Screech. Statistics publication
           was requested while the existing Landing remains retained.'
         observed_empty_weeks: []
+      - week: 2026-W38
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12854103'
+        - '12854110'
+        - '12854119'
+        - '12854477'
+        - '12854488'
+        - '12854493'
+        - '12854501'
+        - '12854518'
+        source_manifest_digest: 0d059ba88da58101595bdd243bd8b1afe4b85b77ca9c2f0daaf0d72606bf74a2
+        accepted_classifier_subject: b309e1838d67585e54c25eaf4da109df10dc6a1b3afd0b0f7e889b90eaf77613
+        classification_review_digest: d26f8ee0fe70f3bc120b77c3dfdcc478fbcedef1b86072d00e20b17cd2ff4952
+        accepted_on: '2026-09-22'
+        evidence: Owner accepted the corrected Pauper 2026-W38 complete classification
+          snapshot in the active Codex conversation on 2026-09-22 after confirming
+          the new Rakdos Synthesizer parent and all other displayed results.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pauper
+            week: 2026-W38
+            bindings:
+              event_ids:
+              - '12854103'
+              - '12854110'
+              - '12854119'
+              - '12854477'
+              - '12854488'
+              - '12854493'
+              - '12854501'
+              - '12854518'
+              record_count: 247
+              classifier: b309e1838d67585e54c25eaf4da109df10dc6a1b3afd0b0f7e889b90eaf77613
+              classification_review_digest: d26f8ee0fe70f3bc120b77c3dfdcc478fbcedef1b86072d00e20b17cd2ff4952
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12854103'
+                - '12854110'
+                - '12854119'
+                - '12854477'
+                - '12854488'
+                - '12854493'
+                - '12854501'
+                - '12854518'
+                record_count: 247
+                classifier: b309e1838d67585e54c25eaf4da109df10dc6a1b3afd0b0f7e889b90eaf77613
+                classification_review_digest: d26f8ee0fe70f3bc120b77c3dfdcc478fbcedef1b86072d00e20b17cd2ff4952
+            digest: 2578188a50d4dcbb38219e68a9ea51d7dea3868a0d916991436c10e826bb6ba9
+          decisions:
+            format: pauper
+            week: 2026-W38
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: ea045c274fc05c28082771ed09b39545375ddd841acdb1d0d5a89f95813fb442
+                evidence: Owner accepted the corrected Pauper 2026-W38 complete
+                  classification snapshot in the active Codex conversation on 2026-09-22
+                  after confirming the new Rakdos Synthesizer parent and all other
+                  displayed results.
+                accepted_on: '2026-09-22'
+                entrypoint: http://127.0.0.1:8785/pauper/2026-W38/index.html
+                submitted_digest: 2578188a50d4dcbb38219e68a9ea51d7dea3868a0d916991436c10e826bb6ba9
     modern:
       initial:
         kind: grandfathered_existing_public_scope
@@ -848,6 +921,93 @@ data_admissions:
         evidence: Owner-approved existing public scope migration; not historical full
           manual review
       weekly_acceptances:
+      - week: 2026-W38
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12854101'
+        - '12854108'
+        - '12854109'
+        - '12854115'
+        - '12854117'
+        - '12854120'
+        - '12854476'
+        - '12854484'
+        - '12854494'
+        - '12854499'
+        - '12854500'
+        - '12854505'
+        - '12854510'
+        - '12854515'
+        source_manifest_digest: b4e3b0716a50b5e5c652b76d7e3615415d0738518d3a028fbfaf6648b60737cd
+        accepted_classifier_subject: bf2284808b02c943143c39624cad801349acff404a939411de33661354f02aef
+        classification_review_digest: b258509c203f1567fd4ad4bb71dda7fce34d0839a33b166e9ff71eb1ce8ec9d4
+        accepted_on: '2026-09-21'
+        evidence: Owner reviewed the complete Modern W38 table, supplied all corrections,
+          stated all other results were correct, and explicitly accepted the eight displayed
+          historical collateral migrations in the current Codex task on 2026-09-21. Strict
+          retained-corpus comparison accepted exactly 21 changes with no new unknown,
+          conflict, classification loss, missing expected record, or unexpected record.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: modern
+            week: 2026-W38
+            bindings:
+              event_ids:
+              - '12854101'
+              - '12854108'
+              - '12854109'
+              - '12854115'
+              - '12854117'
+              - '12854120'
+              - '12854476'
+              - '12854484'
+              - '12854494'
+              - '12854499'
+              - '12854500'
+              - '12854505'
+              - '12854510'
+              - '12854515'
+              record_count: 448
+              classifier: bf2284808b02c943143c39624cad801349acff404a939411de33661354f02aef
+              classification_review_digest: b258509c203f1567fd4ad4bb71dda7fce34d0839a33b166e9ff71eb1ce8ec9d4
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12854101'
+                - '12854108'
+                - '12854109'
+                - '12854115'
+                - '12854117'
+                - '12854120'
+                - '12854476'
+                - '12854484'
+                - '12854494'
+                - '12854499'
+                - '12854500'
+                - '12854505'
+                - '12854510'
+                - '12854515'
+                record_count: 448
+                classifier: bf2284808b02c943143c39624cad801349acff404a939411de33661354f02aef
+                classification_review_digest: b258509c203f1567fd4ad4bb71dda7fce34d0839a33b166e9ff71eb1ce8ec9d4
+            digest: 3635b970be61eaf7951dc97059e1aa578aec0613f5abfc30aef20699a7cf0c49
+          decisions:
+            format: modern
+            week: 2026-W38
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: 66f677b4bf162c362303d70574ce2d7609af2b783a02488db99fb9e5cc542149
+                evidence: Owner reviewed the complete Modern W38 table, supplied all
+                  corrections, stated all other results were correct, and explicitly
+                  accepted the eight displayed historical collateral migrations in the
+                  current Codex task on 2026-09-21.
+                accepted_on: '2026-09-21'
+                entrypoint: http://127.0.0.1:8776/modern/2026-W38/index.html ; http://127.0.0.1:8776/historical-impact/index.html
+                submitted_digest: 3635b970be61eaf7951dc97059e1aa578aec0613f5abfc30aef20699a7cf0c49
       - week: 2026-W36
         kind: owner_accepted_full_classification
         event_ids:
@@ -1067,4 +1227,58 @@ data_admissions:
           accepted the complete W37 classification table, and specified the final Esper
           Legends and Rakdos Sacrifice corrections in the active Codex conversation on
           2026-09-20. Pioneer has no Tabletop event in the current launch scope.
-      weekly_acceptances: []
+      weekly_acceptances:
+      - week: 2026-W38
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12854106'
+        - '12854489'
+        - '12854509'
+        - '12854758'
+        source_manifest_digest: d78a47d980cee454db4ca83c66b8f8dbaf39385b89ba0b1d380afa9770e6dfcc
+        accepted_classifier_subject: fb8573639bb5a91d9e50bade6b7b24a33a916c01ae5e243d7720736d5e5fd4e2
+        classification_review_digest: 65d988d32fb844f7c508dc37bd88c12d479742ca36dc98e4eb5d5218b77078ac
+        accepted_on: '2026-09-22'
+        evidence: Owner accepted the corrected Pioneer 2026-W38 full classification
+          snapshot in the active Codex conversation on 2026-09-22 after reviewing
+          the exact 16-deck retained-corpus impact.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pioneer
+            week: 2026-W38
+            bindings:
+              event_ids:
+              - '12854106'
+              - '12854489'
+              - '12854509'
+              - '12854758'
+              record_count: 126
+              classifier: fb8573639bb5a91d9e50bade6b7b24a33a916c01ae5e243d7720736d5e5fd4e2
+              classification_review_digest: 65d988d32fb844f7c508dc37bd88c12d479742ca36dc98e4eb5d5218b77078ac
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12854106'
+                - '12854489'
+                - '12854509'
+                - '12854758'
+                record_count: 126
+                classifier: fb8573639bb5a91d9e50bade6b7b24a33a916c01ae5e243d7720736d5e5fd4e2
+                classification_review_digest: 65d988d32fb844f7c508dc37bd88c12d479742ca36dc98e4eb5d5218b77078ac
+            digest: 18e5ca99c20d722794a2d94efa4636fcd21920a2b77f7693d03c08849db92f46
+          decisions:
+            format: pioneer
+            week: 2026-W38
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: 4beb7f8cc4cf7d6dd0e595b2ff2200bade12fc136c752c557d9e4a6b16deb7ae
+                evidence: Owner accepted the corrected Pioneer 2026-W38 full classification
+                  snapshot in the active Codex conversation on 2026-09-22 after reviewing
+                  the exact 16-deck retained-corpus impact.
+                accepted_on: '2026-09-22'
+                entrypoint: http://127.0.0.1:8779/index.html
+                submitted_digest: 18e5ca99c20d722794a2d94efa4636fcd21920a2b77f7693d03c08849db92f46

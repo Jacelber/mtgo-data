@@ -40,8 +40,74 @@ def scope(tmp_path, monkeypatch):
     candidate_path.parent.mkdir(parents=True)
     candidate_path.write_text('machine_fact_digest: current-facts\n', encoding='utf-8')
     monkeypatch.setattr(web, 'load_mtgo_context', lambda *a: SimpleNamespace(paths={'statistics': root / 'statistics'}))
+    monkeypatch.setattr(web, 'build_feature_share_table', lambda *a: {
+        'threshold': 0.02,
+        'periods': {
+            'current': {'start': '2026-09-07', 'end': '2026-09-13', 'weeks': 1,
+                        'total_high_score': 1, 'total_top8': 1},
+            'previous': {'start': '2026-08-31', 'end': '2026-09-06', 'weeks': 1,
+                         'total_high_score': 1, 'total_top8': 1},
+            'rolling': {'start': '2026-08-17', 'end': '2026-09-13', 'weeks': 4,
+                        'total_high_score': 4, 'total_top8': 4},
+        },
+        'rows': [],
+    })
     return SimpleNamespace(args=args, review=review, acceptance=acceptance, registry=registry,
                            registry_path=registry_path, candidate_path=candidate_path)
+
+
+def test_feature_share_rows_use_strict_threshold_and_current_share_order():
+    def aggregate(total_high, total_top8, rows):
+        return {'total_high_score': total_high, 'total_top8': total_top8,
+                'archetypes': rows}
+
+    def row(archetype_id, high_count, high_share, top8_share):
+        return {'id': archetype_id, 'name': archetype_id,
+                'high_score_count': high_count, 'high_score_share': high_share,
+                'top8_count': 1, 'top8_share': top8_share}
+
+    current = aggregate(100, 40, [
+        row('current-leader', 8, 0.08, 0.10),
+        row('rolling-only', 1, 0.01, 0.02),
+        row('exactly-two', 2, 0.02, 0.03),
+    ])
+    previous = aggregate(90, 32, [
+        row('current-leader', 4, 0.04, 0.06),
+        row('rolling-only', 5, 0.05, 0.04),
+    ])
+    rolling = aggregate(400, 150, [
+        row('current-leader', 24, 0.06, 0.08),
+        row('rolling-only', 12, 0.03, 0.03),
+        row('exactly-two', 8, 0.02, 0.01),
+    ])
+    names = {
+        'current-leader': {'zh': '本周领先', 'en': 'Current Leader'},
+        'rolling-only': {'zh': '四周入选', 'en': 'Rolling Only'},
+    }
+
+    rows = web.select_feature_share_rows(current, previous, rolling, names)
+
+    assert [item['archetype_id'] for item in rows] == [
+        'current-leader', 'rolling-only']
+    assert rows[1]['current']['high_score_share'] == 0.01
+    assert rows[1]['rolling']['high_score_share'] == 0.03
+
+
+def test_feature_share_rows_do_not_use_rounded_share_for_threshold():
+    aggregate = {
+        'total_high_score': 4999,
+        'total_top8': 0,
+        'archetypes': [{
+            'id': 'barely-over', 'name': 'Barely Over',
+            'high_score_count': 100, 'high_score_share': 0.02,
+            'top8_count': 0, 'top8_share': None,
+        }],
+    }
+    empty = {'total_high_score': 0, 'total_top8': 0, 'archetypes': []}
+
+    rows = web.select_feature_share_rows(aggregate, empty, aggregate, {})
+
+    assert [item['archetype_id'] for item in rows] == ['barely-over']
 
 
 def test_default_keeps_classification_available_without_generating_feature(scope, monkeypatch):
@@ -109,7 +175,21 @@ def test_accepted_scope_allows_feature_without_weekly_completion(scope, monkeypa
     data = json.loads((scope.args.output / 'review-data.json').read_text(encoding='utf-8'))
     assert data['review_stage'] == 'feature'
     assert data['subject']['candidate_evidence'] == []  # Empty candidates are a valid result.
+    assert data['subject']['share_table']['threshold'] == 0.02
     assert data['accepted_evidence'][0]['evidence'] == scope.acceptance['evidence']
+    page = (scope.args.output / 'index.html').read_text(encoding='utf-8')
+    assert '近四周' in page
+    assert '本周高分占比严格超过 2%' in page
+    assert '雪境基本地与对应普通基本地已等同处理' in page
+    assert '基本地名称变化也会影响差异' not in page
+
+
+def test_feature_template_formats_return_reason_for_human_review():
+    page = (web.ROOT / 'tools/weekly_review_web.html').read_text(encoding='utf-8')
+
+    assert "if(x.type==='return')" in page
+    assert '高分环境重新出现' in page
+    assert '参考期没有高分记录' in page
 
 
 def test_initial_acceptance_can_cover_a_larger_historical_scope(scope):

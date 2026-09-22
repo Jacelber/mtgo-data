@@ -13,12 +13,14 @@ DELIVERY 规定的现有私有归档，禁止进入公开产品或公共附件�
 
 ```text
 python tools/review_submission.py classification --materials <review-data.json> --requests <groups.json> --output <new-private-directory>
-python tools/review_submission.py content --input <proposed-content.json> --output <new-private-directory>
+python tools/review_submission.py content --input <proposed-content.json> --localization <validated-card-localization.json> --output <new-private-directory>
 ```
 
 `groups.json` 是数组，每项含 `id`、`members`、`reason`、`proposed`；`names` 可分别含
 `zh`、`en`。内容源使用对话导入器的 format/week/bindings/review 结构。
 网页中的既有名称继续显示，但已批准语言无需重复决定；其他显示项各自待审。
+内容材料必须同时传入本次已验证的牌名本地化表；人工写入的 `[[card:英文|显示名]]`
+若英文牌名不存在，或显示的中文名并非同一张牌，生成器会直接拒绝，不得提交审查。
 生成材料后，Codex 打开实际入口，核对链接、完整牌表、数量及视觉呈现，再请求判断。
 
 ## 记录实际决定
@@ -36,8 +38,9 @@ W38 起完整分类网页同时输出 `full-classification-submission.json`；�
 将其 acceptance 对象写入相应 `data_admissions` 条目的 `classification_acceptance`。
 逐条类别建议的确认不能代替完整分类验收。
 
-内容源的 `acceptance` 字段保存 `{submission, decisions}`，再用既有
-`tools/import_landing_conversation.py` 导入；W38 起没有对应材料或内容已变会拒绝。
+内容源的 `acceptance` 字段保存 `{submission, decisions}`，或将 `review_submission.py record`
+的输出通过 `tools/import_landing_conversation.py --acceptance <acceptance.json>` 单独传入；
+W38 起没有对应材料或内容已变会拒绝。
 Excel 使用同一合同：先用 `review_submission.py workbook --input <book.xlsx>
 --output <private-directory>` 提取待提交内容，再走 content/record；将各份 acceptance
 按 `format/week` 保存到工作簿同名 `.submissions.json` 后，用既有 Excel 导入器。

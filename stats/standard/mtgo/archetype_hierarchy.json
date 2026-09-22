@@ -2,12 +2,12 @@
   "schema_version": "1.1.0",
   "format": "standard",
   "source": "mtgo",
-  "classifier_digest": "b44647bf7389c010105f236a63879829dbeb0c13125e629a423856df0533e6e2",
-  "rules_updated": "2026-09-21T16:06:09+09:00",
+  "classifier_digest": "7d901cce22c5f38b9a70ea298d0015eb98b631bebe6ff3a05749ccfcf237ff64",
+  "rules_updated": "2026-09-21T19:22:15+09:00",
   "summary": {
-    "parents": 128,
+    "parents": 127,
     "leaves": 138,
-    "expandable_parents": 4
+    "expandable_parents": 5
   },
   "parents": [
     {
@@ -55,8 +55,11 @@
     {
       "id": "azorius-control",
       "name": "Azorius Control",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "azorius-control/prepare",
+        "azorius-control/traditional"
+      ]
     },
     {
       "id": "azorius-flyers",
@@ -79,12 +82,6 @@
     {
       "id": "azorius-otters",
       "name": "Azorius Otters",
-      "expandable": false,
-      "subtype_ids": []
-    },
-    {
-      "id": "azorius-prepare-control",
-      "name": "Azorius Prepare Control",
       "expandable": false,
       "subtype_ids": []
     },
@@ -855,12 +852,20 @@
       "subtype_id": null
     },
     {
-      "id": "azorius-control",
-      "kind": "archetype",
-      "name": "Azorius Control",
+      "id": "azorius-control/prepare",
+      "kind": "subtype",
+      "name": "Azorius Prepare",
+      "display_name": "Azorius Prepare Control",
+      "parent_id": "azorius-control",
+      "subtype_id": "prepare"
+    },
+    {
+      "id": "azorius-control/traditional",
+      "kind": "subtype",
+      "name": "Azorius",
       "display_name": "Azorius Control",
       "parent_id": "azorius-control",
-      "subtype_id": null
+      "subtype_id": "traditional"
     },
     {
       "id": "azorius-flyers",
@@ -892,14 +897,6 @@
       "name": "Azorius Otters",
       "display_name": "Azorius Otters",
       "parent_id": "azorius-otters",
-      "subtype_id": null
-    },
-    {
-      "id": "azorius-prepare-control",
-      "kind": "archetype",
-      "name": "Azorius Prepare Control",
-      "display_name": "Azorius Prepare Control",
-      "parent_id": "azorius-prepare-control",
       "subtype_id": null
     },
     {

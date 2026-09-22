@@ -9,10 +9,11 @@ const manaIdentities = Object.freeze({
     "azorius-cage": Object.freeze(["w", "u"]),
     "azorius-flyers": Object.freeze(["w", "u"]),
     "azorius-control": Object.freeze(["w", "u"]),
+    "azorius-control/traditional": Object.freeze(["w", "u"]),
+    "azorius-control/prepare": Object.freeze(["w", "u"]),
     "azorius-momo": Object.freeze(["w", "u"]),
     "azorius-oculus": Object.freeze(["w", "u"]),
     "azorius-prison": Object.freeze(["w", "u"]),
-    "azorius-prepare-control": Object.freeze(["w", "u"]),
     "azorius-prowess": Object.freeze(["w", "u"]),
     "azorius-token-control": Object.freeze(["w", "u"]),
     "bant-airbending": Object.freeze(["w", "u", "g"]),
@@ -149,6 +150,7 @@ const manaIdentities = Object.freeze({
     "affinity": Object.freeze(["u", "r"]),
     "agadeem-persist": Object.freeze(["b", "g"]),
     "amulet-titan": Object.freeze(["g"]),
+    "amulet-ramp": Object.freeze(["u", "r", "g"]),
     "asmo-persist": Object.freeze(["b", "r", "g"]),
     "azorius-control": Object.freeze(["w", "u"]),
     "azorius-energy": Object.freeze(["w", "u"]),
@@ -225,6 +227,7 @@ const manaIdentities = Object.freeze({
     "golgari-yawgmoth": Object.freeze(["b", "g"]),
     "grixis-dress-down": Object.freeze(["u", "b", "r"]),
     "grixis-goryos": Object.freeze(["u", "b", "r"]),
+    "grixis-jace-control": Object.freeze(["u", "b", "r"]),
     "grixis-legends": Object.freeze(["u", "b", "r"]),
     "grixis-persist": Object.freeze(["u", "b", "r"]),
     "grixis-tempo": Object.freeze(["u", "b", "r"]),
@@ -248,6 +251,7 @@ const manaIdentities = Object.freeze({
     "jeskai-energy": Object.freeze(["w", "u", "r"]),
     "jeskai-ponza": Object.freeze(["w", "u", "r"]),
     "jeskai-stoneforge": Object.freeze(["w", "u", "r"]),
+    "jund-creativity": Object.freeze(["b", "r", "g"]),
     "jund-sagavan": Object.freeze(["b", "r", "g"]),
     "lantern-control": Object.freeze(["u", "b"]),
     "leyline-fling": Object.freeze(["b", "r"]),
@@ -519,6 +523,7 @@ const manaIdentities = Object.freeze({
     "proliferate-storm": Object.freeze(["u", "b", "r", "g"]),
     "rakdos-affinity": Object.freeze(["b", "r"]),
     "rakdos-madness": Object.freeze(["b", "r"]),
+    "rakdos-synthesizer": Object.freeze(["b", "r"]),
     "ruby-storm": Object.freeze(["r"]),
     "selesnya-gates": Object.freeze(["w", "g"]),
     "slivers": Object.freeze(["w", "g"]),
@@ -542,6 +547,7 @@ const manaIdentities = Object.freeze({
     "izzet-cauldron": Object.freeze(["u", "r"]),
     "izzet-phoenix": Object.freeze(["u", "r"]),
     "izzet-elementals": Object.freeze(["u", "r"]),
+    "dimir-elementals": Object.freeze(["u", "b"]),
     "simic-devotion": Object.freeze(["u", "g"]),
     "dimir-bounce": Object.freeze(["u", "b"]),
     "lotus-scapeshift": Object.freeze(["u", "b", "g"]),
@@ -580,6 +586,7 @@ const manaIdentities = Object.freeze({
     "esper-bounce": Object.freeze(["w", "u", "b"]),
     "esper-legends": Object.freeze(["w", "u", "b"]),
     "fight-rigging-cage": Object.freeze(["w", "g"]),
+    "fight-rigging": Object.freeze(["g"]),
     "five-color-legends": Object.freeze(["w", "u", "b", "r", "g"]),
     "five-color-ramp": Object.freeze(["w", "u", "b", "r", "g"]),
     "four-color-demons": Object.freeze(["w", "u", "b", "r"]),
@@ -610,6 +617,7 @@ const manaIdentities = Object.freeze({
     "jund-citadel": Object.freeze(["b", "r", "g"]),
     "jund-demons": Object.freeze(["b", "r", "g"]),
     "jund-sacrifice": Object.freeze(["b", "r", "g"]),
+    "jund-artifact-sacrifice": Object.freeze(["b", "r", "g"]),
     "lotus-field": Object.freeze(["w", "u", "b", "g"]),
     "lotus-scapeshift/simic": Object.freeze(["u", "g"]),
     "mardu-doom": Object.freeze(["w", "b", "r"]),
@@ -664,6 +672,10 @@ const representativeCards = Object.freeze({
     "4-color-tablet": Object.freeze([
       Object.freeze({"name": "Inevitable Defeat", "image": "../images/representative-cards/standard/inevitable-defeat.jpg"}),
       Object.freeze({"name": "Tablet of Discovery", "image": "../images/representative-cards/standard/tablet-of-discovery.jpg"}),
+    ]),
+    "azorius-control": Object.freeze([
+      Object.freeze({"name": "No More Lies", "image": "../images/representative-cards/standard/no-more-lies.jpg"}),
+      Object.freeze({"name": "Emeritus of Ideation", "image": "../images/representative-cards/standard/emeritus-of-ideation.jpg"}),
     ]),
     "azorius-momo": Object.freeze([
       Object.freeze({"name": "Momo, Friendly Flier", "image": "../images/representative-cards/standard/momo-friendly-flier.jpg"}),
@@ -765,6 +777,10 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Sunderflock", "image": "../images/representative-cards/standard/sunderflock.jpg"}),
       Object.freeze({"name": "Analyze the Pollen", "image": "../images/representative-cards/standard/analyze-the-pollen.jpg"}),
     ]),
+    "azorius-control/prepare": Object.freeze([
+      Object.freeze({"name": "Emeritus of Ideation", "image": "../images/representative-cards/standard/emeritus-of-ideation.jpg"}),
+      Object.freeze({"name": "Skycoach Waypoint", "image": "../images/representative-cards/standard/skycoach-waypoint.jpg"}),
+    ]),
   }),
   modern: Object.freeze({
     "affinity": Object.freeze([
@@ -865,6 +881,10 @@ const representativeCards = Object.freeze({
     ]),
   }),
   pauper: Object.freeze({
+    "battle-screech": Object.freeze([
+      Object.freeze({"name": "Battle Screech", "image": "../images/representative-cards/pauper/battle-screech.jpg"}),
+      Object.freeze({"name": "Rally the Peasants", "image": "../images/representative-cards/pauper/rally-the-peasants.jpg"}),
+    ]),
     "bogles": Object.freeze([
       Object.freeze({"name": "Slippery Bogle", "image": "../images/representative-cards/pauper/slippery-bogle.jpg"}),
       Object.freeze({"name": "Ethereal Armor", "image": "../images/representative-cards/pauper/ethereal-armor.jpg"}),
@@ -929,6 +949,10 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Salt Road Packbeast", "image": "../images/representative-cards/pauper/salt-road-packbeast.jpg"}),
       Object.freeze({"name": "Winding Way", "image": "../images/representative-cards/pauper/winding-way.jpg"}),
     ]),
+    "rakdos-madness": Object.freeze([
+      Object.freeze({"name": "Faithless Looting", "image": "../images/representative-cards/pauper/faithless-looting.jpg"}),
+      Object.freeze({"name": "Alms of the Vein", "image": "../images/representative-cards/pauper/alms-of-the-vein.jpg"}),
+    ]),
     "snacker-gates": Object.freeze([
       Object.freeze({"name": "Sneaky Snacker", "image": "../images/representative-cards/pauper/sneaky-snacker.jpg"}),
       Object.freeze({"name": "Basilisk Gate", "image": "../images/representative-cards/pauper/basilisk-gate.jpg"}),
@@ -982,6 +1006,26 @@ const representativeCards = Object.freeze({
     "dimir-bounce": Object.freeze([
       Object.freeze({"name": "Hopeless Nightmare", "image": "../images/representative-cards/pioneer/hopeless-nightmare.jpg"}),
       Object.freeze({"name": "This Town Ain't Big Enough", "image": "../images/representative-cards/pioneer/this-town-aint-big-enough.jpg"}),
+    ]),
+    "rakdos-sacrifice": Object.freeze([
+      Object.freeze({"name": "Witch's Oven", "image": "../images/representative-cards/pioneer/witchs-oven.jpg"}),
+      Object.freeze({"name": "Cauldron Familiar", "image": "../images/representative-cards/pioneer/cauldron-familiar.jpg"}),
+    ]),
+    "abzan-greasefang": Object.freeze([
+      Object.freeze({"name": "Greasefang, Okiba Boss", "image": "../images/representative-cards/pioneer/greasefang-okiba-boss.jpg"}),
+      Object.freeze({"name": "Esika's Chariot", "image": "../images/representative-cards/pioneer/esikas-chariot.jpg"}),
+    ]),
+    "lotus-scapeshift": Object.freeze([
+      Object.freeze({"name": "Lotus Field", "image": "../images/representative-cards/pioneer/lotus-field.jpg"}),
+      Object.freeze({"name": "Scapeshift", "image": "../images/representative-cards/pioneer/scapeshift.jpg"}),
+    ]),
+    "orzhov-greasefang-monument": Object.freeze([
+      Object.freeze({"name": "Greasefang, Okiba Boss", "image": "../images/representative-cards/pioneer/greasefang-okiba-boss.jpg"}),
+      Object.freeze({"name": "Monument to Endurance", "image": "../images/representative-cards/pioneer/monument-to-endurance.jpg"}),
+    ]),
+    "dimir-ninjas": Object.freeze([
+      Object.freeze({"name": "Kaito, Bane of Nightmares", "image": "../images/representative-cards/pioneer/kaito-bane-of-nightmares.jpg"}),
+      Object.freeze({"name": "Moon-Circuit Hacker", "image": "../images/representative-cards/pioneer/moon-circuit-hacker.jpg"}),
     ]),
   }),
 });

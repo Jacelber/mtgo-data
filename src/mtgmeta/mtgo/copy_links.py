@@ -2,7 +2,32 @@
 from collections import defaultdict
 import re
 
-TOKEN = re.compile(r"\[\[card:[^\[\]\r\n]+\]\]|deck:[0-9a-f]{20}")
+CARD_TOKEN = re.compile(r"\[\[card:([^|\[\]\r\n]+)\|([^\[\]\r\n]+)\]\]")
+TOKEN = re.compile(CARD_TOKEN.pattern + r"|deck:[0-9a-f]{20}")
+
+
+def validate_card_tokens(value, catalog):
+    """Reject manually authored card tokens that disagree with the canonical lookup."""
+    if isinstance(value, dict):
+        for item in value.values():
+            validate_card_tokens(item, catalog)
+        return
+    if isinstance(value, list):
+        for item in value:
+            validate_card_tokens(item, catalog)
+        return
+    if not isinstance(value, str):
+        return
+    for match in CARD_TOKEN.finditer(value):
+        english, displayed = match.groups()
+        entry = catalog.get(english)
+        if not isinstance(entry, dict) or not entry.get('zh_name'):
+            raise ValueError(f'Card token is absent from the canonical localization: {english}')
+        if displayed not in {english, entry['zh_name']}:
+            raise ValueError(
+                f'Card token name mismatch: {english} cannot be displayed as {displayed}; '
+                f"expected {entry['zh_name']}"
+            )
 
 
 def link_card_names(text, catalog, confirmed_names=()):
@@ -12,6 +37,7 @@ def link_card_names(text, catalog, confirmed_names=()):
     Single-word English names require explicit context to avoid words such as
     Consider or Island becoming links accidentally.
     """
+    validate_card_tokens(text, catalog)
     identities = defaultdict(set)
     for english, entry in catalog.items():
         identities[english].add(english)

@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "10be27063f5e73c74d15d358b9ab9bfefa28893f0b0f924ae3b9466a7c00feab"
+    "digest": "bf2284808b02c943143c39624cad801349acff404a939411de33661354f02aef"
   },
   "input": {
     "event_path": "data/modern/melee/events/451148.json",
@@ -18,10 +18,10 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "6d3313c1909b5011a525cae8d2540c68b474a23c78b95df372a97fe173696c46",
+    "rule_sha256": "cd8dc53954126fbe86dcbf9a7d60b263a0235fff1cd241808d5acd4b8bd249e9",
     "rule_schema_version": "1.1.0",
-    "archetype_count": 193,
-    "rule_count": 336,
+    "archetype_count": 196,
+    "rule_count": 346,
     "subtype_count": 93
   },
   "summary": {
@@ -32,8 +32,8 @@
     "invalid_decks": 0,
     "multiple_matches": 102,
     "overridden_matches": 102,
-    "selected_subtypes": 163,
-    "parent_only": 240,
+    "selected_subtypes": 162,
+    "parent_only": 241,
     "same_parent_multiple_subtype_matches": 4,
     "residual_subtype_violations": 0,
     "selected_by_parent": {
@@ -45,19 +45,20 @@
       "badgermole-combo": 1,
       "bant-reclamation": 1,
       "boros-energy": 16,
-      "boros-land-destruction": 13,
+      "boros-land-destruction": 12,
       "broodscale-combo": 44,
       "burn": 1,
       "chant-control": 6,
       "devoted-druid-combo": 13,
       "dimir-goryos": 1,
       "dimir-mill": 2,
-      "dimir-tempo": 17,
+      "dimir-tempo": 16,
       "domain-zoo": 10,
       "eldrazi-aggro": 1,
       "eldrazi-ramp": 1,
       "eldrazi-tron": 21,
       "esper-blink": 31,
+      "esper-control": 1,
       "esper-goryos": 40,
       "fight-rigging": 19,
       "five-color-ritual": 5,
@@ -71,6 +72,7 @@
       "infect": 3,
       "jeskai-ascendancy-combo": 1,
       "jeskai-energy": 3,
+      "jeskai-ponza": 1,
       "living-end": 7,
       "mono-blue-belcher": 2,
       "mono-blue-merfolk": 2,
@@ -94,7 +96,6 @@
       "chant-control/jeskai": 4,
       "devoted-druid-combo/abzan": 13,
       "dimir-tempo/dimir": 16,
-      "dimir-tempo/esper": 1,
       "eldrazi-ramp/gruul": 1,
       "eldrazi-tron/colorless": 8,
       "eldrazi-tron/mono-green": 9,
@@ -3664,14 +3665,80 @@
       "participant_id": "participant-0f308a10763e2b47b763a8685e76333190c50c2a741aa3f5fa2c42565e4cb388",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "dimir-tempo",
-        "archetype_name": "Dimir Tempo",
-        "subtype_id": "esper",
-        "subtype_name": "Dimir White Splash",
-        "rule_id": "dimir-tempo-esper",
-        "priority": 637000
+        "archetype_id": "esper-control",
+        "archetype_name": "Esper Control",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "esper-control-wrath",
+        "priority": 639010
       },
       "matched_rules": [
+        {
+          "archetype_id": "esper-control",
+          "archetype_name": "Esper Control",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-control-wrath",
+          "priority": 639010,
+          "evidence": [
+            {
+              "card": "Wrath of the Skies",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hallowed Fountain",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Fatal Push",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Teferi, Hero of Dominaria",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Snapcaster Mage",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": 2,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "dimir-tempo",
           "archetype_name": "Dimir Tempo",
@@ -3783,6 +3850,74 @@
       ],
       "top_priority_matches": [
         {
+          "archetype_id": "esper-control",
+          "archetype_name": "Esper Control",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-control-wrath",
+          "priority": 639010,
+          "evidence": [
+            {
+              "card": "Wrath of the Skies",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hallowed Fountain",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Fatal Push",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Teferi, Hero of Dominaria",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Snapcaster Mage",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": 2,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
           "archetype_id": "dimir-tempo",
           "archetype_name": "Dimir Tempo",
           "subtype_id": "esper",
@@ -3823,9 +3958,7 @@
               "exact_count": null
             }
           ]
-        }
-      ],
-      "overridden_matches": [
+        },
         {
           "archetype_id": "azorius-control",
           "archetype_name": "Azorius Control",
@@ -12208,7 +12341,7 @@
             {
               "card": "__classifier-semantic-main-blue-source__",
               "zone": "main",
-              "actual_count": 4,
+              "actual_count": 5,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -12216,7 +12349,7 @@
             {
               "card": "__classifier-semantic-main-white-source__",
               "zone": "main",
-              "actual_count": 2,
+              "actual_count": 3,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -12374,7 +12507,7 @@
             {
               "card": "__classifier-semantic-main-blue-source__",
               "zone": "main",
-              "actual_count": 4,
+              "actual_count": 5,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -12382,7 +12515,7 @@
             {
               "card": "__classifier-semantic-main-white-source__",
               "zone": "main",
-              "actual_count": 2,
+              "actual_count": 3,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -14125,7 +14258,7 @@
         "subtype_id": null,
         "subtype_name": null,
         "rule_id": "ruby-storm-primary",
-        "priority": 214000
+        "priority": 306010
       },
       "matched_rules": [
         {
@@ -14134,7 +14267,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -14162,7 +14295,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -19921,7 +20054,7 @@
         "subtype_id": null,
         "subtype_name": null,
         "rule_id": "ruby-storm-primary",
-        "priority": 214000
+        "priority": 306010
       },
       "matched_rules": [
         {
@@ -19930,7 +20063,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -19958,7 +20091,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -22188,7 +22321,7 @@
         "subtype_id": null,
         "subtype_name": null,
         "rule_id": "ruby-storm-primary",
-        "priority": 214000
+        "priority": 306010
       },
       "matched_rules": [
         {
@@ -22197,7 +22330,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -22225,7 +22358,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -35422,7 +35555,7 @@
         "subtype_id": null,
         "subtype_name": null,
         "rule_id": "ruby-storm-primary",
-        "priority": 214000
+        "priority": 306010
       },
       "matched_rules": [
         {
@@ -35431,7 +35564,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -35459,7 +35592,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -36293,7 +36426,7 @@
         "subtype_id": null,
         "subtype_name": null,
         "rule_id": "ruby-storm-primary",
-        "priority": 214000
+        "priority": 306010
       },
       "matched_rules": [
         {
@@ -36302,7 +36435,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -36330,7 +36463,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -37929,14 +38062,64 @@
       "participant_id": "participant-9209a4ceabcae674acc338a6205889ac3f4c4dac2c47825fcdc68c4ea09f4555",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "boros-land-destruction",
-        "archetype_name": "Boros Ponza",
+        "archetype_id": "jeskai-ponza",
+        "archetype_name": "Jeskai Ponza",
         "subtype_id": null,
         "subtype_name": null,
-        "rule_id": "boros-land-destruction-primary",
-        "priority": 661000
+        "rule_id": "jeskai-ponza-consign",
+        "priority": 661005
       },
       "matched_rules": [
+        {
+          "archetype_id": "jeskai-ponza",
+          "archetype_name": "Jeskai Ponza",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "jeskai-ponza-consign",
+          "priority": 661005,
+          "evidence": [
+            {
+              "card": "Cleansing Wildfire",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Price of Freedom",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hallowed Fountain",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Consign to Memory",
+              "zone": "any",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mana Leak",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
         {
           "archetype_id": "boros-land-destruction",
           "archetype_name": "Boros Ponza",
@@ -38008,6 +38191,58 @@
       ],
       "top_priority_matches": [
         {
+          "archetype_id": "jeskai-ponza",
+          "archetype_name": "Jeskai Ponza",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "jeskai-ponza-consign",
+          "priority": 661005,
+          "evidence": [
+            {
+              "card": "Cleansing Wildfire",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Price of Freedom",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hallowed Fountain",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Consign to Memory",
+              "zone": "any",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mana Leak",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
           "archetype_id": "boros-land-destruction",
           "archetype_name": "Boros Ponza",
           "subtype_id": null,
@@ -38040,9 +38275,7 @@
               "exact_count": null
             }
           ]
-        }
-      ],
-      "overridden_matches": [
+        },
         {
           "archetype_id": "boros-land-destruction",
           "archetype_name": "Boros Ponza",
@@ -39668,7 +39901,7 @@
         "subtype_id": null,
         "subtype_name": null,
         "rule_id": "ruby-storm-primary",
-        "priority": 214000
+        "priority": 306010
       },
       "matched_rules": [
         {
@@ -39677,7 +39910,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -39705,7 +39938,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -39991,7 +40224,7 @@
         "subtype_id": null,
         "subtype_name": null,
         "rule_id": "ruby-storm-primary",
-        "priority": 214000
+        "priority": 306010
       },
       "matched_rules": [
         {
@@ -40000,7 +40233,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -40028,7 +40261,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -40856,7 +41089,7 @@
         "subtype_id": null,
         "subtype_name": null,
         "rule_id": "ruby-storm-primary",
-        "priority": 214000
+        "priority": 306010
       },
       "matched_rules": [
         {
@@ -40865,7 +41098,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -40893,7 +41126,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -40930,7 +41163,7 @@
         "subtype_id": null,
         "subtype_name": null,
         "rule_id": "ruby-storm-primary",
-        "priority": 214000
+        "priority": 306010
       },
       "matched_rules": [
         {
@@ -40939,7 +41172,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -40967,7 +41200,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -43288,8 +43521,8 @@
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
-              "max_count": null,
-              "exact_count": 0
+              "max_count": 1,
+              "exact_count": null
             },
             {
               "card": "Talisman of Curiosity",
@@ -43356,8 +43589,8 @@
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
-              "max_count": null,
-              "exact_count": 0
+              "max_count": 1,
+              "exact_count": null
             },
             {
               "card": "Talisman of Curiosity",
@@ -44313,7 +44546,7 @@
         "subtype_id": null,
         "subtype_name": null,
         "rule_id": "ruby-storm-primary",
-        "priority": 214000
+        "priority": 306010
       },
       "matched_rules": [
         {
@@ -44322,7 +44555,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -44350,7 +44583,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -47711,7 +47944,7 @@
         "subtype_id": null,
         "subtype_name": null,
         "rule_id": "ruby-storm-primary",
-        "priority": 214000
+        "priority": 306010
       },
       "matched_rules": [
         {
@@ -47720,7 +47953,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -47748,7 +47981,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -61271,7 +61504,7 @@
         "subtype_id": null,
         "subtype_name": null,
         "rule_id": "ruby-storm-primary",
-        "priority": 214000
+        "priority": 306010
       },
       "matched_rules": [
         {
@@ -61280,7 +61513,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",
@@ -61308,7 +61541,7 @@
           "subtype_id": null,
           "subtype_name": null,
           "rule_id": "ruby-storm-primary",
-          "priority": 214000,
+          "priority": 306010,
           "evidence": [
             {
               "card": "Ral, Monsoon Mage",

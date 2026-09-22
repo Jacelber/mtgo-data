@@ -48,8 +48,15 @@ def import_content(root, source):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--input',type=Path,required=True)
+    parser.add_argument('--acceptance',type=Path,
+                        help='Separate review_submission.py record output for this exact content')
     args=parser.parse_args()
-    print(import_content(ROOT,json.loads(args.input.read_text(encoding='utf-8'))))
+    source=json.loads(args.input.read_text(encoding='utf-8'))
+    if args.acceptance:
+        if 'acceptance' in source:
+            raise ValueError('Content already contains acceptance; do not supply it twice')
+        source['acceptance']=json.loads(args.acceptance.read_text(encoding='utf-8'))
+    print(import_content(ROOT,source))
 
 
 if __name__=='__main__':

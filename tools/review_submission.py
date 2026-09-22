@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "src"))
 from mtgmeta.mtgo import review_submission as review
+from mtgmeta.mtgo.copy_links import validate_card_tokens
 from mtgmeta.mtgo.publication import require_private_output
 
 
@@ -35,6 +36,8 @@ def main():
     classification.add_argument("--requests", type=Path, required=True)
     content = commands.add_parser("content", help="Prepare proposed bilingual content, names and visuals")
     content.add_argument("--input", type=Path, required=True)
+    content.add_argument("--localization", type=Path, required=True,
+                         help="Canonical bilingual card lookup used to reject mismatched card tokens")
     workbook = commands.add_parser("workbook", help="Extract workbook content for the same review path")
     workbook.add_argument("--input", type=Path, required=True)
     preview = commands.add_parser("preview", help="Bind the actual generated Landing and its dependencies")
@@ -108,7 +111,9 @@ def main():
     if args.command == "classification":
         packet = review.classification_packet(read(args.materials), read(args.requests))
     elif args.command == "content":
-        packet = review.content_packet(root, read(args.input))
+        source = read(args.input)
+        validate_card_tokens(source["review"], read(args.localization))
+        packet = review.content_packet(root, source)
     else:
         packet = review.preview_packet(root, args.format)
     receipt = review.reuse_decisions(packet, read(args.decisions)) if args.decisions else None

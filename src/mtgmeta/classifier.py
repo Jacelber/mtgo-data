@@ -18,7 +18,7 @@ ConflictKind = Literal["parent_archetype", "subtype"]
 
 # Bump this only when classifier evaluation semantics change.  Rule and
 # semantic-feature changes are independently included in each rule digest.
-CLASSIFIER_ENGINE_VERSION = "1.0.0"
+CLASSIFIER_ENGINE_VERSION = "1.1.0"
 
 
 def classifier_digest(rules: RuleSet) -> str:

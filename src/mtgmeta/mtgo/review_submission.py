@@ -553,7 +553,7 @@ def write_materials(packet: dict, output: Path, receipt: dict | None = None, *, 
               "colors": "指示色", "text": "正文", "order": "顺序", "destination_id": "牌表引用",
               "parent_id": "类别", "subtype_id": "子类", "category": "类型", "source_order": "候选顺序"}
     def render(value, field=None):
-        if field == "colors":
+        if field == "colors" and isinstance(value, list):
             return "无色" if value == [] else "／".join({"w": "白", "u": "蓝", "b": "黑", "r": "红", "g": "绿", "c": "无色"}[c] for c in value)
         if isinstance(value, list):
             if field in {"main_deck", "sideboard"}:

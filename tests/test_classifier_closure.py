@@ -539,12 +539,32 @@ def test_public_format_selection_excludes_and_rejects_private_executable(
             "matchup_index.json",
             "top8/index.json",
             "landing/current.json",
+            "archetype_hierarchy.json",
         ):
             _write_json(tmp_path / "stats" / format_id / "mtgo" / suffix, {})
     config = tmp_path / "configs" / "formats.yaml"
     config.parent.mkdir(parents=True)
     config.write_text(
         yaml.safe_dump({"schema_version": "1.3.0", "formats": formats}),
+        encoding="utf-8",
+    )
+    (tmp_path / "configs" / "archetype_mana_identities.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": "1.0",
+                "formats": {"standard": {"approved": {}, "candidates": {}}},
+            },
+            sort_keys=False,
+        ),
+        encoding="utf-8",
+    )
+    rendered = tmp_path / "assets/js/phase8/archetype-visuals.js"
+    rendered.parent.mkdir(parents=True)
+    rendered.write_text(
+        "const manaIdentities = Object.freeze({\n"
+        "  standard: Object.freeze({\n"
+        "  }),\n"
+        "});\n",
         encoding="utf-8",
     )
     write_catalog(tmp_path, generated_at="2026-09-05T00:00:00+00:00")

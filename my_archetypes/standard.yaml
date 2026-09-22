@@ -994,10 +994,32 @@ archetypes:
 - id: azorius-control
   name: Azorius Control
   priority: 39000
+  subtypes:
+  - id: traditional
+    name: Azorius
+  - id: prepare
+    name: Azorius Prepare
   rules:
+  - id: azorius-control-prepare
+    priority: 77200
+    subtype_id: prepare
+    conditions:
+      all:
+      - card: Emeritus of Truce
+        zone: main
+        min_count: 3
+      - card: Emeritus of Ideation
+        zone: main
+        min_count: 3
+      - card: Skycoach Waypoint
+        zone: main
+        min_count: 2
+      - card: Day of Judgment
+        zone: any
+        exact_count: 0
   - id: azorius-control-primary
     priority: 39000
-    subtype_id: null
+    subtype_id: traditional
     conditions:
       all:
       - card: No More Lies
@@ -1012,7 +1034,7 @@ archetypes:
         exact_count: 0
   - id: azorius-control-consult
     priority: 38990
-    subtype_id: null
+    subtype_id: traditional
     conditions:
       all:
       - card: Consult the Star Charts
@@ -1041,7 +1063,7 @@ archetypes:
         exact_count: 0
   - id: azorius-control-consult-ugin
     priority: 38995
-    subtype_id: null
+    subtype_id: traditional
     conditions:
       all:
       - card: Day of Judgment
@@ -1061,7 +1083,7 @@ archetypes:
         exact_count: 0
   - id: azorius-control-trollshaws
     priority: 38998
-    subtype_id: null
+    subtype_id: traditional
     conditions:
       all:
       - card: Plunder the Trollshaws
@@ -1078,7 +1100,7 @@ archetypes:
         min_count: 3
   - id: azorius-control-day-stock
     priority: 38989
-    subtype_id: null
+    subtype_id: traditional
     conditions:
       all:
       - card: No More Lies
@@ -2976,27 +2998,6 @@ archetypes:
       - card: Inti, Seneschal of the Sun
         zone: main
         min_count: 2
-- id: azorius-prepare-control
-  name: Azorius Prepare Control
-  priority: 77200
-  rules:
-  - id: azorius-prepare-control-primary
-    priority: 77200
-    subtype_id: null
-    conditions:
-      all:
-      - card: Emeritus of Truce
-        zone: main
-        min_count: 3
-      - card: Emeritus of Ideation
-        zone: main
-        min_count: 3
-      - card: Skycoach Waypoint
-        zone: main
-        min_count: 2
-      - card: Day of Judgment
-        zone: any
-        exact_count: 0
 - id: boros-ponza
   name: Boros Ponza
   priority: 77180
