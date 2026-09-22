@@ -110,12 +110,9 @@ def _sheets(scope=None, *, all_top8_rows=()):
 
 
 def _current_scope():
-    document = json.loads(
-        (ROOT / "stats/standard/mtgo/landing/current.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    return "standard", document["week"]["id"]
+    # This suite protects the retained workbook contract. W38+ submission
+    # requirements are exercised separately, not selected by today's Landing.
+    return "standard", "2026-W37"
 
 
 @pytest.fixture(scope="module")

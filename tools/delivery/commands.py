@@ -3,7 +3,67 @@ from __future__ import annotations
 
 import re
 from tools.delivery import state as transitions
-from tools.pages_writer import context, resume_completed
+from tools.pages_writer import context, resume_completed, reconcile_pending
+
+
+def remember_candidate(target: str, preparation: str, package: str, base: str | None) -> None:
+    """Keep the archived result discoverable by the same preparation ID."""
+    archive, _ = context(target)
+    archive.private()
+    state, sha = archive.load_state()
+    info = state['packages'].get(package, {})
+    if not info.get('complete') or info.get('target') != target:
+        raise transitions.Conflict('Preparation result is not fully archived for this target')
+    for identifier, other in state['packages'].items():
+        if preparation in other.get('preparations', {}) and identifier != package:
+            raise transitions.Conflict('Preparation already names another archived package; preserve it')
+    recorded = info.setdefault('preparations', {})
+    if preparation in recorded:
+        if recorded[preparation] != base:
+            raise transitions.Conflict('Original preparation base cannot be changed')
+        return
+    recorded[preparation] = base
+    archive.save_state(state, sha)
+
+
+def preflight(target: str, preparation: str | None = None) -> dict:
+    """Resolve old facts before expensive preparation; acquire no writer lock."""
+    archive, pages = context(target)
+    archive.private()
+    state, sha = archive.load_state()
+    observation = None
+    if state["pending"]:
+        pending = state["pending"]
+        if pending.get("run"):
+            run = pages.client.api(f"repos/{target}/actions/runs/{pending['run']}")
+            if run["status"] != "completed":
+                return {"state": "waiting", "operation": pending["operation"], "run": run["id"]}
+        observation = reconcile_pending(archive, pages, state, sha, target=target)
+        state, sha = archive.load_state()
+        if state["pending"]:
+            return {"state": "waiting", "operation": state["pending"]["operation"], "observation": observation}
+    if (observation is None and state['current']
+            and state['current'].get('health') == 'unknown'):
+        observation = resume_completed(archive, pages, state, sha, target=target,
+                                       operation=state['current']['operation'])
+        state, sha = archive.load_state()
+    if state["recovery"]:
+        return {"state": "recovery_required", "recovery": state["recovery"], "observation": observation}
+    current = state["current"]
+    expected = current["remote"]["deployment_id"] if current else None
+    actual = pages.current(expected=expected)
+    if not current and actual:
+        raise transitions.Conflict("Existing deployment needs its actual archived baseline")
+    result = {"state": "ready", "base": transitions.current_id(state),
+              "current": current, "observation": observation}
+    if preparation:
+        matches = [(key, info['preparations'][preparation]) for key, info in state['packages'].items()
+                   if preparation in info.get('preparations', {})]
+        if len(matches) > 1:
+            raise transitions.Conflict('Ambiguous archived preparation; preserve all candidates')
+        if matches:
+            result.update(package=matches[0][0], candidate_base=matches[0][1])
+    return result
 
 
 def dispatch(target: str, operation: str, package: str, base: str | None, mode: str, reason: str = "",
@@ -32,6 +92,8 @@ def dispatch(target: str, operation: str, package: str, base: str | None, mode: 
                 original = pages.client.api(f"repos/{target}/actions/runs/{pending['run']}")
                 if original["status"] != "completed":
                     return {"state": "already_submitted", "run": original["id"], "url": original["html_url"]}
+            if pending.get("remote") or pending.get("phase") != "claimed":
+                return reconcile_pending(archive, pages, state, sha, target=target)
     elif mode == "recovery":
         info = state["packages"].get(package, {})
         if not info.get("complete") or info.get("target") != target:
@@ -45,8 +107,17 @@ def dispatch(target: str, operation: str, package: str, base: str | None, mode: 
         if automatic and state.get("automatic_publication_pause"):
             return {"state": "publication_paused", "pause": state["automatic_publication_pause"],
                     "next": "Preparation may continue; release requires Owner instruction or prior authorization"}
+        if state["pending"]:
+            result = preflight(target)
+            if result['state'] != 'ready':
+                return {**result, 'package': package, 'candidate_base': base}
+            state, sha = archive.load_state()
+            if transitions.current_id(state) == operation and not state['pending']:
+                return resume_completed(archive, pages, state, sha, target=target, operation=operation)
         if state["pending"] or state["recovery"] or base != transitions.current_id(state):
-            raise transitions.Conflict("Resolve the current write/recovery or stale candidate base first")
+            raise transitions.Conflict(
+                f"Candidate {package} retained at base {base!r}; resolve the current write/recovery or stale "
+                "combination, then deliver this archived package. Do not rerun preparation.")
     else:
         raise ValueError("Unsupported operation mode")
     info = state["packages"].get(package, {})

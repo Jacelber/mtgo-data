@@ -45,6 +45,10 @@ python tools/build_weekly_review_web.py --scope standard=2026-W37 --scope modern
 `--include-feature` 重新生成；这只是 Codex 的技术操作，不增加一次 Owner 授权。
 工具核对既有 `data_admissions` 中当前赛制、周次、赛事和分类摘要的实际接纳依据，
 并通过现有消费者核对机械候选的统计摘要；缺失或过期时不提供 Feature 材料。
+当前事实构建不读取旧机械候选。Feature 入口在确认完整分类已验收后，自动重建缺失或
+过期且未含人工决定的候选，再核对赛事、分类、策略、统计与牌表目录摘要后提交。
+含人工决定的旧候选和已提交 Web 快照保持不变；受影响内容按既有 submission 机制续作。
+publication 继续核对实际内容与验收对象，不因旧辅助候选过期重新开启未变化的业务验收。
 机器能生成候选、Unknown 数量少或某场赛事单独审过，都不代表本周完整分类已验收。
 
 正文整理时使用 `tools/prepare_landing_copy.py --input <copy.json> --card-catalog

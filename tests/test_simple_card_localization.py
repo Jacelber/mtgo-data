@@ -15,6 +15,14 @@ from tools import build_simple_card_localization as localization
 WEBP = b"RIFF\x04\x00\x00\x00WEBP"
 
 
+@pytest.fixture(autouse=True)
+def localization_scope_without_unrelated_visual_loader(monkeypatch):
+    # These fixtures exercise public card demand and cache reuse. Mana identity
+    # admission has its own real-loader tests; it is not an input to card lookup.
+    from mtgmeta import catalog
+    monkeypatch.setattr(catalog, "require_complete_mana_identities", lambda *args: None)
+
+
 def test_explicit_copy_cards_enter_localization_demand():
     copy = {"text": {"zh": "[[card:Dispatch|迅速了结]]", "en": "Plain Consider; [[card:Dispatch]]"}}
     assert set(localization._card_names(copy)) == {"Dispatch"}
@@ -41,6 +49,11 @@ def _root(tmp_path: Path) -> Path:
     source_root = Path(__file__).resolve().parents[1]
     (root / "configs").mkdir(parents=True)
     shutil.copyfile(source_root / "configs/formats.yaml", root / "configs/formats.yaml")
+    registry_path = root / "configs/formats.yaml"
+    registry = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
+    for definition in registry["formats"]:
+        definition["public"] = definition["id"] in {"standard", "modern"}
+    registry_path.write_text(yaml.safe_dump(registry), encoding="utf-8")
     shutil.copyfile(
         source_root / "configs/pages_publication.json",
         root / "configs/pages_publication.json",
@@ -211,7 +224,8 @@ def test_demand_changes_when_a_fixture_becomes_complete_public(tmp_path: Path):
     registry = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
     pauper = next(item for item in registry["formats"] if item["id"] == "pauper")
     pauper["public"] = True
-    pauper["mtgo"]["capabilities"].append("landing_generation")
+    if "landing_generation" not in pauper["mtgo"]["capabilities"]:
+        pauper["mtgo"]["capabilities"].append("landing_generation")
     registry_path.write_text(yaml.safe_dump(registry, sort_keys=False), encoding="utf-8")
 
     assert "New Public Card" in localization.product_card_names(root)

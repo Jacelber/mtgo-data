@@ -38,7 +38,8 @@ def scope(tmp_path, monkeypatch):
     monkeypatch.setattr(web, 'build_mtgo_weekly_review', lambda *a, **kw: deepcopy(review))
     candidate_path = root / 'statistics/landing/review/candidates_2026-W37.yaml'
     candidate_path.parent.mkdir(parents=True)
-    candidate_path.write_text('machine_fact_digest: current-facts\n', encoding='utf-8')
+    candidate_path.write_text(yaml.safe_dump({'machine_fact_digest': 'current-facts',
+        'source_event_ids': ['123'], 'classifier_digest': 'rules-a'}), encoding='utf-8')
     monkeypatch.setattr(web, 'load_mtgo_context', lambda *a: SimpleNamespace(paths={'statistics': root / 'statistics'}))
     monkeypatch.setattr(web, 'build_feature_share_table', lambda *a: {
         'threshold': 0.02,
@@ -150,19 +151,22 @@ def test_feature_rejects_missing_or_outdated_acceptance(scope, monkeypatch, chan
 
 
 @pytest.mark.parametrize('candidate', [None, {}, {'machine_fact_digest': 'old-facts'}])
-def test_feature_requires_current_candidate_facts(scope, monkeypatch, candidate):
+def test_feature_refreshes_unsubmitted_candidate_facts(scope, monkeypatch, candidate):
     if candidate is None:
         scope.candidate_path.unlink()
     else:
         scope.candidate_path.write_text(yaml.safe_dump(candidate), encoding='utf-8')
-    # Exercise the real consumer's stale-binding rejection with only expensive inputs replaced.
-    from mtgmeta.mtgo import landing, landing_editorial as editorial
-    monkeypatch.setattr(editorial, 'load_mtgo_context', web.load_mtgo_context)
-    monkeypatch.setattr(editorial, 'load_rules_for_format', lambda *a: {})
-    monkeypatch.setattr(editorial.stats, 'load_all_events', lambda *a, **kw: [])
-    monkeypatch.setattr(landing, 'machine_fact_digest_for_week', lambda *a: 'current-facts')
-    with pytest.raises((ValueError, web.MTGOLandingEditorialError)):
-        web.feature_subject(scope.review, [scope.acceptance])
+    current = {'source_event_ids': ['123'], 'classifier_digest': 'rules-a',
+               'machine_fact_digest': 'current-facts', 'all_top8': [], 'candidate_evidence': []}
+    monkeypatch.setattr(web, 'build_top8_subject', lambda *a: deepcopy(current))
+    calls = []
+    def refresh(*args, **kwargs):
+        calls.append(kwargs)
+        scope.candidate_path.write_text(yaml.safe_dump(current), encoding='utf-8')
+        return {'review_required': False}
+    monkeypatch.setattr(web.landing_screening, 'prepare_candidates', refresh)
+    assert web.feature_subject(scope.review, [scope.acceptance]) == current
+    assert calls == [{'week': '2026-W37', 'preserve_existing': True}]
 
 
 def test_accepted_scope_allows_feature_without_weekly_completion(scope, monkeypatch):
@@ -182,6 +186,25 @@ def test_accepted_scope_allows_feature_without_weekly_completion(scope, monkeypa
     assert '本周高分占比严格超过 2%' in page
     assert '雪境基本地与对应普通基本地已等同处理' in page
     assert '基本地名称变化也会影响差异' not in page
+
+
+def test_candidate_refresh_preserves_manual_decisions(scope, monkeypatch):
+    current = {'source_event_ids': ['123'], 'classifier_digest': 'rules-a',
+               'machine_fact_digest': 'new-facts', 'all_top8': [], 'candidate_evidence': []}
+    monkeypatch.setattr(web, 'build_top8_subject', lambda *a: current)
+    before = scope.candidate_path.read_bytes()
+    monkeypatch.setattr(web.landing_screening, 'prepare_candidates', lambda *a, **kw: {'review_required': True})
+    with pytest.raises(ValueError, match='人工决定'):
+        web.feature_subject(scope.review, [scope.acceptance])
+    assert scope.candidate_path.read_bytes() == before
+
+
+def test_candidate_refresh_cannot_hide_changed_business_subject(scope, monkeypatch):
+    monkeypatch.setattr(web, 'build_top8_subject', lambda *a: {
+        'source_event_ids': ['456'], 'classifier_digest': 'rules-a'})
+    monkeypatch.setattr(web.landing_screening, 'prepare_candidates', lambda *a, **kw: pytest.fail('Must not refresh before acceptance'))
+    with pytest.raises(ValueError, match='不一致'):
+        web.feature_subject(scope.review, [scope.acceptance])
 
 
 def test_feature_template_formats_return_reason_for_human_review():
