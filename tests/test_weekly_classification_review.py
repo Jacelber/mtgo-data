@@ -771,7 +771,7 @@ def supplement_case(tmp_path, monkeypatch):
     for key, relative in files.items():
         _write_json(landing / relative, {"format": "standard", "classifier_digest": "fixture",
             "period": {"start": "2026-08-24" if key == "feature_decks" else week["start"], "end": week["end"]}})
-    for relative, text in {"index.html": "synthetic", "melee/index.html": "synthetic", "stats/catalog.json": "{}",
+    for relative, text in {"index.html": '<script src="assets/js/phase8/app.js"></script><script src="assets/js/phase8/archetype-visuals.js"></script>', "melee/index.html": "synthetic", "stats/catalog.json": "{}",
         "stats/standard/archetype_names.json": '{"names":[]}', "assets/js/phase8/app.js": "/* synthetic */",
         "assets/js/phase8/archetype-visuals.js": 'const manaIdentities = Object.freeze({\n  standard: Object.freeze({\n  }),\n});'}.items():
         path = root / relative
@@ -999,3 +999,50 @@ def test_supplement_chain_rejects_reordering_and_preserves_first_valid_fact(supp
     case.completion["completed_on"] = "2026-09-22"
     result = supplement.coverage(case.root, case.completion, "standard")
     assert result["covered_event_ids"] == ["10"] and len(result["problems"]) == 2
+
+
+def test_legacy_preview_continues_through_resume_archive_and_supplement(supplement_case, monkeypatch):
+    from copy import deepcopy
+    import sys
+    from mtgmeta.mtgo import review_submission as review, supplement_completion as supplement
+    from tools import review_submission as cli, generate_weekly_maintenance_readiness as ready
+    case = supplement_case
+    legacy = case.completion["formats"]["standard"]["preview_acceptance"]
+    packet = legacy["submission"]
+    packet["bindings"].pop("renderer_selection")
+    for name in ("app-tabletop.js", "tabletop-controller.js"):
+        path = f"assets/js/phase8/{name}"
+        (case.root / path).write_text("/* old unrelated renderer */")
+        for resources in (packet["bindings"]["renderer_resources"], packet["dimensions"]["final_page"]["renderer_resources"]):
+            resources[path] = review.hashlib_sha(case.root / path)
+    packet["digest"] = review.digest({k:v for k,v in packet.items() if k != "digest"})
+    legacy["decisions"] = case.accept(packet)
+    legacy["publication"]["preview_digest"] = packet["digest"]
+    original = deepcopy(case.completion)
+    candidate, state = case.advance("11")
+    # A later change to unloaded Tabletop code must not demand a new MTGO decision.
+    (case.root / "assets/js/phase8/app-tabletop.js").write_text("/* new unrelated renderer */")
+    review.validate_completion(case.root, "standard", "2026-W38", case.completion["formats"]["standard"])
+    resumed = review.resume_summary(case.root, "standard", "2026-W38", envelope=legacy)
+    assert resumed["pending_decisions"] == [] and resumed["preview"] == "accepted_recorded"
+    acceptance, publication, output = (case.tmp / name for name in ("legacy-preview.json", "publication.json", "completion-proof.json"))
+    _write_json(acceptance, legacy)
+    _write_json(publication, state)
+    monkeypatch.setattr(sys, "argv", ["review_submission", "--root", str(case.root), "completion",
+        "--acceptance", str(acceptance), "--candidate", str(candidate), "--publication-state", str(publication), "--output", str(output)])
+    cli.main()
+    exported = json.loads(output.read_text(encoding="utf-8"))
+    assert exported["submission"] == legacy["submission"] and exported["decisions"] == legacy["decisions"]
+    assert exported["publication"]["package"] == state["current"]["package"]
+    fact = supplement.build(case.root, case.completion, "standard", candidate=candidate, state=state,
+                            completed_on="2026-09-29", evidence="synthetic supplement")
+    assert fact["preview"]["mode"] == "retained" and "content_acceptance" not in fact
+    assert case.completion == original
+    case.completion["formats"]["standard"]["supplements"] = [fact]
+    _write_yaml(case.root / "configs/mtgo_weekly_review_completions.yaml", case.registry)
+    result = supplement.coverage(case.root, case.completion, "standard")
+    assert not result["problems"] and result["covered_event_ids"] == ["10", "11"]
+    supplement.validate_current_preview(case.root, "standard", result["effective"])
+    assert ready._completion_state(case.root, "2026-W38", format_id="standard")["state"] == "verified"
+    (case.root / "assets/js/phase8/app.js").write_text("/* loaded renderer actually changed */")
+    with pytest.raises(ValueError): supplement.validate_current_preview(case.root, "standard", result["effective"])

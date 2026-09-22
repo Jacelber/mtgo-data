@@ -91,7 +91,7 @@ def test_completion_requires_the_accepted_preview_in_the_confirmed_archive(site,
     assets.mkdir(parents=True)
     (assets / "app.js").write_text("/* fixture renderer */")
     (assets / "archetype-visuals.js").write_text('const manaIdentities = Object.freeze({\n  standard: Object.freeze({\n  }),\n});')
-    for relative, text in {"index.html": "<html>synthetic page</html>", "melee/index.html": "synthetic",
+    for relative, text in {"index.html": '<script src="assets/js/phase8/app.js"></script><script src="assets/js/phase8/archetype-visuals.js"></script>' , "melee/index.html": "synthetic",
                            "stats/catalog.json": "{}", "stats/standard/archetype_names.json": '{"names":[]}'}.items():
         path = root / relative
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -129,3 +129,32 @@ def test_completion_requires_the_accepted_preview_in_the_confirmed_archive(site,
     (assets / "app.js").write_text("/* changed display after acceptance */")
     with pytest.raises(ValueError, match="differs"):
         review.validate_completion(root, "standard", "2026-W38", {"preview_acceptance": envelope})
+
+
+@pytest.mark.parametrize("change,expected", [("other_format", "current"), ("selected_color", "changed"), ("selected_image", "changed")])
+def test_direct_resources_preserve_selected_visual_semantics(site, change, expected):
+    from mtgmeta.mtgo import review_submission as review
+    root, base, documents = site
+    page = documents["current.json"]
+    page["environment"] = {"rows": [{"archetype_id": "test", "key_cards": [{"name": "Card"}]}]}
+    (base / "current.json").write_text(json.dumps(page))
+    assets = root / "assets/js/phase8"
+    assets.mkdir(parents=True)
+    visual = assets / "archetype-visuals.js"
+    visual.write_text('const manaIdentities = Object.freeze({\n'
+        '  standard: Object.freeze({\n    "test": Object.freeze(["u"]),\n  }),\n'
+        '  pauper: Object.freeze({\n    "other": Object.freeze(["g"]),\n  }),\n});\n'
+        'const representativeCards = Object.freeze({\n  standard: Object.freeze({\n'
+        '    "test": Object.freeze([\n      Object.freeze({"name":"Card","image":"../images/representative-cards/standard/card.jpg"}),\n    ]),\n  }),\n});\n')
+    (assets / "app.js").write_text("/* renderer */")
+    (root / "index.html").write_text('<script src="assets/js/phase8/app.js"></script><script src="assets/js/phase8/archetype-visuals.js"></script>')
+    names = root / "stats/standard/archetype_names.json"
+    names.write_text(json.dumps({"names": [{"identity_id": "test", "display": {"zh": "示例", "en": "Test"}}]}))
+    image = root / "assets/images/representative-cards/standard/card.jpg"
+    image.parent.mkdir(parents=True)
+    image.write_bytes(b"synthetic selected image bytes")
+    before = review.preview_packet(root, "standard")
+    if change == "other_format": visual.write_text(visual.read_text().replace('["g"]', '["b"]'))
+    if change == "selected_color": visual.write_text(visual.read_text().replace('["u"]', '["r"]'))
+    if change == "selected_image": image.write_bytes(b"changed selected image bytes")
+    assert review.packet_validity(before, review.preview_packet(root, "standard"))["state"] == expected
