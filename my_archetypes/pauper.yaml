@@ -1284,6 +1284,24 @@ archetypes:
       - card: "Refurbished Familiar"
         zone: main
         min_count: 3
+- id: rakdos-synthesizer
+  name: "Rakdos Synthesizer"
+  priority: 8785
+  rules:
+  - id: rakdos-synthesizer
+    priority: 8785
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Experimental Synthesizer"
+        zone: main
+        min_count: 3
+      - card: "Black Mage's Rod"
+        zone: main
+        min_count: 3
+      - card: "Kessig Flamebreather"
+        zone: main
+        min_count: 3
 - id: esper-affinity
   name: "Esper Affinity"
   priority: 8701
@@ -1864,6 +1882,23 @@ archetypes:
       - card: "Fireblast"
         zone: main
         min_count: 2
+  - id: mono-red-burn-pingers
+    priority: 8348
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Thermo-Alchemist"
+        zone: main
+        min_count: 3
+      - card: "Guttersnipe"
+        zone: main
+        min_count: 2
+      - card: "Lava Dart"
+        zone: main
+        min_count: 3
+      - card: "Galvanic Blast"
+        zone: main
+        min_count: 3
 - id: ephemerate
   name: "Jeskai Ephemerate"
   priority: 8300
@@ -1934,7 +1969,7 @@ archetypes:
         min_count: 2
       - card: "Skred"
         zone: main
-        min_count: 3
+        min_count: 2
       - card: "Archaeomancer"
         zone: main
         min_count: 1
@@ -2222,13 +2257,7 @@ archetypes:
         min_count: 3
       - card: "Winding Way"
         zone: main
-        min_count: 3
-      - card: "Khalni Garden"
-        zone: main
-        min_count: 3
-      - card: "Ardent Recruit"
-        zone: main
-        exact_count: 0
+        min_count: 2
 - id: food-gardens
   name: "Food Gardens"
   priority: 7900

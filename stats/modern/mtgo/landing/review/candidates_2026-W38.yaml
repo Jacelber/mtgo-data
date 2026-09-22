@@ -8,7 +8,7 @@ selection_policy:
   build_shift: 20
   build_reference_minimum: 8
   active_release_sets: []
-machine_fact_digest: 14b6b831e41887b0b7a31f680d5394d4f4128fd4fff2042b317a797c213594fe
+machine_fact_digest: eaca1c3730ad268c1b473be2bdbcdfd1208d068512bf88d258cbfd1a77b6e23e
 note: Machine candidates are evidence aids. The reviewer may select none, replace a candidate, and freely rewrite or remove all editorial copy.
 existing_changes:
 - identity_id: broodscale-combo/mono-green
@@ -430,12 +430,12 @@ existing_changes:
       - name: Ugin's Labyrinth
         deck_qty: 0
         typical_qty: 2.1
+      - name: Forest
+        deck_qty: 4
+        typical_qty: 5.6
       - name: Devourer of Destiny
         deck_qty: 0
         typical_qty: 1.6
-      - name: Forest
-        deck_qty: 4
-        typical_qty: 5.5
       - name: Blade of the Bloodchief
         deck_qty: 2
         typical_qty: 3.0
@@ -626,9 +626,9 @@ existing_changes:
       - name: Scalding Tarn
         deck_qty: 1
         typical_qty: 0.4
-      - name: Island
-        deck_qty: 3
-        typical_qty: 2.5
+      - name: Drown in the Loch
+        deck_qty: 1
+        typical_qty: 0.6
   approved: false
   comment_zh: ''
   comment_en: ''
@@ -1154,14 +1154,14 @@ existing_changes:
   swiss_score: 15
   player_count: 82
   starttime: '2026-09-20 11:00:00.0'
-  deviation: 32
+  deviation: 31
   source: existing
   candidate_reasons:
   - type: build_shift
     identity_level: parent
     identity_id: affinity
     reference_sample_size: 71
-    score: 32
+    score: 31
     difference:
       fewer:
       - name: Weapons Manufacturing
@@ -1280,83 +1280,32 @@ existing_changes:
     qty: 4
   - name: Vexing Bauble
     qty: 1
-- identity_id: eldrazi-ramp/gruul
-  archetype_id: eldrazi-ramp
-  subtype_id: gruul
-  subtype: Gruul
+new_archetypes:
+- identity_id: esper-control
+  archetype_id: esper-control
+  subtype_id: null
+  subtype: null
   event_id: '12854500'
-  deck_id: 1f9371f14239f8d3e39a
-  deck_fingerprint_sha256: 6cd54983599b3a28b02c11b65b29068822a1c699ffa28e098e382f75e4853e7b
-  archetype: Eldrazi Ramp
-  player: HouseOfManaMTG
-  final_rank: 8
+  deck_id: 63d94347ed9783e35e42
+  deck_fingerprint_sha256: bfbbd084efb9e349f29776a95e2efc3240af0cbf0fbd13e8f7566b0bb834213a
+  archetype: Esper Control
+  player: GWT
+  final_rank: 6
   swiss_score: 12
   player_count: 36
   starttime: '2026-09-19 06:00:00.0'
-  deviation: 29
-  source: existing
+  deviation: null
+  source: new
   candidate_reasons:
-  - type: build_shift
-    identity_level: subtype
-    identity_id: eldrazi-ramp/gruul
-    reference_sample_size: 21
-    score: 36
-    difference:
-      fewer:
-      - name: Talisman of Impulse
-        deck_qty: 0
-        typical_qty: 3.5
-      - name: Herigast, Erupting Nullkite
-        deck_qty: 0
-        typical_qty: 1.8
-      - name: Formidable Speaker
-        deck_qty: 0
-        typical_qty: 1.6
-      - name: Unholy Heat
-        deck_qty: 0
-        typical_qty: 1.2
-      - name: World Breaker
-        deck_qty: 0
-        typical_qty: 1.1
-      - name: Forest
-        deck_qty: 2
-        typical_qty: 3.1
-      - name: Kozilek's Return
-        deck_qty: 1
-        typical_qty: 2.0
-      - name: Commercial District
-        deck_qty: 0
-        typical_qty: 1.0
-      more:
-      - name: Ancient Stirrings
-        deck_qty: 4
-        typical_qty: 0.6
-      - name: Talisman of Curiosity
-        deck_qty: 3
-        typical_qty: 0.0
-      - name: Breeding Pool
-        deck_qty: 2
-        typical_qty: 0.0
-      - name: Dismember
-        deck_qty: 2
-        typical_qty: 0.0
-      - name: Trinisphere
-        deck_qty: 2
-        typical_qty: 0.2
-      - name: Misty Rainforest
-        deck_qty: 2
-        typical_qty: 0.9
-      - name: Gemstone Caverns
-        deck_qty: 1
-        typical_qty: 0.0
-      - name: Hedge Maze
-        deck_qty: 1
-        typical_qty: 0.0
+  - type: new_archetype
+    known_state_match: false
+    continuity_alias_match: false
+    prior_record_count_under_current_classifier: 2
   approved: false
   comment_zh: ''
   comment_en: ''
   landing:
-    category: new_technology
+    category: new_deck
     order: null
     headline_zh: ''
     headline_en: ''
@@ -1364,80 +1313,172 @@ existing_changes:
     positioning_en: ''
     featured_cards: []
   main_deck:
-  - name: Ancient Stirrings
+  - name: Brainsurge
     qty: 4
-  - name: Bojuka Bog
+  - name: Consign to Memory
     qty: 1
-  - name: Breeding Pool
-    qty: 2
-  - name: Devourer of Destiny
-    qty: 2
-  - name: Dismember
-    qty: 2
-  - name: Eldrazi Temple
-    qty: 4
-  - name: Emrakul, the Promised End
+  - name: Consult the Star Charts
     qty: 3
+  - name: Counterspell
+    qty: 4
+  - name: Fatal Push
+    qty: 4
+  - name: Flooded Strand
+    qty: 4
+  - name: Hallowed Fountain
+    qty: 2
+  - name: Island
+    qty: 2
+  - name: Kaya's Guile
+    qty: 1
+  - name: Logic Knot
+    qty: 1
+  - name: Marsh Flats
+    qty: 2
+  - name: Meticulous Archive
+    qty: 2
+  - name: Mystic Gate
+    qty: 1
+  - name: Pest Control
+    qty: 1
+  - name: Plains
+    qty: 2
+  - name: Plunder the Trollshaws
+    qty: 1
+  - name: Polluted Delta
+    qty: 4
+  - name: Secluded Starforge
+    qty: 1
+  - name: Shadow of Doubt
+    qty: 1
+  - name: Sheoldred's Edict
+    qty: 2
+  - name: Snapcaster Mage
+    qty: 2
+  - name: Spell Snare
+    qty: 3
+  - name: Swamp
+    qty: 1
+  - name: Teferi, Hero of Dominaria
+    qty: 2
+  - name: The Wandering Emperor
+    qty: 1
+  - name: Undercity Sewers
+    qty: 2
+  - name: Unmoored Ego
+    qty: 1
+  - name: Watery Grave
+    qty: 2
+  - name: Wrath of the Skies
+    qty: 3
+  side_deck:
+  - name: Celestial Purge
+    qty: 1
+  - name: Consign to Memory
+    qty: 3
+  - name: High Noon
+    qty: 2
+  - name: Kaya's Guile
+    qty: 1
+  - name: Mystical Dispute
+    qty: 4
+  - name: Spell Snare
+    qty: 1
+  - name: Surgical Extraction
+    qty: 1
+  - name: Wan Shi Tong, Librarian
+    qty: 1
+  - name: Wrath of the Skies
+    qty: 1
+- identity_id: amulet-ramp
+  archetype_id: amulet-ramp
+  subtype_id: null
+  subtype: null
+  event_id: '12854109'
+  deck_id: 00a19000dd2010fecac2
+  deck_fingerprint_sha256: 8d1f93f11b00550468558e19478a5d6c0aad35ea380615edb32a737a7c3f1d9d
+  archetype: Amulet Ramp
+  player: kanister
+  final_rank: 8
+  swiss_score: 12
+  player_count: 33
+  starttime: '2026-09-15 08:00:00.0'
+  deviation: null
+  source: new
+  candidate_reasons:
+  - type: new_archetype
+    known_state_match: false
+    continuity_alias_match: false
+    prior_record_count_under_current_classifier: 0
+  approved: false
+  comment_zh: ''
+  comment_en: ''
+  landing:
+    category: new_deck
+    order: null
+    headline_zh: ''
+    headline_en: ''
+    positioning_zh: ''
+    positioning_en: ''
+    featured_cards: []
+  main_deck:
+  - name: Amulet of Vigor
+    qty: 4
+  - name: Ancient Stirrings
+    qty: 2
+  - name: Arboreal Grazer
+    qty: 4
+  - name: Boseiju, Who Endures
+    qty: 2
+  - name: Commercial District
+    qty: 1
+  - name: Cultivator Colossus
+    qty: 3
+  - name: Escape to the Wilds
+    qty: 4
+  - name: Explore
+    qty: 4
+  - name: Finale of Devastation
+    qty: 2
   - name: Forest
     qty: 2
-  - name: Gemstone Caverns
+  - name: Gretchen Titchwillow
     qty: 1
-  - name: Ghost Quarter
-    qty: 1
+  - name: Gruul Turf
+    qty: 4
   - name: Hedge Maze
     qty: 1
-  - name: Icetill Explorer
-    qty: 2
-  - name: Kozilek's Command
+  - name: Lessons from Life
     qty: 4
-  - name: Kozilek's Return
-    qty: 1
-  - name: Malevolent Rumble
-    qty: 4
-  - name: Misty Rainforest
-    qty: 2
-  - name: Sire of Seven Deaths
-    qty: 1
-  - name: Sowing Mycospawn
-    qty: 4
-  - name: Stomping Ground
-    qty: 1
-  - name: Talisman of Curiosity
+  - name: Mind into Matter
     qty: 3
-  - name: Trinisphere
-    qty: 2
-  - name: Ugin's Labyrinth
-    qty: 4
-  - name: Ugin, Eye of the Storms
-    qty: 2
-  - name: Utopia Sprawl
-    qty: 4
-  - name: Verdant Catacombs
+  - name: Mirrorpool
     qty: 1
-  - name: Windswept Heath
+  - name: Misty Rainforest
     qty: 1
+  - name: Simic Growth Chamber
+    qty: 4
+  - name: Spelunking
+    qty: 4
+  - name: The Mycosynth Gardens
+    qty: 4
+  - name: Urza's Saga
+    qty: 4
   - name: Wooded Foothills
     qty: 1
   side_deck:
-  - name: Cavern of Souls
-    qty: 1
-  - name: Consign to Memory
-    qty: 4
-  - name: Cursed Totem
-    qty: 2
   - name: Dismember
-    qty: 1
+    qty: 3
+  - name: Force of Vigor
+    qty: 2
   - name: Grafdigger's Cage
     qty: 2
-  - name: Kozilek's Return
+  - name: Relic of Progenitus
     qty: 2
   - name: Trinisphere
-    qty: 1
-  - name: Vexing Bauble
-    qty: 1
-  - name: Warping Wail
-    qty: 1
-new_archetypes: []
+    qty: 3
+  - name: Veil of Summer
+    qty: 3
 week_status: provisional
 provisional_through: '2026-09-27'
 seal_on: '2026-09-28'
@@ -1456,6 +1497,6 @@ source_event_ids:
 - '12854505'
 - '12854510'
 - '12854515'
-classifier_digest: 10be27063f5e73c74d15d358b9ab9bfefa28893f0b0f924ae3b9466a7c00feab
+classifier_digest: bf2284808b02c943143c39624cad801349acff404a939411de33661354f02aef
 selection_policy_digest: 3541185e634bcab559bb3118ee3f29ece113552473d1f314bcde2a1e2f697a42
-link_catalog_digest: f3522a4fb62b6edbd7319cc75077c7a935fd6a107118584b72440cc50986a900
+link_catalog_digest: 30ebbf0a46ea35c70d9e54a097014143460c4571db8cb8689153715c142a2ea0

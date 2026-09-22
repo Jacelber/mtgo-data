@@ -130,7 +130,7 @@
   "allOf": [
     {
       "if": {"properties": {"schema_version": {"enum": ["1.0.0", "1.1.0", "1.2.0"]}}},
-      "then": {"properties": {"format": {"enum": ["standard", "modern", "pauper"]}}}
+      "then": {"properties": {"format": {"enum": ["standard", "modern", "pauper", "pioneer"]}}}
     },
     {
       "if": {"properties": {"schema_version": {"const": "1.0.0"}}},

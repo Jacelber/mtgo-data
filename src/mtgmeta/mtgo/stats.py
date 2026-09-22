@@ -9,6 +9,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from mtgmeta.card_names import canonical_basic_land_name
 from mtgmeta.classifier import classifier_digest, classify_deck
 from mtgmeta.legacy_rules import LegacyArchetypeRules
 from mtgmeta.rules import RuleSet
@@ -499,7 +500,9 @@ def deck_vector(record):
     """把 record 的 main_deck 转成 {规范卡名: 张数} 向量（仅主牌）。"""
     vec = {}
     for c in record.get("main_deck", []):
-        name = normalize_legacy_card_name(c.get("name", "?"))
+        name = canonical_basic_land_name(
+            normalize_legacy_card_name(c.get("name", "?"))
+        )
         vec[name] = vec.get(name, 0) + to_int(c.get("qty", 0))
     return vec
 
@@ -835,9 +838,7 @@ def percentile(values, p):
 def _deck_entry(records, base):
     best = pick_best_deck(records)
     if best and base:
-        best_vec = {}
-        for card in best["main_deck"]:
-            best_vec[card["name"]] = best_vec.get(card["name"], 0) + to_int(card["qty"])
+        best_vec = deck_vector(best)
         raw = weighted_l1(best_vec, base["mean"], base["weights"])
         best["deviation"] = normalize_dev_abs(raw, base["denom"])
         best["deviation_diff"] = deck_diff(best_vec, base["mean"])

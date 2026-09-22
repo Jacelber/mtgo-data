@@ -2074,6 +2074,33 @@ archetypes:
       - card: Legion Leadership
         zone: main
         min_count: 4
+- id: amulet-ramp
+  name: Amulet Ramp
+  priority: 667010
+  rules:
+  - id: amulet-ramp-colossus
+    priority: 667010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Amulet of Vigor
+        zone: main
+        min_count: 4
+      - card: Arboreal Grazer
+        zone: main
+        min_count: 4
+      - card: Spelunking
+        zone: main
+        min_count: 3
+      - card: Cultivator Colossus
+        zone: main
+        min_count: 3
+      - card: Mind into Matter
+        zone: main
+        min_count: 3
+      - card: Primeval Titan
+        zone: main
+        exact_count: 0
 - id: amulet-titan
   name: Amulet Titan
   priority: 667000
@@ -2282,6 +2309,26 @@ archetypes:
   name: Jeskai Ponza
   priority: 661010
   rules:
+  - id: jeskai-ponza-consign
+    priority: 661005
+    subtype_id: null
+    conditions:
+      all:
+      - card: Cleansing Wildfire
+        zone: main
+        min_count: 3
+      - card: Price of Freedom
+        zone: main
+        min_count: 3
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 1
+      - card: Consign to Memory
+        zone: any
+        min_count: 3
+      - card: Mana Leak
+        zone: main
+        exact_count: 0
   - id: jeskai-ponza-primary
     priority: 661010
     subtype_id: null
@@ -2850,6 +2897,35 @@ archetypes:
   - id: selesnya
     name: Selesnya
   rules:
+  - id: eldrazi-tron-simic-portent
+    priority: 649008
+    subtype_id: simic
+    conditions:
+      all:
+      - card: Urza's Mine
+        zone: main
+        min_count: 4
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 4
+      - card: Urza's Tower
+        zone: main
+        min_count: 4
+      - card: Eldrazi Temple
+        zone: main
+        min_count: 2
+      - card: Eldrazi Temple
+        zone: main
+        max_count: 2
+      - card: Talisman of Curiosity
+        zone: main
+        min_count: 3
+      - card: Island
+        zone: main
+        min_count: 1
+      - card: Portent of Calamity
+        zone: main
+        min_count: 2
   - id: eldrazi-tron-simic
     priority: 649010
     subtype_id: simic
@@ -2957,6 +3033,35 @@ archetypes:
       - card: Talisman of Resilience
         zone: main
         min_count: 2
+  - id: eldrazi-tron-mono-green-sowing-map
+    priority: 647901
+    subtype_id: mono-green
+    conditions:
+      all:
+      - card: Urza's Mine
+        zone: main
+        min_count: 4
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 4
+      - card: Urza's Tower
+        zone: main
+        min_count: 4
+      - card: Eldrazi Temple
+        zone: main
+        min_count: 3
+      - card: Forest
+        zone: main
+        min_count: 1
+      - card: Sowing Mycospawn
+        zone: main
+        min_count: 3
+      - card: Expedition Map
+        zone: main
+        min_count: 3
+      - card: Ugin's Labyrinth
+        zone: main
+        exact_count: 0
   - id: eldrazi-tron-colorless-map
     priority: 646900
     subtype_id: colorless
@@ -3009,6 +3114,32 @@ archetypes:
       - card: Rest in Peace
         zone: any
         min_count: 1
+  - id: eldrazi-tron-selesnya-chant
+    priority: 649002
+    subtype_id: selesnya
+    conditions:
+      all:
+      - card: Urza's Mine
+        zone: main
+        min_count: 3
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 3
+      - card: Urza's Tower
+        zone: main
+        min_count: 3
+      - card: Eldrazi Temple
+        zone: main
+        min_count: 3
+      - card: Talisman of Unity
+        zone: main
+        min_count: 3
+      - card: Plains
+        zone: main
+        min_count: 1
+      - card: Orim's Chant
+        zone: any
+        min_count: 3
 - id: tron
   name: Tron
   priority: 648100
@@ -3105,7 +3236,7 @@ archetypes:
         min_count: 4
       - card: Eldrazi Temple
         zone: main
-        exact_count: 0
+        max_count: 1
       - card: Talisman of Curiosity
         zone: main
         min_count: 3
@@ -3208,6 +3339,55 @@ archetypes:
   - id: mono-green
     name: Mono-Green
   rules:
+  - id: eldrazi-ramp-temur-consign
+    priority: 643500
+    subtype_id: temur
+    conditions:
+      all:
+      - card: Sowing Mycospawn
+        zone: main
+        min_count: 3
+      - card: Eldrazi Temple
+        zone: main
+        min_count: 3
+      - card: Breeding Pool
+        zone: main
+        min_count: 1
+      - card: Talisman of Curiosity
+        zone: main
+        min_count: 3
+      - card: Consign to Memory
+        zone: any
+        min_count: 3
+      - card: Kozilek's Return
+        zone: any
+        min_count: 1
+      - card: Kozilek's Return
+        zone: main
+        max_count: 1
+  - id: eldrazi-ramp-sultai-consign
+    priority: 645500
+    subtype_id: sultai
+    conditions:
+      all:
+      - card: Sowing Mycospawn
+        zone: main
+        min_count: 3
+      - card: Eldrazi Temple
+        zone: main
+        min_count: 3
+      - card: Talisman of Resilience
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
+      - card: Consign to Memory
+        zone: any
+        min_count: 3
+      - card: Talisman of Curiosity
+        zone: main
+        exact_count: 0
   - id: eldrazi-ramp-sultai
     priority: 646000
     subtype_id: sultai
@@ -3503,10 +3683,10 @@ archetypes:
         exact_count: 0
 - id: ruby-storm
   name: Ruby Storm
-  priority: 214000
+  priority: 306010
   rules:
   - id: ruby-storm-primary
-    priority: 214000
+    priority: 306010
     subtype_id: null
     conditions:
       all:
@@ -4263,6 +4443,33 @@ archetypes:
       - card: Plunge into Darkness
         zone: main
         min_count: 3
+- id: jund-creativity
+  name: Jund Creativity
+  priority: 627010
+  rules:
+  - id: jund-creativity-primary
+    priority: 627010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Indomitable Creativity
+        zone: main
+        min_count: 3
+      - card: Dwarven Mine
+        zone: main
+        min_count: 1
+      - card: Archon of Cruelty
+        zone: main
+        min_count: 1
+      - card: Wrenn and Six
+        zone: main
+        min_count: 3
+      - card: Fatal Push
+        zone: main
+        min_count: 3
+      - card: Leyline Binding
+        zone: main
+        exact_count: 0
 - id: five-color-creativity
   name: Five-Color Creativity
   priority: 627000
@@ -5443,10 +5650,60 @@ archetypes:
       - card: Agatha's Soul Cauldron
         zone: main
         min_count: 3
+- id: grixis-jace-control
+  name: Grixis Jace Control
+  priority: 639020
+  rules:
+  - id: grixis-jace-control-primary
+    priority: 639020
+    subtype_id: null
+    conditions:
+      all:
+      - card: Jace Reawakened
+        zone: main
+        min_count: 3
+      - card: Valki, God of Lies
+        zone: main
+        min_count: 3
+      - card: Ancestral Vision
+        zone: main
+        min_count: 3
+      - card: Tablet of Discovery
+        zone: main
+        min_count: 3
+      - card: Cruel Ultimatum
+        zone: main
+        min_count: 2
 - id: esper-control
   name: Esper Control
   priority: 639000
   rules:
+  - id: esper-control-wrath
+    priority: 639010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Wrath of the Skies
+        zone: main
+        min_count: 3
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 1
+      - card: Counterspell
+        zone: main
+        min_count: 3
+      - card: Fatal Push
+        zone: main
+        min_count: 3
+      - card: Teferi, Hero of Dominaria
+        zone: main
+        min_count: 2
+      - card: Snapcaster Mage
+        zone: main
+        max_count: 2
   - id: esper-control-primary
     priority: 639000
     subtype_id: null

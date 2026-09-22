@@ -621,6 +621,24 @@ archetypes:
       - card: Overgrown Tomb
         zone: main
         min_count: 1
+- id: jund-artifact-sacrifice
+  name: Jund Artifact Sacrifice
+  priority: 100
+  rules:
+  - id: jund-artifact-sacrifice-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Biotech Specialist
+        zone: main
+        min_count: 3
+      - card: The Sackville-Bagginses
+        zone: main
+        min_count: 3
+      - card: Mayhem Devil
+        zone: main
+        min_count: 3
 - id: jund-sacrifice
   name: Jund Sacrifice
   priority: 100
@@ -855,6 +873,27 @@ archetypes:
       - card: Steam Vents
         zone: main
         min_count: 1
+- id: dimir-elementals
+  name: Dimir Elementals
+  priority: 100
+  rules:
+  - id: dimir-elementals-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Deceit
+        zone: main
+        min_count: 3
+      - card: Sunderflock
+        zone: main
+        min_count: 3
+      - card: Stormwing Entity
+        zone: main
+        min_count: 3
+      - card: Fatal Push
+        zone: main
+        min_count: 3
 - id: azorius-spirits
   name: Azorius Spirits
   priority: 100
@@ -1392,6 +1431,24 @@ archetypes:
       - card: Sacred Foundry
         zone: main
         min_count: 1
+- id: fight-rigging
+  name: Fight Rigging
+  priority: 110
+  rules:
+  - id: fight-rigging-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Fight Rigging
+        zone: main
+        min_count: 4
+      - card: Slumbering Trudge
+        zone: main
+        min_count: 4
+      - card: The Great Henge
+        zone: main
+        min_count: 3
 - id: fight-rigging-cage
   name: Fight Rigging Cage
   priority: 100

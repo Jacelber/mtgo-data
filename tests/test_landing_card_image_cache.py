@@ -442,6 +442,31 @@ def test_pages_builder_admits_only_verified_configured_overlay(tmp_path, monkeyp
                 )
                 _write_json(path, value)
     _write_json(root / "configs/formats.yaml", {"schema_version": "1.3.0", "formats": formats})
+    _write_json(
+        root / "configs/archetype_mana_identities.yaml",
+        {
+            "schema_version": "1.0",
+            "formats": {
+                format_name: {"approved": {}, "candidates": {}}
+                for format_name in ("standard", "modern")
+            },
+        },
+    )
+    for format_name in ("standard", "modern"):
+        _write_json(
+            root / f"stats/{format_name}/mtgo/archetype_hierarchy.json",
+            {"parents": [], "leaves": []},
+        )
+    (root / "assets/js/phase8/archetype-visuals.js").parent.mkdir(
+        parents=True, exist_ok=True
+    )
+    (root / "assets/js/phase8/archetype-visuals.js").write_text(
+        "const manaIdentities = Object.freeze({\n"
+        "  standard: Object.freeze({\n  }),\n"
+        "  modern: Object.freeze({\n  }),\n"
+        "});\n",
+        encoding="utf-8",
+    )
     write_catalog(root, generated_at="2026-08-17T00:00:00+00:00")
     (root / "index.html").write_text("ok", encoding="utf-8")
     (root / "assets/base.txt").parent.mkdir(parents=True, exist_ok=True)

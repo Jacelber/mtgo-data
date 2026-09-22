@@ -8,7 +8,7 @@ selection_policy:
   build_shift: 20
   build_reference_minimum: 8
   active_release_sets: []
-machine_fact_digest: df523b825bc28c3f0fec89961c68967ec3624b71ecf46500cc455082c2f77b5b
+machine_fact_digest: 66c2bd0cd155f446d3e02f120f715ecc0cebde62048d8dd35d9b68a635171f26
 note: Machine candidates are evidence aids. The reviewer may select none, replace a candidate, and freely rewrite or remove all editorial copy.
 existing_changes:
 - identity_id: rakdos-madness
@@ -93,6 +93,83 @@ existing_changes:
     qty: 3
   - name: Smash to Smithereens
     qty: 3
+- identity_id: packbeast-swarm/selesnya
+  archetype_id: packbeast-swarm
+  subtype_id: selesnya
+  subtype: Selesnya Packbeast Swarm
+  event_id: '12854103'
+  deck_id: 9621349e16bfb3409450
+  deck_fingerprint_sha256: d25116d50cce22c040cffbda0778720e7a203dedba7621bd62ece40dc6f73190
+  archetype: Packbeast Swarm
+  player: cabrabr12
+  final_rank: 2
+  swiss_score: 18
+  player_count: 53
+  starttime: '2026-09-14 17:00:00.0'
+  deviation: 3
+  source: existing
+  candidate_reasons:
+  - type: share_increase
+    current_high_score_count: 10
+    current_high_score_denominator: 144
+    current_share: 0.0694
+    reference_high_score_count: 7
+    reference_high_score_denominator: 396
+    reference_share: 0.0177
+    delta_pp: 5.18
+  approved: false
+  comment_zh: ''
+  comment_en: ''
+  landing:
+    category: new_technology
+    order: null
+    headline_zh: ''
+    headline_en: ''
+    positioning_zh: ''
+    positioning_en: ''
+    featured_cards: []
+  main_deck:
+  - name: Darval, Whose Web Protects
+    qty: 2
+  - name: Halo Hopper
+    qty: 4
+  - name: Holdout Settlement
+    qty: 1
+  - name: Khalni Garden
+    qty: 4
+  - name: Leonardo, Big Brother
+    qty: 4
+  - name: Martyr's Soul
+    qty: 4
+  - name: Novice Inspector
+    qty: 3
+  - name: Ornithopter
+    qty: 4
+  - name: Phyrexian Walker
+    qty: 4
+  - name: Plains
+    qty: 11
+  - name: Ramosian Rally
+    qty: 4
+  - name: Salt Road Packbeast
+    qty: 4
+  - name: Search Party Captain
+    qty: 4
+  - name: Thraben Inspector
+    qty: 4
+  - name: Winding Way
+    qty: 3
+  side_deck:
+  - name: Dust to Dust
+    qty: 3
+  - name: Plains
+    qty: 3
+  - name: Standard Bearer
+    qty: 2
+  - name: Thraben Charm
+    qty: 3
+  - name: Ultimate Alliance
+    qty: 4
 - identity_id: jund-wildfire
   archetype_id: jund-wildfire
   subtype_id: null
@@ -125,12 +202,12 @@ existing_changes:
       - name: Blood Fountain
         deck_qty: 0
         typical_qty: 1.1
+      - name: Forest
+        deck_qty: 1
+        typical_qty: 1.8
       - name: Pulse of Murasa
         deck_qty: 0
         typical_qty: 0.8
-      - name: Forest
-        deck_qty: 1
-        typical_qty: 1.7
       - name: Toxin Analysis
         deck_qty: 0
         typical_qty: 0.7
@@ -149,7 +226,7 @@ existing_changes:
         typical_qty: 0.8
       - name: Swamp
         deck_qty: 6
-        typical_qty: 3.2
+        typical_qty: 3.3
       - name: Eviscerator's Insight
         deck_qty: 3
         typical_qty: 2.1
@@ -520,23 +597,20 @@ existing_changes:
   swiss_score: 15
   player_count: 53
   starttime: '2026-09-14 17:00:00.0'
-  deviation: 47
+  deviation: 37
   source: existing
   candidate_reasons:
   - type: build_shift
     identity_level: parent
     identity_id: elves
     reference_sample_size: 31
-    score: 47
+    score: 37
     difference:
       fewer:
       - name: Generous Ent
         deck_qty: 0
         typical_qty: 3.7
       - name: Avenging Hunter
-        deck_qty: 0
-        typical_qty: 3.7
-      - name: Snow-Covered Forest
         deck_qty: 0
         typical_qty: 3.7
       - name: Masked Vandal
@@ -554,10 +628,10 @@ existing_changes:
       - name: Gingerbread Cabin
         deck_qty: 0
         typical_qty: 0.9
+      - name: Nyxborn Hydra
+        deck_qty: 3
+        typical_qty: 3.9
       more:
-      - name: Forest
-        deck_qty: 14
-        typical_qty: 7.7
       - name: Elvish Vanguard
         deck_qty: 4
         typical_qty: 0.3
@@ -567,6 +641,9 @@ existing_changes:
       - name: Jaspera Sentinel
         deck_qty: 4
         typical_qty: 0.4
+      - name: Forest
+        deck_qty: 14
+        typical_qty: 11.4
       - name: Distant Melody
         deck_qty: 2
         typical_qty: 0.0
@@ -639,6 +716,145 @@ existing_changes:
   - name: Vitu-Ghazi Inspector
     qty: 2
   - name: Wellwisher
+    qty: 1
+- identity_id: ephemerate/jeskai
+  archetype_id: ephemerate
+  subtype_id: jeskai
+  subtype: Jeskai
+  event_id: '12854103'
+  deck_id: 5f718ab53a2630b087d1
+  deck_fingerprint_sha256: 0ee298f2dd571b69af268c71f9d147b2707c3274c6c6050f436563c41e29b6b3
+  archetype: Jeskai Ephemerate
+  player: ChaoticMTG
+  final_rank: 8
+  swiss_score: 12
+  player_count: 53
+  starttime: '2026-09-14 17:00:00.0'
+  deviation: 38
+  source: existing
+  candidate_reasons:
+  - type: build_shift
+    identity_level: subtype
+    identity_id: ephemerate/jeskai
+    reference_sample_size: 25
+    score: 38
+    difference:
+      fewer:
+      - name: Augur of Bolas
+        deck_qty: 0
+        typical_qty: 3.7
+      - name: Preordain
+        deck_qty: 0
+        typical_qty: 3.6
+      - name: Skred
+        deck_qty: 2
+        typical_qty: 3.8
+      - name: Ride's End
+        deck_qty: 0
+        typical_qty: 1.7
+      - name: Counterspell
+        deck_qty: 2
+        typical_qty: 3.4
+      - name: Suplex
+        deck_qty: 0
+        typical_qty: 1.3
+      - name: Union of the Third Path
+        deck_qty: 0
+        typical_qty: 1.3
+      - name: Cleansing Wildfire
+        deck_qty: 0
+        typical_qty: 0.8
+      more:
+      - name: Galvanic Discharge
+        deck_qty: 4
+        typical_qty: 0.0
+      - name: Tune the Narrative
+        deck_qty: 4
+        typical_qty: 0.0
+      - name: Fallaji Archaeologist
+        deck_qty: 4
+        typical_qty: 0.2
+      - name: Jolted Awake
+        deck_qty: 2
+        typical_qty: 0.0
+      - name: Bender's Waterskin
+        deck_qty: 3
+        typical_qty: 1.7
+      - name: Dispel
+        deck_qty: 3
+        typical_qty: 1.9
+      - name: Perilous Landscape
+        deck_qty: 4
+        typical_qty: 2.9
+      - name: Murmuring Mystic
+        deck_qty: 2
+        typical_qty: 1.3
+  approved: false
+  comment_zh: ''
+  comment_en: ''
+  landing:
+    category: new_technology
+    order: null
+    headline_zh: ''
+    headline_en: ''
+    positioning_zh: ''
+    positioning_en: ''
+    featured_cards: []
+  main_deck:
+  - name: Archaeomancer
+    qty: 3
+  - name: Bender's Waterskin
+    qty: 3
+  - name: Counterspell
+    qty: 2
+  - name: Dispel
+    qty: 3
+  - name: Ephemerate
+    qty: 4
+  - name: Fallaji Archaeologist
+    qty: 4
+  - name: Galvanic Discharge
+    qty: 4
+  - name: Glacial Floodplain
+    qty: 2
+  - name: Jolted Awake
+    qty: 2
+  - name: Lórien Revealed
+    qty: 4
+  - name: Mulldrifter
+    qty: 4
+  - name: Murmuring Mystic
+    qty: 2
+  - name: Perilous Landscape
+    qty: 4
+  - name: Skred
+    qty: 2
+  - name: Snow-Covered Island
+    qty: 7
+  - name: Snow-Covered Mountain
+    qty: 2
+  - name: Snow-Covered Plains
+    qty: 2
+  - name: Tune the Narrative
+    qty: 4
+  - name: Volatile Fjord
+    qty: 2
+  side_deck:
+  - name: Breath Weapon
+    qty: 1
+  - name: Envelop
+    qty: 2
+  - name: Hydroblast
+    qty: 4
+  - name: Ingot Chewer
+    qty: 1
+  - name: Pyroblast
+    qty: 4
+  - name: Stonehorn Dignitary
+    qty: 1
+  - name: Thraben Charm
+    qty: 1
+  - name: Union of the Third Path
     qty: 1
 new_archetypes:
 - identity_id: four-color-affinity
@@ -738,6 +954,6 @@ source_event_ids:
 - '12854493'
 - '12854501'
 - '12854518'
-classifier_digest: 596dc2f2f78125df30c5248700152a63595e3931591857e6f7ce77e1dd018316
+classifier_digest: b309e1838d67585e54c25eaf4da109df10dc6a1b3afd0b0f7e889b90eaf77613
 selection_policy_digest: 3541185e634bcab559bb3118ee3f29ece113552473d1f314bcde2a1e2f697a42
-link_catalog_digest: 3e6737d52211a7df678c8fd8eb81eaaee5bc3be357d08bb74514dd4b1c2ed1ab
+link_catalog_digest: 10ca53bc74b7c327bc220e8dfd0ca78dace80d0d019fdca6a2a6d3e0209cba6b

@@ -55,6 +55,7 @@ def test_pauper_rule_inventory_and_parent_boundaries() -> None:
         "synthesizer-gates",
         "packbeast-swarm",
         "mardu-synthesizer",
+        "rakdos-synthesizer",
         "esper-midrange",
     }.issubset(archetypes)
     assert archetypes["green-tron"].name == "Monster Tron"

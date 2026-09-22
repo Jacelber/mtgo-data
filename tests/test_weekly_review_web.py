@@ -180,6 +180,16 @@ def test_accepted_scope_allows_feature_without_weekly_completion(scope, monkeypa
     page = (scope.args.output / 'index.html').read_text(encoding='utf-8')
     assert '近四周' in page
     assert '本周高分占比严格超过 2%' in page
+    assert '雪境基本地与对应普通基本地已等同处理' in page
+    assert '基本地名称变化也会影响差异' not in page
+
+
+def test_feature_template_formats_return_reason_for_human_review():
+    page = (web.ROOT / 'tools/weekly_review_web.html').read_text(encoding='utf-8')
+
+    assert "if(x.type==='return')" in page
+    assert '高分环境重新出现' in page
+    assert '参考期没有高分记录' in page
 
 
 def test_initial_acceptance_can_cover_a_larger_historical_scope(scope):

@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from .card_names import normalize_card_name
+from .card_names import equivalent_basic_land_names, normalize_card_name
 
 
 CardCounts = dict[str, int]
@@ -34,10 +34,14 @@ def count_card(
     main_counts: Mapping[str, int],
     side_counts: Mapping[str, int],
 ) -> int:
-    """Count a canonical card name in main, side, or both zones."""
+    """Count a card in main, side, or both zones, merging basic-land printings."""
 
+    equivalent_names = equivalent_basic_land_names(card_name)
     if zone == "main":
-        return main_counts.get(card_name, 0)
+        return sum(main_counts.get(name, 0) for name in equivalent_names)
     if zone == "side":
-        return side_counts.get(card_name, 0)
-    return main_counts.get(card_name, 0) + side_counts.get(card_name, 0)
+        return sum(side_counts.get(name, 0) for name in equivalent_names)
+    return sum(
+        main_counts.get(name, 0) + side_counts.get(name, 0)
+        for name in equivalent_names
+    )

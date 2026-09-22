@@ -1833,6 +1833,15 @@ Average decklists, representative decklists, Core/Flex classification, construct
 
 These calculations are not automatically required for tabletop event pages.
 
+Construction-comparison vectors treat each ordinary basic land and its
+Snow-Covered printing as the same card: Plains, Island, Swamp, Mountain,
+Forest, and Wastes each absorb the corresponding Snow-Covered quantity. This
+applies to average decklists, Core/Flex classification, construction deviation,
+card differences, and recent construction change. Exact submitted decklists,
+display card names, source links, and deck fingerprints retain the submitted
+printing. A future snow-specific archetype must use an explicit snow payoff or
+other reviewed semantic marker instead of relying on the basic-land printing.
+
 An intentional formula change must specify the old and new meaning and preserve
 the applicable compatibility contract. Validate the changed calculation against
 independently calculable inputs and affected results; completion of a historical
