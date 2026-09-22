@@ -1,6 +1,6 @@
 # 周维护有效性与历史完成：开发验收说明
 
-本次只实现 Owner 已确认的第 1、2 项，创建独立 PR 后待验收。不合并、不发布，
+本次只实现 Owner 已确认的第 1、2 项，更新现有 Draft PR #438 后待验收。不合并、不发布，
 不更改 W38 内容、规则、统计、旧验收或完成记录；不实施第 3 项预览资源范围优化。
 开发基线：1349e63aa20af6581c15c34796e958c92842a529（已包含 PR #437）。
 
@@ -14,8 +14,18 @@
 3. 历史完成是否有效与当前对象是否匹配分别报告。历史完成保留，当前差异列入
    historical_changes；下一周不因纯技术差异倒退。晚到赛事显示为 supplement，
    通知使用独立标识，原完成通知保持完成。现有数据接纳约束不变。
-4. 新完成对象保存当次分类 submission；最终预览仍需与确认发布的确切包对应。
+   补充队列按周检查未接纳赛事及接纳后尚未被完成记录覆盖的赛事；多个待处理周
+   同时保留。历史差异不阻止已经办完的补充通知关闭。
+4. W38 起新完成对象保存当次分类 submission；最终预览仍需与确认发布的确切包对应。
    当前源不可读取时报告当前差异，不因此抹掉已验证的历史发布事实。
+
+## 接口修正
+
+技术比较不再调用人工提交构造器。真实 `build_mtgo_weekly_review()` 产生逐牌组
+`deck_material_digest`，Web 随后补全主备牌和 reference；共享比较将两者归一到
+同一材料表示。主备牌与已有摘要矛盾、只提供一半牌表、缺少或无效摘要均拒绝续用。
+人工提交仍要求完整主备牌和可直接定位的 reference。旧周没有摘要的原始 review
+继续按既有完成合同处理，不为本次修复写入任何历史材料。
 
 ## 有限证明
 
@@ -25,7 +35,33 @@
 原完整分类/Feature/内容入口情境与旧 Landing 重述、归档完成检查复用其必要测试。
 没有运行真实分类全量、页面浏览或全仓测试，没有调用外部通知或生产发布。
 
-最终针对性验证：77 个情境通过（含实际 workflow 脚本的离线执行）；git diff --check 通过。
+最终针对性验证：86 个测试通过（5.14 秒）；git diff --check 通过。
+
+本次新增/加强的关键证明：
+
+| 情境 | 结果与测试位置 |
+| --- | --- |
+| 真实生成器的原始 review 与 Web 补全形式 | 技术快照完全相同；人工构造器仍拒绝原始形态。`tests/test_weekly_classification_review.py::test_real_weekly_producer_continues_across_feature_readiness_and_completion` |
+| 未变化、仅引擎版本变化、真实备牌变化 | 分别 current / equivalent / changed；实际 Feature 接纳判断、完成状态查询及 format-completion CLI 的成功/拒绝一致。上项测试参数化覆盖。 |
+| 缺少/无效摘要、摘要矛盾、半份牌表 | evidence_required，不生成可续用快照。`tests/test_weekly_validity.py::test_classification_comparison_requires_consistent_material_evidence` |
+| W38 前真实原始 review | 既有完成导出仍可用，不新增虚构材料。`tests/test_weekly_classification_review.py::test_legacy_raw_review_completion_keeps_its_existing_evidence_contract` |
+| 晚到赛事从未接纳到已接纳再到完成覆盖 | 前两阶段保留 supplement，完成覆盖后移出队列，历史差异仍报告。`tests/test_weekly_validity.py::test_completed_history_survives_current_drift_and_late_event_is_a_supplement` |
+| 多个待处理周 | 选择最早周，同时保留后续周的补充事项。`tests/test_weekly_validity.py::test_readiness_retains_all_queued_supplement_weeks` |
+| 真实 workflow 通知脚本离线执行 | 原完成通知不重开；仅历史差异时关闭补充通知；另有更早待审周时不关闭仍待处理的补充；旧 handoff 无队列依据时不推断关闭。`tests/test_weekly_validity.py::test_readiness_workflow_preserves_old_notice_and_names_supplement` |
+
+回归范围为 `tests/test_weekly_validity.py`、`tests/test_review_submission.py`、
+`tests/test_weekly_maintenance_readiness.py`、`tests/test_weekly_review_web.py`，以及以下定点：
+
+- `tests/test_mtgo_landing.py::test_classifier_restatement_requires_identical_accepted_material`
+- `tests/test_landing_bundle.py::test_completion_requires_the_accepted_preview_in_the_confirmed_archive`
+- `tests/test_weekly_classification_review.py` 中上表两个新增测试，以及既有
+  `test_v2_completion_record_binds_full_review_subjects`、
+  `test_completion_acceptance_event_membership_is_order_independent`、
+  `test_v2_completion_rejects_name_bootstrap_even_with_formal_digest`、
+  `test_completion_cli_rejects_name_bootstrap`
+
+真实生成器测试只使用临时目录的一场合成赛事和一份牌表，没有读取或重新分类生产语料。
+通知脚本使用离线 GitHub 替身，没有实际创建、修改或关闭 Issue。
 
 ## Owner 验收对象
 

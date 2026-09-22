@@ -166,11 +166,27 @@ def test_completed_history_survives_current_drift_and_late_event_is_a_supplement
     first = run()
     assert first["review_week"] == "2026-W39"
     assert first["completed_reviews"] == ["2026-W38"]
+    assert first["outstanding_supplement_weeks"] == []
     assert first["historical_changes"][0]["week"] == "2026-W38"
     events.append(("3.json", {"event_id": "3", "starttime": "2026-09-16"}));pending.add("3")
     second = run()
     assert second["review_week"] == "2026-W38" and second["review_kind"] == "supplement"
     assert second["completed_reviews"] == ["2026-W38"]
+    assert second["outstanding_supplement_weeks"] == ["2026-W38"]
+    # Admission alone cannot close an unfinished supplement.
+    pending.remove("3")
+    row["event_ids"] = ["1", "3"]
+    path.write_text(yaml.safe_dump(registry), encoding="utf-8")
+    third = run()
+    assert third["review_week"] == "2026-W38"
+    assert third["outstanding_supplement_weeks"] == ["2026-W38"]
+    # Once explicit completion covers it, historical technical drift is only a report.
+    completed["accepted_event_ids"] = ["1", "3"]
+    path.write_text(yaml.safe_dump(registry), encoding="utf-8")
+    fourth = run()
+    assert fourth["review_week"] == "2026-W39"
+    assert fourth["outstanding_supplement_weeks"] == []
+    assert fourth["historical_changes"][0]["week"] == "2026-W38"
     assert yaml.safe_load(path.read_text(encoding="utf-8")) == registry
     completed["preview_acceptance"]["publication"]["health"] = "unknown"
     path.write_text(yaml.safe_dump(registry), encoding="utf-8")
@@ -227,22 +243,37 @@ const assert=require('assert');
 const script=JSON.parse(require('fs').readFileSync(process.argv[1],'utf8'));
 const run=new (Object.getPrototypeOf(async function(){}).constructor)('require','core','github','context','process',script);
 (async()=>{
- for (const selected of [null,'2026-W38']) {
-  const calls=[];
-  const readiness={schema_version:'1.7.0',formats:[{format:'standard',review_week:selected,review_kind:'supplement',
+ const cases = [
+  {selected:null, outstanding:[], existing:false},
+  {selected:'2026-W38', outstanding:['2026-W38'], existing:false},
+  {selected:null, outstanding:[], existing:true, close:true},
+  {selected:'2026-W39', outstanding:[], existing:true, close:true},
+  {selected:'2026-W37', outstanding:['2026-W38'], existing:true, close:false},
+  {selected:'2026-W37', existing:true, close:false}, // older handoff has no queue proof
+ ];
+ for (const {selected,outstanding,existing,close} of cases) {
+  const calls=[], summaries=[];
+  const readiness={schema_version:'1.7.0',formats:[{format:'standard',review_week:selected,
+    review_kind:selected==='2026-W38'?'supplement':'weekly', outstanding_supplement_weeks:outstanding,
     public_week:'2026-W38',landing_week:'2026-W38',data_admission:'review_delta_required',completion:{state:'stale'},
     completed_reviews:['2026-W38'],historical_changes:[{week:'2026-W38',mismatches:['technical evidence required']}],
     blockers:[],landing_screening:{status:'after_data_acceptance'}}]};
-  const summary={addRaw(){return this},addEOL(){return this},addHeading(){return this},addCodeBlock(){return this},async write(){}};
+  const summary={addRaw(){return this},addEOL(){return this},addHeading(){return this},
+    addCodeBlock(value){summaries.push(value);return this},async write(){}};
   const core={summary,setFailed(message){throw new Error(message)}};
-  const github={paginate:async()=>[{number:1,state:'closed',body:'<!-- weekly-maintenance:standard:2026-W38 -->'}],rest:{issues:{
-    listForRepo(){},create:async x=>{calls.push(x);return {data:{number:2}}},update:async x=>{calls.push(x)},createComment:async()=>{throw Error('unexpected comment')}}}};
+  const issues=[{number:1,state:'closed',body:'<!-- weekly-maintenance:standard:2026-W38 -->'}];
+  if(existing) issues.push({number:2,state:'open',body:'<!-- weekly-maintenance:standard:2026-W38:supplement -->'});
+  const github={paginate:async()=>issues,rest:{issues:{
+    listForRepo(){},create:async x=>{calls.push(x);return {data:{number:3}}},update:async x=>{calls.push(x)},createComment:async()=>{throw Error('unexpected comment')}}}};
   await run(name=>name==='fs'?{readFileSync:()=>JSON.stringify(readiness)}:require(name),core,github,
     {repo:{owner:'example',repo:'example'},serverUrl:'https://example.test',runId:1}, {env:{READINESS_RESULT:'success',READINESS_PATH:'synthetic'}});
   assert(!calls.some(call=>call.issue_number===1));
-  assert.strictEqual(calls.length,selected?1:0);
-  if(selected) assert(calls[0].body.includes('<!-- weekly-maintenance:standard:2026-W38:supplement -->'));
+  assert.strictEqual(calls.some(call=>call.issue_number===2 && call.state==='closed'),!!close);
+  assert(summaries.some(value=>value.includes('technical evidence required')));
+  assert.strictEqual(calls.length,(selected?1:0)+(close?1:0));
+  if(selected==='2026-W38') assert(calls[0].body.includes('<!-- weekly-maintenance:standard:2026-W38:supplement -->'));
  }
+
 })().catch(e=>{console.error(e);process.exit(1)});
 """
     result = subprocess.run([node, "-e", harness, str(path)], capture_output=True, text=True)
@@ -254,3 +285,50 @@ def test_same_technical_identifiers_cannot_hide_changed_material():
     packet = review.full_classification_packet(before)
     before["records"][0]["main_deck"][0]["name"] = "Different Card"
     assert review.packet_validity(packet, review.full_classification_packet(before))["state"] == "changed"
+
+
+@pytest.mark.parametrize("change", ["missing", "invalid", "contradiction", "partial"])
+def test_classification_comparison_requires_consistent_material_evidence(change):
+    raw = classification()
+    record = admission(raw)
+    row = raw["records"][0]
+    row["deck_material_digest"] = review.digest({zone: row[zone] for zone in ("main_deck", "sideboard")})
+    if change in {"missing", "invalid"}:
+        row.pop("main_deck")
+        row.pop("sideboard")
+        if change == "missing": row.pop("deck_material_digest")
+        else: row["deck_material_digest"] = "not-a-digest"
+    elif change == "partial": row.pop("sideboard")
+    else: row["main_deck"][0]["qty"] = 59
+    assert review.classification_validity(record, raw)["state"] == "evidence_required"
+    with pytest.raises(ValueError): review.classification_comparison_packet(raw)
+
+
+def test_readiness_retains_all_queued_supplement_weeks(tmp_path, monkeypatch):
+    from tools import generate_weekly_maintenance_readiness as ready
+    from mtgmeta.mtgo import publication, classification as classifier
+    from mtgmeta import weekly_review
+    registry = {"weekly_maintenance": {"standard": {"start_week": "2026-W38"}},
+        "data_admissions": {"formats": {"standard": {"weekly_acceptances": [
+            {"week": "2026-W38", "event_ids": ["1"]}, {"week": "2026-W39", "event_ids": ["2", "4"]}]}}},
+        "records": [{"week": week, "formats": {"standard": {"accepted_event_ids": [event]}}}
+                    for week, event in [("2026-W38", "1"), ("2026-W39", "2")]]}
+    monkeypatch.setattr(ready, "_completion_state", lambda *a, **k: {
+        "state": "stale", "historical_state": "verified", "mismatches": ["technical drift"]})
+    monkeypatch.setattr(ready, "_intentional_unknowns", lambda *a, **k: {"standard": {}})
+    monkeypatch.setattr(publication, "resolve_scope", lambda *a: SimpleNamespace(
+        week=date(2026, 9, 21), event_ids={"1", "2", "4"}, pending_event_ids={"3"}))
+    monkeypatch.setattr(publication, "retained_events", lambda *a: [
+        ("3.json", {"event_id": "3", "starttime": "2026-09-16"})])
+    monkeypatch.setattr(weekly_review, "build_mtgo_weekly_review", lambda *a: classification())
+    monkeypatch.setattr(publication, "inspect_publication", lambda *a: [])
+    monkeypatch.setattr(classifier, "audit_mtgo_classification", lambda *a: SimpleNamespace(reports={
+        "unknown_decks": {"records": []}, "index": {"summary": {"strict_validation": "pass"}}}))
+    path = tmp_path / "stats/standard/mtgo/landing/current.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({"week": {"id": "2026-W39"}}))
+    result = ready._independent_readiness(tmp_path, registry, publication_sha="a"*40, production_run_id="1",
+        production_run_attempt="1", source_sha="b"*40, generated_at="2026-10-05T00:00:00Z")["formats"][0]
+    assert result["review_week"] == "2026-W38"
+    assert result["outstanding_supplement_weeks"] == ["2026-W38", "2026-W39"]
+    assert result["completed_reviews"] == ["2026-W38", "2026-W39"]

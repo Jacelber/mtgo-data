@@ -632,9 +632,10 @@ def build_v2_completion_record(
             "classification_review_digest": review_digest,
             "landing_content_digest": landing_digest,
         }
-        if "records" in review:
-            from .mtgo.review_submission import full_classification_packet
-            formats[format_id]["classification_submission"] = full_classification_packet(review)
+        from .mtgo.review_submission import applies, classification_comparison_packet
+        # Earlier producers did not retain per-deck material digests.
+        if applies(week_id) and "records" in review:
+            formats[format_id]["classification_submission"] = classification_comparison_packet(review)
     return {
         "week": week_id,
         "review_scope": "full_official_classification_v2",

@@ -169,7 +169,7 @@ def classification_validity(record: dict, review: dict) -> dict:
             raise ValueError("different review week")
         packet = record.get("classification_acceptance", {}).get("submission")
         if packet:
-            return packet_validity(packet, full_classification_packet(review))
+            return packet_validity(packet, classification_comparison_packet(review))
         exact = (record.get("accepted_classifier_subject") == review["classifier"]["subject_digest"]
                  and record.get("classification_review_digest") == review["classification_review_digest"]
                  and (set(review["event_ids"]) <= set(record["event_ids"])
@@ -234,23 +234,47 @@ def classification_packet(materials: dict, requests: list[dict]) -> dict:
 
 
 def classification_material_digest(value: dict) -> str:
+    """Normalize raw producer rows and their human-readable Web enrichment."""
+    records = []
+    for row in value["records"]:
+        material = row.get("deck_material_digest")
+        zones = ("main_deck", "sideboard")
+        if any(zone in row for zone in zones):
+            if not all(isinstance(row.get(zone), list) for zone in zones):
+                raise ValueError("Classification comparison lacks complete deck material")
+            actual = digest({zone: row[zone] for zone in zones})
+            if material is not None and material != actual:
+                raise ValueError("Classification deck material contradicts its retained digest")
+            material = actual
+        if not isinstance(material, str) or not re.fullmatch(r"[0-9a-f]{64}", material):
+            raise ValueError("Classification comparison lacks a retained deck material digest")
+        # reference is a presentation locator added by Web; source_locator and
+        # every other producer field remain part of the comparison.
+        canonical = {key: item for key, item in row.items()
+                     if key not in {*zones, "reference"}}
+        records.append({**canonical, "deck_material_digest": material})
     return digest({"format": value["format"], "week": value["week"],
                    "events": value.get("events", []), "event_ids": value["event_ids"],
-                   "records": value["records"]})
+                   "records": records})
 
 
-def full_classification_packet(review: dict) -> dict:
-    """The full-table decision is distinct from individual classification proposals."""
-    for row in review["records"]:
-        if not all(isinstance(row.get(zone), list) for zone in ("main_deck", "sideboard")):
-            raise ValueError("Full classification submission lacks complete deck material")
-        if not row.get("reference"):
-            raise ValueError("Full classification submission lacks direct references")
+def classification_comparison_packet(review: dict) -> dict:
+    """Technical comparison only; this does not establish a human submission."""
     value = {"event_ids": sorted(review["event_ids"]), "record_count": len(review["records"]),
              "classifier": review["classifier"]["subject_digest"],
              "classification_review_digest": review["classification_review_digest"]}
     return make_packet("full_classification", review["format"], review["week"],
                        {"full_classification": value}, bindings={**value, "material_digest": classification_material_digest(review)})
+
+
+def full_classification_packet(review: dict) -> dict:
+    """Human full-table submission still requires complete, directly linked decks."""
+    for row in review["records"]:
+        if not all(isinstance(row.get(zone), list) for zone in ("main_deck", "sideboard")):
+            raise ValueError("Full classification submission lacks complete deck material")
+        if not row.get("reference"):
+            raise ValueError("Full classification submission lacks direct references")
+    return classification_comparison_packet(review)
 
 
 def validate_classification_acceptance(record: dict, format_id: str | None = None) -> None:

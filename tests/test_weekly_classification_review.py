@@ -654,3 +654,91 @@ def test_completion_cli_rejects_name_bootstrap(command: str, tmp_path: Path) -> 
     ])
     assert result == 2
     assert not output.exists()
+
+
+@pytest.mark.parametrize("change, expected", [("none", "current"), ("engine", "equivalent"),
+                                              ("cards", "changed")])
+def test_real_weekly_producer_continues_across_feature_readiness_and_completion(tmp_path, monkeypatch, change, expected):
+    from copy import deepcopy
+    from datetime import date
+    from types import SimpleNamespace
+    from mtgmeta import classifier
+    from mtgmeta.mtgo import publication, review_submission as submission
+    from tools import build_weekly_review_web as web
+    from tools import generate_weekly_maintenance_readiness as ready
+
+    root = _synthetic_root(tmp_path / "repo", [_player(1, "Alpha Card")])
+    event_path = root / "data/standard/event.json"
+    event = json.loads(event_path.read_text(encoding="utf-8"))
+    event["starttime"] = "2026-09-15T00:00:00Z"
+    _write_json(event_path, event)
+    raw = build_mtgo_weekly_review(root, "standard", "2026-W38")
+    assert "deck_material_digest" in raw["records"][0]
+    assert not {"main_deck", "sideboard", "reference"} & raw["records"][0].keys()
+    enriched = deepcopy(raw)
+    enriched["records"][0].update(main_deck=event["players"][0]["main_deck"],
+                                  sideboard=event["players"][0]["sideboard"], reference="W38-standard-10-01")
+    packet = submission.full_classification_packet(enriched)
+    assert submission.classification_comparison_packet(raw) == packet
+    with pytest.raises(ValueError, match="complete deck material"):
+        submission.full_classification_packet(raw)
+
+    def accept(value):
+        return submission.record_decision(value, None, list(value["dimensions"]),
+            evidence="synthetic Owner acceptance", accepted_on="2026-09-21", entrypoint="synthetic review")
+    admission = {"week": raw["week"], "kind": "owner_accepted_full_classification", "event_ids": raw["event_ids"],
+        "accepted_classifier_subject": raw["classifier"]["subject_digest"],
+        "classification_review_digest": raw["classification_review_digest"],
+        "evidence": "synthetic", "accepted_on": "2026-09-21",
+        "classification_acceptance": {"submission": packet, "decisions": accept(packet)}}
+    completed = build_v2_completion_record([raw], week_id=raw["week"], completed_on="2026-09-21",
+        evidence="synthetic", landing_content_digests={"standard": "c" * 64}, independent_format=True)
+    preview = submission.make_packet("preview", "standard", raw["week"], {"final_page": "synthetic"}, bindings={})
+    accepted_preview = {"submission": preview, "decisions": accept(preview), "publication": {
+        "health": "passed", "operation": "op", "package": "package", "preview_digest": preview["digest"]}}
+    completed["formats"]["standard"]["preview_acceptance"] = accepted_preview
+    registry = {"schema_version": "1.2.0", "records": [completed],
+        "data_admissions": {"formats": {"standard": {"weekly_acceptances": [admission]}}}}
+    registry_path = root / "configs/mtgo_weekly_review_completions.yaml"
+    _write_yaml(registry_path, registry)
+    saved = registry_path.read_bytes()
+    _write_json(root / "stats/standard/mtgo/landing/current.json", {"week": {"id": raw["week"]}})
+    _write_json(root / "stats/standard/mtgo/landing/features/2026-W38.json",
+                {"format": "standard", "week": {"id": raw["week"]}, "content_digest": "c" * 64})
+    monkeypatch.setattr(submission, "preview_packet", lambda *a: preview)
+    monkeypatch.setattr(ready, "_landing_content_digest", lambda *a: "c" * 64)
+    monkeypatch.setattr(publication, "resolve_scope", lambda *a: SimpleNamespace(event_ids={"10"}, week=date(2026, 9, 14)))
+    monkeypatch.setattr(publication, "inspect_publication", lambda *a: [])
+    if change == "engine":
+        monkeypatch.setattr(classifier, "CLASSIFIER_ENGINE_VERSION", "synthetic-next-version")
+    if change == "cards":
+        event["players"][0]["sideboard"][0]["qty"] = 2
+        _write_json(event_path, event)
+    current = build_mtgo_weekly_review(root, "standard", raw["week"])
+    assert submission.classification_validity(admission, current)["state"] == expected
+    assert bool(web.accepted_classification(registry, current)) == (expected != "changed")
+    state = ready._completion_state(root, raw["week"], format_id="standard")
+    assert state["historical_state"] == "verified"
+    assert state["state"] == ("stale" if expected == "changed" else "verified")
+    current_path, preview_path, output = (tmp_path / name for name in ("review.json", "preview.json", "completion.json"))
+    _write_json(current_path, current)
+    _write_json(preview_path, {"standard": accepted_preview})
+    result = export_review_main(["--repository-root", str(root), "format-completion", "--week", raw["week"],
+        "--format", "standard", "--review", str(current_path), "--landing-digest", "c" * 64,
+        "--preview-acceptances", str(preview_path), "--completed-on", "2026-09-21",
+        "--evidence", "synthetic", "--output", str(output)])
+    assert result == (2 if expected == "changed" else 0)
+    assert output.exists() == (expected != "changed")
+    if output.exists():
+        assert json.loads(output.read_text(encoding="utf-8"))["formats"]["standard"]["classification_submission"] == submission.classification_comparison_packet(current)
+    assert registry_path.read_bytes() == saved
+
+
+def test_legacy_raw_review_completion_keeps_its_existing_evidence_contract(tmp_path):
+    root = _synthetic_root(tmp_path, [_player(1, "Alpha Card")])
+    raw = build_mtgo_weekly_review(root, "standard", "2026-W35")
+    assert "deck_material_digest" not in raw["records"][0]
+    completed = build_v2_completion_record([raw], week_id=raw["week"], completed_on="2026-09-01",
+        evidence="synthetic", landing_content_digests={"standard": "c" * 64}, independent_format=True)
+    assert "classification_submission" not in completed["formats"]["standard"]
+    assert completed["formats"]["standard"]["classification_review_digest"] == raw["classification_review_digest"]

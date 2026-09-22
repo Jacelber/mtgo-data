@@ -203,8 +203,8 @@ def _completion_state(root: Path, week_id: str, *, format_id: str | None = None)
                 if sorted(current_review["event_ids"]) != sorted(expected_events):
                     mismatches.append(f"{format_name} accepted event IDs")
                 if expected.get("classification_submission"):
-                    from mtgmeta.mtgo.review_submission import packet_validity, full_classification_packet
-                    comparison = packet_validity(expected["classification_submission"], full_classification_packet(current_review))
+                    from mtgmeta.mtgo.review_submission import packet_validity, classification_comparison_packet
+                    comparison = packet_validity(expected["classification_submission"], classification_comparison_packet(current_review))
                     if comparison["state"] not in {"current", "equivalent"}:
                         mismatches.append(f"{format_name} classification: {comparison['state']}: {comparison['reason']}")
                 else:
@@ -799,7 +799,17 @@ def _independent_readiness(root: Path, registry: dict[str, Any], *, publication_
                               if week in completed and result["state"] != "verified"]
         unfinished = {row["week"] for row in admissions
                       if week_monday(row["week"]) >= start} - completed
-        weeks = sorted(pending_weeks | unfinished)
+        # A completed week's supplement remains outstanding after admission
+        # until the completion covers those admitted events as well.
+        completion_subjects = {row["week"]: row["formats"][format_id]
+                               for row in registry.get("records", [])
+                               if row["week"] in completed and format_id in row.get("formats", {})}
+        outstanding_supplements = pending_weeks & completed
+        for row in admissions:
+            covered = completion_subjects.get(row["week"], {}).get("accepted_event_ids")
+            if isinstance(covered, list) and set(row["event_ids"]) - set(covered):
+                outstanding_supplements.add(row["week"])
+        weeks = sorted(pending_weeks | unfinished | outstanding_supplements)
         week = weeks[0] if weeks else None
         admission = next((row for row in admissions if row["week"] == week), None)
         completion = _completion_state(root, week, format_id=format_id) if week else {
@@ -868,6 +878,7 @@ def _independent_readiness(root: Path, registry: dict[str, Any], *, publication_
             "metadata_review": "after_regeneration_and_screening_if_delta",
             "completed_reviews": sorted(completed),
             "historical_changes": historical_changes,
+            "outstanding_supplement_weeks": sorted(outstanding_supplements),
             "review_kind": "supplement" if week in completed else "weekly",
             "blockers": blockers,
             "status": status,

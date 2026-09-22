@@ -846,7 +846,9 @@ jobs:
                   if (completed?.state === "open") {
                     await github.rest.issues.update({ ...context.repo, issue_number: completed.number, state: "closed" });
                   }
-                  if (item.review_week !== week && !(item.historical_changes || []).some(change => change.week === week)) {
+                  // Historical differences do not describe outstanding work. Older
+                  // handoffs without the per-week queue cannot prove it is done.
+                  if (Array.isArray(item.outstanding_supplement_weeks) && !item.outstanding_supplement_weeks.includes(week)) {
                     const supplementMarker = `<!-- weekly-maintenance:${item.format}:${week}:supplement -->`;
                     const supplement = issues.find(issue => !issue.pull_request && issue.body?.includes(supplementMarker));
                     if (supplement?.state === "open") {
