@@ -27,14 +27,14 @@ class Pages:
             match = re.search(r"/actions/runs/(\d+)(?:/|$)", link)
             if own_run and match and match[1] == own_run and status["state"] != "success":
                 continue
+            if self.no_send_job(link):
+                continue
             if expected is not None and str(record["id"]) == expected:
                 return {"id": str(record["id"]), "sha": record["sha"], "state": status["state"]}
             if status["state"] == "success":
                 if expected is not None:
                     raise Conflict("Another deployment changed the production base")
                 return {"id": str(record["id"]), "sha": record["sha"], "state": "success"}
-            if status["state"] in {"failure", "error"} and self.no_send_job(link):
-                continue
             if status["state"] != "inactive":
                 raise Conflict("Unresolved or external deployment exists; inspect its actual effects")
         if expected is not None:
