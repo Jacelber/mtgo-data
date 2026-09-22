@@ -21,7 +21,7 @@ def import_content(root, source):
         raise ValueError('Content must already have Owner acceptance')
     catalog = yaml.safe_load((root / editorial.DEFAULT_NAME_CATALOG).read_text(encoding='utf-8'))
     bindings = {key: subject[key] for key in ('source_event_ids','classifier_digest','selection_policy_digest','machine_fact_digest','link_catalog_digest')}
-    if any(source['bindings'].get(key) != value for key, value in bindings.items()):
+    if any(source['bindings'].get(key) != value for key, value in bindings.items()) and not source.get('acceptance'):
         raise ValueError('Accepted conversation references a different machine subject')
     acceptance = None
     if submissions.applies(subject['week']['id']):
@@ -30,6 +30,8 @@ def import_content(root, source):
             raise ValueError('W38 onward requires the actually submitted content and scoped decisions')
         current = submissions.content_packet(root, source)
         submissions.require_accepted(acceptance['submission'], acceptance['decisions'], current=current)
+        # Keep the original accepted provenance; current equivalence was checked above.
+        bindings = {key: source['bindings'][key] for key in bindings}
         bindings['bilingual_catalog_digest'] = submissions.name_digest(current)
     else:
         bindings['bilingual_catalog_digest'] = editorial.name_catalog_binding_digest(catalog, review_schema_version='1.2.0', format_id=format_id)

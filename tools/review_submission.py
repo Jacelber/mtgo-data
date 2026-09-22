@@ -59,6 +59,15 @@ def main():
     completion.add_argument("--candidate", type=Path, required=True)
     completion.add_argument("--publication-state", type=Path, required=True)
     completion.add_argument("--output", type=Path, required=True)
+    supplement = commands.add_parser("supplement-completion", help="Export one verified append-only late-event completion fact")
+    supplement.add_argument("--format", required=True)
+    supplement.add_argument("--week", required=True)
+    supplement.add_argument("--candidate", type=Path, required=True)
+    supplement.add_argument("--publication-state", type=Path, required=True)
+    supplement.add_argument("--completed-on", required=True)
+    supplement.add_argument("--evidence", required=True)
+    supplement.add_argument("--preview-acceptance", type=Path)
+    supplement.add_argument("--output", type=Path, required=True)
     resume = commands.add_parser("resume", help="Derive scoped state without assuming publication")
     resume.add_argument("--format", required=True)
     resume.add_argument("--week", required=True)
@@ -66,6 +75,18 @@ def main():
     resume.add_argument("--output", type=Path)
     args = parser.parse_args()
     root = args.root.resolve()
+    if args.command == "supplement-completion":
+        from mtgmeta.mtgo import supplement_completion
+        registry = read(root / "configs/mtgo_weekly_review_completions.yaml")
+        records = [item for item in registry["records"] if item["week"] == args.week
+                   and args.format in item.get("formats", {})]
+        if len(records) != 1:
+            raise ValueError("Supplement requires exactly one original format/week completion")
+        result = supplement_completion.build(root, records[0], args.format, candidate=args.candidate,
+            state=read(args.publication_state), completed_on=args.completed_on, evidence=args.evidence,
+            preview_acceptance=read(args.preview_acceptance) if args.preview_acceptance else None)
+        write(root, args.output, result)
+        return
     if args.command == "completion":
         import tempfile
         from tools.delivery import packages

@@ -1501,6 +1501,9 @@ def import_review_workbook(
             document["bindings"].pop("workbook_sha256")
             document["bindings"]["content_sha256"] = document_digest(
                 {key: document[key] for key in ("format", "week", "review")})
+            for key, value in acceptance["submission"]["bindings"].items():
+                if key not in {"established_names", "material_digest"}:
+                    document["bindings"][key] = value
             document["bindings"]["bilingual_catalog_digest"] = submissions.name_digest(current)
             document["acceptance"] = acceptance
             validate_review_document(document, root / DEFAULT_REVIEW_SCHEMA)

@@ -211,6 +211,17 @@
             "mismatches"
           ],
           "properties": {
+            "historical_state": {"enum": ["verified", "invalid"]},
+            "historical_problems": {"type": "array", "items": {"type": "string"}},
+            "supplement_coverage": {"type": "object", "additionalProperties": {
+              "type": "object", "additionalProperties": false,
+              "required": ["covered_event_ids", "valid_supplements", "problems"],
+              "properties": {
+                "covered_event_ids": {"type": "array", "items": {"type": "string"}},
+                "valid_supplements": {"type": "array", "items": {"type": "string"}},
+                "problems": {"type": "array", "items": {"type": "string"}}
+              }
+            }},
             "state": {
               "enum": [
                 "unrecorded",
@@ -489,6 +500,14 @@
               },
               "metadata_review": {
                 "const": "after_regeneration_and_screening_if_delta"
+              },
+              "historical_changes": {"type": "array", "items": {"type": "object", "additionalProperties": false,
+                "required": ["week", "mismatches"], "properties": {
+                  "week": {"type": "string"}, "mismatches": {"type": "array", "items": {"type": "string"}}}}},
+              "review_kind": {"enum": ["weekly", "supplement"]},
+              "outstanding_supplement_weeks": {
+                "type": "array", "uniqueItems": true,
+                "items": {"type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$"}
               },
               "completed_reviews": {
                 "type": "array",
