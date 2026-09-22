@@ -109,8 +109,8 @@ def test_archived_result_is_discoverable_and_stale_base_is_not_rewritten(deliver
     archive, pages, _ = delivery
     commands.remember_candidate(TARGET, 'prepare-C', 'C', 'A')
     pages.query.return_value = {'status': 'succeed'}
-    result = commands.preflight(TARGET, 'prepare-C')
-    assert (result['package'], result['candidate_base'], result['base']) == ('C', 'A', 'B')
+    with pytest.raises(state.Conflict, match='stale combination'):
+        commands.preflight(TARGET, 'prepare-C')
     with pytest.raises(state.Conflict, match='retained'):
         commands.dispatch(TARGET, 'prepare-C', 'C', 'A', 'publish')
     with pytest.raises(state.Conflict, match='cannot be changed'):
@@ -173,30 +173,109 @@ def test_product_confirmation_can_converge_on_next_preflight(delivery):
     pages.create.assert_not_called()
 
 
-@pytest.mark.parametrize('outcome', ['ready', 'waiting', 'stale'])
-def test_real_workflow_preparation_entry_reuses_or_stops_before_source_build(tmp_path, outcome):
+@pytest.mark.parametrize('outcome', ['ready', 'waiting', 'stale', 'forged', 'missing', 'multiple'])
+@pytest.mark.parametrize('explicit', [False, True])
+def test_real_workflow_preparation_entry_reuses_or_stops_before_source_build(tmp_path, delivery, outcome, explicit):
+    archive, pages, _ = delivery
+    saved, _ = archive.load_state()
+    saved['pending'] = None
+    saved['packages']['C']['preparations'] = {'C': 'A'}
+    for info in saved['packages'].values():
+        info['target'] = 'Jacelber/mtgo-data'
+    if outcome in ('stale', 'forged'):
+        saved['current']['operation'] = 'B'
+    elif outcome == 'missing':
+        saved['packages']['C'].pop('preparations')
+    elif outcome == 'multiple':
+        saved['packages']['C']['preparations']['another'] = 'A'
+    elif outcome == 'waiting':
+        saved['pending'] = {'operation': 'B', 'run': '7'}
+        pages.client.api.return_value = {'status': 'in_progress', 'id': 7}
+    archive.save_state(saved, 'sha')
     workflow = yaml.safe_load((Path(__file__).resolve().parents[2] / '.github/workflows/prepare-pages.yml').read_text(encoding='utf-8'))
     entry = next(step for step in workflow['jobs']['base']['steps'] if step.get('id') == 'base')['run']
     code = entry.split("python - <<'PY'\n", 1)[1].rsplit('\nPY', 1)[0]
-    result = {'state': 'ready', 'base': 'A', 'package': 'package-C', 'candidate_base': 'A'}
-    if outcome == 'waiting':
-        result = {'state': 'waiting', 'operation': 'B'}
-    elif outcome == 'stale':
-        result['base'] = 'B'
     output = tmp_path / 'outputs'
-    with patch.object(commands, 'preflight', return_value=result), \
-            patch('tools.delivery.gitfacts.preparation_source', side_effect=AssertionError('Do not prepare source')), \
-            patch.dict('os.environ', {'PREPARATION': 'C', 'ARCHIVED_PACKAGE': '', 'ARCHIVED_BASE': '',
-                                    'GITHUB_OUTPUT': str(output)}):
-        if outcome == 'ready':
+    # Missing automatic discovery legitimately prepares a new candidate; this
+    # test targets the old-package fast path, so missing requires explicit input.
+    explicit = explicit or outcome == 'missing'
+    blocked = outcome in ('waiting', 'stale', 'missing') or (explicit and outcome in ('forged', 'multiple')) or (not explicit and outcome == 'forged')
+    with patch('tools.delivery.gitfacts.preparation_source', side_effect=AssertionError('Do not prepare source')), \
+            patch.dict('os.environ', {'PREPARATION': 'C', 'ARCHIVED_PACKAGE': 'C' if explicit else '',
+                                    'ARCHIVED_BASE': 'B' if outcome == 'forged' else 'A',
+                                    'ARCHIVED_PREPARATION': '', 'GITHUB_OUTPUT': str(output)}):
+        if blocked:
+            with pytest.raises((RuntimeError, state.Conflict)):
+                exec(compile(code, 'preparation-entry', 'exec'), {})
+            assert not output.exists()
+        else:
             with pytest.raises(SystemExit) as stopped:
                 exec(compile(code, 'preparation-entry', 'exec'), {})
             assert stopped.value.code == 0
-            assert output.read_text() == 'operation=A\npackage=package-C\n'
-        else:
-            with pytest.raises(RuntimeError):
-                exec(compile(code, 'preparation-entry', 'exec'), {})
-            assert not output.exists()
+            assert output.read_text() == 'operation=A\npackage=C\npreparation=C\n'
+    pages.create.assert_not_called()
+    archive.retrieve.assert_not_called()
     for name in ('localization-cache', 'build', 'archive'):
         assert workflow['jobs'][name]['if'] == "needs.base.outputs.package == ''"
     assert workflow['jobs']['reuse']['needs'] == 'base'
+    reuse = next(step for step in workflow['jobs']['reuse']['steps'] if 'run' in step and 'dispatch(' in step['run'])
+    assert reuse['env']['PREPARATION'] == '${{ needs.base.outputs.preparation }}'
+    assert "preparation=os.environ['PREPARATION']" in reuse['run']
+    writer = yaml.safe_load((Path(__file__).resolve().parents[2] / '.github/workflows/pages.yml').read_text(encoding='utf-8'))
+    for job, command in [('request', 'request'), ('deploy', 'claim')]:
+        step = next(step for step in writer['jobs'][job]['steps'] if f' {command} --package' in step.get('run', ''))
+        assert '--preparation "$PREPARATION"' in step['run']
+        assert step.get('env', writer['jobs'][job].get('env', {}))['PREPARATION'] == '${{ inputs.preparation }}'
+
+
+@pytest.mark.parametrize('supplied,current,error', [('B','B','supplied base'), ('A','B','retained'), ('A','A',None)])
+def test_direct_dispatch_checks_trusted_base_before_any_post(delivery, supplied, current, error):
+    archive, pages, _ = delivery
+    saved, _ = archive.load_state()
+    saved['pending'] = None
+    saved['current']['operation'] = current
+    saved['packages']['C']['preparations'] = {'original-C': 'A'}
+    archive.save_state(saved, 'sha')
+    pages.client.api.return_value = {'workflow_runs': []}
+    if error:
+        with pytest.raises(state.Conflict, match=error):
+            commands.dispatch(TARGET, 'new-operation', 'C', supplied, 'publish', preparation='original-C')
+        pages.client.api.assert_not_called()
+    else:
+        assert commands.dispatch(TARGET, 'new-operation', 'C', supplied, 'publish', preparation='original-C')['state'] == 'submitted'
+        assert pages.client.api.call_args.kwargs['body']['inputs']['preparation'] == 'original-C'
+    assert archive.load_state()[0]['packages']['C']['preparations'] == {'original-C': 'A'}
+    archive.retrieve.assert_not_called()
+
+
+def test_multiple_records_require_exact_selection_even_when_bases_equal():
+    saved = state.initial()
+    saved['packages']['C'] = {'complete': True, 'preparations': {'one': 'A', 'two': 'A'}}
+    with pytest.raises(state.Conflict, match='exact preparation'):
+        state.archived_preparation(saved, 'C', 'A')
+    assert state.archived_preparation(saved, 'C', 'A', 'two')['preparation'] == 'two'
+    with pytest.raises(state.Conflict, match='does not belong'):
+        state.archived_preparation(saved, 'C', 'A', 'other')
+
+
+@pytest.mark.parametrize('entry', ['request', 'claim'])
+def test_direct_writer_cannot_bypass_preparation_check(delivery, tmp_path, entry):
+    import io
+    archive, pages, _ = delivery
+    saved, _ = archive.load_state()
+    saved['pending'] = None
+    saved['current']['operation'] = 'B'
+    saved['packages']['C']['preparations'] = {'original-C': 'A'}
+    archive.save_state(saved, 'sha')
+    archive.save_state.reset_mock()
+    argv = ['writer', '--target', TARGET, '--operation', 'new-operation', entry,
+            '--package', 'C', '--base', 'B', '--preparation', 'original-C']
+    if entry == 'claim':
+        argv += ['--output', str(tmp_path / 'unused')]
+    with patch.object(pages_writer, 'context', return_value=(archive, pages)), \
+            patch('sys.argv', argv), patch('sys.stdout', new_callable=io.StringIO) as report:
+        assert pages_writer.main() == 2
+    assert 'supplied base' in report.getvalue()
+    archive.save_state.assert_not_called()
+    archive.retrieve.assert_not_called()
+    pages.create.assert_not_called()

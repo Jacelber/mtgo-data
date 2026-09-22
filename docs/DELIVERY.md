@@ -84,9 +84,12 @@ Pages 昂贵准备前，现有 `prepare-pages.yml` 调用 `project.py preflight`
 preflight 不持有长期发布锁；取得写入机会和发送前的最终检查继续保留。
 
 归档成功后，在已有包记录中保存准备 operation 与原 base。同一 operation 再次运行
-准备工作流时直接选取该包，跳过本地化、构建、加密和上传。老包可用工作流的
-`archived_package`、`archived_base` 显式选择，或通过 `project.py deliver --package ...
---base ... --operation ...` 续发；已发送的操作使用 `project.py resume --operation ...`。
+准备工作流时直接选取该包，跳过本地化、构建、加密和上传。已有可信准备记录的包可用
+工作流的 `archived_package`、`archived_base` 显式选择；原 base 只取自控制状态，输入值
+仅用于核对。一个包存在多个准备记录时必须填写 `archived_preparation` 精确选择。
+直接 `project.py deliver --package ... --base ... --operation ... --preparation ...`
+及云端 writer 也使用共享校验。缺少可信历史记录的旧包保留并报告待查来源与组合，
+不自动重建、改写 base 或进入复用路径。已发送的操作使用 `project.py resume --operation ...`。
 包发现或准备标识只记录已有成果，不代表业务验收或发布授权。原 base 不可被静默替换。
 期间已有其它交付时保留原包，聚焦核对组合及更新受影响内容，不能覆盖后来交付的产品。
 恢复意图与自动发布暂停沿用原规则，不因查询、原包复用或确认成功自动扩大授权。

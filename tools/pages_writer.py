@@ -123,12 +123,14 @@ def main() -> int:
     request = sub.add_parser("request", help="Register recovery intent before entering the writer queue")
     request.add_argument("--package", required=True)
     request.add_argument("--base", default="")
+    request.add_argument("--preparation", default="")
     request.add_argument("--recovery", action="store_true")
     request.add_argument("--reason", default="")
     request.add_argument("--automatic", action="store_true")
     claim = sub.add_parser("claim", help="Claim the target, retrieve the archived package, and extract it")
     claim.add_argument("--package", required=True)
     claim.add_argument("--base", default="")
+    claim.add_argument("--preparation", default="")
     claim.add_argument("--recovery", action="store_true")
     claim.add_argument("--automatic", action="store_true")
     claim.add_argument("--output", type=Path, required=True)
@@ -173,12 +175,15 @@ def main() -> int:
                                                      package=args.package, reason=args.reason)
                 archive.save_state(state, sha)
             else:
+                transitions.archived_preparation(state, args.package, args.base or None, args.preparation or None)
                 transitions.require_publication_enabled(state, automatic=args.automatic)
             result = {"state": "requested", "operation": args.operation}
             if output := os.environ.get("GITHUB_OUTPUT"):
                 with Path(output).open("a") as handle:
                     handle.write("allowed=true\n")
         elif args.command == "claim":
+            if not state['pending'] and not args.recovery:
+                transitions.archived_preparation(state, args.package, args.base or None, args.preparation or None)
             if state["packages"].get(args.package, {}).get("target") != args.target:
                 raise transitions.Conflict("Candidate belongs to a different deployment target")
             current = state["current"]

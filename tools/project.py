@@ -54,6 +54,7 @@ def main(argv: list[str] | None = None) -> int:
         if name == "restore":
             operation.add_argument("--reason", required=True)
         if name == "deliver":
+            operation.add_argument("--preparation", help="Exact archived preparation; required when a package has multiple records")
             operation.add_argument("--automatic", action="store_true", help="Required for unattended automatic callers")
     args = parser.parse_args(argv)
     try:
@@ -84,7 +85,8 @@ def main(argv: list[str] | None = None) -> int:
                 result = commands.dispatch(args.target, args.operation, getattr(args, "package", ""),
                     getattr(args, "base", None) or None,
                     {"deliver": "publish", "restore": "recovery", "resume": "resume"}[args.command],
-                    getattr(args, "reason", ""), automatic=getattr(args, "automatic", False))
+                    getattr(args, "reason", ""), automatic=getattr(args, "automatic", False),
+                    preparation=getattr(args, "preparation", None))
         else:
             manifest = json.loads((args.candidate / "manifest.json").read_text(encoding="utf-8"))
             package = args.candidate / "product.tar.gz"

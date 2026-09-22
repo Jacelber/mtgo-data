@@ -15,6 +15,10 @@ on:
         description: Current operation, empty for first deployment
         type: string
         default: ''
+      preparation:
+        description: Exact trusted preparation record for a normal publication
+        type: string
+        default: ''
       mode:
         description: Existing authorized action
         type: choice
@@ -48,6 +52,7 @@ jobs:
           PACKAGE: ${{ inputs.package }}
           OPERATION: ${{ inputs.operation }}
           BASE: ${{ inputs.base }}
+          PREPARATION: ${{ inputs.preparation }}
           MODE: ${{ inputs.mode }}
           REASON: ${{ inputs.reason }}
           AUTOMATIC: ${{ inputs.automatic }}
@@ -55,7 +60,7 @@ jobs:
           flags=()
           if [ "$AUTOMATIC" = true ]; then flags+=(--automatic); fi
           if [ "$MODE" = recovery ]; then flags+=(--recovery --reason "$REASON"); fi
-          python tools/pages_writer.py --target Jacelber/mtgo-data --operation "$OPERATION" request --package "$PACKAGE" --base "$BASE" "${flags[@]}"
+          python tools/pages_writer.py --target Jacelber/mtgo-data --operation "$OPERATION" request --package "$PACKAGE" --base "$BASE" --preparation "$PREPARATION" "${flags[@]}"
   deploy:
     name: Deploy selected product
     needs: request
@@ -78,6 +83,7 @@ jobs:
       PACKAGE: ${{ inputs.package }}
       OPERATION: ${{ inputs.operation }}
       BASE: ${{ inputs.base }}
+      PREPARATION: ${{ inputs.preparation }}
       MODE: ${{ inputs.mode }}
       AUTOMATIC: ${{ inputs.automatic }}
     steps:
@@ -90,7 +96,7 @@ jobs:
           flags=()
           if [ "$AUTOMATIC" = true ]; then flags+=(--automatic); fi
           if [ "$MODE" = recovery ]; then flags+=(--recovery); fi
-          python tools/pages_writer.py --target Jacelber/mtgo-data --operation "$OPERATION" claim --package "$PACKAGE" --base "$BASE" --output "$RUNNER_TEMP/selected-transport" "${flags[@]}"
+          python tools/pages_writer.py --target Jacelber/mtgo-data --operation "$OPERATION" claim --package "$PACKAGE" --base "$BASE" --preparation "$PREPARATION" --output "$RUNNER_TEMP/selected-transport" "${flags[@]}"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: steps.candidate.outputs.phase == 'claimed'
         id: transport

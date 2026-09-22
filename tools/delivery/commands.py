@@ -26,7 +26,8 @@ def remember_candidate(target: str, preparation: str, package: str, base: str | 
     archive.save_state(state, sha)
 
 
-def preflight(target: str, preparation: str | None = None) -> dict:
+def preflight(target: str, preparation: str | None = None, *, archived_package: str | None = None,
+              archived_base: str | None = None, archived_preparation: str | None = None) -> dict:
     """Resolve old facts before expensive preparation; acquire no writer lock."""
     archive, pages = context(target)
     archive.private()
@@ -56,24 +57,38 @@ def preflight(target: str, preparation: str | None = None) -> dict:
         raise transitions.Conflict("Existing deployment needs its actual archived baseline")
     result = {"state": "ready", "base": transitions.current_id(state),
               "current": current, "observation": observation}
-    if preparation:
+    if archived_package:
+        result.update(transitions.archived_preparation(state, archived_package, archived_base, archived_preparation))
+    elif preparation:
         matches = [(key, info['preparations'][preparation]) for key, info in state['packages'].items()
                    if preparation in info.get('preparations', {})]
         if len(matches) > 1:
             raise transitions.Conflict('Ambiguous archived preparation; preserve all candidates')
         if matches:
-            result.update(package=matches[0][0], candidate_base=matches[0][1])
+            result.update(transitions.archived_preparation(state, matches[0][0], matches[0][1], preparation))
+    if result.get('package'):
+        if state['packages'][result['package']].get('target') != target:
+            raise transitions.Conflict('Archived candidate belongs to another target')
+        already_current = (current and current['operation'] == preparation
+                           and current['package'] == result['package'])
+        if result['candidate_base'] != result['base'] and not already_current:
+            raise transitions.Conflict(f"Candidate {result['package']} retained: stale combination; do not rebuild or rebase")
     return result
 
 
 def dispatch(target: str, operation: str, package: str, base: str | None, mode: str, reason: str = "",
-             *, automatic: bool = False) -> dict:
+             *, automatic: bool = False, preparation: str | None = None) -> dict:
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,95}", operation):
         raise ValueError("Use the same short operation ID for continuation")
     archive, pages = context(target)
     archive.private()
     state, sha = archive.load_state()
+    if mode == 'publish':
+        selected = transitions.archived_preparation(state, package, base, preparation)
+        preparation, base = selected['preparation'], selected['candidate_base']
     if transitions.current_id(state) == operation and not state["pending"]:
+        if mode == 'publish' and state['current']['package'] != package:
+            raise transitions.Conflict('Operation is already bound to another package')
         if mode == "resume":
             return resume_completed(archive, pages, state, sha, target=target, operation=operation)
         health = state["current"].get("health", "unknown")
@@ -130,7 +145,7 @@ def dispatch(target: str, operation: str, package: str, base: str | None, mode: 
     ref = "master" if target == "Jacelber/mtgo-data" else "main"
     pages.client.api(f"repos/{target}/actions/workflows/pages.yml/dispatches", method="POST", body={
         "ref": ref, "inputs": {"operation": operation, "package": package, "base": base or "", "mode": mode,
-                               "reason": reason, "automatic": str(automatic).lower()}})
+                               "reason": reason, "automatic": str(automatic).lower(), "preparation": preparation or ""}})
     return {"state": "submitted", "operation": operation, "target": target,
             "next": "Query this operation; do not invent a new ID after an uncertain response"}
 

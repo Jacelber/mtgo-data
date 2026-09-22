@@ -22,6 +22,10 @@ on:
         description: Original preparation base of the archived package; never replace with current base to bypass a conflict
         type: string
         default: ''
+      archived_preparation:
+        description: Exact preparation record for archived_package; required when that package has multiple records
+        type: string
+        default: ''
 permissions:
   contents: read
   actions: read
@@ -42,6 +46,7 @@ jobs:
       operation: ${{ steps.base.outputs.operation }}
       source: ${{ steps.base.outputs.source }}
       package: ${{ steps.base.outputs.package }}
+      preparation: ${{ steps.base.outputs.preparation }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
@@ -55,6 +60,7 @@ jobs:
           REQUESTED_SOURCE: ${{ inputs.source || github.sha }}
           ARCHIVED_PACKAGE: ${{ inputs.archived_package }}
           ARCHIVED_BASE: ${{ inputs.archived_base }}
+          ARCHIVED_PREPARATION: ${{ inputs.archived_preparation }}
           PREPARATION: ${{ inputs.operation }}
         run: |
           git fetch --no-tags origin master
@@ -66,17 +72,19 @@ jobs:
           from tools.pages_writer import context
           from tools.delivery.gitfacts import preparation_source
           from tools.delivery.commands import preflight
-          result = preflight('Jacelber/mtgo-data', os.environ['PREPARATION'])
+          result = preflight('Jacelber/mtgo-data', os.environ['PREPARATION'],
+                             archived_package=os.environ['ARCHIVED_PACKAGE'] or None,
+                             archived_base=os.environ['ARCHIVED_BASE'] or None,
+                             archived_preparation=os.environ['ARCHIVED_PREPARATION'] or None)
           if result['state'] != 'ready':
               raise RuntimeError('Preparation deferred; continue the existing operation: ' + json.dumps(result))
-          package = os.environ['ARCHIVED_PACKAGE'] or result.get('package')
+          package = result.get('package')
           if package:
-              base = (os.environ['ARCHIVED_BASE'] or None) if os.environ['ARCHIVED_PACKAGE'] else result['candidate_base']
-              if base != result['base'] and result['base'] != os.environ['PREPARATION']:
-                  raise RuntimeError('Archived candidate retained; its combination is stale. Resolve affected content; do not silently rebase or rebuild.')
+              base = result['candidate_base']
               with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
                   output.write('operation=' + (base or '') + '\n')
                   output.write('package=' + package + '\n')
+                  output.write('preparation=' + result['preparation'] + '\n')
               raise SystemExit(0)
           archive, _ = context('Jacelber/mtgo-data')
           archive.private()
@@ -474,7 +482,7 @@ jobs:
           from tools.delivery.commands import dispatch
           candidate = json.loads((Path(os.environ['RUNNER_TEMP']) / 'archive-result.json').read_text())
           result = dispatch('Jacelber/mtgo-data', os.environ['OPERATION'], candidate['id'],
-                            os.environ['BASE'] or None, 'publish', automatic=True)
+                            os.environ['BASE'] or None, 'publish', automatic=True, preparation=os.environ['OPERATION'])
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
               output.write('\nAutomatic publication: `' + result['state'] + '`.\n')
               if result['state'] == 'publication_paused':
@@ -502,6 +510,7 @@ jobs:
           PACKAGE: ${{ needs.base.outputs.package }}
           BASE: ${{ needs.base.outputs.operation }}
           OPERATION: ${{ inputs.operation }}
+          PREPARATION: ${{ needs.base.outputs.preparation }}
           PUBLISH: ${{ inputs.publish_automatically }}
         run: |
           python - <<'PY'
@@ -510,7 +519,7 @@ jobs:
           from tools.delivery.commands import dispatch
           if os.environ['PUBLISH'] == 'true':
               result = dispatch('Jacelber/mtgo-data', os.environ['OPERATION'], os.environ['PACKAGE'],
-                                os.environ['BASE'] or None, 'publish', automatic=True)
+                                os.environ['BASE'] or None, 'publish', automatic=True, preparation=os.environ['PREPARATION'])
           else:
               result = {'state': 'candidate_retained', 'package': os.environ['PACKAGE'], 'base': os.environ['BASE']}
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:

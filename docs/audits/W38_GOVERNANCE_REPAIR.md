@@ -1,7 +1,8 @@
 # W38 故障整改：开发验收材料
 
 状态：本地开发及必要验证完成，提交 PR 供 Owner 与云端 chatbot 验收。未合并或部署。
-本次仅获准创建 PR；PR 创建后的检查、修复、合并与发布均未授权。
+Owner 后续仅授权修复 A 的显式归档包原 base 校验缺口、针对性验证并更新现有 PR。
+更新后停止；合并、发布及 Standard W38 历史绑定处理不在本次授权内。
 
 隔离分支：`codex/w38-governance-repair-20260922`。
 开发基线：`c23b639d30a6152127e9e95949ecc4a0b4feaf58`（包含 #434、#435、#436）。
@@ -19,7 +20,7 @@
 
 归档成功后，在现有包记录内保存准备标识和原 base。同一准备标识再次运行时找回
 该包，跳过 localization、build、encryption 和 archive，直接进入已有 dispatch 入口。
-历史包仍可用 archived_package / archived_base 显式选取。此关联只用于发现成果，
+有可信记录的历史包可用 archived_package / archived_base 显式选取。此关联只用于发现成果，
 不代表人工批准、不修改不可变归档包，也不是新增审批台账。
 
 ### 已验证的具体行为
@@ -41,10 +42,24 @@
 
 复核了真实 workflow 内嵌入口的 ready / waiting / stale 分支，以及原包路径跳过
 昂贵作业的连线。查询作业仅新增 Pages / deployment 只读权限，未扩大线上写权限。
-最终 writer 的串行协调和发送前检查保持原样。
+最终 writer 的串行协调和发送前检查继续保留。
 
-证明：`tests/delivery/test_continuation.py` 的 14 个有限情境全部通过；原 dispatch 和
-platform 检查通过，CLI 的等待返回码及工作流内嵌 Python 编译检查通过。
+本次补修把校验集中到 delivery 的 `archived_preparation`：原 base 只读取已有完整包的
+control state preparation 记录，调用者输入只做相等核对；多个记录即使 base 相同，
+也必须明确选择记录。prepare-pages、直接 dispatch 和 writer request/claim 均接入。
+缺少可信记录的旧包报告待查来源与组合，保留原包，不进入自动复用或重建。
+
+| 本次新增核对 | 结果 |
+| --- | --- |
+| 记录原 base=A，当前 B，显式填写 B | 拒绝输入与记录不符，不发送 |
+| 记录原 base=A，当前 B，显式填写 A | 保留原包，判定组合过期，不发送 |
+| 包、具体 preparation、原 base=A 与当前 A 完全匹配 | 复用原包，传递同一 preparation |
+| 多个 preparation，未明确选择或选择不属于该包的记录 | 拒绝，不任选一个 base |
+| 旧包缺少可信 preparation/base | 拒绝复用，报告来源与组合待查 |
+
+证明：本次 `tests/delivery/test_continuation.py` 的 29 个有限情境全部通过，包含真实
+prepare-pages 内嵌入口的显式与自动路径、原有续作情境及直接发送入口的防绕过核对。
+首次提交的 dispatch、platform 与 CLI 验证结论保留，本次没有扩大重跑范围。
 这些是本地机制与入口验证，没有在生产制造超时或故障。
 
 Owner 验收点：是否接受上述续作方式及并发边界，而无需重新处理技术状态。
@@ -114,7 +129,7 @@ Owner 验收点：测试范围与当前合同一致，没有为了通过测试�
 ## 验收后与自然观察
 
 本次受改结果可以按 A/B/C 验收，Standard 的既有历史差异单独报告，不隐瞒也不绕过。
-本次在创建 PR 后停止，后续动作等待 Owner 新指令。此次没有公开产品字节变化，
+本次在更新 PR #437 后停止，后续动作等待 Owner 验收与新指令。此次没有公开产品字节变化，
 因此不为了交付控制代码重新发布 W38。
 
 下一次正常周维护和 Pages 发布再观察实际外部耗时、原包复用与人工介入；尚未宣称
