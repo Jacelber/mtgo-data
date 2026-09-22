@@ -148,20 +148,10 @@ def accepted_classification(registry, review):
     """Use scoped business evidence, never an unrelated nested digest or completion flag."""
     scope = registry.get('data_admissions', {}).get('formats', {}).get(review['format'], {})
     candidates = [scope.get('initial', {}), *scope.get('weekly_acceptances', [])]
-    accepted = []
-    for item in candidates:
-        if (item.get('kind') in {'owner_accepted_initial_public_scope', 'owner_accepted_full_classification'}
-                and item.get('week') == review['week']
-                and item.get('classification_review_digest') == review.get('classification_review_digest')
-                and item.get('accepted_classifier_subject') == review['classifier']['subject_digest']
-                and set(review['event_ids']).issubset(set(item.get('event_ids', [])))
-                and item.get('evidence') and item.get('accepted_on')):
-            try:
-                submissions.validate_classification_acceptance(item, review['format'])
-            except (ValueError, KeyError):
-                continue
-            accepted.append(item)
-    return accepted
+    return [item for item in candidates
+            if item.get('kind') in {'owner_accepted_initial_public_scope', 'owner_accepted_full_classification'}
+            and item.get('evidence') and item.get('accepted_on')
+            and submissions.classification_validity(item, review)['state'] in {'current', 'equivalent'}]
 
 
 def feature_subject(review, accepted):

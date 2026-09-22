@@ -86,7 +86,11 @@ def decision_state(packet: dict, receipt: dict | None) -> dict:
         established = (packet["kind"] == "content" and key.startswith("name.")
                        and key in packet["bindings"].get("established_names", {})
                        and packet["bindings"]["established_names"][key] == packet["dimensions"][key])
-        valid = established or (decision.get("subject") == dimension_digest(packet, key)
+        prior = receipt.get("equivalent_submission") if scope_matches else None
+        continued = (isinstance(prior, dict) and key in prior.get("dimensions", {})
+                     and decision.get("subject") == dimension_digest(prior, key)
+                     and packet_validity(prior, packet)["state"] in {"current", "equivalent"})
+        valid = established or ((decision.get("subject") == dimension_digest(packet, key) or continued)
                  and all(isinstance(decision.get(field), str) and decision[field].strip()
                          for field in ("evidence", "accepted_on", "entrypoint", "submitted_digest")))
         if valid and not established:
@@ -105,7 +109,11 @@ def reuse_decisions(packet: dict, envelope: dict) -> dict:
     if (prior["format"], prior["kind"]) != (packet["format"], packet["kind"]):
         raise ValueError("Cannot reuse decisions from another format or kind")
     if prior["week"] == packet["week"]:
-        return deepcopy(receipt)
+        result = deepcopy(receipt)
+        origin = result.get("equivalent_submission", prior)
+        if packet_validity(origin, packet)["state"] == "equivalent":
+            result["equivalent_submission"] = deepcopy(origin)
+        return result
     result = {key: packet[key] for key in ("format", "week", "kind")}
     result["decisions"] = {}
     for key in state["accepted"]:
@@ -116,20 +124,71 @@ def reuse_decisions(packet: dict, envelope: dict) -> dict:
     return result
 
 
+def packet_validity(packet: dict, current: dict) -> dict:
+    """Compare immutable scoped material; version identifiers alone prove no equivalence."""
+    validate_packet(packet)
+    validate_packet(current)
+    if any(packet[key] != current[key] for key in ("format", "week", "kind")):
+        return {"state": "changed", "reason": "review scope"}
+    def bindings(value):
+        return {key: item for key, item in value["bindings"].items()
+                if key not in {"established_names", "material_digest"}}
+    old, new = bindings(packet), bindings(current)
+    if packet["dimensions"] == current["dimensions"] and old == new:
+        before, after = (value["bindings"].get("material_digest") for value in (packet, current))
+        if before is not None and after is not None and before != after:
+            return {"state": "changed", "reason": "source material changed"}
+        return {"state": "current", "reason": None}
+    technical = {"content": {"classifier_digest", "machine_fact_digest"},
+                 "full_classification": {"classifier", "classification_review_digest"}}
+    ignored = technical.get(packet["kind"], set())
+    def material_dimensions(value):
+        dimensions = deepcopy(value["dimensions"])
+        if value["kind"] == "full_classification":
+            dimensions["full_classification"] = {
+                key: item for key, item in dimensions["full_classification"].items()
+                if key not in ignored}
+        return dimensions
+    if (material_dimensions(packet) != material_dimensions(current)
+            or {k: v for k, v in old.items() if k not in ignored}
+            != {k: v for k, v in new.items() if k not in ignored}):
+        return {"state": "changed", "reason": "reviewed material or source membership"}
+    before, after = (value["bindings"].get("material_digest") for value in (packet, current))
+    if not (isinstance(before, str) and re.fullmatch(r"[0-9a-f]{64}", before)
+            and isinstance(after, str) and re.fullmatch(r"[0-9a-f]{64}", after)):
+        return {"state": "evidence_required", "reason": "retained material comparison is unavailable"}
+    return ({"state": "equivalent", "reason": "same scoped material; technical provenance changed"}
+            if ignored and before == after else {"state": "changed", "reason": "source material changed"})
+
+
+def classification_validity(record: dict, review: dict) -> dict:
+    """One acceptance decision for Feature preparation, readiness and continuation."""
+    try:
+        validate_classification_acceptance(record, review["format"])
+        if record["week"] != review["week"]:
+            raise ValueError("different review week")
+        packet = record.get("classification_acceptance", {}).get("submission")
+        if packet:
+            return packet_validity(packet, full_classification_packet(review))
+        exact = (record.get("accepted_classifier_subject") == review["classifier"]["subject_digest"]
+                 and record.get("classification_review_digest") == review["classification_review_digest"]
+                 and (set(review["event_ids"]) <= set(record["event_ids"])
+                      if record.get("kind") == "owner_accepted_initial_public_scope"
+                      else set(record["event_ids"]) == set(review["event_ids"])))
+        return {"state": "current" if exact else "evidence_required", "reason": None if exact else "legacy material"}
+    except (ValueError, KeyError, TypeError) as exc:
+        return {"state": "evidence_required", "reason": str(exc)}
+
+
 def require_accepted(packet: dict, receipt: dict, *, current: dict | None = None) -> None:
     state = decision_state(packet, receipt)
     if state["pending"]:
         raise ValueError("Review still needs decisions: " + ", ".join(state["pending"]))
     if current is not None:
-        validate_packet(current)
-        def subject(value):
-            return {**{key: item for key, item in value.items() if key not in {"digest", "bindings"}},
-                    "bindings": {key: item for key, item in value["bindings"].items() if key != "established_names"}}
-        if subject(current) != subject(packet):
-            changed = sorted(key for key in set(current["dimensions"]) | set(packet["dimensions"])
-                             if current["dimensions"].get(key) != packet["dimensions"].get(key))
+        validity = packet_validity(packet, current)
+        if validity["state"] not in {"current", "equivalent"}:
             raise ValueError("Submitted material no longer matches current content: "
-                             + (", ".join(changed) or "source bindings"))
+                             + validity["state"] + ": " + validity["reason"])
 
 
 def classification_packet(materials: dict, requests: list[dict]) -> dict:
@@ -174,6 +233,12 @@ def classification_packet(materials: dict, requests: list[dict]) -> dict:
                                  "classification_review_digest": review["classification_review_digest"]})
 
 
+def classification_material_digest(value: dict) -> str:
+    return digest({"format": value["format"], "week": value["week"],
+                   "events": value.get("events", []), "event_ids": value["event_ids"],
+                   "records": value["records"]})
+
+
 def full_classification_packet(review: dict) -> dict:
     """The full-table decision is distinct from individual classification proposals."""
     for row in review["records"]:
@@ -185,7 +250,7 @@ def full_classification_packet(review: dict) -> dict:
              "classifier": review["classifier"]["subject_digest"],
              "classification_review_digest": review["classification_review_digest"]}
     return make_packet("full_classification", review["format"], review["week"],
-                       {"full_classification": value}, bindings=value)
+                       {"full_classification": value}, bindings={**value, "material_digest": classification_material_digest(review)})
 
 
 def validate_classification_acceptance(record: dict, format_id: str | None = None) -> None:
@@ -261,7 +326,7 @@ def content_dimensions(root: Path, format_id: str, review: dict, environment: di
     return dimensions
 
 
-def make_content_packet(root, format_id, week, content, environment, names, *, bindings):
+def make_content_packet(root, format_id, week, content, environment, names, *, bindings, facts=None):
     dimensions = content_dimensions(root, format_id, content, environment, names)
     established = {}
     for item in names["names"]:
@@ -272,7 +337,8 @@ def make_content_packet(root, format_id, week, content, environment, names, *, b
             if approved and key in dimensions:
                 established[key] = item[field]
     return make_packet("content", format_id, week, dimensions,
-                       bindings={**bindings, "established_names": established})
+                       bindings={**bindings, "established_names": established,
+                                 **({"material_digest": digest(facts)} if facts is not None else {})})
 
 
 def content_packet(root: Path, source: dict) -> dict:
@@ -284,16 +350,20 @@ def content_packet(root: Path, source: dict) -> dict:
         raise ValueError("Review content week differs from its actual subject")
     bindings = {key: subject[key] for key in ("source_event_ids", "classifier_digest",
                 "selection_policy_digest", "machine_fact_digest", "link_catalog_digest")}
-    if any(source["bindings"].get(key) != value for key, value in bindings.items()):
+    if any(source["bindings"].get(key) != value for key, value in bindings.items()) and not source.get("acceptance"):
         raise ValueError("Review content uses outdated source bindings")
     year, number = week.split("-W")
     from datetime import timedelta
+    facts = {}
     _, page = landing.build_document(root, format_id,
                                      today=date.fromisocalendar(int(year), int(number), 1) + timedelta(days=7),
-                                     _admit_review=False)
+                                     _admit_review=False, _review_facts=facts)
     names = yaml.safe_load((root / editorial.DEFAULT_NAME_CATALOG).read_text(encoding="utf-8"))
-    return make_content_packet(root, format_id, week, source["review"], page["environment"], names,
-                       bindings=bindings)
+    packet = make_content_packet(root, format_id, week, source["review"], page["environment"], names,
+                                 bindings=bindings, facts=facts)
+    if source.get("acceptance"):
+        require_accepted(source["acceptance"]["submission"], source["acceptance"]["decisions"], current=packet)
+    return packet
 
 
 def name_digest(packet: dict) -> str:
@@ -386,7 +456,7 @@ def hashlib_sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def validate_completion(root: Path, format_id: str, week: str, record: dict) -> None:
+def validate_completion(root: Path, format_id: str, week: str, record: dict, *, check_current: bool = True) -> None:
     if not applies(week):
         return
     accepted = record.get("preview_acceptance", {})
@@ -398,6 +468,18 @@ def validate_completion(root: Path, format_id: str, week: str, record: dict) -> 
     if (publication.get("health") != "passed" or not publication.get("operation")
             or not publication.get("package") or publication.get("preview_digest") != packet["digest"]):
         raise ValueError("Completion requires the corresponding confirmed publication")
+    classification = record.get("classification_submission")
+    if classification:
+        validate_packet(classification)
+        value = classification["dimensions"].get("full_classification", {})
+        if (classification.get("format") != format_id or classification.get("week") != week
+                or classification.get("kind") != "full_classification"
+                or value.get("event_ids") != sorted(record.get("accepted_event_ids", []))
+                or value.get("classifier") != record.get("accepted_classifier_subject")
+                or value.get("classification_review_digest") != record.get("classification_review_digest")):
+            raise ValueError("Completed classification snapshot differs from its recorded subject")
+    if not check_current:
+        return
     # Completed historical weeks retain their recorded object. The current page
     # must still match when it is this week; a later admitted week does not undo it.
     from .landing_bundle import read_json
@@ -425,16 +507,10 @@ def resume_summary(root: Path, format_id: str, week: str, *, envelope: dict | No
         from mtgmeta.weekly_review import build_mtgo_weekly_review
         current = build_mtgo_weekly_review(root, format_id, week)
         current_event_ids = set(current["event_ids"])
-        valid = [item for item in accepted if item.get("classification_review_digest") == current["classification_review_digest"]
-                 and item.get("accepted_classifier_subject") == current["classifier"]["subject_digest"]
-                 and (current_event_ids <= set(item.get("event_ids", []))
-                      if item.get("kind") == "owner_accepted_initial_public_scope"
-                      else current_event_ids == set(item.get("event_ids", [])))]
-        for item in list(valid):
-            try:
-                validate_classification_acceptance(item, format_id)
-            except (ValueError, KeyError, TypeError):
-                valid.remove(item)
+        evaluations = [classification_validity(item, current) for item in accepted]
+        valid = [item for item, result in zip(accepted, evaluations)
+                 if result["state"] in {"current", "equivalent"}]
+        status["classification_validity"] = evaluations
         status["classification"] = "accepted" if valid else "changed"
         status["classification_evidence"] = [{key: item.get(key) for key in ("accepted_on", "evidence")} for item in valid]
     review_path = root / f"stats/{format_id}/mtgo/landing/review/{week}.yaml"
@@ -485,7 +561,13 @@ def resume_summary(root: Path, format_id: str, week: str, *, envelope: dict | No
                  and format_id in item.get("formats", {})]
     if completed:
         try:
-            validate_completion(root, format_id, week, completed[-1]["formats"][format_id])
+            validate_completion(root, format_id, week, completed[-1]["formats"][format_id], check_current=False)
+            try:
+                validate_completion(root, format_id, week, completed[-1]["formats"][format_id])
+                status["current_product"] = "matches_recorded_preview"
+            except (OSError, ValueError, KeyError, TypeError) as exc:
+                status["current_product"] = "needs_investigation"
+                status["current_product_problem"] = str(exc)
             status["completion"] = "legacy_recorded" if not applies(week) else "confirmed_recorded"
             if applies(week):
                 status["publication_evidence"] = completed[-1]["formats"][format_id]["preview_acceptance"]["publication"]
@@ -499,6 +581,8 @@ def resume_summary(root: Path, format_id: str, week: str, *, envelope: dict | No
         status["next_actions"].append("仅提交列出的待决定内容；继续无关且已授权工作")
     if status["completion"] in {"legacy_recorded", "confirmed_recorded"}:
         status["next_actions"] = ["保留本周完成结果，不重开验收；后续周维护转入下一待审周"]
+        if status["classification"] != "accepted" or status["content"] == "needs_repair" or status.get("current_product") == "needs_investigation":
+            status["next_actions"].append("历史完成不撤销；当前差异单独核查，有真实增量时仅处理该增量")
         if status["completion"] == "legacy_recorded":
             status["preview"] = status["visuals"] = "not_separately_recorded_legacy"
     status["next_actions"].append("如需核对当前线上状态，查询原发布操作；本地记录不等于实时线上查询")
@@ -515,7 +599,7 @@ def validate_content_acceptance(document: dict) -> None:
         raise ValueError("Content acceptance belongs to another subject")
     require_accepted(packet, acceptance["decisions"])
     for key, value in packet["bindings"].items():
-        if key == "established_names":
+        if key in {"established_names", "material_digest"}:
             continue  # Rechecked against the actual catalog by content_packet/build_document.
         if document["bindings"].get(key) != value:
             raise ValueError(f"Content acceptance source changed: {key}")

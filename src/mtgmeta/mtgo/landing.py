@@ -744,6 +744,7 @@ def build_document(
     visuals_path: str | Path | None = None,
     allow_classifier_restatement: bool = False,
     _admit_review: bool = True,
+    _review_facts: dict | None = None,
     private: bool = False,
     review_week: str | None = None,
 ) -> tuple[str, dict[str, Any]]:
@@ -893,6 +894,10 @@ def build_document(
     machine_fact_digest = _fact_digest(
         {**fact_payload, "observations": observations[:5]}
     )
+    review_facts = {key: value for key, value in fact_payload.items() if key != "classifier"}
+    review_facts["observations"] = observations[:5]
+    if _review_facts is not None:
+        _review_facts.update(review_facts)
     features: list[dict[str, Any]] = []
     summary_items: list[dict[str, Any]] = []
     pickup_document_digest = _fact_digest(
@@ -935,9 +940,11 @@ def build_document(
                 from . import review_submission as submissions
                 packet = submissions.make_content_packet(root, format_id, week,
                     review["review"], environment, name_document,
-                    bindings={key: review["bindings"][key] for key in
-                              ("source_event_ids", "classifier_digest", "selection_policy_digest",
-                               "machine_fact_digest", "link_catalog_digest")})
+                    bindings={"source_event_ids": current["event_ids"], "classifier_digest": rules_digest,
+                              "selection_policy_digest": selection_policy_digest,
+                              "machine_fact_digest": machine_fact_digest,
+                              "link_catalog_digest": editorial.document_digest(editorial.build_top8_catalog(current_top8))},
+                    facts=review_facts)
                 submissions.require_accepted(review["acceptance"]["submission"],
                                              review["acceptance"]["decisions"], current=packet)
                 scoped_name_digest = submissions.name_digest(packet)
@@ -988,8 +995,10 @@ def build_document(
                     loaded = None
                 if isinstance(loaded, dict):
                     prior_document = loaded
-            restatement_safe = (
-                allow_classifier_restatement
+            shared_equivalent = (review["schema_version"] == "1.3.0" and
+                submissions.packet_validity(review["acceptance"]["submission"], packet)["state"] in {"current", "equivalent"})
+            restatement_safe = shared_equivalent or (
+                review["schema_version"] != "1.3.0" and allow_classifier_restatement
                 and prior_document is not None
                 and _classifier_restatement_preserves_accepted_material(
                     binding_mismatches,

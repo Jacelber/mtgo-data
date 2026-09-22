@@ -632,6 +632,9 @@ def build_v2_completion_record(
             "classification_review_digest": review_digest,
             "landing_content_digest": landing_digest,
         }
+        if "records" in review:
+            from .mtgo.review_submission import full_classification_packet
+            formats[format_id]["classification_submission"] = full_classification_packet(review)
     return {
         "week": week_id,
         "review_scope": "full_official_classification_v2",

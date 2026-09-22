@@ -160,6 +160,7 @@ def _completion_state(root: Path, week_id: str, *, format_id: str | None = None)
             f"Weekly review completion record for {week_id} has unsupported format bindings"
         )
     mismatches = []
+    historical_problems = []
     review_scope = record.get("review_scope", "top8_legacy")
     if review_scope not in {"top8_legacy", "full_official_classification_v2"}:
         raise ValueError(f"Weekly review completion record for {week_id} has invalid scope")
@@ -197,22 +198,40 @@ def _completion_state(root: Path, week_id: str, *, format_id: str | None = None)
                 raise ValueError(
                     f"{week_id} {format_name} full classification completion is invalid"
                 )
-            current_review = build_mtgo_weekly_review(root, format_name, week_id)
-            if sorted(current_review["event_ids"]) != sorted(expected_events):
-                mismatches.append(f"{format_name} accepted event IDs")
-            if current_review["classifier"]["subject_digest"] != expected_classifier:
-                mismatches.append(f"{format_name} accepted classifier subject")
-            if current_review["classification_review_digest"] != expected_review:
-                mismatches.append(f"{format_name} full classification review subject")
-        if _landing_content_digest(root, format_name, week_id) != expected_landing:
-            mismatches.append(f"{format_name} Landing content")
+            try:
+                current_review = build_mtgo_weekly_review(root, format_name, week_id)
+                if sorted(current_review["event_ids"]) != sorted(expected_events):
+                    mismatches.append(f"{format_name} accepted event IDs")
+                if expected.get("classification_submission"):
+                    from mtgmeta.mtgo.review_submission import packet_validity, full_classification_packet
+                    comparison = packet_validity(expected["classification_submission"], full_classification_packet(current_review))
+                    if comparison["state"] not in {"current", "equivalent"}:
+                        mismatches.append(f"{format_name} classification: {comparison['state']}: {comparison['reason']}")
+                else:
+                    if current_review["classifier"]["subject_digest"] != expected_classifier:
+                        mismatches.append(f"{format_name} accepted classifier subject (retained material evidence required)")
+                    if current_review["classification_review_digest"] != expected_review:
+                        mismatches.append(f"{format_name} full classification review subject")
+            except (OSError, ValueError, KeyError, TypeError) as exc:
+                mismatches.append(f"{format_name} current classification unavailable: {exc}")
+        try:
+            if _landing_content_digest(root, format_name, week_id) != expected_landing:
+                mismatches.append(f"{format_name} Landing content")
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            mismatches.append(f"{format_name} current Landing unavailable: {exc}")
         from mtgmeta.mtgo.review_submission import validate_completion
+        try:
+            validate_completion(root, format_name, week_id, expected, check_current=False)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            historical_problems.append(f"{format_name}: {exc}")
         try:
             validate_completion(root, format_name, week_id, expected)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             mismatches.append(f"{format_name} final preview/publication: {exc}")
     return {
         "state": "stale" if mismatches else "verified",
+        "historical_state": "invalid" if historical_problems else "verified",
+        "historical_problems": historical_problems,
         "completed_on": completed_on,
         "evidence": evidence,
         "mismatches": mismatches,
@@ -772,8 +791,12 @@ def _independent_readiness(root: Path, registry: dict[str, Any], *, publication_
         recorded_weeks = {row["week"] for row in registry.get("records", [])
                           if format_id in row.get("formats", {})
                           and week_monday(row["week"]) >= start}
-        completed = {week for week in recorded_weeks
-                     if _completion_state(root, week, format_id=format_id)["state"] == "verified"}
+        history = {week: _completion_state(root, week, format_id=format_id) for week in recorded_weeks}
+        completed = {week for week, result in history.items()
+                     if result.get("historical_state", result["state"]) == "verified"}
+        historical_changes = [{"week": week, "mismatches": result["mismatches"]}
+                              for week, result in sorted(history.items())
+                              if week in completed and result["state"] != "verified"]
         unfinished = {row["week"] for row in admissions
                       if week_monday(row["week"]) >= start} - completed
         weeks = sorted(pending_weeks | unfinished)
@@ -809,11 +832,10 @@ def _independent_readiness(root: Path, registry: dict[str, Any], *, publication_
             from mtgmeta.mtgo.publication import inspect_publication
             if inspect_publication(root, format_id):
                 data_status = "accepted_not_published"
-        if admission is not None and review is not None and (
-            set(admission["event_ids"]) != review_ids
-            or admission["classification_review_digest"] != review["classification_review_digest"]
-        ):
-            data_status = "review_delta_required"
+        if admission is not None and review is not None:
+            from mtgmeta.mtgo.review_submission import classification_validity
+            if classification_validity(admission, review)["state"] not in {"current", "equivalent"}:
+                data_status = "review_delta_required"
         screening = {"status": "after_data_acceptance", "reason": None, "binding": None}
         if data_status == "published" and week:
             try:
@@ -845,6 +867,8 @@ def _independent_readiness(root: Path, registry: dict[str, Any], *, publication_
             "landing_screening": screening,
             "metadata_review": "after_regeneration_and_screening_if_delta",
             "completed_reviews": sorted(completed),
+            "historical_changes": historical_changes,
+            "review_kind": "supplement" if week in completed else "weekly",
             "blockers": blockers,
             "status": status,
         })
@@ -929,7 +953,7 @@ def build_private_readiness(
             "completion": completion,
             "blockers": blockers,
             "status": "blocked" if blockers else (
-                "completed" if completion["state"] == "verified" else (
+                "completed" if completion.get("historical_state", completion["state"]) == "verified" else (
                     "continue_review" if landing else "prepare_landing"
                 )
             ),

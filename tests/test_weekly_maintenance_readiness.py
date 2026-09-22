@@ -216,7 +216,8 @@ def test_data_publication_landing_blocker_and_late_delta_are_independent(tmp_pat
     monkeypatch.setattr(publication, "retained_events", lambda *args: [("synthetic.json", {
         "event_id": "200", "starttime": "2025-01-13"})])
     monkeypatch.setattr(publication, "inspect_publication", lambda *args: [])
-    review = {"event_ids": ["200"], "classification_review_digest": "a" * 64}
+    review = {"event_ids": ["200"], "classification_review_digest": "a" * 64,
+              "format": "standard", "week": "2025-W03", "classifier": {"subject_digest": "b" * 64}}
     def build(root, fmt, week):
         if fmt == "modern":
             raise ValueError("synthetic missing approved bilingual name")
@@ -226,7 +227,8 @@ def test_data_publication_landing_blocker_and_late_delta_are_independent(tmp_pat
         reports={"unknown_decks": {"records": []}, "index": {"summary": {"strict_validation": "pass"}}}))
     for fmt in ("standard", "modern"):
         _write_json(tmp_path / "stats" / fmt / "mtgo/landing/current.json", {"week": {"id": "2025-W02"}})
-    row = {"week": "2025-W03", "event_ids": ["200"], "classification_review_digest": "a" * 64}
+    row = {"week": "2025-W03", "event_ids": ["200"], "classification_review_digest": "a" * 64,
+           "accepted_classifier_subject": "b" * 64}
     registry = {"data_admissions": {"formats": {"standard": {"weekly_acceptances": [row]},
                                                   "modern": {"weekly_acceptances": []}}}}
     def result():
