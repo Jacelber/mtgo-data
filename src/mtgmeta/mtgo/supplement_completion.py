@@ -80,7 +80,7 @@ def coverage(root: Path, record: dict, format_id: str) -> dict:
                 accepted = effective["preview_acceptance"]
                 if (entry["preview"]["retained_from"] != accepted["submission"]["digest"]
                         or actual["week"] != accepted["submission"]["week"]
-                        or actual["dimensions"] != accepted["submission"]["dimensions"]):
+                        or review.preview_validity(accepted["submission"], actual, dimensions_only=True)["state"] not in {"current", "equivalent"}):
                     raise ValueError("Retained preview actually changed")
             elif entry["preview"]["mode"] == "accepted":
                 accepted = entry["preview"]["acceptance"]
@@ -115,7 +115,7 @@ def validate_current_preview(root: Path, format_id: str, effective: dict) -> Non
     expected = effective["preview_acceptance"]["submission"]
     page = json.loads((root / f"stats/{format_id}/mtgo/landing/current.json").read_text(encoding="utf-8"))
     if page["week"]["id"] == expected["week"]:
-        if review.preview_packet(root, format_id)["dimensions"] != expected["dimensions"]:
+        if review.preview_validity(expected, review.preview_packet(root, format_id), dimensions_only=True)["state"] not in {"current", "equivalent"}:
             raise ValueError("Current preview differs from the completed supplement")
 
 
@@ -168,7 +168,7 @@ def build(root: Path, record: dict, format_id: str, *, candidate: Path,
             raise ValueError("Supplement package preview differs from the current reviewed product")
     prior = existing["effective"]["preview_acceptance"]
     extra = {}
-    if actual["week"] == prior["submission"]["week"] and actual["dimensions"] == prior["submission"]["dimensions"]:
+    if review.preview_validity(prior["submission"], actual, dimensions_only=True)["state"] in {"current", "equivalent"}:
         preview = {"mode": "retained", "submission": actual, "retained_from": prior["submission"]["digest"]}
     else:
         if preview_acceptance is None:

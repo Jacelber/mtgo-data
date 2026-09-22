@@ -124,10 +124,61 @@ def reuse_decisions(packet: dict, envelope: dict) -> dict:
     return result
 
 
+def preview_validity(packet: dict, current: dict, *, dimensions_only: bool = False) -> dict:
+    """Project legacy extras only with an unchanged entry and all direct resources.
+
+    Completion's existing dimensions-only contract remains distinct from a full
+    submission comparison; both use the same resource compatibility proof.
+    """
+    from .preview_resources import SELECTION, ENTRY
+    validate_packet(packet)
+    validate_packet(current)
+    if packet["kind"] != "preview" or any(packet[key] != current[key] for key in ("format", "week", "kind")):
+        return {"state": "changed", "reason": "preview scope"}
+    before, after = deepcopy(packet), deepcopy(current)
+    old_method, new_method = (item["bindings"].get("renderer_selection") for item in (before, after))
+    if any(method is not None and method != SELECTION for method in (old_method, new_method)):
+        return {"state": "evidence_required", "reason": "unsupported renderer selection"}
+    projected = old_method is None and new_method == SELECTION
+    if old_method is not None and new_method is None:
+        return {"state": "evidence_required", "reason": "current renderer selection is not declared"}
+    if old_method is not None or new_method is not None:
+        maps = []
+        for item in (before, after):
+            resources = item["bindings"].get("renderer_resources")
+            page = item["dimensions"].get("final_page", {})
+            if (not isinstance(resources, dict) or not isinstance(page, dict)
+                    or page.get("renderer_resources") != resources
+                    or ENTRY not in resources
+                    or any(not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value)
+                           for value in resources.values())):
+                return {"state": "evidence_required", "reason": "incomplete or inconsistent renderer evidence"}
+            maps.append(resources)
+    if projected:
+        old_resources, new_resources = maps
+        if old_resources[ENTRY] != new_resources[ENTRY]:
+            return {"state": "changed", "reason": "preview entry changed"}
+        if set(new_resources) - set(old_resources):
+            return {"state": "evidence_required", "reason": "direct renderer missing from retained evidence"}
+        if any(old_resources[key] != value for key, value in new_resources.items()):
+            return {"state": "changed", "reason": "loaded renderer changed"}
+        before["bindings"]["renderer_resources"] = deepcopy(new_resources)
+        before["dimensions"]["final_page"]["renderer_resources"] = deepcopy(new_resources)
+        before["bindings"]["renderer_selection"] = deepcopy(SELECTION)
+    same = before["dimensions"] == after["dimensions"]
+    if not dimensions_only:
+        same = same and before["bindings"] == after["bindings"]
+    return {"state": ("equivalent" if projected else "current") if same else "changed",
+            "reason": "unchanged entry and loaded resources; legacy extras excluded" if same and projected
+                      else None if same else "preview material or bindings changed"}
+
+
 def packet_validity(packet: dict, current: dict) -> dict:
     """Compare immutable scoped material; version identifiers alone prove no equivalence."""
     validate_packet(packet)
     validate_packet(current)
+    if packet["kind"] == "preview":
+        return preview_validity(packet, current)
     if any(packet[key] != current[key] for key in ("format", "week", "kind")):
         return {"state": "changed", "reason": "review scope"}
     def bindings(value):
@@ -459,20 +510,14 @@ def preview_packet(root: Path, format_id: str) -> dict:
                       if row["identity_id"] in identities}
     if set(selected_names) != identities:
         raise ValueError("Final page is missing displayed bilingual names")
-    resources = {path.relative_to(root).as_posix(): hashlib_sha(path) for path in
-                 sorted((root / "assets/js/phase8").glob("*.js"))
-                 if path.name != "archetype-visuals.js"}
-    resources.update({path.relative_to(root).as_posix(): hashlib_sha(path)
-                      for path in sorted((root / "assets/css").glob("phase8-*.css"))})
-    if not resources or not (root / "index.html").is_file():
-        raise ValueError("Final preview lacks its page renderer")
-    resources["index.html"] = hashlib_sha(root / "index.html")
+    from .preview_resources import select, SELECTION
+    resources = {relative: hashlib_sha(root / relative) for relative in select(root)}
     dimensions = {"final_page": {"product_digest": digest(meaning(bundle["documents"])),
                                  "names": selected_names, "colors": selected_colors,
                                  "selected_local_images": preview_images(root, format_id, page),
                                  "renderer_resources": resources}}
     return make_packet("preview", format_id, bundle["week"], dimensions,
-                       bindings={"bundle_digest": bundle["digest"], "renderer_resources": resources})
+                       bindings={"bundle_digest": bundle["digest"], "renderer_resources": resources, "renderer_selection": SELECTION})
 
 
 def hashlib_sha(path: Path) -> str:
@@ -510,7 +555,7 @@ def validate_completion(root: Path, format_id: str, week: str, record: dict, *, 
     current = read_json(root / f"stats/{format_id}/mtgo/landing/current.json")
     if current["week"]["id"] == week:
         actual = preview_packet(root, format_id)
-        if actual["dimensions"] != packet["dimensions"]:
+        if preview_validity(packet, actual, dimensions_only=True)["state"] not in {"current", "equivalent"}:
             raise ValueError("Completed preview differs from the current product")
 
 
@@ -564,7 +609,7 @@ def resume_summary(root: Path, format_id: str, week: str, *, envelope: dict | No
         if packet["kind"] == "preview":
             try:
                 current = preview_packet(root, format_id)
-                state = decision_state(current, envelope.get("decisions"))
+                state = decision_state(current, reuse_decisions(current, envelope))
                 status["pending_decisions"] = state["pending"]
                 status["source_bindings_changed"] = current["bindings"] != packet["bindings"]
             except (OSError, ValueError, KeyError, TypeError) as exc:
