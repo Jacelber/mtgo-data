@@ -317,6 +317,8 @@ def _run_landing(args: argparse.Namespace, root: Path, registry: Path) -> int:
         print(
             f"MTGO Landing preserved for {reason}: "
             f"format={args.format_id} output={result['path']}"
+            + (f" review={result['review_problem']['state']}: {result['review_problem']['reason']}"
+               if result.get("review_problem") else "")
         )
     else:
         print(

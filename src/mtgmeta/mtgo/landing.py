@@ -745,6 +745,7 @@ def build_document(
     allow_classifier_restatement: bool = False,
     _admit_review: bool = True,
     _review_facts: dict | None = None,
+    _review_status_detail: dict | None = None,
     private: bool = False,
     review_week: str | None = None,
 ) -> tuple[str, dict[str, Any]]:
@@ -936,6 +937,7 @@ def build_document(
                 root / editorial.DEFAULT_REVIEW_SCHEMA,
             )
             scoped_name_digest = None
+            content_validity = None
             if review["schema_version"] == "1.3.0":
                 from . import review_submission as submissions
                 packet = submissions.make_content_packet(root, format_id, week,
@@ -945,8 +947,11 @@ def build_document(
                               "machine_fact_digest": machine_fact_digest,
                               "link_catalog_digest": editorial.document_digest(editorial.build_top8_catalog(current_top8))},
                     facts=review_facts)
-                submissions.require_accepted(review["acceptance"]["submission"],
-                                             review["acceptance"]["decisions"], current=packet)
+                submitted = review["acceptance"]["submission"]
+                submissions.require_accepted(submitted, review["acceptance"]["decisions"])
+                content_validity = submissions.packet_validity(submitted, packet)
+                if content_validity["state"] not in {"current", "equivalent"} and _review_status_detail is not None:
+                    _review_status_detail.update(content_validity)
                 scoped_name_digest = submissions.name_digest(packet)
                 visual_metadata_digest = submissions.digest({key: value for key, value in packet["dimensions"].items()
                                                              if key.startswith("visual.")})
@@ -995,8 +1000,8 @@ def build_document(
                     loaded = None
                 if isinstance(loaded, dict):
                     prior_document = loaded
-            shared_equivalent = (review["schema_version"] == "1.3.0" and
-                submissions.packet_validity(review["acceptance"]["submission"], packet)["state"] in {"current", "equivalent"})
+            shared_equivalent = (content_validity is not None and
+                content_validity["state"] in {"current", "equivalent"})
             restatement_safe = shared_equivalent or (
                 review["schema_version"] != "1.3.0" and allow_classifier_restatement
                 and prior_document is not None
@@ -1008,7 +1013,7 @@ def build_document(
                     current_features,
                 )
             )
-            if binding_mismatches and not restatement_safe:
+            if (content_validity is not None and not shared_equivalent) or (binding_mismatches and not restatement_safe):
                 review_status = "stale_review_required"
             else:
                 summary_items = current_summary_items
@@ -1289,6 +1294,7 @@ def generate(
         "landing_generation",
         registry_path=registry_path,
     )
+    review_status_detail: dict = {}
     review_status, document = build_document(
         root,
         format_id,
@@ -1298,6 +1304,7 @@ def generate(
         name_catalog_path=name_catalog_path,
         visuals_path=visuals_path,
         allow_classifier_restatement=allow_classifier_restatement,
+        _review_status_detail=review_status_detail,
         private=private,
         review_week=review_week,
     )
@@ -1333,6 +1340,7 @@ def generate(
             "week": document["week"]["id"],
             "feature_count": len(document["features"]["items"]),
             "summary_count": len(document["weekly_summary"]["items"]),
+            **({"review_problem": review_status_detail} if review_status_detail else {}),
         }
     review_root = (
         Path(review_directory).resolve()
