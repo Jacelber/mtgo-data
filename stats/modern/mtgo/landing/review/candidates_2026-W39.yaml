@@ -8,7 +8,7 @@ selection_policy:
   build_shift: 20
   build_reference_minimum: 8
   active_release_sets: []
-machine_fact_digest: a53eb3aa6076d11b80d5bcc046dced06ef95b8152607a8cfba7858dd42bed516
+machine_fact_digest: 7c2c1967df53892b89a2ee3e6a48027582cd64dd2691fdbbd9c1ae51713377b9
 note: Machine candidates are evidence aids. The reviewer may select none, replace a candidate, and freely rewrite or remove all editorial copy.
 existing_changes:
 - identity_id: broodscale-combo/mono-green
@@ -28,13 +28,13 @@ existing_changes:
   source: existing
   candidate_reasons:
   - type: share_increase
-    current_high_score_count: 84
-    current_high_score_denominator: 359
-    current_share: 0.234
+    current_high_score_count: 93
+    current_high_score_denominator: 391
+    current_share: 0.2379
     reference_high_score_count: 199
     reference_high_score_denominator: 1559
     reference_share: 0.1276
-    delta_pp: 10.63
+    delta_pp: 11.02
   approved: false
   comment_zh: ''
   comment_en: ''
@@ -583,6 +583,151 @@ existing_changes:
     qty: 2
   - name: Teferi, Time Raveler
     qty: 1
+- identity_id: prowess/izzet
+  archetype_id: prowess
+  subtype_id: izzet
+  subtype: Izzet
+  event_id: '12854932'
+  deck_id: c2db89e8e7c17ecc22c8
+  deck_fingerprint_sha256: d3f4b3d4035d9412f92d0ca52ba4bd847a7920c4a04cc3d5901658820a20c4b9
+  archetype: Prowess
+  player: BressD1
+  final_rank: 5
+  swiss_score: 18
+  player_count: 90
+  starttime: '2026-09-27 11:00:00.0'
+  deviation: 29
+  source: existing
+  candidate_reasons:
+  - type: build_shift
+    identity_level: subtype
+    identity_id: prowess/izzet
+    reference_sample_size: 161
+    score: 31
+    difference:
+      fewer:
+      - name: Slickshot Show-Off
+        deck_qty: 0
+        typical_qty: 3.2
+      - name: Mutagenic Growth
+        deck_qty: 0
+        typical_qty: 3.1
+      - name: Expressive Iteration
+        deck_qty: 0
+        typical_qty: 2.7
+      - name: Arid Mesa
+        deck_qty: 1
+        typical_qty: 2.2
+      - name: Violent Urge
+        deck_qty: 0
+        typical_qty: 1.1
+      - name: Bloodstained Mire
+        deck_qty: 2
+        typical_qty: 2.7
+      - name: Mountain
+        deck_qty: 2
+        typical_qty: 2.7
+      - name: Fiery Islet
+        deck_qty: 1
+        typical_qty: 1.6
+      more:
+      - name: Stormchaser's Talent
+        deck_qty: 4
+        typical_qty: 0.9
+      - name: Boomerang Basics
+        deck_qty: 4
+        typical_qty: 1.0
+      - name: Experimental Synthesizer
+        deck_qty: 3
+        typical_qty: 0.3
+      - name: Scalding Tarn
+        deck_qty: 4
+        typical_qty: 2.6
+      - name: Fire-Brained Scheme
+        deck_qty: 1
+        typical_qty: 0.0
+      - name: Island
+        deck_qty: 1
+        typical_qty: 0.0
+      - name: Steam Vents
+        deck_qty: 4
+        typical_qty: 3.3
+      - name: Tormod's Crypt
+        deck_qty: 1
+        typical_qty: 0.3
+  approved: false
+  comment_zh: ''
+  comment_en: ''
+  landing:
+    category: new_technology
+    order: null
+    headline_zh: ''
+    headline_en: ''
+    positioning_zh: ''
+    positioning_en: ''
+    featured_cards: []
+  main_deck:
+  - name: Arid Mesa
+    qty: 1
+  - name: Bloodstained Mire
+    qty: 2
+  - name: Boomerang Basics
+    qty: 4
+  - name: Cori-Steel Cutter
+    qty: 4
+  - name: Dragon's Rage Channeler
+    qty: 4
+  - name: Experimental Synthesizer
+    qty: 3
+  - name: Fiery Islet
+    qty: 1
+  - name: Fire-Brained Scheme
+    qty: 1
+  - name: Island
+    qty: 1
+  - name: Lava Dart
+    qty: 4
+  - name: Lightning Bolt
+    qty: 4
+  - name: Mishra's Bauble
+    qty: 4
+  - name: Monastery Swiftspear
+    qty: 4
+  - name: Mountain
+    qty: 2
+  - name: Preordain
+    qty: 4
+  - name: Scalding Tarn
+    qty: 4
+  - name: Steam Vents
+    qty: 4
+  - name: Stormchaser's Talent
+    qty: 4
+  - name: Thundering Falls
+    qty: 1
+  - name: Tormod's Crypt
+    qty: 1
+  - name: Unholy Heat
+    qty: 1
+  - name: Wooded Foothills
+    qty: 2
+  side_deck:
+  - name: Consign to Memory
+    qty: 3
+  - name: Meltdown
+    qty: 2
+  - name: Obsidian Charmaw
+    qty: 2
+  - name: Spell Pierce
+    qty: 1
+  - name: Spell Snare
+    qty: 2
+  - name: Surgical Extraction
+    qty: 1
+  - name: Tormod's Crypt
+    qty: 1
+  - name: Unholy Heat
+    qty: 3
 - identity_id: dimir-tempo/dimir
   archetype_id: dimir-tempo
   subtype_id: dimir
@@ -1214,7 +1359,8 @@ source_event_ids:
 - '12854917'
 - '12854922'
 - '12854927'
+- '12854932'
 - '12854975'
 classifier_digest: bf2284808b02c943143c39624cad801349acff404a939411de33661354f02aef
 selection_policy_digest: 3541185e634bcab559bb3118ee3f29ece113552473d1f314bcde2a1e2f697a42
-link_catalog_digest: 2c39f9aeaa05c3d05a042de967244985e99f943abd16ba3b57a39ffcfb3886de
+link_catalog_digest: 497b3371a543cfb25ff7f7e65faf9b3114895d819b02d2062db7a078620ec9b7

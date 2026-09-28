@@ -8,7 +8,7 @@ selection_policy:
   build_shift: 20
   build_reference_minimum: 8
   active_release_sets: []
-machine_fact_digest: 787e4e2a345ab24840922a179b2c8648a3da7de4a9c2a034429b08aaef849724
+machine_fact_digest: 7026fe9243ae94c557f5271f45478241f17376e20fef522997ad6612cf81f272
 note: Machine candidates are evidence aids. The reviewer may select none, replace a candidate, and freely rewrite or remove all editorial copy.
 existing_changes:
 - identity_id: esper-affinity
@@ -28,13 +28,13 @@ existing_changes:
   source: existing
   candidate_reasons:
   - type: share_increase
-    current_high_score_count: 9
-    current_high_score_denominator: 89
-    current_share: 0.1011
+    current_high_score_count: 12
+    current_high_score_denominator: 116
+    current_share: 0.1034
     reference_high_score_count: 3
     reference_high_score_denominator: 439
     reference_share: 0.0068
-    delta_pp: 9.43
+    delta_pp: 9.66
   approved: false
   comment_zh: ''
   comment_en: ''
@@ -107,13 +107,13 @@ existing_changes:
   source: existing
   candidate_reasons:
   - type: share_increase
-    current_high_score_count: 10
-    current_high_score_denominator: 89
-    current_share: 0.1124
+    current_high_score_count: 12
+    current_high_score_denominator: 116
+    current_share: 0.1034
     reference_high_score_count: 14
     reference_high_score_denominator: 439
     reference_share: 0.0319
-    delta_pp: 8.05
+    delta_pp: 7.16
   approved: false
   comment_zh: ''
   comment_en: ''
@@ -171,6 +171,125 @@ existing_changes:
     qty: 4
   - name: Vitu-Ghazi Inspector
     qty: 2
+- identity_id: mono-red-madness
+  archetype_id: mono-red-madness
+  subtype_id: null
+  subtype: null
+  event_id: '12854935'
+  deck_id: 1f0f7f7e5376e64afd0f
+  deck_fingerprint_sha256: 32e246d83812cd967df33f3e0de6e971492a6ba9fe4dbf9e57671617b036cc88
+  archetype: Mono-Red Madness
+  player: mami
+  final_rank: 3
+  swiss_score: 15
+  player_count: 67
+  starttime: '2026-09-27 17:00:00.0'
+  deviation: 25
+  source: existing
+  candidate_reasons:
+  - type: build_shift
+    identity_level: parent
+    identity_id: mono-red-madness
+    reference_sample_size: 138
+    score: 25
+    difference:
+      fewer:
+      - name: Mountain
+        deck_qty: 11
+        typical_qty: 18.8
+      - name: Voldaren Epicure
+        deck_qty: 0
+        typical_qty: 3.5
+      - name: Fiery Temper
+        deck_qty: 3
+        typical_qty: 4.0
+      - name: Melded Moxite
+        deck_qty: 0
+        typical_qty: 0.6
+      - name: Vision of Love
+        deck_qty: 0
+        typical_qty: 0.2
+      - name: Faithless Looting
+        deck_qty: 3
+        typical_qty: 3.2
+      more:
+      - name: Seething Landscape
+        deck_qty: 4
+        typical_qty: 0.0
+      - name: Volatile Fjord
+        deck_qty: 4
+        typical_qty: 0.0
+      - name: Deep Analysis
+        deck_qty: 2
+        typical_qty: 0.0
+      - name: Kessig Flamebreather
+        deck_qty: 4
+        typical_qty: 2.9
+      - name: Island
+        deck_qty: 1
+        typical_qty: 0.0
+      - name: Fireblast
+        deck_qty: 4
+        typical_qty: 3.3
+      - name: Guttersnipe
+        deck_qty: 4
+        typical_qty: 3.4
+      - name: Grab the Prize
+        deck_qty: 4
+        typical_qty: 3.9
+  approved: false
+  comment_zh: ''
+  comment_en: ''
+  landing:
+    category: new_technology
+    order: null
+    headline_zh: ''
+    headline_en: ''
+    positioning_zh: ''
+    positioning_en: ''
+    featured_cards: []
+  main_deck:
+  - name: Deep Analysis
+    qty: 2
+  - name: Faithless Looting
+    qty: 3
+  - name: Fiery Temper
+    qty: 3
+  - name: Fireblast
+    qty: 4
+  - name: Grab the Prize
+    qty: 4
+  - name: Guttersnipe
+    qty: 4
+  - name: Highway Robbery
+    qty: 4
+  - name: Island
+    qty: 1
+  - name: Kessig Flamebreather
+    qty: 4
+  - name: Lava Dart
+    qty: 4
+  - name: Lightning Bolt
+    qty: 4
+  - name: Mountain
+    qty: 11
+  - name: Seething Landscape
+    qty: 4
+  - name: Sneaky Snacker
+    qty: 4
+  - name: Volatile Fjord
+    qty: 4
+  side_deck:
+  - name: Annul
+    qty: 4
+  - name: Deep Analysis
+    qty: 1
+  - name: Electrickery
+    qty: 2
+  - name: Hydroblast
+    qty: 4
+  - name: Pyroblast
+    qty: 4
 - identity_id: green-tron
   archetype_id: green-tron
   subtype_id: null
@@ -468,6 +587,7 @@ source_event_ids:
 - '12854905'
 - '12854910'
 - '12854918'
+- '12854935'
 classifier_digest: b309e1838d67585e54c25eaf4da109df10dc6a1b3afd0b0f7e889b90eaf77613
 selection_policy_digest: 3541185e634bcab559bb3118ee3f29ece113552473d1f314bcde2a1e2f697a42
-link_catalog_digest: 0bd1bc607f003c86c31669725b65b7e882067c5ef2b8e57b31e8a66991f01549
+link_catalog_digest: 67026dabab3b81b099291b6479a7cd04082c4ecb14f2c28ce894d3c7a83fc7ef
