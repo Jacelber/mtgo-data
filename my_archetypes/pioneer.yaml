@@ -639,6 +639,26 @@ archetypes:
       - card: Mayhem Devil
         zone: main
         min_count: 3
+  - id: jund-artifact-sacrifice-biotech-anvil
+    priority: 101
+    subtype_id: null
+    conditions:
+      all:
+      - card: Biotech Specialist
+        zone: main
+        min_count: 3
+      - card: The Sackville-Bagginses
+        zone: main
+        min_count: 3
+      - card: Oni-Cult Anvil
+        zone: main
+        min_count: 3
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
+      - card: Stomping Ground
+        zone: main
+        min_count: 1
 - id: jund-sacrifice
   name: Jund Sacrifice
   priority: 100
@@ -786,6 +806,26 @@ archetypes:
       - card: Adeline, Resplendent Cathar
         zone: main
         min_count: 1
+  - id: mono-white-humans-mox-amber
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Thalia's Lieutenant
+        zone: main
+        min_count: 3
+      - card: Adeline, Resplendent Cathar
+        zone: main
+        min_count: 3
+      - card: Thalia, Guardian of Thraben
+        zone: main
+        min_count: 3
+      - card: Mox Amber
+        zone: main
+        min_count: 3
+      - card: Coppercoat Vanguard
+        zone: main
+        exact_count: 0
 - id: boros-land-destruction
   name: Boros Land Destruction
   priority: 100
@@ -1032,6 +1072,27 @@ archetypes:
       - card: Glasspool Mimic
         zone: main
         min_count: 1
+- id: rakdos-creativity
+  name: Rakdos Creativity
+  priority: 101
+  rules:
+  - id: rakdos-creativity-specimens
+    priority: 101
+    subtype_id: null
+    conditions:
+      all:
+      - card: Indomitable Creativity
+        zone: main
+        min_count: 3
+      - card: Hunt for Specimens
+        zone: main
+        min_count: 3
+      - card: Fable of the Mirror-Breaker
+        zone: main
+        min_count: 3
+      - card: Blood Crypt
+        zone: main
+        min_count: 3
 - id: izzet-creativity
   name: Izzet Creativity
   priority: 100
