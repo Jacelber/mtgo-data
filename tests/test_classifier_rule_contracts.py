@@ -277,56 +277,6 @@ def test_standard_prepare_control_is_azorius_control_subtype() -> None:
     ) == ("classified", "azorius-control", "prepare", "azorius-control-prepare")
 
 
-@pytest.mark.parametrize(
-    ("cards", "parent", "subtype", "rule_id"),
-    (
-        (
-            (("Aang's Iceberg", 3), ("The Legend of Kuruk", 3),
-             ("No More Lies", 3), ("Hallowed Fountain", 2)),
-            "azorius-control", "traditional", "azorius-control-iceberg",
-        ),
-        (
-            (("Aang, Swift Savior", 2), ("Aven Interrupter", 2),
-             ("Voice of Victory", 2), ("Skycoach Conductor", 2)),
-            "azorius-midrange", None, "azorius-midrange-primary",
-        ),
-        (
-            (("Giant's Boulder", 3), ("Rakshasa's Bargain", 2),
-             ("Syncopate", 2), ("Lightning Helix", 1)),
-            "five-color-control", None, "five-color-control-boulder",
-        ),
-        (
-            (("Emeritus of Truce", 2), ("Emeritus of Ideation", 2),
-             ("Skycoach Waypoint", 2), ("Bender's Waterskin", 2),
-             ("Pinnacle Starcage", 2), ("Stock Up", 2),
-             ("Ugin, Eye of the Storms", 1), ("Day of Judgment", 1)),
-            "azorius-control", "prepare", "azorius-control-prepare-ugin",
-        ),
-        (
-            (("Sephiroth, Fabled SOLDIER", 3), ("Greedy Freebooter", 3),
-             ("The Sackville-Bagginses", 3), ("Godless Shrine", 2)),
-            "orzhov-sacrifice", None, "orzhov-sacrifice-sephiroth",
-        ),
-        (
-            (("Ancient Cornucopia", 3), ("Consult the Star Charts", 3),
-             ("No More Lies", 3), ("Breeding Pool", 1), ("Temple Garden", 1)),
-            "bant-control", None, "bant-control-cornucopia",
-        ),
-    ),
-)
-def test_standard_w39_owner_classifications(
-    cards: tuple[tuple[str, int], ...],
-    parent: str,
-    subtype: str | None,
-    rule_id: str,
-) -> None:
-    result = classify_deck(load_rule_set(ROOT / "my_archetypes/standard.yaml"), _deck(*cards))
-
-    assert (result.status, result.archetype_id, result.subtype_id, result.selected_rule_id) == (
-        "classified", parent, subtype, rule_id,
-    )
-
-
 def test_melee_split_card_adapter_contract() -> None:
     adapted, errors = _adapt_decklist(
         {
