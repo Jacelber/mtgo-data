@@ -291,7 +291,21 @@ def test_execute_materializes_only_after_existing_deterministic_validation(tmp_p
     monkeypatch.setattr(metadata, "rules_last_commit_iso", lambda *args: "2025-02-03T00:00:00Z")
     monkeypatch.setattr(catalog, "write_catalog", lambda *args: None)
     monkeypatch.setattr(landing_editorial, "generate_public_name_contract", lambda *args: None)
-    monkeypatch.setattr(classifier_closure, "inspect_format", lambda *args: {"state": "CURRENT"})
+    def mtgo_current_with_stale_melee(*_args):
+        names = (
+            "mtgo_statistics", "mtgo_matchups", "mtgo_top8", "mtgo_hierarchy",
+            "mtgo_landing", "public_archetype_names", "classification_reports",
+            "mtgo_publication",
+        )
+        return {
+            "state": "STALE_REGENERABLE",
+            "families": {
+                **{name: {"state": "CURRENT"} for name in names},
+                "melee": {"state": "STALE_REGENERABLE"},
+            },
+        }
+
+    monkeypatch.setattr(classifier_closure, "inspect_format", mtgo_current_with_stale_melee)
     materialize = classifier_closure._materialize_with_rollback
     def replace(root, stage, paths, **kwargs):
         assert {path.relative_to(root): path.read_bytes() for path in root.rglob("*") if path.is_file()} == before
@@ -323,6 +337,26 @@ def test_execute_materializes_only_after_existing_deterministic_validation(tmp_p
     for path, content in before.items():
         if str(path).replace("\\", "/").startswith(("data/", "configs/", "stats/modern/")):
             assert (tmp_path / path).read_bytes() == content
+
+
+def test_staged_mtgo_closure_does_not_hide_stale_mtgo_data() -> None:
+    from mtgmeta.mtgo.publication import _staged_mtgo_closure_issues
+
+    families = {
+        name: {"state": "CURRENT"}
+        for name in (
+            "mtgo_statistics", "mtgo_matchups", "mtgo_top8", "mtgo_hierarchy",
+            "mtgo_landing", "public_archetype_names", "classification_reports",
+            "mtgo_publication",
+        )
+    }
+    families["melee"] = {"state": "STALE_REGENERABLE"}
+    assert _staged_mtgo_closure_issues({"state": "STALE_REGENERABLE", "families": families}) == {}
+
+    families["mtgo_statistics"] = {"state": "STALE_REGENERABLE"}
+    assert _staged_mtgo_closure_issues({"state": "STALE_REGENERABLE", "families": families}) == {
+        "mtgo_statistics": "STALE_REGENERABLE"
+    }
 
 
 def test_joint_staging_converges_two_stale_public_formats(tmp_path, monkeypatch):
