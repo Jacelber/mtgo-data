@@ -2019,6 +2019,26 @@ archetypes:
       - card: __classifier-semantic-any-green-spell__
         zone: any
         exact_count: 0
+  - id: prowess-izzet-vivi-cutter
+    priority: 672210
+    subtype_id: izzet
+    conditions:
+      all:
+      - card: Cori-Steel Cutter
+        zone: main
+        min_count: 3
+      - card: Vivi Ornitier
+        zone: main
+        min_count: 3
+      - card: Stormchaser's Talent
+        zone: main
+        min_count: 3
+      - card: Dragon's Rage Channeler
+        zone: main
+        min_count: 3
+      - card: Steam Vents
+        zone: main
+        min_count: 1
 - id: leyline-fling
   name: Leyline Fling
   priority: 673000
@@ -2465,6 +2485,27 @@ archetypes:
       - card: Scion of Draco
         zone: main
         min_count: 3
+- id: domain-living-end
+  name: Domain Living End
+  priority: 327100
+  rules:
+  - id: domain-living-end-primary
+    priority: 327100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Living End
+        zone: main
+        min_count: 3
+      - card: Leyline of the Guildpact
+        zone: main
+        min_count: 3
+      - card: Scion of Draco
+        zone: main
+        min_count: 3
+      - card: Bloodbraid Marauder
+        zone: main
+        min_count: 3
 - id: five-color-elementals
   name: Five-Color Elementals
   priority: 324210
@@ -2814,6 +2855,9 @@ archetypes:
       - card: __classifier-semantic-main-red-source__
         zone: main
         min_count: 1
+      - card: __classifier-semantic-any-red-spell__
+        zone: any
+        min_count: 1
   - id: broodscale-combo-gruul-red-spell
     priority: 650900
     subtype_id: gruul
@@ -2845,9 +2889,6 @@ archetypes:
       - card: __classifier-semantic-main-green-source__
         zone: main
         min_count: 1
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
       - card: __classifier-semantic-any-red-spell__
         zone: any
         exact_count: 0
@@ -2949,6 +2990,32 @@ archetypes:
       - card: Island
         zone: main
         min_count: 1
+  - id: eldrazi-tron-simic-consign
+    priority: 649011
+    subtype_id: simic
+    conditions:
+      all:
+      - card: Urza's Mine
+        zone: main
+        min_count: 4
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 4
+      - card: Urza's Tower
+        zone: main
+        min_count: 4
+      - card: Eldrazi Temple
+        zone: main
+        min_count: 3
+      - card: Talisman of Curiosity
+        zone: main
+        min_count: 3
+      - card: Consign to Memory
+        zone: side
+        min_count: 2
+      - card: Island
+        zone: main
+        exact_count: 0
   - id: eldrazi-tron-mono-black
     priority: 649000
     subtype_id: mono-black
@@ -4199,6 +4266,8 @@ archetypes:
   subtypes:
   - id: mono-black
     name: Mono-Black
+  - id: orzhov
+    name: Orzhov
   - id: golgari
     name: Golgari
   - id: dimir
@@ -4244,6 +4313,20 @@ archetypes:
       - card: Blood Crypt
         zone: main
         min_count: 1
+  - id: necrodominance-orzhov
+    priority: 635500
+    subtype_id: orzhov
+    conditions:
+      all:
+      - card: Necrodominance
+        zone: main
+        min_count: 3
+      - card: Godless Shrine
+        zone: main
+        min_count: 2
+      - card: Orim's Chant
+        zone: side
+        min_count: 2
   - id: necrodominance-mono-black
     priority: 203000
     subtype_id: mono-black
@@ -6438,7 +6521,52 @@ archetypes:
     name: Dimir Red Splash
   - id: esper
     name: Dimir White Splash
+  - id: sultai
+    name: Dimir Green Splash
   rules:
+  - id: dimir-tempo-sultai-culling
+    priority: 638100
+    subtype_id: sultai
+    conditions:
+      all:
+      - card: Fatal Push
+        zone: main
+        min_count: 3
+      - card: Psychic Frog
+        zone: main
+        min_count: 3
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Breeding Pool
+        zone: main
+        min_count: 1
+      - card: Culling Ritual
+        zone: side
+        min_count: 2
+      - card: Birthing Ritual
+        zone: main
+        exact_count: 0
+  - id: dimir-tempo-dimir-murktide
+    priority: 212011
+    subtype_id: dimir
+    conditions:
+      all:
+      - card: Murktide Regent
+        zone: main
+        min_count: 4
+      - card: Fatal Push
+        zone: main
+        min_count: 3
+      - card: Counterspell
+        zone: main
+        min_count: 3
+      - card: Thought Scour
+        zone: main
+        min_count: 3
+      - card: Watery Grave
+        zone: main
+        min_count: 1
   - id: dimir-tempo-grixis
     priority: 638000
     subtype_id: grixis
@@ -6924,6 +7052,56 @@ archetypes:
       - card: Goryo's Vengeance
         zone: main
         exact_count: 0
+  - id: mardu-blink-ragavan
+    priority: 632398
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 3
+      - card: Ragavan, Nimble Pilferer
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: Detective's Phoenix
+        zone: main
+        exact_count: 0
+      - card: Lightning Bolt
+        zone: main
+        exact_count: 0
+- id: abzan-blink
+  name: Abzan Blink
+  priority: 632350
+  rules:
+  - id: abzan-blink-rhino
+    priority: 632350
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: Siege Rhino
+        zone: main
+        min_count: 2
+      - card: Grist, the Hunger Tide
+        zone: main
+        min_count: 1
 - id: orzhov-blink
   name: Orzhov Blink
   priority: 632300
