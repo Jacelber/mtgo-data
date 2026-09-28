@@ -2,7 +2,7 @@
   "schema_version": "1.1.0",
   "format": "modern",
   "source": "mtgo",
-  "classifier_digest": "bf2284808b02c943143c39624cad801349acff404a939411de33661354f02aef",
+  "classifier_digest": "4d3ee4ea527249f9d70c28dc8c0eca6782a2cd182b3c0c5170565f131d4f7d08",
   "period": {
     "type": "12w",
     "start": "2026-06-29",
@@ -17,6 +17,12 @@
       {
         "id": "abzan-auras",
         "name": "Abzan Auras",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "abzan-blink",
+        "name": "Abzan Blink",
         "expandable": false,
         "subtype_ids": []
       },
@@ -321,7 +327,8 @@
         "subtype_ids": [
           "dimir-tempo/dimir",
           "dimir-tempo/esper",
-          "dimir-tempo/grixis"
+          "dimir-tempo/grixis",
+          "dimir-tempo/sultai"
         ]
       },
       {
@@ -333,6 +340,12 @@
       {
         "id": "domain-blink",
         "name": "Domain Blink",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "domain-living-end",
+        "name": "Domain Living End",
         "expandable": false,
         "subtype_ids": []
       },
@@ -993,6 +1006,7 @@
           "necrodominance/dimir",
           "necrodominance/golgari",
           "necrodominance/mono-black",
+          "necrodominance/orzhov",
           "necrodominance/rakdos"
         ]
       },
@@ -1315,6 +1329,14 @@
         "name": "Abzan Auras",
         "display_name": "Abzan Auras",
         "parent_id": "abzan-auras",
+        "subtype_id": null
+      },
+      {
+        "id": "abzan-blink",
+        "kind": "archetype",
+        "name": "Abzan Blink",
+        "display_name": "Abzan Blink",
+        "parent_id": "abzan-blink",
         "subtype_id": null
       },
       {
@@ -1822,6 +1844,14 @@
         "subtype_id": "grixis"
       },
       {
+        "id": "dimir-tempo/sultai",
+        "kind": "subtype",
+        "name": "Dimir Green Splash",
+        "display_name": "Dimir Green Splash Tempo",
+        "parent_id": "dimir-tempo",
+        "subtype_id": "sultai"
+      },
+      {
         "id": "dimir-unearth",
         "kind": "archetype",
         "name": "Dimir Unearth",
@@ -1835,6 +1865,14 @@
         "name": "Domain Blink",
         "display_name": "Domain Blink",
         "parent_id": "domain-blink",
+        "subtype_id": null
+      },
+      {
+        "id": "domain-living-end",
+        "kind": "archetype",
+        "name": "Domain Living End",
+        "display_name": "Domain Living End",
+        "parent_id": "domain-living-end",
         "subtype_id": null
       },
       {
@@ -2852,6 +2890,14 @@
         "display_name": "Mono-Black Necrodominance",
         "parent_id": "necrodominance",
         "subtype_id": "mono-black"
+      },
+      {
+        "id": "necrodominance/orzhov",
+        "kind": "subtype",
+        "name": "Orzhov",
+        "display_name": "Orzhov Necrodominance",
+        "parent_id": "necrodominance",
+        "subtype_id": "orzhov"
       },
       {
         "id": "necrodominance/rakdos",
