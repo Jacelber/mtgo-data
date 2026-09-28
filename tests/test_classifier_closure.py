@@ -61,6 +61,28 @@ def test_allowed_refresh_includes_dependent_publication_metadata() -> None:
     }
 
 
+def test_allowed_refresh_includes_data_generated_for_new_admission() -> None:
+    families = {
+        "mtgo_statistics": "stats/modern/mtgo/decks_1w.json",
+        "mtgo_matchups": "stats/modern/mtgo/matchup_1w.json",
+        "mtgo_top8": "stats/modern/mtgo/top8/2026-W39.json",
+        "classification_reports": "reports/modern/mtgo/index.json",
+        "mtgo_publication": "stats/modern/mtgo/meta.json",
+        "melee": "stats/modern/melee/index.json",
+    }
+    initial = {
+        "families": {
+            name: {"state": STALE if name == "mtgo_publication" else CURRENT}
+            for name in families
+        }
+    }
+    staged = {"families": {name: {"artifacts": [path]} for name, path in families.items()}}
+
+    assert _allowed_refreshed_artifacts(initial, staged) == set(families.values()) - {
+        families["melee"]
+    }
+
+
 def test_landing_refresh_declares_pinned_week_files(tmp_path: Path) -> None:
     path = tmp_path / "stats/modern/mtgo/landing/current.json"
     document = {"classifier": {"digest": "current"},

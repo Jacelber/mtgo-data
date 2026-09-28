@@ -2875,6 +2875,23 @@ archetypes:
       - card: __classifier-semantic-any-red-spell__
         zone: any
         min_count: 1
+  - id: broodscale-combo-gruul-firespout
+    priority: 650850
+    subtype_id: gruul
+    conditions:
+      all:
+      - card: Basking Broodscale
+        zone: main
+        min_count: 3
+      - card: Blade of the Bloodchief
+        zone: main
+        min_count: 2
+      - card: Firespout
+        zone: any
+        min_count: 1
+      - card: __classifier-semantic-any-red-spell__
+        zone: any
+        exact_count: 0
   - id: broodscale-combo-mono-green
     priority: 650000
     subtype_id: mono-green
@@ -2890,6 +2907,9 @@ archetypes:
         zone: main
         min_count: 1
       - card: __classifier-semantic-any-red-spell__
+        zone: any
+        exact_count: 0
+      - card: Firespout
         zone: any
         exact_count: 0
   - id: broodscale-combo-simic

@@ -756,6 +756,42 @@ def test_modern_w38_owner_corrections(
 
 
 @pytest.mark.parametrize(
+    ("sideboard", "expected_subtype"),
+    (((), "mono-green"), ((("Firespout", 1),), "gruul")),
+)
+def test_modern_broodscale_firespout_sideboard(
+    sideboard: tuple[tuple[str, int], ...], expected_subtype: str,
+) -> None:
+    deck = _deck(
+        ("Basking Broodscale", 4),
+        ("Blade of the Bloodchief", 3),
+        ("Forest", 4),
+        ("Karplusan Forest", 1),
+    )
+    deck["sideboard"] = [
+        {"name": name, "qty": quantity} for name, quantity in sideboard
+    ]
+
+    result = classify_deck(load_rule_set(ROOT / "my_archetypes/modern.yaml"), deck)
+
+    assert (result.archetype_id, result.subtype_id) == ("broodscale-combo", expected_subtype)
+
+
+def test_modern_broodscale_firespout_with_grove_only() -> None:
+    deck = _deck(
+        ("Basking Broodscale", 4),
+        ("Blade of the Bloodchief", 3),
+        ("Forest", 4),
+        ("Grove of the Burnwillows", 4),
+    )
+    deck["sideboard"] = [{"name": "Firespout", "qty": 2}]
+
+    result = classify_deck(load_rule_set(ROOT / "my_archetypes/modern.yaml"), deck)
+
+    assert (result.archetype_id, result.subtype_id) == ("broodscale-combo", "gruul")
+
+
+@pytest.mark.parametrize(
     ("main_cards", "expected"),
     (
         (

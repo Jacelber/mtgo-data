@@ -972,6 +972,10 @@ def _allowed_refreshed_artifacts(
         for name, family in initial_families.items()
         if family["state"] != CURRENT
     }
+    if initial_families.get("mtgo_publication", {}).get("state") != CURRENT:
+        refreshed_families.update(
+            {"mtgo_statistics", "mtgo_matchups", "mtgo_top8", "classification_reports"}
+        )
     if refreshed_families:
         refreshed_families.add("mtgo_publication")
     return {

@@ -319,6 +319,28 @@ def prepare_review(root: Path, format_id: str, week: str, output: Path) -> Path:
     return output
 
 
+_MTGO_CLOSURE_FAMILIES = (
+    "mtgo_statistics", "mtgo_matchups", "mtgo_top8", "mtgo_hierarchy",
+    "mtgo_landing", "public_archetype_names", "classification_reports",
+    "mtgo_publication",
+)
+
+
+def _staged_mtgo_closure_issues(closure: Mapping[str, Any]) -> dict[str, str | None]:
+    if closure.get("state") == "CURRENT":
+        return {}
+    families = closure.get("families")
+    if not isinstance(families, Mapping):
+        return {"closure": "missing families"}
+    issues = {}
+    for name in _MTGO_CLOSURE_FAMILIES:
+        family = families.get(name)
+        state = family.get("state") if isinstance(family, Mapping) else None
+        if state != "CURRENT":
+            issues[name] = state
+    return issues
+
+
 def stage_publications(
     root: Path,
     format_ids: Sequence[str],
@@ -422,9 +444,10 @@ def stage_publications(
                 f"invalid staged publication for {format_id}: {issues}; {stage}"
             )
         closure = inspect_format(stage, format_id)
-        if closure["state"] != "CURRENT":
+        stale = _staged_mtgo_closure_issues(closure)
+        if stale:
             raise PublicationError(
-                f"BLOCKED_OWNER_REVIEW: staged classifier closure {closure}; {stage}"
+                f"BLOCKED_OWNER_REVIEW: staged MTGO classifier closure {stale}; {stage}"
             )
         if _protected_input_fingerprints(stage, format_id) != protected[format_id]:
             raise PublicationError(

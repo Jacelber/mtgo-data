@@ -341,6 +341,64 @@ data_admissions:
         evidence: Owner-approved existing public scope migration; not historical full
           manual review
       weekly_acceptances:
+      - week: 2026-W39
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12854529'
+        - '12854538'
+        - '12854542'
+        - '12854913'
+        - '12854920'
+        - '12854938'
+        source_manifest_digest: 6dce763d8c197765fabaf11c6bfaa219bcf53142cbe1228c51b94299e3e84e64
+        accepted_classifier_subject: 8372eab6a8c6597ee8a399e10c33453b400361d37d2d7a34542d37f8bca50347
+        classification_review_digest: 3712f62bee939313bc61b12218bf380b5a65ba46a1e89767e39789efee68715c
+        accepted_on: '2026-09-28'
+        evidence: Owner confirmed the complete Standard W39 classification and specified the listed corrections; all other current
+          rows are correct on 2026-09-28.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: standard
+            week: 2026-W39
+            bindings:
+              event_ids:
+              - '12854529'
+              - '12854538'
+              - '12854542'
+              - '12854913'
+              - '12854920'
+              - '12854938'
+              record_count: 184
+              classifier: 8372eab6a8c6597ee8a399e10c33453b400361d37d2d7a34542d37f8bca50347
+              classification_review_digest: 3712f62bee939313bc61b12218bf380b5a65ba46a1e89767e39789efee68715c
+              material_digest: b63dd3baf43739a05b626f63bcb941d59e3721a2716fcbf5b44a64e16769e36d
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12854529'
+                - '12854538'
+                - '12854542'
+                - '12854913'
+                - '12854920'
+                - '12854938'
+                record_count: 184
+                classifier: 8372eab6a8c6597ee8a399e10c33453b400361d37d2d7a34542d37f8bca50347
+                classification_review_digest: 3712f62bee939313bc61b12218bf380b5a65ba46a1e89767e39789efee68715c
+            digest: 350099c595e79a71b817746b5bf7b63746c8d9bb53f7f767fec3b8ff981ecaa2
+          decisions:
+            format: standard
+            week: 2026-W39
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: f6d9d6043c693debe231597eee18e022bf051e52121e024ebdf7a76cd9662c8f
+                evidence: Owner's 2026-09-28 Standard W39 full-table corrections; all unmentioned classifications confirmed correct.
+                accepted_on: '2026-09-28'
+                entrypoint: file:///D:/dl/crawlerpj/.codex-weekly-w39-20260928/review-standard-v2/standard/2026-W39/index.html
+                submitted_digest: 350099c595e79a71b817746b5bf7b63746c8d9bb53f7f767fec3b8ff981ecaa2
       - week: 2026-W38
         kind: owner_accepted_full_classification
         event_ids:
@@ -570,6 +628,63 @@ data_admissions:
           public scope in the active Codex conversation on 2026-09-10; classifier
           repair PR '#392.' Event 12853710 remains explicitly excluded.
       weekly_acceptances:
+      - week: 2026-W39
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12854527'
+        - '12854534'
+        - '12854905'
+        - '12854910'
+        - '12854918'
+        - '12854935'
+        source_manifest_digest: 87cdc3659cac2e284591bc093a7199d84ee1530ce4909961c8354ef048fc736d
+        accepted_classifier_subject: 4a02a2b714dda233a634e0d8d4d2b97b821d7fc9885629bfc1e95f1a6df26b18
+        classification_review_digest: 1348c7fca0545f17c3e1decf8d31326f2d967cfcbaca09b1ac06978219447678
+        accepted_on: '2026-09-28'
+        evidence: Owner confirmed the Pauper W39 classification results listed in the active conversation on 2026-09-28.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pauper
+            week: 2026-W39
+            bindings:
+              event_ids:
+              - '12854527'
+              - '12854534'
+              - '12854905'
+              - '12854910'
+              - '12854918'
+              - '12854935'
+              record_count: 188
+              classifier: 4a02a2b714dda233a634e0d8d4d2b97b821d7fc9885629bfc1e95f1a6df26b18
+              classification_review_digest: 1348c7fca0545f17c3e1decf8d31326f2d967cfcbaca09b1ac06978219447678
+              material_digest: 7089e03e9c7c71afb1ceaf8ece1723cbc39dcf9ae95a627f16b4e957eef23cef
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12854527'
+                - '12854534'
+                - '12854905'
+                - '12854910'
+                - '12854918'
+                - '12854935'
+                record_count: 188
+                classifier: 4a02a2b714dda233a634e0d8d4d2b97b821d7fc9885629bfc1e95f1a6df26b18
+                classification_review_digest: 1348c7fca0545f17c3e1decf8d31326f2d967cfcbaca09b1ac06978219447678
+            digest: 098fbef42110389e0faedf14389dee2902fcbc61299e978d006c1af8da3d8c81
+          decisions:
+            format: pauper
+            week: 2026-W39
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: 86b5055d753b4894f9eb2f9a3b12164fb02c11de39ca587defb53861dc7f8790
+                evidence: Owner's 2026-09-28 Pauper W39 confirmed classification results for the complete reviewed table.
+                accepted_on: '2026-09-28'
+                entrypoint: file:///D:/dl/crawlerpj/.codex-weekly-w39-20260928/review-pauper-v3/pauper/2026-W39/index.html
+                submitted_digest: 098fbef42110389e0faedf14389dee2902fcbc61299e978d006c1af8da3d8c81
       - week: 2026-W37
         kind: owner_accepted_full_classification
         event_ids:
@@ -921,6 +1036,89 @@ data_admissions:
         evidence: Owner-approved existing public scope migration; not historical full
           manual review
       weekly_acceptances:
+      - week: 2026-W39
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12854523'
+        - '12854525'
+        - '12854532'
+        - '12854533'
+        - '12854539'
+        - '12854541'
+        - '12854901'
+        - '12854911'
+        - '12854916'
+        - '12854917'
+        - '12854922'
+        - '12854927'
+        - '12854932'
+        - '12854975'
+        source_manifest_digest: f76c7db463b1b3b343070e29ff094ed366400be4f46ccb6fa0a3ed1bbb1b306d
+        accepted_classifier_subject: 4d3ee4ea527249f9d70c28dc8c0eca6782a2cd182b3c0c5170565f131d4f7d08
+        classification_review_digest: 8955194c6b24df672889689d091d73043c8356f805c798c703a894da876047ea
+        accepted_on: '2026-09-28'
+        evidence: Owner confirmed the complete Modern W39 classification, specified the listed corrections, and clarified two prior
+          labels were wrong on 2026-09-28.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: modern
+            week: 2026-W39
+            bindings:
+              event_ids:
+              - '12854523'
+              - '12854525'
+              - '12854532'
+              - '12854533'
+              - '12854539'
+              - '12854541'
+              - '12854901'
+              - '12854911'
+              - '12854916'
+              - '12854917'
+              - '12854922'
+              - '12854927'
+              - '12854932'
+              - '12854975'
+              record_count: 448
+              classifier: 4d3ee4ea527249f9d70c28dc8c0eca6782a2cd182b3c0c5170565f131d4f7d08
+              classification_review_digest: 8955194c6b24df672889689d091d73043c8356f805c798c703a894da876047ea
+              material_digest: 32a08e51ea24ab3305590ba9ee37ae4b4f726ba2623157aa1b4d42454fd63440
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12854523'
+                - '12854525'
+                - '12854532'
+                - '12854533'
+                - '12854539'
+                - '12854541'
+                - '12854901'
+                - '12854911'
+                - '12854916'
+                - '12854917'
+                - '12854922'
+                - '12854927'
+                - '12854932'
+                - '12854975'
+                record_count: 448
+                classifier: 4d3ee4ea527249f9d70c28dc8c0eca6782a2cd182b3c0c5170565f131d4f7d08
+                classification_review_digest: 8955194c6b24df672889689d091d73043c8356f805c798c703a894da876047ea
+            digest: 622b40c0ee8011f4d9ca7a8112f09ee30e498545acf31b056ef7eac054927811
+          decisions:
+            format: modern
+            week: 2026-W39
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: af0f3516bb752df2a1b97528ca2b537c6a8c96698f80b79daa17b40ec0c03421
+                evidence: Owner's 2026-09-28 Modern W39 full-table corrections and clarification that both old classifications were
+                  wrong; all unmentioned classifications confirmed correct.
+                accepted_on: '2026-09-28'
+                entrypoint: file:///D:/dl/crawlerpj/.codex-weekly-w39-20260928/review-modern-v3/modern/2026-W39/index.html
+                submitted_digest: 622b40c0ee8011f4d9ca7a8112f09ee30e498545acf31b056ef7eac054927811
       - week: 2026-W38
         kind: owner_accepted_full_classification
         event_ids:
@@ -1228,6 +1426,51 @@ data_admissions:
           Legends and Rakdos Sacrifice corrections in the active Codex conversation on
           2026-09-20. Pioneer has no Tabletop event in the current launch scope.
       weekly_acceptances:
+      - week: 2026-W39
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12854530'
+        - '12854926'
+        source_manifest_digest: 9220c03357a4dd738fe6f47645c3d88a17727f01b00a4e4107d518fb698cb64a
+        accepted_classifier_subject: 7c9d105e864c79bf6f5094ad963161ad646289ee82920fb214bf1663003ebcc1
+        classification_review_digest: 11a63e43c7be4497a3efe0e17c406bdd68d26c8558ef82fb90020c7a27e34657
+        accepted_on: '2026-09-28'
+        evidence: Owner confirmed the Pioneer W39 classification results listed in the active conversation on 2026-09-28.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pioneer
+            week: 2026-W39
+            bindings:
+              event_ids:
+              - '12854530'
+              - '12854926'
+              record_count: 64
+              classifier: 7c9d105e864c79bf6f5094ad963161ad646289ee82920fb214bf1663003ebcc1
+              classification_review_digest: 11a63e43c7be4497a3efe0e17c406bdd68d26c8558ef82fb90020c7a27e34657
+              material_digest: 6a72960fbe90958982cf97061f100d2056b795470de28280f82a53e95c60326f
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12854530'
+                - '12854926'
+                record_count: 64
+                classifier: 7c9d105e864c79bf6f5094ad963161ad646289ee82920fb214bf1663003ebcc1
+                classification_review_digest: 11a63e43c7be4497a3efe0e17c406bdd68d26c8558ef82fb90020c7a27e34657
+            digest: d931020381c19117ed8a6dd68c9c302c79a3d9a813647dae0c7fade9aa18a2c6
+          decisions:
+            format: pioneer
+            week: 2026-W39
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: d957ca95a5de896ca60d752819440520341e5bbf3a419e3ec51ae9f72c92259b
+                evidence: Owner's 2026-09-28 Pioneer W39 confirmed classification results for the complete reviewed table.
+                accepted_on: '2026-09-28'
+                entrypoint: file:///D:/dl/crawlerpj/.codex-weekly-w39-20260928/review-pioneer-v2/pioneer/2026-W39/index.html
+                submitted_digest: d931020381c19117ed8a6dd68c9c302c79a3d9a813647dae0c7fade9aa18a2c6
       - week: 2026-W38
         kind: owner_accepted_full_classification
         event_ids:
