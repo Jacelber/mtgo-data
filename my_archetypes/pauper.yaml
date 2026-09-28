@@ -384,6 +384,23 @@ archetypes:
       - card: "Dread Return"
         zone: main
         min_count: 1
+  - id: spy-combo-elves
+    priority: 9651
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Balustrade Spy"
+        zone: main
+        min_count: 4
+      - card: "Dread Return"
+        zone: main
+        min_count: 2
+      - card: "Lotleth Giant"
+        zone: main
+        min_count: 2
+      - card: "Priest of Titania"
+        zone: main
+        min_count: 3
 - id: turbo-fog
   name: "Turbo Fog"
   priority: 9640
@@ -848,6 +865,26 @@ archetypes:
       - card: "Tolarian Terror"
         zone: main
         exact_count: 0
+  - id: dimir-control-strix
+    priority: 9291
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Baleful Strix"
+        zone: main
+        min_count: 4
+      - card: "Counterspell"
+        zone: main
+        min_count: 4
+      - card: "Murmuring Mystic"
+        zone: main
+        min_count: 2
+      - card: "Snuff Out"
+        zone: main
+        min_count: 4
+      - card: "Trinket Mage"
+        zone: main
+        min_count: 2
 - id: azorius-faeries
   name: "Azorius Faeries"
   priority: 9200
@@ -956,6 +993,48 @@ archetypes:
       - card: "Snuff Out"
         zone: main
         min_count: 3
+  - id: dimir-faeries-strix-ninjas
+    priority: 9181
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Baleful Strix"
+        zone: main
+        min_count: 4
+      - card: "Spellstutter Sprite"
+        zone: main
+        min_count: 2
+        max_count: 2
+      - card: "Faerie Seer"
+        zone: main
+        min_count: 3
+      - card: "Moon-Circuit Hacker"
+        zone: main
+        min_count: 4
+      - card: "Ninja of the Deep Hours"
+        zone: main
+        min_count: 3
+- id: grixis-faeries
+  name: "Grixis Faeries"
+  priority: 9186
+  rules:
+  - id: grixis-faeries-vandalblast
+    priority: 9186
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Baleful Strix"
+        zone: main
+        min_count: 4
+      - card: "Spellstutter Sprite"
+        zone: main
+        min_count: 3
+      - card: "Molten Tributary"
+        zone: main
+        min_count: 1
+      - card: "Vandalblast"
+        zone: side
+        min_count: 2
 - id: izzet-control
   name: "Izzet Control"
   priority: 9170
@@ -1031,6 +1110,26 @@ archetypes:
         zone: main
         exact_count: 0
       - card: "Ephemerate"
+        zone: main
+        exact_count: 0
+  - id: grixis-control-sulfurous
+    priority: 9161
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Counterspell"
+        zone: main
+        min_count: 4
+      - card: "Murmuring Mystic"
+        zone: main
+        min_count: 3
+      - card: "Terminate"
+        zone: main
+        min_count: 3
+      - card: "Sulfurous Blast"
+        zone: main
+        min_count: 3
+      - card: "Skred"
         zone: main
         exact_count: 0
 - id: mono-blue-faeries
@@ -1158,6 +1257,27 @@ archetypes:
       - card: "Sacred Cat"
         zone: main
         min_count: 3
+- id: four-color-pestilence-gates
+  name: "4-Color Pestilence Gate"
+  priority: 8945
+  rules:
+  - id: four-color-pestilence-gates-primary
+    priority: 8945
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Basilisk Gate"
+        zone: main
+        min_count: 4
+      - card: "Pestilence"
+        zone: main
+        min_count: 3
+      - card: "Guardian of the Guildpact"
+        zone: main
+        min_count: 3
+      - card: "Pyroblast"
+        zone: side
+        min_count: 2
 - id: jeskai-caw-gates
   name: "Jeskai Caw Gates"
   priority: 8930
@@ -1284,6 +1404,36 @@ archetypes:
       - card: "Refurbished Familiar"
         zone: main
         min_count: 3
+- id: four-color-synthesizer
+  name: "4-Color Synthesizer"
+  priority: 8795
+  rules:
+  - id: four-color-synthesizer-blue-spells
+    priority: 8795
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Experimental Synthesizer"
+        zone: main
+        min_count: 3
+      - card: "Glint Hawk"
+        zone: main
+        min_count: 3
+      - card: "Kor Skyfisher"
+        zone: main
+        min_count: 3
+      - card: "Refurbished Familiar"
+        zone: main
+        min_count: 3
+      - card: "Thoughtcast"
+        zone: main
+        min_count: 3
+      - card: "Cryogen Relic"
+        zone: main
+        min_count: 2
+      - card: "Galvanic Blast"
+        zone: main
+        min_count: 3
 - id: rakdos-synthesizer
   name: "Rakdos Synthesizer"
   priority: 8785
@@ -1321,6 +1471,29 @@ archetypes:
         zone: main
         min_count: 1
       - card: "Galvanic Blast"
+        zone: main
+        exact_count: 0
+  - id: esper-affinity-strix-enforcer
+    priority: 8704
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Myr Enforcer"
+        zone: main
+        min_count: 3
+      - card: "Thoughtcast"
+        zone: main
+        min_count: 3
+      - card: "Baleful Strix"
+        zone: main
+        min_count: 3
+      - card: "Dispatch"
+        zone: main
+        min_count: 3
+      - card: "Galvanic Blast"
+        zone: main
+        exact_count: 0
+      - card: "Glint Hawk"
         zone: main
         exact_count: 0
   - id: esper-affinity
@@ -1758,6 +1931,30 @@ archetypes:
       - card: "Scrapwork Mutt"
         zone: main
         min_count: 3
+- id: izzet-madness
+  name: "Izzet Madness"
+  priority: 8405
+  rules:
+  - id: izzet-madness-deep-analysis
+    priority: 8405
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Guttersnipe"
+        zone: main
+        min_count: 3
+      - card: "Fiery Temper"
+        zone: main
+        min_count: 3
+      - card: "Lava Dart"
+        zone: main
+        min_count: 3
+      - card: "Deep Analysis"
+        zone: main
+        min_count: 2
+      - card: "Island"
+        zone: main
+        min_count: 1
 - id: mono-red-madness
   name: "Mono-Red Madness"
   priority: 8400
@@ -1897,6 +2094,50 @@ archetypes:
         zone: main
         min_count: 3
       - card: "Galvanic Blast"
+        zone: main
+        min_count: 3
+- id: esper-ephemerate
+  name: "Esper Ephemerate"
+  priority: 8310
+  rules:
+  - id: esper-ephemerate-snuff-out
+    priority: 8310
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Ephemerate"
+        zone: main
+        min_count: 3
+      - card: "Archaeomancer"
+        zone: main
+        min_count: 2
+      - card: "Mulldrifter"
+        zone: main
+        min_count: 3
+      - card: "Snuff Out"
+        zone: main
+        min_count: 3
+      - card: "Counterspell"
+        zone: main
+        min_count: 3
+  - id: esper-ephemerate-strix
+    priority: 8309
+    subtype_id: null
+    conditions:
+      all:
+      - card: "Ephemerate"
+        zone: main
+        min_count: 3
+      - card: "Archaeomancer"
+        zone: main
+        min_count: 2
+      - card: "Mulldrifter"
+        zone: main
+        min_count: 3
+      - card: "Baleful Strix"
+        zone: main
+        min_count: 3
+      - card: "Dispatch"
         zone: main
         min_count: 3
 - id: ephemerate
