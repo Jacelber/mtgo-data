@@ -555,7 +555,19 @@ def validate_completion(root: Path, format_id: str, week: str, record: dict, *, 
     current = read_json(root / f"stats/{format_id}/mtgo/landing/current.json")
     if current["week"]["id"] == week:
         actual = preview_packet(root, format_id)
-        if preview_validity(packet, actual, dimensions_only=True)["state"] not in {"current", "equivalent"}:
+        comparison = preview_validity(packet, actual, dimensions_only=True)
+        if comparison["state"] not in {"current", "equivalent"} and not (root / "assets/card-cache/v1/manifest.json").exists():
+            retained = deepcopy(packet)
+            archived_images = retained["dimensions"]["final_page"]["selected_local_images"]
+            source_images = actual["dimensions"]["final_page"]["selected_local_images"]
+            archived_cache = set(archived_images) - set(source_images)
+            if (archived_cache
+                    and all(path.startswith("assets/card-cache/v1/images/") for path in archived_cache)
+                    and all(archived_images.get(path) == value for path, value in source_images.items())):
+                retained["dimensions"]["final_page"]["selected_local_images"] = source_images
+                retained["digest"] = digest({key: value for key, value in retained.items() if key != "digest"})
+                comparison = preview_validity(retained, actual, dimensions_only=True)
+        if comparison["state"] not in {"current", "equivalent"}:
             raise ValueError("Completed preview differs from the current product")
 
 

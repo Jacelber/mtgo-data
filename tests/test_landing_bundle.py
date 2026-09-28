@@ -118,6 +118,26 @@ def test_completion_requires_the_accepted_preview_in_the_confirmed_archive(site,
     cli.main()
     envelope = json.loads(output.read_text())
     review.validate_completion(root, "standard", "2026-W38", {"preview_acceptance": envelope})
+    archive_only = deepcopy(envelope)
+    archive_only["submission"]["dimensions"]["final_page"]["selected_local_images"][
+        "assets/card-cache/v1/images/selected.jpg"] = "a" * 64
+    archive_only["submission"]["digest"] = review.digest({
+        key: value for key, value in archive_only["submission"].items() if key != "digest"})
+    archive_only["decisions"] = review.record_decision(
+        archive_only["submission"], None, ["final_page"], evidence="Synthetic cache acceptance",
+        accepted_on="2026-09-21", entrypoint="https://example.invalid/fixture")
+    archive_only["publication"]["preview_digest"] = archive_only["submission"]["digest"]
+    review.validate_completion(root, "standard", "2026-W38", {"preview_acceptance": archive_only})
+    archive_only["submission"]["dimensions"]["final_page"]["selected_local_images"][
+        "assets/images/unrelated.jpg"] = "b" * 64
+    archive_only["submission"]["digest"] = review.digest({
+        key: value for key, value in archive_only["submission"].items() if key != "digest"})
+    archive_only["decisions"] = review.record_decision(
+        archive_only["submission"], None, ["final_page"], evidence="Synthetic cache acceptance",
+        accepted_on="2026-09-21", entrypoint="https://example.invalid/fixture")
+    archive_only["publication"]["preview_digest"] = archive_only["submission"]["digest"]
+    with pytest.raises(ValueError, match="differs"):
+        review.validate_completion(root, "standard", "2026-W38", {"preview_acceptance": archive_only})
     from tools.export_weekly_classification_review import attach_preview_acceptances
     record = {"week": "2026-W38", "formats": {"standard": {}}}
     with pytest.raises(ValueError, match="requires confirmed"):

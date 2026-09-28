@@ -732,6 +732,17 @@ def test_real_weekly_producer_continues_across_feature_readiness_and_completion(
     if output.exists():
         assert json.loads(output.read_text(encoding="utf-8"))["formats"]["standard"]["classification_submission"] == submission.classification_comparison_packet(current)
     assert registry_path.read_bytes() == saved
+    if change == "engine":
+        admission.pop("classification_acceptance")
+        _write_yaml(registry_path, registry)
+        original_path = tmp_path / "original-review.json"
+        _write_json(original_path, raw)
+        result = export_review_main(["--repository-root", str(root), "format-completion", "--week", raw["week"],
+            "--format", "standard", "--review", str(original_path), "--landing-digest", "c" * 64,
+            "--preview-acceptances", str(preview_path), "--completed-on", "2026-09-21",
+            "--evidence", "synthetic historical backfill", "--output", str(output)])
+        assert result == 0
+        assert json.loads(output.read_text(encoding="utf-8"))["formats"]["standard"]["classification_review_digest"] == raw["classification_review_digest"]
 
 
 def test_legacy_raw_review_completion_keeps_its_existing_evidence_contract(tmp_path):

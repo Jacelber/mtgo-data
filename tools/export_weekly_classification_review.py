@@ -148,8 +148,13 @@ def main(argv: list[str] | None = None) -> int:
             if review.get("format") != args.format_id or review.get("week") != args.week:
                 raise ValueError("completion review format/week mismatch")
             current_review = build_mtgo_weekly_review(root, args.format_id, args.week)
-            if current_review["classification_review_digest"] != review["classification_review_digest"]:
-                raise ValueError("completion review digest is stale")
+            from mtgmeta.mtgo.review_submission import classification_comparison_packet, packet_validity
+            comparison = packet_validity(
+                classification_comparison_packet(review),
+                classification_comparison_packet(current_review),
+            )
+            if comparison["state"] not in {"current", "equivalent"}:
+                raise ValueError("completion review digest is stale: " + comparison["reason"])
             if args.private_landing is None:
                 from mtgmeta.mtgo.publication import inspect_publication, resolve_scope
                 import yaml
@@ -161,8 +166,17 @@ def main(argv: list[str] | None = None) -> int:
                     *format_admissions.get("weekly_acceptances", []),
                 ]
                 from mtgmeta.mtgo.review_submission import classification_validity
-                if not any(classification_validity(row, current_review)["state"] in {"current", "equivalent"}
-                           for row in admissions):
+                if not any(
+                    row.get("week") == args.week
+                    and (
+                        classification_validity(row, current_review)["state"] in {"current", "equivalent"}
+                        or (row.get("classification_review_digest") == review["classification_review_digest"]
+                            and row.get("accepted_classifier_subject") == review["classifier"]["subject_digest"]
+                            and sorted(row.get("event_ids", [])) == sorted(review["event_ids"])
+                            and comparison["state"] in {"current", "equivalent"})
+                    )
+                    for row in admissions
+                ):
                     raise ValueError("completion requires the exact or proven-equivalent full-classification acceptance")
                 scope = resolve_scope(root, args.format_id)
                 if not set(review["event_ids"]) <= scope.event_ids or inspect_publication(root, args.format_id):
