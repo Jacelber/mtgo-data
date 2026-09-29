@@ -131,3 +131,36 @@ def test_unproven_selection_cannot_bypass_completion_comparison(tmp_path, failur
             resources.pop("index.html")
     resign(current)
     assert review.preview_validity(prior, current, dimensions_only=True)["state"] == "evidence_required"
+
+
+@pytest.mark.parametrize("change", [None, "no_proof", "hash", "scope", "product", "image", "binding", "entry", "evidence"])
+def test_renderer_repair_preserves_original_acceptance_and_all_other_material(tmp_path, change):
+    entry(tmp_path)
+    old = packet(tmp_path)
+    decisions = review.record_decision(old, None, ["final_page"], evidence="synthetic Owner acceptance",
+        accepted_on="2026-09-21", entrypoint="https://example.invalid/preview")
+    original = deepcopy(decisions)
+    write(tmp_path, "assets/js/phase8/app.js", "fixed renderer")
+    current = packet(tmp_path)
+    proof = {"method": "same-display-renderer-repair-v1", "format": "standard", "week": "2026-W38",
+        "product_digest": "product", "before": deepcopy(old["bindings"]["renderer_resources"]),
+        "after": deepcopy(current["bindings"]["renderer_resources"]),
+        "evidence": "synthetic before/after display comparison", "verification_sha256": "a" * 64}
+    if change == "hash": proof["after"]["assets/js/phase8/app.js"] = "b" * 64
+    if change == "scope": proof["week"] = "2026-W39"
+    if change == "evidence": proof["verification_sha256"] = ""
+    if change == "product": current["dimensions"]["final_page"]["product_digest"] = "changed"
+    if change == "image": current["dimensions"]["final_page"]["selected_local_images"]["card.jpg"] = "changed"
+    if change == "binding": current["bindings"]["bundle_digest"] = "changed"
+    if change == "entry":
+        for mapping in (current["bindings"]["renderer_resources"], current["dimensions"]["final_page"]["renderer_resources"], proof["after"]):
+            mapping["index.html"] = "b" * 64
+    resign(current)
+    if change != "no_proof": decisions["renderer_repair"] = proof
+    assert review.packet_validity(old, current)["state"] == "changed"
+    if change is None:
+        review.require_accepted(old, decisions, current=current)
+        assert review.preview_validity(old, current, dimensions_only=True, renderer_repair=proof)["state"] == "equivalent"
+    else:
+        with pytest.raises(ValueError): review.require_accepted(old, decisions, current=current)
+    assert decisions["decisions"] == original["decisions"]

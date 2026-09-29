@@ -124,7 +124,8 @@ def reuse_decisions(packet: dict, envelope: dict) -> dict:
     return result
 
 
-def preview_validity(packet: dict, current: dict, *, dimensions_only: bool = False) -> dict:
+def preview_validity(packet: dict, current: dict, *, dimensions_only: bool = False,
+                     renderer_repair: dict | None = None) -> dict:
     """Project legacy extras only with an unchanged entry and all direct resources.
 
     Completion's existing dimensions-only contract remains distinct from a full
@@ -165,11 +166,35 @@ def preview_validity(packet: dict, current: dict, *, dimensions_only: bool = Fal
         before["bindings"]["renderer_resources"] = deepcopy(new_resources)
         before["dimensions"]["final_page"]["renderer_resources"] = deepcopy(new_resources)
         before["bindings"]["renderer_selection"] = deepcopy(SELECTION)
+    repaired = False
+    if renderer_repair and old_method == new_method == SELECTION:
+        proof = renderer_repair
+        old_resources, new_resources = maps
+        # This is scoped technical evidence, never a replacement Owner decision.
+        # All non-renderer material is still compared below, without exceptions.
+        repaired = (
+            proof.get("method") == "same-display-renderer-repair-v1"
+            and proof.get("format") == packet["format"]
+            and proof.get("week") == packet["week"]
+            and proof.get("product_digest") == packet["dimensions"]["final_page"].get("product_digest")
+            and proof.get("before") == old_resources
+            and proof.get("after") == new_resources
+            and set(old_resources) == set(new_resources)
+            and old_resources[ENTRY] == new_resources[ENTRY]
+            and old_resources != new_resources
+            and isinstance(proof.get("evidence"), str) and bool(proof["evidence"].strip())
+            and isinstance(proof.get("verification_sha256"), str)
+            and re.fullmatch(r"[0-9a-f]{64}", proof["verification_sha256"]) is not None
+        )
+        if repaired:
+            before["bindings"]["renderer_resources"] = deepcopy(new_resources)
+            before["dimensions"]["final_page"]["renderer_resources"] = deepcopy(new_resources)
     same = before["dimensions"] == after["dimensions"]
     if not dimensions_only:
         same = same and before["bindings"] == after["bindings"]
-    return {"state": ("equivalent" if projected else "current") if same else "changed",
-            "reason": "unchanged entry and loaded resources; legacy extras excluded" if same and projected
+    return {"state": ("equivalent" if projected or repaired else "current") if same else "changed",
+            "reason": "same displayed material; exact renderer repair evidence retained" if same and repaired
+                      else "unchanged entry and loaded resources; legacy extras excluded" if same and projected
                       else None if same else "preview material or bindings changed"}
 
 
@@ -237,6 +262,8 @@ def require_accepted(packet: dict, receipt: dict, *, current: dict | None = None
         raise ValueError("Review still needs decisions: " + ", ".join(state["pending"]))
     if current is not None:
         validity = packet_validity(packet, current)
+        if packet["kind"] == "preview" and validity["state"] == "changed":
+            validity = preview_validity(packet, current, renderer_repair=receipt.get("renderer_repair"))
         if validity["state"] not in {"current", "equivalent"}:
             raise ValueError("Submitted material no longer matches current content: "
                              + validity["state"] + ": " + validity["reason"])
@@ -555,7 +582,8 @@ def validate_completion(root: Path, format_id: str, week: str, record: dict, *, 
     current = read_json(root / f"stats/{format_id}/mtgo/landing/current.json")
     if current["week"]["id"] == week:
         actual = preview_packet(root, format_id)
-        comparison = preview_validity(packet, actual, dimensions_only=True)
+        repair = accepted["decisions"].get("renderer_repair")
+        comparison = preview_validity(packet, actual, dimensions_only=True, renderer_repair=repair)
         if comparison["state"] not in {"current", "equivalent"} and not (root / "assets/card-cache/v1/manifest.json").exists():
             retained = deepcopy(packet)
             archived_images = retained["dimensions"]["final_page"]["selected_local_images"]
@@ -566,7 +594,7 @@ def validate_completion(root: Path, format_id: str, week: str, record: dict, *, 
                     and all(archived_images.get(path) == value for path, value in source_images.items())):
                 retained["dimensions"]["final_page"]["selected_local_images"] = source_images
                 retained["digest"] = digest({key: value for key, value in retained.items() if key != "digest"})
-                comparison = preview_validity(retained, actual, dimensions_only=True)
+                comparison = preview_validity(retained, actual, dimensions_only=True, renderer_repair=repair)
         if comparison["state"] not in {"current", "equivalent"}:
             raise ValueError("Completed preview differs from the current product")
 
