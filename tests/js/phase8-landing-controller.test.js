@@ -50,7 +50,7 @@ test("Pinned Landing keeps its own week when rolling statistics advance", async 
   await assert.rejects(() => context.P8MtgoController.loadLanding("pauper", `${prefix}/current.json`));
 });
 
-test("Landing history excludes empty archive weeks and never loads Pickup", async () => {
+test("Landing excludes empty past weeks but preserves the current empty week", async () => {
   const requested = [];
   const documents = {
     "stats/standard/mtgo/landing/current.json": {
@@ -121,4 +121,22 @@ test("Landing history excludes empty archive weeks and never loads Pickup", asyn
     requested.includes("stats/standard/mtgo/landing/features/2099-W02.json"),
     true
   );
+
+  documents["stats/standard/mtgo/landing/features/index.json"].weeks[0].feature_count = 0;
+  documents["stats/standard/mtgo/landing/features/2099-W02.json"].features.items = [];
+  documents["stats/standard/mtgo/landing/features/index.json"].weeks[1].feature_count = 1;
+  documents["stats/standard/mtgo/landing/features/2099-W01.json"].features.items = [
+    { destination_id: "deck:bbbbbbbbbbbbbbbbbbbb" },
+  ];
+  const emptyCurrent = await context.P8MtgoController.loadLanding(
+    "standard", "stats/standard/mtgo/landing/current.json", null
+  );
+  assert.equal(emptyCurrent.featureFile, "2099-W02.json");
+  assert.equal(emptyCurrent.featureDocument.features.items.length, 0);
+  assert.deepEqual(Array.from(emptyCurrent.featureIndex.weeks, item => item.file),
+    ["2099-W02.json", "2099-W01.json"]);
+  const selectedHistory = await context.P8MtgoController.loadLanding(
+    "standard", "stats/standard/mtgo/landing/current.json", "2099-W01.json"
+  );
+  assert.equal(selectedHistory.featureDocument.features.items.length, 1);
 });

@@ -919,6 +919,10 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Ephemerate", "image": "../images/representative-cards/pauper/ephemerate.jpg"}),
       Object.freeze({"name": "Archaeomancer", "image": "../images/representative-cards/pauper/archaeomancer.jpg"}),
     ]),
+    "esper-affinity": Object.freeze([
+      Object.freeze({"name": "Dispatch", "image": "../images/representative-cards/pauper/dispatch.jpg"}),
+      Object.freeze({"name": "Refurbished Familiar", "image": "../images/representative-cards/pauper/refurbished-familiar.jpg"}),
+    ]),
     "golgari-gardens": Object.freeze([
       Object.freeze({"name": "Khalni Garden", "image": "../images/representative-cards/pauper/khalni-garden.jpg"}),
       Object.freeze({"name": "Tithing Blade", "image": "../images/representative-cards/pauper/tithing-blade.jpg"}),
@@ -1040,6 +1044,22 @@ const representativeCards = Object.freeze({
     "dimir-ninjas": Object.freeze([
       Object.freeze({"name": "Kaito, Bane of Nightmares", "image": "../images/representative-cards/pioneer/kaito-bane-of-nightmares.jpg"}),
       Object.freeze({"name": "Moon-Circuit Hacker", "image": "../images/representative-cards/pioneer/moon-circuit-hacker.jpg"}),
+    ]),
+    "mono-white-humans": Object.freeze([
+      Object.freeze({"name": "Thalia's Lieutenant", "image": "../images/representative-cards/pioneer/thalias-lieutenant.jpg"}),
+      Object.freeze({"name": "Adeline, Resplendent Cathar", "image": "../images/representative-cards/pioneer/adeline-resplendent-cathar.jpg"}),
+    ]),
+    "rakdos-creativity": Object.freeze([
+      Object.freeze({"name": "Indomitable Creativity", "image": "../images/representative-cards/pioneer/indomitable-creativity.jpg"}),
+      Object.freeze({"name": "Hunt for Specimens", "image": "../images/representative-cards/pioneer/hunt-for-specimens.jpg"}),
+    ]),
+    "selesnya-company": Object.freeze([
+      Object.freeze({"name": "Collected Company", "image": "../images/representative-cards/pioneer/collected-company.jpg"}),
+      Object.freeze({"name": "Badgermole Cub", "image": "../images/representative-cards/pioneer/badgermole-cub.jpg"}),
+    ]),
+    "temur-lessons": Object.freeze([
+      Object.freeze({"name": "Firebending Lesson", "image": "../images/representative-cards/pioneer/firebending-lesson.jpg"}),
+      Object.freeze({"name": "Questing Druid", "image": "../images/representative-cards/pioneer/questing-druid.jpg"}),
     ]),
   }),
 });
