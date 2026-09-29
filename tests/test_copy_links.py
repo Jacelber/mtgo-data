@@ -26,6 +26,13 @@ def test_ambiguous_and_embedded_english_not_guessed():
     assert questions == ['Consider', '重名']
 
 
+def test_english_card_names_adjacent_to_chinese_are_linked():
+    catalog = {'Dread Return': {'zh_name': '颤栗再现'}}
+    linked, questions = link_card_names('使用Dread Return和其他牌；Dread Returns不匹配', catalog)
+    assert linked == '使用[[card:Dread Return|Dread Return]]和其他牌；Dread Returns不匹配'
+    assert not questions
+
+
 def test_feature_references_are_scope_local_and_unknown_rejected():
     items = [{'order': 1, 'text': {'zh':'第一行\n【F1】'}}]
     token = 'deck:' + 'a'*20

@@ -4,6 +4,7 @@ import re
 
 CARD_TOKEN = re.compile(r"\[\[card:([^|\[\]\r\n]+)\|([^\[\]\r\n]+)\]\]")
 TOKEN = re.compile(CARD_TOKEN.pattern + r"|deck:[0-9a-f]{20}")
+ASCII_WORD = re.compile(r"[A-Za-z0-9_]")
 
 
 def validate_card_tokens(value, catalog):
@@ -57,7 +58,7 @@ def link_card_names(text, catalog, confirmed_names=()):
             if not is_chinese:
                 before = segment[match.start()-1:match.start()] if match.start() else ''
                 after = segment[match.end():match.end()+1]
-                if (before and (before.isalnum() or before == '_')) or (after and (after.isalnum() or after == '_')):
+                if (before and ASCII_WORD.fullmatch(before)) or (after and ASCII_WORD.fullmatch(after)):
                     return name
             if len(identities[name]) != 1 or (not is_chinese and ' ' not in name and name not in confirmed_names):
                 ambiguous.add(name)

@@ -178,7 +178,11 @@ def test_weekly_summary_link_without_exact_feature_fails_closed():
             encoding="utf-8"
         )
     )
-    linked = document["weekly_summary"]["items"][2]["deck_links"][0]["token"]
+    linked = next(
+        item["deck_links"][0]["token"]
+        for item in document["weekly_summary"]["items"]
+        if item["deck_links"]
+    )
     document["features"]["items"] = [
         item
         for item in document["features"]["items"]

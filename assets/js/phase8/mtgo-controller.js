@@ -191,9 +191,11 @@
     const landing = await client.fetchJson(landingPath);
     const data = landingDataPaths(format, landing);
     const featureIndex = await client.fetchJson(`${base}/landing/features/index.json`);
-    const selectableWeeks = featureIndex.weeks.filter(item => item.feature_count > 0);
-    const selectableFeatureIndex = { ...featureIndex, weeks: selectableWeeks };
     const currentFeatureFile = `${landing.week?.id}.json`;
+    const selectableWeeks = featureIndex.weeks.filter(item => (
+      item.feature_count > 0 || item.file === currentFeatureFile
+    ));
+    const selectableFeatureIndex = { ...featureIndex, weeks: selectableWeeks };
     const selectedEntry = selectableWeeks.find(item => item.file === selectedFeatureFile)
       || selectableWeeks.find(item => item.file === currentFeatureFile)
       || selectableWeeks[0]
