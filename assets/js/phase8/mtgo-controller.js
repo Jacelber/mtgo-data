@@ -337,6 +337,7 @@
   }
 
   root.P8MtgoController = Object.freeze({
+    featureImageCacheFor,
     loadCardLocalization,
     loadComparisonDecks,
     loadMatchup,

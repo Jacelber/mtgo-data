@@ -379,6 +379,8 @@ def build_melee_review(
     repository_root: str | Path,
     format_id: str,
     event_id: str,
+    *,
+    refresh_retained: bool = False,
 ) -> dict[str, Any]:
     """Build full available-deck review evidence for one review-ready Melee event."""
 
@@ -388,14 +390,15 @@ def build_melee_review(
         root / "data" / format_id / "melee" / "classifications" / f"{event_id}.json"
     )
     event = _json_object(event_path)
-    overlay = _json_object(classification_path)
     rule_path = root / "my_archetypes" / f"{format_id}.yaml"
+    overlay = (build_classification_overlay_from_paths(event_path, rule_path, root)
+               if refresh_retained else _json_object(classification_path))
     rules = load_rule_set(rule_path)
     desired = classifier_digest(rules)
     classifier = overlay.get("classifier")
     if not isinstance(classifier, dict) or classifier.get("digest") != desired:
         raise ValueError(f"Melee {event_id} classification is not review-ready")
-    reproduced = build_classification_overlay_from_paths(event_path, rule_path, root)
+    reproduced = overlay if refresh_retained else build_classification_overlay_from_paths(event_path, rule_path, root)
     if overlay != reproduced:
         raise ValueError(
             f"Melee {event_id} classification cannot be reproduced from retained source"

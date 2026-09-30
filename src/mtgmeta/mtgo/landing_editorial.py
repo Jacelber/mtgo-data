@@ -101,6 +101,7 @@ def build_candidate_documents(
     format_id: str,
     *,
     stable_ids: bool = False,
+    processed_events: dict | None = None,
 ):
     """Screen and deduplicate Landing candidates while preserving machine evidence."""
 
@@ -109,10 +110,11 @@ def build_candidate_documents(
     reference_monday = end_monday - timedelta(weeks=1)
     reference_start = end_monday - timedelta(weeks=4)
     reference_end = end_monday - timedelta(days=1)
-    processed_events = {
-        id(event): stats.process_event(event, rules)
-        for _event_date, event in events
-    }
+    if processed_events is None:
+        processed_events = {
+            id(event): stats.process_event(event, rules)
+            for _event_date, event in events
+        }
     current_records = screening.week_records(
         events,
         rules,
