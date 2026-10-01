@@ -160,3 +160,47 @@ def test_selected_feature_uses_existing_face_resolution_and_resumes(tmp_path, na
     assert entry["face_index"] == 0 and entry["source_image_uri"] == uri
     assert page == page_before and cached.read_bytes() == cached_bytes
     assert weekly_resources.ensure(site, page)["downloaded"] == []
+
+
+@pytest.mark.parametrize("name", ["Front", "Front // Back"])
+@pytest.mark.parametrize("failure", [None, "missing_crop", "wrong_card"])
+def test_environment_face_selection_keeps_art_crop_and_cache(tmp_path, name, failure):
+    from PIL import Image
+    from tools.build_archetype_visuals import image_slug
+    site, responses = tmp_path / "site", tmp_path / "responses"
+    responses.mkdir()
+    Image.new("RGB", (80, 50), "green").save(responses / "crop.jpg")
+    crop = "https://cards.scryfall.io/art_crop/front/synthetic.jpg"
+    normal = "https://cards.scryfall.io/normal/front/synthetic.jpg"
+    card = {"name": "Front // Back", "id": "00000000-0000-0000-0000-000000000001",
+            "card_faces": [{"name": "Front", "image_uris": {"normal": normal, "art_crop": crop}},
+                           {"name": "Back", "image_uris": {"normal": normal,
+                            "art_crop": "https://cards.scryfall.io/art_crop/back/second.jpg"}}]}
+    fixture = {"cards": {name: deepcopy(card)}, "images": {crop: "crop.jpg"}}
+    if failure == "missing_crop":
+        for face in fixture["cards"][name]["card_faces"]:
+            del face["image_uris"]["art_crop"]  # normal exists but must not substitute.
+    if failure == "wrong_card":
+        fixture["cards"][name] = {**card, "name": "Other", "card_faces": []}
+    flow.write(responses / "fixture.json", fixture)
+    cached = site / "assets/images/representative-cards/pauper/cached.jpg"
+    cached.parent.mkdir(parents=True)
+    shutil.copyfile(responses / "crop.jpg", cached)
+    before = cached.read_bytes()
+    page = {"format": "pauper", "week": {"id": "2026-W39"}, "features": {"items": []},
+            "environment": {"rows": [{"archetype_id": "synthetic", "key_cards": [
+                {"name": "Cached"}, {"name": name}]}]}}
+    original = deepcopy(page)
+    if failure:
+        with pytest.raises(ValueError, match="No art_crop image|another card"):
+            weekly_resources.ensure(site, page, fixture=responses / "fixture.json")
+        assert page == original and cached.read_bytes() == before
+        fixture["cards"][name] = card
+        flow.write(responses / "fixture.json", fixture)
+    result = weekly_resources.ensure(site, page, fixture=responses / "fixture.json")
+    target = site / f"assets/images/representative-cards/pauper/{image_slug(name)}.jpg"
+    assert result["downloaded"] == [target.relative_to(site).as_posix()]
+    assert target.read_bytes() == (responses / "crop.jpg").read_bytes()
+    assert cached.relative_to(site).as_posix() in result["reused"]
+    assert page == original and cached.read_bytes() == before
+    assert weekly_resources.ensure(site, page)["downloaded"] == []

@@ -17,6 +17,14 @@ def replace_bytes(path, payload):
     temporary.replace(path)  # Never write through a retained hardlink.
 
 
+def _art_crop_candidate(card, name, image_uris, face_index):
+    """Use shared name/face ranking, with the environment's art-only contract."""
+    uri = image_uris.get("art_crop") if isinstance(image_uris, dict) else None
+    if uri is None:
+        return None
+    return {"name": name, "face_index": face_index, "source_image_uri": cache._valid_scryfall_image_uri(uri)}
+
+
 def ensure(site: Path, page: dict, *, fetch_missing=False, fixture: Path | None = None):
     """Use existing resolvers/validators, requesting only selected missing art.
 
@@ -68,8 +76,11 @@ def ensure(site: Path, page: dict, *, fetch_missing=False, fixture: Path | None 
             uri = ""
             if not target.is_file():
                 value = card(name)
-                face = next((f for f in value.get("card_faces", []) if f.get("name") == name), value)
-                uri = cache._valid_scryfall_image_uri(face["image_uris"]["art_crop"])
+                key = cache._normalized_name(name)
+                found = cache._bulk_lookup([value], {key}, candidate_factory=_art_crop_candidate).get(key)
+                if found is None:
+                    raise ValueError(f"No art_crop image for selected environment card {name}")
+                uri = found["source_image_uri"]
             image(uri, target, lambda data: cache._valid_jpeg(data, name))
             visuals.require_art_crop_shape(target, format_id=format_id, identity=row["archetype_id"], card=name)
     manifest_path = site / "assets/card-cache/v1/manifest.json"

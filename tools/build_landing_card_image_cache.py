@@ -275,7 +275,7 @@ def _candidate(
 
 
 def _bulk_lookup(
-    cards: Iterable[Any], requested_names: set[str]
+    cards: Iterable[Any], requested_names: set[str], *, candidate_factory=_candidate
 ) -> dict[str, dict[str, Any]]:
     lookup: dict[str, dict[str, Any]] = {}
     ranks: dict[str, int] = {}
@@ -298,7 +298,7 @@ def _bulk_lookup(
             continue
         if raw.get("layout") == "art_series" or raw.get("set_type") == "token":
             continue
-        top = _candidate(raw, raw["name"], raw.get("image_uris"), None)
+        top = candidate_factory(raw, raw["name"], raw.get("image_uris"), None)
         if top is not None:
             add(top, 0)
         faces = raw.get("card_faces")
@@ -307,7 +307,7 @@ def _bulk_lookup(
             for index, face in enumerate(faces):
                 if not isinstance(face, dict) or not isinstance(face.get("name"), str):
                     continue
-                value = _candidate(raw, face["name"], face.get("image_uris"), index)
+                value = candidate_factory(raw, face["name"], face.get("image_uris"), index)
                 if value is None and top is not None:
                     value = {**top, "name": face["name"]}
                 if value is not None:
