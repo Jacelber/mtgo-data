@@ -13,7 +13,11 @@ from mtgmeta.mtgo import review_submission as submissions
 
 def import_content(root, source):
     format_id = source['format']
-    subject = editorial.build_top8_subject(root, format_id, source['week']['id'])
+    admitted = source.get('acceptance', {}).get('decisions', {}).get('admitted_scope')
+    # The admitted path is validated once by content_packet below; its exact
+    # catalog is retained instead of silently rebuilding from directory growth.
+    subject = ({**source, **source['bindings']} if admitted else
+               editorial.build_top8_subject(root, format_id, source['week']['id']))
     if source['week'] != subject['week']:
         raise ValueError('Conversation week does not match current review subject')
     review = source['review']

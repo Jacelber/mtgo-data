@@ -748,7 +748,10 @@ def build_document(
     _review_status_detail: dict | None = None,
     private: bool = False,
     review_week: str | None = None,
+    _prepared_inputs: tuple | None = None,
 ) -> tuple[str, dict[str, Any]]:
+    if _prepared_inputs is not None and _admit_review:
+        raise MTGOLandingError("prepared inputs are limited to private content facts")
     root = Path(repository_root).resolve()
     context = load_mtgo_context(
         root,
@@ -756,11 +759,12 @@ def build_document(
         "landing_generation",
         registry_path=registry_path,
     )
-    rules = load_rules_for_format(root, format_id, registry_path=registry_path)
+    rules = (_prepared_inputs[1] if _prepared_inputs is not None
+             else load_rules_for_format(root, format_id, registry_path=registry_path))
     definition = context.definition
     if private and definition.public:
         raise MTGOLandingError("private Landing mode requires a public: false format")
-    events = stats.load_all_events(
+    events = _prepared_inputs[0] if _prepared_inputs is not None else stats.load_all_events(
         root, format_id, registry_path=registry_path, public=_admit_review and not private
     )
     reference_today = today or datetime.now().date()
@@ -778,7 +782,7 @@ def build_document(
     target_sunday = target_monday + timedelta(days=6)
     previous_monday = target_monday - timedelta(weeks=1)
     reference_start = target_monday - timedelta(weeks=4)
-    processed_events = {
+    processed_events = _prepared_inputs[2] if _prepared_inputs is not None else {
         id(event): stats.process_event(event, rules) for _event_date, event in events
     }
     current = _period(target_monday, target_sunday, events, processed_events)

@@ -141,7 +141,7 @@ def retained_events(root: Path, format_id: str):
     return events
 
 
-def _resolve_scope(repository_root: str | Path, format_id: str):
+def _resolve_scope(repository_root: str | Path, format_id: str, *, through_week: str | None = None):
     root = Path(repository_root).resolve()
     from ..config import load_format_registry
     definition = load_format_registry(root / "configs/formats.yaml").require_mtgo(format_id)
@@ -164,6 +164,13 @@ def _resolve_scope(repository_root: str | Path, format_id: str):
         reviews = config["weekly_acceptances"]
         if not isinstance(reviews, list):
             raise PublicationError("weekly acceptances must be a list")
+        if through_week is not None:
+            # Historical content uses its original admission prefix, never the
+            # latest frontier. The caller must verify the retained scope digest.
+            cutoff = week_monday(through_week)
+            if week_monday(initial["week"]) > cutoff:
+                raise PublicationError("retained admission predates the available initial scope")
+            reviews = [record for record in reviews if week_monday(record["week"]) <= cutoff]
         for review in reviews:
             if review.get("kind") != "owner_accepted_full_classification":
                 raise PublicationError("a completion is not a classification admission")

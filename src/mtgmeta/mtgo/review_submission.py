@@ -137,6 +137,21 @@ def preview_validity(packet: dict, current: dict, *, dimensions_only: bool = Fal
     if packet["kind"] != "preview" or any(packet[key] != current[key] for key in ("format", "week", "kind")):
         return {"state": "changed", "reason": "preview scope"}
     before, after = deepcopy(packet), deepcopy(current)
+    if ("image_subjects" not in before["dimensions"].get("final_page", {})
+            and "image_subjects" in after["dimensions"].get("final_page", {})):
+        return {"state": "evidence_required", "reason": "retained preview lacks bilingual selected-resource evidence"}
+    old_page, new_page = before["dimensions"].get("final_page", {}), after["dimensions"].get("final_page", {})
+    image_relocated = False
+    if old_page.get("image_subjects") is not None and new_page.get("image_subjects") is not None:
+        def complete_image_map(page):
+            return page.get("selected_local_images") == {card["image"]: card["sha256"]
+                for languages in page["image_subjects"].values() for cards in languages.values()
+                for card in cards if card["sha256"] is not None}
+        if (complete_image_map(old_page) and complete_image_map(new_page)
+                and image_display_subject(old_page["image_subjects"]) == image_display_subject(new_page["image_subjects"])):
+            image_relocated = old_page["image_subjects"] != new_page["image_subjects"]
+            for key in ("image_subjects", "selected_local_images"):
+                old_page[key] = deepcopy(new_page[key])
     old_method, new_method = (item["bindings"].get("renderer_selection") for item in (before, after))
     if any(method is not None and method != SELECTION for method in (old_method, new_method)):
         return {"state": "evidence_required", "reason": "unsupported renderer selection"}
@@ -192,7 +207,7 @@ def preview_validity(packet: dict, current: dict, *, dimensions_only: bool = Fal
     same = before["dimensions"] == after["dimensions"]
     if not dimensions_only:
         same = same and before["bindings"] == after["bindings"]
-    return {"state": ("equivalent" if projected or repaired else "current") if same else "changed",
+    return {"state": ("equivalent" if projected or repaired or image_relocated else "current") if same else "changed",
             "reason": "same displayed material; exact renderer repair evidence retained" if same and repaired
                       else "unchanged entry and loaded resources; legacy extras excluded" if same and projected
                       else None if same else "preview material or bindings changed"}
@@ -447,6 +462,21 @@ def content_packet(root: Path, source: dict) -> dict:
     import yaml
     from . import landing, landing_editorial as editorial
     format_id, week = source["format"], source["week"]["id"]
+    admitted_scope = source.get("acceptance", {}).get("decisions", {}).get("admitted_scope")
+    if admitted_scope is not None:
+        actual = editorial.build_admitted_content_facts(root, format_id, week, admitted_scope=admitted_scope)
+        if actual["admitted_scope"] != admitted_scope:
+            raise ValueError("Content admission scope changed; retain the prior candidate and resolve the increment")
+        page = actual["page"]
+        bindings = {"source_event_ids": page["source_event_ids"], "classifier_digest": page["classifier"]["digest"],
+            "selection_policy_digest": editorial.document_digest(editorial.screening.load_screening_policy(root)),
+            "machine_fact_digest": page["review_binding"]["machine_fact_digest"],
+            "link_catalog_digest": editorial.document_digest(actual["all_top8"])}
+        packet = make_content_packet(root, format_id, week, source["review"], page["environment"],
+            editorial.load_name_catalog_document(root / editorial.DEFAULT_NAME_CATALOG),
+            bindings=bindings, facts=actual["review_facts"])
+        require_accepted(source["acceptance"]["submission"], source["acceptance"]["decisions"], current=packet)
+        return packet
     subject = editorial.build_top8_subject(root, format_id, week)
     if source["week"] != subject["week"]:
         raise ValueError("Review content week differs from its actual subject")
@@ -472,9 +502,25 @@ def name_digest(packet: dict) -> str:
     return digest({key: value for key, value in packet["dimensions"].items() if key.startswith("name.")})
 
 
-def preview_images(root: Path, format_id: str, page: dict) -> dict:
-    """Bind the actual selected local images, not every archetype's metadata."""
-    result = {}
+def image_display_subject(subjects: dict) -> dict:
+    """Ignore storage relocation only when actual selected bytes are identical."""
+    result = deepcopy(subjects)
+    for languages in result.values():
+        for cards in languages.values():
+            for card in cards:
+                if re.fullmatch(r"[0-9a-f]{64}", card.get("sha256") or ""):
+                    card.pop("image", None)
+    return result
+
+
+def preview_image_subjects(root: Path, format_id: str, page: dict) -> dict:
+    """Bind each region/language/slot to the actual consumer-selected bytes.
+
+    Selection matches P8CardLocalization.resolve; cross-runtime tests guard that
+    contract. Paths alone, or their intersection, do not identify displayed art.
+    """
+    from .landing_bundle import read_json
+    regions = {}
     rows = page["environment"]["rows"]
     if rows:
         source = (root / "assets/js/phase8/archetype-visuals.js").read_text(encoding="utf-8")
@@ -487,15 +533,17 @@ def preview_images(root: Path, format_id: str, page: dict) -> dict:
             cards = [json.loads(value) for value in re.findall(r'Object\.freeze\((\{[^\n]+\})\)', groups.get(row["archetype_id"], ""))]
             if [card["name"] for card in cards] != [card["name"] for card in row["key_cards"]]:
                 raise ValueError("Rendered representative cards differ from the submitted environment")
+            selected = []
             for card in cards:
                 relative = card["image"]
                 if not relative.startswith("../images/representative-cards/") or ".." in relative[3:].split("/"):
                     raise ValueError("Unsupported representative image location")
                 path = "assets/" + relative[3:]
-                result[path] = hashlib_sha(root / path)
+                selected.append((card["name"], path))
+            regions["environment:" + row["archetype_id"]] = selected
     manifest_path = root / "assets/card-cache/v1/manifest.json"
+    cache = {}
     if manifest_path.is_file():
-        from .landing_bundle import read_json
         manifest = read_json(manifest_path)
         selected = {card["name"] for feature in page["features"]["items"] for card in feature["featured_cards"]}
         for card in manifest["cards"]:
@@ -506,8 +554,38 @@ def preview_images(root: Path, format_id: str, page: dict) -> dict:
             relative = card["local_path"]
             if not relative.startswith("assets/card-cache/v1/") or ".." in relative.split("/"):
                 raise ValueError("Unsupported Feature image location")
-            result[relative] = hashlib_sha(root / relative)
+            cache[card["name"]] = relative
+    for feature in page["features"]["items"]:
+        regions["feature:" + feature["destination_id"]] = [(c["name"], cache.get(c["name"]))
+                                                          for c in feature["featured_cards"]]
+    lookup_path = root / "assets/card-localization/cards.json"
+    lookup = read_json(lookup_path) if lookup_path.is_file() else {}
+    result = {}
+    from urllib.parse import quote
+    for region, cards in regions.items():
+        result[region] = {}
+        for language in ("zh", "en"):
+            selected = []
+            for name, fallback in cards:
+                entry = (lookup.get(name) or lookup.get(re.split(r"\s*//\s*", name)[0]) or {}) if language == "zh" else {}
+                image = entry.get("local_image") or entry.get("image_url") or fallback
+                if not image:
+                    image = "https://api.scryfall.com/cards/named?exact=" + quote(name, safe="~()*!.'-") + "&format=image&version=normal"
+                local = not re.match(r"^[a-z]+:", image, re.I)
+                if local and (not image.startswith("assets/") or ".." in image.split("/") or "\\" in image):
+                    raise ValueError("Unsupported selected image location")
+                selected.append({"name": name, "image": image,
+                    "sha256": hashlib_sha(root / image) if local else None,
+                    "display_name": entry.get("zh_name", name),
+                    "link": entry.get("mtgch_url") or "https://scryfall.com/search?q=" + quote('!"' + name + '"', safe="~()*!.'-")})
+            result[region][language] = selected
     return result
+
+
+def preview_images(root: Path, format_id: str, page: dict) -> dict:
+    return {item["image"]: item["sha256"]
+            for languages in preview_image_subjects(root, format_id, page).values()
+            for images in languages.values() for item in images if item["sha256"] is not None}
 
 
 def preview_packet(root: Path, format_id: str) -> dict:
@@ -539,9 +617,12 @@ def preview_packet(root: Path, format_id: str) -> dict:
         raise ValueError("Final page is missing displayed bilingual names")
     from .preview_resources import select, SELECTION
     resources = {relative: hashlib_sha(root / relative) for relative in select(root)}
+    image_subjects = preview_image_subjects(root, format_id, page)
+    images = {item["image"]: item["sha256"] for languages in image_subjects.values()
+              for selected in languages.values() for item in selected if item["sha256"] is not None}
     dimensions = {"final_page": {"product_digest": digest(meaning(bundle["documents"])),
                                  "names": selected_names, "colors": selected_colors,
-                                 "selected_local_images": preview_images(root, format_id, page),
+                                 "selected_local_images": images, "image_subjects": image_subjects,
                                  "renderer_resources": resources}}
     return make_packet("preview", format_id, bundle["week"], dimensions,
                        bindings={"bundle_digest": bundle["digest"], "renderer_resources": resources, "renderer_selection": SELECTION})
