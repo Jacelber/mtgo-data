@@ -32,6 +32,8 @@
 
 ## 实际改动与复用边界
 
+下文描述首次提交。审核后的必要连接适配见[REVISION_1.md](REVISION_1.md)：已交付范围/known复用、双语区域资源绑定、material_digest与旧入口连接、指定环境配置及选中缺图续作、完整Web字段。新增薄入口调用现有机制，不变更行为基准。
+
 本轮未重写分类器、统计、筛选政策、归档、发布操作或completion机制。生产模块改动共四处：导出已有图片缓存选择函数供资源检查复用；Landing及候选筛选允许共享一次已处理的输入；Melee审阅允许在内存中从保留输入取得当前分类覆盖，不改已存提交。
 
 新增入口仅封装确定动作：facts、inspect、classification、stage-data、prepare、check-preview、serve、record-input、adopt-displayed、page-delta、accept-page、finalize-source。它们分别输出事实／材料／私有候选／绑定记录，不维护独立批次状态。现有发布与完成工具继续负责真实交付。

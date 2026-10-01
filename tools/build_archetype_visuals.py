@@ -97,8 +97,8 @@ def require_public_statistics_coverage(
         )
 
 
-def generate(root: Path, format_id: str) -> None:
-    config = yaml.safe_load((root / "configs/mtgo_landing_visuals.yaml").read_text(encoding="utf-8"))
+def generate(root: Path, format_id: str, *, identities: set[str] | None = None, config_override=None) -> None:
+    config = config_override if config_override is not None else yaml.safe_load((root / "configs/mtgo_landing_visuals.yaml").read_text(encoding="utf-8"))
     selected = config["formats"][format_id]
     source = root / "assets/js/phase8/archetype-visuals.js"
     text = source.read_text(encoding="utf-8")
@@ -108,7 +108,12 @@ def generate(root: Path, format_id: str) -> None:
     entries = {**selected["parents"], **selected["subtypes"]}
     for identity in selected["allow_parent_fallback_for_subtypes"]:
         entries.setdefault(identity, selected["parents"][identity.split("/")[0]])
-    require_public_statistics_coverage(root, format_id, set(entries))
+    if identities is None:
+        require_public_statistics_coverage(root, format_id, set(entries))
+    else:
+        if not identities <= entries.keys():
+            raise ValueError("Selected representative identity is not configured")
+        entries = {key: value for key, value in entries.items() if key in identities}
     lines = [f"  {format_id}: Object.freeze({{"]
     for identity, cards in entries.items():
         lines.append(f"    {json.dumps(identity)}: Object.freeze([")
@@ -129,11 +134,26 @@ def generate(root: Path, format_id: str) -> None:
     lines.append("  }),")
     replacement = "\n".join(lines)
     pattern = rf"^  {re.escape(format_id)}: Object\.freeze\(\{{\n.*?^  \}}\),"
+    if identities is not None:
+        old = re.search(pattern, block, re.M | re.S)
+        if old is None:
+            raise ValueError("Selected format visual section is absent")
+        selected_block = old[0]
+        for identity in entries:
+            entry_pattern = rf'^    "{re.escape(identity)}": Object\.freeze\(\[\n.*?^    \]\),'
+            entry = re.search(entry_pattern, replacement, re.M | re.S)[0]
+            if re.search(entry_pattern, selected_block, re.M | re.S):
+                selected_block = re.sub(entry_pattern, lambda _: entry, selected_block, flags=re.M | re.S)
+            else:
+                selected_block = selected_block[:-5] + entry + "\n  }),"
+        replacement = selected_block
     if re.search(pattern, block, re.M | re.S):
         block = re.sub(pattern, lambda _: replacement, block, flags=re.M | re.S)
     else:
         block += "\n" + replacement
-    source.write_text(text[:start] + block + text[end:], encoding="utf-8", newline="\n")
+    temporary = source.with_suffix(".js.new")
+    temporary.write_text(text[:start] + block + text[end:], encoding="utf-8", newline="\n")
+    temporary.replace(source)
 
 
 if __name__ == "__main__":

@@ -30,6 +30,6 @@ description: 执行或续作本项目周维护：联合 MTGO／指定 Melee 分�
 - MTGO／指定Melee同赛制联合分类，来源、统计、完成记录保持分开。统一交付覆盖自动入口；内容仍用既定MTGO来源。
 - 固定快照不覆盖，保留输入及原操作续作。未知不冒充通过；失败不清零。完成后结束，不自动追加历史修复、优化或下一周。
 
-工具：仓库根目录 `python tools/weekly_maintenance.py`，使用任务已确认的Python。子命令及参数见当前参考，正常路径直接执行。准备入口只写私有输出，不抓取、不发布、不自动接受决定。pending齐备立即提交；真实故障才针对性读实现。
+工具：仓库根目录 `python tools/weekly_maintenance.py`，使用任务已确认的Python。子命令及参数见当前参考，正常路径直接执行。准备入口只写私有输出，不采集赛事、不发布、不自动接受决定；所选缺图按第6步补齐。pending齐备立即提交；真实故障才针对性读实现。
 
 设计／验收才按标题定位 `docs/plans/weekly-maintenance-skill/BEHAVIOR_BASELINE.md`，运行时不通读。

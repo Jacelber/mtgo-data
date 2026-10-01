@@ -760,6 +760,43 @@ def _week_monday(week: str) -> date:
         raise MTGOLandingEditorialError(f"invalid ISO review week: {week}") from exc
 
 
+def build_admitted_content_facts(root: Path, format_id: str, week: str, *, require_delivered_classifier=False) -> dict:
+    """Read delivered admission identity, then process only its retained corpus.
+
+    Reuses admission/source checks and the metadata scope pointer, not a full
+    publication audit. Late retained arrivals remain pending.
+    """
+    from . import publication, landing
+    scope, retained = publication._resolve_scope(root, format_id)
+    meta = json.loads((root / f"stats/{format_id}/mtgo/meta.json").read_text(encoding="utf-8"))
+    binding = meta.get("publication", {})
+    if (scope.week.strftime("%G-W%V") != week or binding.get("scope_digest") != scope.subject_digest
+            or binding.get("week") != week):
+        raise MTGOLandingEditorialError("Content requires the delivered admission scope for this week")
+    events = [(stats.parse_event_date(event.get("starttime")), event) for _, event in retained
+              if str(event["event_id"]) in scope.event_ids]
+    events = [(day, event) for day, event in events if day is not None]
+    rules = load_rules_for_format(root, format_id)
+    if require_delivered_classifier:
+        from .top8 import classifier_digest
+        relative = f"stats/{format_id}/mtgo/decks_1w.json"
+        payload = (root / relative).read_bytes()
+        if (hashlib.sha256(payload).hexdigest() != binding.get("artifacts", {}).get(relative)
+                or json.loads(payload).get("classifier_digest") != classifier_digest(rules)):
+            raise MTGOLandingEditorialError("Content classifier differs from the fixed delivered statistics")
+    processed = {id(event): stats.process_event(event, rules) for _, event in events}
+    monday = _week_monday(week)
+    records = screening.week_records(events, rules, monday, processed_events=processed)
+    top8 = build_top8_catalog([record for record in records if record["is_top8"]])
+    facts = {}
+    _, page = landing.build_document(root, format_id, today=monday + timedelta(days=7),
+        _admit_review=False, review_week=week, _prepared_inputs=(events, rules, processed), _review_facts=facts)
+    return {"events": events, "rules": rules, "processed": processed, "records": records,
+            "all_top8": top8, "page": page, "review_facts": facts,
+            "admitted_scope": {"week": week, "scope_digest": scope.subject_digest},
+            "pending_event_ids": sorted(scope.pending_event_ids)}
+
+
 def build_top8_subject(
     repository_root: str | Path,
     format_id: str,

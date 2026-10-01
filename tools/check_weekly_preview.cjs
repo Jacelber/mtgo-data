@@ -22,18 +22,19 @@ const { chromium } = require(process.env.WEEKLY_PLAYWRIGHT || 'playwright');
   const selected = [];
   if (!onlyFeature) for (const row of document.environment.rows) {
     for (const card of context.P8ArchetypeVisuals.representativeCards[format]?.[row.archetype_id] || []) {
-      selected.push({ name: card.name, image: 'assets/' + card.image.slice(3) });
+      selected.push({ name: card.name, image: 'assets/' + card.image.slice(3), region: 'environment:' + row.archetype_id });
     }
   }
   const features = document.features.items.filter(item => !onlyFeature || item.destination_id === onlyFeature);
   if (onlyFeature && features.length !== 1) throw new Error('Requested Feature is not present exactly once');
-  for (const feature of features) for (const card of feature.featured_cards) selected.push({ name: card.name, image: cache[card.name] });
+  for (const feature of features) for (const card of feature.featured_cards) selected.push({ name: card.name, image: cache[card.name], region: 'feature:' + feature.destination_id });
   const resources = [];
   for (const language of ['zh', 'en']) for (const card of selected) {
     const chosen = context.P8CardLocalization.resolve(card.name, language, lookup, card.image);
     const local = chosen.image && !/^[a-z]+:/i.test(chosen.image) && !chosen.image.split('/').includes('..');
     const file = local ? path.join(site, chosen.image) : null;
-    resources.push({ language, name: card.name, selected: chosen.image, source: chosen.source,
+    resources.push({ region: card.region, language, name: card.name, selected: chosen.image, source: chosen.source,
+      display_name: chosen.displayName, link: chosen.linkUrl,
       exists: !!file && fs.existsSync(file), sha256: file && fs.existsSync(file)
         ? crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex') : null });
   }

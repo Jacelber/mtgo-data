@@ -1,4 +1,4 @@
-"""Private weekly content preparation; never fetch, admit, publish or infer acceptance."""
+"""Private weekly preparation; optional selected image fill, never event fetch or publication."""
 from __future__ import annotations
 
 import argparse
@@ -191,8 +191,11 @@ def inventory(root, source, displayed=None, previous=None, facts=None):
                      "reuse_check": "fixed source scope and displayed environment rows only"}}
 
 
-def render_inventory(value):
+def render_inventory(value, lookup=None):
     e = html.escape
+    def card_label(name):
+        entry = (lookup or {}).get(name) or (lookup or {}).get(name.split(" // ")[0]) or {}
+        return e(entry.get("zh_name", name)) + (" · " + e(name) if entry.get("zh_name") else "")
     sections = [f"<h1>{e(value['format'])} · {e(value['week'])}</h1>",
                 "<p>本周未展示新类型：" + e("、".join(value["new_types"]) or "无") + "</p>",
                 "<h2>需要用户提供／确认</h2><ul>" + "".join(f"<li>{e(x)}</li>" for x in value["required_user"]) + "</ul>",
@@ -212,12 +215,12 @@ def render_inventory(value):
             for name in card_names(deck):
                 counts[name] = counts.get(name, 0) + 1
         sections.append("<details><summary>实际构筑牌张出现次数（非推荐）</summary><ul>" + "".join(
-            f"<li>{e(name)}：{count}/{len(row['decks'])} 副</li>"
+            f"<li>{card_label(name)}：{count}/{len(row['decks'])} 副</li>"
             for name, count in sorted(counts.items(), key=lambda pair: (-pair[1], pair[0]))) + "</ul></details>")
         for deck in row["decks"]:
             sections.append(f"<details><summary>{e(str(deck['event_id']))} · {e(str(deck.get('player', '')))} · 第{e(str(deck['final_rank']))}名完整主备牌</summary>")
             for key, label in (("main_deck", "主牌"), ("side_deck", "备牌")):
-                sections.append(f"<h4>{label}</h4><ul>" + "".join(f"<li>{c['qty']} {e(c['name'])}</li>" for c in deck[key]) + "</ul>")
+                sections.append(f"<h4>{label} · 共{sum(c['qty'] for c in deck[key])}张</h4><ul>" + "".join(f"<li>{c['qty']} {card_label(c['name'])}</li>" for c in deck[key]) + "</ul>")
             sections.append("</details>")
     sections.append("<h2>程序筛选事实</h2><ul>" + "".join(
         f"<li><a href='#{e(value['active_aliases'].get(item['token'], ''))}'>{e(value['active_aliases'].get(item['token'], item['token']))}</a>：{e(json.dumps(item['reasons'], ensure_ascii=False))}</li>"
@@ -227,7 +230,7 @@ def render_inventory(value):
         alias = value["active_aliases"][deck["token"]]
         sections.append(f"<section id='{e(alias)}'><h3>{e(alias)} · {e(deck.get('display_name', deck['parent_id']))} · {e(deck.get('player',''))} · 第{deck['final_rank']}名</h3><p>赛事 {e(deck['event_id'])}</p>")
         for key, title in (("main_deck", "主牌"), ("side_deck", "备牌")):
-            sections.append(f"<h4>{title}</h4><ul>" + "".join(f"<li>{c['qty']} {e(c['name'])}</li>" for c in deck[key]) + "</ul>")
+            sections.append(f"<h4>{title} · 共{sum(c['qty'] for c in deck[key])}张</h4><ul>" + "".join(f"<li>{c['qty']} {card_label(c['name'])}</li>" for c in deck[key]) + "</ul>")
         sections.append("</section>")
     return '<!doctype html><meta charset="utf-8"><title>周维护材料</title><style>body{max-width:1000px;margin:32px auto;font:16px/1.6 system-ui}pre{white-space:pre-wrap}</style>' + "".join(sections)
 
@@ -240,14 +243,33 @@ def link_or_copy(source, destination):
     return str(destination)
 
 
-def prepare(root, source, base, output, facts=None):
+def prepare(root, source, base, output, facts=None, *, visuals=None, fetch_missing=False, resource_fixture=None):
     """Compose only editorial outputs over a fixed site; no acceptance is invented."""
     format_id, week = scope(source)
+    if not facts or "review_facts" not in facts or "admitted_scope" not in facts:
+        raise ValueError("Fixed admitted facts with review_facts required; use the facts entry once")
     state = inventory(root, source, read(base / f"stats/{format_id}/mtgo/landing/current.json"), facts=facts)
     user_missing = [item for item in state["required_user"] if not item.startswith("环境栏 ")]
     if user_missing or state["errors"] or state["machine_pending"]:
         raise ValueError(json.dumps({"required_user": user_missing, "errors": state["errors"],
                                      "machine_pending": state["machine_pending"]}, ensure_ascii=False))
+    source, facts = deepcopy(source), deepcopy(facts)
+    visual_config = read(root / "configs/mtgo_landing_visuals.yaml")
+    if visuals:
+        rows = {row["archetype_id"]: row for row in facts["page"]["environment"]["rows"]}
+        if set(visuals) - rows.keys():
+            raise ValueError("Representative choices must belong to the current environment")
+        for identity, cards in visuals.items():
+            if not isinstance(cards, list) or len(cards) != 2 or len(set(cards)) != 2 or not all(isinstance(c, str) and c.strip() for c in cards):
+                raise ValueError("Each representative choice needs two distinct canonical card names")
+            rows[identity]["key_cards"] = [{"name": card} for card in cards]
+            visual_config["formats"][format_id]["parents"][identity] = cards
+        facts["review_facts"]["environment"] = deepcopy(facts["page"]["environment"])
+        machine = landing._fact_digest({**facts["review_facts"], "classifier": facts["page"]["classifier"]})
+        source["bindings"]["machine_fact_digest"] = machine
+        facts["bindings"] = deepcopy(source["bindings"])
+        facts["page"]["review_binding"]["machine_fact_digest"] = machine
+        facts["digest"] = digest({k: v for k, v in facts.items() if k != "digest"})
     page_path = Path(f"stats/{format_id}/mtgo/landing/current.json")
     page = deepcopy(facts["page"]) if facts else read(base / page_path)
     if page["week"]["id"] != week or page["classifier"]["digest"] != source["bindings"]["classifier_digest"]:
@@ -303,33 +325,55 @@ def prepare(root, source, base, output, facts=None):
         if not (base / relative).is_file() or value != read(base / relative):
             write(site / relative, value)
             changed.append(relative.as_posix())
-    packet = submissions.preview_packet(site, format_id)
-    write(output / "preview.json", packet)
-    content = submissions.make_content_packet(root, format_id, week, source["review"], page["environment"],
-        editorial.load_name_catalog_document(root / editorial.DEFAULT_NAME_CATALOG), bindings=source["bindings"])
-    write(output / "content.json", content)
+    write(output / "visuals.yaml", visual_config)
+    write(output / "facts.json", facts)
     write(output / "source.json", source)
+    write(output / "preparation.json", {"root": str(root.resolve()), "visuals": visuals or {},
+        "names": editorial.load_name_catalog_document(root / editorial.DEFAULT_NAME_CATALOG),
+        "input_digest": digest([source, facts, visual_config, page]), "changed": changed, "reused_files": reused_files})
+    return finish_resources(output, fetch_missing=fetch_missing, resource_fixture=resource_fixture)
+
+
+def finish_resources(output, *, fetch_missing=False, resource_fixture=None):
+    """Resume only an unsubmitted preparation; never rewrite a preview snapshot."""
+    if (output / "preview.json").exists():
+        raise ValueError("Preview already fixed; use a new revision, not resources in place")
+    plan, source, facts = (read(output / name) for name in ("preparation.json", "source.json", "facts.json"))
+    root, site = Path(plan["root"]), output / "site"
+    format_id, week = scope(source)
+    config = read(output / "visuals.yaml")
+    page = read(site / f"stats/{format_id}/mtgo/landing/current.json")
+    if plan["input_digest"] != digest([source, facts, config, page]):
+        raise ValueError("Preparation input changed; create a revision")
+    from tools import weekly_resources, build_archetype_visuals
+    resource_work = weekly_resources.ensure(site, page, fetch_missing=fetch_missing, fixture=resource_fixture)
+    if plan["visuals"]:
+        build_archetype_visuals.generate(site, format_id, identities=set(plan["visuals"]), config_override=config)
+    packet = submissions.preview_packet(site, format_id)
+    content = submissions.make_content_packet(site, format_id, week, source["review"], page["environment"],
+        plan["names"], bindings=source["bindings"],
+        facts=facts["review_facts"])
+    write(output / "content.json", content)
+    write(output / "preview.json", packet)
     return {"format": format_id, "week": week, "site": str(site),
             "entrypoint": f"/index.html?format={format_id}&view=landing&lang=zh",
             "preview": str(output / "preview.json"), "state": "private_preview_requires_actual_page_check",
             "publishable": False, "source_digest": digest(source),
-            "work": {"generated": changed, "reused_files": reused_files, "fetched": 0,
+            "source": str(output / "source.json"), "facts": str(output / "facts.json"),
+            "visual_config": str(output / "visuals.yaml"), "resources": resource_work,
+            "work": {"generated": plan["changed"], "reused_files": plan["reused_files"], "fetched": 0,
                      "classified": 0, "translated": 0,
                      "reuse_check": "fixed scope and preview's selected product dependencies"}}
 
 
 def prepare_facts(root, format_id, week, output):
     """One retained-input pass, shared by existing screening and Landing logic."""
-    rules = load_rules_for_format(root, format_id)
-    events = stats.load_all_events(root, format_id, public=False)
-    processed = {id(event): stats.process_event(event, rules) for _, event in events}
+    admitted = editorial.build_admitted_content_facts(root, format_id, week, require_delivered_classifier=True)
+    rules, events, processed = (admitted[key] for key in ("rules", "events", "processed"))
     monday = editorial._week_monday(week)
-    records = screening.week_records(events, rules, monday, processed_events=processed)
-    top8 = editorial.build_top8_catalog([r for r in records if r["is_top8"]])
-    _, page = landing.build_document(root, format_id, today=monday + timedelta(days=7),
-        _admit_review=False, review_week=week, _prepared_inputs=(events, rules, processed))
+    records, top8, page = (admitted[key] for key in ("records", "all_top8", "page"))
     policy = screening.load_screening_policy(root)
-    known_file = root / f"stats/{format_id}/mtgo/pickup/known_archetypes.json"
+    known_file = root / f"stats/{format_id}/mtgo/landing/review/known_archetypes.json"
     known = screening.load_known(known_file, stable_ids=True)
     if known is None:
         start = monday - timedelta(weeks=screening.INITIAL_KNOWN_WEEKS)
@@ -352,7 +396,10 @@ def prepare_facts(root, format_id, week, output):
         "bindings": bindings, "all_top8": top8, "candidate_evidence": evidence,
         "known_archetype_ids": sorted({r["archetype_id"] for r in records if r["archetype"] != "Unknown"}),
         "review": {"top_copy": {"items": []}, "features": {"items": []}}}
-    facts = {"page": page, "bindings": bindings,
+    facts = {"page": page, "bindings": bindings, "review_facts": admitted["review_facts"],
+             "admitted_scope": admitted["admitted_scope"], "pending_event_ids": admitted["pending_event_ids"],
+             "known_state": {"path": str(known_file.relative_to(root)),
+                             "initialized": not known_file.exists(), "known_ids": sorted(known)},
              "environment_decks": [{"parent_id": r["archetype_id"], "event_id": r["event_id"],
                  "player": r["player"], "final_rank": r["final_rank"],
                  **screening.record_deck_cards(r)} for r in records if r["is_high_score"]]}
@@ -360,25 +407,28 @@ def prepare_facts(root, format_id, week, output):
     write(output / "source.json", source)
     write(output / "facts.json", facts)
     return {"source": str(output / "source.json"), "facts": str(output / "facts.json"),
+            "pending_event_ids": admitted["pending_event_ids"],
             "work": {"processed_events": len(events), "fetched": 0, "public_files_written": 0,
                      "reuse": "same processed retained events passed to existing builders"}}
 
 
-def classification_material(root, format_id, week, melee_ids, output):
+def classification_material(root, format_id, week, melee_ids, output, localization=None):
     """Separate source submissions in one immutable full-deck Web carrier."""
     from mtgmeta import weekly_review
     scope({"format": format_id, "week": week})
     if len(set(melee_ids)) != len(melee_ids) or any(not re.fullmatch(r"[1-9][0-9]*", value) for value in melee_ids):
         raise ValueError("Melee members must be distinct positive event IDs")
     mtgo = weekly_review.build_mtgo_weekly_review(root, format_id, week)
+    lookup_path = localization or root / "assets/card-localization/cards.json"
+    lookup = read(lookup_path) if lookup_path.is_file() else {}
     inputs = {}
     for row in mtgo["records"]:
         relative, pointer = row["source_locator"].split("#", 1)
         if relative not in inputs:
             inputs[relative] = read(root / relative)
         player = inputs[relative]["players"][int(pointer.split("/")[-1])]
-        row["main_deck"] = player.get("main_deck", [])
-        row["sideboard"] = player.get("sideboard", [])
+        row["main_deck"] = player.get("main_deck")
+        row["sideboard"] = player.get("sideboard")
         row["reference"] = f"mtgo:{row['event_id']}:{row['rank']}"
     members = [{"source": "mtgo", "events": mtgo["event_ids"], "records": mtgo["records"],
                 "unavailable": [], "packet": submissions.full_classification_packet(mtgo)}]
@@ -394,6 +444,9 @@ def classification_material(root, format_id, week, melee_ids, output):
             decks = {item["participant_id"]: item for item in event["decklists"]
                      if item.get("status") == "submitted" and item.get("game_format") == format_id}
             for row in review["available_records"]:
+                row["event_metadata"] = event.get("metadata", {})
+                row["date"] = event.get("metadata", {}).get("date", {}).get("start")
+                row["event_name"] = event.get("metadata", {}).get("name", "")
                 cards = decks[row["participant_id"]]["cards"]
                 row["main_deck"] = [{"name": c["name"], "qty": c["quantity"]} for c in cards if c["section"] == "main"]
                 row["sideboard"] = [{"name": c["name"], "qty": c["quantity"]} for c in cards if c["section"] == "sideboard"]
@@ -418,9 +471,19 @@ def classification_material(root, format_id, week, melee_ids, output):
         if member.get("known_input_quality"):
             sections.append("<p>交接输入已知质量信息（不代替本次发布条件）：" + e(str(member["known_input_quality"])) + "</p>")
         for row in member["records"]:
-            sections.append(f"<details id='{e(row['reference'])}'><summary>{e(row['reference'])} · {e(str(row.get('player', '')))} · {e(str(row['identity']))} · {e(str(row.get('priority_reasons', [])))}</summary>")
+            identity = row["identity"]
+            title = " / ".join(str(identity.get(k) or "") for k in ("parent_chinese", "parent_english", "subtype_chinese", "subtype_english")).strip(" / ")
+            sections.append(f"<details id='{e(row['reference'])}'><summary>{e(row['reference'])} · {e(str(row.get('player', '')))} · {e(title)} · {e(str(row.get('priority_reasons', [])))}</summary>")
+            sections.append(f"<p>日期：{e(str(row.get('date') or row.get('event_metadata', {}).get('start_date') or row.get('event_metadata', {}).get('starttime') or row.get('event_metadata', {})))} · 名次：{e(str(row.get('rank')))} · {e(str(row.get('event_name', '')))}</p>")
+            sections.append(f"<p>来源定位：{e(row['source_locator'])} · <a href='#{e(row['reference'])}'>本牌表固定入口</a></p>")
             for zone in ("main_deck", "sideboard"):
-                sections.append(f"<h3>{zone}</h3><ul>" + "".join(f"<li>{c['qty']} {e(c['name'])}</li>" for c in row[zone]) + "</ul>")
+                if row[zone] is None:
+                    sections.append(f"<h3>{'主牌' if zone == 'main_deck' else '备牌'}：分区不可用</h3>")
+                    continue
+                cards = row[zone] or []
+                total = sum(c["qty"] for c in cards)
+                sections.append(f"<h3>{'主牌' if zone == 'main_deck' else '备牌'} · 共 {total} 张</h3><ul>" + "".join(
+                    f"<li>{c['qty']} {e((lookup.get(c['name']) or lookup.get(c['name'].split(' // ')[0]) or {}).get('zh_name', c['name']))} · {e(c['name'])}</li>" for c in cards) + "</ul>")
             sections.append("</details>")
         for missing in member["unavailable"]:
             sections.append("<p>unavailable：" + e(str(missing)) + "</p>")
@@ -506,12 +569,24 @@ def record_input(packet, values, *, evidence, accepted_on, previous=None):
     return {"submission": packet, "decisions": receipt}
 
 
-def page_delta(before_site, after_site, format_id):
+def page_delta(before_site, after_site, format_id, before_packet=None):
     """Identify a single Feature-card change; all other page meaning must match."""
     from mtgmeta.mtgo.landing_bundle import inspect_bundle
-    before = submissions.preview_packet(before_site, format_id)
+    old_bundle = inspect_bundle(before_site, format_id)
+    if before_packet is not None:
+        before = before_packet.get("submission", before_packet)
+        submissions.validate_packet(before)
+        if (before["kind"] != "preview" or before["format"] != format_id
+                or before["bindings"].get("bundle_digest") != old_bundle["digest"]):
+            raise ValueError("Retained preview does not bind the original page documents")
+    else:
+        try:
+            before = submissions.preview_packet(before_site, format_id)
+        except FileNotFoundError as exc:
+            return {"state": "evidence_required", "reason": "Original selected resource unavailable",
+                    "missing": str(exc.filename), "next": "Use the retained fixed preview via --before-packet; do not infer prior bytes"}
     after = submissions.preview_packet(after_site, format_id)
-    old = inspect_bundle(before_site, format_id)["documents"]
+    old = old_bundle["documents"]
     new = inspect_bundle(after_site, format_id)["documents"]
     prior_features = {f["destination_id"]: f for f in old["landing"]["features"]["items"]}
     next_features = {f["destination_id"]: f for f in new["landing"]["features"]["items"]}
@@ -526,15 +601,35 @@ def page_delta(before_site, after_site, format_id):
             return [without_cards(item) for item in value]
         return value
     a, b = before["dimensions"]["final_page"], after["dimensions"]["final_page"]
+    if "image_subjects" not in a:
+        return {"state": "evidence_required", "reason": "Retained preview lacks bilingual selected-resource evidence"}
     identical_context = all(a[key] == b[key] for key in ("names", "colors", "renderer_resources"))
-    common = set(a["selected_local_images"]) & set(b["selected_local_images"])
-    identical_context = identical_context and all(a["selected_local_images"][p] == b["selected_local_images"][p] for p in common)
+    excluded_regions = {"feature:" + token for token in changed}
+    def unchanged_regions(value):
+        return submissions.image_display_subject({key: item for key, item in value["image_subjects"].items()
+                                                  if key not in excluded_regions})
+    identical_context = identical_context and unchanged_regions(a) == unchanged_regions(b)
     scoped = (len(changed) == 1 and set(prior_features) == set(next_features)
               and without_cards(old) == without_cards(new) and identical_context
               and (before["format"], before["week"]) == (after["format"], after["week"]))
     return {"before": before, "after": after, "changed_features": changed,
-            "state": "feature_cards_only" if scoped else "same" if before["dimensions"] == after["dimensions"] else "wider_change",
+            "state": "feature_cards_only" if scoped else "same" if submissions.preview_validity(before, after, dimensions_only=True)["state"] in {"current", "equivalent"} else "wider_change",
             "work": "compared selected product documents and bound renderer/names/colors/images; no generation or browser rerun"}
+
+
+def resource_selection_matches(packet, resources, only_feature=None):
+    expected = []
+    for region, languages in packet["dimensions"]["final_page"]["image_subjects"].items():
+        if only_feature and region != "feature:" + only_feature:
+            continue
+        for language, images in languages.items():
+            for item in images:
+                expected.append({"region": region, "language": language, "name": item["name"],
+                    "selected": item["image"], "sha256": item["sha256"],
+                    "display_name": item["display_name"], "link": item["link"]})
+    actual = [{key: row.get(key) for key in expected[0]} for row in resources] if expected else resources
+    key = lambda row: json.dumps(row, sort_keys=True)
+    return sorted(expected, key=key) == sorted(actual, key=key)
 
 
 def accept_page(packet, check, *, evidence, accepted_on, entrypoint, previous=None, delta=None):
@@ -581,9 +676,49 @@ def adopt_displayed(packet, displayed_site, *, evidence, accepted_on, previous=N
     return {"submission": packet, "decisions": receipt}
 
 
-def finalize_source(root, source, site, acceptance):
+def adopt_content(root, source, preparation):
+    """Connect a fixed accepted candidate to the existing private importer."""
+    root = root.resolve()
+    if root == ROOT:
+        raise ValueError("Content adoption requires a separate non-production preparation directory")
+    if (root / ".git").exists() and subprocess.run(["git", "-C", str(root), "remote"],
+            check=True, capture_output=True, text=True).stdout.strip():
+        raise ValueError("Content adoption cannot target a remote-connected production checkout")
+    require_private_output(ROOT, root / "index.html")
+    format_id, _ = scope(source)
+    prepared = read(preparation / "preview.json")
+    bound = source["acceptance"]["decisions"]["accepted_page_binding"]
+    if bound["preview_digest"] != prepared["digest"]:
+        raise ValueError("Accepted source is not bound to this preparation")
+    submissions.require_accepted(bound["acceptance"]["submission"], bound["acceptance"]["decisions"], current=prepared)
+    configuration_path = root / "configs/mtgo_landing_visuals.yaml"
+    configuration = read(configuration_path)
+    proposed = read(preparation / "visuals.yaml")
+    configuration["formats"][format_id] = proposed["formats"][format_id]
+    old_config = configuration_path.read_bytes()
+    from tools.weekly_resources import replace_bytes
+    from tools.import_landing_conversation import import_content
+    destination = root / f"stats/{format_id}/mtgo/landing/review/{source['week']['id']}.yaml"
+    old_content = destination.read_bytes() if destination.is_file() else None
+    write(configuration_path, configuration)
+    if old_content is not None:
+        replace_bytes(destination, old_content)  # Detach any retained hardlink.
+    try:
+        destination = import_content(root, source)
+    except Exception:
+        replace_bytes(configuration_path, old_config)
+        if old_content is not None:
+            replace_bytes(destination, old_content)
+        raise
+    return {"source": str(destination), "visuals": str(configuration_path), "remote_writes": 0}
+
+
+def finalize_source(root, source, site, acceptance, facts):
     """Export accepted private source without another classification or generation."""
     format_id, week = scope(source)
+    inventory(root, source, facts=facts)
+    if "review_facts" not in facts or "admitted_scope" not in facts:
+        raise ValueError("Fixed admitted facts with review_facts required")
     actual = submissions.preview_packet(site, format_id)
     submissions.require_accepted(acceptance["submission"], acceptance["decisions"], current=actual)
     page = read(site / f"stats/{format_id}/mtgo/landing/current.json")
@@ -599,11 +734,13 @@ def finalize_source(root, source, site, acceptance):
     document["review"]["top_copy"]["reviewed"] = True
     document["review"]["features"]["reviewed"] = True
     packet = submissions.make_content_packet(root, format_id, week, document["review"], page["environment"],
-        editorial.load_name_catalog_document(root / editorial.DEFAULT_NAME_CATALOG), bindings=source["bindings"])
+        editorial.load_name_catalog_document(root / editorial.DEFAULT_NAME_CATALOG), bindings=source["bindings"],
+        facts=facts["review_facts"])
     origin = acceptance["decisions"]["decisions"]["final_page"]
     receipt = submissions.record_decision(packet, None, list(packet["dimensions"]), evidence=origin["evidence"],
         accepted_on=origin["accepted_on"], entrypoint=origin["entrypoint"])
     receipt["accepted_page_binding"] = {"preview_digest": actual["digest"], "acceptance": acceptance}
+    receipt["admitted_scope"] = deepcopy(facts["admitted_scope"])
     document["bindings"]["bilingual_catalog_digest"] = submissions.name_digest(packet)
     document["bindings"]["content_sha256"] = editorial.document_digest({k: document[k] for k in ("format", "week", "review")})
     document["acceptance"] = {"submission": packet, "decisions": receipt}
@@ -628,12 +765,17 @@ def main(argv=None):
     classify.add_argument("--week", required=True)
     classify.add_argument("--melee", action="append", default=[])
     classify.add_argument("--output", type=Path, required=True)
+    classify.add_argument("--localization", type=Path)
     stage = sub.add_parser("stage-data")
     stage.add_argument("--root", type=Path, required=True)
     stage.add_argument("--plan", type=Path, required=True)
     stage.add_argument("--resume-stage", type=Path)
     stage.add_argument("--previous-result", type=Path)
     stage.add_argument("--output", type=Path, required=True)
+    resources = sub.add_parser("resources", help="Resume missing resources of an unsubmitted preparation")
+    resources.add_argument("--preparation", type=Path, required=True)
+    resources.add_argument("--fetch-missing-resources", action="store_true")
+    resources.add_argument("--resource-fixture", type=Path)
     for name in ("inspect", "prepare"):
         cmd = sub.add_parser(name)
         cmd.add_argument("--root", type=Path, default=ROOT)
@@ -647,6 +789,9 @@ def main(argv=None):
             cmd.add_argument("--no-feature", action="store_true", help="Only when the Owner explicitly chose no Feature")
         else:
             cmd.add_argument("--base-site", type=Path, required=True)
+            cmd.add_argument("--visuals", type=Path, help="Only actual Owner choices: identity -> two canonical names")
+            cmd.add_argument("--fetch-missing-resources", action="store_true")
+            cmd.add_argument("--resource-fixture", type=Path, help="Isolated finite response fixture; no live fallback")
     serve = sub.add_parser("serve")
     serve.add_argument("--directory", type=Path, required=True)
     serve.add_argument("--port", type=int, default=8765)
@@ -665,6 +810,7 @@ def main(argv=None):
     record.add_argument("--previous", type=Path)
     delta_cmd = sub.add_parser("page-delta")
     delta_cmd.add_argument("--before-site", type=Path, required=True)
+    delta_cmd.add_argument("--before-packet", type=Path, help="Retained fixed preview when original cache is unavailable")
     delta_cmd.add_argument("--after-site", type=Path, required=True)
     delta_cmd.add_argument("--format", required=True)
     delta_cmd.add_argument("--output", type=Path, required=True)
@@ -689,22 +835,39 @@ def main(argv=None):
     finalize.add_argument("--source", type=Path, required=True)
     finalize.add_argument("--site", type=Path, required=True)
     finalize.add_argument("--acceptance", type=Path, required=True)
+    finalize.add_argument("--facts", type=Path, required=True)
     finalize.add_argument("--output", type=Path, required=True)
+    adopt_content_cmd = sub.add_parser("adopt-content")
+    adopt_content_cmd.add_argument("--root", type=Path, required=True)
+    adopt_content_cmd.add_argument("--source", type=Path, required=True)
+    adopt_content_cmd.add_argument("--preparation", type=Path, required=True)
+    adopt_content_cmd.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
     started = perf_counter()
     started_at = datetime.now(timezone.utc).isoformat()
     try:
-        if args.command in {"page-delta", "accept-page", "adopt-displayed", "finalize-source", "stage-data"}:
+        if args.command == "resources":
+            result = finish_resources(args.preparation, fetch_missing=args.fetch_missing_resources,
+                                      resource_fixture=args.resource_fixture)
+            result["timing"] = {"started_at": started_at, "seconds": round(perf_counter() - started, 4)}
+            write(args.preparation / "result.json", result)
+            print(json.dumps({"result": str(args.preparation / "result.json"), "preview": result["preview"],
+                              "downloaded": result["resources"]["downloaded"]}, ensure_ascii=False))
+            return 0
+        if args.command in {"page-delta", "accept-page", "adopt-displayed", "finalize-source", "stage-data", "adopt-content"}:
             require_private_output(ROOT, args.output.resolve())
             if args.output.exists():
                 raise ValueError("Record exists; choose a new immutable path")
             if args.command == "page-delta":
-                result = page_delta(args.before_site, args.after_site, args.format)
+                result = page_delta(args.before_site, args.after_site, args.format,
+                                    read(args.before_packet) if args.before_packet else None)
             elif args.command == "stage-data":
                 result = stage_data(args.root, read(args.plan), args.resume_stage,
                                     read(args.previous_result) if args.previous_result else None)
             elif args.command == "finalize-source":
-                result = finalize_source(args.root, read(args.source), args.site, read(args.acceptance))
+                result = finalize_source(args.root, read(args.source), args.site, read(args.acceptance), read(args.facts))
+            elif args.command == "adopt-content":
+                result = adopt_content(args.root, read(args.source), args.preparation)
             elif args.command == "adopt-displayed":
                 result = adopt_displayed(read(args.packet), args.displayed_site, evidence=args.evidence,
                     accepted_on=args.accepted_on, previous=read(args.previous)["decisions"] if args.previous else None)
@@ -734,6 +897,12 @@ def main(argv=None):
             finally:
                 server.shutdown()
                 server.server_close()
+            if result.returncode == 0:
+                resources = json.loads((output / "resources.json").read_text(encoding="utf-8"))
+                if (not resource_selection_matches(checked_packet, resources, args.only_feature)
+                        or submissions.preview_packet(args.site, args.format) != checked_packet):
+                    result = subprocess.CompletedProcess(result.args, 1, result.stdout,
+                        "Consumer resource selection does not match the fixed preview, or candidate changed during check")
             summary = {"state": "passed" if result.returncode == 0 else "failed", "returncode": result.returncode,
                        "preview_digest": checked_packet["digest"], "only_feature": args.only_feature,
                        "stdout": result.stdout, "stderr": result.stderr,
@@ -760,7 +929,7 @@ def main(argv=None):
         output = new_output(root, args.output)
         if args.command in {"facts", "classification"}:
             summary = (prepare_facts(root, args.format, args.week, output) if args.command == "facts"
-                       else classification_material(root, args.format, args.week, args.melee, output))
+                       else classification_material(root, args.format, args.week, args.melee, output, args.localization))
             summary["timing"] = {"started_at": started_at, "seconds": round(perf_counter() - started, 4)}
             write(output / "result.json", summary)
             print(json.dumps(summary, ensure_ascii=False))
@@ -775,16 +944,22 @@ def main(argv=None):
             result = inventory(root, source, read(args.displayed_page) if args.displayed_page else None,
                                read(args.previous) if args.previous else None, read(args.facts) if args.facts else None)
             write(output / "inventory.json", result)
-            (output / "index.html").write_text(render_inventory(result), encoding="utf-8")
+            (output / "index.html").write_text(render_inventory(result, read(lookup) if lookup.is_file() else {}), encoding="utf-8")
             summary = {key: result[key] for key in ("required_user", "machine_pending", "errors", "new_types", "work")}
             summary["material"] = str(output / "index.html")
             summary["source"] = str(output / "source.json") if args.no_feature else str(args.source)
         else:
-            summary = prepare(root, source, args.base_site.resolve(), output, read(args.facts) if args.facts else None)
+            summary = prepare(root, source, args.base_site.resolve(), output, read(args.facts) if args.facts else None,
+                visuals=read(args.visuals) if args.visuals else None, fetch_missing=args.fetch_missing_resources,
+                resource_fixture=args.resource_fixture)
         summary["timing"] = {"started_at": started_at, "seconds": round(perf_counter() - started, 4)}
         summary["card_name_normalizations"] = normalizations
         write(output / "result.json", summary)
-        print(json.dumps(summary, ensure_ascii=False, indent=2))
+        shown = deepcopy(summary)
+        if "resources" in shown:
+            shown["resources"] = {"downloaded": shown["resources"]["downloaded"],
+                "reused_count": len(shown["resources"]["reused"]), "details": str(output / "result.json")}
+        print(json.dumps(shown, ensure_ascii=False, indent=2))
         return 0
     except (ValueError, KeyError, OSError) as exc:
         print(json.dumps({"state": "blocked", "error": str(exc), "seconds": round(perf_counter() - started, 4)}, ensure_ascii=False))
