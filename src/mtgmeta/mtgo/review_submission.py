@@ -464,7 +464,7 @@ def content_packet(root: Path, source: dict) -> dict:
     format_id, week = source["format"], source["week"]["id"]
     admitted_scope = source.get("acceptance", {}).get("decisions", {}).get("admitted_scope")
     if admitted_scope is not None:
-        actual = editorial.build_admitted_content_facts(root, format_id, week)
+        actual = editorial.build_admitted_content_facts(root, format_id, week, admitted_scope=admitted_scope)
         if actual["admitted_scope"] != admitted_scope:
             raise ValueError("Content admission scope changed; retain the prior candidate and resolve the increment")
         page = actual["page"]

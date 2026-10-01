@@ -80,12 +80,11 @@ def ensure(site: Path, page: dict, *, fetch_missing=False, fixture: Path | None 
         entry = next((c for c in manifest["cards"] if c["name"] == name), None)
         if entry is None:
             value = card(name)
-            faces = value.get("card_faces", [])
-            index = next((i for i, f in enumerate(faces) if f.get("name") == name), None)
-            face = faces[index] if index is not None else value
-            found = cache._candidate(value, name, face.get("image_uris"), index)
+            key = cache._normalized_name(name)
+            found = cache._bulk_lookup([value], {key}).get(key)
             if found is None:
                 raise ValueError(f"No normal image for selected Feature card {name}")
+            index = found["face_index"]
             suffix = "" if index is None else f"-face-{index}"
             entry = {**found, "local_path": f"assets/card-cache/v1/images/{found['scryfall_id']}{suffix}.jpg",
                      "uses": [], "cache_source": "generated"}

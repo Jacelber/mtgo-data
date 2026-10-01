@@ -760,19 +760,31 @@ def _week_monday(week: str) -> date:
         raise MTGOLandingEditorialError(f"invalid ISO review week: {week}") from exc
 
 
-def build_admitted_content_facts(root: Path, format_id: str, week: str, *, require_delivered_classifier=False) -> dict:
-    """Read delivered admission identity, then process only its retained corpus.
+def build_admitted_content_facts(root: Path, format_id: str, week: str, *, require_delivered_classifier=False,
+                                 admitted_scope: dict | None = None) -> dict:
+    """Build new delivered facts or re-read an exact retained content scope.
 
     Reuses admission/source checks and the metadata scope pointer, not a full
-    publication audit. Late retained arrivals remain pending.
+    publication audit. Retained content verifies its historical admission prefix
+    against the saved digest; current publication metadata does not rebind it.
+    Late retained arrivals remain pending.
     """
     from . import publication, landing
-    scope, retained = publication._resolve_scope(root, format_id)
-    meta = json.loads((root / f"stats/{format_id}/mtgo/meta.json").read_text(encoding="utf-8"))
-    binding = meta.get("publication", {})
-    if (scope.week.strftime("%G-W%V") != week or binding.get("scope_digest") != scope.subject_digest
-            or binding.get("week") != week):
-        raise MTGOLandingEditorialError("Content requires the delivered admission scope for this week")
+    if admitted_scope is not None:
+        if admitted_scope.get("week") != week:
+            raise MTGOLandingEditorialError("Retained admission belongs to another content week")
+        if require_delivered_classifier:
+            raise MTGOLandingEditorialError("New content must use the current delivered scope")
+        scope, retained = publication._resolve_scope(root, format_id, through_week=week)
+        if admitted_scope != {"week": scope.week.strftime("%G-W%V"), "scope_digest": scope.subject_digest}:
+            raise MTGOLandingEditorialError("Retained content admission scope no longer matches its original inputs")
+    else:
+        scope, retained = publication._resolve_scope(root, format_id)
+        meta = json.loads((root / f"stats/{format_id}/mtgo/meta.json").read_text(encoding="utf-8"))
+        binding = meta.get("publication", {})
+        if (scope.week.strftime("%G-W%V") != week or binding.get("scope_digest") != scope.subject_digest
+                or binding.get("week") != week):
+            raise MTGOLandingEditorialError("Content requires the delivered admission scope for this week")
     events = [(stats.parse_event_date(event.get("starttime")), event) for _, event in retained
               if str(event["event_id"]) in scope.event_ids]
     events = [(day, event) for day, event in events if day is not None]

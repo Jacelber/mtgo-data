@@ -1,0 +1,33 @@
+{
+  "kind": "local targeted regression, not GitHub CI or model timing",
+  "reviewed_base": "b5f5dc9816d78db4bd22a39567dcb40b0a73c573",
+  "result": "90 passed",
+  "seconds": 27.29,
+  "command": "python -m pytest -q tests/test_weekly_cross_week_and_faces.py tests/test_weekly_revision.py tests/test_review_submission.py tests/test_mtgo_reviewed_publication.py tests/test_landing_card_image_cache.py tests/test_mtgo_landing_editorial.py tests/test_weekly_maintenance.py --tb=short",
+  "new_cases": 7,
+  "cross_week": {
+    "original_content_week": "2026-W39",
+    "advanced_admission_week": "2026-W40",
+    "actual_entrypoints": ["acceptance_record", "content_packet", "resume_summary"],
+    "content_after_advance": "accepted_recorded",
+    "original_content_bytes_unchanged": true,
+    "unadmitted_increment_excluded": true,
+    "changed_content_rejected": true,
+    "changed_protected_input_rejected": true,
+    "invalid_saved_scope_rejected": true,
+    "synthetic_event_and_decisions": true,
+    "clock_only_dependency_mock": "2026-10-06"
+  },
+  "feature_resources": {
+    "names": ["Front", "Front // Back"],
+    "cases_per_name": ["valid face image", "missing image then resume", "wrong card then resume"],
+    "existing_resolver": "build_landing_card_image_cache._bulk_lookup",
+    "fixture_only": true,
+    "selected_name_preserved": true,
+    "unaffected_cache_preserved": true,
+    "downloaded_per_success": 1,
+    "downloaded_on_repeat": 0
+  },
+  "production_writes": 0,
+  "remote_publications": 0
+}
