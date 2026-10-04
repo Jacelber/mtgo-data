@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "bf2284808b02c943143c39624cad801349acff404a939411de33661354f02aef"
+    "digest": "f66e1d5a6353efa2ec05a6c2ddea0595e4a7916ca14c1b41b35616465129e04b"
   },
   "input": {
     "event_path": "data/modern/melee/events/441441.json",
@@ -18,11 +18,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "cd8dc53954126fbe86dcbf9a7d60b263a0235fff1cd241808d5acd4b8bd249e9",
+    "rule_sha256": "378e0fa7ae0bd5ac428bd115fae01e58d13c2f04e37d602abd1e5e44982c7b08",
     "rule_schema_version": "1.1.0",
-    "archetype_count": 196,
-    "rule_count": 346,
-    "subtype_count": 93
+    "archetype_count": 207,
+    "rule_count": 373,
+    "subtype_count": 95
   },
   "summary": {
     "total_records": 571,
@@ -30,8 +30,8 @@
     "unknown": 7,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 84,
-    "overridden_matches": 84,
+    "multiple_matches": 85,
+    "overridden_matches": 85,
     "selected_subtypes": 256,
     "parent_only": 308,
     "same_parent_multiple_subtype_matches": 4,
@@ -60,7 +60,8 @@
       "dice-factory-eldrazi": 1,
       "dimir-mill": 6,
       "dimir-tempo": 17,
-      "domain-zoo": 12,
+      "domain-living-end": 1,
+      "domain-zoo": 11,
       "dredge": 2,
       "dwarves": 1,
       "eldrazi-aggro": 3,
@@ -115,8 +116,8 @@
     },
     "selected_by_subtype": {
       "broodscale-combo/golgari": 1,
-      "broodscale-combo/gruul": 21,
-      "broodscale-combo/mono-green": 16,
+      "broodscale-combo/gruul": 22,
+      "broodscale-combo/mono-green": 15,
       "burn/boros": 10,
       "burn/mono-red": 1,
       "chant-control/azorius": 3,
@@ -702,15 +703,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -754,15 +763,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -3514,6 +3531,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -3547,6 +3572,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 4,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -4925,6 +4958,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 7,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -4958,6 +4999,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 7,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -9619,6 +9668,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -9652,6 +9709,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 3,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -10146,15 +10211,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -10198,15 +10271,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -10648,6 +10729,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 7,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -10681,6 +10770,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 7,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -13062,19 +13159,19 @@
       "selected": {
         "archetype_id": "broodscale-combo",
         "archetype_name": "Broodscale Combo",
-        "subtype_id": "mono-green",
-        "subtype_name": "Mono-Green",
-        "rule_id": "broodscale-combo-mono-green",
-        "priority": 650000
+        "subtype_id": "gruul",
+        "subtype_name": "Gruul",
+        "rule_id": "broodscale-combo-gruul-firespout",
+        "priority": 650850
       },
       "matched_rules": [
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "mono-green",
-          "subtype_name": "Mono-Green",
-          "rule_id": "broodscale-combo-mono-green",
-          "priority": 650000,
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul-firespout",
+          "priority": 650850,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -13093,20 +13190,12 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-green-source__",
-              "zone": "main",
-              "actual_count": 8,
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
-            },
-            {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             },
             {
               "card": "__classifier-semantic-any-red-spell__",
@@ -13123,10 +13212,10 @@
         {
           "archetype_id": "broodscale-combo",
           "archetype_name": "Broodscale Combo",
-          "subtype_id": "mono-green",
-          "subtype_name": "Mono-Green",
-          "rule_id": "broodscale-combo-mono-green",
-          "priority": 650000,
+          "subtype_id": "gruul",
+          "subtype_name": "Gruul",
+          "rule_id": "broodscale-combo-gruul-firespout",
+          "priority": 650850,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -13145,20 +13234,12 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-green-source__",
-              "zone": "main",
-              "actual_count": 8,
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 2,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
-            },
-            {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": null,
-              "exact_count": 0
             },
             {
               "card": "__classifier-semantic-any-red-spell__",
@@ -14586,6 +14667,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -14619,6 +14708,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 4,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -15516,8 +15613,8 @@
         "archetype_name": "Broodscale Combo",
         "subtype_id": "gruul",
         "subtype_name": "Gruul",
-        "rule_id": "broodscale-combo-gruul",
-        "priority": 651000
+        "rule_id": "broodscale-combo-gruul-firespout",
+        "priority": 650850
       },
       "matched_rules": [
         {
@@ -15525,8 +15622,8 @@
           "archetype_name": "Broodscale Combo",
           "subtype_id": "gruul",
           "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "rule_id": "broodscale-combo-gruul-firespout",
+          "priority": 650850,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -15545,12 +15642,20 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "Firespout",
+              "zone": "any",
               "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -15561,8 +15666,8 @@
           "archetype_name": "Broodscale Combo",
           "subtype_id": "gruul",
           "subtype_name": "Gruul",
-          "rule_id": "broodscale-combo-gruul",
-          "priority": 651000,
+          "rule_id": "broodscale-combo-gruul-firespout",
+          "priority": 650850,
           "evidence": [
             {
               "card": "Basking Broodscale",
@@ -15581,12 +15686,20 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "Firespout",
+              "zone": "any",
               "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -17149,15 +17262,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -17201,15 +17322,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -20442,6 +20571,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 5,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -20475,6 +20612,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 5,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -20834,6 +20979,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 7,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -20867,6 +21020,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 7,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -25666,15 +25827,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -25754,15 +25923,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -28340,6 +28517,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 7,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -28373,6 +28558,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 7,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -29088,6 +29281,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 5,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -29121,6 +29322,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 5,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -31387,15 +31596,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -31569,15 +31786,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -33121,15 +33346,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -33173,15 +33406,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -35445,15 +35686,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -35497,15 +35746,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -36084,6 +36341,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 7,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -36117,6 +36382,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 7,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -37007,6 +37280,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -37040,6 +37321,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 6,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -43656,15 +43945,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -43708,15 +44005,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -44281,15 +44586,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -44333,15 +44646,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -45793,15 +46114,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -45845,15 +46174,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -55261,6 +55598,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -55294,6 +55639,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 6,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -55505,6 +55858,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -55538,6 +55899,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 3,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -56822,15 +57191,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -56874,15 +57251,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -60928,6 +61313,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -60961,6 +61354,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 9,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -61524,15 +61925,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -61706,15 +62115,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -63072,6 +63489,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 5,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -63105,6 +63530,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 5,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -64022,6 +64455,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -64055,6 +64496,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 3,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -65834,6 +66283,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 7,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -65867,6 +66324,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 7,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -66701,15 +67166,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -66753,15 +67226,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -68396,6 +68877,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 5,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -68429,6 +68918,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 5,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -69952,15 +70449,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -70004,15 +70509,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -72631,15 +73144,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -72683,15 +73204,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -72905,6 +73434,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -72938,6 +73475,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 9,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -73191,6 +73736,14 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -73224,6 +73777,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 4,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -73357,15 +73918,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -73409,15 +73978,23 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
+              "card": "Firespout",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Spell Pierce",
               "zone": "any",
               "actual_count": 0,
               "min_count": null,
@@ -75491,14 +76068,56 @@
       "participant_id": "participant-ff82440369f04483a2a6c01a770473314b9ee2ec1efec8f7c2dc4a4b5f9ca03b",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "domain-zoo",
-        "archetype_name": "Domain Zoo",
+        "archetype_id": "domain-living-end",
+        "archetype_name": "Domain Living End",
         "subtype_id": null,
         "subtype_name": null,
-        "rule_id": "domain-zoo-primary",
-        "priority": 327000
+        "rule_id": "domain-living-end-primary",
+        "priority": 327100
       },
       "matched_rules": [
+        {
+          "archetype_id": "domain-living-end",
+          "archetype_name": "Domain Living End",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-living-end-primary",
+          "priority": 327100,
+          "evidence": [
+            {
+              "card": "Living End",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline of the Guildpact",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Bloodbraid Marauder",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "domain-zoo",
           "archetype_name": "Domain Zoo",
@@ -75536,6 +76155,50 @@
       ],
       "top_priority_matches": [
         {
+          "archetype_id": "domain-living-end",
+          "archetype_name": "Domain Living End",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-living-end-primary",
+          "priority": 327100,
+          "evidence": [
+            {
+              "card": "Living End",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline of the Guildpact",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Bloodbraid Marauder",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
           "archetype_id": "domain-zoo",
           "archetype_name": "Domain Zoo",
           "subtype_id": null,
@@ -75570,7 +76233,6 @@
           ]
         }
       ],
-      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,

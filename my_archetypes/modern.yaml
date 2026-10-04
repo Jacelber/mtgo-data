@@ -907,6 +907,36 @@ archetypes:
       - card: Death's Shadow
         zone: main
         exact_count: 0
+  - id: rakdos-delirium-manipulator
+    priority: 620067
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nethergoyf
+        zone: main
+        min_count: 2
+      - card: Moonshadow
+        zone: main
+        min_count: 2
+      - card: Fear of Missing Out
+        zone: main
+        min_count: 2
+      - card: Detective's Phoenix
+        zone: main
+        min_count: 2
+      - card: Dark Matter Manipulator
+        zone: main
+        min_count: 2
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+      - card: Hollow One
+        zone: main
+        exact_count: 0
+      - card: Death's Shadow
+        zone: main
+        exact_count: 0
+
 - id: rakdos-midrange
   name: Rakdos Midrange
   priority: 620060
@@ -2039,6 +2069,36 @@ archetypes:
       - card: Steam Vents
         zone: main
         min_count: 1
+  - id: prowess-izzet-battlemage
+    priority: 672190
+    subtype_id: izzet
+    conditions:
+      all:
+      - card: Cori-Steel Cutter
+        zone: main
+        min_count: 3
+      - card: Lava Dart
+        zone: main
+        min_count: 3
+      - card: Pompous Battlemage
+        zone: main
+        min_count: 2
+      - card: Preordain
+        zone: main
+        min_count: 2
+      - card: Monastery Swiftspear
+        zone: main
+        max_count: 1
+      - card: __classifier-semantic-any-white-spell__
+        zone: any
+        exact_count: 0
+      - card: __classifier-semantic-any-black-spell__
+        zone: any
+        exact_count: 0
+      - card: __classifier-semantic-any-green-spell__
+        zone: any
+        exact_count: 0
+
 - id: leyline-fling
   name: Leyline Fling
   priority: 673000
@@ -2286,6 +2346,42 @@ archetypes:
       - card: __classifier-semantic-main-black-source__
         zone: main
         exact_count: 0
+  - id: scapeshift-gruul-zenith
+    priority: 666480
+    subtype_id: gruul
+    conditions:
+      all:
+      - card: Scapeshift
+        zone: main
+        min_count: 3
+      - card: Valakut, the Molten Pinnacle
+        zone: main
+        min_count: 3
+      - card: Dryad of the Ilysian Grove
+        zone: main
+        min_count: 3
+      - card: Green Sun's Zenith
+        zone: main
+        min_count: 3
+      - card: Primeval Titan
+        zone: main
+        min_count: 1
+      - card: Amulet of Vigor
+        zone: main
+        exact_count: 0
+      - card: Hexhaven Invigorator
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+
 - id: gruul-valakut
   name: Gruul Valakut
   priority: 666400
@@ -2738,6 +2834,39 @@ archetypes:
       - card: __classifier-semantic-main-red-source__
         zone: main
         exact_count: 0
+  - id: oculus-ritual-bant-coatl
+    priority: 658090
+    subtype_id: bant
+    conditions:
+      all:
+      - card: Abhorrent Oculus
+        zone: main
+        min_count: 2
+      - card: Birthing Ritual
+        zone: main
+        min_count: 3
+      - card: Ice-Fang Coatl
+        zone: main
+        min_count: 2
+      - card: Solitude
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+
 - id: five-color-ritual
   name: Five-Color Ritual
   priority: 324100
@@ -2912,6 +3041,9 @@ archetypes:
       - card: Firespout
         zone: any
         exact_count: 0
+      - card: Spell Pierce
+        zone: any
+        exact_count: 0
   - id: broodscale-combo-simic
     priority: 653000
     subtype_id: simic
@@ -2943,6 +3075,30 @@ archetypes:
       - card: __classifier-semantic-main-black-source__
         zone: main
         min_count: 1
+  - id: broodscale-combo-simic-spell-pierce
+    priority: 652999
+    subtype_id: simic
+    conditions:
+      all:
+      - card: Basking Broodscale
+        zone: main
+        min_count: 3
+      - card: Blade of the Bloodchief
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: Spell Pierce
+        zone: any
+        min_count: 1
+      - card: __classifier-semantic-any-red-spell__
+        zone: any
+        exact_count: 0
+      - card: __classifier-semantic-any-black-spell__
+        zone: any
+        exact_count: 0
+
 - id: eldrazi-tron
   name: Eldrazi Tron
   priority: 649000
@@ -5961,6 +6117,42 @@ archetypes:
       - card: Emperor of Bones
         zone: main
         min_count: 3
+  - id: grixis-persist-frog-emperor
+    priority: 639885
+    subtype_id: null
+    conditions:
+      all:
+      - card: Persist
+        zone: main
+        min_count: 3
+      - card: Archon of Cruelty
+        zone: main
+        min_count: 3
+      - card: Faithless Looting
+        zone: main
+        min_count: 2
+      - card: Psychic Frog
+        zone: main
+        min_count: 2
+      - card: Emperor of Bones
+        zone: main
+        min_count: 2
+      - card: Abhorrent Oculus
+        zone: main
+        exact_count: 0
+      - card: Goryo's Vengeance
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+
 - id: agadeem-persist
   name: Agadeem Persist
   priority: 639800
@@ -6200,6 +6392,33 @@ archetypes:
       - card: Ephemerate
         zone: main
         min_count: 1
+  - id: esper-goryos-emperor-no-ephemerate
+    priority: 641190
+    subtype_id: null
+    conditions:
+      all:
+      - card: Goryo's Vengeance
+        zone: main
+        min_count: 3
+      - card: Atraxa, Grand Unifier
+        zone: main
+        min_count: 3
+      - card: Psychic Frog
+        zone: main
+        min_count: 3
+      - card: Emperor of Bones
+        zone: main
+        min_count: 2
+      - card: Ephemerate
+        zone: main
+        exact_count: 0
+
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
 - id: golgari-goryos
   name: Golgari Goryo's
   priority: 641150
@@ -6884,6 +7103,36 @@ archetypes:
       - card: Persist
         zone: main
         exact_count: 0
+  - id: esper-blink-goryos-hybrid
+    priority: 632790
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 3
+      - card: Quantum Riddler
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: Psychic Frog
+        zone: main
+        min_count: 3
+      - card: Goryo's Vengeance
+        zone: main
+        min_count: 1
+      - card: Goryo's Vengeance
+        zone: main
+        max_count: 2
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+
 - id: azorius-blink
   name: Azorius Blink
   priority: 632200
@@ -7406,6 +7655,42 @@ archetypes:
       - card: Wear/Tear
         zone: any
         exact_count: 0
+  - id: rakdos-hollow-one-looting-overlord
+    priority: 627890
+    subtype_id: rakdos
+    conditions:
+      all:
+      - card: Hollow One
+        zone: main
+        min_count: 3
+      - card: Faithless Looting
+        zone: main
+        min_count: 3
+      - card: Detective's Phoenix
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 2
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+      - card: Burning Inquiry
+        zone: main
+        exact_count: 0
+      - card: Vengevine
+        zone: main
+        exact_count: 0
+      - card: Practiced Offense
+        zone: main
+        exact_count: 0
+      - card: Hardened Academic
+        zone: main
+        exact_count: 0
+      - card: Wear/Tear
+        zone: main
+        exact_count: 0
+
 - id: rakdos-steel-cutter
   name: Rakdos Steel-Cutter
   priority: 674500
@@ -8859,3 +9144,255 @@ archetypes:
       - card: __classifier-semantic-main-black-source__
         zone: main
         exact_count: 0
+- id: invigorator-scapeshift
+  name: Invigorator Scapeshift
+  priority: 666700
+  rules:
+  - id: invigorator-scapeshift-primary
+    priority: 666700
+    subtype_id: null
+    conditions:
+      all:
+      - card: Hexhaven Invigorator
+        zone: main
+        min_count: 2
+      - card: Scapeshift
+        zone: main
+        min_count: 1
+      - card: Valakut, the Molten Pinnacle
+        zone: main
+        min_count: 1
+      - card: Green Sun's Zenith
+        zone: main
+        min_count: 2
+      - card: Amulet of Vigor
+        zone: main
+        exact_count: 0
+- id: sultai-control
+  name: Sultai Control
+  priority: 692009
+  rules:
+  - id: sultai-control-primary
+    priority: 692009
+    subtype_id: null
+    conditions:
+      all:
+      - card: Wan Shi Tong, Librarian
+        zone: main
+        min_count: 2
+      - card: Counterspell
+        zone: main
+        min_count: 2
+      - card: Rakshasa's Bargain
+        zone: main
+        min_count: 2
+      - card: Fatal Push
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        min_count: 1
+      - card: Psychic Frog
+        zone: main
+        exact_count: 0
+- id: boros-legend
+  name: Boros Legend
+  priority: 625500
+  rules:
+  - id: boros-legend-primary
+    priority: 625500
+    subtype_id: null
+    conditions:
+      all:
+      - card: Mox Amber
+        zone: main
+        min_count: 2
+      - card: Merry, Esquire of Rohan
+        zone: main
+        min_count: 2
+      - card: Senu, Keen-Eyed Protector
+        zone: main
+        min_count: 2
+      - card: Quicksilver, Brash Blur
+        zone: main
+        min_count: 2
+- id: golgari-phoenix
+  name: Golgari Phoenix
+  priority: 624500
+  rules:
+  - id: golgari-phoenix-primary
+    priority: 624500
+    subtype_id: null
+    conditions:
+      all:
+      - card: Darklight Phoenix
+        zone: main
+        min_count: 2
+      - card: Buried Alive
+        zone: main
+        min_count: 2
+      - card: Bloodghast
+        zone: main
+        min_count: 2
+      - card: Malevolent Rumble
+        zone: main
+        min_count: 2
+- id: dimir-tron
+  name: Dimir Tron
+  priority: 621100
+  rules:
+  - id: dimir-tron-primary
+    priority: 621100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Urza's Mine
+        zone: main
+        min_count: 3
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 3
+      - card: Urza's Tower
+        zone: main
+        min_count: 3
+      - card: Expedition Map
+        zone: main
+        min_count: 2
+      - card: Force of Negation
+        zone: main
+        min_count: 2
+      - card: Stock Up
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+- id: mono-blue-extra-turn
+  name: Mono-Blue Extra Turn
+  priority: 626100
+  rules:
+  - id: mono-blue-extra-turn-primary
+    priority: 626100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Time Warp
+        zone: main
+        min_count: 2
+      - card: Part the Waterveil
+        zone: main
+        min_count: 2
+      - card: Exhaustion
+        zone: main
+        min_count: 2
+      - card: Gigadrowse
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+- id: restore-balance
+  name: Restore Balance
+  priority: 626200
+  rules:
+  - id: restore-balance-primary
+    priority: 626200
+    subtype_id: null
+    conditions:
+      all:
+      - card: Restore Balance
+        zone: main
+        min_count: 2
+      - card: Greater Gargadon
+        zone: main
+        min_count: 2
+      - card: Shardless Agent
+        zone: main
+        min_count: 2
+- id: mono-white-ponza
+  name: Mono-White Ponza
+  priority: 660970
+  rules:
+  - id: mono-white-ponza-primary
+    priority: 660970
+    subtype_id: null
+    conditions:
+      all:
+      - card: White Orchid Phantom
+        zone: main
+        min_count: 2
+      - card: Field of Ruin
+        zone: main
+        min_count: 2
+      - card: Erode
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+- id: four-color-goryos
+  name: Four-Color Goryo's
+  priority: 641180
+  rules:
+  - id: four-color-goryos-primary
+    priority: 641180
+    subtype_id: null
+    conditions:
+      all:
+      - card: Goryo's Vengeance
+        zone: main
+        min_count: 3
+      - card: Atraxa, Grand Unifier
+        zone: main
+        min_count: 2
+      - card: Ephemerate
+        zone: main
+        min_count: 1
+      - card: Galvanic Discharge
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        min_count: 1
