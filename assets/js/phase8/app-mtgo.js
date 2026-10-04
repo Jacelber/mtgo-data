@@ -940,6 +940,7 @@ async function matchupView() {
   return `${rangeButtons(state.matchupRange, "data-matchup-range")}
     <aside class="source-note" aria-label="${t("source.label")}">
       <p>${t("source.matchups")}</p>
+      <p>${t("source.matchups_scope")}</p>
     </aside>
     ${matchupFreshness(completeness)}
     <section class="panel"><div class="panel-toolbar"><div><h2>${t("matchup.title")}</h2>

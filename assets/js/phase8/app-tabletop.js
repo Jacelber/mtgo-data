@@ -387,6 +387,8 @@ function tabletopMultiEventMatchup(matchupDocument, eventFormat) {
       <strong>${t("tabletop.multi_included_events")}</strong>
       <ul class="quality-list">${includedEvents}</ul>
       <p>${t("tabletop.multi_overview_separate")}</p>
+      <div class="quality-notice"><strong>${t("tabletop.data_quality")}</strong>
+        <ul class="quality-list"><li>${t("tabletop.statistics_scope")}</li></ul></div>
     </div>
     <div class="matchup-view-controls">${matchupFilterControls(viewDocument)}</div>
     ${matchupLegend(viewDocument.min_sample_hint)}${matchupProjection(viewDocument)}`;
@@ -571,10 +573,8 @@ async function tabletopView() {
       })}</li>`
       : `<li>${escapeHtml(issueMessage(issue, eventFormat))}</li>`
   )).join("");
-  const qualityNotice = issueList
-    ? `<div class="quality-notice"><strong>${t("tabletop.data_quality")}</strong>
-        <ul class="quality-list">${issueList}</ul></div>`
-    : "";
+  const qualityNotice = `<div class="quality-notice"><strong>${t("tabletop.data_quality")}</strong>
+    <ul class="quality-list"><li>${t("tabletop.statistics_scope")}</li>${issueList}</ul></div>`;
   const eventSummary = scopeState.multi_event ? "" : `
     <section class="panel event-summary" aria-label="${escapeHtml(overview.event.name)}"><div class="event-title-row"><strong>${escapeHtml(overview.event.name)}</strong>
       <a href="${escapeHtml(overview.event.source_url)}" target="_blank" rel="noopener">${t("tabletop.source_event")}</a></div>

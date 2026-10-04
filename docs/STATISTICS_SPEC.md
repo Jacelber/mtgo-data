@@ -475,18 +475,27 @@ Do not infer every late-round win by a highly ranked player to be an awarded win
 
 ### 6.9 Playoffs
 
-Quarterfinals, semifinals, and finals are excluded from the primary Swiss statistics.
+For Tabletop events, quarterfinals, semifinals, and finals are excluded from
+overview performance statistics and both single-event and combined matchup matrices.
 
 Reasons include:
 
 - very small sample size;
 - different pairing structure;
 - elimination incentives;
+- different time-limit and draw conditions from Swiss rounds;
 - insufficient value for the primary archetype matrix.
 
 Playoff results may be shown separately as event context, final placement, or deck detail.
 
 They must not be merged silently into the primary Swiss win rate or matchup matrix.
+
+MTGO matchup matrices retain their source-based coverage: eligible Videre
+records include both Swiss and available Top 8 playoff matches. They are not
+Swiss-only matrices, and playoff coverage is not guaranteed complete. Their
+source note must disclose this inclusion. Tabletop data-quality notes must
+disclose playoff exclusion for overview performance and single-event or combined
+matrices, while distinguishing final standings, which retain playoff outcomes.
 
 ### 6.10 Disqualified participants
 
@@ -1257,7 +1266,7 @@ The inverse cell must reconcile:
 
 ### 11.2 Primary exclusions
 
-The primary matrix excludes:
+The primary Tabletop matrix excludes:
 
 - mirrors, unless a mirror cell is shown separately;
 - byes;
