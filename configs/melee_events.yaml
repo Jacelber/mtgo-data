@@ -1,6 +1,56 @@
 schema_version: "3.1.0"
 
 events:
+  - id: "411350"
+    url: "https://melee.gg/Tournament/View/411350"
+    name: "Champions Cup Final Season 5 Round 1"
+    date:
+      start: "2026-10-03"
+      end: "2026-10-04"
+    format: "modern"
+    series: "regional_championship"
+    structure: "constructed_single_stage"
+    enabled: true
+    review_status: "verified"
+    tabletop: true
+    team_event: false
+    mixed_format: false
+    raw_requests:
+      - id: "tournament"
+        resource_type: "tournament"
+        url: "https://melee.gg/Tournament/View/411350"
+        content_type: "html"
+    include:
+      swiss: true
+      playoffs: true
+    phases:
+      - id: "single_stage_modern"
+        stage: "day1"
+        round_phase: "constructed"
+        game_format: "modern"
+        swiss: true
+        rounds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+      - id: "top8_modern"
+        stage: "playoff"
+        round_phase: "playoff"
+        game_format: "modern"
+        swiss: false
+        source_labels: ["Quarterfinals", "Semifinals", "Finals"]
+    reviewed_overrides: []
+    statistics:
+      default_match_scope: "all_constructed_swiss"
+      constructed_game_format: "modern"
+      include_playoffs: false
+    source_evidence:
+      - "https://melee.gg/Tournament/View/411350"
+      - "https://ssl.bigmagic.net/championscup/factsheet-final-season5?round=1"
+    special_handling:
+      - "The organizer schedules eight Swiss rounds on October 3 and five on October 4, followed by a Top 8 playoff; the same Modern deck is used on both dates."
+      - "Owner confirmed there is no cut between the two calendar days and requested 1daynocut handling: all thirteen Swiss rounds belong to one constructed_single_stage field."
+      - "The day1 stage is the existing single-stage statistical representation, not the calendar date; no Day 2 advancement or conversion applies."
+      - "Quarterfinals, Semifinals, and Finals remain contextual only and are excluded from primary Modern Swiss statistics."
+    notes: "BIG MAGIC's completed individual Japan and South Korea Regional Championship at Pacifico Yokohama. Official Melee page and organizer factsheet verified on 2026-10-04; Owner requested cloud collection for this event."
+
   - id: "451148"
     url: "https://melee.gg/Tournament/View/451148"
     name: "龙盾杯 MTG China Open S13 Regional Championship"
