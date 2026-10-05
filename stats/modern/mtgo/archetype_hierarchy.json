@@ -2,11 +2,11 @@
   "schema_version": "1.1.0",
   "format": "modern",
   "source": "mtgo",
-  "classifier_digest": "f66e1d5a6353efa2ec05a6c2ddea0595e4a7916ca14c1b41b35616465129e04b",
-  "rules_updated": "2026-10-04T22:08:44+09:00",
+  "classifier_digest": "415749058c900300d8e070b89f37aa14e89f69b5106b2b7d9ee1e68917bcfee6",
+  "rules_updated": "2026-10-05T23:32:07+09:00",
   "summary": {
-    "parents": 207,
-    "leaves": 278,
+    "parents": 212,
+    "leaves": 286,
     "expandable_parents": 23
   },
   "parents": [
@@ -148,6 +148,12 @@
       "subtype_ids": []
     },
     {
+      "id": "bant-energy",
+      "name": "Bant Energy",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "bant-reclamation",
       "name": "Bant Reclamation",
       "expandable": false,
@@ -168,6 +174,12 @@
     {
       "id": "boros-belcher",
       "name": "Boros Belcher",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "boros-dragon",
+      "name": "Boros Dragon",
       "expandable": false,
       "subtype_ids": []
     },
@@ -216,6 +228,7 @@
       "expandable": true,
       "subtype_ids": [
         "chant-control/azorius",
+        "chant-control/bant",
         "chant-control/esper",
         "chant-control/jeskai"
       ]
@@ -407,16 +420,11 @@
         "eldrazi-ramp/golgari",
         "eldrazi-ramp/gruul",
         "eldrazi-ramp/mono-green",
+        "eldrazi-ramp/selesnya",
         "eldrazi-ramp/simic",
         "eldrazi-ramp/sultai",
         "eldrazi-ramp/temur"
       ]
-    },
-    {
-      "id": "eldrazi-ramp-chant",
-      "name": "Eldrazi Ramp Chant",
-      "expandable": false,
-      "subtype_ids": []
     },
     {
       "id": "eldrazi-tron",
@@ -557,6 +565,12 @@
       "subtype_ids": []
     },
     {
+      "id": "germinate-recruits",
+      "name": "Germinate Recruits",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "glimpse-of-tomorrow",
       "name": "Glimpse of Tomorrow",
       "expandable": false,
@@ -595,6 +609,12 @@
     {
       "id": "golgari-yawgmoth",
       "name": "Golgari Yawgmoth",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "grixis-control",
+      "name": "Grixis Control",
       "expandable": false,
       "subtype_ids": []
     },
@@ -820,6 +840,12 @@
       "subtype_ids": []
     },
     {
+      "id": "jeskai-fiend",
+      "name": "Jeskai Fiend",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "jeskai-ponza",
       "name": "Jeskai Ponza",
       "expandable": false,
@@ -918,6 +944,12 @@
     {
       "id": "mardu-zombies",
       "name": "Mardu Zombies",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-black-discard",
+      "name": "Mono-Black Discard",
       "expandable": false,
       "subtype_ids": []
     },
@@ -1040,6 +1072,7 @@
       "name": "Necrodominance",
       "expandable": true,
       "subtype_ids": [
+        "necrodominance/abzan",
         "necrodominance/cosmogoyf",
         "necrodominance/dimir",
         "necrodominance/golgari",
@@ -1574,6 +1607,14 @@
       "subtype_id": null
     },
     {
+      "id": "bant-energy",
+      "kind": "archetype",
+      "name": "Bant Energy",
+      "display_name": "Bant Energy",
+      "parent_id": "bant-energy",
+      "subtype_id": null
+    },
+    {
       "id": "bant-reclamation",
       "kind": "archetype",
       "name": "Bant Reclamation",
@@ -1603,6 +1644,14 @@
       "name": "Boros Belcher",
       "display_name": "Boros Belcher",
       "parent_id": "boros-belcher",
+      "subtype_id": null
+    },
+    {
+      "id": "boros-dragon",
+      "kind": "archetype",
+      "name": "Boros Dragon",
+      "display_name": "Boros Dragon",
+      "parent_id": "boros-dragon",
       "subtype_id": null
     },
     {
@@ -1692,6 +1741,14 @@
       "display_name": "Azorius Chant Control",
       "parent_id": "chant-control",
       "subtype_id": "azorius"
+    },
+    {
+      "id": "chant-control/bant",
+      "kind": "subtype",
+      "name": "Bant",
+      "display_name": "Bant Chant Control",
+      "parent_id": "chant-control",
+      "subtype_id": "bant"
     },
     {
       "id": "chant-control/esper",
@@ -2022,6 +2079,14 @@
       "subtype_id": "mono-green"
     },
     {
+      "id": "eldrazi-ramp/selesnya",
+      "kind": "subtype",
+      "name": "Selesnya",
+      "display_name": "Selesnya Eldrazi Ramp",
+      "parent_id": "eldrazi-ramp",
+      "subtype_id": "selesnya"
+    },
+    {
       "id": "eldrazi-ramp/simic",
       "kind": "subtype",
       "name": "Simic",
@@ -2044,14 +2109,6 @@
       "display_name": "Temur Eldrazi Ramp",
       "parent_id": "eldrazi-ramp",
       "subtype_id": "temur"
-    },
-    {
-      "id": "eldrazi-ramp-chant",
-      "kind": "archetype",
-      "name": "Eldrazi Ramp Chant",
-      "display_name": "Eldrazi Ramp Chant",
-      "parent_id": "eldrazi-ramp-chant",
-      "subtype_id": null
     },
     {
       "id": "eldrazi-tron/colorless",
@@ -2262,6 +2319,14 @@
       "subtype_id": null
     },
     {
+      "id": "germinate-recruits",
+      "kind": "archetype",
+      "name": "Germinate Recruits",
+      "display_name": "Germinate Recruits",
+      "parent_id": "germinate-recruits",
+      "subtype_id": null
+    },
+    {
       "id": "glimpse-of-tomorrow",
       "kind": "archetype",
       "name": "Glimpse of Tomorrow",
@@ -2315,6 +2380,14 @@
       "name": "Golgari Yawgmoth",
       "display_name": "Golgari Yawgmoth",
       "parent_id": "golgari-yawgmoth",
+      "subtype_id": null
+    },
+    {
+      "id": "grixis-control",
+      "kind": "archetype",
+      "name": "Grixis Control",
+      "display_name": "Grixis Control",
+      "parent_id": "grixis-control",
       "subtype_id": null
     },
     {
@@ -2654,6 +2727,14 @@
       "subtype_id": null
     },
     {
+      "id": "jeskai-fiend",
+      "kind": "archetype",
+      "name": "Jeskai Fiend",
+      "display_name": "Jeskai Fiend",
+      "parent_id": "jeskai-fiend",
+      "subtype_id": null
+    },
+    {
       "id": "jeskai-ponza",
       "kind": "archetype",
       "name": "Jeskai Ponza",
@@ -2814,6 +2895,14 @@
       "subtype_id": null
     },
     {
+      "id": "mono-black-discard",
+      "kind": "archetype",
+      "name": "Mono-Black Discard",
+      "display_name": "Mono-Black Discard",
+      "parent_id": "mono-black-discard",
+      "subtype_id": null
+    },
+    {
       "id": "mono-black-eldrazi",
       "kind": "archetype",
       "name": "Mono-Black Eldrazi",
@@ -2964,6 +3053,14 @@
       "display_name": "Naya Midrange",
       "parent_id": "naya-midrange",
       "subtype_id": null
+    },
+    {
+      "id": "necrodominance/abzan",
+      "kind": "subtype",
+      "name": "Abzan",
+      "display_name": "Abzan Necrodominance",
+      "parent_id": "necrodominance",
+      "subtype_id": "abzan"
     },
     {
       "id": "necrodominance/cosmogoyf",

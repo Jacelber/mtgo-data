@@ -472,6 +472,13 @@ def _display_english(parent_name: str, subtype_name: str | None) -> str:
     subtype_words = subtype_name.split()
     if subtype_words == parent_words[: len(subtype_words)]:
         return parent_name
+    # A fully spelled subtype already supplies the family noun, including
+    # reviewed singular names such as Jund Garden under Golgari Gardens.
+    family_noun = parent_words[-1]
+    if len(subtype_words) > 1 and subtype_words[-1] in {
+        family_noun, family_noun[:-1] if family_noun.endswith("s") else family_noun
+    }:
+        return subtype_name
     color_prefixes = {
         "Azorius",
         "Bant",

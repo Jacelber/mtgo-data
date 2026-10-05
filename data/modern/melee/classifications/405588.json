@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "f66e1d5a6353efa2ec05a6c2ddea0595e4a7916ca14c1b41b35616465129e04b"
+    "digest": "415749058c900300d8e070b89f37aa14e89f69b5106b2b7d9ee1e68917bcfee6"
   },
   "input": {
     "event_path": "data/modern/melee/events/405588.json",
@@ -18,11 +18,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "378e0fa7ae0bd5ac428bd115fae01e58d13c2f04e37d602abd1e5e44982c7b08",
+    "rule_sha256": "7605cafc62ce6b943235a3d1d4e4bd3516a52490d5b4deb76a8f417448787d59",
     "rule_schema_version": "1.1.0",
-    "archetype_count": 207,
-    "rule_count": 373,
-    "subtype_count": 95
+    "archetype_count": 212,
+    "rule_count": 387,
+    "subtype_count": 98
   },
   "summary": {
     "total_records": 1494,
@@ -30,11 +30,11 @@
     "unknown": 5,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 435,
-    "overridden_matches": 435,
-    "selected_subtypes": 704,
-    "parent_only": 785,
-    "same_parent_multiple_subtype_matches": 22,
+    "multiple_matches": 447,
+    "overridden_matches": 447,
+    "selected_subtypes": 703,
+    "parent_only": 786,
+    "same_parent_multiple_subtype_matches": 24,
     "residual_subtype_violations": 0,
     "selected_by_parent": {
       "affinity": 86,
@@ -65,7 +65,7 @@
       "dimir-goryos": 1,
       "dimir-legends": 1,
       "dimir-mill": 7,
-      "dimir-tempo": 89,
+      "dimir-tempo": 88,
       "domain-zoo": 40,
       "dredge": 1,
       "eight-rack": 1,
@@ -83,6 +83,7 @@
       "five-color-ritual": 2,
       "fling-goyf": 4,
       "golgari-yawgmoth": 10,
+      "grixis-control": 1,
       "grixis-creativity-goryos": 1,
       "grixis-goryos": 6,
       "grixis-persist": 12,
@@ -150,7 +151,7 @@
       "devoted-druid-combo/abzan": 59,
       "dimir-tempo/dimir": 75,
       "dimir-tempo/esper": 8,
-      "dimir-tempo/grixis": 6,
+      "dimir-tempo/grixis": 5,
       "eldrazi-ramp/golgari": 5,
       "eldrazi-ramp/gruul": 4,
       "eldrazi-ramp/mono-green": 1,
@@ -4383,6 +4384,96 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -4461,7 +4552,98 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -12623,14 +12805,136 @@
       "participant_id": "participant-0dcad9849f1ebd540a7236dd3aef6612283651bc6d3b614ed00e451cb8f2f6c9",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "dimir-tempo",
-        "archetype_name": "Dimir Tempo",
-        "subtype_id": "grixis",
-        "subtype_name": "Dimir Red Splash",
-        "rule_id": "dimir-tempo-grixis",
-        "priority": 638000
+        "archetype_id": "grixis-control",
+        "archetype_name": "Grixis Control",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "grixis-control-primary",
+        "priority": 692009
       },
       "matched_rules": [
+        {
+          "archetype_id": "grixis-control",
+          "archetype_name": "Grixis Control",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "grixis-control-primary",
+          "priority": 692009,
+          "evidence": [
+            {
+              "card": "Snapcaster Mage",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Flame of Anor",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Fatal Push",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Consult the Star Charts",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Steam Vents",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Dragon's Rage Channeler",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Ragavan, Nimble Pilferer",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
         {
           "archetype_id": "dimir-tempo",
           "archetype_name": "Dimir Tempo",
@@ -13038,6 +13342,130 @@
       ],
       "top_priority_matches": [
         {
+          "archetype_id": "grixis-control",
+          "archetype_name": "Grixis Control",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "grixis-control-primary",
+          "priority": 692009,
+          "evidence": [
+            {
+              "card": "Snapcaster Mage",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Flame of Anor",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Fatal Push",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Consult the Star Charts",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Steam Vents",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Dragon's Rage Channeler",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Ragavan, Nimble Pilferer",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
           "archetype_id": "dimir-tempo",
           "archetype_name": "Dimir Tempo",
           "subtype_id": "grixis",
@@ -13086,9 +13514,7 @@
               "exact_count": null
             }
           ]
-        }
-      ],
-      "overridden_matches": [
+        },
         {
           "archetype_id": "izzet-wizards",
           "archetype_name": "Izzet Wizards",
@@ -15329,6 +15755,96 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -15407,7 +15923,98 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -16403,6 +17010,96 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -16481,7 +17178,98 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -42792,6 +43580,48 @@
         {
           "archetype_id": "chant-control",
           "archetype_name": "Chant Control",
+          "subtype_id": "bant",
+          "subtype_name": "Bant",
+          "rule_id": "chant-control-bant",
+          "priority": 305975,
+          "evidence": [
+            {
+              "card": "Orim's Chant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Planar Genesis",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
+        {
+          "archetype_id": "chant-control",
+          "archetype_name": "Chant Control",
           "subtype_id": "azorius",
           "subtype_name": "Azorius",
           "rule_id": "chant-control-azorius",
@@ -42901,6 +43731,48 @@
         }
       ],
       "overridden_matches": [
+        {
+          "archetype_id": "chant-control",
+          "archetype_name": "Chant Control",
+          "subtype_id": "bant",
+          "subtype_name": "Bant",
+          "rule_id": "chant-control-bant",
+          "priority": 305975,
+          "evidence": [
+            {
+              "card": "Orim's Chant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Planar Genesis",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
         {
           "archetype_id": "chant-control",
           "archetype_name": "Chant Control",
@@ -49136,6 +50008,96 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -49214,7 +50176,98 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -51095,6 +52148,96 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -51173,7 +52316,98 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -88142,7 +89376,7 @@
               "card": "Wrath of the Skies",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -88254,7 +89488,7 @@
               "card": "Wrath of the Skies",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -105833,6 +107067,96 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -105911,7 +107235,98 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -113970,6 +115385,96 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -114048,7 +115553,98 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -115589,6 +117185,48 @@
         {
           "archetype_id": "chant-control",
           "archetype_name": "Chant Control",
+          "subtype_id": "bant",
+          "subtype_name": "Bant",
+          "rule_id": "chant-control-bant",
+          "priority": 305975,
+          "evidence": [
+            {
+              "card": "Orim's Chant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Planar Genesis",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
+        {
+          "archetype_id": "chant-control",
+          "archetype_name": "Chant Control",
           "subtype_id": "azorius",
           "subtype_name": "Azorius",
           "rule_id": "chant-control-azorius",
@@ -115698,6 +117336,48 @@
         }
       ],
       "overridden_matches": [
+        {
+          "archetype_id": "chant-control",
+          "archetype_name": "Chant Control",
+          "subtype_id": "bant",
+          "subtype_name": "Bant",
+          "rule_id": "chant-control-bant",
+          "priority": 305975,
+          "evidence": [
+            {
+              "card": "Orim's Chant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Planar Genesis",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
         {
           "archetype_id": "chant-control",
           "archetype_name": "Chant Control",
@@ -120821,6 +122501,96 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -120899,7 +122669,98 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -121789,6 +123650,96 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -121867,7 +123818,98 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -122065,6 +124107,96 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -122143,7 +124275,98 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -134141,7 +136364,7 @@
               "card": "Consult the Star Charts",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -134149,7 +136372,7 @@
               "card": "Wan Shi Tong, Librarian",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -134241,7 +136464,7 @@
               "card": "Consult the Star Charts",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -134249,7 +136472,7 @@
               "card": "Wan Shi Tong, Librarian",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -141692,6 +143915,96 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -141770,7 +144083,98 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -151551,6 +153955,96 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -151629,7 +154123,98 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "dimir-tempo",
+          "archetype_name": "Dimir Tempo",
+          "subtype_id": "dimir",
+          "subtype_name": "Dimir",
+          "rule_id": "dimir-tempo-dimir-frog-counterspell",
+          "priority": 212009,
+          "evidence": [
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Counterspell",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Drown in the Loch",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Watery Grave",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Persist",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -177872,7 +180457,7 @@
               "card": "Wrath of the Skies",
               "zone": "main",
               "actual_count": 2,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -177940,7 +180525,7 @@
               "card": "Wrath of the Skies",
               "zone": "main",
               "actual_count": 2,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -181999,7 +184584,7 @@
               "card": "Consult the Star Charts",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -182007,7 +184592,7 @@
               "card": "Wan Shi Tong, Librarian",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -182099,7 +184684,7 @@
               "card": "Consult the Star Charts",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -182107,7 +184692,7 @@
               "card": "Wan Shi Tong, Librarian",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -227634,7 +230219,7 @@
               "card": "Wrath of the Skies",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -227702,7 +230287,7 @@
               "card": "Wrath of the Skies",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },

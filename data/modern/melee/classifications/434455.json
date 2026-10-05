@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "f66e1d5a6353efa2ec05a6c2ddea0595e4a7916ca14c1b41b35616465129e04b"
+    "digest": "415749058c900300d8e070b89f37aa14e89f69b5106b2b7d9ee1e68917bcfee6"
   },
   "input": {
     "event_path": "data/modern/melee/events/434455.json",
@@ -18,11 +18,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "378e0fa7ae0bd5ac428bd115fae01e58d13c2f04e37d602abd1e5e44982c7b08",
+    "rule_sha256": "7605cafc62ce6b943235a3d1d4e4bd3516a52490d5b4deb76a8f417448787d59",
     "rule_schema_version": "1.1.0",
-    "archetype_count": 207,
-    "rule_count": 373,
-    "subtype_count": 95
+    "archetype_count": 212,
+    "rule_count": 387,
+    "subtype_count": 98
   },
   "summary": {
     "total_records": 362,
@@ -34,7 +34,7 @@
     "overridden_matches": 56,
     "selected_subtypes": 126,
     "parent_only": 236,
-    "same_parent_multiple_subtype_matches": 4,
+    "same_parent_multiple_subtype_matches": 5,
     "residual_subtype_violations": 0,
     "selected_by_parent": {
       "affinity": 46,
@@ -7291,7 +7291,7 @@
               "card": "Wrath of the Skies",
               "zone": "main",
               "actual_count": 2,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -7359,7 +7359,7 @@
               "card": "Wrath of the Skies",
               "zone": "main",
               "actual_count": 2,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -11830,7 +11830,7 @@
               "card": "Wrath of the Skies",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -11898,7 +11898,7 @@
               "card": "Wrath of the Skies",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 2,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -32169,6 +32169,48 @@
         {
           "archetype_id": "chant-control",
           "archetype_name": "Chant Control",
+          "subtype_id": "bant",
+          "subtype_name": "Bant",
+          "rule_id": "chant-control-bant",
+          "priority": 305975,
+          "evidence": [
+            {
+              "card": "Orim's Chant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Planar Genesis",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
+        {
+          "archetype_id": "chant-control",
+          "archetype_name": "Chant Control",
           "subtype_id": "azorius",
           "subtype_name": "Azorius",
           "rule_id": "chant-control-azorius",
@@ -32278,6 +32320,48 @@
         }
       ],
       "overridden_matches": [
+        {
+          "archetype_id": "chant-control",
+          "archetype_name": "Chant Control",
+          "subtype_id": "bant",
+          "subtype_name": "Bant",
+          "rule_id": "chant-control-bant",
+          "priority": 305975,
+          "evidence": [
+            {
+              "card": "Orim's Chant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Planar Genesis",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
         {
           "archetype_id": "chant-control",
           "archetype_name": "Chant Control",

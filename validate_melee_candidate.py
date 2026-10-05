@@ -146,12 +146,20 @@ def _validate_json_identity(
                 f"{change.path}: format does not match {format_id}"
             )
         return failures
+    if change.path == f"data/{format_id}/melee/events/{event_id}.json":
+        identity = value.get("metadata")
+        if not isinstance(identity, dict):
+            return [f"{change.path}: event metadata is missing or invalid"]
+        actual_format = identity.get("constructed_format")
+    else:
+        identity = value
+        actual_format = identity.get("format")
     if change.path != f"stats/{format_id}/melee/index.json":
-        if value.get("event_id") != event_id:
+        if identity.get("event_id") != event_id:
             failures.append(f"{change.path}: event_id does not match {event_id}")
-    if value.get("format") != format_id:
+    if actual_format != format_id:
         failures.append(f"{change.path}: format does not match {format_id}")
-    if value.get("source") != "melee":
+    if identity.get("source") != "melee":
         failures.append(f"{change.path}: source must equal melee")
     return failures
 

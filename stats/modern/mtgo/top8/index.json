@@ -3,9 +3,9 @@
   "document_type": "top8_index",
   "source": "mtgo",
   "format": "modern",
-  "classifier_digest": "f66e1d5a6353efa2ec05a6c2ddea0595e4a7916ca14c1b41b35616465129e04b",
-  "generated": "2026-10-05T10:51:07",
-  "latest_complete_week": "2026-09-21",
+  "classifier_digest": "415749058c900300d8e070b89f37aa14e89f69b5106b2b7d9ee1e68917bcfee6",
+  "generated": "2026-10-05T23:13:49",
+  "latest_complete_week": "2026-09-28",
   "history_policy": "source_immutable_classifier_restatement",
   "classification_impact": {
     "weeks": [
@@ -24,10 +24,21 @@
         "week": "2026-07-27",
         "previous_classifier_digest": "f66e1d5a6353efa2ec05a6c2ddea0595e4a7916ca14c1b41b35616465129e04b",
         "added_event_ids": [],
-        "classification_changes": [],
+        "classification_changes": [
+          {
+            "event_id": "12849474",
+            "rank": 5,
+            "before": "eldrazi-ramp-chant",
+            "after": "eldrazi-ramp/selesnya"
+          }
+        ],
         "comparison_base_changes": {
-          "added_identity_ids": [],
-          "removed_identity_ids": [],
+          "added_identity_ids": [
+            "eldrazi-ramp/selesnya"
+          ],
+          "removed_identity_ids": [
+            "eldrazi-ramp-chant"
+          ],
           "changed_identity_ids": []
         }
       },
@@ -35,10 +46,21 @@
         "week": "2026-08-03",
         "previous_classifier_digest": "f66e1d5a6353efa2ec05a6c2ddea0595e4a7916ca14c1b41b35616465129e04b",
         "added_event_ids": [],
-        "classification_changes": [],
+        "classification_changes": [
+          {
+            "event_id": "12851108",
+            "rank": 1,
+            "before": "eldrazi-ramp-chant",
+            "after": "eldrazi-ramp/selesnya"
+          }
+        ],
         "comparison_base_changes": {
-          "added_identity_ids": [],
-          "removed_identity_ids": [],
+          "added_identity_ids": [
+            "eldrazi-ramp/selesnya"
+          ],
+          "removed_identity_ids": [
+            "eldrazi-ramp-chant"
+          ],
           "changed_identity_ids": []
         }
       },
@@ -46,10 +68,21 @@
         "week": "2026-08-10",
         "previous_classifier_digest": "f66e1d5a6353efa2ec05a6c2ddea0595e4a7916ca14c1b41b35616465129e04b",
         "added_event_ids": [],
-        "classification_changes": [],
+        "classification_changes": [
+          {
+            "event_id": "12851118",
+            "rank": 5,
+            "before": "eldrazi-ramp-chant",
+            "after": "eldrazi-ramp/selesnya"
+          }
+        ],
         "comparison_base_changes": {
-          "added_identity_ids": [],
-          "removed_identity_ids": [],
+          "added_identity_ids": [
+            "eldrazi-ramp/selesnya"
+          ],
+          "removed_identity_ids": [
+            "eldrazi-ramp-chant"
+          ],
           "changed_identity_ids": []
         }
       },
@@ -118,15 +151,79 @@
           "removed_identity_ids": [],
           "changed_identity_ids": []
         }
+      },
+      {
+        "week": "2026-09-28",
+        "previous_classifier_digest": null,
+        "added_event_ids": [
+          "12854940",
+          "12854942",
+          "12854949",
+          "12854950",
+          "12855444",
+          "12855448",
+          "12855450",
+          "12855453",
+          "12855459",
+          "12855469",
+          "12855474",
+          "12855475",
+          "12855490"
+        ],
+        "classification_changes": [],
+        "comparison_base_changes": {
+          "added_identity_ids": [
+            "affinity",
+            "amulet-titan",
+            "boros-belcher",
+            "boros-energy",
+            "boros-land-destruction",
+            "broodscale-combo/golgari",
+            "broodscale-combo/mono-green",
+            "chant-control/azorius",
+            "chant-control/jeskai",
+            "devoted-druid-combo/abzan",
+            "dimir-control",
+            "dimir-tempo/dimir",
+            "domain-zoo",
+            "eldrazi-tron/mono-green",
+            "esper-blink",
+            "esper-goryos",
+            "esper-ketramose",
+            "fight-rigging",
+            "five-color-creativity",
+            "grixis-control",
+            "hollowvine",
+            "izzet-tempo",
+            "living-end/temur",
+            "mono-blue-belcher",
+            "prowess/izzet",
+            "rakdos-delirium",
+            "ruby-storm",
+            "simic-neoform"
+          ],
+          "removed_identity_ids": [],
+          "changed_identity_ids": []
+        }
       }
     ],
     "summary": {
-      "retained_week_count": 10,
-      "added_event_count": 0,
-      "classification_change_count": 0
+      "retained_week_count": 11,
+      "added_event_count": 13,
+      "classification_change_count": 3
     }
   },
   "weeks": [
+    {
+      "file": "2026-W40.json",
+      "comparison_bases_file": "2026-W40-bases.json",
+      "start": "2026-09-28",
+      "end": "2026-10-04",
+      "event_count": 13,
+      "status": "provisional",
+      "provisional_through": "2026-10-11",
+      "seal_on": "2026-10-12"
+    },
     {
       "file": "2026-W39.json",
       "comparison_bases_file": "2026-W39-bases.json",

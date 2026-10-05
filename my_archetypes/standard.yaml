@@ -234,6 +234,23 @@ archetypes:
         min_count: 3
       - card: Monument to Endurance
         min_count: 3
+  - id: monument-lessons-geist-lessons
+    priority: 75990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Geist of Saint Thalia
+        zone: main
+        min_count: 1
+      - card: Accumulate Wisdom
+        zone: main
+        min_count: 1
+      - card: Monument to Endurance
+        zone: main
+        min_count: 1
+      - card: Firebending Lesson
+        zone: main
+        min_count: 1
 - id: jeskai-lessons
   name: Jeskai Lessons
   priority: 75000
@@ -653,6 +670,35 @@ archetypes:
       - card: Inevitable Defeat
         zone: any
         exact_count: 0
+  - id: jeskai-control-stock-up-helix
+    priority: 56980
+    subtype_id: null
+    conditions:
+      all:
+      - card: Stock Up
+        zone: main
+        min_count: 1
+      - card: No More Lies
+        zone: main
+        min_count: 1
+      - card: Lightning Helix
+        zone: main
+        min_count: 1
+      - card: Day of Judgment
+        zone: main
+        min_count: 1
+      - card: Way of the Pyromancer
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: Jeskai Revelation
+        zone: any
+        exact_count: 0
 - id: boros-dragons
   name: Boros Dragons
   priority: 55000
@@ -809,6 +855,26 @@ archetypes:
       - card: Stormchaser's Talent
         zone: main
         exact_count: 0
+  - id: izzet-prowess-battlemage-cantrips
+    priority: 51008
+    subtype_id: null
+    conditions:
+      all:
+      - card: Slickshot Show-Off
+        zone: main
+        min_count: 1
+      - card: Pompous Battlemage
+        zone: main
+        min_count: 1
+      - card: Opt
+        zone: main
+        min_count: 1
+      - card: Sleight of Hand
+        zone: main
+        min_count: 1
+      - card: Flow State
+        zone: main
+        min_count: 1
 - id: bant-airbending
   name: Bant Airbending
   priority: 50000
@@ -1602,6 +1668,26 @@ archetypes:
       - card: Spirebluff Canal
         zone: main
         min_count: 1
+  - id: izzet-aggro-stingcaster-burn
+    priority: 21990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Hired Claw
+        zone: main
+        min_count: 1
+      - card: Stingcaster Mage
+        zone: main
+        min_count: 1
+      - card: Boltwave
+        zone: main
+        min_count: 1
+      - card: Gandalf, Goblins' Bane
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        min_count: 1
 - id: gruul-delirium
   name: Gruul Delirium
   priority: 21000
@@ -2017,6 +2103,38 @@ archetypes:
       - card: Unholy Annex // Ritual Chamber
         zone: any
         max_count: 1
+  - id: golgari-midrange-wastewood
+    priority: 1980
+    subtype_id: null
+    conditions:
+      all:
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
+      - card: Wastewood Verge
+        zone: main
+        min_count: 1
+      - card: Requiting Hex
+        zone: main
+        min_count: 1
+      - card: Nature's Rhythm
+        zone: any
+        exact_count: 0
+      - card: Flow State
+        zone: any
+        exact_count: 0
+      - card: Unholy Annex // Ritual Chamber
+        zone: any
+        max_count: 1
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
 - id: selesnya-midrange
   name: Selesnya Midrange
   priority: 1000
@@ -2241,13 +2359,13 @@ archetypes:
       - card: Get Lost
         zone: main
         min_count: 1
-- id: orzhov-lifegain
-  name: Orzhov Lifegain
+- id: lifegain
+  name: Lifegain
   priority: 77000
   rules:
-  - id: orzhov-lifegain-primary
+  - id: lifegain-orzhov
     priority: 77000
-    subtype_id: null
+    subtype_id: orzhov
     conditions:
       all:
       - card: Amalia Benavides Aguirre
@@ -2262,6 +2380,62 @@ archetypes:
       - card: Godless Shrine
         zone: main
         min_count: 2
+  - id: lifegain-abzan
+    priority: 77010
+    subtype_id: abzan
+    conditions:
+      all:
+      - card: Amalia Benavides Aguirre
+        zone: main
+        min_count: 1
+      - card: Hinterland Sanctifier
+        zone: main
+        min_count: 1
+      - card: Lunar Convocation
+        zone: main
+        min_count: 1
+      - card: Case of the Uneaten Feast
+        zone: main
+        min_count: 1
+      - card: Way of the Paradox
+        zone: main
+        min_count: 1
+      - card: Professor Dellian Fel
+        zone: main
+        min_count: 1
+  - id: lifegain-mono-white
+    priority: 77020
+    subtype_id: mono-white
+    conditions:
+      all:
+      - card: Case of the Uneaten Feast
+        zone: main
+        min_count: 1
+      - card: Haliya, Guided by Light
+        zone: main
+        min_count: 1
+      - card: Leonardo, Cutting Edge
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+  subtypes:
+  - id: orzhov
+    name: Orzhov Lifegain
+  - id: abzan
+    name: Abzan Lifegain
+  - id: mono-white
+    name: Mono-White Lifegain
 - id: five-color-humans
   name: Five-Color Humans
   priority: 25990
@@ -2903,6 +3077,35 @@ archetypes:
       - card: __classifier-semantic-main-black-source__
         zone: main
         exact_count: 0
+  - id: gruul-ramp-heartwood-roxanne
+    priority: 67860
+    subtype_id: null
+    conditions:
+      all:
+      - card: Heartwood Crafter
+        zone: main
+        min_count: 1
+      - card: Roxanne, Starfall Savant
+        zone: main
+        min_count: 1
+      - card: Dowsing Device
+        zone: main
+        min_count: 1
+      - card: Trumpeting Carnosaur
+        zone: main
+        min_count: 1
+      - card: Stomping Ground
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
 - id: break-out-aggro
   name: Break Out Aggro
   priority: 67950
@@ -3041,6 +3244,29 @@ archetypes:
       - card: Godless Shrine
         zone: main
         min_count: 1
+  - id: orzhov-midrange-dual-land-fallback
+    priority: 1900
+    subtype_id: null
+    conditions:
+      all:
+      - card: Godless Shrine
+        zone: main
+        min_count: 1
+      - card: Concealed Courtyard
+        zone: main
+        min_count: 1
+      - card: Deep-Cavern Bat
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
 - id: naya-delirium
   name: Naya Delirium
   priority: 77190
@@ -3206,6 +3432,26 @@ archetypes:
       - card: Godless Shrine
         zone: main
         min_count: 2
+  - id: orzhov-sacrifice-bloodwitch-bartolome
+    priority: 77219
+    subtype_id: null
+    conditions:
+      all:
+      - card: Sephiroth, Fabled SOLDIER
+        zone: main
+        min_count: 1
+      - card: Vengeful Bloodwitch
+        zone: main
+        min_count: 1
+      - card: Bartolomé del Presidio
+        zone: main
+        min_count: 1
+      - card: The Sackville-Bagginses
+        zone: main
+        min_count: 1
+      - card: Godless Shrine
+        zone: main
+        min_count: 1
 - id: bant-control
   name: Bant Control
   priority: 77210
@@ -3228,5 +3474,242 @@ archetypes:
         zone: main
         min_count: 1
       - card: Temple Garden
+        zone: main
+        min_count: 1
+
+- id: jund-superfriends
+  name: Jund Superfriends
+  priority: 78000
+  rules:
+  - id: jund-superfriends-primary
+    priority: 78000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Chandra, Torch of Defiance
+        zone: main
+        min_count: 1
+      - card: Professor Dellian Fel
+        zone: main
+        min_count: 1
+      - card: Vraska, the Cutting Glare
+        zone: main
+        min_count: 1
+      - card: Way of the Pyromancer
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+
+- id: izzet-superfriends
+  name: Izzet Superfriends
+  priority: 78001
+  rules:
+  - id: izzet-superfriends-primary
+    priority: 78001
+    subtype_id: null
+    conditions:
+      all:
+      - card: Chandra, Chill of Compliance
+        zone: main
+        min_count: 1
+      - card: Ral, Crackling Wit
+        zone: main
+        min_count: 1
+      - card: The Theorist, Jace Beleren
+        zone: main
+        min_count: 1
+      - card: Way of the Pyromancer
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+
+- id: rakdos-lizards
+  name: Rakdos Lizards
+  priority: 78002
+  rules:
+  - id: rakdos-lizards-primary
+    priority: 78002
+    subtype_id: null
+    conditions:
+      all:
+      - card: Hired Claw
+        zone: main
+        min_count: 1
+      - card: Iridescent Vinelasher
+        zone: main
+        min_count: 1
+      - card: Master of Barbs
+        zone: main
+        min_count: 1
+      - card: Ingris Stingerquill
+        zone: main
+        min_count: 1
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+
+- id: mono-black-phoenix
+  name: Mono-Black Phoenix
+  priority: 78003
+  rules:
+  - id: mono-black-phoenix-primary
+    priority: 78003
+    subtype_id: null
+    conditions:
+      all:
+      - card: Darklight Phoenix
+        zone: main
+        min_count: 1
+      - card: Bloodghast
+        zone: main
+        min_count: 1
+      - card: Winter, Tormented Loner
+        zone: main
+        min_count: 1
+      - card: Rankle's Prank
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+
+- id: simic-landfall
+  name: Simic Landfall
+  priority: 78004
+  rules:
+  - id: simic-landfall-primary
+    priority: 78004
+    subtype_id: null
+    conditions:
+      all:
+      - card: Mossborn Hydra
+        zone: main
+        min_count: 1
+      - card: Earthbender Ascension
+        zone: main
+        min_count: 1
+      - card: Mightform Harmonizer
+        zone: main
+        min_count: 1
+      - card: Breeding Pool
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+
+- id: jeskai-superfriends
+  name: Jeskai Superfriends
+  priority: 78005
+  rules:
+  - id: jeskai-superfriends-primary
+    priority: 78005
+    subtype_id: null
+    conditions:
+      all:
+      - card: Gideon's Memorial
+        zone: main
+        min_count: 1
+      - card: Way of the Pyromancer
+        zone: main
+        min_count: 1
+      - card: Chandra, Torch of Defiance
+        zone: main
+        min_count: 1
+      - card: The Theorist, Jace Beleren
+        zone: main
+        min_count: 1
+
+- id: golgari-self-mill
+  name: Golgari Self-Mill
+  priority: 78006
+  rules:
+  - id: golgari-self-mill-primary
+    priority: 78006
+    subtype_id: null
+    conditions:
+      all:
+      - card: Say Its Name
+        zone: main
+        min_count: 1
+      - card: Huskburster Swarm
+        zone: main
+        min_count: 1
+      - card: Rubblebelt Maverick
+        zone: main
+        min_count: 1
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 1
+
+- id: jeskai-helping-hand
+  name: Jeskai Helping Hand
+  priority: 78007
+  rules:
+  - id: jeskai-helping-hand-primary
+    priority: 78007
+    subtype_id: null
+    conditions:
+      all:
+      - card: Helping Hand
+        zone: main
+        min_count: 1
+      - card: Abhorrent Oculus
+        zone: main
+        min_count: 1
+      - card: Marauding Mako
+        zone: main
+        min_count: 1
+      - card: Seasoned Cryomancer
+        zone: main
+        min_count: 1
+
+- id: gruul-dragons-storm
+  name: Gruul Dragons Storm
+  priority: 78008
+  rules:
+  - id: gruul-dragons-storm-primary
+    priority: 78008
+    subtype_id: null
+    conditions:
+      all:
+      - card: Stormscale Scion
+        zone: main
+        min_count: 1
+      - card: Mox Jasper
+        zone: main
+        min_count: 1
+      - card: The Legend of Roku
+        zone: main
+        min_count: 1
+      - card: Konstrari Charm
         zone: main
         min_count: 1
