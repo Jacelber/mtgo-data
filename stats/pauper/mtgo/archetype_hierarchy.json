@@ -2,12 +2,12 @@
   "schema_version": "1.1.0",
   "format": "pauper",
   "source": "mtgo",
-  "classifier_digest": "4a02a2b714dda233a634e0d8d4d2b97b821d7fc9885629bfc1e95f1a6df26b18",
-  "rules_updated": "2026-09-28T17:59:20+09:00",
+  "classifier_digest": "f71ec8089cec37c5c1763e71c3820f92ce35c7c102b1196e77923866b0f52d13",
+  "rules_updated": "2026-10-05T23:32:07+09:00",
   "summary": {
-    "parents": 92,
-    "leaves": 99,
-    "expandable_parents": 3
+    "parents": 94,
+    "leaves": 104,
+    "expandable_parents": 6
   },
   "parents": [
     {
@@ -23,6 +23,12 @@
       "subtype_ids": []
     },
     {
+      "id": "azorius-affinity",
+      "name": "Azorius Affinity",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "azorius-faeries",
       "name": "Azorius Faeries",
       "expandable": false,
@@ -31,8 +37,11 @@
     {
       "id": "azorius-familiars",
       "name": "Azorius Familiars",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "azorius-familiars/azorius",
+        "azorius-familiars/jeskai"
+      ]
     },
     {
       "id": "battle-screech",
@@ -82,8 +91,11 @@
     {
       "id": "dimir-control",
       "name": "Dimir Control",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "dimir-control/dimir",
+        "dimir-control/red-splash"
+      ]
     },
     {
       "id": "dimir-faeries",
@@ -199,8 +211,11 @@
     {
       "id": "golgari-gardens",
       "name": "Golgari Gardens",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "golgari-gardens/golgari",
+        "golgari-gardens/jund"
+      ]
     },
     {
       "id": "green-tron",
@@ -331,6 +346,12 @@
     {
       "id": "jund-ramp",
       "name": "Jund Ramp",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "jund-snacker",
+      "name": "Jund Snacker",
       "expandable": false,
       "subtype_ids": []
     },
@@ -594,6 +615,14 @@
       "subtype_id": null
     },
     {
+      "id": "azorius-affinity",
+      "kind": "archetype",
+      "name": "Azorius Affinity",
+      "display_name": "Azorius Affinity",
+      "parent_id": "azorius-affinity",
+      "subtype_id": null
+    },
+    {
       "id": "azorius-faeries",
       "kind": "archetype",
       "name": "Azorius Faeries",
@@ -602,12 +631,20 @@
       "subtype_id": null
     },
     {
-      "id": "azorius-familiars",
-      "kind": "archetype",
+      "id": "azorius-familiars/azorius",
+      "kind": "subtype",
       "name": "Azorius Familiars",
       "display_name": "Azorius Familiars",
       "parent_id": "azorius-familiars",
-      "subtype_id": null
+      "subtype_id": "azorius"
+    },
+    {
+      "id": "azorius-familiars/jeskai",
+      "kind": "subtype",
+      "name": "Jeskai Familiars",
+      "display_name": "Jeskai Familiars",
+      "parent_id": "azorius-familiars",
+      "subtype_id": "jeskai"
     },
     {
       "id": "battle-screech/boros",
@@ -674,12 +711,20 @@
       "subtype_id": null
     },
     {
-      "id": "dimir-control",
-      "kind": "archetype",
+      "id": "dimir-control/dimir",
+      "kind": "subtype",
       "name": "Dimir Control",
       "display_name": "Dimir Control",
       "parent_id": "dimir-control",
-      "subtype_id": null
+      "subtype_id": "dimir"
+    },
+    {
+      "id": "dimir-control/red-splash",
+      "kind": "subtype",
+      "name": "Dimir Splash Red Control",
+      "display_name": "Dimir Splash Red Control",
+      "parent_id": "dimir-control",
+      "subtype_id": "red-splash"
     },
     {
       "id": "dimir-faeries",
@@ -834,12 +879,20 @@
       "subtype_id": null
     },
     {
-      "id": "golgari-gardens",
-      "kind": "archetype",
+      "id": "golgari-gardens/golgari",
+      "kind": "subtype",
       "name": "Golgari Gardens",
       "display_name": "Golgari Gardens",
       "parent_id": "golgari-gardens",
-      "subtype_id": null
+      "subtype_id": "golgari"
+    },
+    {
+      "id": "golgari-gardens/jund",
+      "kind": "subtype",
+      "name": "Jund Garden",
+      "display_name": "Jund Garden",
+      "parent_id": "golgari-gardens",
+      "subtype_id": "jund"
     },
     {
       "id": "green-tron",
@@ -1015,6 +1068,14 @@
       "name": "Jund Ramp",
       "display_name": "Jund Ramp",
       "parent_id": "jund-ramp",
+      "subtype_id": null
+    },
+    {
+      "id": "jund-snacker",
+      "kind": "archetype",
+      "name": "Jund Snacker",
+      "display_name": "Jund Snacker",
+      "parent_id": "jund-snacker",
       "subtype_id": null
     },
     {

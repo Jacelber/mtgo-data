@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "b309e1838d67585e54c25eaf4da109df10dc6a1b3afd0b0f7e889b90eaf77613"
+    "digest": "f71ec8089cec37c5c1763e71c3820f92ce35c7c102b1196e77923866b0f52d13"
   },
   "input": {
     "event_path": "data/pauper/melee/events/438329.json",
@@ -18,11 +18,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/pauper.yaml",
-    "rule_sha256": "02a56a0cd69c217ee523a9b4dad30aac444d699cb9afdff91e6c13d156b3ca60",
+    "rule_sha256": "eb50ab50f717edc7b29e1c2a7dc253c94d2f33af3c014fbb541f8cd8e757b660",
     "rule_schema_version": "1.1.0",
-    "archetype_count": 87,
-    "rule_count": 134,
-    "subtype_count": 10
+    "archetype_count": 94,
+    "rule_count": 155,
+    "subtype_count": 16
   },
   "summary": {
     "total_records": 1070,
@@ -30,10 +30,10 @@
     "unknown": 1,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 388,
-    "overridden_matches": 388,
-    "selected_subtypes": 64,
-    "parent_only": 1005,
+    "multiple_matches": 391,
+    "overridden_matches": 391,
+    "selected_subtypes": 113,
+    "parent_only": 956,
     "same_parent_multiple_subtype_matches": 1,
     "residual_subtype_violations": 0,
     "selected_by_parent": {
@@ -104,10 +104,12 @@
       "walls-combo": 8
     },
     "selected_by_subtype": {
+      "azorius-familiars/azorius": 23,
       "battle-screech/boros": 2,
       "battle-screech/mono-white": 30,
       "ephemerate/four-color": 1,
       "ephemerate/jeskai": 30,
+      "golgari-gardens/golgari": 26,
       "packbeast-swarm/mono-white": 1
     },
     "strict_validation": "pass"
@@ -739,8 +741,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -748,8 +750,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -784,8 +786,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -829,8 +831,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -838,8 +840,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -874,8 +876,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -2413,8 +2415,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -2422,8 +2424,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -2458,8 +2460,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -3197,8 +3199,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -3206,8 +3208,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -3242,8 +3244,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -4004,9 +4006,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -4126,9 +4136,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -4967,8 +4985,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -5039,8 +5057,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -5141,8 +5159,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -5150,8 +5168,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -5186,8 +5204,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -5455,9 +5473,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -5577,9 +5603,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -7085,8 +7119,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -7094,8 +7128,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -7130,8 +7164,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -7758,8 +7792,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -7767,8 +7801,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -7803,8 +7837,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -7922,8 +7956,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -7931,8 +7965,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -7967,8 +8001,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -8077,7 +8111,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -8199,7 +8241,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -10048,7 +10098,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -10170,7 +10228,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -10517,8 +10583,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -10526,8 +10592,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -10562,8 +10628,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -11788,8 +11854,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -11797,8 +11863,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -11833,8 +11899,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -13044,8 +13110,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -13053,8 +13119,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -13089,8 +13155,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -13749,8 +13815,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -13758,8 +13824,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -13794,8 +13860,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -13929,8 +13995,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -13938,8 +14004,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -13974,8 +14040,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -18181,9 +18247,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -18303,9 +18377,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -18608,8 +18690,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -18617,8 +18699,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -18653,8 +18735,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -19387,8 +19469,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -19396,8 +19478,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -19432,8 +19514,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -19477,8 +19559,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -19486,8 +19568,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -19522,8 +19604,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -20999,7 +21081,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -21121,7 +21211,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -24909,8 +25007,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -24918,8 +25016,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -24954,8 +25052,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -26886,8 +26984,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -26895,8 +26993,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -26931,8 +27029,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -27041,9 +27139,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -27163,9 +27269,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -27357,8 +27471,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -27366,8 +27480,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -27402,8 +27516,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -27961,8 +28075,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -27970,8 +28084,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -28006,8 +28120,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -28926,8 +29040,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -28935,8 +29049,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -28971,8 +29085,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -34300,9 +34414,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -34422,9 +34544,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -36801,9 +36931,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -36923,9 +37061,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -37871,7 +38017,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -37993,7 +38147,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -39135,8 +39297,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -39144,8 +39306,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -39180,8 +39342,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -42235,8 +42397,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -42244,8 +42406,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -42280,8 +42442,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -44541,8 +44703,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -44550,8 +44712,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -44586,8 +44748,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -46085,7 +46247,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -46207,7 +46377,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -47329,8 +47507,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -47338,8 +47516,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -47374,8 +47552,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -49540,7 +49718,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -49662,7 +49848,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -51754,28 +51948,20 @@
               "exact_count": null
             },
             {
-              "card": "Galvanic Discharge",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Visionary's Dance",
-              "zone": "main",
-              "actual_count": 2,
-              "min_count": 2,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Bender's Waterskin",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "Mulldrifter",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -51830,28 +52016,20 @@
               "exact_count": null
             },
             {
-              "card": "Galvanic Discharge",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Visionary's Dance",
-              "zone": "main",
-              "actual_count": 2,
-              "min_count": 2,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Bender's Waterskin",
               "zone": "main",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "Mulldrifter",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -51959,8 +52137,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -51968,8 +52146,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -52004,8 +52182,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -52197,8 +52375,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -52206,8 +52384,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -52242,8 +52420,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -52531,8 +52709,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens-artifact",
         "priority": 7795
       },
@@ -52540,8 +52718,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens-artifact",
           "priority": 7795,
           "evidence": [
@@ -52600,8 +52778,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens-artifact",
           "priority": 7795,
           "evidence": [
@@ -53113,9 +53291,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -53235,9 +53421,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -54061,9 +54255,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -54183,9 +54385,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -54500,9 +54710,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 2,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -54622,9 +54840,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 2,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -55342,7 +55568,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -55464,7 +55698,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -56502,7 +56744,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -56624,7 +56874,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -57132,9 +57390,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -57254,9 +57520,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -58096,9 +58370,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -58218,9 +58500,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -58290,8 +58580,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -58299,8 +58589,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -58335,8 +58625,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -60701,7 +60991,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -60737,7 +61035,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -61737,7 +62043,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -61859,7 +62173,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -62980,8 +63302,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -62989,8 +63311,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -63025,8 +63347,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -64705,6 +65027,48 @@
           "archetype_name": "Monster Tron",
           "subtype_id": null,
           "subtype_name": null,
+          "rule_id": "green-tron-b",
+          "priority": 9890,
+          "evidence": [
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Maelstrom Colossus",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
+        {
+          "archetype_id": "green-tron",
+          "archetype_name": "Monster Tron",
+          "subtype_id": null,
+          "subtype_name": null,
           "rule_id": "green-tron-rumble",
           "priority": 9880,
           "evidence": [
@@ -64788,6 +65152,48 @@
         }
       ],
       "overridden_matches": [
+        {
+          "archetype_id": "green-tron",
+          "archetype_name": "Monster Tron",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "green-tron-b",
+          "priority": 9890,
+          "evidence": [
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Maelstrom Colossus",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "green-tron",
           "archetype_name": "Monster Tron",
@@ -66087,9 +66493,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -66209,9 +66623,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -66567,8 +66989,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -66576,8 +66998,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -66612,8 +67034,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -66937,7 +67359,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -66973,7 +67403,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -66996,8 +67434,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -67005,8 +67443,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -67041,8 +67479,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -67575,9 +68013,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -67697,9 +68143,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -68814,9 +69268,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -68936,9 +69398,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -76447,8 +76917,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -76456,8 +76926,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -76492,8 +76962,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -77009,8 +77479,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -77018,8 +77488,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -77054,8 +77524,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -78982,9 +79452,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -79104,9 +79582,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -80683,7 +81169,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -80805,7 +81299,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -83216,9 +83718,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -83338,9 +83848,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -84026,7 +84544,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -84148,7 +84674,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -86474,8 +87008,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -86546,8 +87080,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -86765,8 +87299,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -86774,8 +87308,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -86810,8 +87344,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -87010,9 +87544,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -87132,9 +87674,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -87607,8 +88157,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -87616,8 +88166,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -87652,8 +88202,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -88398,7 +88948,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -88520,7 +89078,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -89722,7 +90288,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -89844,7 +90418,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -90262,7 +90844,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -90384,7 +90974,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -90721,8 +91319,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -90730,8 +91328,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -90766,8 +91364,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -95447,6 +96045,72 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "ephemerate",
+          "archetype_name": "Jeskai Ephemerate",
+          "subtype_id": "jeskai",
+          "subtype_name": "Jeskai",
+          "rule_id": "jeskai-ephemerate-wildfire",
+          "priority": 8195,
+          "evidence": [
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Archaeomancer",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Cleansing Wildfire",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Rustvale Bridge",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Silverbluff Bridge",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Bender's Waterskin",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Mulldrifter",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -95493,7 +96157,74 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "ephemerate",
+          "archetype_name": "Jeskai Ephemerate",
+          "subtype_id": "jeskai",
+          "subtype_name": "Jeskai",
+          "rule_id": "jeskai-ephemerate-wildfire",
+          "priority": 8195,
+          "evidence": [
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Archaeomancer",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Cleansing Wildfire",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Rustvale Bridge",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Silverbluff Bridge",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Bender's Waterskin",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Mulldrifter",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -99238,7 +99969,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -99360,7 +100099,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -100293,10 +101040,60 @@
         "archetype_name": "Rakdos Madness",
         "subtype_id": null,
         "subtype_name": null,
-        "rule_id": "rakdos-madness",
-        "priority": 8500
+        "rule_id": "rakdos-madness-guttersnipe",
+        "priority": 8501
       },
       "matched_rules": [
+        {
+          "archetype_id": "rakdos-madness",
+          "archetype_name": "Rakdos Madness",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "rakdos-madness-guttersnipe",
+          "priority": 8501,
+          "evidence": [
+            {
+              "card": "Guttersnipe",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Alms of the Vein",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Fiery Temper",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Faithless Looting",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Sneaky Snacker",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "rakdos-madness",
           "archetype_name": "Rakdos Madness",
@@ -100330,6 +101127,58 @@
           "archetype_name": "Rakdos Madness",
           "subtype_id": null,
           "subtype_name": null,
+          "rule_id": "rakdos-madness-guttersnipe",
+          "priority": 8501,
+          "evidence": [
+            {
+              "card": "Guttersnipe",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Alms of the Vein",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Fiery Temper",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Faithless Looting",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Sneaky Snacker",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
+          "archetype_id": "rakdos-madness",
+          "archetype_name": "Rakdos Madness",
+          "subtype_id": null,
+          "subtype_name": null,
           "rule_id": "rakdos-madness",
           "priority": 8500,
           "evidence": [
@@ -100352,7 +101201,6 @@
           ]
         }
       ],
-      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -103265,8 +104113,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -103274,8 +104122,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -103310,8 +104158,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -103673,8 +104521,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -103682,8 +104530,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -103718,8 +104566,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -104289,7 +105137,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -104411,7 +105267,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -105991,6 +106855,48 @@
           "archetype_name": "Monster Tron",
           "subtype_id": null,
           "subtype_name": null,
+          "rule_id": "green-tron-b",
+          "priority": 9890,
+          "evidence": [
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Maelstrom Colossus",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
+        {
+          "archetype_id": "green-tron",
+          "archetype_name": "Monster Tron",
+          "subtype_id": null,
+          "subtype_name": null,
           "rule_id": "green-tron-rumble",
           "priority": 9880,
           "evidence": [
@@ -106074,6 +106980,48 @@
         }
       ],
       "overridden_matches": [
+        {
+          "archetype_id": "green-tron",
+          "archetype_name": "Monster Tron",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "green-tron-b",
+          "priority": 9890,
+          "evidence": [
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Maelstrom Colossus",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "green-tron",
           "archetype_name": "Monster Tron",
@@ -107139,8 +108087,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -107148,8 +108096,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -107184,8 +108132,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -108274,9 +109222,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -108396,9 +109352,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -113106,7 +114070,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -113228,7 +114200,15 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
               "zone": "main",
               "actual_count": 4,
               "min_count": 2,
@@ -113300,8 +114280,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -113309,8 +114289,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -113345,8 +114325,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -114876,9 +115856,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -114998,9 +115986,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -116522,8 +117518,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -116531,8 +117527,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -116567,8 +117563,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -117911,8 +118907,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -117920,8 +118916,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -117956,8 +118952,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -120548,6 +121544,48 @@
           "archetype_name": "Monster Tron",
           "subtype_id": null,
           "subtype_name": null,
+          "rule_id": "green-tron-b",
+          "priority": 9890,
+          "evidence": [
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Maelstrom Colossus",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
+        {
+          "archetype_id": "green-tron",
+          "archetype_name": "Monster Tron",
+          "subtype_id": null,
+          "subtype_name": null,
           "rule_id": "green-tron-rumble",
           "priority": 9880,
           "evidence": [
@@ -120631,6 +121669,48 @@
         }
       ],
       "overridden_matches": [
+        {
+          "archetype_id": "green-tron",
+          "archetype_name": "Monster Tron",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "green-tron-b",
+          "priority": 9890,
+          "evidence": [
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Maelstrom Colossus",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "green-tron",
           "archetype_name": "Monster Tron",
@@ -128422,9 +129502,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -128544,9 +129632,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -131727,8 +132823,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -131736,8 +132832,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -131772,8 +132868,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -132336,8 +133432,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -132345,8 +133441,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -132381,8 +133477,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -133380,8 +134476,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -133389,8 +134485,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -133425,8 +134521,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -134495,9 +135591,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -134617,9 +135721,17 @@
               "exact_count": null
             },
             {
-              "card": "Boulderbranch Golem",
+              "card": "Urza's Mine",
               "zone": "main",
-              "actual_count": 3,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
               "min_count": 2,
               "max_count": null,
               "exact_count": null
@@ -135283,8 +136395,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -135292,8 +136404,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -135328,8 +136440,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -137021,8 +138133,8 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "golgari",
+        "subtype_name": "Golgari Gardens",
         "rule_id": "golgari-gardens",
         "priority": 7800
       },
@@ -137030,8 +138142,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -137066,8 +138178,8 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "golgari",
+          "subtype_name": "Golgari Gardens",
           "rule_id": "golgari-gardens",
           "priority": 7800,
           "evidence": [
@@ -140205,8 +141317,8 @@
       "selected": {
         "archetype_id": "azorius-familiars",
         "archetype_name": "Azorius Familiars",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "azorius",
+        "subtype_name": "Azorius Familiars",
         "rule_id": "azorius-familiars",
         "priority": 7300
       },
@@ -140214,8 +141326,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -140250,8 +141362,8 @@
         {
           "archetype_id": "azorius-familiars",
           "archetype_name": "Azorius Familiars",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius Familiars",
           "rule_id": "azorius-familiars",
           "priority": 7300,
           "evidence": [
@@ -141715,6 +142827,72 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "ephemerate",
+          "archetype_name": "Jeskai Ephemerate",
+          "subtype_id": "jeskai",
+          "subtype_name": "Jeskai",
+          "rule_id": "jeskai-ephemerate-wildfire",
+          "priority": 8195,
+          "evidence": [
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Archaeomancer",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Cleansing Wildfire",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Rustvale Bridge",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Silverbluff Bridge",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Bender's Waterskin",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Mulldrifter",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -141761,7 +142939,74 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "ephemerate",
+          "archetype_name": "Jeskai Ephemerate",
+          "subtype_id": "jeskai",
+          "subtype_name": "Jeskai",
+          "rule_id": "jeskai-ephemerate-wildfire",
+          "priority": 8195,
+          "evidence": [
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Archaeomancer",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Cleansing Wildfire",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Rustvale Bridge",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Silverbluff Bridge",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Bender's Waterskin",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Mulldrifter",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
