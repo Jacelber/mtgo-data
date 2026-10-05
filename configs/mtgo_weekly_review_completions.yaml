@@ -2486,6 +2486,65 @@ data_admissions:
           tables in the active Codex conversation on 2026-09-08; classifier closure PR
           '#386.'
         observed_empty_weeks: []
+      - week: 2026-W40
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12854946'
+        - '12855458'
+        - '12855466'
+        - '12855471'
+        - '12855496'
+        - '12855524'
+        source_manifest_digest: 496b0fe427f04ae0b44e8ced1bebc30828d8daed8c10981fd16d8b20afa54244
+        accepted_classifier_subject: 170cac2775abcc40e70e18c4459c5a3e7ccecb976704c6d05ac24d21d3613b1c
+        classification_review_digest: 9f0451f5c66bced5c5193316afb8e4f268943e857b2e2944a5a8c580aeaf2fe5
+        accepted_on: '2026-10-05'
+        evidence: Owner explicitly confirmed full Standard 191-deck table and supplied corrections, including confirmed Izzet Superfriends
+          rank 21 / Rakdos Lizards rank 24.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: standard
+            week: 2026-W40
+            bindings:
+              event_ids:
+              - '12854946'
+              - '12855458'
+              - '12855466'
+              - '12855471'
+              - '12855496'
+              - '12855524'
+              record_count: 191
+              classifier: 170cac2775abcc40e70e18c4459c5a3e7ccecb976704c6d05ac24d21d3613b1c
+              classification_review_digest: 9f0451f5c66bced5c5193316afb8e4f268943e857b2e2944a5a8c580aeaf2fe5
+              material_digest: ad52f4ba67cb93f3195f7602eb8dd4b58a56a903213a4b8fc4e769e6b3e7d689
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12854946'
+                - '12855458'
+                - '12855466'
+                - '12855471'
+                - '12855496'
+                - '12855524'
+                record_count: 191
+                classifier: 170cac2775abcc40e70e18c4459c5a3e7ccecb976704c6d05ac24d21d3613b1c
+                classification_review_digest: 9f0451f5c66bced5c5193316afb8e4f268943e857b2e2944a5a8c580aeaf2fe5
+            digest: c4ce1fee3b00eabca6200e5579b41e6639170bc4fafed5dabda0bbcd09f59626
+          decisions:
+            format: standard
+            week: 2026-W40
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: c564fc74675cbbf64e73397bc7fb26c49e44db87d8133f87b6c90d563819b05f
+                evidence: 'Owner in this conversation on 2026-10-05: 我先确认了全量standard牌表，请先推进这一部分, followed by exact corrections and
+                  confirmation of 12855524:21 vs :24. Implemented results preserved in standard-rules/decision-scope.json.'
+                accepted_on: '2026-10-05'
+                entrypoint: http://127.0.0.1:4176/standard-r2/index.html
+                submitted_digest: c4ce1fee3b00eabca6200e5579b41e6639170bc4fafed5dabda0bbcd09f59626
     pauper:
       initial:
         kind: owner_accepted_initial_public_scope
@@ -2751,6 +2810,67 @@ data_admissions:
                 accepted_on: '2026-09-22'
                 entrypoint: http://127.0.0.1:8785/pauper/2026-W38/index.html
                 submitted_digest: 2578188a50d4dcbb38219e68a9ea51d7dea3868a0d916991436c10e826bb6ba9
+      - week: 2026-W40
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12854944'
+        - '12854951'
+        - '12855452'
+        - '12855463'
+        - '12855468'
+        - '12855476'
+        - '12855493'
+        source_manifest_digest: 909a3ad59727157fb4d8e890801c46e4a7de3feae370c8543c23d588d244f746
+        accepted_classifier_subject: f71ec8089cec37c5c1763e71c3820f92ce35c7c102b1196e77923866b0f52d13
+        classification_review_digest: c7ee6d87cca25301d9f8e00ae546fa86feffb202d69d93e8ec64468e45fd9412
+        accepted_on: '2026-10-05'
+        evidence: Owner explicitly replied 两赛制全表均已确认 for Pauper 212 and Pioneer 89; both extra Jeskai Familiars decks also accepted.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pauper
+            week: 2026-W40
+            bindings:
+              event_ids:
+              - '12854944'
+              - '12854951'
+              - '12855452'
+              - '12855463'
+              - '12855468'
+              - '12855476'
+              - '12855493'
+              record_count: 212
+              classifier: f71ec8089cec37c5c1763e71c3820f92ce35c7c102b1196e77923866b0f52d13
+              classification_review_digest: c7ee6d87cca25301d9f8e00ae546fa86feffb202d69d93e8ec64468e45fd9412
+              material_digest: b9c0cdad2efc30556e90909f8b63cbb84d2549379b2f036cefa3a3b38cc03dad
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12854944'
+                - '12854951'
+                - '12855452'
+                - '12855463'
+                - '12855468'
+                - '12855476'
+                - '12855493'
+                record_count: 212
+                classifier: f71ec8089cec37c5c1763e71c3820f92ce35c7c102b1196e77923866b0f52d13
+                classification_review_digest: c7ee6d87cca25301d9f8e00ae546fa86feffb202d69d93e8ec64468e45fd9412
+            digest: 6cc2a09ba216a96d60d6c66e1fbde4b9b915f60fe8b5cb40a59e0a8eaf4353eb
+          decisions:
+            format: pauper
+            week: 2026-W40
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: 0e6773981a806a0b0e1901b5496f07a6588959a8dcd1a78db19de6674c4b4661
+                evidence: 'Current conversation 2026-10-05: Owner explicitly confirmed 两赛制全表均已确认 for Pioneer 89 and Pauper 212,
+                  and 两份都归入洁斯凯佣兽 for mtgo:12854935:17 and mtgo:12854944:19.'
+                accepted_on: '2026-10-05'
+                entrypoint: http://127.0.0.1:4176/pauper-r2/index.html
+                submitted_digest: 6cc2a09ba216a96d60d6c66e1fbde4b9b915f60fe8b5cb40a59e0a8eaf4353eb
     modern:
       initial:
         kind: grandfathered_existing_public_scope
@@ -3235,6 +3355,86 @@ data_admissions:
           then approved the v5 collateral migrations and the 4-Color Oculus Ritual subtype
           in the active Codex conversation on 2026-09-19. Landing content remains pending.
         observed_empty_weeks: []
+      - week: 2026-W40
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12854940'
+        - '12854942'
+        - '12854949'
+        - '12854950'
+        - '12855444'
+        - '12855448'
+        - '12855450'
+        - '12855453'
+        - '12855459'
+        - '12855469'
+        - '12855474'
+        - '12855475'
+        - '12855490'
+        source_manifest_digest: 3e5dc82196268f52148161383b09adf7e92332691e0b1aac75a08c5573f88bac
+        accepted_classifier_subject: 415749058c900300d8e070b89f37aa14e89f69b5106b2b7d9ee1e68917bcfee6
+        classification_review_digest: c036fc8494fc7303d1c052acc9def05f5e4e9cd762dcaaef2e1e880504a34043
+        accepted_on: '2026-10-05'
+        evidence: Owner explicitly replied 仅 MTGO 全表已确认 for the Modern 415-deck table; explicit corrections and five supplementary
+          migrations accepted.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: modern
+            week: 2026-W40
+            bindings:
+              event_ids:
+              - '12854940'
+              - '12854942'
+              - '12854949'
+              - '12854950'
+              - '12855444'
+              - '12855448'
+              - '12855450'
+              - '12855453'
+              - '12855459'
+              - '12855469'
+              - '12855474'
+              - '12855475'
+              - '12855490'
+              record_count: 415
+              classifier: 415749058c900300d8e070b89f37aa14e89f69b5106b2b7d9ee1e68917bcfee6
+              classification_review_digest: c036fc8494fc7303d1c052acc9def05f5e4e9cd762dcaaef2e1e880504a34043
+              material_digest: 3cc48f245330c88308bacbac7e50ed5de4c1b544ff01798938d3ffb74901874d
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12854940'
+                - '12854942'
+                - '12854949'
+                - '12854950'
+                - '12855444'
+                - '12855448'
+                - '12855450'
+                - '12855453'
+                - '12855459'
+                - '12855469'
+                - '12855474'
+                - '12855475'
+                - '12855490'
+                record_count: 415
+                classifier: 415749058c900300d8e070b89f37aa14e89f69b5106b2b7d9ee1e68917bcfee6
+                classification_review_digest: c036fc8494fc7303d1c052acc9def05f5e4e9cd762dcaaef2e1e880504a34043
+            digest: 0f81c7c45db07f2876dafb7398bc0593865bc74a206e16fe1ff402488b810005
+          decisions:
+            format: modern
+            week: 2026-W40
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: b4407a981605fdb30881a0938370c6716d90ef3eb780588d5797b0cbb3893750
+                evidence: 'Current conversation: user supplied 11 Modern corrections, accepted the five-item extra-impact page with
+                  同意, then explicitly answered 仅 MTGO 全表已确认 to the 415-record full-review scope question.'
+                accepted_on: '2026-10-05'
+                entrypoint: http://127.0.0.1:4176/modern-r3/full/index.html
+                submitted_digest: 0f81c7c45db07f2876dafb7398bc0593865bc74a206e16fe1ff402488b810005
     pioneer:
       initial:
         kind: owner_accepted_initial_public_scope
@@ -3505,3 +3705,52 @@ data_admissions:
                 accepted_on: '2026-09-22'
                 entrypoint: http://127.0.0.1:8779/index.html
                 submitted_digest: 18e5ca99c20d722794a2d94efa4636fcd21920a2b77f7693d03c08849db92f46
+      - week: 2026-W40
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12854947'
+        - '12855464'
+        - '12855494'
+        source_manifest_digest: 1e8b8fa1cee2bd14b1b3e2f557b1e143e10c9d4849a981741f18f1017497898a
+        accepted_classifier_subject: 0d3c2fa77f83125b423b471356b2cd6a9ad3a8111b632617ffbbeb81b48de303
+        classification_review_digest: 5f3bf07c3c30b4d0e3c57ace31a7ad006bef46f9943fb9db0a143bab62537510
+        accepted_on: '2026-10-05'
+        evidence: Owner explicitly replied 两赛制全表均已确认 for Pauper 212 and Pioneer 89.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pioneer
+            week: 2026-W40
+            bindings:
+              event_ids:
+              - '12854947'
+              - '12855464'
+              - '12855494'
+              record_count: 89
+              classifier: 0d3c2fa77f83125b423b471356b2cd6a9ad3a8111b632617ffbbeb81b48de303
+              classification_review_digest: 5f3bf07c3c30b4d0e3c57ace31a7ad006bef46f9943fb9db0a143bab62537510
+              material_digest: 3fc754620845fe5c3a5bf7fa2007b0acaade39b1c1492481135359a4e0bf1ccb
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12854947'
+                - '12855464'
+                - '12855494'
+                record_count: 89
+                classifier: 0d3c2fa77f83125b423b471356b2cd6a9ad3a8111b632617ffbbeb81b48de303
+                classification_review_digest: 5f3bf07c3c30b4d0e3c57ace31a7ad006bef46f9943fb9db0a143bab62537510
+            digest: 2655917667ec5e65ddcd75b24ad7fa1b2a68ff8b27e909862f17cfcc30bdaabd
+          decisions:
+            format: pioneer
+            week: 2026-W40
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: faf020bb4859b273a19e8b79feabea85adeefad8741a3b0a1261dbd98725c782
+                evidence: 'Current conversation 2026-10-05: Owner explicitly confirmed 两赛制全表均已确认 for Pioneer 89 and Pauper 212,
+                  and 两份都归入洁斯凯佣兽 for mtgo:12854935:17 and mtgo:12854944:19.'
+                accepted_on: '2026-10-05'
+                entrypoint: http://127.0.0.1:4176/pioneer-r2/index.html
+                submitted_digest: 2655917667ec5e65ddcd75b24ad7fa1b2a68ff8b27e909862f17cfcc30bdaabd

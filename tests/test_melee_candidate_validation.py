@@ -15,6 +15,28 @@ SELECTED_EVENT_ID = "441441"
 CATALOG_PATH = "stats/modern/melee/index.json"
 
 
+@pytest.mark.parametrize("field,value", [(None, None), ("event_id", "999999"),
+                                        ("constructed_format", "pauper"), ("source", "mtgo")])
+def test_normalized_event_identity_uses_metadata(tmp_path, field, value):
+    path = f"data/modern/melee/events/{SELECTED_EVENT_ID}.json"
+    metadata = {"event_id": SELECTED_EVENT_ID, "constructed_format": FORMAT_ID, "source": "melee"}
+    if field:
+        metadata[field] = value
+    target = tmp_path / path
+    target.parent.mkdir(parents=True)
+    target.write_text(json.dumps({"metadata": metadata}), encoding="utf-8")
+    failures = candidate._validate_json_identity(tmp_path, Change("??", path), SELECTED_EVENT_ID, FORMAT_ID)
+    assert bool(failures) == bool(field)
+
+
+def test_normalized_event_rejects_missing_metadata_even_with_top_level_identity(tmp_path):
+    path = f"data/modern/melee/events/{SELECTED_EVENT_ID}.json"
+    target = tmp_path / path
+    target.parent.mkdir(parents=True)
+    target.write_text(json.dumps({"event_id": SELECTED_EVENT_ID, "format": FORMAT_ID, "source": "melee"}), encoding="utf-8")
+    assert candidate._validate_json_identity(tmp_path, Change("??", path), SELECTED_EVENT_ID, FORMAT_ID)
+
+
 def _event(event_id: str) -> dict[str, object]:
     return {
         "event_id": event_id,

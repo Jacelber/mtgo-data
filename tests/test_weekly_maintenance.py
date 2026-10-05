@@ -206,21 +206,21 @@ def test_displayed_policy_accepts_only_unchanged_visual_and_names(tmp_path, monk
 def test_data_wrapper_orders_existing_producers_and_binds_resume(tmp_path, monkeypatch):
     from datetime import date
     from types import SimpleNamespace
-    from mtgmeta.melee import classification, stats, matchup, publish
+    from mtgmeta.melee import classification, opportunities, stats, matchup, publish
     from mtgmeta.mtgo import publication
     calls = []
     monkeypatch.setattr(workflow, "require_private_output", lambda *_: None)
     monkeypatch.setattr(publication, "resolve_scope", lambda *_: SimpleNamespace(week=date(2026, 9, 21)))
-    for name, module in (("classification", classification), ("stats", stats), ("matchup", matchup), ("publish", publish)):
+    for name, module in (("classification", classification), ("opportunities", opportunities), ("stats", stats), ("matchup", matchup), ("publish", publish)):
         monkeypatch.setattr(module, "main", lambda args, name=name: calls.append(name) or 0)
     def stage(root, formats, **kwargs):
         calls.append(("stage", formats, kwargs))
         return {"stage": str(tmp_path / "staged")}
     monkeypatch.setattr(publication, "stage_publications", stage)
     plan = {"week": "2026-W39", "mtgo_formats": ["modern"], "melee": [{
-        "format": "modern", "event_id": "405588", "steps": ["publish", "stats", "classification", "matchup"]}]}
+        "format": "modern", "event_id": "405588", "steps": ["publish", "stats", "classification", "matchup", "opportunities"]}]}
     result = workflow.stage_data(tmp_path, plan)
-    assert calls[:4] == ["classification", "stats", "matchup", "publish"]
+    assert calls[:5] == ["classification", "opportunities", "stats", "matchup", "publish"]
     assert calls[-1][2] == {"include_landing": False, "execute": False, "resume_stage": None}
     calls.clear()
     resumed = workflow.stage_data(tmp_path, plan, tmp_path / "staged", result)

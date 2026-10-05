@@ -96,7 +96,7 @@ archetypes:
         zone: main
         min_count: 3
 - id: green-tron
-  name: "Monster Tron"
+  name: Monster Tron
   priority: 9900
   rules:
   - id: green-tron-a
@@ -104,13 +104,13 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Urza's Tower"
+      - card: Urza's Tower
         zone: main
         min_count: 2
-      - card: "Ancient Stirrings"
+      - card: Ancient Stirrings
         zone: main
         min_count: 2
-      - card: "Bramble Wurm"
+      - card: Bramble Wurm
         zone: main
         min_count: 3
   - id: green-tron-b
@@ -118,13 +118,16 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Urza's Tower"
+      - card: Urza's Tower
         zone: main
         min_count: 2
-      - card: "Maelstrom Colossus"
+      - card: Maelstrom Colossus
         zone: main
         min_count: 2
-      - card: "Boulderbranch Golem"
+      - card: Urza's Mine
+        zone: main
+        min_count: 2
+      - card: Urza's Power Plant
         zone: main
         min_count: 2
   - id: green-tron-rumble
@@ -132,19 +135,19 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Urza's Tower"
+      - card: Urza's Tower
         zone: main
         min_count: 4
-      - card: "Urza's Mine"
+      - card: Urza's Mine
         zone: main
         min_count: 4
-      - card: "Urza's Power Plant"
+      - card: Urza's Power Plant
         zone: main
         min_count: 4
-      - card: "Expedition Map"
+      - card: Expedition Map
         zone: main
         min_count: 3
-      - card: "Bramble Wurm"
+      - card: Bramble Wurm
         zone: main
         min_count: 4
   - id: green-tron-fangren
@@ -152,22 +155,22 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Urza's Mine"
+      - card: Urza's Mine
         zone: main
         min_count: 4
-      - card: "Urza's Power Plant"
+      - card: Urza's Power Plant
         zone: main
         min_count: 4
-      - card: "Urza's Tower"
+      - card: Urza's Tower
         zone: main
         min_count: 4
-      - card: "Ancient Stirrings"
+      - card: Ancient Stirrings
         zone: main
         min_count: 3
-      - card: "Fangren Marauder"
+      - card: Fangren Marauder
         zone: main
         min_count: 3
-      - card: "Maelstrom Colossus"
+      - card: Maelstrom Colossus
         zone: main
         min_count: 3
 - id: inside-out
@@ -848,43 +851,94 @@ archetypes:
         zone: main
         exact_count: 0
 - id: dimir-control
-  name: "Dimir Control"
+  name: Dimir Control
   priority: 9290
   rules:
   - id: dimir-control
     priority: 9290
-    subtype_id: null
+    subtype_id: dimir
     conditions:
       all:
-      - card: "Contaminated Aquifer"
+      - card: Contaminated Aquifer
         zone: main
         min_count: 3
-      - card: "Murmuring Mystic"
+      - card: Murmuring Mystic
         zone: main
         min_count: 3
-      - card: "Tolarian Terror"
+      - card: Tolarian Terror
         zone: main
         exact_count: 0
   - id: dimir-control-strix
     priority: 9291
-    subtype_id: null
+    subtype_id: dimir
     conditions:
       all:
-      - card: "Baleful Strix"
+      - card: Baleful Strix
         zone: main
         min_count: 4
-      - card: "Counterspell"
+      - card: Counterspell
         zone: main
         min_count: 4
-      - card: "Murmuring Mystic"
+      - card: Murmuring Mystic
         zone: main
         min_count: 2
-      - card: "Snuff Out"
+      - card: Snuff Out
         zone: main
         min_count: 4
-      - card: "Trinket Mage"
+      - card: Trinket Mage
         zone: main
         min_count: 2
+  - id: dimir-control-red-splash
+    priority: 9292
+    subtype_id: red-splash
+    conditions:
+      all:
+      - card: Contaminated Aquifer
+        zone: main
+        min_count: 3
+      - card: Murmuring Mystic
+        zone: main
+        min_count: 3
+      - card: Tolarian Terror
+        zone: main
+        exact_count: 0
+      - card: Vandalblast
+        zone: any
+        min_count: 1
+      - card: Skred
+        zone: main
+        exact_count: 0
+  - id: dimir-control-strix-red-splash
+    priority: 9293
+    subtype_id: red-splash
+    conditions:
+      all:
+      - card: Baleful Strix
+        zone: main
+        min_count: 4
+      - card: Counterspell
+        zone: main
+        min_count: 4
+      - card: Murmuring Mystic
+        zone: main
+        min_count: 2
+      - card: Snuff Out
+        zone: main
+        min_count: 4
+      - card: Trinket Mage
+        zone: main
+        min_count: 2
+      - card: Vandalblast
+        zone: any
+        min_count: 1
+      - card: Skred
+        zone: main
+        exact_count: 0
+  subtypes:
+  - id: dimir
+    name: Dimir Control
+  - id: red-splash
+    name: Dimir Splash Red Control
 - id: azorius-faeries
   name: "Azorius Faeries"
   priority: 9200
@@ -1063,7 +1117,7 @@ archetypes:
         zone: main
         exact_count: 0
 - id: grixis-control
-  name: "Grixis Control"
+  name: Grixis Control
   priority: 9160
   rules:
   - id: grixis-control
@@ -1071,22 +1125,22 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Augur of Bolas"
+      - card: Augur of Bolas
         zone: main
         min_count: 3
-      - card: "Counterspell"
+      - card: Counterspell
         zone: main
         min_count: 3
-      - card: "Lightning Bolt"
+      - card: Lightning Bolt
         zone: main
         min_count: 3
-      - card: "Snuff Out"
+      - card: Snuff Out
         zone: main
         min_count: 2
-      - card: "Seething Landscape"
+      - card: Seething Landscape
         zone: main
         min_count: 3
-      - card: "Tolarian Terror"
+      - card: Tolarian Terror
         zone: main
         exact_count: 0
   - id: grixis-control-terminate
@@ -1094,22 +1148,22 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Skred"
+      - card: Skred
         zone: main
         min_count: 3
-      - card: "Murmuring Mystic"
+      - card: Murmuring Mystic
         zone: main
         min_count: 3
-      - card: "Counterspell"
+      - card: Counterspell
         zone: main
         min_count: 3
-      - card: "Terminate"
+      - card: Terminate
         zone: main
         min_count: 1
-      - card: "Tolarian Terror"
+      - card: Tolarian Terror
         zone: main
         exact_count: 0
-      - card: "Ephemerate"
+      - card: Ephemerate
         zone: main
         exact_count: 0
   - id: grixis-control-sulfurous
@@ -1117,19 +1171,45 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Counterspell"
+      - card: Counterspell
         zone: main
         min_count: 4
-      - card: "Murmuring Mystic"
+      - card: Murmuring Mystic
         zone: main
         min_count: 3
-      - card: "Terminate"
+      - card: Terminate
         zone: main
         min_count: 3
-      - card: "Sulfurous Blast"
+      - card: Sulfurous Blast
         zone: main
         min_count: 3
-      - card: "Skred"
+      - card: Skred
+        zone: main
+        exact_count: 0
+  - id: grixis-control-strix-skred
+    priority: 9295
+    subtype_id: null
+    conditions:
+      all:
+      - card: Baleful Strix
+        zone: main
+        min_count: 2
+      - card: Skred
+        zone: main
+        min_count: 2
+      - card: Counterspell
+        zone: main
+        min_count: 2
+      - card: Murmuring Mystic
+        zone: main
+        min_count: 1
+      - card: Snuff Out
+        zone: main
+        min_count: 1
+      - card: Tolarian Terror
+        zone: main
+        exact_count: 0
+      - card: Ephemerate
         zone: main
         exact_count: 0
 - id: mono-blue-faeries
@@ -1660,7 +1740,7 @@ archetypes:
         zone: main
         min_count: 1
 - id: jeskai-affinity
-  name: "Jeskai Affinity"
+  name: Jeskai Affinity
   priority: 8702
   rules:
   - id: jeskai-affinity-spell-colors
@@ -1668,20 +1748,43 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Myr Enforcer"
+      - card: Myr Enforcer
         zone: main
         min_count: 3
-      - card: "Glint Hawk"
+      - card: Glint Hawk
         zone: main
         min_count: 1
-      - card: "Thoughtcast"
+      - card: Thoughtcast
         zone: main
         min_count: 1
-      - card: "Galvanic Blast"
+      - card: Galvanic Blast
         zone: main
         min_count: 1
-      - card: "Refurbished Familiar"
+      - card: Refurbished Familiar
         zone: main
+        exact_count: 0
+  - id: jeskai-affinity-dispatch
+    priority: 8703
+    subtype_id: null
+    conditions:
+      all:
+      - card: Myr Enforcer
+        zone: main
+        min_count: 3
+      - card: Thoughtcast
+        zone: main
+        min_count: 1
+      - card: Galvanic Blast
+        zone: main
+        min_count: 1
+      - card: Refurbished Familiar
+        zone: main
+        exact_count: 0
+      - card: Dispatch
+        zone: main
+        min_count: 1
+      - card: Baleful Strix
+        zone: any
         exact_count: 0
 - id: rakdos-affinity
   name: "Rakdos Affinity"
@@ -1872,7 +1975,7 @@ archetypes:
         zone: main
         min_count: 3
 - id: rakdos-madness
-  name: "Rakdos Madness"
+  name: Rakdos Madness
   priority: 8500
   rules:
   - id: rakdos-madness
@@ -1880,12 +1983,32 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Kitchen Imp"
+      - card: Kitchen Imp
         zone: main
         min_count: 3
-      - card: "Alms of the Vein"
+      - card: Alms of the Vein
         zone: main
         min_count: 3
+  - id: rakdos-madness-guttersnipe
+    priority: 8501
+    subtype_id: null
+    conditions:
+      all:
+      - card: Guttersnipe
+        zone: main
+        min_count: 2
+      - card: Alms of the Vein
+        zone: main
+        min_count: 2
+      - card: Fiery Temper
+        zone: main
+        min_count: 2
+      - card: Faithless Looting
+        zone: main
+        min_count: 2
+      - card: Sneaky Snacker
+        zone: main
+        min_count: 2
 - id: boros-madness
   name: "Boros Madness"
   priority: 8490
@@ -2097,7 +2220,7 @@ archetypes:
         zone: main
         min_count: 3
 - id: esper-ephemerate
-  name: "Esper Ephemerate"
+  name: Esper Ephemerate
   priority: 8310
   rules:
   - id: esper-ephemerate-snuff-out
@@ -2105,19 +2228,19 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Ephemerate"
+      - card: Ephemerate
         zone: main
         min_count: 3
-      - card: "Archaeomancer"
+      - card: Archaeomancer
         zone: main
         min_count: 2
-      - card: "Mulldrifter"
+      - card: Mulldrifter
         zone: main
         min_count: 3
-      - card: "Snuff Out"
+      - card: Snuff Out
         zone: main
         min_count: 3
-      - card: "Counterspell"
+      - card: Counterspell
         zone: main
         min_count: 3
   - id: esper-ephemerate-strix
@@ -2125,42 +2248,42 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Ephemerate"
+      - card: Ephemerate
         zone: main
-        min_count: 3
-      - card: "Archaeomancer"
+        min_count: 1
+      - card: Archaeomancer
         zone: main
         min_count: 2
-      - card: "Mulldrifter"
+      - card: Mulldrifter
+        zone: main
+        min_count: 2
+      - card: Baleful Strix
         zone: main
         min_count: 3
-      - card: "Baleful Strix"
-        zone: main
-        min_count: 3
-      - card: "Dispatch"
+      - card: Dispatch
         zone: main
         min_count: 3
 - id: ephemerate
-  name: "Jeskai Ephemerate"
+  name: Jeskai Ephemerate
   priority: 8300
   subtypes:
   - id: four-color
-    name: "Four-Color"
+    name: Four-Color
   - id: jeskai
-    name: "Jeskai"
+    name: Jeskai
   rules:
   - id: four-color-ephemerate
     priority: 8300
     subtype_id: four-color
     conditions:
       all:
-      - card: "Ephemerate"
+      - card: Ephemerate
         zone: main
         min_count: 3
-      - card: "Skred"
+      - card: Skred
         zone: main
         min_count: 3
-      - card: "Crypt Incursion"
+      - card: Crypt Incursion
         zone: main
         min_count: 1
   - id: four-color-ephemerate-teachings
@@ -2168,16 +2291,16 @@ archetypes:
     subtype_id: four-color
     conditions:
       all:
-      - card: "Ephemerate"
+      - card: Ephemerate
         zone: main
         min_count: 3
-      - card: "Skred"
+      - card: Skred
         zone: main
         min_count: 3
-      - card: "Mystical Teachings"
+      - card: Mystical Teachings
         zone: main
         min_count: 1
-      - card: "Pulse of Murasa"
+      - card: Pulse of Murasa
         zone: main
         min_count: 1
   - id: four-color-ephemerate-snacker
@@ -2185,19 +2308,19 @@ archetypes:
     subtype_id: four-color
     conditions:
       all:
-      - card: "Ephemerate"
+      - card: Ephemerate
         zone: main
         min_count: 3
-      - card: "Archaeomancer"
+      - card: Archaeomancer
         zone: main
         min_count: 2
-      - card: "Sneaky Snacker"
+      - card: Sneaky Snacker
         zone: main
         min_count: 3
-      - card: "Ghastly Demise"
+      - card: Ghastly Demise
         zone: main
         min_count: 2
-      - card: "Fire/Ice"
+      - card: Fire/Ice
         zone: main
         min_count: 1
   - id: jeskai-ephemerate
@@ -2205,16 +2328,16 @@ archetypes:
     subtype_id: jeskai
     conditions:
       all:
-      - card: "Ephemerate"
+      - card: Ephemerate
         zone: main
         min_count: 2
-      - card: "Skred"
+      - card: Skred
         zone: main
         min_count: 2
-      - card: "Archaeomancer"
+      - card: Archaeomancer
         zone: main
         min_count: 1
-      - card: "Glacial Floodplain"
+      - card: Glacial Floodplain
         zone: main
         min_count: 1
   - id: jeskai-ephemerate-wildfire
@@ -2222,30 +2345,27 @@ archetypes:
     subtype_id: jeskai
     conditions:
       all:
-      - card: "Ephemerate"
+      - card: Ephemerate
         zone: main
         min_count: 2
-      - card: "Archaeomancer"
+      - card: Archaeomancer
         zone: main
         min_count: 1
-      - card: "Cleansing Wildfire"
+      - card: Cleansing Wildfire
         zone: main
         min_count: 3
-      - card: "Rustvale Bridge"
+      - card: Rustvale Bridge
         zone: main
         min_count: 3
-      - card: "Silverbluff Bridge"
+      - card: Silverbluff Bridge
         zone: main
         min_count: 3
-      - card: "Galvanic Discharge"
-        zone: main
-        min_count: 3
-      - card: "Visionary's Dance"
-        zone: main
-        min_count: 2
-      - card: "Bender's Waterskin"
+      - card: Bender's Waterskin
         zone: main
         exact_count: 0
+      - card: Mulldrifter
+        zone: main
+        min_count: 2
 - id: domain-ephemerate
   name: "Domain Ephemerate"
   priority: 8290
@@ -2548,46 +2668,94 @@ archetypes:
         zone: main
         exact_count: 0
 - id: golgari-gardens
-  name: "Golgari Gardens"
+  name: Golgari Gardens
   priority: 7800
   rules:
   - id: golgari-gardens
     priority: 7800
-    subtype_id: null
+    subtype_id: golgari
     conditions:
       all:
-      - card: "Khalni Garden"
+      - card: Khalni Garden
         zone: main
         min_count: 3
-      - card: "Fanatical Offering"
+      - card: Fanatical Offering
         zone: main
         min_count: 3
-      - card: "Crypt Rats"
+      - card: Crypt Rats
         zone: main
         min_count: 1
   - id: golgari-gardens-artifact
     priority: 7795
-    subtype_id: null
+    subtype_id: golgari
     conditions:
       all:
-      - card: "Khalni Garden"
+      - card: Khalni Garden
         zone: main
         min_count: 3
-      - card: "Fanatical Offering"
+      - card: Fanatical Offering
         zone: main
         min_count: 3
-      - card: "Tithing Blade"
+      - card: Tithing Blade
         zone: main
         min_count: 3
-      - card: "Ichor Wellspring"
+      - card: Ichor Wellspring
         zone: main
         min_count: 3
-      - card: "Cast Down"
+      - card: Cast Down
         zone: main
         min_count: 3
-      - card: "Crypt Rats"
+      - card: Crypt Rats
         zone: main
         exact_count: 0
+  - id: golgari-gardens-red-splash
+    priority: 7802
+    subtype_id: jund
+    conditions:
+      all:
+      - card: Khalni Garden
+        zone: main
+        min_count: 3
+      - card: Fanatical Offering
+        zone: main
+        min_count: 3
+      - card: Crypt Rats
+        zone: main
+        min_count: 1
+      - card: Vandalblast
+        zone: any
+        min_count: 1
+  - id: golgari-gardens-artifact-red-splash
+    priority: 7797
+    subtype_id: jund
+    conditions:
+      all:
+      - card: Khalni Garden
+        zone: main
+        min_count: 3
+      - card: Fanatical Offering
+        zone: main
+        min_count: 3
+      - card: Tithing Blade
+        zone: main
+        min_count: 3
+      - card: Ichor Wellspring
+        zone: main
+        min_count: 3
+      - card: Cast Down
+        zone: main
+        min_count: 3
+      - card: Crypt Rats
+        zone: main
+        exact_count: 0
+      - card: Vandalblast
+        zone: any
+        min_count: 1
+  subtypes:
+  - id: golgari
+    name: Golgari Gardens
+  - id: jund
+    name: Jund Garden
 - id: gruul-initiative
   name: "Gruul Initiative"
   priority: 7705
@@ -2804,23 +2972,45 @@ archetypes:
         zone: main
         min_count: 3
 - id: azorius-familiars
-  name: "Azorius Familiars"
+  name: Azorius Familiars
   priority: 7300
   rules:
   - id: azorius-familiars
     priority: 7300
-    subtype_id: null
+    subtype_id: azorius
     conditions:
       all:
-      - card: "Sunscape Familiar"
+      - card: Sunscape Familiar
         zone: main
         min_count: 3
-      - card: "Snap"
+      - card: Snap
         zone: main
         min_count: 3
-      - card: "God-Pharaoh's Faithful"
+      - card: God-Pharaoh's Faithful
         zone: main
         min_count: 3
+  - id: jeskai-familiars
+    priority: 7301
+    subtype_id: jeskai
+    conditions:
+      all:
+      - card: Sunscape Familiar
+        zone: main
+        min_count: 3
+      - card: Snap
+        zone: main
+        min_count: 3
+      - card: God-Pharaoh's Faithful
+        zone: main
+        min_count: 3
+      - card: Pyroblast
+        zone: any
+        min_count: 1
+  subtypes:
+  - id: azorius
+    name: Azorius Familiars
+  - id: jeskai
+    name: Jeskai Familiars
 - id: dimir-flicker-control
   name: "Dimir Flicker Control"
   priority: 7250
@@ -2961,3 +3151,78 @@ archetypes:
       - card: "Rally at the Hornburg"
         zone: main
         exact_count: 0
+- id: azorius-affinity
+  name: Azorius Affinity
+  priority: 8703
+  rules:
+  - id: azorius-affinity
+    priority: 8703
+    subtype_id: null
+    conditions:
+      all:
+      - card: Myr Enforcer
+        zone: main
+        min_count: 2
+      - card: Thoughtcast
+        zone: main
+        min_count: 2
+      - card: Dispatch
+        zone: main
+        min_count: 1
+      - card: Ancient Den
+        zone: main
+        min_count: 1
+      - card: Razortide Bridge
+        zone: main
+        min_count: 1
+      - card: Refurbished Familiar
+        zone: any
+        exact_count: 0
+      - card: Baleful Strix
+        zone: any
+        exact_count: 0
+      - card: Galvanic Blast
+        zone: any
+        exact_count: 0
+      - card: Makeshift Munitions
+        zone: any
+        exact_count: 0
+      - card: Rites of Initiation
+        zone: any
+        exact_count: 0
+      - card: Vault of Whispers
+        zone: any
+        exact_count: 0
+      - card: Drossforge Bridge
+        zone: any
+        exact_count: 0
+      - card: Mistvault Bridge
+        zone: any
+        exact_count: 0
+      - card: Goldmire Bridge
+        zone: any
+        exact_count: 0
+      - card: Swamp
+        zone: any
+        exact_count: 0
+- id: jund-snacker
+  name: Jund Snacker
+  priority: 9400
+  rules:
+  - id: jund-snacker
+    priority: 9400
+    subtype_id: null
+    conditions:
+      all:
+      - card: Melded Moxite
+        zone: main
+        min_count: 2
+      - card: Sneaky Snacker
+        zone: main
+        min_count: 2
+      - card: Writhing Chrysalis
+        zone: main
+        min_count: 2
+      - card: Eviscerator's Insight
+        zone: main
+        min_count: 1

@@ -519,8 +519,8 @@ def stage_data(root, plan, resume_stage=None, previous=None):
             raise ValueError("Resume requires the same plan, root and previously recorded stage")
     elif previous is not None:
         raise ValueError("Previous result requires its resume stage")
-    from mtgmeta.melee import classification, stats as melee_stats, matchup as melee_matchup, publish
-    producers = {"classification": classification.main, "stats": melee_stats.main,
+    from mtgmeta.melee import classification, opportunities, stats as melee_stats, matchup as melee_matchup, publish
+    producers = {"classification": classification.main, "opportunities": opportunities.main, "stats": melee_stats.main,
                  "matchup": melee_matchup.main, "publish": publish.main}
     members = plan.get("melee", [])
     for item in members:
