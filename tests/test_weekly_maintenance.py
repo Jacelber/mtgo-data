@@ -131,7 +131,21 @@ def test_environment_web_includes_non_top8_full_decks(inputs):
     ninth["main_deck"] = [{"name": "Only in high-score deck", "qty": 2}]
     facts = {"page": page, "bindings": source["bindings"], "environment_decks": [ninth]}
     text = workflow.render_inventory(workflow.inventory(root, source, facts=facts))
-    assert "第9名完整主备牌" in text and "2 Only in high-score deck" in text
+    payload = json.loads(text.split('<script id="review-data" type="application/json">')[1].split('</script>')[0])
+    assert payload['material']['environment'][0]['decks'] == [ninth]
+    assert payload['material']['all_top8'] == source['all_top8']
+
+
+def test_review_carrier_retains_missing_zones_references_and_private_packets():
+    material = {'format': 'modern', 'week': '2026-W40', 'blocked': [], 'members': [
+        {'source': 'melee', 'events': ['123'], 'records': [
+            {'reference': 'melee:123:p1', 'rank': 462, 'main_deck': None, 'sideboard': [],
+             'player': '</script><script>alert(1)</script>', 'identity': {}}],
+         'unavailable': [{'participant_id': 'p2'}], 'packet': {'digest': 'retained'}}]}
+    text = workflow.render_classification(material)
+    embedded = text.split('<script id="review-data" type="application/json">')[1].split('</script>')[0]
+    assert '</script>' not in embedded
+    assert json.loads(embedded)['material'] == material
 
 
 def test_regional_acceptance_cannot_cover_a_different_or_unaccepted_page():

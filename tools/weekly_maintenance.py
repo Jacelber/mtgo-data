@@ -5,7 +5,6 @@ import argparse
 from copy import deepcopy
 from datetime import date, datetime, timedelta, timezone
 import functools
-import html
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 import json
 import os
@@ -191,48 +190,14 @@ def inventory(root, source, displayed=None, previous=None, facts=None):
                      "reuse_check": "fixed source scope and displayed environment rows only"}}
 
 
-def render_inventory(value, lookup=None):
-    e = html.escape
-    def card_label(name):
-        entry = (lookup or {}).get(name) or (lookup or {}).get(name.split(" // ")[0]) or {}
-        return e(entry.get("zh_name", name)) + (" · " + e(name) if entry.get("zh_name") else "")
-    sections = [f"<h1>{e(value['format'])} · {e(value['week'])}</h1>",
-                "<p>本周未展示新类型：" + e("、".join(value["new_types"]) or "无") + "</p>",
-                "<h2>需要用户提供／确认</h2><ul>" + "".join(f"<li>{e(x)}</li>" for x in value["required_user"]) + "</ul>",
-                "<h2>需要修正</h2><ul>" + "".join(f"<li>{e(x)}</li>" for x in value["errors"]) + "</ul>"]
-    for row in value["environment"]:
-        status_text = {"displayed_configuration_reused": "沿用已展示配置", "changed": "展示配置实际改变", "not_previously_displayed": "此前未展示"}
-        sections.append(f"<h2>{e(row['name'])}</h2><p>{e(status_text[row['status']])} · {e(' / '.join(row['cards']))}</p>")
-        metrics = row["facts"]
-        sections.append("<table><tr><th>范围</th><th>占比</th><th>数量／分母</th></tr>")
-        for key, label in (("current", "本周"), ("previous_week", "上周"), ("previous_four_weeks", "前四周")):
-            metric = metrics.get(key, {})
-            share = f"{100 * metric['share']:.2f}%" if isinstance(metric.get('share'), (int, float)) else "—"
-            sections.append(f"<tr><td>{label}</td><td>{share}</td><td>{e(str(metric.get('count', '—')))}／{e(str(metric.get('denominator', '—')))}</td></tr>")
-        sections.append("</table>")
-        counts = {}
-        for deck in row["decks"]:
-            for name in card_names(deck):
-                counts[name] = counts.get(name, 0) + 1
-        sections.append("<details><summary>实际构筑牌张出现次数（非推荐）</summary><ul>" + "".join(
-            f"<li>{card_label(name)}：{count}/{len(row['decks'])} 副</li>"
-            for name, count in sorted(counts.items(), key=lambda pair: (-pair[1], pair[0]))) + "</ul></details>")
-        for deck in row["decks"]:
-            sections.append(f"<details><summary>{e(str(deck['event_id']))} · {e(str(deck.get('player', '')))} · 第{e(str(deck['final_rank']))}名完整主备牌</summary>")
-            for key, label in (("main_deck", "主牌"), ("side_deck", "备牌")):
-                sections.append(f"<h4>{label} · 共{sum(c['qty'] for c in deck[key])}张</h4><ul>" + "".join(f"<li>{c['qty']} {card_label(c['name'])}</li>" for c in deck[key]) + "</ul>")
-            sections.append("</details>")
-    sections.append("<h2>程序筛选事实</h2><ul>" + "".join(
-        f"<li><a href='#{e(value['active_aliases'].get(item['token'], ''))}'>{e(value['active_aliases'].get(item['token'], item['token']))}</a>：{e(json.dumps(item['reasons'], ensure_ascii=False))}</li>"
-        for item in value["candidate_evidence"]) + "</ul>")
-    sections.append("<h2>完整 Top8 牌表（事实材料，非模型推荐）</h2>")
-    for deck in value["all_top8"]:
-        alias = value["active_aliases"][deck["token"]]
-        sections.append(f"<section id='{e(alias)}'><h3>{e(alias)} · {e(deck.get('display_name', deck['parent_id']))} · {e(deck.get('player',''))} · 第{deck['final_rank']}名</h3><p>赛事 {e(deck['event_id'])}</p>")
-        for key, title in (("main_deck", "主牌"), ("side_deck", "备牌")):
-            sections.append(f"<h4>{title} · 共{sum(c['qty'] for c in deck[key])}张</h4><ul>" + "".join(f"<li>{c['qty']} {card_label(c['name'])}</li>" for c in deck[key]) + "</ul>")
-        sections.append("</section>")
-    return '<!doctype html><meta charset="utf-8"><title>周维护材料</title><style>body{max-width:1000px;margin:32px auto;font:16px/1.6 system-ui}pre{white-space:pre-wrap}</style>' + "".join(sections)
+def render_inventory(value, lookup=None, names=None):
+    from tools.weekly_maintenance_review import render_review
+    return render_review(value, kind="content", lookup=lookup, names=names)
+
+
+def render_classification(value, lookup=None, names=None):
+    from tools.weekly_maintenance_review import render_review
+    return render_review(value, kind="classification", lookup=lookup, names=names)
 
 
 def link_or_copy(source, destination):
@@ -459,36 +424,14 @@ def classification_material(root, format_id, week, melee_ids, output, localizati
                             "unavailable": review["unavailable_records"], "known_input_quality": event.get("quality", {}), "packet": packet})
         except (ValueError, OSError, KeyError) as exc:
             blocked.append({"source": "melee", "event_id": event_id, "error": str(exc)})
-    e = html.escape
-    sections = [f"<h1>{e(format_id)} {e(week)} 完整分类材料</h1>",
-                "<p>分类可审不代表数据可交付。各来源确认分别绑定；未齐对象仍在本批范围。</p>"]
-    for block in blocked:
-        sections.append("<p>待完成：" + e(str(block)) + "</p>")
     for member in members:
         key = member["source"] + ("-" + member["events"][0] if member["source"] == "melee" else "")
         write(output / f"{key}-submission.json", member["packet"])
-        sections.append(f"<h2>{e(key)}：{len(member['records'])} 副可审，{len(member['unavailable'])} 副不可用</h2>")
-        if member.get("known_input_quality"):
-            sections.append("<p>交接输入已知质量信息（不代替本次发布条件）：" + e(str(member["known_input_quality"])) + "</p>")
-        for row in member["records"]:
-            identity = row["identity"]
-            title = " / ".join(str(identity.get(k) or "") for k in ("parent_chinese", "parent_english", "subtype_chinese", "subtype_english")).strip(" / ")
-            sections.append(f"<details id='{e(row['reference'])}'><summary>{e(row['reference'])} · {e(str(row.get('player', '')))} · {e(title)} · {e(str(row.get('priority_reasons', [])))}</summary>")
-            sections.append(f"<p>日期：{e(str(row.get('date') or row.get('event_metadata', {}).get('start_date') or row.get('event_metadata', {}).get('starttime') or row.get('event_metadata', {})))} · 名次：{e(str(row.get('rank')))} · {e(str(row.get('event_name', '')))}</p>")
-            sections.append(f"<p>来源定位：{e(row['source_locator'])} · <a href='#{e(row['reference'])}'>本牌表固定入口</a></p>")
-            for zone in ("main_deck", "sideboard"):
-                if row[zone] is None:
-                    sections.append(f"<h3>{'主牌' if zone == 'main_deck' else '备牌'}：分区不可用</h3>")
-                    continue
-                cards = row[zone] or []
-                total = sum(c["qty"] for c in cards)
-                sections.append(f"<h3>{'主牌' if zone == 'main_deck' else '备牌'} · 共 {total} 张</h3><ul>" + "".join(
-                    f"<li>{c['qty']} {e((lookup.get(c['name']) or lookup.get(c['name'].split(' // ')[0]) or {}).get('zh_name', c['name']))} · {e(c['name'])}</li>" for c in cards) + "</ul>")
-            sections.append("</details>")
-        for missing in member["unavailable"]:
-            sections.append("<p>unavailable：" + e(str(missing)) + "</p>")
-    write(output / "materials.json", {"format": format_id, "week": week, "members": members, "blocked": blocked})
-    (output / "index.html").write_text('<!doctype html><meta charset="utf-8"><title>联合分类审阅</title>' + ''.join(sections), encoding="utf-8")
+    material = {"format": format_id, "week": week, "members": members, "blocked": blocked}
+    write(output / "materials.json", material)
+    names_path = root / f"stats/{format_id}/archetype_names.json"
+    names = read(names_path).get("names", []) if names_path.is_file() else []
+    (output / "index.html").write_text(render_classification(material, lookup, names), encoding="utf-8")
     return {"material": str(output / "index.html"), "blocked": blocked, "state": "partial" if blocked else "ready",
             "scope": {"mtgo": mtgo["event_ids"], "melee": melee_ids}, "fetched": 0}
 
@@ -766,6 +709,12 @@ def main(argv=None):
     classify.add_argument("--melee", action="append", default=[])
     classify.add_argument("--output", type=Path, required=True)
     classify.add_argument("--localization", type=Path)
+    render = sub.add_parser("render", help="Re-render a retained inventory/materials snapshot without rebuilding facts")
+    render.add_argument("--root", type=Path, default=ROOT)
+    render.add_argument("--input", type=Path, required=True)
+    render.add_argument("--kind", choices=("content", "classification"), required=True)
+    render.add_argument("--output", type=Path, required=True)
+    render.add_argument("--localization", type=Path)
     stage = sub.add_parser("stage-data")
     stage.add_argument("--root", type=Path, required=True)
     stage.add_argument("--plan", type=Path, required=True)
@@ -927,6 +876,20 @@ def main(argv=None):
             return 0
         root = args.root.resolve()
         output = new_output(root, args.output)
+        if args.command == "render":
+            material = read(args.input)
+            format_id, _ = scope(material)
+            lookup = args.localization or root / "assets/card-localization/cards.json"
+            names_path = root / f"stats/{format_id}/archetype_names.json"
+            renderer = render_inventory if args.kind == "content" else render_classification
+            text = renderer(material, read(lookup) if lookup.is_file() else {},
+                            read(names_path).get("names", []) if names_path.is_file() else [])
+            (output / "index.html").write_text(text, encoding="utf-8")
+            shutil.copyfile(args.input, output / args.input.name)
+            write(output / "result.json", {"material": str(output / "index.html"),
+                "retained_material_digest": digest(material), "classified": 0, "fetched": 0})
+            print(json.dumps({"material": str(output / "index.html")}, ensure_ascii=False))
+            return 0
         if args.command in {"facts", "classification"}:
             summary = (prepare_facts(root, args.format, args.week, output) if args.command == "facts"
                        else classification_material(root, args.format, args.week, args.melee, output, args.localization))
@@ -944,7 +907,9 @@ def main(argv=None):
             result = inventory(root, source, read(args.displayed_page) if args.displayed_page else None,
                                read(args.previous) if args.previous else None, read(args.facts) if args.facts else None)
             write(output / "inventory.json", result)
-            (output / "index.html").write_text(render_inventory(result, read(lookup) if lookup.is_file() else {}), encoding="utf-8")
+            (output / "index.html").write_text(render_inventory(result, read(lookup) if lookup.is_file() else {},
+                read(root / f"stats/{source['format']}/archetype_names.json").get("names", [])
+                if (root / f"stats/{source['format']}/archetype_names.json").is_file() else []), encoding="utf-8")
             summary = {key: result[key] for key in ("required_user", "machine_pending", "errors", "new_types", "work")}
             summary["material"] = str(output / "index.html")
             summary["source"] = str(output / "source.json") if args.no_feature else str(args.source)
