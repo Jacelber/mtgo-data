@@ -235,6 +235,15 @@ def test_joint_web_shows_source_date_totals_and_existing_names(tmp_path, monkeyp
     output.mkdir()
     workflow.classification_material(tmp_path, "modern", "2026-W39", ["456"], output, tmp_path / "lookup.json")
     page = (output / "index.html").read_text(encoding="utf-8")
-    for text in ("2026-09-21", "2026-09-20", "Synthetic Melee", "主牌 · 共 60 张", "备牌 · 共 15 张",
-                 "测试牌 · Synthetic Card", "href='#melee:456:p1'", "event.json#/players/0"):
-        assert text in page
+    # The shared carrier stores complete input; cards/totals are rendered when
+    # the owner opens a row rather than expanding every deck in the HTML.
+    embedded = json.loads(page.split('<script id="review-data" type="application/json">')[1].split('</script>')[0])
+    assert embedded["localization"]["Synthetic Card"]["zh_name"] == "测试牌"
+    one, two = embedded["material"]["members"]
+    assert one["records"][0]["date"] == "2026-09-21"
+    assert one["records"][0]["source_locator"] == "event.json#/players/0"
+    assert two["records"][0]["reference"] == "melee:456:p1"
+    assert two["records"][0]["date"] == "2026-09-20"
+    assert two["records"][0]["event_name"] == "Synthetic Melee"
+    assert sum(c["qty"] for c in two["records"][0]["main_deck"]) == 60
+    assert sum(c["qty"] for c in two["records"][0]["sideboard"]) == 15

@@ -496,6 +496,12 @@ Responsibilities:
 - `landing_screening.py` owns private MTGO weekly candidate screening and
   reusable deck-selection helpers;
 - `landing_editorial.py` owns the reviewed Landing source and workbook import;
+- `landing_tabletop.py` reads explicitly included retained same-week Melee
+  deck/Swiss results for optional Feature selection. Its separate catalog and
+  digest bind event, classification and score inputs; `all_top8` and MTGO
+  populations are unchanged. Selected public decks carry `source: melee`,
+  `event_name` and `swiss_record`; only MTGO selected decks have the rank-8
+  limit. The complete private tabletop catalog is not a public Landing dump;
 - stable parent-ID tracking for every maintained format;
 - known-state maintenance inside the private Landing review boundary;
 - format metadata that identifies matchup source and measured archive

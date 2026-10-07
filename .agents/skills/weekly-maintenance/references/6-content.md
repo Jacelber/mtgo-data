@@ -2,7 +2,8 @@
 
 输入：5的对象与缺项；用户Feature有无、对象、类别、四张不同主备牌、逐条Feature中文、Landing中文；环境代表牌仅实际未决时提供。自然语言在对话累计，机器整理SOURCE，不要求重填表。
 用 `inspect`核对机械缺项。缺用户输入只提醒，无委托不推荐／代写。中文定稿与明确选择直接是决定，保留原消息引用；机器英文仍须确认。牌名通过共享目录规范化，真实歧义才问。无关英文不重译。
-SOURCE保留all_top8和bindings不动。仅填写review.top_copy.items：`[{order:1,text:{zh:原文,en:英文草稿}}]`；review.features为`{explicit_empty:false,items:[...]}`，每项包含destination_id（已有token）、parent_id/subtype_id（从all_top8取）、category（new_deck/new_technology）、source_order（用户选择顺序）、featured_cards（4个标准牌名）、positioning（zh/en）、supporting_facts（candidate_evidence中对应reasons，无则[]）。明确不选用explicit_empty:true及items:[]。保留中文中的`[deck:...]`链接标记并在英文对应位置使用。用户不需要填写此结构。
+SOURCE保留all_top8、可选tabletop及bindings不动。仅填写review.top_copy.items：`[{order:1,text:{zh:原文,en:英文草稿}}]`；review.features为`{explicit_empty:false,items:[...]}`，每项包含destination_id（已有token）、parent_id/subtype_id（从all_top8或tabletop.decks取）、category（new_deck/new_technology）、source_order（用户选择顺序）、featured_cards（4个标准牌名）、positioning（zh/en）、supporting_facts（candidate_evidence中对应reasons，无则[]）。明确不选用explicit_empty:true及items:[]。保留中文中的`[deck:...]`链接标记并在英文对应位置使用。用户不需要填写此结构。
+实体Feature沿用同样的四牌、中文、英文和实际页面审阅，正式内容保留来源、赛事名及瑞士轮成绩；链接展开本条完整牌表，不套用MTGO平均牌表或把实体成绩混入环境统计。
 `python tools/weekly_maintenance.py prepare --root ROOT --source SOURCE --facts FACTS --base-site BASE_SITE --output NEW_DIR` 准备私有实际页面。FACTS是5的已接纳固定事实，含既有review_facts；BASE_SITE使用现有确定站点。工具复用事实生成material_digest，不重跑分类。
 有本次明确的环境代表牌决定时，加 `--visuals CHOICES_JSON`，内容为`{"类别稳定ID":["英文牌名1","英文牌名2"]}`。机器从已有双语目录忠实转换；实际歧义才问。工具同时更新候选环境、受影响代表图配置及私有visuals.yaml，保留其它赛制和条目。用户无需填写JSON。
 必要资源缺失时，在已获准正常内容制作中加 `--fetch-missing-resources`，只查当前选中牌名和补缺图，复用有效缓存。隔离重放使用提供的`--resource-fixture FIXTURE`有限响应，禁止转到真实网络。资源失败保留NEW_DIR，从 `resources --preparation NEW_DIR --fetch-missing-resources`（隔离时换fixture参数）续作；已有preview.json即是固定快照，禁止原地修改，需新修订。不是重新抓取赛事输入。

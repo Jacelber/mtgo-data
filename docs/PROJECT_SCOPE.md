@@ -450,6 +450,14 @@ and left to right; features not mentioned in top copy appear last in their
 category. The Owner continues to control category, positioning, representative
 cards, and all top-copy prose.
 
+Weekly Features may also select retained, classified decks from explicitly
+included same-format tabletop events in that week, with at most two Swiss
+losses across both days. Playoffs are excluded from that selection condition.
+Such Features retain their tabletop source, event and Swiss record and expand
+their own exact decklist. They do not change MTGO environment populations,
+candidate statistics or average decks. Missing results are not zero losses;
+early drops show their actual played record without a minimum win requirement.
+
 The approved bilingual classifier-name catalog is also the display authority
 for classifier-backed parent and subtype labels across the Chinese variants of
 the Landing, every retained MTGO view, and applicable Tabletop views. English

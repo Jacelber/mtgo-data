@@ -281,7 +281,7 @@ function landingFeatureDetail(item) {
   const identity = item.subtype_id
     ? `${item.archetype_id}/${item.subtype_id}`
     : item.archetype_id;
-  const reference = currentContext.featureDecks
+  const reference = item.deck.source !== "melee" && currentContext.featureDecks
     ? locateDeck(currentContext.featureDecks, identity)
     : null;
   return deckDetailHtml({
@@ -289,6 +289,10 @@ function landingFeatureDetail(item) {
     exactDeck: item.deck,
     averageDeck: reference?.average_deck,
     comparison: { rank: item.deck.final_rank },
+    showEventContext: item.deck.source === "melee",
+    showReference: item.deck.source !== "melee",
+    performanceHtml: item.deck.source === "melee"
+      ? `<p>${I18n.language() === "zh" ? "实体大赛 · 瑞士轮" : "Tabletop · Swiss"}: ${item.deck.swiss_record.wins}-${item.deck.swiss_record.losses}-${item.deck.swiss_record.draws}</p>` : "",
     closeAction: `data-landing-feature-toggle="${escapeHtml(item.destination_id)}"`,
     showDeviation: false,
     className: "deck-detail landing-feature-detail",
@@ -302,7 +306,14 @@ function landingFeatureHtml(item) {
   const category = item.category === "new_deck"
     ? t("landing.feature_new_deck")
     : t("landing.feature_new_technology");
-  return `<article class="landing-feature-item ${open ? "open" : ""}" data-feature-destination="${escapeHtml(id)}"><div class="landing-feature-summary"><button type="button" class="landing-feature-toggle" data-landing-feature-toggle="${escapeHtml(id)}" aria-expanded="${open}"><span class="landing-feature-copy"><span class="landing-feature-category">${category}</span><strong>${escapeHtml(classifierName(item.archetype_id, item.subtype_id))}</strong><span>${escapeHtml(localizedValue(item.positioning))}</span></span><span class="landing-feature-sign" aria-hidden="true">${open ? "−" : "+"}</span></button><span class="landing-feature-media"><span class="landing-feature-cards" aria-label="${t("landing.four_cards")}">${item.featured_cards.map(landingFeatureCard).join("")}</span><button class="landing-feature-image-retry secondary-button" type="button" data-retry-feature-images hidden>${t("card.image_retry_group")}</button></span></div>${open ? landingFeatureDetail(item) : ""}</article>`;
+  const source = item.deck?.source === "melee"
+    ? `<span>${escapeHtml(item.deck.event_name)} · ${I18n.language() === "zh" ? "瑞士轮" : "Swiss"} ${item.deck.swiss_record.wins}-${item.deck.swiss_record.losses}-${item.deck.swiss_record.draws}</span>` : "";
+  // The toggle is a button, so show token labels without nesting card links.
+  const positioning = localizedValue(item.positioning).replace(
+    /\[\[card:([^\[\]|\r\n]+)(?:\|([^\[\]|\r\n]+))?\]\]/g,
+    (_, name, label) => label || cardDisplay(name).displayName,
+  );
+  return `<article class="landing-feature-item ${open ? "open" : ""}" data-feature-destination="${escapeHtml(id)}"><div class="landing-feature-summary"><button type="button" class="landing-feature-toggle" data-landing-feature-toggle="${escapeHtml(id)}" aria-expanded="${open}"><span class="landing-feature-copy"><span class="landing-feature-category">${category}</span><strong>${escapeHtml(classifierName(item.archetype_id, item.subtype_id))}</strong>${source}<span>${escapeHtml(positioning)}</span></span><span class="landing-feature-sign" aria-hidden="true">${open ? "−" : "+"}</span></button><span class="landing-feature-media"><span class="landing-feature-cards" aria-label="${t("landing.four_cards")}">${item.featured_cards.map(landingFeatureCard).join("")}</span><button class="landing-feature-image-retry secondary-button" type="button" data-retry-feature-images hidden>${t("card.image_retry_group")}</button></span></div>${open ? landingFeatureDetail(item) : ""}</article>`;
 }
 
 function landingFeaturesHtml(context) {
