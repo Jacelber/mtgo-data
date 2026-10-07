@@ -10,6 +10,35 @@ SELECTION = {"method": "entry-direct-v1", "entry": ENTRY}
 SEMANTIC_VISUALS = "assets/js/phase8/archetype-visuals.js"
 
 
+def versioned_entry_equivalent(proof, before_resources, after_resources):
+    """Verify retained HTML differs only in content-bound renderer versions."""
+    if not isinstance(proof, dict):
+        return False
+    normalized = []
+    for key, resources in (("before_html", before_resources), ("after_html", after_resources)):
+        text = proof.get(key)
+        if not isinstance(text, str) or sha256(text.encode("utf-8")).hexdigest() != resources[ENTRY]:
+            return False
+        parser = References()
+        try:
+            parser.feed(text)
+            parser.close()
+            for reference in parser.paths:
+                url = urlsplit(reference)
+                if not url.query:
+                    continue
+                relative = url.path
+                if (url.scheme or url.netloc or url.fragment or relative not in resources
+                        or not re.fullmatch(r"v=[0-9a-f]{12}", url.query)
+                        or url.query[2:] != resources[relative][:12]):
+                    return False
+                text = text.replace(reference, relative)
+        except ValueError:
+            return False
+        normalized.append(text.replace("\r\n", "\n"))
+    return normalized[0] == normalized[1]
+
+
 class References(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)

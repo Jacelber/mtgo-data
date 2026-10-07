@@ -187,3 +187,44 @@ def test_renderer_repair_preserves_original_acceptance_and_all_other_material(tm
     else:
         with pytest.raises(ValueError): review.require_accepted(old, decisions, current=current)
     assert decisions["decisions"] == original["decisions"]
+
+
+@pytest.mark.parametrize("change", [None, "line_endings", "wrong_version", "markup", "unbound_html", "no_entry_proof"])
+def test_renderer_repair_accepts_only_bound_cache_version_entry_changes(tmp_path, change):
+    entry(tmp_path)
+    before_html = (tmp_path / "index.html").read_text()
+    old = packet(tmp_path)
+    decisions = review.record_decision(old, None, ["final_page"], evidence="synthetic Owner acceptance",
+        accepted_on="2026-09-21", entrypoint="https://example.invalid/preview")
+    write(tmp_path, "assets/js/phase8/app.js", "fixed renderer")
+    version = sha256(b"fixed renderer").hexdigest()[:12]
+    after_html = before_html.replace("app.js\"", f"app.js?v={version}\"")
+    if change == "line_endings":
+        before_html += "\r\n"
+        (tmp_path / "index.html").write_bytes(before_html.encode("utf-8"))
+        old = packet(tmp_path)
+        decisions = review.record_decision(old, None, ["final_page"], evidence="synthetic Owner acceptance",
+            accepted_on="2026-09-21", entrypoint="https://example.invalid/preview")
+        after_html += "\n"
+    (tmp_path / "index.html").write_bytes(after_html.encode("utf-8"))
+    current = packet(tmp_path)
+    if change == "wrong_version":
+        after_html = after_html.replace(version, "0" * 12)
+    if change == "markup":
+        after_html += "<p>Changed user content</p>"
+    if change in {"wrong_version", "markup"}:
+        for mapping in (current["bindings"]["renderer_resources"], current["dimensions"]["final_page"]["renderer_resources"]):
+            mapping["index.html"] = sha256(after_html.encode()).hexdigest()
+        resign(current)
+    proof = {"method": "same-display-renderer-repair-v1", "format": "standard", "week": "2026-W38",
+        "product_digest": "product", "before": deepcopy(old["bindings"]["renderer_resources"]),
+        "after": deepcopy(current["bindings"]["renderer_resources"]),
+        "evidence": "synthetic unchanged display with cache version update", "verification_sha256": "a" * 64,
+        "entry_version_repair": {"before_html": before_html, "after_html": after_html}}
+    if change == "unbound_html": proof["entry_version_repair"]["before_html"] += " "
+    if change == "no_entry_proof": proof.pop("entry_version_repair")
+    decisions["renderer_repair"] = proof
+    if change in {None, "line_endings"}:
+        review.require_accepted(old, decisions, current=current)
+    else:
+        with pytest.raises(ValueError): review.require_accepted(old, decisions, current=current)

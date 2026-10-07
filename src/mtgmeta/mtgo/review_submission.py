@@ -131,7 +131,7 @@ def preview_validity(packet: dict, current: dict, *, dimensions_only: bool = Fal
     Completion's existing dimensions-only contract remains distinct from a full
     submission comparison; both use the same resource compatibility proof.
     """
-    from .preview_resources import SELECTION, ENTRY
+    from .preview_resources import SELECTION, ENTRY, versioned_entry_equivalent
     validate_packet(packet)
     validate_packet(current)
     if packet["kind"] != "preview" or any(packet[key] != current[key] for key in ("format", "week", "kind")):
@@ -195,7 +195,8 @@ def preview_validity(packet: dict, current: dict, *, dimensions_only: bool = Fal
             and proof.get("before") == old_resources
             and proof.get("after") == new_resources
             and set(old_resources) == set(new_resources)
-            and old_resources[ENTRY] == new_resources[ENTRY]
+            and (old_resources[ENTRY] == new_resources[ENTRY]
+                 or versioned_entry_equivalent(proof.get("entry_version_repair"), old_resources, new_resources))
             and old_resources != new_resources
             and isinstance(proof.get("evidence"), str) and bool(proof["evidence"].strip())
             and isinstance(proof.get("verification_sha256"), str)
