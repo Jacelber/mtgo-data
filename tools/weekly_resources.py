@@ -1,5 +1,6 @@
 """Selected Landing resource closure; preserve all unrelated cache entries."""
 from copy import deepcopy
+from datetime import timedelta
 import hashlib
 import json
 from pathlib import Path
@@ -86,6 +87,23 @@ def ensure(site: Path, page: dict, *, fetch_missing=False, fixture: Path | None 
     manifest_path = site / "assets/card-cache/v1/manifest.json"
     original_manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.is_file() else {"cards": []}
     manifest = deepcopy(original_manifest)
+    # The browser admits images only for weeks in the format's rolling window.
+    # Adding card uses alone leaves a new week's English images inaccessible.
+    windows = manifest.setdefault("formats", [])
+    window = next((item for item in windows if item["format"] == format_id), None)
+    weeks = set(window["selected_weeks"] if window else []) | {week}
+    anchor = max(cache._week_monday(value) for value in weeks)
+    minimum = anchor - timedelta(weeks=cache.CACHE_WINDOW_WEEKS - 1)
+    updated = {"format": format_id, "anchor_week": cache._week_id(anchor),
+               "window_end": cache._week_id(anchor), "window_start": cache._week_id(minimum),
+               "selected_weeks": sorted((value for value in weeks
+                   if minimum <= cache._week_monday(value) <= anchor), reverse=True)}
+    if window is None:
+        windows.append(updated)
+    else:
+        window.update(updated)
+    manifest.update(schema_version=cache.CACHE_SCHEMA_VERSION, product=cache.CACHE_PRODUCT,
+                    public_prefix=cache.CACHE_PUBLIC_PREFIX, window_size_weeks=cache.CACHE_WINDOW_WEEKS)
     for name in sorted({c["name"] for f in page["features"]["items"] for c in f["featured_cards"]}):
         names.add(name)
         entry = next((c for c in manifest["cards"] if c["name"] == name), None)

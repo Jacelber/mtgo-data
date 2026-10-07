@@ -363,16 +363,20 @@
     },
     "summaryDeck": {
       "type": "object",
+      "allOf": [{"if": {"required": ["source"], "properties": {"source": {"const": "melee"}}}, "then": {"required": ["event_name", "swiss_record"]}, "else": {"properties": {"final_rank": {"maximum": 8}}}}],
       "additionalProperties": false,
       "required": ["archetype_id", "display_name", "event_id", "deck_id", "deck_fingerprint_sha256", "player", "final_rank", "starttime"],
       "properties": {
         "archetype_id": {"$ref": "#/$defs/stableId"},
         "display_name": {"type": "string", "minLength": 1},
+        "source": {"const": "melee"},
+        "event_name": {"type": "string", "minLength": 1},
+        "swiss_record": {"type": "object", "additionalProperties": false, "required": ["wins", "losses", "draws"], "properties": {"wins": {"type": "integer", "minimum": 0}, "losses": {"type": "integer", "minimum": 0, "maximum": 2}, "draws": {"type": "integer", "minimum": 0}}},
         "event_id": {"type": "string", "pattern": "^[0-9]+$"},
         "deck_id": {"type": "string", "minLength": 1},
         "deck_fingerprint_sha256": {"$ref": "#/$defs/sha256"},
         "player": {"type": "string"},
-        "final_rank": {"type": "integer", "minimum": 1, "maximum": 8},
+        "final_rank": {"type": "integer", "minimum": 1},
         "starttime": {"type": "string", "minLength": 1}
       }
     },
@@ -417,14 +421,18 @@
     },
     "featureDeck": {
       "type": "object",
+      "allOf": [{"if": {"required": ["source"], "properties": {"source": {"const": "melee"}}}, "then": {"required": ["event_name", "swiss_record"]}, "else": {"properties": {"final_rank": {"maximum": 8}}}}],
       "additionalProperties": false,
       "required": ["event_id", "deck_id", "deck_fingerprint_sha256", "player", "final_rank", "player_count", "starttime", "main_deck", "side_deck"],
       "properties": {
+        "source": {"const": "melee"},
+        "event_name": {"type": "string", "minLength": 1},
+        "swiss_record": {"type": "object", "additionalProperties": false, "required": ["wins", "losses", "draws"], "properties": {"wins": {"type": "integer", "minimum": 0}, "losses": {"type": "integer", "minimum": 0, "maximum": 2}, "draws": {"type": "integer", "minimum": 0}}},
         "event_id": {"type": "string", "pattern": "^[0-9]+$"},
         "deck_id": {"type": "string", "minLength": 1},
         "deck_fingerprint_sha256": {"$ref": "#/$defs/sha256"},
         "player": {"type": "string"},
-        "final_rank": {"type": "integer", "minimum": 1, "maximum": 8},
+        "final_rank": {"type": "integer", "minimum": 1},
         "player_count": {"type": "integer", "minimum": 1},
         "starttime": {"type": "string", "minLength": 1},
         "main_deck": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/cardQuantity"}},

@@ -384,6 +384,7 @@ function deckDetailHtml({
   referenceNote = "",
   performanceHtml = "",
   showDeviation = true,
+  showReference = true,
   showEventContext = false,
   className = "deck-detail",
   responsiveKey = "",
@@ -400,7 +401,7 @@ function deckDetailHtml({
     <button class="deck-close" type="button" ${closeAction}${responsiveAttribute("close")} aria-label="${t("deck.close")}">✕</button>
     <h3>${escapeHtml(title)}</h3>
     ${baseStatus === "unavailable" ? `<p class="detail-status">${t("deck.comparison_unavailable")}</p>` : ""}
-    <div class="deck-columns">
+    <div class="deck-columns"${showReference ? "" : ' style="grid-template-columns:1fr"'}>
       <div class="deck-column">
         <h4>${deckTitle}</h4>
         ${deck ? `${deckMetaHtml(deck, comparison, showEventContext)}
@@ -412,7 +413,7 @@ function deckDetailHtml({
           </div>` : ""}<h4>${t("deck.main")}</h4>${cardList(deck.main_deck)}
           <h4>${t("deck.side")}</h4>${cardList(deck.side_deck || deck.sideboard)}` : `<p class="empty-state">${t("empty.deck")}</p>`}
       </div>
-      <div class="deck-column">
+      ${showReference ? `<div class="deck-column">
         ${referenceNote ? `<p class="reference-note">${escapeHtml(referenceNote)}</p>` : ""}
         <div class="deck-mode" role="group" aria-label="${t("deck.average")} / ${t("deck.representative")}">
           <button type="button" data-deck-mode="average"${responsiveAttribute("mode-average")} class="${state.detailMode === "average" ? "active" : ""}">${t("deck.average")}</button>
@@ -420,7 +421,7 @@ function deckDetailHtml({
           <span>（${t("deck.sample", { count: averageDeck?.sample_size ?? "—" })}）</span>
         </div>
         ${averageDeckHtml(averageDeck, showEventContext)}
-      </div>
+      </div>` : ""}
     </div>
   </section>`;
 }

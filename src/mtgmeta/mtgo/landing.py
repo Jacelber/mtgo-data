@@ -944,12 +944,15 @@ def build_document(
             content_validity = None
             if review["schema_version"] == "1.3.0":
                 from . import review_submission as submissions
+                from .landing_tabletop import validate_retained
+                tabletop_binding = validate_retained(root, review)
                 packet = submissions.make_content_packet(root, format_id, week,
                     review["review"], environment, name_document,
                     bindings={"source_event_ids": current["event_ids"], "classifier_digest": rules_digest,
                               "selection_policy_digest": selection_policy_digest,
                               "machine_fact_digest": machine_fact_digest,
-                              "link_catalog_digest": editorial.document_digest(editorial.build_top8_catalog(current_top8))},
+                              "link_catalog_digest": editorial.document_digest(editorial.build_top8_catalog(current_top8)),
+                              **tabletop_binding},
                     facts=review_facts)
                 submitted = review["acceptance"]["submission"]
                 submissions.require_accepted(submitted, review["acceptance"]["decisions"])
@@ -1133,13 +1136,14 @@ def validate_document(document: Mapping[str, Any]) -> None:
             link_orders = [link["order"] for link in links]
             link_tokens = [link["token"] for link in links]
             placements = [
-                (link["deck"]["event_id"], link["deck"]["final_rank"])
+                (link["deck"].get("source", "mtgo"), link["deck"]["event_id"], link["deck"]["final_rank"])
                 for link in links
             ]
             if link_orders != sorted(set(link_orders)):
                 raise MTGOLandingError("Landing weekly summary deck-link order is invalid")
             if len(placements) != len(set(placements)) or any(
-                event_id not in source_event_ids for event_id, _rank in placements
+                link["deck"].get("source") != "melee" and link["deck"]["event_id"] not in source_event_ids
+                for link in links
             ):
                 raise MTGOLandingError("Landing weekly summary deck link is invalid")
             localized_tokens = [

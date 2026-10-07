@@ -62,6 +62,7 @@ function landingFunctions(language = "zh", loadedContext = {}) {
       product: "mtgo-landing",
     },
     t: key => key,
+    deckDetailHtml: value => JSON.stringify(value),
     window: {
       addEventListener: () => {},
       location: { href: "http://localhost/index.html" },
@@ -76,12 +77,32 @@ function landingFunctions(language = "zh", loadedContext = {}) {
       landingEnvironmentRows,
       landingRepresentatives,
       landingFeatureHtml,
+      landingFeatureDetail,
       landingFeatureCard,
       landingFeatureItems,
       landingSummaryText,
     };`, context);
   return context.__landing;
 }
+
+test("tabletop Feature preserves event and Swiss record without an MTGO average", () => {
+  const item = {destination_id: "deck:aaaaaaaaaaaaaaaaaaaa", archetype_id: "a", subtype_id: null,
+    category: "new_technology", positioning: {zh: "说明", en: "Copy"}, featured_cards: [],
+    deck: {source: "melee", event_id: "42", event_name: "Major <Event>", final_rank: 11,
+      swiss_record: {wins: 10, losses: 2, draws: 1}, main_deck: [], side_deck: []}};
+  for (const language of ["zh", "en"]) {
+    const reader = landingFunctions(language, {featureDecks: {decks: {a: {archetype_id: "a", average_deck: {sample_size: 99}}}}});
+    const details = JSON.parse(reader.landingFeatureDetail(item));
+    assert.equal(details.exactDeck.final_rank, 11);
+    assert.equal(details.showEventContext, true);
+    assert.equal(details.showReference, false);
+    assert.equal(details.averageDeck, undefined);
+    assert.match(details.performanceHtml, /10-2-1/);
+    assert.match(reader.landingFeatureHtml(item), /Major &lt;Event&gt;.*10-2-1/);
+    const mtgo = {...item, deck: {...item.deck, source: undefined}};
+    assert.equal(JSON.parse(reader.landingFeatureDetail(mtgo)).averageDeck.sample_size, 99);
+  }
+});
 
 test("weekly summary replaces only the exact deck token with its localized link", () => {
   const { landingSummaryText } = landingFunctions("zh");

@@ -45,6 +45,9 @@ def import_content(root, source):
                 'all_top8':subject['all_top8'],'review':review,'known_archetype_ids':subject['known_archetype_ids']}
     if acceptance:
         document['acceptance'] = acceptance
+    if source.get('tabletop'):
+        document['tabletop'] = source['tabletop']
+        document['bindings']['tabletop_digest'] = source['bindings']['tabletop_digest']
     editorial.validate_review_document(document,root/editorial.DEFAULT_REVIEW_SCHEMA)
     destination = root/'stats'/format_id/'mtgo/landing/review'/f"{subject['week']['id']}.yaml"
     editorial._write_yaml(destination,document)

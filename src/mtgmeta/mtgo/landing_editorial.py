@@ -1195,13 +1195,17 @@ def validate_review_document(document: Mapping[str, Any], schema_path: str | Pat
         raise MTGOLandingEditorialError(
             "Landing top-copy token lacks an exact selected feature: " + ", ".join(unknown)
         )
-    catalog_tokens = set(top8_tokens)
+    from .landing_tabletop import deck_catalog
+    combined = deck_catalog(document)
+    catalog_tokens = {item["token"] for item in combined}
+    if len(catalog_tokens) != len(combined):
+        raise MTGOLandingEditorialError("Landing Feature catalog contains duplicate deck tokens")
     missing = sorted(set(feature_tokens) - catalog_tokens)
     if missing:
         raise MTGOLandingEditorialError(
-            "Landing feature is absent from the exact Top 8 catalog: " + ", ".join(missing)
+            "Landing feature is absent from the fixed deck catalog: " + ", ".join(missing)
         )
-    decks = {item["token"]: item for item in document["all_top8"]}
+    decks = {item["token"]: item for item in combined}
     for feature in feature_items:
         deck = decks[feature["destination_id"]]
         deck_cards = {
@@ -1272,7 +1276,8 @@ def materialize_review(
     """Derive localized titles, links, and feature order from one reviewed source."""
 
     format_id = str(document["format"])
-    decks = {item["token"]: item for item in document["all_top8"]}
+    from .landing_tabletop import deck_catalog, provenance
+    decks = {item["token"]: item for item in deck_catalog(document)}
     summary_items: list[dict[str, Any]] = []
     for item in sorted(document["review"]["top_copy"]["items"], key=lambda value: value["order"]):
         tokens = list(dict.fromkeys(DECK_TOKEN_PATTERN.findall(item["text"]["zh"])))
@@ -1297,6 +1302,7 @@ def materialize_review(
                         "player": deck["player"],
                         "final_rank": deck["final_rank"],
                         "starttime": deck["starttime"],
+                        **provenance(deck),
                     },
                 }
             )
@@ -1344,7 +1350,7 @@ def materialize_review(
                         "main_deck",
                         "side_deck",
                     )
-                },
+                } | provenance(deck),
                 "positioning": dict(item["positioning"]),
                 "featured_cards": [{"name": card} for card in item["featured_cards"]],
                 "supporting_facts": [dict(fact) for fact in item["supporting_facts"]],

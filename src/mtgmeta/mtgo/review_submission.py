@@ -464,6 +464,8 @@ def content_packet(root: Path, source: dict) -> dict:
     format_id, week = source["format"], source["week"]["id"]
     admitted_scope = source.get("acceptance", {}).get("decisions", {}).get("admitted_scope")
     if admitted_scope is not None:
+        from .landing_tabletop import validate_retained
+        tabletop_binding = validate_retained(root, source)
         actual = editorial.build_admitted_content_facts(root, format_id, week, admitted_scope=admitted_scope)
         if actual["admitted_scope"] != admitted_scope:
             raise ValueError("Content admission scope changed; retain the prior candidate and resolve the increment")
@@ -471,7 +473,7 @@ def content_packet(root: Path, source: dict) -> dict:
         bindings = {"source_event_ids": page["source_event_ids"], "classifier_digest": page["classifier"]["digest"],
             "selection_policy_digest": editorial.document_digest(editorial.screening.load_screening_policy(root)),
             "machine_fact_digest": page["review_binding"]["machine_fact_digest"],
-            "link_catalog_digest": editorial.document_digest(actual["all_top8"])}
+            "link_catalog_digest": editorial.document_digest(actual["all_top8"]), **tabletop_binding}
         packet = make_content_packet(root, format_id, week, source["review"], page["environment"],
             editorial.load_name_catalog_document(root / editorial.DEFAULT_NAME_CATALOG),
             bindings=bindings, facts=actual["review_facts"])
@@ -482,6 +484,8 @@ def content_packet(root: Path, source: dict) -> dict:
         raise ValueError("Review content week differs from its actual subject")
     bindings = {key: subject[key] for key in ("source_event_ids", "classifier_digest",
                 "selection_policy_digest", "machine_fact_digest", "link_catalog_digest")}
+    from .landing_tabletop import validate_retained
+    bindings.update(validate_retained(root, source))
     if any(source["bindings"].get(key) != value for key, value in bindings.items()) and not source.get("acceptance"):
         raise ValueError("Review content uses outdated source bindings")
     year, number = week.split("-W")

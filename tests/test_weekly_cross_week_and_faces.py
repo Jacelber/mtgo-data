@@ -27,6 +27,8 @@ def retained_content(tmp_path):
     registry_path = root / publication.ADMISSION_PATH
     registry = flow.read(registry_path)
     registry["records"] = []  # This fixture exercises content, not archive health.
+    admission = registry["data_admissions"]["formats"]["pauper"]
+    admission["weekly_acceptances"] = [r for r in admission["weekly_acceptances"] if r["week"] <= "2026-W39"]
     flow.write(registry_path, registry)
     admitted, events = publication._resolve_scope(root, "pauper")
     for relative, event in events:
@@ -35,6 +37,11 @@ def retained_content(tmp_path):
             flow.write(root / relative, event)
     facts_dir = tmp_path / "facts"
     facts_dir.mkdir()
+    # Live repository metadata advances; this fixture starts from W39 delivery.
+    admitted, _ = publication._resolve_scope(root, "pauper")
+    metadata = flow.read(root / "stats/pauper/mtgo/meta.json")
+    metadata["publication"].update(week="2026-W39", scope_digest=admitted.subject_digest)
+    flow.write(root / "stats/pauper/mtgo/meta.json", metadata)
     flow.prepare_facts(root, "pauper", "2026-W39", facts_dir)
     source, facts = flow.read(facts_dir / "source.json"), flow.read(facts_dir / "facts.json")
     source["review"] = deepcopy(flow.read(flow.ROOT / "stats/pauper/mtgo/landing/review/2026-W39.yaml")["review"])
@@ -120,6 +127,26 @@ def test_new_week_delivery_keeps_old_content_readable_and_detects_real_changes(r
     with pytest.raises(ValueError, match="source binding"):
         review.content_packet(root, source)
     assert review.resume_summary(root, "pauper", "2026-W39")["content"] == "needs_repair"
+
+
+def test_selected_resources_advance_only_current_format_cache_window(tmp_path):
+    site = tmp_path / "site"
+    path = site / "assets/card-cache/v1/manifest.json"
+    other = {"format": "modern", "selected_weeks": ["2026-W39"]}
+    flow.write(path, {"cards": [], "formats": [deepcopy(other), {
+        "format": "standard", "selected_weeks": ["2026-W39", "2026-W38", "2026-W37", "2026-W36"]}]})
+    page = {"format": "standard", "week": {"id": "2026-W40"},
+            "environment": {"rows": []}, "features": {"items": []}}
+    assert weekly_resources.ensure(site, page)["downloaded"] == []
+    manifest = flow.read(path)
+    assert manifest["formats"][0] == other
+    assert manifest["formats"][1] == {
+        "format": "standard", "selected_weeks": ["2026-W40", "2026-W39", "2026-W38", "2026-W37"],
+        "anchor_week": "2026-W40", "window_end": "2026-W40", "window_start": "2026-W37"}
+    assert manifest["schema_version"] == "1.1.0"
+    before = path.read_bytes()
+    weekly_resources.ensure(site, page)
+    assert path.read_bytes() == before
 
 
 @pytest.mark.parametrize("name", ["Front", "Front // Back"])

@@ -71,7 +71,8 @@ def card_names(deck):
 
 def normalize_selected_cards(source, lookup):
     result, changes = deepcopy(source), []
-    decks = {d["token"]: d for d in source.get("all_top8", [])}
+    from mtgmeta.mtgo.landing_tabletop import deck_catalog
+    decks = {d["token"]: d for d in deck_catalog(source)}
     for item in result.get("review", {}).get("features", {}).get("items", []):
         deck = decks.get(item.get("destination_id"))
         if deck is None:
@@ -106,6 +107,12 @@ def inventory(root, source, displayed=None, previous=None, facts=None):
     bound_decks = source.get("bindings", {}).get("link_catalog_digest")
     if bound_decks and editorial.document_digest(decks) != bound_decks:
         raise ValueError("Retained deck catalog changed without a new submission binding")
+    from mtgmeta.mtgo import landing_tabletop as tabletop
+    if source.get("tabletop"):
+        if source["bindings"].get("tabletop_digest") != tabletop.digest(source["tabletop"]):
+            raise ValueError("Retained tabletop catalog changed without its submission binding")
+    mtgo_decks = decks
+    decks = tabletop.deck_catalog(source)
     if facts and facts.get("digest") and facts["digest"] != digest({k: v for k, v in facts.items() if k != "digest"}):
         raise ValueError("Fixed content facts changed")
     records = {item["token"]: item for item in decks}
@@ -176,7 +183,7 @@ def inventory(root, source, displayed=None, previous=None, facts=None):
         status = "displayed_configuration_reused" if same else "changed" if prior else "not_previously_displayed"
         if not same:
             required.append(f"环境栏 {parent}: {'首次展示' if not prior else '实际改变'}的代表牌／展示确认")
-        underlying = facts.get("environment_decks", decks) if facts else decks
+        underlying = facts.get("environment_decks", mtgo_decks) if facts else mtgo_decks
         environment.append({"archetype_id": parent, "status": status, "cards": cards,
                             "name": names.get(parent, {}).get("zh") or row.get("display_name") or parent,
                             "facts": row, "decks": [d for d in underlying if d["parent_id"] == parent]})
@@ -184,7 +191,9 @@ def inventory(root, source, displayed=None, previous=None, facts=None):
             "displayed_page_digest": digest(displayed) if displayed else None,
             "aliases": identities, "active_aliases": aliases, "required_user": required,
             "machine_pending": machine, "errors": errors, "environment": environment,
-            "all_top8": decks, "new_types": [r["archetype_id"] for r in environment if r["status"] == "not_previously_displayed"],
+            "all_top8": mtgo_decks, "tabletop_decks": source.get("tabletop", {}).get("decks", []),
+            "tabletop_events": source.get("tabletop", {}).get("events", []),
+            "new_types": [r["archetype_id"] for r in environment if r["status"] == "not_previously_displayed"],
             "candidate_evidence": source.get("candidate_evidence", []),
             "work": {"classified": 0, "fetched": 0, "generated_pages": 0,
                      "reuse_check": "fixed source scope and displayed environment rows only"}}
@@ -211,6 +220,8 @@ def link_or_copy(source, destination):
 def prepare(root, source, base, output, facts=None, *, visuals=None, fetch_missing=False, resource_fixture=None):
     """Compose only editorial outputs over a fixed site; no acceptance is invented."""
     format_id, week = scope(source)
+    from mtgmeta.mtgo.landing_tabletop import validate_retained
+    validate_retained(root, source)
     if not facts or "review_facts" not in facts or "admitted_scope" not in facts:
         raise ValueError("Fixed admitted facts with review_facts required; use the facts entry once")
     state = inventory(root, source, read(base / f"stats/{format_id}/mtgo/landing/current.json"), facts=facts)
@@ -286,6 +297,30 @@ def prepare(root, source, base, output, facts=None, *, visuals=None, fetch_missi
         index["weeks"].insert(0, {"week": week, "file": f"{week}.json", "start": source["week"]["start"],
                                 "end": source["week"]["end"], "feature_count": len(public_features)})
     changed = []
+    if any(item["deck"].get("source") == "melee" for item in public_features):
+        # A previously accepted base may predate tabletop Feature rendering.
+        # Copy on write so its original renderer/preview remain unchanged.
+        for name in ("app-core.js", "app-mtgo.js"):
+            relative = Path("assets/js/phase8") / name
+            renderer = (root / relative).read_bytes()
+            if not (site / relative).is_file() or (site / relative).read_bytes() != renderer:
+                temporary = (site / relative).with_suffix(".js.new")
+                temporary.write_bytes(renderer)
+                temporary.replace(site / relative)
+                changed.append(relative.as_posix())
+        entrypoint = site / "index.html"
+        html = entrypoint.read_text(encoding="utf-8")
+        from hashlib import sha256
+        for name in ("app-core.js", "app-mtgo.js"):
+            relative = f"assets/js/phase8/{name}"
+            version = sha256((site / relative).read_bytes()).hexdigest()[:12]
+            html = re.sub(re.escape(relative) + r'(?:\?[^"\s>]*)?(?=")',
+                          relative + "?v=" + version, html)
+        if html != entrypoint.read_text(encoding="utf-8"):
+            temporary = entrypoint.with_suffix(".html.new")
+            temporary.write_text(html, encoding="utf-8")
+            temporary.replace(entrypoint)
+            changed.append("index.html")
     for relative, value in ((page_path, page), (archive_path, archive), (index_path, index)):
         if not (base / relative).is_file() or value != read(base / relative):
             write(site / relative, value)
@@ -687,7 +722,8 @@ def finalize_source(root, source, site, acceptance, facts):
     document["bindings"]["bilingual_catalog_digest"] = submissions.name_digest(packet)
     document["bindings"]["content_sha256"] = editorial.document_digest({k: document[k] for k in ("format", "week", "review")})
     document["acceptance"] = {"submission": packet, "decisions": receipt}
-    document.setdefault("known_archetype_ids", sorted({d["parent_id"] for d in source["all_top8"]}))
+    from mtgmeta.mtgo.landing_tabletop import deck_catalog
+    document.setdefault("known_archetype_ids", sorted({d["parent_id"] for d in deck_catalog(source)}))
     for index, item in enumerate(document.get("candidate_evidence", []), 1):
         item.setdefault("source_order", index)
     editorial.validate_review_document(document, root / editorial.DEFAULT_REVIEW_SCHEMA)
@@ -725,6 +761,12 @@ def main(argv=None):
     resources.add_argument("--preparation", type=Path, required=True)
     resources.add_argument("--fetch-missing-resources", action="store_true")
     resources.add_argument("--resource-fixture", type=Path)
+    tabletop = sub.add_parser("tabletop", help="Add explicitly selected retained Swiss <=2-loss Feature decks")
+    tabletop.add_argument("--root", type=Path, required=True)
+    tabletop.add_argument("--source", type=Path, required=True)
+    tabletop.add_argument("--facts", type=Path, required=True)
+    tabletop.add_argument("--event", action="append", required=True)
+    tabletop.add_argument("--output", type=Path, required=True)
     for name in ("inspect", "prepare"):
         cmd = sub.add_parser(name)
         cmd.add_argument("--root", type=Path, default=ROOT)
@@ -876,6 +918,21 @@ def main(argv=None):
             return 0
         root = args.root.resolve()
         output = new_output(root, args.output)
+        if args.command == "tabletop":
+            from mtgmeta.mtgo import landing_tabletop
+            source, facts = read(args.source), read(args.facts)
+            format_id, week = scope(source)
+            value = landing_tabletop.build_catalog(root, format_id, week, args.event)
+            source["tabletop"] = value
+            source["bindings"]["tabletop_digest"] = landing_tabletop.digest(value)
+            facts["bindings"] = deepcopy(source["bindings"])
+            facts["digest"] = digest({k: v for k, v in facts.items() if k != "digest"})
+            write(output / "source.json", source)
+            write(output / "facts.json", facts)
+            print(json.dumps({"source": str(output / "source.json"), "facts": str(output / "facts.json"),
+                              "events": value["events"], "deck_count": len(value["decks"]),
+                              "fetched": 0, "classified": 0}, ensure_ascii=False))
+            return 0
         if args.command == "render":
             material = read(args.input)
             format_id, _ = scope(material)
