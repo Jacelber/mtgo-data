@@ -54,6 +54,7 @@ const { chromium } = require(process.env.WEEKLY_PLAYWRIGHT || 'playwright');
       // Isolation: external network is blocked and reported, never fetched to
       // disguise missing local resources during a cache-hit replay.
       const external = [];
+      let linkPreviewExternal = [];
       await page.route('**/*', route => {
         if (new URL(route.request().url()).origin !== new URL(base).origin) {
           external.push(route.request().url());
@@ -65,6 +66,31 @@ const { chromium } = require(process.env.WEEKLY_PLAYWRIGHT || 'playwright');
       await page.locator('body').waitFor();
       if (await page.locator('.landing-feature-item').count() !== document.features.items.length) {
         errors.push('Rendered Feature count differs from the fixed page');
+      }
+      if ((await page.locator('.landing-feature-summary').allTextContents()).some(text => text.includes('[[card:'))) {
+        errors.push('Feature summary exposes internal card tokens');
+      }
+      if (!onlyFeature) {
+        const links = page.locator('a[data-landing-feature-destination]');
+        for (const link of await links.all()) {
+          const token = await link.getAttribute('data-landing-feature-destination');
+          await link.click();
+          const detail = page.locator(`[data-feature-destination="${token}"] .landing-feature-detail`);
+          await detail.waitFor({ state: 'visible', timeout: 5000 });
+          const feature = document.features.items.find(item => item.destination_id === token);
+          if (!feature || !(await detail.innerText()).includes(feature.deck.player)) {
+            errors.push(`Feature link opens a different deck: ${token}`);
+          }
+          if (feature?.deck.source === 'melee' && (await detail.innerText()).includes(language === 'zh' ? '平均牌表' : 'Average deck')) {
+            errors.push(`Tabletop Feature exposes an MTGO comparison: ${token}`);
+          }
+        }
+        // Expanded full lists can trigger existing remote hover previews when
+        // layout moves beneath the pointer. They are outside selected artwork
+        // closure; retain that evidence separately and check the closed page.
+        linkPreviewExternal = external.splice(0);
+        await page.mouse.move(0, 0);
+        await page.goto(`${base}/index.html?format=${format}&view=landing&lang=${language}`, { waitUntil: 'networkidle' });
       }
       // Exercise lazy loading as a reader does. A full-page screenshot alone
       // does not put below-the-fold images into the viewport.
@@ -89,7 +115,7 @@ const { chromium } = require(process.env.WEEKLY_PLAYWRIGHT || 'playwright');
         src: el.currentSrc || el.src, alt: el.alt, loaded: el.complete && el.naturalWidth > 0
       })));
       const text = await page.locator('body').innerText();
-      const entry = { language, url: page.url(), images, external, errors,
+      const entry = { language, url: page.url(), images, external, linkPreviewExternal, errors,
         text: text.slice(0, 3000), passed: images.length > 0 && images.every(x => x.loaded) && !errors.length && !external.length };
       if (onlyFeature) await region.screenshot({ path: path.join(output, `${language}.png`) });
       else await page.screenshot({ path: path.join(output, `${language}.png`), fullPage: true });

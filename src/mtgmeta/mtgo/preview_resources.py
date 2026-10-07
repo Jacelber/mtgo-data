@@ -1,6 +1,8 @@
 """Direct renderer references of the MTGO entry; not a runtime dependency graph."""
 from html.parser import HTMLParser
+from hashlib import sha256
 from pathlib import Path, PurePosixPath
+import re
 from urllib.parse import unquote, urlsplit
 
 ENTRY = "index.html"
@@ -42,7 +44,7 @@ def select(root: Path) -> list[str]:
         url = urlsplit(reference)
         path = unquote(url.path)
         parts = PurePosixPath(path)
-        if (url.scheme or url.netloc or url.query or url.fragment or not path
+        if (url.scheme or url.netloc or url.fragment or not path
                 or path.startswith("/") or "\\" in path or ":" in path or ".." in parts.parts):
             raise ValueError(f"Unsupported preview renderer reference: {reference}")
         relative = parts.as_posix()
@@ -50,6 +52,9 @@ def select(root: Path) -> list[str]:
         if (not target.is_file() or not target.resolve().is_relative_to(root)
                 or any(item.is_symlink() for item in (target, *target.parents) if item != root)):
             raise ValueError(f"Missing or unsafe preview renderer: {reference}")
+        if url.query and (not re.fullmatch(r"v=[0-9a-f]{12}", url.query)
+                or url.query[2:] != sha256(target.read_bytes()).hexdigest()[:12]):
+            raise ValueError(f"Unsupported preview renderer version: {reference}")
         if relative != SEMANTIC_VISUALS:
             resources.add(relative)
     if len(resources) == 1:

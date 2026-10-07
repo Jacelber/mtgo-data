@@ -257,7 +257,7 @@ test("a reviewed feature keeps one disclosure action and four separate card link
     subtype_id: null,
     display_name: "New Deck",
     headline: { zh: "新套牌标题", en: "New deck headline" },
-    positioning: { zh: "定位文案", en: "Positioning" },
+    positioning: { zh: "[[card:Dispatch|迅速了结]]与[[card:Test Card|<script>]]", en: "Positioning" },
     featured_cards: ["A", "B", "C", "D"].map(name => ({ name })),
     deck: {},
   });
@@ -266,6 +266,9 @@ test("a reviewed feature keeps one disclosure action and four separate card link
   assert.equal((html.match(/data-progressive-image=/g) || []).length, 4);
   assert.match(html, /<\/button><span class="landing-feature-media">/);
   assert.equal((html.match(/data-retry-feature-images/g) || []).length, 1);
+  assert.match(html, /迅速了结与&lt;script&gt;/);
+  assert.doesNotMatch(html, /\[\[card:|<script>/);
+  assert.doesNotMatch(html.match(/<button[^>]*class="landing-feature-toggle"[\s\S]*?<\/button>/)[0], /<a /);
   assert.match(html, /data-retry-feature-images hidden>card\.image_retry_group<\/button>/);
 });
 

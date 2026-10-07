@@ -1,5 +1,6 @@
 """Direct-entry selection and evidence-based legacy projection, without browser gates."""
 from copy import deepcopy
+from hashlib import sha256
 from pathlib import Path
 
 import pytest
@@ -45,6 +46,28 @@ def test_actual_mtgo_entry_has_no_tabletop_only_renderer():
     assert "assets/js/phase8/app-tabletop.js" not in paths
     assert "assets/js/phase8/tabletop-controller.js" not in paths
     assert "assets/js/phase8/archetype-visuals.js" not in paths
+
+
+def test_content_version_reference_binds_actual_renderer_bytes(tmp_path):
+    entry(tmp_path)
+    path = "assets/js/phase8/app.js"
+    version = sha256((tmp_path / path).read_bytes()).hexdigest()[:12]
+    html = (tmp_path / "index.html").read_text()
+    write(tmp_path, "index.html", html.replace(path, f"{path}?v={version}"))
+    assert path in select(tmp_path)
+    write(tmp_path, path, "different renderer")
+    with pytest.raises(ValueError, match="renderer version"):
+        select(tmp_path)
+
+
+@pytest.mark.parametrize("query", ["v=000000000000", "v=1", "v=synthetic", "v=000000000000&other=1"])
+def test_renderer_query_must_be_the_exact_content_version(tmp_path, query):
+    entry(tmp_path)
+    path = "assets/js/phase8/app.js"
+    html = (tmp_path / "index.html").read_text()
+    write(tmp_path, "index.html", html.replace(path, f"{path}?{query}"))
+    with pytest.raises(ValueError, match="renderer version"):
+        select(tmp_path)
 
 
 @pytest.mark.parametrize("reference", ['<script src="https://example.test/code.js"></script>',
