@@ -2607,6 +2607,12 @@ composition, and reviewed weekly summary continue to describe the
 current Landing document. Feature history is therefore not a historical Landing
 statistics contract.
 
+Current and historical Feature titles and classification identifiers are derived
+from the selected exact deck under the current classifier and shared name catalog.
+The selected deck, editorial category, order, prose and display cards remain the
+reviewed choices. A taxonomy migration does not select a replacement deck or
+rewrite the Owner's historical prose.
+
 ### 24.7 Empty and refresh states
 
 No admitted event is a valid `no_events` state and has an automatically empty

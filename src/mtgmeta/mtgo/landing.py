@@ -664,9 +664,13 @@ def _feature_archive_documents(
     name_catalog_path: Path,
     *,
     private: bool = False,
+    mtgo_catalog: Mapping[str, Mapping[str, Any]] | None = None,
+    rules_digest: str | None = None,
+    tabletop_cache: dict | None = None,
 ) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
     editorial.validate_name_catalog(root, name_catalog_path, formats={format_id})
     names = editorial.load_name_catalog(name_catalog_path)
+    rules_digest = rules_digest or classifier_digest(load_rules_for_format(root, format_id))
     admitted: frozenset[str] | None = None
     if not private:
         from .publication import resolve_scope
@@ -693,7 +697,9 @@ def _feature_archive_documents(
             if existing.is_file():
                 raise MTGOLandingError("existing public Landing feature source is outside the admitted scope")
             continue
-        materialized = editorial.materialize_review(review, names)
+        decks = editorial.resolve_review_decks(root, review, mtgo_catalog=mtgo_catalog,
+                                              tabletop_cache=tabletop_cache)
+        materialized = editorial.materialize_review(review, names, decks=decks)
         items = [_public_feature(item) for item in materialized["features"]]
         destinations = [item["destination_id"] for item in items]
         if len(destinations) != len(set(destinations)):
@@ -707,7 +713,7 @@ def _feature_archive_documents(
             "source": SOURCE_ID,
             "week": week,
             "source_event_ids": review["bindings"]["source_event_ids"],
-            "classifier_digest": review["bindings"]["classifier_digest"],
+            "classifier_digest": rules_digest,
             "content_digest": editorial.document_digest(items),
             "features": {"items": items},
         }
@@ -749,6 +755,8 @@ def build_document(
     private: bool = False,
     review_week: str | None = None,
     _prepared_inputs: tuple | None = None,
+    _feature_catalog: dict | None = None,
+    _tabletop_cache: dict | None = None,
 ) -> tuple[str, dict[str, Any]]:
     if _prepared_inputs is not None and _admit_review:
         raise MTGOLandingError("prepared inputs are limited to private content facts")
@@ -785,6 +793,17 @@ def build_document(
     processed_events = _prepared_inputs[2] if _prepared_inputs is not None else {
         id(event): stats.process_event(event, rules) for _event_date, event in events
     }
+    feature_catalog = {}
+    tabletop_cache = _tabletop_cache if _tabletop_cache is not None else {}
+    for _event_date, event in (events if _admit_review else []):
+        records = [
+            {**record, "deck_id": screening._candidate_deck_id(str(event["event_id"]), index, record)}
+            for index, record in enumerate(processed_events[id(event)]["records"])
+            if record["is_top8"]
+        ]
+        feature_catalog.update({item["token"]: item for item in editorial.build_top8_catalog(records)})
+    if _feature_catalog is not None:
+        _feature_catalog.update(feature_catalog)
     current = _period(target_monday, target_sunday, events, processed_events)
     previous = _period(
         previous_monday,
@@ -940,12 +959,14 @@ def build_document(
                 review_path,
                 root / editorial.DEFAULT_REVIEW_SCHEMA,
             )
+            decks = editorial.resolve_review_decks(root, review, mtgo_catalog=feature_catalog,
+                                                  tabletop_cache=tabletop_cache)
             scoped_name_digest = None
             content_validity = None
             if review["schema_version"] == "1.3.0":
                 from . import review_submission as submissions
                 from .landing_tabletop import validate_retained
-                tabletop_binding = validate_retained(root, review)
+                tabletop_binding = validate_retained(root, review, classification_cache=tabletop_cache)
                 packet = submissions.make_content_packet(root, format_id, week,
                     review["review"], environment, name_document,
                     bindings={"source_event_ids": current["event_ids"], "classifier_digest": rules_digest,
@@ -953,7 +974,7 @@ def build_document(
                               "machine_fact_digest": machine_fact_digest,
                               "link_catalog_digest": editorial.document_digest(editorial.build_top8_catalog(current_top8)),
                               **tabletop_binding},
-                    facts=review_facts)
+                    facts=review_facts, decks=decks)
                 submitted = review["acceptance"]["submission"]
                 submissions.require_accepted(submitted, review["acceptance"]["decisions"])
                 content_validity = submissions.packet_validity(submitted, packet)
@@ -991,7 +1012,7 @@ def build_document(
                 for field in binding_fields
                 if review["bindings"].get(field) != current_binding.get(field)
             }
-            materialized = editorial.materialize_review(review, names)
+            materialized = editorial.materialize_review(review, names, decks=decks)
             current_summary_items = materialized["weekly_summary"]
             current_features = [
                 _public_feature(item) for item in materialized["features"]
@@ -1303,6 +1324,8 @@ def generate(
         registry_path=registry_path,
     )
     review_status_detail: dict = {}
+    feature_catalog: dict = {}
+    tabletop_cache: dict = {}
     review_status, document = build_document(
         root,
         format_id,
@@ -1315,6 +1338,8 @@ def generate(
         _review_status_detail=review_status_detail,
         private=private,
         review_week=review_week,
+        _feature_catalog=feature_catalog,
+        _tabletop_cache=tabletop_cache,
     )
     output = (
         Path(output_directory).resolve()
@@ -1366,6 +1391,9 @@ def generate(
         review_root,
         catalog_path,
         private=private,
+        mtgo_catalog=feature_catalog,
+        rules_digest=document["classifier"]["digest"],
+        tabletop_cache=tabletop_cache,
     )
     current_feature = feature_weeks.get(document["week"]["id"])
     if current_feature is None or current_feature["features"]["items"] != document["features"]["items"]:

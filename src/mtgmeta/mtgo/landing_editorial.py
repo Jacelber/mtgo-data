@@ -1132,8 +1132,6 @@ def _feature_rows_by_scope(
                 "source_order": source_order,
                 "category": category,
                 "destination_id": token,
-                "parent_id": deck["parent_id"],
-                "subtype_id": deck["subtype_id"],
                 "positioning": positioning,
                 "featured_cards": featured_cards,
                 "supporting_facts": evidence[key].get(token, []),
@@ -1269,15 +1267,55 @@ def validate_review_binding(
             )
 
 
+def resolve_review_decks(
+    repository_root: str | Path,
+    document: Mapping[str, Any],
+    *,
+    mtgo_catalog: Mapping[str, Mapping[str, Any]] | None = None,
+    tabletop_cache: dict | None = None,
+) -> dict[str, Mapping[str, Any]]:
+    """Resolve selected stable deck references, never stored classification copies."""
+    from .landing_tabletop import build_catalog, deck_catalog
+
+    root = Path(repository_root)
+    selected = {item["destination_id"] for item in document["review"]["features"]["items"]}
+    retained = {item["token"]: item for item in deck_catalog(document)}
+    if mtgo_catalog is None and selected & {item["token"] for item in document["all_top8"]}:
+        subject = build_top8_subject(root, str(document["format"]), document["week"]["id"])
+        mtgo_catalog = {item["token"]: item for item in subject["all_top8"]}
+    current = dict(mtgo_catalog or {})
+    tabletop = document.get("tabletop")
+    if tabletop and selected & {item["token"] for item in tabletop["decks"]}:
+        actual = build_catalog(root, document["format"], document["week"]["id"],
+                               [item["event_id"] for item in tabletop["events"]],
+                               classification_cache=tabletop_cache)
+        current.update({item["token"]: item for item in actual["decks"]})
+    result = {}
+    for token in sorted(selected):
+        original, deck = retained.get(token), current.get(token)
+        if original is None or deck is None:
+            raise MTGOLandingEditorialError(
+                f"{document['format']} {document['week']['id']}: selected Feature deck is missing: {token}"
+            )
+        fields = ("event_id", "deck_id", "deck_fingerprint_sha256", "final_rank")
+        if any(original[key] != deck[key] for key in fields) or original.get("source", "mtgo") != deck.get("source", "mtgo"):
+            raise MTGOLandingEditorialError(f"Selected Feature deck identity or cards changed: {token}")
+        if deck["parent_id"] == "unknown":
+            raise MTGOLandingEditorialError(f"Selected Feature deck has no current classification: {token}")
+        result[token] = deck
+    return result
+
+
 def materialize_review(
     document: Mapping[str, Any],
     names: Mapping[tuple[str, str, str | None], Mapping[str, str]],
+    *,
+    decks: Mapping[str, Mapping[str, Any]],
 ) -> dict[str, list[dict[str, Any]]]:
     """Derive localized titles, links, and feature order from one reviewed source."""
 
     format_id = str(document["format"])
-    from .landing_tabletop import deck_catalog, provenance
-    decks = {item["token"]: item for item in deck_catalog(document)}
+    from .landing_tabletop import provenance
     summary_items: list[dict[str, Any]] = []
     for item in sorted(document["review"]["top_copy"]["items"], key=lambda value: value["order"]):
         tokens = list(dict.fromkeys(DECK_TOKEN_PATTERN.findall(item["text"]["zh"])))
@@ -1327,14 +1365,14 @@ def materialize_review(
         category = item["category"]
         category_counts[category] += 1
         deck = decks[item["destination_id"]]
-        name = names[(format_id, item["parent_id"], item["subtype_id"])]
+        name = names[(format_id, deck["parent_id"], deck["subtype_id"])]
         features.append(
             {
                 "category": category,
                 "order": category_counts[category],
                 "destination_id": item["destination_id"],
-                "archetype_id": item["parent_id"],
-                "subtype_id": item["subtype_id"],
+                "archetype_id": deck["parent_id"],
+                "subtype_id": deck["subtype_id"],
                 "display_name": name["en"],
                 "title": dict(name),
                 "deck": {
@@ -1634,6 +1672,7 @@ __all__ = [
     "load_review_document",
     "name_catalog_binding_digest",
     "materialize_review",
+    "resolve_review_decks",
     "read_review_workbook",
     "validate_name_catalog",
     "validate_review_binding",

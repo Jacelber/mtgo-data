@@ -582,6 +582,13 @@ not change the current Landing brief, environment, composition, or construction
 facts. Every feature carries one stable exact-deck `destination_id`; localized
 names and prose are display content, not navigation identities.
 
+Feature selections retain the exact deck reference, editorial category, order,
+copy and selected cards. Generation resolves that reference to the current
+classification and shared bilingual names, reusing the classified event records.
+Legacy per-feature parent/subtype fields are accepted for compatibility but are
+not classification authority; new imports omit these duplicate fields. Missing
+or changed exact decks are errors, never substituted by another representative.
+
 Private review documents and continuity state remain under
 `stats/<format>/mtgo/landing/review/` and are excluded from Pages. Public feature
 documents contain only materialized reviewed output and the minimum source,
