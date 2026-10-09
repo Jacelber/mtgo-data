@@ -299,6 +299,15 @@ def _allowed_new_path(
             re.fullmatch(r"\d{4}-W\d{2}\.json", parts[5])
         )
     if (
+        len(parts) == 7
+        and parts[0] == "stats"
+        and parts[1] in product_formats
+        and parts[2:5] == ("mtgo", "landing", "weeks")
+    ):
+        return bool(re.fullmatch(r"\d{4}-W\d{2}", parts[5])) and parts[6] in {
+            "range.json", "environment_decks.json", "feature_decks.json", "completeness.json",
+        }
+    if (
         len(parts) == 6
         and parts[0] == "stats"
         and parts[1] in product_formats

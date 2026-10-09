@@ -331,6 +331,26 @@ def test_production_candidate_admits_latest_and_bounded_feature_archive_only():
     )
 
 
+def test_production_candidate_admits_only_pinned_landing_week_dependencies():
+    from validate_production_candidate import _allowed_new_path
+
+    collection_formats = ("legacy", "standard", "modern")
+    product_formats = ("standard", "modern")
+    for name in ("range", "environment_decks", "feature_decks", "completeness"):
+        assert _allowed_new_path(
+            f"stats/standard/mtgo/landing/weeks/{SYNTHETIC_WEEK}/{name}.json",
+            collection_formats, product_formats,
+        )
+    for path in (
+        f"stats/legacy/mtgo/landing/weeks/{SYNTHETIC_WEEK}/range.json",
+        "stats/standard/mtgo/landing/weeks/latest/range.json",
+        f"stats/standard/mtgo/landing/weeks/{SYNTHETIC_WEEK}/review.yaml",
+        f"stats/standard/mtgo/landing/weeks/{SYNTHETIC_WEEK}/extra.json",
+        f"stats/standard/mtgo/landing/weeks/{SYNTHETIC_WEEK}/nested/range.json",
+    ):
+        assert not _allowed_new_path(path, collection_formats, product_formats)
+
+
 def test_production_candidate_admits_only_public_bilingual_name_contract():
     from validate_production_candidate import _allowed_new_path, _allowed_path
 
