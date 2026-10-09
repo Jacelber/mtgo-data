@@ -1,5 +1,6 @@
 """Import already Owner-accepted conversation content into the private week source."""
 import argparse
+from copy import deepcopy
 import json
 from pathlib import Path
 import sys
@@ -20,7 +21,7 @@ def import_content(root, source):
                editorial.build_top8_subject(root, format_id, source['week']['id']))
     if source['week'] != subject['week']:
         raise ValueError('Conversation week does not match current review subject')
-    review = source['review']
+    review = deepcopy(source['review'])
     if review['top_copy']['reviewed'] is not True or review['features']['reviewed'] is not True:
         raise ValueError('Content must already have Owner acceptance')
     catalog = yaml.safe_load((root / editorial.DEFAULT_NAME_CATALOG).read_text(encoding='utf-8'))
@@ -39,7 +40,10 @@ def import_content(root, source):
         bindings['bilingual_catalog_digest'] = submissions.name_digest(current)
     else:
         bindings['bilingual_catalog_digest'] = editorial.name_catalog_binding_digest(catalog, review_schema_version='1.2.0', format_id=format_id)
-    bindings['content_sha256'] = editorial.document_digest({key: source[key] for key in ('format','week','review')})
+    for item in review['features']['items']:
+        item.pop('parent_id', None)
+        item.pop('subtype_id', None)
+    bindings['content_sha256'] = editorial.document_digest({'format':format_id,'week':source['week'],'review':review})
     document = {'schema_version':'1.3.0' if acceptance else '1.2.0','source':'mtgo','format':format_id,'week':subject['week'],
                 'bindings':bindings,'candidate_evidence':subject['candidate_evidence'],
                 'all_top8':subject['all_top8'],'review':review,'known_archetype_ids':subject['known_archetype_ids']}

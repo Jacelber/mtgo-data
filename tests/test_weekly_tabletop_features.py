@@ -79,7 +79,7 @@ def test_tabletop_materialization_carries_source_without_mtgo_population_change(
             "category": "new_technology", "source_order": 1, "featured_cards": ["Card A"],
             "positioning": {"zh": "说明", "en": "Copy"}, "supporting_facts": []}]}}}
     names = {("modern", "prowess", None): {"zh": "灵技", "en": "Prowess"}}
-    result = landing_editorial.materialize_review(source, names)
+    result = landing_editorial.materialize_review(source, names, decks={token: deck})
     assert source["all_top8"] == []
     for actual in (result["features"][0]["deck"], result["weekly_summary"][0]["deck_links"][0]["deck"]):
         assert actual["source"] == "melee" and actual["event_name"] == "Two-day event"
@@ -94,10 +94,29 @@ def test_source_qualified_public_rank_contract():
             "player": "Player", "final_rank": 11, "player_count": 100, "starttime": "2026-10-03",
             "main_deck": [], "side_deck": []}
     assert not validator.is_valid(deck)
+
     deck.update(source="melee", event_name="Event", swiss_record={"wins": 9, "losses": 2, "draws": 1})
     assert validator.is_valid(deck)
     deck["swiss_record"]["losses"] = 3
     assert not validator.is_valid(deck)
+
+
+def test_retained_tabletop_reference_follows_current_taxonomy_without_changing_cards(tmp_path):
+    retained_event(tmp_path)
+    original = landing_tabletop.build_catalog(tmp_path, "modern", "2026-W40", ["123"])
+    source = {"format": "modern", "week": {"id": "2026-W40"}, "all_top8": [], "tabletop": original,
+              "bindings": {"tabletop_digest": landing_tabletop.digest(original)}}
+    weekly_maintenance.write(tmp_path / "configs/taxonomy.json", {
+        "schema_version": "1.0.0", "format": "modern", "archetypes": [{
+            "id": "current", "name": "Current", "priority": 1, "rules": [{
+                "id": "current", "priority": 1, "conditions": {"all": [{"card": "Card A", "zone": "main", "min_count": 1}]}}]}]})
+    cache = {}
+    current = landing_tabletop.build_catalog(tmp_path, "modern", "2026-W40", ["123"], classification_cache=cache)
+    assert current["decks"][0]["parent_id"] == "current"
+    assert current["decks"][0]["token"] == original["decks"][0]["token"]
+    assert current["decks"][0]["main_deck"] == original["decks"][0]["main_deck"]
+    assert landing_tabletop.validate_retained(tmp_path, source, classification_cache=cache) == source["bindings"]
+    assert len(cache) == 1
 
 
 def test_tabletop_accepted_import_and_generation_keep_mtgo_facts(retained_content):
@@ -143,6 +162,8 @@ def test_tabletop_accepted_import_and_generation_keep_mtgo_facts(retained_conten
     path = import_content(root, source)
     restored = landing_editorial.load_review_document(path, root / landing_editorial.DEFAULT_REVIEW_SCHEMA)
     assert restored["tabletop"] == source["tabletop"] and restored["all_top8"] == source["all_top8"]
+    assert all("parent_id" not in item and "subtype_id" not in item
+               for item in restored["review"]["features"]["items"])
     status, page = landing.build_document(root, "pauper", today=date(2026, 9, 28))
     assert page["features"]["items"][0]["deck"]["source"] == "melee", status
     assert page["features"]["items"][0]["deck"]["final_rank"] == 11

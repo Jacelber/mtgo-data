@@ -399,7 +399,12 @@ def visual_colors(root: Path, format_id: str) -> dict:
     }
 
 
-def content_dimensions(root: Path, format_id: str, review: dict, environment: dict, names: dict) -> dict:
+def content_dimensions(root: Path, format_id: str, review: dict, environment: dict, names: dict, *, decks=None) -> dict:
+    if decks is not None:
+        review = deepcopy(review)
+        for item in review["features"]["items"]:
+            deck = decks[item["destination_id"]]
+            item.update(parent_id=deck["parent_id"], subtype_id=deck["subtype_id"])
     colors = visual_colors(root, format_id)
     dimensions = {}
     copy = review["top_copy"]["items"]
@@ -444,8 +449,11 @@ def content_dimensions(root: Path, format_id: str, review: dict, environment: di
     return dimensions
 
 
-def make_content_packet(root, format_id, week, content, environment, names, *, bindings, facts=None):
-    dimensions = content_dimensions(root, format_id, content, environment, names)
+def make_content_packet(root, format_id, week, content, environment, names, *, bindings, facts=None, decks=None):
+    if decks is None and any("parent_id" not in item for item in content["features"]["items"]):
+        from .landing_editorial import build_top8_subject
+        decks = {item["token"]: item for item in build_top8_subject(root, format_id, week)["all_top8"]}
+    dimensions = content_dimensions(root, format_id, content, environment, names, decks=decks)
     established = {}
     for item in names["names"]:
         status = item.get("review_status")
@@ -468,6 +476,8 @@ def content_packet(root: Path, source: dict) -> dict:
         from .landing_tabletop import validate_retained
         tabletop_binding = validate_retained(root, source)
         actual = editorial.build_admitted_content_facts(root, format_id, week, admitted_scope=admitted_scope)
+        decks = editorial.resolve_review_decks(root, source,
+            mtgo_catalog={item["token"]: item for item in actual["all_top8"]})
         if actual["admitted_scope"] != admitted_scope:
             raise ValueError("Content admission scope changed; retain the prior candidate and resolve the increment")
         page = actual["page"]
@@ -477,10 +487,12 @@ def content_packet(root: Path, source: dict) -> dict:
             "link_catalog_digest": editorial.document_digest(actual["all_top8"]), **tabletop_binding}
         packet = make_content_packet(root, format_id, week, source["review"], page["environment"],
             editorial.load_name_catalog_document(root / editorial.DEFAULT_NAME_CATALOG),
-            bindings=bindings, facts=actual["review_facts"])
+            bindings=bindings, facts=actual["review_facts"], decks=decks)
         require_accepted(source["acceptance"]["submission"], source["acceptance"]["decisions"], current=packet)
         return packet
     subject = editorial.build_top8_subject(root, format_id, week)
+    decks = editorial.resolve_review_decks(root, source,
+        mtgo_catalog={item["token"]: item for item in subject["all_top8"]})
     if source["week"] != subject["week"]:
         raise ValueError("Review content week differs from its actual subject")
     bindings = {key: subject[key] for key in ("source_event_ids", "classifier_digest",
@@ -497,7 +509,7 @@ def content_packet(root: Path, source: dict) -> dict:
                                      _admit_review=False, _review_facts=facts)
     names = yaml.safe_load((root / editorial.DEFAULT_NAME_CATALOG).read_text(encoding="utf-8"))
     packet = make_content_packet(root, format_id, week, source["review"], page["environment"], names,
-                                 bindings=bindings, facts=facts)
+                                 bindings=bindings, facts=facts, decks=decks)
     if source.get("acceptance"):
         require_accepted(source["acceptance"]["submission"], source["acceptance"]["decisions"], current=packet)
     return packet
@@ -827,9 +839,11 @@ def validate_content_acceptance(document: dict) -> None:
         if value != packet["dimensions"].get(f"copy.{language}"):
             raise ValueError(f"Unsubmitted copy: {language}")
     features = document["review"]["features"]["items"]
-    selection = [{key: item[key] for key in ("destination_id", "parent_id", "subtype_id", "category", "source_order")}
-                 for item in features]
-    if selection != packet["dimensions"].get("features"):
+    selection_fields = ("destination_id", "category", "source_order")
+    selection = [{key: item[key] for key in selection_fields} for item in features]
+    submitted = [{key: item[key] for key in selection_fields}
+                 for item in packet["dimensions"].get("features", [])]
+    if selection != submitted:
         raise ValueError("Unsubmitted Feature selection")
     for item in features:
         token = item["destination_id"]

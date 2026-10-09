@@ -153,8 +153,6 @@ def inventory(root, source, displayed=None, previous=None, facts=None):
         if deck is None:
             errors.append(f"{alias}: 不属于固定牌表范围")
             continue
-        if (item.get("parent_id"), item.get("subtype_id")) != (deck["parent_id"], deck.get("subtype_id")):
-            errors.append(f"{alias}: 分类身份与固定牌表不符")
         if item.get("category") not in {"new_deck", "new_technology"}:
             required.append(f"{alias}: 展示类别（新套牌／新科技）")
         cards = item.get("featured_cards", [])
@@ -253,7 +251,10 @@ def prepare(root, source, base, output, facts=None, *, visuals=None, fetch_missi
     original_page = read(base / page_path)
     if facts and original_page["week"] == page["week"] and original_page.get("data_files"):
         page["data_files"] = deepcopy(original_page["data_files"])
-    material = editorial.materialize_review(source, editorial.load_name_catalog(root / editorial.DEFAULT_NAME_CATALOG))
+    from mtgmeta.mtgo.landing_tabletop import deck_catalog
+    decks = {item["token"]: item for item in deck_catalog(source)}
+    material = editorial.materialize_review(source, editorial.load_name_catalog(root / editorial.DEFAULT_NAME_CATALOG),
+                                           decks=decks)
     page["weekly_summary"]["items"] = material["weekly_summary"]
     public_features = [landing._public_feature(item) for item in material["features"]]
     page["features"]["items"] = public_features
@@ -350,9 +351,11 @@ def finish_resources(output, *, fetch_missing=False, resource_fixture=None):
     if plan["visuals"]:
         build_archetype_visuals.generate(site, format_id, identities=set(plan["visuals"]), config_override=config)
     packet = submissions.preview_packet(site, format_id)
+    from mtgmeta.mtgo.landing_tabletop import deck_catalog
+    decks = {item["token"]: item for item in deck_catalog(source)}
     content = submissions.make_content_packet(site, format_id, week, source["review"], page["environment"],
         plan["names"], bindings=source["bindings"],
-        facts=facts["review_facts"])
+        facts=facts["review_facts"], decks=decks)
     write(output / "content.json", content)
     write(output / "preview.json", packet)
     return {"format": format_id, "week": week, "site": str(site),
@@ -700,7 +703,10 @@ def finalize_source(root, source, site, acceptance, facts):
     actual = submissions.preview_packet(site, format_id)
     submissions.require_accepted(acceptance["submission"], acceptance["decisions"], current=actual)
     page = read(site / f"stats/{format_id}/mtgo/landing/current.json")
-    material = editorial.materialize_review(source, editorial.load_name_catalog(root / editorial.DEFAULT_NAME_CATALOG))
+    from mtgmeta.mtgo.landing_tabletop import deck_catalog
+    decks = {item["token"]: item for item in deck_catalog(source)}
+    material = editorial.materialize_review(source, editorial.load_name_catalog(root / editorial.DEFAULT_NAME_CATALOG),
+                                           decks=decks)
     if (material["weekly_summary"] != page["weekly_summary"]["items"]
             or [landing._public_feature(item) for item in material["features"]] != page["features"]["items"]
             or source["bindings"]["classifier_digest"] != page["classifier"]["digest"]
@@ -713,7 +719,7 @@ def finalize_source(root, source, site, acceptance, facts):
     document["review"]["features"]["reviewed"] = True
     packet = submissions.make_content_packet(root, format_id, week, document["review"], page["environment"],
         editorial.load_name_catalog_document(root / editorial.DEFAULT_NAME_CATALOG), bindings=source["bindings"],
-        facts=facts["review_facts"])
+        facts=facts["review_facts"], decks=decks)
     origin = acceptance["decisions"]["decisions"]["final_page"]
     receipt = submissions.record_decision(packet, None, list(packet["dimensions"]), evidence=origin["evidence"],
         accepted_on=origin["accepted_on"], entrypoint=origin["entrypoint"])
