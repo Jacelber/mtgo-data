@@ -367,6 +367,8 @@ def test_build_resolves_maintained_alias_without_changing_feature_name(tmp_path)
 
 def test_adventure_face_name_uses_the_combined_card_image(tmp_path):
     root = _synthetic_subject_root(tmp_path)
+    _write_feature_week(root, "standard", "2026-W33",
+                        ["Shared Card", "Front Face", "Front Face // Back Face"])
     cards = _bulk_cards()
     combined = next(card for card in cards if card.get("name") == "Front Face // Back Face")
     combined["image_uris"] = {
@@ -377,17 +379,30 @@ def test_adventure_face_name_uses_the_combined_card_image(tmp_path):
     bulk_path = tmp_path / "oracle-cards.jsonl.gz"
     _write_bulk_jsonl_gzip(bulk_path, cards)
     output = tmp_path / "cache"
+    requests = []
+
+    def fetch_image(url):
+        requests.append(url)
+        return JPEG_A
 
     manifest = build_cache_bundle(
         root,
         output,
         bulk_data_path=bulk_path,
-        fetch_image=lambda _url: JPEG_A,
+        fetch_image=fetch_image,
     )
 
     entry = next(card for card in manifest["cards"] if card["name"] == "Front Face")
     assert entry["face_index"] is None
     assert entry["source_image_uri"].endswith("/combined.jpg")
+    complete = next(card for card in manifest["cards"] if card["name"] == "Front Face // Back Face")
+    assert entry["local_path"] == complete["local_path"]
+    assert requests.count("https://cards.scryfall.io/normal/combined.jpg") == 1
+    assert verify_cache_bundle(root, output) == manifest
+    complete["oracle_id"] = "99999999-aaaa-4aaa-8999-999999999999"
+    _write_json(output / "manifest.json", manifest)
+    with pytest.raises(CacheBuildError, match="conflicting cache image reference"):
+        verify_cache_bundle(root, output)
 
 
 def test_verifier_rejects_changed_image_bytes(tmp_path):

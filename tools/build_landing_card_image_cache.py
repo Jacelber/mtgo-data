@@ -486,11 +486,14 @@ def build_cache_bundle(
             )
             suffix = "" if resolved["face_index"] is None else f"-face-{resolved['face_index']}"
             file_name = f"{resolved['scryfall_id']}{suffix}.jpg"
-            payload = image_fetch(resolved["source_image_uri"])
-            _valid_jpeg(payload, card["name"])
             image_dir.mkdir(parents=True, exist_ok=True)
             image_path = image_dir / file_name
-            image_path.write_bytes(payload)
+            if image_path.exists():
+                payload = image_path.read_bytes()
+            else:
+                payload = image_fetch(resolved["source_image_uri"])
+                _valid_jpeg(payload, card["name"])
+                image_path.write_bytes(payload)
             entries.append(
                 {
                     **common,
@@ -581,7 +584,7 @@ def verify_cache_bundle(
 
     expected_bundle_files = {cache_root / "manifest.json"}
     generated_count = 0
-    seen_local_paths: set[str] = set()
+    seen_local_paths: dict[str, tuple[Any, ...]] = {}
     for card in cards:
         if set(card) != {
             "bytes",
@@ -601,9 +604,11 @@ def verify_cache_bundle(
             raise CacheBuildError("card-image cache usage mismatch")
         local_path = _safe_local_path(card.get("local_path"))
         local_path_text = local_path.as_posix()
-        if local_path_text in seen_local_paths:
-            raise CacheBuildError(f"duplicate cache image path: {local_path}")
-        seen_local_paths.add(local_path_text)
+        identity = tuple(card.get(key) for key in
+                         ("scryfall_id", "oracle_id", "face_index", "bytes", "sha256"))
+        if local_path_text in seen_local_paths and seen_local_paths[local_path_text] != identity:
+            raise CacheBuildError(f"conflicting cache image reference: {local_path}")
+        seen_local_paths[local_path_text] = identity
         byte_count = card.get("bytes")
         if (
             not isinstance(byte_count, int)
