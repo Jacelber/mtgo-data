@@ -10,13 +10,13 @@
     "event_sha256": "c972d333662b9c12d7eb0fec5e01d5a6e98cc89ee804cd1359f10df172e847ce",
     "event_schema_version": "2.2.0",
     "classification_path": "data/modern/melee/classifications/441441.json",
-    "classification_sha256": "681221da496640d603d351cca9fe7fbe9ccb3339c2821b639122a05f28a15308",
+    "classification_sha256": "075151a840bb6d0346dd926aab7e5decf64e1209256f08d648bf3ac3fac286b0",
     "classification_schema_version": "1.1.0",
     "opportunity_path": "data/modern/melee/opportunities/441441.json",
-    "opportunity_sha256": "249cc2afc741b389b3ee966f24f52094bde41b874e0f6b622eb7b1ba9839f984",
+    "opportunity_sha256": "7acba9a46f93e88442324944301d5ef6191d5806dead91d94694ab24f81f2e41",
     "opportunity_schema_version": "1.1.0",
     "taxonomy_path": "my_archetypes/modern.yaml",
-    "taxonomy_sha256": "7605cafc62ce6b943235a3d1d4e4bd3516a52490d5b4deb76a8f417448787d59",
+    "taxonomy_sha256": "99fb122833ee9e4c194a1e0673294fb4c2d23fd9a9947e3cd3db39229e451892",
     "taxonomy_schema_version": "1.1.0"
   },
   "event": {
@@ -4484,7 +4484,7 @@
           "classification_status": "classified",
           "archetype_id": "hollowvine",
           "archetype_name": "Hollowvine",
-          "expandable": false,
+          "expandable": true,
           "deck_count": 6,
           "metagame_share": 0.010508,
           "constructed_points": 85,
@@ -4558,7 +4558,227 @@
             },
             "mirror_match_count": 1
           },
-          "subtypes": []
+          "subtypes": [
+            {
+              "group_id": "subtype:hollowvine/rakdos",
+              "subtype_id": "rakdos",
+              "subtype_name": "Rakdos",
+              "display_name": "Rakdos Hollowvine",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:hollowvine/boros",
+              "subtype_id": "boros",
+              "subtype_name": "Boros",
+              "display_name": "Boros Hollowvine",
+              "deck_count": 5,
+              "metagame_share": 0.008757,
+              "constructed_points": 76,
+              "theoretical_rounds": 45,
+              "effective_theoretical_rounds": 45,
+              "average_points_per_effective_round": 1.688889,
+              "completed_or_officially_exempt_rounds": 43,
+              "completion_rate": 0.955556,
+              "played_match_participations": 43,
+              "source_match_count": 42,
+              "result_counts": {
+                "drop_unplayed": 2,
+                "played_draw": 1,
+                "played_loss": 17,
+                "played_win": 25
+              },
+              "drop_player_count": 1,
+              "drop_unplayed_rounds": 2,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 25,
+                  "losses": 17,
+                  "draws": 1,
+                  "matches": 43,
+                  "win_rate": 0.593023,
+                  "confidence_interval_95": {
+                    "lower": 0.444501,
+                    "upper": 0.726288
+                  },
+                  "literal_record": {
+                    "wins": 25,
+                    "losses": 17,
+                    "draws": 1,
+                    "matches": 43,
+                    "win_rate": 0.581395,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.433283,
+                      "upper": 0.716157
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 24,
+                  "losses": 16,
+                  "draws": 1,
+                  "matches": 41,
+                  "win_rate": 0.597561,
+                  "confidence_interval_95": {
+                    "lower": 0.445428,
+                    "upper": 0.732979
+                  },
+                  "literal_record": {
+                    "wins": 24,
+                    "losses": 16,
+                    "draws": 1,
+                    "matches": 41,
+                    "win_rate": 0.585366,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.433668,
+                      "upper": 0.722437
+                    }
+                  }
+                },
+                "mirror_match_count": 1
+              }
+            },
+            {
+              "group_id": "subtype:hollowvine/mardu",
+              "subtype_id": "mardu",
+              "subtype_name": "Mardu",
+              "display_name": "Mardu Hollowvine",
+              "deck_count": 1,
+              "metagame_share": 0.001751,
+              "constructed_points": 9,
+              "theoretical_rounds": 9,
+              "effective_theoretical_rounds": 9,
+              "average_points_per_effective_round": 1.0,
+              "completed_or_officially_exempt_rounds": 7,
+              "completion_rate": 0.777778,
+              "played_match_participations": 7,
+              "source_match_count": 7,
+              "result_counts": {
+                "drop_unplayed": 2,
+                "played_loss": 4,
+                "played_win": 3
+              },
+              "drop_player_count": 1,
+              "drop_unplayed_rounds": 2,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 3,
+                  "losses": 4,
+                  "draws": 0,
+                  "matches": 7,
+                  "win_rate": 0.428571,
+                  "confidence_interval_95": {
+                    "lower": 0.15822,
+                    "upper": 0.749542
+                  },
+                  "literal_record": {
+                    "wins": 3,
+                    "losses": 4,
+                    "draws": 0,
+                    "matches": 7,
+                    "win_rate": 0.428571,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.158217,
+                      "upper": 0.749546
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 3,
+                  "losses": 4,
+                  "draws": 0,
+                  "matches": 7,
+                  "win_rate": 0.428571,
+                  "confidence_interval_95": {
+                    "lower": 0.15822,
+                    "upper": 0.749542
+                  },
+                  "literal_record": {
+                    "wins": 3,
+                    "losses": 4,
+                    "draws": 0,
+                    "matches": 7,
+                    "win_rate": 0.428571,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.158217,
+                      "upper": 0.749546
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            }
+          ]
         },
         {
           "group_id": "archetype:necrodominance",
@@ -5602,6 +5822,68 @@
               "subtype_id": "izzet",
               "subtype_name": "Izzet",
               "display_name": "Izzet Sewer Combo",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:sewer-combo/jeskai",
+              "subtype_id": "jeskai",
+              "subtype_name": "Jeskai",
+              "display_name": "Jeskai Sewer Combo",
               "deck_count": 0,
               "metagame_share": 0.0,
               "constructed_points": 0,
@@ -14988,7 +15270,7 @@
           "classification_status": "classified",
           "archetype_id": "hollowvine",
           "archetype_name": "Hollowvine",
-          "expandable": false,
+          "expandable": true,
           "deck_count": 3,
           "metagame_share": 0.022901,
           "constructed_points": 21,
@@ -15062,7 +15344,213 @@
             "mirror_match_count": 0
           },
           "day2_conversion": 0.5,
-          "subtypes": []
+          "subtypes": [
+            {
+              "group_id": "subtype:hollowvine/rakdos",
+              "subtype_id": "rakdos",
+              "subtype_name": "Rakdos",
+              "display_name": "Rakdos Hollowvine",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              },
+              "day2_conversion": null
+            },
+            {
+              "group_id": "subtype:hollowvine/boros",
+              "subtype_id": "boros",
+              "subtype_name": "Boros",
+              "display_name": "Boros Hollowvine",
+              "deck_count": 3,
+              "metagame_share": 0.022901,
+              "constructed_points": 21,
+              "theoretical_rounds": 18,
+              "effective_theoretical_rounds": 18,
+              "average_points_per_effective_round": 1.166667,
+              "completed_or_officially_exempt_rounds": 15,
+              "completion_rate": 0.833333,
+              "played_match_participations": 15,
+              "source_match_count": 15,
+              "result_counts": {
+                "drop_unplayed": 3,
+                "played_loss": 8,
+                "played_win": 7
+              },
+              "drop_player_count": 1,
+              "drop_unplayed_rounds": 3,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 7,
+                  "losses": 8,
+                  "draws": 0,
+                  "matches": 15,
+                  "win_rate": 0.466667,
+                  "confidence_interval_95": {
+                    "lower": 0.248095,
+                    "upper": 0.69883
+                  },
+                  "literal_record": {
+                    "wins": 7,
+                    "losses": 8,
+                    "draws": 0,
+                    "matches": 15,
+                    "win_rate": 0.466667,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.248092,
+                      "upper": 0.698834
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 7,
+                  "losses": 8,
+                  "draws": 0,
+                  "matches": 15,
+                  "win_rate": 0.466667,
+                  "confidence_interval_95": {
+                    "lower": 0.248095,
+                    "upper": 0.69883
+                  },
+                  "literal_record": {
+                    "wins": 7,
+                    "losses": 8,
+                    "draws": 0,
+                    "matches": 15,
+                    "win_rate": 0.466667,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.248092,
+                      "upper": 0.698834
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              },
+              "day2_conversion": 0.6
+            },
+            {
+              "group_id": "subtype:hollowvine/mardu",
+              "subtype_id": "mardu",
+              "subtype_name": "Mardu",
+              "display_name": "Mardu Hollowvine",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              },
+              "day2_conversion": 0.0
+            }
+          ]
         },
         {
           "group_id": "archetype:mono-blue-belcher",
@@ -15437,6 +15925,69 @@
               "subtype_id": "izzet",
               "subtype_name": "Izzet",
               "display_name": "Izzet Sewer Combo",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              },
+              "day2_conversion": null
+            },
+            {
+              "group_id": "subtype:sewer-combo/jeskai",
+              "subtype_id": "jeskai",
+              "subtype_name": "Jeskai",
+              "display_name": "Jeskai Sewer Combo",
               "deck_count": 0,
               "metagame_share": 0.0,
               "constructed_points": 0,
@@ -27232,7 +27783,7 @@
           "classification_status": "classified",
           "archetype_id": "hollowvine",
           "archetype_name": "Hollowvine",
-          "expandable": false,
+          "expandable": true,
           "deck_count": 6,
           "metagame_share": 0.010508,
           "constructed_points": 106,
@@ -27306,7 +27857,227 @@
             },
             "mirror_match_count": 1
           },
-          "subtypes": []
+          "subtypes": [
+            {
+              "group_id": "subtype:hollowvine/rakdos",
+              "subtype_id": "rakdos",
+              "subtype_name": "Rakdos",
+              "display_name": "Rakdos Hollowvine",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:hollowvine/boros",
+              "subtype_id": "boros",
+              "subtype_name": "Boros",
+              "display_name": "Boros Hollowvine",
+              "deck_count": 5,
+              "metagame_share": 0.008757,
+              "constructed_points": 97,
+              "theoretical_rounds": 63,
+              "effective_theoretical_rounds": 63,
+              "average_points_per_effective_round": 1.539683,
+              "completed_or_officially_exempt_rounds": 58,
+              "completion_rate": 0.920635,
+              "played_match_participations": 58,
+              "source_match_count": 57,
+              "result_counts": {
+                "drop_unplayed": 5,
+                "played_draw": 1,
+                "played_loss": 25,
+                "played_win": 32
+              },
+              "drop_player_count": 2,
+              "drop_unplayed_rounds": 5,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 32,
+                  "losses": 25,
+                  "draws": 1,
+                  "matches": 58,
+                  "win_rate": 0.560345,
+                  "confidence_interval_95": {
+                    "lower": 0.432833,
+                    "upper": 0.680359
+                  },
+                  "literal_record": {
+                    "wins": 32,
+                    "losses": 25,
+                    "draws": 1,
+                    "matches": 58,
+                    "win_rate": 0.551724,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.424519,
+                      "upper": 0.672503
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 31,
+                  "losses": 24,
+                  "draws": 1,
+                  "matches": 56,
+                  "win_rate": 0.5625,
+                  "confidence_interval_95": {
+                    "lower": 0.432735,
+                    "upper": 0.684241
+                  },
+                  "literal_record": {
+                    "wins": 31,
+                    "losses": 24,
+                    "draws": 1,
+                    "matches": 56,
+                    "win_rate": 0.553571,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.42413,
+                      "upper": 0.676135
+                    }
+                  }
+                },
+                "mirror_match_count": 1
+              }
+            },
+            {
+              "group_id": "subtype:hollowvine/mardu",
+              "subtype_id": "mardu",
+              "subtype_name": "Mardu",
+              "display_name": "Mardu Hollowvine",
+              "deck_count": 1,
+              "metagame_share": 0.001751,
+              "constructed_points": 9,
+              "theoretical_rounds": 9,
+              "effective_theoretical_rounds": 9,
+              "average_points_per_effective_round": 1.0,
+              "completed_or_officially_exempt_rounds": 7,
+              "completion_rate": 0.777778,
+              "played_match_participations": 7,
+              "source_match_count": 7,
+              "result_counts": {
+                "drop_unplayed": 2,
+                "played_loss": 4,
+                "played_win": 3
+              },
+              "drop_player_count": 1,
+              "drop_unplayed_rounds": 2,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 3,
+                  "losses": 4,
+                  "draws": 0,
+                  "matches": 7,
+                  "win_rate": 0.428571,
+                  "confidence_interval_95": {
+                    "lower": 0.15822,
+                    "upper": 0.749542
+                  },
+                  "literal_record": {
+                    "wins": 3,
+                    "losses": 4,
+                    "draws": 0,
+                    "matches": 7,
+                    "win_rate": 0.428571,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.158217,
+                      "upper": 0.749546
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 3,
+                  "losses": 4,
+                  "draws": 0,
+                  "matches": 7,
+                  "win_rate": 0.428571,
+                  "confidence_interval_95": {
+                    "lower": 0.15822,
+                    "upper": 0.749542
+                  },
+                  "literal_record": {
+                    "wins": 3,
+                    "losses": 4,
+                    "draws": 0,
+                    "matches": 7,
+                    "win_rate": 0.428571,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.158217,
+                      "upper": 0.749546
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            }
+          ]
         },
         {
           "group_id": "archetype:necrodominance",
@@ -28360,6 +29131,68 @@
               "subtype_id": "izzet",
               "subtype_name": "Izzet",
               "display_name": "Izzet Sewer Combo",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:sewer-combo/jeskai",
+              "subtype_id": "jeskai",
+              "subtype_name": "Jeskai",
+              "display_name": "Jeskai Sewer Combo",
               "deck_count": 0,
               "metagame_share": 0.0,
               "constructed_points": 0,

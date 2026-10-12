@@ -20,10 +20,10 @@ bindings:
   - '12855474'
   - '12855475'
   - '12855490'
-  classifier_digest: 415749058c900300d8e070b89f37aa14e89f69b5106b2b7d9ee1e68917bcfee6
+  classifier_digest: a31de3ebf1f2324a3c30e38a0a85382e9453b9eede1a1d021ae548e7c322ce2d
   selection_policy_digest: d3397488f8c8cc2471cd9f216be17b74cf6c50b64b4e34a4b8bd451c4b3bed59
-  machine_fact_digest: 6971a535e12cad14526a306aec1a05934ad2365777e967b7555b95bffb5d0a88
-  link_catalog_digest: b3b8329c5235863790683fb57653e777525c843175358883d0e5de9828746516
+  machine_fact_digest: 0d878279a653c9371f33dd63e66bbc57ca3d9cee23511a815c864d0266a02009
+  link_catalog_digest: 22510a8338534ec8f8ccc973d1bbdf62b5a64d0a4e86ce68ac0d989f39e6f0fe
   bilingual_catalog_digest: f2cb60251feaf161c9f0d7752bf165971bea5d6f006cd96182a2a10205d2d2a2
   content_sha256: bac3dcf8bd69025a58587d78c3f258cc2315b64061f8f174b967e5a84d7d1320
   tabletop_digest: 1fb7ae37ff541dbfa9efb3d1efbcf086fc7c6f0c83a95008eb3b82f72d8dae24
@@ -3611,7 +3611,7 @@ all_top8:
   player_count: 72
   player: Bambil
   parent_id: hollowvine
-  subtype_id: null
+  subtype_id: boros
   display_name: Hollowvine
   main_deck:
   - name: Arena of Glory
@@ -8691,7 +8691,7 @@ all_top8:
   player_count: 83
   player: Bawer
   parent_id: hollowvine
-  subtype_id: null
+  subtype_id: boros
   display_name: Hollowvine
   main_deck:
   - name: Arena of Glory
@@ -9435,10 +9435,10 @@ acceptance:
       - '12855474'
       - '12855475'
       - '12855490'
-      classifier_digest: 415749058c900300d8e070b89f37aa14e89f69b5106b2b7d9ee1e68917bcfee6
+      classifier_digest: a31de3ebf1f2324a3c30e38a0a85382e9453b9eede1a1d021ae548e7c322ce2d
       selection_policy_digest: d3397488f8c8cc2471cd9f216be17b74cf6c50b64b4e34a4b8bd451c4b3bed59
-      machine_fact_digest: 6971a535e12cad14526a306aec1a05934ad2365777e967b7555b95bffb5d0a88
-      link_catalog_digest: b3b8329c5235863790683fb57653e777525c843175358883d0e5de9828746516
+      machine_fact_digest: 0d878279a653c9371f33dd63e66bbc57ca3d9cee23511a815c864d0266a02009
+      link_catalog_digest: 22510a8338534ec8f8ccc973d1bbdf62b5a64d0a4e86ce68ac0d989f39e6f0fe
       tabletop_digest: 1fb7ae37ff541dbfa9efb3d1efbcf086fc7c6f0c83a95008eb3b82f72d8dae24
       established_names:
         name.modern|izzet-tempo|none.zh: 红蓝节奏
@@ -9608,7 +9608,7 @@ acceptance:
         - Devoted Druid
         - Vizier of Remedies
       visual.environment.ruby-storm:
-        colors:
+        colors: &id001
         - r
         cards:
         - Ruby Medallion
@@ -9646,13 +9646,13 @@ acceptance:
         - Phelia, Exuberant Shepherd
         - Quantum Riddler
       visual.environment.amulet-titan:
-        colors:
+        colors: &id002
         - g
         cards:
         - Amulet of Vigor
         - Primeval Titan
       visual.environment.esper-goryos:
-        colors:
+        colors: &id004
         - w
         - u
         - b
@@ -9707,8 +9707,7 @@ acceptance:
       feature.deck:2f3bb88642c119095bb1.zh: 满编[[card:Dark Matter Manipulator|暗物质操弄师]]，替代了之前使用的[[card:Stitcher's Supplier|拼接师备尸]]，打进了RC八强，
       feature.deck:2f3bb88642c119095bb1.en: A full playset of [[card:Dark Matter Manipulator|Dark Matter Manipulator]] replaces [[card:Stitcher's Supplier|Stitcher's Supplier]] in this RC Top 8 list.
       visual.feature.deck:60809d01e109ec40e1b4:
-        colors:
-        - r
+        colors: *id001
         cards:
         - Twinned Vision
         - Ruby Medallion
@@ -9717,8 +9716,7 @@ acceptance:
       feature.deck:60809d01e109ec40e1b4.zh: 风暴基本都带上了两张[[card:Twinned Vision|双生视像]]。被冲动效果放逐后施放也可以抓2张，返照也还比较有用
       feature.deck:60809d01e109ec40e1b4.en: Storm lists mostly run two copies of [[card:Twinned Vision|Twinned Vision]]. Casting it after an impulse-draw effect exiles it still draws two cards, and flashback is useful too.
       visual.feature.deck:b79b48cc693f1457fbb3:
-        colors:
-        - g
+        colors: *id002
         cards:
         - Roiling Canopy
         - Yavimaya, Cradle of Growth
@@ -9727,7 +9725,7 @@ acceptance:
       feature.deck:b79b48cc693f1457fbb3.zh: 泰坦护身符收获了[[card:Roiling Canopy|狂搅树冠]]这张绿色瓦拉库，配合已经在环境中的[[card:Yavimaya, Cradle of Growth|育苗摇篮亚维马雅]]，可以打出非常爆炸的伤害
       feature.deck:b79b48cc693f1457fbb3.en: Amulet Titan gains [[card:Roiling Canopy|Roiling Canopy]], a green Valakut. Together with the already established [[card:Yavimaya, Cradle of Growth|Yavimaya, Cradle of Growth]], it can deal explosive amounts of damage.
       visual.feature.deck:9124fda2b936a0f508a0:
-        colors:
+        colors: &id003
         - w
         - b
         - g
@@ -9739,10 +9737,7 @@ acceptance:
       feature.deck:9124fda2b936a0f508a0.zh: 备牌[[card:Solarium Sentry|沐日哨卫]]
       feature.deck:9124fda2b936a0f508a0.en: '[[card:Solarium Sentry|Solarium Sentry]] in the sideboard.'
       visual.feature.deck:c089ee20b271b059e4bf:
-        colors:
-        - w
-        - b
-        - g
+        colors: *id003
         cards:
         - Karn, Argent Defender
         - Devoted Druid
@@ -9795,10 +9790,7 @@ acceptance:
       feature.deck:c23a3e39139573bee2b4.zh: 带[[card:Theorist's Sanctum|塑理师圣所]]拿下挑战赛亚军的格利极控制
       feature.deck:c23a3e39139573bee2b4.en: Grixis Control with [[card:Theorist's Sanctum|Theorist's Sanctum]] finished second in a Challenge.
       visual.feature.deck:c632cfa8aeee0fb1dae4:
-        colors:
-        - w
-        - u
-        - b
+        colors: *id004
         cards:
         - Seasoned Cryomancer
         - Goryo's Vengeance
@@ -9846,7 +9838,7 @@ acceptance:
       name.modern|rakdos-delirium|none.en: Rakdos Delirium
       name.modern|ruby-storm|none.zh: 红宝石风暴
       name.modern|ruby-storm|none.en: Ruby Storm
-    digest: 58a645ba7ee978f1e0889a9ea73f9599c9cd886a07e4aa46422b92d97c2ab929
+    digest: 3199059563a618a7e73a389fd1b54ada8502a2ed793aee7650f54a522e9101dc
   decisions:
     format: modern
     week: 2026-W40

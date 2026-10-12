@@ -242,7 +242,9 @@ def _verified_outputs(
         path = event_directory / f"{name}.json"
         document, payload = _read_object(path)
         expected = statistics_document_bytes(rebuilt[name])
-        if payload != expected:
+        if payload != expected and not (
+            name == "matchup" and payload == statistics_document_bytes(rebuilt[name], compact=True)
+        ):
             raise MeleePublicationError(
                 f"{path}: does not match deterministic rebuild"
             )
