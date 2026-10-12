@@ -46,6 +46,11 @@ def test_reviewed_final_ranks_reject_inconsistent_top_two():
         module.supplement_from_semifinals(result, event)
 
 
+def test_reviewed_exception_rejects_unapproved_event_before_reading_or_fetching(tmp_path):
+    with pytest.raises(ValueError, match="not approved"):
+        module.refresh(tmp_path, "459699", reviewed_semifinals=True)
+
+
 def test_no_show_opponent_administrative_result_uses_statistics_vocabulary():
     from mtgmeta.melee.opportunities import _source_opportunity
     competitor = {"participant_id": "a", "result_type": "administrative", "match_points": 3}
