@@ -30,7 +30,7 @@ nav{position:sticky;top:0;z-index:4;background:#f3f5f0;padding:10px 0;margin:10p
 .content-table small{display:block}.content-table button{text-align:left}.tag{display:inline-block;font-size:12px;padding:2px 7px;border-radius:4px;background:#e2eee5;margin:2px}.pending{background:#fff0cf;color:#785014}
 .deck-meta{display:flex;gap:10px;flex-wrap:wrap}.card{display:grid;grid-template-columns:30px 1fr;gap:8px;padding:7px 0}.card small{display:block}.card .qty{text-align:right;font-weight:700}
 dialog .close{position:sticky;top:0;background:white;z-index:1}.zones h3{background:#edf3ed;padding:8px;border-radius:5px}.reason p{overflow-wrap:anywhere}
-#matrix td button b{display:block}#matrix td{min-width:215px}.scroll{max-height:720px}.env-cards{min-width:170px}.representative+.representative{margin-top:6px}.catalog-row{align-items:start}#environment-detail .toolbar{margin-top:20px}
+#matrix td button b{display:block}#matrix td{min-width:215px}.env-cards{min-width:170px}.representative+.representative{margin-top:6px}.catalog-row{align-items:start}#environment-detail .toolbar{margin-top:20px}
 .empty{padding:20px;color:#5d706b}.counts{font-variant-numeric:tabular-nums}button:focus-visible,a:focus-visible{outline:3px solid #bb8022;outline-offset:2px}
 @media(max-width:600px){nav{gap:5px;font-size:13px}.zones{grid-template-columns:1fr}.content-table{min-width:670px}}`;
 document.head.appendChild(style);
