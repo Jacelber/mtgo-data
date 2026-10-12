@@ -129,7 +129,7 @@ def _source_result(
             }
         ]
 
-    if status in {"intentional draw", "id"} or result == "0 0 3":
+    if status in {"intentional draw", "id"} or result in {"0 0 3", "0 0 3 draw"}:
         if len(competitors) != 2:
             return None
         if any(item.match_points not in {None, 1} for item in competitors):

@@ -45,7 +45,21 @@ events:
     advancement:
       day2_after_round: 9
       day2_minimum_match_points: 18
-    reviewed_overrides: []
+    reviewed_overrides:
+    - id: owner_reviewed_round15_table9_id
+      source_match_id: "7cfd7a2f-6119-4cbf-bf3d-b4e0016f89f9"
+      review_status: verified
+      played: false
+      competitors:
+      - source_participant_id: "4367375"
+        result_type: intentional_draw
+        match_points: 1
+      - source_participant_id: "4367233"
+        result_type: intentional_draw
+        match_points: 1
+      reason: "Owner review on 2026-10-12: treat Round 15 table 9, LeeMar versus Nick Kuntz, as an intentional draw based on the pairing, 0-0-1 score and qualification position. This is an explicit Owner interpretation, not an official ID flag; retain the source text and both one-point awards, exclude both sides from played win-rate and matchup statistics."
+      source_evidence:
+      - https://melee.gg/Tournament/View/405591
     statistics:
       default_match_scope: all_constructed_swiss
       constructed_game_format: modern
