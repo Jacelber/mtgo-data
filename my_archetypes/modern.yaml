@@ -4516,6 +4516,26 @@ archetypes:
       - card: Isochron Scepter
         zone: main
         exact_count: 0
+  - id: jeskai-control-wizards
+    priority: 304490
+    subtype_id: null
+    conditions:
+      all:
+      - card: Thundertrap Trainer
+        zone: main
+        min_count: 2
+      - card: Flame of Anor
+        zone: main
+        min_count: 4
+      - card: Snapcaster Mage
+        zone: main
+        min_count: 2
+      - card: Counterspell
+        zone: main
+        min_count: 4
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
 - id: azorius-control
   name: Azorius Control
   priority: 304000
@@ -8882,27 +8902,27 @@ archetypes:
       - card: Creeping Chill
         zone: main
         min_count: 4
-- id: jeskai-wizards
-  name: Jeskai Wizards
-  priority: 690820
+- id: jeskai-twin
+  name: Jeskai Twin
+  priority: 622200
   rules:
-  - id: jeskai-wizards-primary
-    priority: 690820
+  - id: jeskai-twin-primary
+    priority: 622200
     subtype_id: null
     conditions:
       all:
-      - card: Thundertrap Trainer
+      - card: Splinter Twin
         zone: main
         min_count: 2
-      - card: Flame of Anor
-        zone: main
-        min_count: 4
-      - card: Snapcaster Mage
+      - card: Deepway Navigator
         zone: main
         min_count: 2
-      - card: Counterspell
+      - card: __classifier-semantic-main-blue-source__
         zone: main
-        min_count: 4
+        min_count: 1
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        min_count: 1
       - card: __classifier-semantic-main-white-source__
         zone: main
         min_count: 1
