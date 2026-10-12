@@ -2,7 +2,7 @@
   "schema_version": "1.1.0",
   "format": "modern",
   "source": "mtgo",
-  "classifier_digest": "415749058c900300d8e070b89f37aa14e89f69b5106b2b7d9ee1e68917bcfee6",
+  "classifier_digest": "a31de3ebf1f2324a3c30e38a0a85382e9453b9eede1a1d021ae548e7c322ce2d",
   "period": {
     "type": "1w",
     "start": "2026-09-28",
@@ -41,6 +41,12 @@
       {
         "id": "agadeem-persist",
         "name": "Agadeem Persist",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "allies",
+        "name": "Allies",
         "expandable": false,
         "subtype_ids": []
       },
@@ -164,6 +170,12 @@
         "subtype_ids": []
       },
       {
+        "id": "bant-ritual-blink",
+        "name": "Bant Ritual Blink",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "battle-of-wits",
         "name": "Battle of Wits",
         "expandable": false,
@@ -269,6 +281,28 @@
       {
         "id": "dark-maestro",
         "name": "Dark Maestro",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "darklight-phoenix",
+        "name": "Darklight Phoenix",
+        "expandable": true,
+        "subtype_ids": [
+          "darklight-phoenix/golgari",
+          "darklight-phoenix/grixis",
+          "darklight-phoenix/sultai"
+        ]
+      },
+      {
+        "id": "darklight-vengevine",
+        "name": "Darklight Vengevine",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "death-and-taxes",
+        "name": "Death & Taxes",
         "expandable": false,
         "subtype_ids": []
       },
@@ -411,6 +445,12 @@
         "subtype_ids": []
       },
       {
+        "id": "eldrazi-forge",
+        "name": "Eldrazi Forge",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "eldrazi-ouroboroid",
         "name": "Eldrazi Ouroboroid",
         "expandable": false,
@@ -509,6 +549,12 @@
         "subtype_ids": []
       },
       {
+        "id": "esper-unearth",
+        "name": "Esper Unearth",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "fight-rigging",
         "name": "Fight Rigging",
         "expandable": false,
@@ -589,12 +635,6 @@
       {
         "id": "golgari-goryos",
         "name": "Golgari Goryo's",
-        "expandable": false,
-        "subtype_ids": []
-      },
-      {
-        "id": "golgari-phoenix",
-        "name": "Golgari Phoenix",
         "expandable": false,
         "subtype_ids": []
       },
@@ -734,8 +774,12 @@
       {
         "id": "hollowvine",
         "name": "Hollowvine",
-        "expandable": false,
-        "subtype_ids": []
+        "expandable": true,
+        "subtype_ids": [
+          "hollowvine/boros",
+          "hollowvine/mardu",
+          "hollowvine/rakdos"
+        ]
       },
       {
         "id": "infect",
@@ -749,7 +793,7 @@
       },
       {
         "id": "invigorator-scapeshift",
-        "name": "Invigorator Scapeshift",
+        "name": "Invigorator Valakut",
         "expandable": false,
         "subtype_ids": []
       },
@@ -862,8 +906,8 @@
         "subtype_ids": []
       },
       {
-        "id": "jeskai-wizards",
-        "name": "Jeskai Wizards",
+        "id": "jeskai-twin",
+        "name": "Jeskai Twin",
         "expandable": false,
         "subtype_ids": []
       },
@@ -1036,6 +1080,12 @@
         "subtype_ids": []
       },
       {
+        "id": "mono-red-goblin-burn",
+        "name": "Mono-Red Goblin Burn",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "mono-red-prison",
         "name": "Mono-Red Prison",
         "expandable": false,
@@ -1124,6 +1174,12 @@
       {
         "id": "orzhov-ketramose",
         "name": "Orzhov Ketramose",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "orzhov-lifegain",
+        "name": "Orzhov Lifegain",
         "expandable": false,
         "subtype_ids": []
       },
@@ -1275,6 +1331,7 @@
         "subtype_ids": [
           "sewer-combo/azorius",
           "sewer-combo/izzet",
+          "sewer-combo/jeskai",
           "sewer-combo/mono-blue",
           "sewer-combo/simic"
         ]
@@ -1282,6 +1339,12 @@
       {
         "id": "shape-anew",
         "name": "Shape Anew",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "shifting-omni",
+        "name": "Shifting Omni",
         "expandable": false,
         "subtype_ids": []
       },
@@ -1448,6 +1511,14 @@
         "name": "Agadeem Persist",
         "display_name": "Agadeem Persist",
         "parent_id": "agadeem-persist",
+        "subtype_id": null
+      },
+      {
+        "id": "allies",
+        "kind": "archetype",
+        "name": "Allies",
+        "display_name": "Allies",
+        "parent_id": "allies",
         "subtype_id": null
       },
       {
@@ -1624,6 +1695,14 @@
         "name": "Bant Reclamation",
         "display_name": "Bant Reclamation",
         "parent_id": "bant-reclamation",
+        "subtype_id": null
+      },
+      {
+        "id": "bant-ritual-blink",
+        "kind": "archetype",
+        "name": "Bant Ritual Blink",
+        "display_name": "Bant Ritual Blink",
+        "parent_id": "bant-ritual-blink",
         "subtype_id": null
       },
       {
@@ -1832,6 +1911,46 @@
         "name": "Dark Maestro",
         "display_name": "Dark Maestro",
         "parent_id": "dark-maestro",
+        "subtype_id": null
+      },
+      {
+        "id": "darklight-phoenix/golgari",
+        "kind": "subtype",
+        "name": "Golgari",
+        "display_name": "Golgari Darklight Phoenix",
+        "parent_id": "darklight-phoenix",
+        "subtype_id": "golgari"
+      },
+      {
+        "id": "darklight-phoenix/grixis",
+        "kind": "subtype",
+        "name": "Grixis",
+        "display_name": "Grixis Darklight Phoenix",
+        "parent_id": "darklight-phoenix",
+        "subtype_id": "grixis"
+      },
+      {
+        "id": "darklight-phoenix/sultai",
+        "kind": "subtype",
+        "name": "Sultai",
+        "display_name": "Sultai Darklight Phoenix",
+        "parent_id": "darklight-phoenix",
+        "subtype_id": "sultai"
+      },
+      {
+        "id": "darklight-vengevine",
+        "kind": "archetype",
+        "name": "Darklight Vengevine",
+        "display_name": "Darklight Vengevine",
+        "parent_id": "darklight-vengevine",
+        "subtype_id": null
+      },
+      {
+        "id": "death-and-taxes",
+        "kind": "archetype",
+        "name": "Death & Taxes",
+        "display_name": "Death & Taxes",
+        "parent_id": "death-and-taxes",
         "subtype_id": null
       },
       {
@@ -2051,6 +2170,14 @@
         "subtype_id": null
       },
       {
+        "id": "eldrazi-forge",
+        "kind": "archetype",
+        "name": "Eldrazi Forge",
+        "display_name": "Eldrazi Forge",
+        "parent_id": "eldrazi-forge",
+        "subtype_id": null
+      },
+      {
         "id": "eldrazi-ouroboroid",
         "kind": "archetype",
         "name": "Eldrazi Ouroboroid",
@@ -2243,6 +2370,14 @@
         "subtype_id": null
       },
       {
+        "id": "esper-unearth",
+        "kind": "archetype",
+        "name": "Esper Unearth",
+        "display_name": "Esper Unearth",
+        "parent_id": "esper-unearth",
+        "subtype_id": null
+      },
+      {
         "id": "fight-rigging",
         "kind": "archetype",
         "name": "Fight Rigging",
@@ -2352,14 +2487,6 @@
         "name": "Golgari Goryo's",
         "display_name": "Golgari Goryo's",
         "parent_id": "golgari-goryos",
-        "subtype_id": null
-      },
-      {
-        "id": "golgari-phoenix",
-        "kind": "archetype",
-        "name": "Golgari Phoenix",
-        "display_name": "Golgari Phoenix",
-        "parent_id": "golgari-phoenix",
         "subtype_id": null
       },
       {
@@ -2571,12 +2698,28 @@
         "subtype_id": null
       },
       {
-        "id": "hollowvine",
-        "kind": "archetype",
-        "name": "Hollowvine",
-        "display_name": "Hollowvine",
+        "id": "hollowvine/boros",
+        "kind": "subtype",
+        "name": "Boros",
+        "display_name": "Boros Hollowvine",
         "parent_id": "hollowvine",
-        "subtype_id": null
+        "subtype_id": "boros"
+      },
+      {
+        "id": "hollowvine/mardu",
+        "kind": "subtype",
+        "name": "Mardu",
+        "display_name": "Mardu Hollowvine",
+        "parent_id": "hollowvine",
+        "subtype_id": "mardu"
+      },
+      {
+        "id": "hollowvine/rakdos",
+        "kind": "subtype",
+        "name": "Rakdos",
+        "display_name": "Rakdos Hollowvine",
+        "parent_id": "hollowvine",
+        "subtype_id": "rakdos"
       },
       {
         "id": "infect/bant",
@@ -2605,8 +2748,8 @@
       {
         "id": "invigorator-scapeshift",
         "kind": "archetype",
-        "name": "Invigorator Scapeshift",
-        "display_name": "Invigorator Scapeshift",
+        "name": "Invigorator Valakut",
+        "display_name": "Invigorator Valakut",
         "parent_id": "invigorator-scapeshift",
         "subtype_id": null
       },
@@ -2755,11 +2898,11 @@
         "subtype_id": null
       },
       {
-        "id": "jeskai-wizards",
+        "id": "jeskai-twin",
         "kind": "archetype",
-        "name": "Jeskai Wizards",
-        "display_name": "Jeskai Wizards",
-        "parent_id": "jeskai-wizards",
+        "name": "Jeskai Twin",
+        "display_name": "Jeskai Twin",
+        "parent_id": "jeskai-twin",
         "subtype_id": null
       },
       {
@@ -3011,6 +3154,14 @@
         "subtype_id": null
       },
       {
+        "id": "mono-red-goblin-burn",
+        "kind": "archetype",
+        "name": "Mono-Red Goblin Burn",
+        "display_name": "Mono-Red Goblin Burn",
+        "parent_id": "mono-red-goblin-burn",
+        "subtype_id": null
+      },
+      {
         "id": "mono-red-prison",
         "kind": "archetype",
         "name": "Mono-Red Prison",
@@ -3192,6 +3343,14 @@
         "name": "Orzhov Ketramose",
         "display_name": "Orzhov Ketramose",
         "parent_id": "orzhov-ketramose",
+        "subtype_id": null
+      },
+      {
+        "id": "orzhov-lifegain",
+        "kind": "archetype",
+        "name": "Orzhov Lifegain",
+        "display_name": "Orzhov Lifegain",
+        "parent_id": "orzhov-lifegain",
         "subtype_id": null
       },
       {
@@ -3475,6 +3634,14 @@
         "subtype_id": "izzet"
       },
       {
+        "id": "sewer-combo/jeskai",
+        "kind": "subtype",
+        "name": "Jeskai",
+        "display_name": "Jeskai Sewer Combo",
+        "parent_id": "sewer-combo",
+        "subtype_id": "jeskai"
+      },
+      {
         "id": "sewer-combo/mono-blue",
         "kind": "subtype",
         "name": "Mono-Blue",
@@ -3496,6 +3663,14 @@
         "name": "Shape Anew",
         "display_name": "Shape Anew",
         "parent_id": "shape-anew",
+        "subtype_id": null
+      },
+      {
+        "id": "shifting-omni",
+        "kind": "archetype",
+        "name": "Shifting Omni",
+        "display_name": "Shifting Omni",
+        "parent_id": "shifting-omni",
         "subtype_id": null
       },
       {
@@ -18741,7 +18916,7 @@
     "chant-control/jeskai",
     "dimir-tempo/dimir",
     "living-end/temur",
-    "hollowvine",
+    "hollowvine/boros",
     "simic-neoform",
     "boros-land-destruction",
     "invigorator-scapeshift",
@@ -19217,7 +19392,7 @@
         }
       }
     },
-    "hollowvine": {
+    "hollowvine/boros": {
       "wins": 12,
       "losses": 7,
       "draws": 0,
@@ -20507,7 +20682,7 @@
       },
       "mirror_match_count": 0
     },
-    "hollowvine": {
+    "hollowvine/boros": {
       "all_matches": {
         "wins": 12,
         "losses": 7,
@@ -21978,7 +22153,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -22750,7 +22925,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 2,
         "losses": 0,
         "draws": 0,
@@ -23346,7 +23521,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -24030,7 +24205,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 1,
         "losses": 1,
         "draws": 0,
@@ -24626,7 +24801,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 1,
         "losses": 1,
         "draws": 0,
@@ -25288,7 +25463,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -25818,7 +25993,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -26988,7 +27163,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -27518,7 +27693,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 0,
         "losses": 2,
         "draws": 0,
@@ -28092,7 +28267,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -28512,7 +28687,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -29750,7 +29925,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -31344,7 +31519,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -31499,7 +31674,7 @@
         }
       }
     },
-    "hollowvine": {
+    "hollowvine/boros": {
       "amulet-titan": {
         "wins": 2,
         "losses": 0,
@@ -32518,7 +32693,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -34890,7 +35065,7 @@
           }
         }
       },
-      "hollowvine": {
+      "hollowvine/boros": {
         "wins": 0,
         "losses": 1,
         "draws": 0,

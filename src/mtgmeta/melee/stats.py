@@ -1334,11 +1334,12 @@ def build_event_statistics(
     }
 
 
-def statistics_document_bytes(document: Mapping[str, Any]) -> bytes:
-    """Return canonical, human-reviewable UTF-8 bytes."""
+def statistics_document_bytes(document: Mapping[str, Any], *, compact: bool = False) -> bytes:
+    """Return deterministic UTF-8 bytes, optionally without JSON whitespace."""
 
     return (
-        json.dumps(document, ensure_ascii=False, indent=2, sort_keys=False) + "\n"
+        json.dumps(document, ensure_ascii=False, indent=None if compact else 2,
+                   separators=(",", ":") if compact else None, sort_keys=False) + "\n"
     ).encode("utf-8")
 
 

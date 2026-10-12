@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.1.0",
+  "document_type": "quality",
+  "source": "melee",
+  "event_id": "471573",
+  "format": "modern",
+  "event_structure": "constructed_single_stage",
+  "input": {
+    "event_path": "data/modern/melee/events/471573.json",
+    "event_sha256": "0a769cd0faf2d247da39811db52eb190ff1730f1f8661512f4221b1abdca4bb8",
+    "event_schema_version": "2.2.0",
+    "classification_path": "data/modern/melee/classifications/471573.json",
+    "classification_sha256": "cfe23b0ec56d3d3094f3bfe8ec6ce753c5fedcac6a1478b26d657b6736d733bd",
+    "classification_schema_version": "1.1.0",
+    "opportunity_path": "data/modern/melee/opportunities/471573.json",
+    "opportunity_sha256": "a8d6fe7010a7e39558bc8e6dc2531a98dd76ebbdc958676ea441feda9a37d3c8",
+    "opportunity_schema_version": "1.1.0",
+    "taxonomy_path": "my_archetypes/modern.yaml",
+    "taxonomy_sha256": "99fb122833ee9e4c194a1e0673294fb4c2d23fd9a9947e3cd3db39229e451892",
+    "taxonomy_schema_version": "1.1.0"
+  },
+  "status": "ready",
+  "blocking": false,
+  "counts": {
+    "participants": 184,
+    "standings": 184,
+    "submitted_decklists": 184,
+    "missing_or_unavailable_decklists": 0,
+    "classified_decks": 184,
+    "unknown_decks": 0,
+    "classification_conflicts": 0,
+    "invalid_decks": 0,
+    "rounds": 11,
+    "unknown_rounds": 0,
+    "source_matches": 653,
+    "source_constructed_matches": 646,
+    "eligible_constructed_matches": 638,
+    "unknown_result_opportunities": 0,
+    "bye_count": 3,
+    "intentional_draw_match_count": 5,
+    "intentional_draw_opportunities": 10,
+    "drop_player_count": 64,
+    "drop_unplayed_rounds": 183,
+    "disqualified_participant_count": 0,
+    "disqualified_matches_excluded": 0,
+    "top8_lock_player_count": 0,
+    "top8_lock_exemptions": 0,
+    "playoff_participants": 8,
+    "no_show_opportunities": 0
+  },
+  "checks": [
+    {
+      "id": "participant_coverage",
+      "passed": true
+    },
+    {
+      "id": "classification_coverage",
+      "passed": true
+    },
+    {
+      "id": "single_stage_scope_contract",
+      "passed": true
+    },
+    {
+      "id": "eligible_match_conservation",
+      "passed": true
+    },
+    {
+      "id": "draft_and_playoff_excluded",
+      "passed": true
+    }
+  ],
+  "issues": []
+}

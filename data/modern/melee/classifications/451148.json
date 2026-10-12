@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "415749058c900300d8e070b89f37aa14e89f69b5106b2b7d9ee1e68917bcfee6"
+    "digest": "a31de3ebf1f2324a3c30e38a0a85382e9453b9eede1a1d021ae548e7c322ce2d"
   },
   "input": {
     "event_path": "data/modern/melee/events/451148.json",
@@ -18,11 +18,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "7605cafc62ce6b943235a3d1d4e4bd3516a52490d5b4deb76a8f417448787d59",
+    "rule_sha256": "99fb122833ee9e4c194a1e0673294fb4c2d23fd9a9947e3cd3db39229e451892",
     "rule_schema_version": "1.1.0",
-    "archetype_count": 212,
-    "rule_count": 387,
-    "subtype_count": 98
+    "archetype_count": 221,
+    "rule_count": 406,
+    "subtype_count": 105
   },
   "summary": {
     "total_records": 404,
@@ -30,10 +30,10 @@
     "unknown": 1,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 104,
-    "overridden_matches": 104,
-    "selected_subtypes": 162,
-    "parent_only": 241,
+    "multiple_matches": 115,
+    "overridden_matches": 115,
+    "selected_subtypes": 164,
+    "parent_only": 239,
     "same_parent_multiple_subtype_matches": 5,
     "residual_subtype_violations": 0,
     "selected_by_parent": {
@@ -100,6 +100,8 @@
       "eldrazi-tron/colorless": 8,
       "eldrazi-tron/mono-green": 9,
       "eldrazi-tron/simic": 4,
+      "hollowvine/boros": 1,
+      "hollowvine/rakdos": 1,
       "infect/bant": 1,
       "infect/simic": 1,
       "infect/sultai": 1,
@@ -321,7 +323,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -455,7 +457,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -613,14 +615,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -650,14 +644,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -1813,7 +1799,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -1947,7 +1933,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -2228,8 +2214,8 @@
       "selected": {
         "archetype_id": "hollowvine",
         "archetype_name": "Hollowvine",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "rakdos",
+        "subtype_name": "Rakdos",
         "rule_id": "hollowvine-primary",
         "priority": 628000
       },
@@ -2237,8 +2223,8 @@
         {
           "archetype_id": "hollowvine",
           "archetype_name": "Hollowvine",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "rakdos",
+          "subtype_name": "Rakdos",
           "rule_id": "hollowvine-primary",
           "priority": 628000,
           "evidence": [
@@ -2259,12 +2245,12 @@
               "exact_count": null
             },
             {
-              "card": "Blazing Rootwalla",
+              "card": "__classifier-semantic-main-white-source__",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
+              "actual_count": 0,
+              "min_count": null,
               "max_count": null,
-              "exact_count": null
+              "exact_count": 0
             }
           ]
         }
@@ -2273,8 +2259,8 @@
         {
           "archetype_id": "hollowvine",
           "archetype_name": "Hollowvine",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "rakdos",
+          "subtype_name": "Rakdos",
           "rule_id": "hollowvine-primary",
           "priority": 628000,
           "evidence": [
@@ -2295,12 +2281,12 @@
               "exact_count": null
             },
             {
-              "card": "Blazing Rootwalla",
+              "card": "__classifier-semantic-main-white-source__",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
+              "actual_count": 0,
+              "min_count": null,
               "max_count": null,
-              "exact_count": null
+              "exact_count": 0
             }
           ]
         }
@@ -2402,7 +2388,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -2536,7 +2522,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -3088,7 +3074,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -3222,7 +3208,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -3510,6 +3496,40 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -3548,7 +3568,42 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -4701,7 +4756,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -4835,7 +4890,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -6031,6 +6086,32 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "mono-blue-merfolk",
+          "archetype_name": "Mono-Blue Merfolk",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "mono-blue-merfolk-two-lords",
+          "priority": 101999,
+          "evidence": [
+            {
+              "card": "Lord of Atlantis",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Master of the Pearl Trident",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -6053,7 +6134,34 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "mono-blue-merfolk",
+          "archetype_name": "Mono-Blue Merfolk",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "mono-blue-merfolk-two-lords",
+          "priority": 101999,
+          "evidence": [
+            {
+              "card": "Lord of Atlantis",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Master of the Pearl Trident",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -7810,6 +7918,32 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "mono-blue-merfolk",
+          "archetype_name": "Mono-Blue Merfolk",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "mono-blue-merfolk-two-lords",
+          "priority": 101999,
+          "evidence": [
+            {
+              "card": "Lord of Atlantis",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Master of the Pearl Trident",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -7832,7 +7966,34 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "mono-blue-merfolk",
+          "archetype_name": "Mono-Blue Merfolk",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "mono-blue-merfolk-two-lords",
+          "priority": 101999,
+          "evidence": [
+            {
+              "card": "Lord of Atlantis",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Master of the Pearl Trident",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -8141,7 +8302,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -8283,7 +8444,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -8449,14 +8610,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -8486,14 +8639,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -9585,14 +9730,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -9622,14 +9759,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -10094,7 +10223,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -10228,7 +10357,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -10386,14 +10515,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -10423,14 +10544,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -11395,19 +11508,19 @@
       "selected": {
         "archetype_id": "hollowvine",
         "archetype_name": "Hollowvine",
-        "subtype_id": null,
-        "subtype_name": null,
-        "rule_id": "hollowvine-primary",
-        "priority": 628000
+        "subtype_id": "boros",
+        "subtype_name": "Boros",
+        "rule_id": "hollowvine-boros",
+        "priority": 628001
       },
       "matched_rules": [
         {
           "archetype_id": "hollowvine",
           "archetype_name": "Hollowvine",
-          "subtype_id": null,
-          "subtype_name": null,
-          "rule_id": "hollowvine-primary",
-          "priority": 628000,
+          "subtype_id": "boros",
+          "subtype_name": "Boros",
+          "rule_id": "hollowvine-boros",
+          "priority": 628001,
           "evidence": [
             {
               "card": "Hollow One",
@@ -11426,12 +11539,20 @@
               "exact_count": null
             },
             {
-              "card": "Blazing Rootwalla",
+              "card": "__classifier-semantic-main-white-source__",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
+              "actual_count": 5,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -11440,10 +11561,10 @@
         {
           "archetype_id": "hollowvine",
           "archetype_name": "Hollowvine",
-          "subtype_id": null,
-          "subtype_name": null,
-          "rule_id": "hollowvine-primary",
-          "priority": 628000,
+          "subtype_id": "boros",
+          "subtype_name": "Boros",
+          "rule_id": "hollowvine-boros",
+          "priority": 628001,
           "evidence": [
             {
               "card": "Hollow One",
@@ -11462,12 +11583,20 @@
               "exact_count": null
             },
             {
-              "card": "Blazing Rootwalla",
+              "card": "__classifier-semantic-main-white-source__",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
+              "actual_count": 5,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
             }
           ]
         }
@@ -11942,7 +12071,7 @@
               "card": "Phyrexian Tower",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             }
@@ -12002,7 +12131,7 @@
               "card": "Phyrexian Tower",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             }
@@ -13170,6 +13299,40 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -13208,7 +13371,42 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -13260,6 +13458,40 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -13298,7 +13530,42 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -13660,14 +13927,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -13697,14 +13956,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -14748,14 +14999,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -14785,14 +15028,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -16326,14 +16561,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -16363,14 +16590,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -16668,6 +16887,40 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -16706,7 +16959,42 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -16970,6 +17258,40 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -17008,7 +17330,42 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -18252,14 +18609,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -18289,14 +18638,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -18507,7 +18848,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -18641,7 +18982,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -19415,14 +19756,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -19452,14 +19785,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -20227,7 +20552,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -20361,7 +20686,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -20848,7 +21173,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -20982,7 +21307,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -23168,14 +23493,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -23205,14 +23522,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -23513,7 +23822,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -23647,7 +23956,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -24589,14 +24898,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -24626,14 +24927,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -24764,7 +25057,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -24898,7 +25191,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -25316,7 +25609,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -25450,7 +25743,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -28093,7 +28386,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -28227,7 +28520,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -28650,14 +28943,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -28687,14 +28972,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -29425,14 +29702,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -29462,14 +29731,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -29648,7 +29909,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -29782,7 +30043,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -30115,14 +30376,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -30152,14 +30405,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -30751,14 +30996,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -30788,14 +31025,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -31696,14 +31925,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -31733,14 +31954,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -32540,7 +32753,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -32600,7 +32813,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -34122,7 +34335,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -34256,7 +34469,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -34597,7 +34810,7 @@
               "card": "Hedron Crab",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -34625,7 +34838,7 @@
               "card": "Hedron Crab",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -34891,7 +35104,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -35025,7 +35238,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -35687,14 +35900,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -35724,14 +35929,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -37746,14 +37943,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -37783,14 +37972,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -38650,14 +38831,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -38687,14 +38860,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -39166,7 +39331,7 @@
               "card": "Hedron Crab",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -39194,7 +39359,7 @@
               "card": "Hedron Crab",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -39577,7 +39742,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -39637,7 +39802,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -39826,14 +39991,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -39863,14 +40020,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -40208,14 +40357,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -40245,14 +40386,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -40823,14 +40956,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -40860,14 +40985,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -41003,14 +41120,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -41040,14 +41149,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -41109,14 +41210,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -41146,14 +41239,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -42292,14 +42377,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -42329,14 +42406,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -45074,6 +45143,40 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -45112,7 +45215,42 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -45522,7 +45660,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -45656,7 +45794,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -46674,14 +46812,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -46711,14 +46841,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -46960,14 +47082,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -46997,14 +47111,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -49133,7 +49239,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -49267,7 +49373,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -50173,14 +50279,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -50210,14 +50308,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -51093,6 +51183,40 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -51131,7 +51255,42 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -51297,7 +51456,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -51357,7 +51516,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -51541,7 +51700,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -51675,7 +51834,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -51918,7 +52077,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -52052,7 +52211,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -52210,14 +52369,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -52247,14 +52398,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -52311,7 +52454,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -52445,7 +52588,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -54298,14 +54441,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -54335,14 +54470,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -54797,7 +54924,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -54857,7 +54984,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -54935,7 +55062,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -55069,7 +55196,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -56383,14 +56510,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -56420,14 +56539,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -56643,14 +56754,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -56680,14 +56783,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -57672,7 +57767,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -57806,7 +57901,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -58235,7 +58330,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -58369,7 +58464,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -58617,14 +58712,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -58654,14 +58741,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -60024,14 +60103,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -60061,14 +60132,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -60125,7 +60188,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -60185,7 +60248,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -60642,6 +60705,40 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -60680,7 +60777,42 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -60936,14 +61068,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -60973,14 +61097,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -61050,6 +61166,40 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -61088,7 +61238,42 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "domain-zoo",
+          "archetype_name": "Domain Zoo",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "domain-zoo-kavu",
+          "priority": 326999,
+          "evidence": [
+            {
+              "card": "Territorial Kavu",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Scion of Draco",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Leyline Binding",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -61233,7 +61418,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -61367,7 +61552,7 @@
               "card": "Overlord of the Balemurk",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 2,
               "max_count": null,
               "exact_count": null
             },
@@ -62486,14 +62671,6 @@
               "exact_count": null
             },
             {
-              "card": "Mishra's Bauble",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
               "card": "Kappa Cannoneer",
               "zone": "main",
               "actual_count": 4,
@@ -62523,14 +62700,6 @@
             },
             {
               "card": "Urza's Saga",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Mishra's Bauble",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,

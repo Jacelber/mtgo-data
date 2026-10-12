@@ -718,6 +718,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--format", required=True, dest="format_id")
     parser.add_argument("--event-id", required=True)
+    parser.add_argument("--compact", action="store_true",
+                        help="omit JSON whitespace without changing matchup values")
     parser.add_argument(
         "--execute",
         action="store_true",
@@ -776,7 +778,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.execute:
             reused = write_statistics_document(
                 destination,
-                statistics_document_bytes(document),
+                statistics_document_bytes(document, compact=args.compact),
             )
         print(
             json.dumps(

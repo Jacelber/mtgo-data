@@ -257,10 +257,25 @@ def inspect_publication(root: Path, format_id: str) -> list[str]:
         if document.get("latest_complete_week") != week_monday(expected["week"]).isoformat():
             issues.append(f"{name}: public calendar frontier differs")
     admitted = resolve_scope(root, format_id).event_ids
+    admitted_melee: set[str] | None = None
     for relative in artifact_paths(root, format_id):
         document = json.loads((root / relative).read_text(encoding="utf-8"))
         if not referenced_event_ids(document) <= admitted:
             issues.append(f"{relative}: unadmitted public event reference")
+        melee_ids = referenced_event_ids(document, source="melee")
+        if melee_ids:
+            if admitted_melee is None:
+                from ..melee.config import load_melee_event_registry
+                registry = load_melee_event_registry(root / "configs/melee_events.yaml")
+                catalog = json.loads((root / "stats" / format_id / "melee/index.json").read_text(encoding="utf-8"))
+                admitted_melee = set()
+                for entry in catalog["events"]:
+                    event_id = str(entry["event_id"])
+                    event = registry.require_fetchable(event_id)
+                    if event.format == format_id:
+                        admitted_melee.add(event_id)
+            if not melee_ids <= admitted_melee:
+                issues.append(f"{relative}: unadmitted public Melee event reference")
         if relative.startswith(f"reports/{format_id}/mtgo/") and (
             document.get("scope") != "all_admitted_events" or document.get("event_count") != len(admitted)
         ):
@@ -268,20 +283,25 @@ def inspect_publication(root: Path, format_id: str) -> list[str]:
     return issues
 
 
-def referenced_event_ids(value: Any) -> set[str]:
-    """Read existing MTGO source-reference fields without reclassifying inputs."""
+def referenced_event_ids(value: Any, *, source: str = "mtgo", _inherited_source: str = "mtgo") -> set[str]:
+    """Keep nested Tabletop references separate from the MTGO admission scope."""
     result: set[str] = set()
     if isinstance(value, dict):
+        current_source = value.get("source", _inherited_source)
+        if not isinstance(current_source, str) or current_source not in {"mtgo", "melee"}:
+            current_source = _inherited_source
         for key, child in value.items():
             if key == "event_id" and child is not None:
-                result.add(str(child))
+                if current_source == source:
+                    result.add(str(child))
             elif key in {"event_ids", "source_event_ids"} and isinstance(child, list):
-                result.update(str(item) for item in child)
+                if current_source == source:
+                    result.update(str(item) for item in child)
             else:
-                result.update(referenced_event_ids(child))
+                result.update(referenced_event_ids(child, source=source, _inherited_source=current_source))
     elif isinstance(value, list):
         for child in value:
-            result.update(referenced_event_ids(child))
+            result.update(referenced_event_ids(child, source=source, _inherited_source=_inherited_source))
     return result
 
 

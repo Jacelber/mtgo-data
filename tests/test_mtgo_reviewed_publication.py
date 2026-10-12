@@ -177,6 +177,45 @@ def test_current_binding_rejects_unadmitted_references_even_if_rehashed(tmp_path
     assert any("public report population" in issue for issue in inspect_publication(tmp_path, "standard"))
 
 
+def test_nested_tabletop_references_keep_source_membership_separate():
+    from mtgmeta.mtgo.publication import referenced_event_ids
+    document = {"source": "mtgo", "source_event_ids": ["100"], "features": [
+        {"deck": {"source": "melee", "event_id": "411350"}},
+        {"deck": {"event_id": "200"}},
+        {"source": "melee", "event_ids": ["459699"],
+         "nested": {"source": "mtgo", "event_id": "300"}},
+    ], "counts": {"source": {"event_id": "400"}}}
+    assert referenced_event_ids(document) == {"100", "200", "300", "400"}
+    assert referenced_event_ids(document, source="melee") == {"411350", "459699"}
+
+
+def test_public_landing_accepts_only_admitted_same_format_melee_references(tmp_path):
+    import shutil
+    from pathlib import Path
+    from mtgmeta.mtgo.publication import inspect_publication, publication_binding
+    _repository(tmp_path)
+    _generate(tmp_path, "modern")
+    shutil.copyfile(Path(__file__).resolve().parents[1] / "configs/melee_events.yaml",
+                    tmp_path / "configs/melee_events.yaml")
+    _write(tmp_path / "stats/modern/melee/index.json", {"events": [{"event_id": "411350"}]})
+    artifact = tmp_path / "stats/modern/mtgo/landing/features/source-check.json"
+    _write(artifact, {"source": "mtgo", "source_event_ids": ["100"],
+                      "deck": {"source": "melee", "event_id": "411350"}})
+    meta_path = tmp_path / "stats/modern/mtgo/meta.json"
+    meta = json.loads(meta_path.read_text())
+    meta["publication"] = publication_binding(tmp_path, "modern")
+    _write(meta_path, meta)
+    assert inspect_publication(tmp_path, "modern") == []
+    _write(artifact, {"source": "mtgo", "deck": {"source": "melee", "event_id": "999999"}})
+    meta["publication"] = publication_binding(tmp_path, "modern")
+    _write(meta_path, meta)
+    assert any("unadmitted public Melee event" in item for item in inspect_publication(tmp_path, "modern"))
+    _write(artifact, {"source": "mtgo", "deck": {"event_id": "200"}})
+    meta["publication"] = publication_binding(tmp_path, "modern")
+    _write(meta_path, meta)
+    assert any("unadmitted public event" in item for item in inspect_publication(tmp_path, "modern"))
+
+
 def test_changed_accepted_source_and_public_review_destination_fail_closed(tmp_path):
     from mtgmeta.mtgo.publication import require_private_output, resolve_scope
     _repository(tmp_path)
