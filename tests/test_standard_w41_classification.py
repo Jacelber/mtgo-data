@@ -56,12 +56,24 @@ def test_owner_w41_corrections(rules, event, rank, parent, subtype):
     assert (result.status, result.archetype_id, result.subtype_id) == ('classified', parent, subtype)
 
 
-def test_spider_man_union_has_no_subtypes_and_keeps_deceit_path(rules):
+def test_spider_man_union_combines_dimir_and_preserves_sultai(rules):
     parent = next(a for a in rules.archetypes if a.id == 'dimir-spider-man')
-    assert not parent.subtypes
+    assert [s.id for s in parent.subtypes] == ['dimir', 'sultai']
     assert not {'dimir-deceit', 'dimir-excruciator', 'sultai-excruciator'} & {a.id for a in rules.archetypes}
     result = classify_deck(rules, retained('12855542', 2))
-    assert (result.archetype_id, result.subtype_id) == ('dimir-spider-man', None)
+    assert (result.archetype_id, result.subtype_id) == ('dimir-spider-man', 'dimir')
+
+
+def test_sultai_spider_man_retains_green_build_under_shared_parent(rules):
+    deck = {'main_deck': [{'name': name, 'qty': qty} for name, qty in (
+        ('Doomsday Excruciator', 2), ('Superior Spider-Man', 4), ('Deceit', 4),
+        ('Wistfulness', 2), ('Overgrown Tomb', 4),
+    )], 'sideboard': []}
+    result = classify_deck(rules, deck)
+    assert (result.archetype_id, result.subtype_id) == ('dimir-spider-man', 'sultai')
+    deck['main_deck'] = [c for c in deck['main_deck'] if c['name'] != 'Wistfulness']
+    result = classify_deck(rules, deck)
+    assert (result.archetype_id, result.subtype_id) == ('dimir-spider-man', 'dimir')
 
 
 def test_professor_in_sideboard_does_not_make_lifegain_abzan(rules):

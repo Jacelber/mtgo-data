@@ -3,6 +3,8 @@
 const manaIdentities = Object.freeze({
   standard: Object.freeze({
     "dimir-spider-man": Object.freeze(["u", "b"]),
+    "dimir-spider-man/dimir": Object.freeze(["u", "b"]),
+    "dimir-spider-man/sultai": Object.freeze(["u", "b", "g"]),
     "boros-superfriends": Object.freeze(["w", "r"]),
     "mono-white-swarm-aggro": Object.freeze(["w"]),
     "grixis-artifact-sacrifice": Object.freeze(["u", "b", "r"]),

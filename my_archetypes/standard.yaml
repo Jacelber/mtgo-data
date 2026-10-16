@@ -3749,10 +3749,15 @@ archetypes:
 - id: dimir-spider-man
   name: Dimir Spider-Man
   priority: 70010
+  subtypes:
+  - id: dimir
+    name: Dimir Spider-Man
+  - id: sultai
+    name: Sultai Spider-Man
   rules:
   - id: sultai-excruciator-primary
     priority: 70010
-    subtype_id: null
+    subtype_id: sultai
     conditions:
       all:
       - card: Doomsday Excruciator
@@ -3769,14 +3774,14 @@ archetypes:
         min_count: 1
   - id: dimir-excruciator-primary
     priority: 70000
-    subtype_id: null
+    subtype_id: dimir
     conditions:
       all:
       - card: Doomsday Excruciator
         min_count: 1
   - id: dimir-deceit-primary
     priority: 19000
-    subtype_id: null
+    subtype_id: dimir
     conditions:
       all:
       - card: Deceit
