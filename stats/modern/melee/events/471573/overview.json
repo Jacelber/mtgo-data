@@ -10,13 +10,13 @@
     "event_sha256": "0a769cd0faf2d247da39811db52eb190ff1730f1f8661512f4221b1abdca4bb8",
     "event_schema_version": "2.2.0",
     "classification_path": "data/modern/melee/classifications/471573.json",
-    "classification_sha256": "cfe23b0ec56d3d3094f3bfe8ec6ce753c5fedcac6a1478b26d657b6736d733bd",
+    "classification_sha256": "c024bfc5e5a4b3f36a5e9633002afb9001aa83f6619df15203d5e12ce61aea1c",
     "classification_schema_version": "1.1.0",
     "opportunity_path": "data/modern/melee/opportunities/471573.json",
-    "opportunity_sha256": "a8d6fe7010a7e39558bc8e6dc2531a98dd76ebbdc958676ea441feda9a37d3c8",
+    "opportunity_sha256": "92a5e38dbdf3b3dc3ca67dab34d446b9e2669ca6fce7fb40e2df71bcd6a71b16",
     "opportunity_schema_version": "1.1.0",
     "taxonomy_path": "my_archetypes/modern.yaml",
-    "taxonomy_sha256": "99fb122833ee9e4c194a1e0673294fb4c2d23fd9a9947e3cd3db39229e451892",
+    "taxonomy_sha256": "d060a9fc0ec71e67841bb4cfdbd8e75f0c30c407b2e95cc18f2f7e514bbb247e",
     "taxonomy_schema_version": "1.1.0"
   },
   "event": {
@@ -1308,26 +1308,116 @@
           "subtypes": []
         },
         {
+          "group_id": "archetype:esper-blink",
+          "classification_status": "classified",
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "expandable": false,
+          "deck_count": 12,
+          "metagame_share": 0.065217,
+          "constructed_points": 127,
+          "theoretical_rounds": 96,
+          "effective_theoretical_rounds": 96,
+          "average_points_per_effective_round": 1.322917,
+          "completed_or_officially_exempt_rounds": 84,
+          "completion_rate": 0.875,
+          "played_match_participations": 83,
+          "source_match_count": 81,
+          "result_counts": {
+            "drop_unplayed": 12,
+            "intentional_draw": 1,
+            "played_draw": 6,
+            "played_loss": 37,
+            "played_win": 40
+          },
+          "drop_player_count": 5,
+          "drop_unplayed_rounds": 12,
+          "intentional_draw_opportunities": 1,
+          "bye_count": 0,
+          "top8_lock_player_count": 0,
+          "top8_lock_exemptions": 0,
+          "disqualified_player_count": 0,
+          "high_score": {
+            "count": 2,
+            "field_share": 0.038462,
+            "high_score_conversion": 0.166667,
+            "day2_high_score_rate": null,
+            "effective_round_distribution": {
+              "8": 12
+            }
+          },
+          "match_record": {
+            "all_matches": {
+              "wins": 40,
+              "losses": 37,
+              "draws": 6,
+              "matches": 83,
+              "win_rate": 0.518072,
+              "confidence_interval_95": {
+                "lower": 0.412178,
+                "upper": 0.622368
+              },
+              "literal_record": {
+                "wins": 40,
+                "losses": 37,
+                "draws": 6,
+                "matches": 83,
+                "win_rate": 0.481928,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.37763,
+                  "upper": 0.587824
+                }
+              }
+            },
+            "non_mirror": {
+              "wins": 38,
+              "losses": 35,
+              "draws": 4,
+              "matches": 77,
+              "win_rate": 0.519481,
+              "confidence_interval_95": {
+                "lower": 0.40964,
+                "upper": 0.62747
+              },
+              "literal_record": {
+                "wins": 38,
+                "losses": 35,
+                "draws": 4,
+                "matches": 77,
+                "win_rate": 0.493506,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.384828,
+                  "upper": 0.602802
+                }
+              }
+            },
+            "mirror_match_count": 3
+          },
+          "subtypes": []
+        },
+        {
           "group_id": "archetype:chant-control",
           "classification_status": "classified",
           "archetype_id": "chant-control",
           "archetype_name": "Chant Control",
           "expandable": true,
-          "deck_count": 12,
-          "metagame_share": 0.065217,
-          "constructed_points": 143,
-          "theoretical_rounds": 96,
-          "effective_theoretical_rounds": 96,
-          "average_points_per_effective_round": 1.489583,
-          "completed_or_officially_exempt_rounds": 93,
-          "completion_rate": 0.96875,
-          "played_match_participations": 93,
-          "source_match_count": 86,
+          "deck_count": 11,
+          "metagame_share": 0.059783,
+          "constructed_points": 134,
+          "theoretical_rounds": 88,
+          "effective_theoretical_rounds": 88,
+          "average_points_per_effective_round": 1.522727,
+          "completed_or_officially_exempt_rounds": 85,
+          "completion_rate": 0.965909,
+          "played_match_participations": 85,
+          "source_match_count": 78,
           "result_counts": {
             "drop_unplayed": 3,
             "played_draw": 17,
-            "played_loss": 34,
-            "played_win": 42
+            "played_loss": 29,
+            "played_win": 39
           },
           "drop_player_count": 2,
           "drop_unplayed_rounds": 3,
@@ -1339,56 +1429,56 @@
           "high_score": {
             "count": 4,
             "field_share": 0.076923,
-            "high_score_conversion": 0.333333,
+            "high_score_conversion": 0.363636,
             "day2_high_score_rate": null,
             "effective_round_distribution": {
-              "8": 12
+              "8": 11
             }
           },
           "match_record": {
             "all_matches": {
-              "wins": 42,
-              "losses": 34,
+              "wins": 39,
+              "losses": 29,
               "draws": 17,
-              "matches": 93,
-              "win_rate": 0.543011,
+              "matches": 85,
+              "win_rate": 0.558824,
               "confidence_interval_95": {
-                "lower": 0.442076,
-                "upper": 0.640534
+                "lower": 0.453,
+                "upper": 0.65956
               },
               "literal_record": {
-                "wins": 42,
-                "losses": 34,
+                "wins": 39,
+                "losses": 29,
                 "draws": 17,
-                "matches": 93,
-                "win_rate": 0.451613,
+                "matches": 85,
+                "win_rate": 0.458824,
                 "win_rate_method": "wins_over_valid_matches",
                 "confidence_interval_95": {
-                  "lower": 0.354396,
-                  "upper": 0.552669
+                  "lower": 0.35697,
+                  "upper": 0.564239
                 }
               }
             },
             "non_mirror": {
-              "wins": 37,
-              "losses": 29,
+              "wins": 34,
+              "losses": 24,
               "draws": 13,
-              "matches": 79,
-              "win_rate": 0.550633,
+              "matches": 71,
+              "win_rate": 0.570423,
               "confidence_interval_95": {
-                "lower": 0.441143,
-                "upper": 0.655427
+                "lower": 0.4546,
+                "upper": 0.679015
               },
               "literal_record": {
-                "wins": 37,
-                "losses": 29,
+                "wins": 34,
+                "losses": 24,
                 "draws": 13,
-                "matches": 79,
-                "win_rate": 0.468354,
+                "matches": 71,
+                "win_rate": 0.478873,
                 "win_rate_method": "wins_over_valid_matches",
                 "confidence_interval_95": {
-                  "lower": 0.362356,
-                  "upper": 0.577288
+                  "lower": 0.366773,
+                  "upper": 0.593142
                 }
               }
             },
@@ -1400,21 +1490,21 @@
               "subtype_id": "azorius",
               "subtype_name": "Azorius",
               "display_name": "Azorius Chant Control",
-              "deck_count": 11,
-              "metagame_share": 0.059783,
-              "constructed_points": 127,
-              "theoretical_rounds": 88,
-              "effective_theoretical_rounds": 88,
-              "average_points_per_effective_round": 1.443182,
-              "completed_or_officially_exempt_rounds": 85,
-              "completion_rate": 0.965909,
-              "played_match_participations": 85,
-              "source_match_count": 80,
+              "deck_count": 10,
+              "metagame_share": 0.054348,
+              "constructed_points": 118,
+              "theoretical_rounds": 80,
+              "effective_theoretical_rounds": 80,
+              "average_points_per_effective_round": 1.475,
+              "completed_or_officially_exempt_rounds": 77,
+              "completion_rate": 0.9625,
+              "played_match_participations": 77,
+              "source_match_count": 72,
               "result_counts": {
                 "drop_unplayed": 3,
                 "played_draw": 13,
-                "played_loss": 34,
-                "played_win": 38
+                "played_loss": 29,
+                "played_win": 35
               },
               "drop_player_count": 2,
               "drop_unplayed_rounds": 3,
@@ -1426,56 +1516,56 @@
               "high_score": {
                 "count": 3,
                 "field_share": 0.057692,
-                "high_score_conversion": 0.272727,
+                "high_score_conversion": 0.3,
                 "day2_high_score_rate": null,
                 "effective_round_distribution": {
-                  "8": 11
+                  "8": 10
                 }
               },
               "match_record": {
                 "all_matches": {
-                  "wins": 38,
-                  "losses": 34,
+                  "wins": 35,
+                  "losses": 29,
                   "draws": 13,
-                  "matches": 85,
-                  "win_rate": 0.523529,
+                  "matches": 77,
+                  "win_rate": 0.538961,
                   "confidence_interval_95": {
-                    "lower": 0.418652,
-                    "upper": 0.626372
+                    "lower": 0.428432,
+                    "upper": 0.645788
                   },
                   "literal_record": {
-                    "wins": 38,
-                    "losses": 34,
+                    "wins": 35,
+                    "losses": 29,
                     "draws": 13,
-                    "matches": 85,
-                    "win_rate": 0.447059,
+                    "matches": 77,
+                    "win_rate": 0.454545,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.345935,
-                      "upper": 0.552761
+                      "lower": 0.34814,
+                      "upper": 0.565271
                     }
                   }
                 },
                 "non_mirror": {
-                  "wins": 35,
-                  "losses": 31,
+                  "wins": 32,
+                  "losses": 26,
                   "draws": 9,
-                  "matches": 75,
-                  "win_rate": 0.526667,
+                  "matches": 67,
+                  "win_rate": 0.544776,
                   "confidence_interval_95": {
-                    "lower": 0.415149,
-                    "upper": 0.635585
+                    "lower": 0.426358,
+                    "upper": 0.658338
                   },
                   "literal_record": {
-                    "wins": 35,
-                    "losses": 31,
+                    "wins": 32,
+                    "losses": 26,
                     "draws": 9,
-                    "matches": 75,
-                    "win_rate": 0.466667,
+                    "matches": 67,
+                    "win_rate": 0.477612,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.358155,
-                      "upper": 0.578427
+                      "lower": 0.362502,
+                      "upper": 0.59515
                     }
                   }
                 },
@@ -1704,96 +1794,6 @@
               }
             }
           ]
-        },
-        {
-          "group_id": "archetype:esper-blink",
-          "classification_status": "classified",
-          "archetype_id": "esper-blink",
-          "archetype_name": "Esper Blink",
-          "expandable": false,
-          "deck_count": 12,
-          "metagame_share": 0.065217,
-          "constructed_points": 127,
-          "theoretical_rounds": 96,
-          "effective_theoretical_rounds": 96,
-          "average_points_per_effective_round": 1.322917,
-          "completed_or_officially_exempt_rounds": 84,
-          "completion_rate": 0.875,
-          "played_match_participations": 83,
-          "source_match_count": 81,
-          "result_counts": {
-            "drop_unplayed": 12,
-            "intentional_draw": 1,
-            "played_draw": 6,
-            "played_loss": 37,
-            "played_win": 40
-          },
-          "drop_player_count": 5,
-          "drop_unplayed_rounds": 12,
-          "intentional_draw_opportunities": 1,
-          "bye_count": 0,
-          "top8_lock_player_count": 0,
-          "top8_lock_exemptions": 0,
-          "disqualified_player_count": 0,
-          "high_score": {
-            "count": 2,
-            "field_share": 0.038462,
-            "high_score_conversion": 0.166667,
-            "day2_high_score_rate": null,
-            "effective_round_distribution": {
-              "8": 12
-            }
-          },
-          "match_record": {
-            "all_matches": {
-              "wins": 40,
-              "losses": 37,
-              "draws": 6,
-              "matches": 83,
-              "win_rate": 0.518072,
-              "confidence_interval_95": {
-                "lower": 0.412178,
-                "upper": 0.622368
-              },
-              "literal_record": {
-                "wins": 40,
-                "losses": 37,
-                "draws": 6,
-                "matches": 83,
-                "win_rate": 0.481928,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.37763,
-                  "upper": 0.587824
-                }
-              }
-            },
-            "non_mirror": {
-              "wins": 38,
-              "losses": 35,
-              "draws": 4,
-              "matches": 77,
-              "win_rate": 0.519481,
-              "confidence_interval_95": {
-                "lower": 0.40964,
-                "upper": 0.62747
-              },
-              "literal_record": {
-                "wins": 38,
-                "losses": 35,
-                "draws": 4,
-                "matches": 77,
-                "win_rate": 0.493506,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.384828,
-                  "upper": 0.602802
-                }
-              }
-            },
-            "mirror_match_count": 3
-          },
-          "subtypes": []
         },
         {
           "group_id": "archetype:esper-goryos",
@@ -4014,6 +4014,604 @@
           "subtypes": []
         },
         {
+          "group_id": "archetype:eldrazi-ramp",
+          "classification_status": "classified",
+          "archetype_id": "eldrazi-ramp",
+          "archetype_name": "Eldrazi Ramp",
+          "expandable": true,
+          "deck_count": 2,
+          "metagame_share": 0.01087,
+          "constructed_points": 24,
+          "theoretical_rounds": 16,
+          "effective_theoretical_rounds": 16,
+          "average_points_per_effective_round": 1.5,
+          "completed_or_officially_exempt_rounds": 16,
+          "completion_rate": 1.0,
+          "played_match_participations": 16,
+          "source_match_count": 16,
+          "result_counts": {
+            "played_loss": 8,
+            "played_win": 8
+          },
+          "drop_player_count": 0,
+          "drop_unplayed_rounds": 0,
+          "intentional_draw_opportunities": 0,
+          "bye_count": 0,
+          "top8_lock_player_count": 0,
+          "top8_lock_exemptions": 0,
+          "disqualified_player_count": 0,
+          "high_score": {
+            "count": 1,
+            "field_share": 0.019231,
+            "high_score_conversion": 0.5,
+            "day2_high_score_rate": null,
+            "effective_round_distribution": {
+              "8": 2
+            }
+          },
+          "match_record": {
+            "all_matches": {
+              "wins": 8,
+              "losses": 8,
+              "draws": 0,
+              "matches": 16,
+              "win_rate": 0.5,
+              "confidence_interval_95": {
+                "lower": 0.279996,
+                "upper": 0.720004
+              },
+              "literal_record": {
+                "wins": 8,
+                "losses": 8,
+                "draws": 0,
+                "matches": 16,
+                "win_rate": 0.5,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.279992,
+                  "upper": 0.720008
+                }
+              }
+            },
+            "non_mirror": {
+              "wins": 8,
+              "losses": 8,
+              "draws": 0,
+              "matches": 16,
+              "win_rate": 0.5,
+              "confidence_interval_95": {
+                "lower": 0.279996,
+                "upper": 0.720004
+              },
+              "literal_record": {
+                "wins": 8,
+                "losses": 8,
+                "draws": 0,
+                "matches": 16,
+                "win_rate": 0.5,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.279992,
+                  "upper": 0.720008
+                }
+              }
+            },
+            "mirror_match_count": 0
+          },
+          "subtypes": [
+            {
+              "group_id": "subtype:eldrazi-ramp/gruul",
+              "subtype_id": "gruul",
+              "subtype_name": "Gruul",
+              "display_name": "Gruul Eldrazi Ramp",
+              "deck_count": 1,
+              "metagame_share": 0.005435,
+              "constructed_points": 15,
+              "theoretical_rounds": 8,
+              "effective_theoretical_rounds": 8,
+              "average_points_per_effective_round": 1.875,
+              "completed_or_officially_exempt_rounds": 8,
+              "completion_rate": 1.0,
+              "played_match_participations": 8,
+              "source_match_count": 8,
+              "result_counts": {
+                "played_loss": 3,
+                "played_win": 5
+              },
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": {
+                "count": 1,
+                "field_share": 0.019231,
+                "high_score_conversion": 1.0,
+                "day2_high_score_rate": null,
+                "effective_round_distribution": {
+                  "8": 1
+                }
+              },
+              "match_record": {
+                "all_matches": {
+                  "wins": 5,
+                  "losses": 3,
+                  "draws": 0,
+                  "matches": 8,
+                  "win_rate": 0.625,
+                  "confidence_interval_95": {
+                    "lower": 0.305742,
+                    "upper": 0.863156
+                  },
+                  "literal_record": {
+                    "wins": 5,
+                    "losses": 3,
+                    "draws": 0,
+                    "matches": 8,
+                    "win_rate": 0.625,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.305738,
+                      "upper": 0.863158
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 5,
+                  "losses": 3,
+                  "draws": 0,
+                  "matches": 8,
+                  "win_rate": 0.625,
+                  "confidence_interval_95": {
+                    "lower": 0.305742,
+                    "upper": 0.863156
+                  },
+                  "literal_record": {
+                    "wins": 5,
+                    "losses": 3,
+                    "draws": 0,
+                    "matches": 8,
+                    "win_rate": 0.625,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.305738,
+                      "upper": 0.863158
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:eldrazi-ramp/temur",
+              "subtype_id": "temur",
+              "subtype_name": "Temur",
+              "display_name": "Temur Eldrazi Ramp",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": {
+                "count": 0,
+                "field_share": 0.0,
+                "high_score_conversion": null,
+                "day2_high_score_rate": null,
+                "effective_round_distribution": {}
+              },
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:eldrazi-ramp/sultai",
+              "subtype_id": "sultai",
+              "subtype_name": "Sultai",
+              "display_name": "Sultai Eldrazi Ramp",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": {
+                "count": 0,
+                "field_share": 0.0,
+                "high_score_conversion": null,
+                "day2_high_score_rate": null,
+                "effective_round_distribution": {}
+              },
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:eldrazi-ramp/simic",
+              "subtype_id": "simic",
+              "subtype_name": "Simic",
+              "display_name": "Simic Eldrazi Ramp",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": {
+                "count": 0,
+                "field_share": 0.0,
+                "high_score_conversion": null,
+                "day2_high_score_rate": null,
+                "effective_round_distribution": {}
+              },
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:eldrazi-ramp/golgari",
+              "subtype_id": "golgari",
+              "subtype_name": "Golgari",
+              "display_name": "Golgari Eldrazi Ramp",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": {
+                "count": 0,
+                "field_share": 0.0,
+                "high_score_conversion": null,
+                "day2_high_score_rate": null,
+                "effective_round_distribution": {}
+              },
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:eldrazi-ramp/mono-green",
+              "subtype_id": "mono-green",
+              "subtype_name": "Mono-Green",
+              "display_name": "Mono-Green Eldrazi Ramp",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": {
+                "count": 0,
+                "field_share": 0.0,
+                "high_score_conversion": null,
+                "day2_high_score_rate": null,
+                "effective_round_distribution": {}
+              },
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:eldrazi-ramp/selesnya",
+              "subtype_id": "selesnya",
+              "subtype_name": "Selesnya",
+              "display_name": "Selesnya Eldrazi Ramp",
+              "deck_count": 1,
+              "metagame_share": 0.005435,
+              "constructed_points": 9,
+              "theoretical_rounds": 8,
+              "effective_theoretical_rounds": 8,
+              "average_points_per_effective_round": 1.125,
+              "completed_or_officially_exempt_rounds": 8,
+              "completion_rate": 1.0,
+              "played_match_participations": 8,
+              "source_match_count": 8,
+              "result_counts": {
+                "played_loss": 5,
+                "played_win": 3
+              },
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": {
+                "count": 0,
+                "field_share": 0.0,
+                "high_score_conversion": 0.0,
+                "day2_high_score_rate": null,
+                "effective_round_distribution": {
+                  "8": 1
+                }
+              },
+              "match_record": {
+                "all_matches": {
+                  "wins": 3,
+                  "losses": 5,
+                  "draws": 0,
+                  "matches": 8,
+                  "win_rate": 0.375,
+                  "confidence_interval_95": {
+                    "lower": 0.136844,
+                    "upper": 0.694258
+                  },
+                  "literal_record": {
+                    "wins": 3,
+                    "losses": 5,
+                    "draws": 0,
+                    "matches": 8,
+                    "win_rate": 0.375,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.136842,
+                      "upper": 0.694262
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 3,
+                  "losses": 5,
+                  "draws": 0,
+                  "matches": 8,
+                  "win_rate": 0.375,
+                  "confidence_interval_95": {
+                    "lower": 0.136844,
+                    "upper": 0.694258
+                  },
+                  "literal_record": {
+                    "wins": 3,
+                    "losses": 5,
+                    "draws": 0,
+                    "matches": 8,
+                    "win_rate": 0.375,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.136842,
+                      "upper": 0.694262
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            }
+          ]
+        },
+        {
           "group_id": "archetype:esper-ketramose",
           "classification_status": "classified",
           "archetype_id": "esper-ketramose",
@@ -5512,587 +6110,6 @@
             "mirror_match_count": 0
           },
           "subtypes": []
-        },
-        {
-          "group_id": "archetype:eldrazi-ramp",
-          "classification_status": "classified",
-          "archetype_id": "eldrazi-ramp",
-          "archetype_name": "Eldrazi Ramp",
-          "expandable": true,
-          "deck_count": 1,
-          "metagame_share": 0.005435,
-          "constructed_points": 15,
-          "theoretical_rounds": 8,
-          "effective_theoretical_rounds": 8,
-          "average_points_per_effective_round": 1.875,
-          "completed_or_officially_exempt_rounds": 8,
-          "completion_rate": 1.0,
-          "played_match_participations": 8,
-          "source_match_count": 8,
-          "result_counts": {
-            "played_loss": 3,
-            "played_win": 5
-          },
-          "drop_player_count": 0,
-          "drop_unplayed_rounds": 0,
-          "intentional_draw_opportunities": 0,
-          "bye_count": 0,
-          "top8_lock_player_count": 0,
-          "top8_lock_exemptions": 0,
-          "disqualified_player_count": 0,
-          "high_score": {
-            "count": 1,
-            "field_share": 0.019231,
-            "high_score_conversion": 1.0,
-            "day2_high_score_rate": null,
-            "effective_round_distribution": {
-              "8": 1
-            }
-          },
-          "match_record": {
-            "all_matches": {
-              "wins": 5,
-              "losses": 3,
-              "draws": 0,
-              "matches": 8,
-              "win_rate": 0.625,
-              "confidence_interval_95": {
-                "lower": 0.305742,
-                "upper": 0.863156
-              },
-              "literal_record": {
-                "wins": 5,
-                "losses": 3,
-                "draws": 0,
-                "matches": 8,
-                "win_rate": 0.625,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.305738,
-                  "upper": 0.863158
-                }
-              }
-            },
-            "non_mirror": {
-              "wins": 5,
-              "losses": 3,
-              "draws": 0,
-              "matches": 8,
-              "win_rate": 0.625,
-              "confidence_interval_95": {
-                "lower": 0.305742,
-                "upper": 0.863156
-              },
-              "literal_record": {
-                "wins": 5,
-                "losses": 3,
-                "draws": 0,
-                "matches": 8,
-                "win_rate": 0.625,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.305738,
-                  "upper": 0.863158
-                }
-              }
-            },
-            "mirror_match_count": 0
-          },
-          "subtypes": [
-            {
-              "group_id": "subtype:eldrazi-ramp/gruul",
-              "subtype_id": "gruul",
-              "subtype_name": "Gruul",
-              "display_name": "Gruul Eldrazi Ramp",
-              "deck_count": 1,
-              "metagame_share": 0.005435,
-              "constructed_points": 15,
-              "theoretical_rounds": 8,
-              "effective_theoretical_rounds": 8,
-              "average_points_per_effective_round": 1.875,
-              "completed_or_officially_exempt_rounds": 8,
-              "completion_rate": 1.0,
-              "played_match_participations": 8,
-              "source_match_count": 8,
-              "result_counts": {
-                "played_loss": 3,
-                "played_win": 5
-              },
-              "drop_player_count": 0,
-              "drop_unplayed_rounds": 0,
-              "intentional_draw_opportunities": 0,
-              "bye_count": 0,
-              "top8_lock_player_count": 0,
-              "top8_lock_exemptions": 0,
-              "disqualified_player_count": 0,
-              "high_score": {
-                "count": 1,
-                "field_share": 0.019231,
-                "high_score_conversion": 1.0,
-                "day2_high_score_rate": null,
-                "effective_round_distribution": {
-                  "8": 1
-                }
-              },
-              "match_record": {
-                "all_matches": {
-                  "wins": 5,
-                  "losses": 3,
-                  "draws": 0,
-                  "matches": 8,
-                  "win_rate": 0.625,
-                  "confidence_interval_95": {
-                    "lower": 0.305742,
-                    "upper": 0.863156
-                  },
-                  "literal_record": {
-                    "wins": 5,
-                    "losses": 3,
-                    "draws": 0,
-                    "matches": 8,
-                    "win_rate": 0.625,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": {
-                      "lower": 0.305738,
-                      "upper": 0.863158
-                    }
-                  }
-                },
-                "non_mirror": {
-                  "wins": 5,
-                  "losses": 3,
-                  "draws": 0,
-                  "matches": 8,
-                  "win_rate": 0.625,
-                  "confidence_interval_95": {
-                    "lower": 0.305742,
-                    "upper": 0.863156
-                  },
-                  "literal_record": {
-                    "wins": 5,
-                    "losses": 3,
-                    "draws": 0,
-                    "matches": 8,
-                    "win_rate": 0.625,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": {
-                      "lower": 0.305738,
-                      "upper": 0.863158
-                    }
-                  }
-                },
-                "mirror_match_count": 0
-              }
-            },
-            {
-              "group_id": "subtype:eldrazi-ramp/temur",
-              "subtype_id": "temur",
-              "subtype_name": "Temur",
-              "display_name": "Temur Eldrazi Ramp",
-              "deck_count": 0,
-              "metagame_share": 0.0,
-              "constructed_points": 0,
-              "theoretical_rounds": 0,
-              "effective_theoretical_rounds": 0,
-              "average_points_per_effective_round": null,
-              "completed_or_officially_exempt_rounds": 0,
-              "completion_rate": null,
-              "played_match_participations": 0,
-              "source_match_count": 0,
-              "result_counts": {},
-              "drop_player_count": 0,
-              "drop_unplayed_rounds": 0,
-              "intentional_draw_opportunities": 0,
-              "bye_count": 0,
-              "top8_lock_player_count": 0,
-              "top8_lock_exemptions": 0,
-              "disqualified_player_count": 0,
-              "high_score": {
-                "count": 0,
-                "field_share": 0.0,
-                "high_score_conversion": null,
-                "day2_high_score_rate": null,
-                "effective_round_distribution": {}
-              },
-              "match_record": {
-                "all_matches": {
-                  "wins": 0,
-                  "losses": 0,
-                  "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
-                  "literal_record": {
-                    "wins": 0,
-                    "losses": 0,
-                    "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
-                  }
-                },
-                "non_mirror": {
-                  "wins": 0,
-                  "losses": 0,
-                  "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
-                  "literal_record": {
-                    "wins": 0,
-                    "losses": 0,
-                    "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
-                  }
-                },
-                "mirror_match_count": 0
-              }
-            },
-            {
-              "group_id": "subtype:eldrazi-ramp/sultai",
-              "subtype_id": "sultai",
-              "subtype_name": "Sultai",
-              "display_name": "Sultai Eldrazi Ramp",
-              "deck_count": 0,
-              "metagame_share": 0.0,
-              "constructed_points": 0,
-              "theoretical_rounds": 0,
-              "effective_theoretical_rounds": 0,
-              "average_points_per_effective_round": null,
-              "completed_or_officially_exempt_rounds": 0,
-              "completion_rate": null,
-              "played_match_participations": 0,
-              "source_match_count": 0,
-              "result_counts": {},
-              "drop_player_count": 0,
-              "drop_unplayed_rounds": 0,
-              "intentional_draw_opportunities": 0,
-              "bye_count": 0,
-              "top8_lock_player_count": 0,
-              "top8_lock_exemptions": 0,
-              "disqualified_player_count": 0,
-              "high_score": {
-                "count": 0,
-                "field_share": 0.0,
-                "high_score_conversion": null,
-                "day2_high_score_rate": null,
-                "effective_round_distribution": {}
-              },
-              "match_record": {
-                "all_matches": {
-                  "wins": 0,
-                  "losses": 0,
-                  "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
-                  "literal_record": {
-                    "wins": 0,
-                    "losses": 0,
-                    "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
-                  }
-                },
-                "non_mirror": {
-                  "wins": 0,
-                  "losses": 0,
-                  "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
-                  "literal_record": {
-                    "wins": 0,
-                    "losses": 0,
-                    "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
-                  }
-                },
-                "mirror_match_count": 0
-              }
-            },
-            {
-              "group_id": "subtype:eldrazi-ramp/simic",
-              "subtype_id": "simic",
-              "subtype_name": "Simic",
-              "display_name": "Simic Eldrazi Ramp",
-              "deck_count": 0,
-              "metagame_share": 0.0,
-              "constructed_points": 0,
-              "theoretical_rounds": 0,
-              "effective_theoretical_rounds": 0,
-              "average_points_per_effective_round": null,
-              "completed_or_officially_exempt_rounds": 0,
-              "completion_rate": null,
-              "played_match_participations": 0,
-              "source_match_count": 0,
-              "result_counts": {},
-              "drop_player_count": 0,
-              "drop_unplayed_rounds": 0,
-              "intentional_draw_opportunities": 0,
-              "bye_count": 0,
-              "top8_lock_player_count": 0,
-              "top8_lock_exemptions": 0,
-              "disqualified_player_count": 0,
-              "high_score": {
-                "count": 0,
-                "field_share": 0.0,
-                "high_score_conversion": null,
-                "day2_high_score_rate": null,
-                "effective_round_distribution": {}
-              },
-              "match_record": {
-                "all_matches": {
-                  "wins": 0,
-                  "losses": 0,
-                  "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
-                  "literal_record": {
-                    "wins": 0,
-                    "losses": 0,
-                    "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
-                  }
-                },
-                "non_mirror": {
-                  "wins": 0,
-                  "losses": 0,
-                  "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
-                  "literal_record": {
-                    "wins": 0,
-                    "losses": 0,
-                    "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
-                  }
-                },
-                "mirror_match_count": 0
-              }
-            },
-            {
-              "group_id": "subtype:eldrazi-ramp/golgari",
-              "subtype_id": "golgari",
-              "subtype_name": "Golgari",
-              "display_name": "Golgari Eldrazi Ramp",
-              "deck_count": 0,
-              "metagame_share": 0.0,
-              "constructed_points": 0,
-              "theoretical_rounds": 0,
-              "effective_theoretical_rounds": 0,
-              "average_points_per_effective_round": null,
-              "completed_or_officially_exempt_rounds": 0,
-              "completion_rate": null,
-              "played_match_participations": 0,
-              "source_match_count": 0,
-              "result_counts": {},
-              "drop_player_count": 0,
-              "drop_unplayed_rounds": 0,
-              "intentional_draw_opportunities": 0,
-              "bye_count": 0,
-              "top8_lock_player_count": 0,
-              "top8_lock_exemptions": 0,
-              "disqualified_player_count": 0,
-              "high_score": {
-                "count": 0,
-                "field_share": 0.0,
-                "high_score_conversion": null,
-                "day2_high_score_rate": null,
-                "effective_round_distribution": {}
-              },
-              "match_record": {
-                "all_matches": {
-                  "wins": 0,
-                  "losses": 0,
-                  "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
-                  "literal_record": {
-                    "wins": 0,
-                    "losses": 0,
-                    "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
-                  }
-                },
-                "non_mirror": {
-                  "wins": 0,
-                  "losses": 0,
-                  "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
-                  "literal_record": {
-                    "wins": 0,
-                    "losses": 0,
-                    "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
-                  }
-                },
-                "mirror_match_count": 0
-              }
-            },
-            {
-              "group_id": "subtype:eldrazi-ramp/mono-green",
-              "subtype_id": "mono-green",
-              "subtype_name": "Mono-Green",
-              "display_name": "Mono-Green Eldrazi Ramp",
-              "deck_count": 0,
-              "metagame_share": 0.0,
-              "constructed_points": 0,
-              "theoretical_rounds": 0,
-              "effective_theoretical_rounds": 0,
-              "average_points_per_effective_round": null,
-              "completed_or_officially_exempt_rounds": 0,
-              "completion_rate": null,
-              "played_match_participations": 0,
-              "source_match_count": 0,
-              "result_counts": {},
-              "drop_player_count": 0,
-              "drop_unplayed_rounds": 0,
-              "intentional_draw_opportunities": 0,
-              "bye_count": 0,
-              "top8_lock_player_count": 0,
-              "top8_lock_exemptions": 0,
-              "disqualified_player_count": 0,
-              "high_score": {
-                "count": 0,
-                "field_share": 0.0,
-                "high_score_conversion": null,
-                "day2_high_score_rate": null,
-                "effective_round_distribution": {}
-              },
-              "match_record": {
-                "all_matches": {
-                  "wins": 0,
-                  "losses": 0,
-                  "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
-                  "literal_record": {
-                    "wins": 0,
-                    "losses": 0,
-                    "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
-                  }
-                },
-                "non_mirror": {
-                  "wins": 0,
-                  "losses": 0,
-                  "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
-                  "literal_record": {
-                    "wins": 0,
-                    "losses": 0,
-                    "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
-                  }
-                },
-                "mirror_match_count": 0
-              }
-            },
-            {
-              "group_id": "subtype:eldrazi-ramp/selesnya",
-              "subtype_id": "selesnya",
-              "subtype_name": "Selesnya",
-              "display_name": "Selesnya Eldrazi Ramp",
-              "deck_count": 0,
-              "metagame_share": 0.0,
-              "constructed_points": 0,
-              "theoretical_rounds": 0,
-              "effective_theoretical_rounds": 0,
-              "average_points_per_effective_round": null,
-              "completed_or_officially_exempt_rounds": 0,
-              "completion_rate": null,
-              "played_match_participations": 0,
-              "source_match_count": 0,
-              "result_counts": {},
-              "drop_player_count": 0,
-              "drop_unplayed_rounds": 0,
-              "intentional_draw_opportunities": 0,
-              "bye_count": 0,
-              "top8_lock_player_count": 0,
-              "top8_lock_exemptions": 0,
-              "disqualified_player_count": 0,
-              "high_score": {
-                "count": 0,
-                "field_share": 0.0,
-                "high_score_conversion": null,
-                "day2_high_score_rate": null,
-                "effective_round_distribution": {}
-              },
-              "match_record": {
-                "all_matches": {
-                  "wins": 0,
-                  "losses": 0,
-                  "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
-                  "literal_record": {
-                    "wins": 0,
-                    "losses": 0,
-                    "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
-                  }
-                },
-                "non_mirror": {
-                  "wins": 0,
-                  "losses": 0,
-                  "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
-                  "literal_record": {
-                    "wins": 0,
-                    "losses": 0,
-                    "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
-                    "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
-                  }
-                },
-                "mirror_match_count": 0
-              }
-            }
-          ]
         },
         {
           "group_id": "archetype:esper-persist",

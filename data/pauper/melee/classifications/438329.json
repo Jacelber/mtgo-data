@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "f71ec8089cec37c5c1763e71c3820f92ce35c7c102b1196e77923866b0f52d13"
+    "digest": "9b0fe4ea5db48512d7cfc891bca421bda97369465cad2506a0f020399bfa2abe"
   },
   "input": {
     "event_path": "data/pauper/melee/events/438329.json",
@@ -18,7 +18,7 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/pauper.yaml",
-    "rule_sha256": "eb50ab50f717edc7b29e1c2a7dc253c94d2f33af3c014fbb541f8cd8e757b660",
+    "rule_sha256": "2669fa945700f37611208139293bb1046fdefcd370dbe81bbd513389f74d0197",
     "rule_schema_version": "1.1.0",
     "archetype_count": 94,
     "rule_count": 155,
@@ -30,8 +30,8 @@
     "unknown": 1,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 391,
-    "overridden_matches": 391,
+    "multiple_matches": 392,
+    "overridden_matches": 392,
     "selected_subtypes": 113,
     "parent_only": 956,
     "same_parent_multiple_subtype_matches": 1,
@@ -42,8 +42,8 @@
       "azorius-familiars": 23,
       "battle-screech": 32,
       "bogles": 7,
-      "boros-snacker": 1,
-      "boros-synthesizer": 4,
+      "boros-snacker": 2,
+      "boros-synthesizer": 3,
       "cycle-storm": 4,
       "dimir-affinity": 3,
       "dimir-faeries": 39,
@@ -41685,14 +41685,56 @@
       "participant_id": "participant-49c38edc78f609f1a0b0ba55629470d93d43cac924cc3a32f1fdde63c7e322bc",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "boros-synthesizer",
-        "archetype_name": "Boros Synthesizer",
+        "archetype_id": "boros-snacker",
+        "archetype_name": "Boros Snacker",
         "subtype_id": null,
         "subtype_name": null,
-        "rule_id": "boros-synthesizer",
-        "priority": 7100
+        "rule_id": "boros-snacker",
+        "priority": 8900
       },
       "matched_rules": [
+        {
+          "archetype_id": "boros-snacker",
+          "archetype_name": "Boros Snacker",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "boros-snacker",
+          "priority": 8900,
+          "evidence": [
+            {
+              "card": "Sneaky Snacker",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Pursue the Past",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kor Skyfisher",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Basilisk Gate",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
         {
           "archetype_id": "boros-synthesizer",
           "archetype_name": "Boros Synthesizer",
@@ -41730,6 +41772,50 @@
       ],
       "top_priority_matches": [
         {
+          "archetype_id": "boros-snacker",
+          "archetype_name": "Boros Snacker",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "boros-snacker",
+          "priority": 8900,
+          "evidence": [
+            {
+              "card": "Sneaky Snacker",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Pursue the Past",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Kor Skyfisher",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Basilisk Gate",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
           "archetype_id": "boros-synthesizer",
           "archetype_name": "Boros Synthesizer",
           "subtype_id": null,
@@ -41764,7 +41850,6 @@
           ]
         }
       ],
-      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -77367,7 +77452,7 @@
               "card": "Pursue the Past",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -77377,22 +77462,6 @@
               "actual_count": 4,
               "min_count": 3,
               "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Melded Moxite",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Glint Hawk",
-              "zone": "main",
-              "actual_count": 2,
-              "min_count": null,
-              "max_count": 2,
               "exact_count": null
             },
             {
@@ -77427,7 +77496,7 @@
               "card": "Pursue the Past",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 3,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             },
@@ -77437,22 +77506,6 @@
               "actual_count": 4,
               "min_count": 3,
               "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Melded Moxite",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Glint Hawk",
-              "zone": "main",
-              "actual_count": 2,
-              "min_count": null,
-              "max_count": 2,
               "exact_count": null
             },
             {
