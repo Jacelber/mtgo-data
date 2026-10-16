@@ -50,7 +50,7 @@ def _deck(*cards: tuple[str, int]) -> dict[str, list[dict[str, object]]]:
                 ("Wistfulness", 2),
                 ("Overgrown Tomb", 4),
             ),
-            "sultai-excruciator",
+            "dimir-spider-man",
         ),
         (
             (
@@ -59,7 +59,7 @@ def _deck(*cards: tuple[str, int]) -> dict[str, list[dict[str, object]]]:
                 ("Deceit", 4),
                 ("Watery Grave", 4),
             ),
-            "dimir-excruciator",
+            "dimir-spider-man",
         ),
         (
             (

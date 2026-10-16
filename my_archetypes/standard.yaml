@@ -357,38 +357,38 @@ archetypes:
         min_count: 3
       - card: Temple Garden
         min_count: 1
-- id: sultai-excruciator
-  name: Sultai Excruciator
-  priority: 70010
-  rules:
-  - id: sultai-excruciator-primary
-    priority: 70010
+  - id: selesnya-landfall-sideboard-white
+    priority: 78008
     subtype_id: null
     conditions:
       all:
-      - card: Doomsday Excruciator
-        min_count: 1
-      - card: Superior Spider-Man
-        min_count: 3
-      - card: Deceit
-        min_count: 3
-      - card: Wistfulness
+      - card: Earthbender Ascension
         zone: main
         min_count: 1
-      - card: __classifier-semantic-main-green-source__
+      - card: Mossborn Hydra
         zone: main
         min_count: 1
-- id: dimir-excruciator
-  name: Dimir Excruciator
-  priority: 70000
-  rules:
-  - id: dimir-excruciator-primary
-    priority: 70000
-    subtype_id: null
-    conditions:
-      all:
-      - card: Doomsday Excruciator
+      - card: Icetill Explorer
+        zone: main
         min_count: 1
+      - card: Fabled Passage
+        zone: main
+        min_count: 1
+      - card: Plains
+        zone: side
+        min_count: 1
+      - card: Sheltered by Ghosts
+        zone: side
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
 - id: bant-rhythm
   name: Bant Rhythm
   priority: 69000
@@ -1236,6 +1236,41 @@ archetypes:
       - card: Consult the Star Charts
         zone: any
         exact_count: 0
+  - id: azorius-control-theorist
+    priority: 38988
+    subtype_id: traditional
+    conditions:
+      all:
+      - card: Countersculpt
+        zone: main
+        min_count: 1
+      - card: The Theorist, Jace Beleren
+        zone: main
+        min_count: 1
+      - card: Jace's Machinations
+        zone: main
+        min_count: 1
+      - card: No More Lies
+        zone: main
+        min_count: 1
+      - card: Day of Judgment
+        zone: main
+        min_count: 1
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 1
+      - card: Jeskai Revelation
+        zone: any
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
 - id: mono-white-momo
   name: Mono-White Momo
   priority: 38000
@@ -1353,6 +1388,29 @@ archetypes:
         exact_count: 0
       - card: Overgrown Tomb
         min_count: 1
+  - id: sultai-demon-blue-control
+    priority: 34010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Unholy Annex // Ritual Chamber
+        zone: main
+        min_count: 3
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
+      - card: Three Steps Ahead
+        zone: main
+        min_count: 1
+      - card: Dispelling Exhale
+        zone: main
+        min_count: 1
+      - card: Nature's Rhythm
+        zone: any
+        exact_count: 0
 - id: boros-burn
   name: Boros Burn
   priority: 32000
@@ -1438,11 +1496,11 @@ archetypes:
     conditions:
       all:
       - card: Tiger-Seal
-        min_count: 4
+        min_count: 1
       - card: Duelist of the Mind
-        min_count: 4
+        min_count: 1
       - card: Fear of Missing Out
-        min_count: 3
+        min_count: 1
 - id: jeskai-artifacts
   name: Jeskai Artifacts
   priority: 28000
@@ -1714,23 +1772,6 @@ archetypes:
         min_count: 3
       - card: Stormchaser's Talent
         min_count: 3
-- id: dimir-deceit
-  name: Dimir Deceit
-  priority: 19000
-  rules:
-  - id: dimir-deceit-primary
-    priority: 19000
-    subtype_id: null
-    conditions:
-      all:
-      - card: Deceit
-        min_count: 3
-      - card: Requiting Hex
-        min_count: 2
-      - card: Superior Spider-Man
-        min_count: 3
-      - card: Doomsday Excruciator
-        exact_count: 0
 - id: izzet-opus
   name: Izzet Opus
   priority: 18000
@@ -2397,10 +2438,10 @@ archetypes:
       - card: Case of the Uneaten Feast
         zone: main
         min_count: 1
-      - card: Way of the Paradox
+      - card: Professor Dellian Fel
         zone: main
         min_count: 1
-      - card: Professor Dellian Fel
+      - card: __classifier-semantic-main-green-source__
         zone: main
         min_count: 1
   - id: lifegain-mono-white
@@ -3610,9 +3651,6 @@ archetypes:
       - card: Earthbender Ascension
         zone: main
         min_count: 1
-      - card: Mightform Harmonizer
-        zone: main
-        min_count: 1
       - card: Breeding Pool
         zone: main
         min_count: 1
@@ -3625,7 +3663,6 @@ archetypes:
       - card: __classifier-semantic-main-red-source__
         zone: main
         exact_count: 0
-
 - id: jeskai-superfriends
   name: Jeskai Superfriends
   priority: 78005
@@ -3657,9 +3694,6 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: Say Its Name
-        zone: main
-        min_count: 1
       - card: Huskburster Swarm
         zone: main
         min_count: 1
@@ -3669,7 +3703,6 @@ archetypes:
       - card: Overlord of the Balemurk
         zone: main
         min_count: 1
-
 - id: jeskai-helping-hand
   name: Jeskai Helping Hand
   priority: 78007
@@ -3713,3 +3746,197 @@ archetypes:
       - card: Konstrari Charm
         zone: main
         min_count: 1
+- id: dimir-spider-man
+  name: Dimir Spider-Man
+  priority: 70010
+  rules:
+  - id: sultai-excruciator-primary
+    priority: 70010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Doomsday Excruciator
+        min_count: 1
+      - card: Superior Spider-Man
+        min_count: 3
+      - card: Deceit
+        min_count: 3
+      - card: Wistfulness
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        min_count: 1
+  - id: dimir-excruciator-primary
+    priority: 70000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Doomsday Excruciator
+        min_count: 1
+  - id: dimir-deceit-primary
+    priority: 19000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Deceit
+        min_count: 3
+      - card: Requiting Hex
+        min_count: 2
+      - card: Superior Spider-Man
+        min_count: 3
+      - card: Doomsday Excruciator
+        exact_count: 0
+- id: boros-superfriends
+  name: Boros Superfriends
+  priority: 78010
+  rules:
+  - id: boros-superfriends-primary
+    priority: 78010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Elspeth, Storm Slayer
+        zone: main
+        min_count: 1
+      - card: Ajani, Outland Chaperone
+        zone: main
+        min_count: 1
+      - card: Chandra, Torch of Defiance
+        zone: main
+        min_count: 1
+      - card: Gideon's Memorial
+        zone: main
+        min_count: 1
+      - card: Sacred Foundry
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+- id: mono-white-swarm-aggro
+  name: Mono-White Swarm Aggro
+  priority: 78011
+  rules:
+  - id: mono-white-swarm-aggro-primary
+    priority: 78011
+    subtype_id: null
+    conditions:
+      all:
+      - card: Warden of the Inner Sky
+        zone: main
+        min_count: 1
+      - card: Resolute Reinforcements
+        zone: main
+        min_count: 1
+      - card: Novice Inspector
+        zone: main
+        min_count: 1
+      - card: The Last Ronin's Technique
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+- id: grixis-artifact-sacrifice
+  name: Grixis Artifact Sacrifice
+  priority: 78012
+  rules:
+  - id: grixis-artifact-sacrifice-primary
+    priority: 78012
+    subtype_id: null
+    conditions:
+      all:
+      - card: The Sackville-Bagginses
+        zone: main
+        min_count: 1
+      - card: Obsessive Pursuit
+        zone: main
+        min_count: 1
+      - card: Gleaming Geardrake
+        zone: main
+        min_count: 1
+      - card: Cryogen Relic
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        min_count: 1
+- id: mono-white-angels
+  name: Mono-White Angels
+  priority: 78013
+  rules:
+  - id: mono-white-angels-primary
+    priority: 78013
+    subtype_id: null
+    conditions:
+      all:
+      - card: Giada, Font of Hope
+        zone: main
+        min_count: 1
+      - card: Resplendent Angel
+        zone: main
+        min_count: 1
+      - card: Youthful Valkyrie
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+- id: jund-midrange
+  name: Jund Midrange
+  priority: 1000
+  rules:
+  - id: jund-midrange-primary
+    priority: 1000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
+      - card: Professor Dellian Fel
+        zone: main
+        min_count: 1
+      - card: Deceit
+        zone: main
+        min_count: 1
+      - card: Deadly Cover-Up
+        zone: main
+        min_count: 1
+      - card: Superior Spider-Man
+        zone: any
+        exact_count: 0

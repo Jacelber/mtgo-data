@@ -2,6 +2,12 @@
 
 const manaIdentities = Object.freeze({
   standard: Object.freeze({
+    "dimir-spider-man": Object.freeze(["u", "b"]),
+    "boros-superfriends": Object.freeze(["w", "r"]),
+    "mono-white-swarm-aggro": Object.freeze(["w"]),
+    "grixis-artifact-sacrifice": Object.freeze(["u", "b", "r"]),
+    "mono-white-angels": Object.freeze(["w"]),
+    "jund-midrange": Object.freeze(["b", "r", "g"]),
     "4-color-allies": Object.freeze(["w", "u", "r", "g"]),
     "4-color-demons": Object.freeze(["w", "u", "b", "r"]),
     "4-color-tablet": Object.freeze(["w", "u", "b", "r"]),
