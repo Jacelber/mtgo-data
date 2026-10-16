@@ -1779,7 +1779,12 @@ cookie, and private-header fields remain prohibited.
 
 Legacy v1/v2 and completed HMAC v3 snapshots remain read-compatible and need no
 secret for downstream parsing or generation. The protected `434455` v2 bytes
-and derived compatibility result are not migrated. The successor writer has no
+and derived compatibility result are not migrated. A classifier update may advance
+the format catalog active taxonomy while retaining this event entry and every
+protected file exactly. The compatibility fixture constrains that event entry
+and its outputs; the active taxonomy describes current events. Existing
+multi-event admission continues to reject events whose taxonomy differs from
+the active catalog. The successor writer has no
 HMAC creation, key storage, key ID, rotation, injection, or recovery lifecycle.
 The implemented v4 writer is the current collection path; do not reintroduce
 HMAC creation for new collections. Existing supported snapshots remain readable

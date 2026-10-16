@@ -1,3 +1,7 @@
+from copy import deepcopy
+import json
+from pathlib import Path
+
 import pytest
 
 from build_pages_artifact import PublicationError, _validate_catalog_projection
@@ -42,4 +46,23 @@ def test_catalog_projection_allows_unrelated_growth():
 )
 def test_catalog_projection_rejects_drift_or_undefined_state(document, projection):
     with pytest.raises(PublicationError):
+        _validate_catalog_projection(document, projection)
+
+
+def test_protected_event_survives_an_unrelated_active_taxonomy_update():
+    root = Path(__file__).resolve().parents[1]
+    manifest = json.loads((root / "tests/fixtures/melee/434455_compatibility_manifest.json").read_bytes())
+    projection = next(p for p in manifest["catalog_projections"] if p["role"] == "format_event_entry")
+    document = {
+        **projection["root_requirements"],
+        "active_taxonomy": {
+            "schema_version": "1.0.0",
+            "taxonomy_schema_version": "1.1.0",
+            "taxonomy_sha256": "a" * 64,
+        },
+        "events": [deepcopy(projection["expected"])],
+    }
+    _validate_catalog_projection(document, projection)
+    document["events"][0]["matchup_compatibility"]["taxonomy_sha256"] = "a" * 64
+    with pytest.raises(PublicationError, match="selected value changed"):
         _validate_catalog_projection(document, projection)
