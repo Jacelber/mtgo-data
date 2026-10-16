@@ -630,6 +630,10 @@ archetypes:
     subtype_id: null
     conditions:
       all:
+      # Owner retains the non-Anvil Viper build; shared artifact support alone is insufficient.
+      - card: Rottenmouth Viper
+        zone: main
+        min_count: 1
       - card: Biotech Specialist
         zone: main
         min_count: 3
@@ -677,8 +681,9 @@ archetypes:
       - card: Mayhem Devil
         zone: main
         min_count: 1
+      # The accepted cat/Oven engine also keeps Ygra in the sideboard.
       - card: Ygra, Eater of All
-        zone: main
+        zone: any
         min_count: 1
   - id: jund-sacrifice-artifact-support
     priority: 102
