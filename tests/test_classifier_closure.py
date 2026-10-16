@@ -364,6 +364,7 @@ def test_melee_closure_follows_public_catalog_and_exact_sha_chain(
             "exact_byte_change": "separate_owner_approved_version_migration"
         },
         "immutable_snapshot": {
+            "response_count": 0,
             "manifest": {
                 "role": "raw_snapshot_manifest",
                 "path": raw_manifest.relative_to(tmp_path).as_posix(),
@@ -377,12 +378,6 @@ def test_melee_closure_follows_public_catalog_and_exact_sha_chain(
                 "path": event.relative_to(tmp_path).as_posix(),
                 "bytes": event.stat().st_size,
                 "sha256": _digest(event),
-            },
-            {
-                "role": "classification_overlay",
-                "path": classification.relative_to(tmp_path).as_posix(),
-                "bytes": classification.stat().st_size,
-                "sha256": _digest(classification),
             },
         ],
         "catalog_projections": [
@@ -441,17 +436,19 @@ def test_melee_closure_follows_public_catalog_and_exact_sha_chain(
     assert result["state"] == CURRENT
     assert result["issues"] == []
 
-    compatibility_document["exact_files"][1]["sha256"] = "b" * 64
-    _write_json(compatibility, compatibility_document)
+    # Derived changes are governed by the current input chain, never old hashes.
+    classification_document = json.loads(classification.read_bytes())
+    classification_document["classifier"]["digest"] = "b" * 64
+    _write_json(classification, classification_document)
     result = _inspect_melee(tmp_path, "modern", desired, catalog)
-    assert result["state"] == BLOCKED_OWNER_REVIEW
-    assert "Owner-approved migration" in result["issues"][0]
-
-    compatibility_document["contract_version"] = "1.1.0"
-    compatibility_document["exact_files"][1]["sha256"] = _digest(classification)
-    _write_json(compatibility, compatibility_document)
-    result = _inspect_melee(tmp_path, "modern", desired, catalog)
-    assert result["state"] == CURRENT
+    assert result["state"] == STALE
+    classification_document["classifier"]["digest"] = desired
+    _write_json(classification, classification_document)
+    # Source corruption remains invalid and cannot be fixed by regeneration.
+    original_event = event.read_bytes()
+    event.write_text('{"event":"changed"}', encoding="utf-8")
+    assert _inspect_melee(tmp_path, "modern", desired, catalog)["state"] == "INVALID"
+    event.write_bytes(original_event)
     assert _digest(raw_manifest) == immutable_source_sha
     assert _digest(event) == normalized_event_sha
 

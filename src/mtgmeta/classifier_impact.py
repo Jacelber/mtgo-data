@@ -285,6 +285,11 @@ def compare_classifier_impact(
             },
             "same_input_used_for_both_rules": True,
         },
+        "current_melee_event_ids": sorted(
+            str(item["event_id"]) for item in
+            (_json_object(root / "stats" / format_id / "melee/index.json")["events"]
+             if (root / "stats" / format_id / "melee/index.json").is_file() else [])
+        ),
         "summary": {
             "change_count": len(changes),
             "new_unknown_count": sum("new_unknown" in item["change_kinds"] for item in changes),

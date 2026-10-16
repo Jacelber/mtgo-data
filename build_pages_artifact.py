@@ -182,12 +182,12 @@ def _sha256(path: Path) -> str:
 
 def _verify_record(
     root: Path,
-    selected: set[str],
+    selected: set[str] | None,
     record: dict[str, Any],
     label: str,
 ) -> str:
     relative = _safe_relative(record.get("path"), f"{label} path")
-    if relative not in selected:
+    if selected is not None and relative not in selected:
         raise PublicationError(f"protected path is absent from the artifact: {relative}")
     path = _source_file(root, relative)
     expected_bytes = record.get("bytes")
@@ -202,9 +202,8 @@ def _verify_record(
 def _validate_catalog_projection(
     document: dict[str, Any], projection: dict[str, Any]
 ) -> None:
-    if projection.get("expansion_policy") != (
-        "allow_unselected_entries_and_volatile_root_fields"
-    ):
+    policy = projection.get("expansion_policy")
+    if policy not in {"allow_unselected_entries_and_volatile_root_fields", "allow_current_classification"}:
         raise PublicationError("unsupported catalog projection expansion policy")
     requirements = projection.get("root_requirements")
     selection = projection.get("selection")
@@ -229,12 +228,14 @@ def _validate_catalog_projection(
         if len(matches) != 1:
             raise PublicationError("catalog projection selection must match exactly once")
         current = matches[0]
+    if policy == "allow_current_classification":
+        current = {k: v for k, v in current.items() if k not in {"matchup_compatibility", "quality_status"}}
     if current != expected:
         raise PublicationError("catalog projection selected value changed")
 
 
 def validate_compatibility(
-    root: Path, config: dict[str, Any], selected: set[str]
+    root: Path, config: dict[str, Any], selected: set[str] | None, *, sources_only: bool = False
 ) -> set[str]:
     protected: set[str] = set()
     for manifest_relative in config["compatibility_manifests"]:
@@ -279,6 +280,8 @@ def validate_compatibility(
                 raise PublicationError("compatibility exact-file record is not an object")
             protected.add(_verify_record(root, selected, record, "exact file"))
 
+        if sources_only:
+            continue
         projections = manifest.get("catalog_projections")
         if not isinstance(projections, list):
             raise PublicationError("compatibility catalog_projections must be a list")
@@ -429,6 +432,12 @@ def build_artifact(
     config = load_config(root, config_path.resolve())
     selected = publication_paths(root, config)
     protected = validate_compatibility(root, config, selected)
+    from mtgmeta.classifier_closure import validate_current_melee
+    try:
+        for catalog in sorted((root / "stats").glob("*/melee/index.json")):
+            validate_current_melee(root, catalog.parent.parent.name)
+    except (ValueError, RuntimeError) as exc:
+        raise PublicationError(f"current Melee classification is incomplete: {exc}") from exc
     source_bytes = _tree_bytes(root, selected)
     if source_bytes > config["maximum_artifact_bytes"]:
         raise PublicationError(

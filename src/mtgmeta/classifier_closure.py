@@ -38,17 +38,7 @@ STAGE_COPY_IGNORES = (
     "test-results",
     "playwright-report",
 )
-PROTECTED_MELEE_DERIVED_ROLES = frozenset(
-    {
-        "classification_overlay",
-        "opportunity_ledger",
-        "event_overview",
-        "event_decks",
-        "event_matchup",
-        "event_quality",
-        "event_meta",
-    }
-)
+
 
 
 class ClassifierClosureError(RuntimeError):
@@ -311,145 +301,30 @@ def _enabled_melee_ids(root: Path, format_id: str) -> set[str]:
     }
 
 
-def _protected_record_matches(root: Path, record: Mapping[str, Any]) -> bool:
-    path = _safe_relative(root, record.get("path"), label="protected record")
-    expected_bytes = record.get("bytes")
-    expected_sha = record.get("sha256")
-    return (
-        path.is_file()
-        and isinstance(expected_bytes, int)
-        and expected_bytes >= 0
-        and isinstance(expected_sha, str)
-        and path.stat().st_size == expected_bytes
-        and _sha256(path) == expected_sha
-    )
-
-
-def _protected_projection_matches(root: Path, projection: Mapping[str, Any]) -> bool:
-    if projection.get("expansion_policy") != (
-        "allow_unselected_entries_and_volatile_root_fields"
-    ):
-        raise ClassifierClosureError("protected catalog projection policy is invalid")
-    document = _json_object(
-        _safe_relative(root, projection.get("path"), label="protected projection")
-    )
-    requirements = projection.get("root_requirements")
-    selection = projection.get("selection")
-    expected = projection.get("expected")
-    if (
-        not isinstance(requirements, Mapping)
-        or not isinstance(selection, list)
-        or not isinstance(expected, Mapping)
-    ):
-        raise ClassifierClosureError("protected catalog projection is malformed")
-    if any(document.get(key) != value for key, value in requirements.items()):
-        return False
-    current: Mapping[str, Any] = document
-    for step in selection:
-        if not isinstance(step, Mapping):
-            raise ClassifierClosureError("protected catalog selection is malformed")
-        collection = current.get(step.get("collection"))
-        if not isinstance(collection, list):
-            return False
-        matches = [
-            item
-            for item in collection
-            if isinstance(item, Mapping)
-            and item.get(step.get("field")) == step.get("equals")
-        ]
-        if len(matches) != 1:
-            return False
-        current = matches[0]
-    return current == expected
-
-
-def _inspect_protected_melee_compatibility(
-    root: Path,
-    format_id: str,
-    event_id: str,
-) -> tuple[list[Path], list[str], list[str]]:
-    """Return manifest paths, Owner blockers, and invalid immutable inputs."""
-
-    config_path = root / "configs" / "pages_publication.json"
-    config = _json_object(config_path)
-    manifest_values = config.get("compatibility_manifests")
-    if not isinstance(manifest_values, list):
-        raise ClassifierClosureError(
-            "Pages publication config has no compatibility manifest list"
-        )
-    artifacts: list[Path] = []
-    blockers: list[str] = []
-    invalid: list[str] = []
-    for value in manifest_values:
-        manifest_path = _safe_relative(
-            root, value, label="Pages compatibility manifest"
-        )
-        manifest = _json_object(manifest_path)
-        event = manifest.get("event")
-        if (
-            not isinstance(event, Mapping)
-            or event.get("format") != format_id
-            or str(event.get("event_id") or "") != event_id
-        ):
+def _inspect_protected_melee_compatibility(root, format_id, event_id):
+    """Protect retained source facts, independently of current classification."""
+    from build_pages_artifact import PublicationError, validate_compatibility
+    config = _json_object(root / "configs/pages_publication.json")
+    paths = []
+    invalid = []
+    manifests = config.get("compatibility_manifests")
+    if not isinstance(manifests, list):
+        raise ClassifierClosureError("Pages publication config has no compatibility manifest list")
+    for relative in manifests:
+        path = _safe_relative(root, relative, label="compatibility manifest")
+        manifest = _json_object(path)
+        event = manifest.get("event", {})
+        if event.get("format") != format_id or str(event.get("event_id")) != event_id:
             continue
-        artifacts.append(manifest_path)
-        policy = manifest.get("migration_policy")
-        if (
-            not isinstance(policy, Mapping)
-            or policy.get("exact_byte_change")
-            != "separate_owner_approved_version_migration"
-        ):
-            invalid.append(
-                f"Melee event {event_id} compatibility migration policy is invalid"
-            )
-            continue
-        immutable = manifest.get("immutable_snapshot")
-        immutable_record = (
-            immutable.get("manifest") if isinstance(immutable, Mapping) else None
-        )
-        if not isinstance(immutable_record, Mapping) or not _protected_record_matches(
-            root, immutable_record
-        ):
-            invalid.append(
-                f"Melee event {event_id} immutable snapshot authority changed"
-            )
-        exact_files = manifest.get("exact_files")
-        if not isinstance(exact_files, list):
-            invalid.append(f"Melee event {event_id} exact-file authority is invalid")
-        else:
-            for record in exact_files:
-                if not isinstance(record, Mapping):
-                    invalid.append(
-                        f"Melee event {event_id} exact-file authority is malformed"
-                    )
-                    continue
-                if _protected_record_matches(root, record):
-                    continue
-                role = record.get("role")
-                if role in PROTECTED_MELEE_DERIVED_ROLES:
-                    blockers.append(
-                        f"Melee event {event_id} protected {role} requires Owner-approved migration"
-                    )
-                else:
-                    invalid.append(
-                        f"Melee event {event_id} protected immutable {role} changed"
-                    )
-        projections = manifest.get("catalog_projections")
-        if not isinstance(projections, list):
-            invalid.append(
-                f"Melee event {event_id} catalog projection authority is invalid"
-            )
-        else:
-            for projection in projections:
-                if not isinstance(projection, Mapping):
-                    invalid.append(
-                        f"Melee event {event_id} catalog projection is malformed"
-                    )
-                elif not _protected_projection_matches(root, projection):
-                    blockers.append(
-                        f"Melee event {event_id} protected catalog projection requires Owner-approved migration"
-                    )
-    return artifacts, blockers, invalid
+        paths.append(path)
+        # Source checks run before expensive generation. Catalog/consumer checks
+        # run after generation, when their current derived inputs are complete.
+        try:
+            validate_compatibility(root, {"compatibility_manifests": [relative]},
+                                   None, sources_only=True)
+        except (PublicationError, OSError, ValueError) as exc:
+            invalid.append(str(exc))
+    return paths, [], invalid
 
 
 def _inspect_melee(
@@ -457,6 +332,7 @@ def _inspect_melee(
     format_id: str,
     desired: str,
     catalog_path: Path | None,
+    *, event_ids: set[str] | None = None,
 ) -> dict[str, Any]:
     if catalog_path is None:
         return _family("melee", [], root)
@@ -481,6 +357,8 @@ def _inspect_melee(
             issues.append("Melee active taxonomy does not match the current rule file")
         seen: set[str] = set()
         for entry in catalog_events:
+            if event_ids is not None and isinstance(entry, Mapping) and str(entry.get("event_id")) not in event_ids:
+                continue
             if not isinstance(entry, Mapping):
                 issues.append("Melee catalog contains a non-object event")
                 continue
@@ -627,6 +505,55 @@ def _catalog_format(root: Path, format_id: str) -> tuple[dict[str, Any], Path | 
             root, tabletop.get("path"), label=f"{format_id} Tabletop catalog"
         )
     return selected, tabletop_path
+
+
+def current_melee_sync(root: Path, format_id: str) -> list[dict[str, Any]]:
+    """List stale current consumers; retained but unadmitted events stay private."""
+    catalog = root / "stats" / format_id / "melee/index.json"
+    if not catalog.is_file():
+        return []
+    desired = classifier_digest(load_rules_for_format(root, format_id))
+    events = _json_object(catalog)["events"]
+    ids = [str(item["event_id"]) for item in events]
+    if len(ids) != len(set(ids)):
+        raise ClassifierClosureError("duplicate current Melee event")
+    result = []
+    for event_id in ids:
+        report = _inspect_melee(root, format_id, desired, catalog, event_ids={event_id})
+        if report["state"] == INVALID:
+            raise ClassifierClosureError("; ".join(report["issues"]))
+        if report["state"] != CURRENT:
+            result.append({"format": format_id, "event_id": event_id,
+                           "steps": ["classification", "opportunities", "stats", "matchup", "publish"]})
+    return result
+
+
+def validate_current_melee(root: Path, format_id: str) -> dict[str, Any]:
+    """Validate the complete current chain and the real combined consumer."""
+    from .melee.multi_event_contract import build_multi_event_matchup_contract, _admit_event
+    from .mtgo.matchup import build_matchup_hierarchy
+    catalog_path = root / "stats" / format_id / "melee/index.json"
+    if not catalog_path.is_file():
+        return {"event_ids": []}
+    desired = classifier_digest(load_rules_for_format(root, format_id))
+    report = _inspect_melee(root, format_id, desired, catalog_path)
+    if report["state"] != CURRENT:
+        raise ClassifierClosureError("; ".join(report["issues"]))
+    catalog = _json_object(catalog_path)
+    inputs = [{name: _json_object(_safe_relative(catalog_path.parent, entry[name], label=name))
+               for name in ("meta", "matchup")} for entry in catalog["events"]]
+    if len(inputs) == 1:
+        entry = catalog["events"][0]
+        _admit_event(event_id=str(entry["event_id"]), event_name=entry["name"],
+                     event_input=inputs[0], catalog_event=entry,
+                     active_taxonomy=catalog["active_taxonomy"], format_id=format_id)
+        return {"event_ids": [str(catalog["events"][0]["event_id"])], "classifier_digest": desired}
+    hierarchy = build_matchup_hierarchy(load_rules_for_format(root, format_id))
+    hierarchy["parents"].append({"id": "unknown", "name": "Unknown", "expandable": False, "subtype_ids": []})
+    hierarchy["leaves"].append({"id": "unknown", "kind": "unknown", "name": "Unknown",
+        "display_name": "Unknown", "parent_id": "unknown", "subtype_id": None})
+    result = build_multi_event_matchup_contract(inputs, canonical_hierarchy=hierarchy, catalog=catalog)
+    return {"event_ids": result["event_ids"], "classifier_digest": desired}
 
 
 def inspect_format(repository_root: str | Path, format_id: str) -> dict[str, Any]:
@@ -802,7 +729,7 @@ def _report_phase(format_id: str, phase: str, started: float) -> None:
     )
 
 
-def _generate_melee(stage: Path, format_id: str) -> None:
+def _generate_melee(stage: Path, format_id: str, *, event_ids: set[str] | None = None) -> None:
     from .melee.classification import (
         build_classification_overlay_from_paths,
         classification_overlay_bytes,
@@ -828,41 +755,48 @@ def _generate_melee(stage: Path, format_id: str) -> None:
     events = existing.get("events")
     if not isinstance(events, list) or not events:
         raise ClassifierClosureError("Melee catalog has no active events")
-    event_ids = [str(item["event_id"]) for item in events if isinstance(item, Mapping)]
+    current_ids = [str(item["event_id"]) for item in events if isinstance(item, Mapping)]
+    rebuild = set(current_ids) if event_ids is None else event_ids
     merged_catalog: dict[str, Any] | None = None
     base = stage / "data" / format_id / "melee"
     taxonomy = stage / "my_archetypes" / f"{format_id}.yaml"
     registry = stage / "configs" / "melee_events.yaml"
-    for event_id in event_ids:
+    for event_id in current_ids:
+        if event_id not in rebuild:
+            retained = {**existing, "default_event_id": event_id,
+                        "events": [item for item in events if str(item["event_id"]) == event_id]}
+            merged_catalog = retained if merged_catalog is None else merge_event_catalog(merged_catalog, retained)
+            continue
         event_path = base / "events" / f"{event_id}.json"
         classification_path = base / "classifications" / f"{event_id}.json"
         opportunity_path = base / "opportunities" / f"{event_id}.json"
-        classification = build_classification_overlay_from_paths(
-            event_path, taxonomy, stage
-        )
-        write_classification_overlay(
-            classification_path, classification_overlay_bytes(classification)
-        )
-        opportunity = build_opportunity_ledger_from_paths(
-            event_path, classification_path, stage
-        )
-        write_opportunity_ledger(
-            opportunity_path, opportunity_ledger_bytes(opportunity)
-        )
-        statistics = build_event_statistics_from_paths(
-            event_path, classification_path, opportunity_path, taxonomy, stage
-        )
         event_output = stage / "stats" / format_id / "melee" / "events" / event_id
-        for name, document in statistics.items():
-            write_statistics_document(
-                event_output / f"{name}.json", statistics_document_bytes(document)
+        if event_id in rebuild:
+            classification = build_classification_overlay_from_paths(
+                event_path, taxonomy, stage
             )
-        matchup = build_event_matchup_from_paths(
-            event_path, classification_path, opportunity_path, taxonomy, stage
-        )
-        write_statistics_document(
-            event_output / "matchup.json", statistics_document_bytes(matchup)
-        )
+            write_classification_overlay(
+                classification_path, classification_overlay_bytes(classification)
+            )
+            opportunity = build_opportunity_ledger_from_paths(
+                event_path, classification_path, stage
+            )
+            write_opportunity_ledger(
+                opportunity_path, opportunity_ledger_bytes(opportunity)
+            )
+            statistics = build_event_statistics_from_paths(
+                event_path, classification_path, opportunity_path, taxonomy, stage
+            )
+            for name, document in statistics.items():
+                write_statistics_document(
+                    event_output / f"{name}.json", statistics_document_bytes(document)
+                )
+            matchup = build_event_matchup_from_paths(
+                event_path, classification_path, opportunity_path, taxonomy, stage
+            )
+            write_statistics_document(
+                event_output / "matchup.json", statistics_document_bytes(matchup)
+            )
         publication = build_event_publication_from_paths(
             event_path,
             classification_path,
