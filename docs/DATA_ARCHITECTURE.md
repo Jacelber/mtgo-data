@@ -1566,8 +1566,8 @@ changing the retained mixed document shape. P9-05 compatibly extends the
 quality Schema to the same three structures. Structure conditionals require
 the exact scope set, the pure-event advancement metric, the pure Day 2
 conversion field, and the correct overall-points context flag. The committed
-mixed event `434455` remains the byte-stability oracle for overview, decks,
-and quality.
+mixed event `434455` has a fixed test baseline in the reference fixture;
+its current overview, decks and quality follow the confirmed taxonomy.
 
 The generator has a read-only default and an explicit `--execute` write path.
 It does not contact Melee or MTGO, modify any retained input, or write a
@@ -1705,55 +1705,32 @@ candidate paths. A missing, disabled, unverified, malformed, or unsupported
 entry fails before source access and has no fallback format. Manual dispatch,
 review-branch publication and source boundaries are preserved.
 
-### 11.12 Reference-event compatibility manifest
+### 11.12 Current classification and fixed reference event
 
-The W35 derived-data closure migration updates the version `1.8.0`
-compatibility boundary for mixed Melee event `434455` in
-`tests/fixtures/melee/434455_compatibility_manifest.json`. Its exact-byte set
-contains the raw snapshot manifest, normalized event, classification overlay,
-opportunity ledger, and five event-specific public documents. The raw manifest
-is a closure root: validation also verifies the unique path, byte count, and
-SHA-256 of every one of its 483 declared responses and rejects any undeclared
-file in the retained snapshot directory.
+All events already admitted to a format's current data products, including
+mixed event `434455`, follow the latest Owner-confirmed classification.
+This is ordinary classification maintenance, without per-event migration
+approval. Raw match facts, statistical methods, public scope, accepted
+editorial content and historical archives retain their separate protections.
 
-Version `1.8.0` keeps the raw snapshot manifest and normalized event
-byte-identical while rebinding the classification overlay, opportunity ledger,
-and five event documents to the Owner-accepted W35 Modern taxonomy. All 362
-submitted decks remain classified with zero Unknown, conflicts, or invalid
-records. Relative to `1.7.0`, exactly two event `434455` decks leave the former
-Affinity result: one becomes `mono-blue-artifact` and one becomes
-`sewer-combo/azorius`. Opportunity totals, scope populations, and result facts
-remain unchanged. The rebuilt `434455` opportunity ledger advances from its
-stale `1.0.0` output to the already maintained `1.1.0` missing-decklist-aware
-Schema without adding a new field or statistical meaning. The maintained
-hierarchy and matchup matrices expand to the new taxonomy. No source response
-is fetched or rewritten.
+`tests/fixtures/melee/434455_reference.zip` preserves the former fixed test
+baseline and its manifest. Tests read that fixture independently of live
+products; it is neither a publication source nor an old taxonomy constraint.
+`434455_compatibility_manifest.json` protects the retained normalized event,
+raw manifest and all 483 declared responses, and the source identity, scope
+and public route in catalogs. Current derived files are checked against their
+actual source hashes, current classifier, complete downstream chain and the
+multi-event consumer, rather than historical output hashes.
 
-The same deterministic migration rebuilds event `441441` from its retained
-normalized event. Its 574 participants consist of 564 classified submitted
-decks, seven Owner-reviewed Unknown submitted decks, and three unavailable
-decklists represented only in the opportunity ledger. Both events' metadata
-and matchup compatibility now bind to one active Modern taxonomy; their source
-data and statistics remain separate.
+The existing classifier comparison reports the full retained corpus and the
+current admitted Melee event IDs. Weekly data staging synchronizes every stale
+current event in the affected format from retained inputs, preserving private
+unadmitted events. Resume verifies the same source/rules and complete products;
+packaging rejects incomplete synchronization. A changed taxonomy must work
+through these same entries without editing a special event protection rule.
+Classification differences remain explainable against confirmed decisions;
+this policy does not automatically accept a new classification meaning.
 
-The format event catalog and global consumer catalog are expandable indexes,
-not immutable event payloads. Their complete bytes are excluded from the
-compatibility digest set. Validation instead freezes the complete selected
-`434455` event entry in `stats/modern/melee/index.json` and the Modern
-`tabletop-major-events` product route in `stats/catalog.json`. Unrelated event,
-format, product, default-selection, ordering, and volatile generation metadata
-may change when their own tasks authorize that work, provided the selected
-projection remains unchanged. The `1.8.0` selected projection uses catalog
-schema `1.2.0`, binds its root to the active taxonomy, and freezes the event's
-matchup compatibility evidence so later multi-event growth fails closed on a
-taxonomy mismatch.
-
-Shared whitelist and taxonomy files are not exact-byte members of the event
-manifest. Protected `434455` derived bytes and their embedded provenance remain
-the compatibility result. Any deliberate exact-byte change requires a new
-manifest version, replacement evidence, a decision record, and separate owner
-approval. Future privacy snapshot versions must not regenerate the retained v2
-reference snapshot.
 
 ### 11.13 Future-event participant and field minimization
 

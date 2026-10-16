@@ -248,3 +248,30 @@ def test_data_wrapper_orders_existing_producers_and_binds_resume(tmp_path, monke
     with pytest.raises(ValueError, match="classification failed"):
         workflow.stage_data(tmp_path, plan)
     assert calls == []  # No stats, MTGO stage, or delivery after failure.
+
+
+def test_current_cohort_is_completed_even_when_plan_omits_events(tmp_path, monkeypatch):
+    from mtgmeta import classifier_closure as closure
+    monkeypatch.setattr(workflow, "require_private_output", lambda *_: None)
+    calls = []
+    stale = [{"format": "modern", "event_id": event, "steps": ["classification", "opportunities", "stats", "matchup", "publish"]}
+             for event in ("434455", "471573")]
+    monkeypatch.setattr(closure, "current_melee_sync", lambda *_: list(stale))
+    def generate(root, format_id, *, event_ids):
+        calls.append((format_id, event_ids))
+        stale.clear()
+    monkeypatch.setattr(closure, "_generate_melee", generate)
+    monkeypatch.setattr(closure, "validate_current_melee", lambda *_: None)
+    plan = {"week": "2026-W41", "mtgo_formats": [], "melee": [{"format": "modern", "event_id": "434455", "steps": []}]}
+    result = workflow.stage_data(tmp_path, plan)
+    assert calls == [("modern", {"434455", "471573"})]
+    assert {m["event_id"] for m in result["melee_scope"]} == {"434455", "471573"}
+    resumed = workflow.stage_data(tmp_path, plan, tmp_path, result)
+    assert len(calls) == 1
+    assert resumed["reused_melee"] == result["melee_completed"]
+    changed = tmp_path / "my_archetypes/modern.yaml"
+    changed.parent.mkdir()
+    changed.write_text("changed rules", encoding="utf-8")
+    with pytest.raises(ValueError, match="Resume inputs changed"):
+        workflow.stage_data(tmp_path, plan, tmp_path, result)
+    assert len(calls) == 1

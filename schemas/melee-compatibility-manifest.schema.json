@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/melee-compatibility-manifest.schema.json",
   "title": "Melee reference-event compatibility manifest",
-  "x-schema-version": "1.8.0",
+  "x-schema-version": "2.0.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -11,10 +11,11 @@
     "migration_policy",
     "immutable_snapshot",
     "exact_files",
-    "catalog_projections"
+    "catalog_projections",
+    "reference_fixture"
   ],
   "properties": {
-    "contract_version": {"const": "1.8.0"},
+    "contract_version": {"const": "2.0.0"},
     "event": {
       "type": "object",
       "additionalProperties": false,
@@ -33,18 +34,32 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "exact_byte_change",
-        "catalog_growth",
+        "classification_refresh",
         "legacy_snapshot_regeneration"
       ],
       "properties": {
-        "exact_byte_change": {
-          "const": "separate_owner_approved_version_migration"
+        "classification_refresh": {
+          "const": "all_current_events"
         },
-        "catalog_growth": {
-          "const": "allowed_when_selected_projection_is_unchanged"
+        "legacy_snapshot_regeneration": {
+          "const": "prohibited"
+        }
+      }
+    },
+    "reference_fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/repositoryPath"
         },
-        "legacy_snapshot_regeneration": {"const": "prohibited"}
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
       }
     },
     "immutable_snapshot": {
@@ -129,7 +144,7 @@
         },
         "expected": {"type": "object", "minProperties": 1},
         "expansion_policy": {
-          "const": "allow_unselected_entries_and_volatile_root_fields"
+          "enum": ["allow_unselected_entries_and_volatile_root_fields", "allow_current_classification"]
         }
       }
     }

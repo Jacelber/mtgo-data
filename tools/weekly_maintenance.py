@@ -503,7 +503,32 @@ def stage_data(root, plan, resume_stage=None, previous=None):
     from mtgmeta.melee import classification, opportunities, stats as melee_stats, matchup as melee_matchup, publish
     producers = {"classification": classification.main, "opportunities": opportunities.main, "stats": melee_stats.main,
                  "matchup": melee_matchup.main, "publish": publish.main}
-    members = plan.get("melee", [])
+    from mtgmeta.classifier_closure import current_melee_sync, validate_current_melee, _protected_input_fingerprints, _generate_melee
+    members = deepcopy(plan.get("melee", []))
+    sync_formats = sorted(set(formats) | {item["format"] for item in members})
+    before_inputs = {f: _protected_input_fingerprints(root, f) for f in sync_formats}
+    generation_subject = digest({p.relative_to(root).as_posix(): p.read_text(encoding="utf-8")
+        for p in (root / "src/mtgmeta").rglob("*.py")})
+    if previous and previous.get("generation_subject") != generation_subject:
+        raise ValueError("Resume generation inputs changed")
+    if previous and previous.get("input_fingerprints") != before_inputs:
+        raise ValueError("Resume inputs changed; preserve the prior stage and regenerate affected products")
+    current_scope = {f: sorted(str(item["event_id"]) for item in read(root / f"stats/{f}/melee/index.json")["events"])
+                     for f in sync_formats if (root / f"stats/{f}/melee/index.json").is_file()}
+    if previous and previous.get("current_melee_scope") != current_scope:
+        raise ValueError("Resume current Melee scope changed")
+    sync_required = {}
+    for f in sync_formats:
+        required = current_melee_sync(root, f)
+        if resume_stage is not None and required:
+            raise ValueError("Resume Melee products are stale; regenerate affected products first")
+        sync_required[f] = {item["event_id"] for item in required}
+        for item in required:
+            existing = next((m for m in members if (m["format"], m["event_id"]) == (f, item["event_id"])), None)
+            if existing is None:
+                members.append(item)
+            else:
+                existing["steps"] = item["steps"]
     for item in members:
         scope({"format": item["format"], "week": plan["week"]})
         if not re.fullmatch(r"[1-9][0-9]*", item["event_id"]):
@@ -512,9 +537,16 @@ def stage_data(root, plan, resume_stage=None, previous=None):
             raise ValueError("Unknown or duplicate Melee producer")
     completed = []
     if resume_stage is None:
+        for f, ids in sync_required.items():
+            if ids:
+                started = perf_counter()
+                _generate_melee(root, f, event_ids=ids)
+                completed.append({"format": f, "events": sorted(ids), "producer": "current_melee_sync",
+                                  "seconds": round(perf_counter() - started, 4)})
         for item in members:
-            # Scope is determined in step 3; this wrapper does not discover
-            # additional consumers or silently expand historical products.
+            if item["event_id"] in sync_required.get(item["format"], set()):
+                continue
+            # Synchronize all already-admitted current consumers of this format.
             for name, producer in producers.items():
                 if name not in item["steps"]:
                     continue
@@ -525,13 +557,16 @@ def stage_data(root, plan, resume_stage=None, previous=None):
                     raise ValueError(f"Melee {item['event_id']} {name} failed; retained candidate: {root}; completed={completed}")
                 completed.append({"format": item["format"], "event": item["event_id"], "producer": name,
                                   "seconds": round(perf_counter() - started, 4)})
+    for f in sync_formats:
+        if _protected_input_fingerprints(root, f) != before_inputs[f]:
+            raise ValueError("Source facts or reviewed input changed during data generation")
+        validate_current_melee(root, f)
     if formats:
         result = stage_publications(root, formats, include_landing=False, execute=False, resume_stage=resume_stage)
-    elif resume_stage is not None:
-        raise ValueError("An MTGO resume stage requires its original format scope")
     else:
         result = {"stage": str(root), "formats": [], "executed": False}
-    return {**result, "root": str(root), "melee_completed": completed,
+    return {**result, "root": str(root), "input_fingerprints": before_inputs, "generation_subject": generation_subject, "current_melee_scope": current_scope,
+            "melee_scope": members, "melee_completed": completed,
             "reused_melee": (previous.get("melee_completed", []) + previous.get("reused_melee", [])) if previous else [],
             "plan_digest": digest(plan), "fetched": 0,
             "remote_writes": 0, "landing": "retained", "next": "verify the fixed combined product and reuse the existing package/publish path"}
