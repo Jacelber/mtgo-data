@@ -501,6 +501,10 @@ const manaIdentities = Object.freeze({
     "orzhov-lifegain": Object.freeze(["w", "b"]),
     "sewer-combo/jeskai": Object.freeze(["w", "u", "r"]),
     "shifting-omni": Object.freeze(["u", "g"]),
+    "phoenix-prowess": Object.freeze(["r"]),
+    "mono-white-tron": Object.freeze(["w"]),
+    "mardu-goryos": Object.freeze(["w", "b", "r"]),
+    "sphinx-approach": Object.freeze(["u", "b", "r"]),
   }),
   pauper: Object.freeze({
     "affinity-combo": Object.freeze(["u"]),
