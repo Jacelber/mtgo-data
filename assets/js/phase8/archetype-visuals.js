@@ -616,6 +616,11 @@ const manaIdentities = Object.freeze({
     "golgari-gardens/golgari": Object.freeze(["b", "g"]),
   }),
   pioneer: Object.freeze({
+    "mono-black-phoenix": Object.freeze(["b"]),
+    "bant-airbending": Object.freeze(["w", "u", "g"]),
+    "orzhov-midrange": Object.freeze(["w", "b"]),
+    "boros-discard": Object.freeze(["w", "r"]),
+    "mono-green-landfall": Object.freeze(["g"]),
     "izzet-prowess": Object.freeze(["u", "r"]),
     "golgari-demons": Object.freeze(["b", "g"]),
     "boros-land-destruction": Object.freeze(["w", "r"]),

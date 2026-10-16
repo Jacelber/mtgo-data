@@ -680,6 +680,35 @@ archetypes:
       - card: Ygra, Eater of All
         zone: main
         min_count: 1
+  - id: jund-sacrifice-artifact-support
+    priority: 102
+    subtype_id: null
+    conditions:
+      all:
+      - card: Witch's Oven
+        zone: main
+        min_count: 1
+      - card: Cauldron Familiar
+        zone: main
+        min_count: 1
+      - card: Scavenger's Talent
+        zone: main
+        min_count: 1
+      - card: Deadly Dispute
+        zone: main
+        min_count: 1
+      - card: Shrapnel Blast
+        zone: main
+        min_count: 1
+      - card: Biotech Specialist
+        zone: main
+        min_count: 1
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
 - id: golgari-sacrifice
   name: Golgari Sacrifice
   priority: 100
@@ -2735,3 +2764,159 @@ archetypes:
       - card: Bloodtithe Harvester
         zone: main
         min_count: 1
+- id: mono-black-phoenix
+  name: Mono-Black Phoenix
+  priority: 110
+  rules:
+  - id: mono-black-phoenix-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Darklight Phoenix
+        zone: main
+        min_count: 1
+      - card: Bloodghast
+        zone: main
+        min_count: 1
+      - card: Stitcher's Supplier
+        zone: main
+        min_count: 1
+      - card: Priest of Forgotten Gods
+        zone: main
+        min_count: 1
+      - card: Swamp
+        zone: main
+        min_count: 1
+      - card: Watery Grave
+        zone: main
+        exact_count: 0
+      - card: Blood Crypt
+        zone: main
+        exact_count: 0
+      - card: Overgrown Tomb
+        zone: main
+        exact_count: 0
+      - card: Godless Shrine
+        zone: main
+        exact_count: 0
+- id: bant-airbending
+  name: Bant Airbending
+  priority: 110
+  rules:
+  - id: bant-airbending-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Airbender Ascension
+        zone: main
+        min_count: 1
+      - card: Aang, Swift Savior
+        zone: main
+        min_count: 1
+      - card: Appa, Steadfast Guardian
+        zone: main
+        min_count: 1
+      - card: Doc Aurlock, Grizzled Genius
+        zone: main
+        min_count: 1
+      - card: Hallowed Fountain
+        zone: main
+        min_count: 1
+      - card: Breeding Pool
+        zone: main
+        min_count: 1
+- id: orzhov-midrange
+  name: Orzhov Midrange
+  priority: 90
+  rules:
+  - id: orzhov-midrange-primary
+    priority: 90
+    subtype_id: null
+    conditions:
+      all:
+      - card: Thoughtseize
+        zone: main
+        min_count: 1
+      - card: Fatal Push
+        zone: main
+        min_count: 1
+      - card: Godless Shrine
+        zone: main
+        min_count: 1
+      - card: The Wandering Emperor
+        zone: main
+        min_count: 1
+      - card: Watery Grave
+        zone: main
+        exact_count: 0
+      - card: Blood Crypt
+        zone: main
+        exact_count: 0
+      - card: Overgrown Tomb
+        zone: main
+        exact_count: 0
+- id: boros-discard
+  name: Boros Discard
+  priority: 110
+  rules:
+  - id: boros-discard-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Cool but Rude
+        zone: main
+        min_count: 1
+      - card: Flameblade Adept
+        zone: main
+        min_count: 1
+      - card: Hardened Academic
+        zone: main
+        min_count: 1
+      - card: Guardian of New Benalia
+        zone: main
+        min_count: 1
+      - card: Sacred Foundry
+        zone: main
+        min_count: 1
+      - card: Fear of Missing Out
+        zone: main
+        min_count: 1
+- id: mono-green-landfall
+  name: Mono-Green Landfall
+  priority: 110
+  rules:
+  - id: mono-green-landfall-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Earthbender Ascension
+        zone: main
+        min_count: 1
+      - card: Mossborn Hydra
+        zone: main
+        min_count: 1
+      - card: Icetill Explorer
+        zone: main
+        min_count: 1
+      - card: Fabled Passage
+        zone: main
+        min_count: 1
+      - card: Forest
+        zone: main
+        min_count: 1
+      - card: Breeding Pool
+        zone: main
+        exact_count: 0
+      - card: Temple Garden
+        zone: main
+        exact_count: 0
+      - card: Stomping Ground
+        zone: main
+        exact_count: 0
+      - card: Overgrown Tomb
+        zone: main
+        exact_count: 0
