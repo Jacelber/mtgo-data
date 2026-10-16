@@ -2,12 +2,12 @@
   "schema_version": "1.1.0",
   "format": "standard",
   "source": "mtgo",
-  "classifier_digest": "170cac2775abcc40e70e18c4459c5a3e7ccecb976704c6d05ac24d21d3613b1c",
-  "rules_updated": "2026-10-05T23:32:07+09:00",
+  "classifier_digest": "3fe93c3fb72f281252123789274c3b767d46cc00f7c11b0e279217bd57eed4d0",
+  "rules_updated": "2026-10-16T11:09:02+09:00",
   "summary": {
-    "parents": 140,
-    "leaves": 153,
-    "expandable_parents": 6
+    "parents": 143,
+    "leaves": 157,
+    "expandable_parents": 7
   },
   "parents": [
     {
@@ -168,6 +168,12 @@
       "subtype_ids": []
     },
     {
+      "id": "boros-superfriends",
+      "name": "Boros Superfriends",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "boros-token",
       "name": "Boros Token",
       "expandable": false,
@@ -210,18 +216,6 @@
       "subtype_ids": []
     },
     {
-      "id": "dimir-deceit",
-      "name": "Dimir Deceit",
-      "expandable": false,
-      "subtype_ids": []
-    },
-    {
-      "id": "dimir-excruciator",
-      "name": "Dimir Excruciator",
-      "expandable": false,
-      "subtype_ids": []
-    },
-    {
       "id": "dimir-faeries",
       "name": "Dimir Faeries",
       "expandable": false,
@@ -250,6 +244,15 @@
       "name": "Dimir Spellementals",
       "expandable": false,
       "subtype_ids": []
+    },
+    {
+      "id": "dimir-spider-man",
+      "name": "Dimir Spider-Man",
+      "expandable": true,
+      "subtype_ids": [
+        "dimir-spider-man/dimir",
+        "dimir-spider-man/sultai"
+      ]
     },
     {
       "id": "dwarves",
@@ -330,6 +333,12 @@
     {
       "id": "golgari-self-mill",
       "name": "Golgari Self-Mill",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "grixis-artifact-sacrifice",
+      "name": "Grixis Artifact Sacrifice",
       "expandable": false,
       "subtype_ids": []
     },
@@ -526,6 +535,12 @@
       "subtype_ids": []
     },
     {
+      "id": "jund-midrange",
+      "name": "Jund Midrange",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "jund-superfriends",
       "name": "Jund Superfriends",
       "expandable": false,
@@ -642,6 +657,12 @@
       "subtype_ids": []
     },
     {
+      "id": "mono-white-angels",
+      "name": "Mono-White Angels",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "mono-white-auras",
       "name": "Mono-White Auras",
       "expandable": false,
@@ -650,6 +671,12 @@
     {
       "id": "mono-white-momo",
       "name": "Mono-White Momo",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-white-swarm-aggro",
+      "name": "Mono-White Swarm Aggro",
       "expandable": false,
       "subtype_ids": []
     },
@@ -788,12 +815,6 @@
     {
       "id": "sultai-demon",
       "name": "Sultai Demon",
-      "expandable": false,
-      "subtype_ids": []
-    },
-    {
-      "id": "sultai-excruciator",
-      "name": "Sultai Excruciator",
       "expandable": false,
       "subtype_ids": []
     },
@@ -1102,6 +1123,14 @@
       "subtype_id": null
     },
     {
+      "id": "boros-superfriends",
+      "kind": "archetype",
+      "name": "Boros Superfriends",
+      "display_name": "Boros Superfriends",
+      "parent_id": "boros-superfriends",
+      "subtype_id": null
+    },
+    {
       "id": "boros-token",
       "kind": "archetype",
       "name": "Boros Token",
@@ -1158,22 +1187,6 @@
       "subtype_id": null
     },
     {
-      "id": "dimir-deceit",
-      "kind": "archetype",
-      "name": "Dimir Deceit",
-      "display_name": "Dimir Deceit",
-      "parent_id": "dimir-deceit",
-      "subtype_id": null
-    },
-    {
-      "id": "dimir-excruciator",
-      "kind": "archetype",
-      "name": "Dimir Excruciator",
-      "display_name": "Dimir Excruciator",
-      "parent_id": "dimir-excruciator",
-      "subtype_id": null
-    },
-    {
       "id": "dimir-faeries",
       "kind": "archetype",
       "name": "Dimir Faeries",
@@ -1212,6 +1225,22 @@
       "display_name": "Dimir Spellementals",
       "parent_id": "dimir-spellementals",
       "subtype_id": null
+    },
+    {
+      "id": "dimir-spider-man/dimir",
+      "kind": "subtype",
+      "name": "Dimir Spider-Man",
+      "display_name": "Dimir Spider-Man",
+      "parent_id": "dimir-spider-man",
+      "subtype_id": "dimir"
+    },
+    {
+      "id": "dimir-spider-man/sultai",
+      "kind": "subtype",
+      "name": "Sultai Spider-Man",
+      "display_name": "Sultai Spider-Man",
+      "parent_id": "dimir-spider-man",
+      "subtype_id": "sultai"
     },
     {
       "id": "dwarves/boros",
@@ -1331,6 +1360,14 @@
       "name": "Golgari Self-Mill",
       "display_name": "Golgari Self-Mill",
       "parent_id": "golgari-self-mill",
+      "subtype_id": null
+    },
+    {
+      "id": "grixis-artifact-sacrifice",
+      "kind": "archetype",
+      "name": "Grixis Artifact Sacrifice",
+      "display_name": "Grixis Artifact Sacrifice",
+      "parent_id": "grixis-artifact-sacrifice",
       "subtype_id": null
     },
     {
@@ -1590,6 +1627,14 @@
       "subtype_id": null
     },
     {
+      "id": "jund-midrange",
+      "kind": "archetype",
+      "name": "Jund Midrange",
+      "display_name": "Jund Midrange",
+      "parent_id": "jund-midrange",
+      "subtype_id": null
+    },
+    {
       "id": "jund-superfriends",
       "kind": "archetype",
       "name": "Jund Superfriends",
@@ -1790,6 +1835,14 @@
       "subtype_id": null
     },
     {
+      "id": "mono-white-angels",
+      "kind": "archetype",
+      "name": "Mono-White Angels",
+      "display_name": "Mono-White Angels",
+      "parent_id": "mono-white-angels",
+      "subtype_id": null
+    },
+    {
       "id": "mono-white-auras",
       "kind": "archetype",
       "name": "Mono-White Auras",
@@ -1803,6 +1856,14 @@
       "name": "Mono-White Momo",
       "display_name": "Mono-White Momo",
       "parent_id": "mono-white-momo",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-white-swarm-aggro",
+      "kind": "archetype",
+      "name": "Mono-White Swarm Aggro",
+      "display_name": "Mono-White Swarm Aggro",
+      "parent_id": "mono-white-swarm-aggro",
       "subtype_id": null
     },
     {
@@ -1987,14 +2048,6 @@
       "name": "Sultai Demon",
       "display_name": "Sultai Demon",
       "parent_id": "sultai-demon",
-      "subtype_id": null
-    },
-    {
-      "id": "sultai-excruciator",
-      "kind": "archetype",
-      "name": "Sultai Excruciator",
-      "display_name": "Sultai Excruciator",
-      "parent_id": "sultai-excruciator",
       "subtype_id": null
     },
     {

@@ -2,6 +2,14 @@
 
 const manaIdentities = Object.freeze({
   standard: Object.freeze({
+    "dimir-spider-man": Object.freeze(["u", "b"]),
+    "dimir-spider-man/dimir": Object.freeze(["u", "b"]),
+    "dimir-spider-man/sultai": Object.freeze(["u", "b", "g"]),
+    "boros-superfriends": Object.freeze(["w", "r"]),
+    "mono-white-swarm-aggro": Object.freeze(["w"]),
+    "grixis-artifact-sacrifice": Object.freeze(["u", "b", "r"]),
+    "mono-white-angels": Object.freeze(["w"]),
+    "jund-midrange": Object.freeze(["b", "r", "g"]),
     "4-color-allies": Object.freeze(["w", "u", "r", "g"]),
     "4-color-demons": Object.freeze(["w", "u", "b", "r"]),
     "4-color-tablet": Object.freeze(["w", "u", "b", "r"]),
@@ -164,6 +172,10 @@ const manaIdentities = Object.freeze({
     "lifegain": Object.freeze(["w"]),
   }),
   modern: Object.freeze({
+    "phoenix-prowess": Object.freeze(["r"]),
+    "mono-white-tron": Object.freeze(["w"]),
+    "mardu-goryos": Object.freeze(["w", "b", "r"]),
+    "sphinx-approach": Object.freeze(["u", "b", "r"]),
     "abzan-blink": Object.freeze(["w", "b", "g"]),
     "affinity": Object.freeze(["u", "r"]),
     "agadeem-persist": Object.freeze(["b", "g"]),
@@ -608,6 +620,11 @@ const manaIdentities = Object.freeze({
     "golgari-gardens/golgari": Object.freeze(["b", "g"]),
   }),
   pioneer: Object.freeze({
+    "mono-black-phoenix": Object.freeze(["b"]),
+    "bant-airbending": Object.freeze(["w", "u", "g"]),
+    "orzhov-midrange": Object.freeze(["w", "b"]),
+    "boros-discard": Object.freeze(["w", "r"]),
+    "mono-green-landfall": Object.freeze(["g"]),
     "izzet-prowess": Object.freeze(["u", "r"]),
     "golgari-demons": Object.freeze(["b", "g"]),
     "boros-land-destruction": Object.freeze(["w", "r"]),

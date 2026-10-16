@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "a31de3ebf1f2324a3c30e38a0a85382e9453b9eede1a1d021ae548e7c322ce2d"
+    "digest": "931000d0e58a12cb3e09bf0bc30c5f5796b7404c8d614b1ee58c8bc392b50a52"
   },
   "input": {
     "event_path": "data/modern/melee/events/471573.json",
@@ -18,10 +18,10 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "99fb122833ee9e4c194a1e0673294fb4c2d23fd9a9947e3cd3db39229e451892",
+    "rule_sha256": "d060a9fc0ec71e67841bb4cfdbd8e75f0c30c407b2e95cc18f2f7e514bbb247e",
     "rule_schema_version": "1.1.0",
-    "archetype_count": 221,
-    "rule_count": 406,
+    "archetype_count": 225,
+    "rule_count": 411,
     "subtype_count": 105
   },
   "summary": {
@@ -45,13 +45,13 @@
       "boros-energy": 10,
       "boros-land-destruction": 1,
       "broodscale-combo": 29,
-      "chant-control": 12,
+      "chant-control": 11,
       "devoted-druid-combo": 4,
       "dimir-mill": 1,
       "dimir-tempo": 6,
       "domain-zoo": 6,
       "eldrazi-aggro": 1,
-      "eldrazi-ramp": 1,
+      "eldrazi-ramp": 2,
       "eldrazi-tron": 7,
       "esper-blink": 12,
       "esper-goryos": 11,
@@ -79,13 +79,14 @@
     "selected_by_subtype": {
       "broodscale-combo/golgari": 1,
       "broodscale-combo/mono-green": 28,
-      "chant-control/azorius": 11,
+      "chant-control/azorius": 10,
       "chant-control/jeskai": 1,
       "devoted-druid-combo/abzan": 4,
       "dimir-tempo/dimir": 3,
       "dimir-tempo/esper": 2,
       "dimir-tempo/grixis": 1,
       "eldrazi-ramp/gruul": 1,
+      "eldrazi-ramp/selesnya": 1,
       "eldrazi-tron/colorless": 3,
       "eldrazi-tron/mono-green": 4,
       "living-end/temur": 2,
@@ -1228,6 +1229,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -1264,6 +1281,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -6216,6 +6249,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -6252,6 +6301,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -6648,24 +6713,24 @@
       "participant_id": "participant-2a50ab2590e1db8215f2b7cbf3d7f6cca43911d8d48bd155a97c31cb2466057b",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "chant-control",
-        "archetype_name": "Chant Control",
-        "subtype_id": "azorius",
-        "subtype_name": "Azorius",
-        "rule_id": "chant-control-azorius",
-        "priority": 305900
+        "archetype_id": "eldrazi-ramp",
+        "archetype_name": "Eldrazi Ramp",
+        "subtype_id": "selesnya",
+        "subtype_name": "Selesnya",
+        "rule_id": "eldrazi-ramp-selesnya",
+        "priority": 646850
       },
       "matched_rules": [
         {
-          "archetype_id": "chant-control",
-          "archetype_name": "Chant Control",
-          "subtype_id": "azorius",
-          "subtype_name": "Azorius",
-          "rule_id": "chant-control-azorius",
-          "priority": 305900,
+          "archetype_id": "eldrazi-ramp",
+          "archetype_name": "Eldrazi Ramp",
+          "subtype_id": "selesnya",
+          "subtype_name": "Selesnya",
+          "rule_id": "eldrazi-ramp-selesnya",
+          "priority": 646850,
           "evidence": [
             {
-              "card": "Orim's Chant",
+              "card": "Sowing Mycospawn",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -6673,35 +6738,43 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
-              "zone": "any",
-              "actual_count": 0,
-              "min_count": null,
+              "card": "Ugin's Labyrinth",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
               "max_count": null,
-              "exact_count": 0
+              "exact_count": null
             },
             {
-              "card": "__classifier-semantic-any-black-spell__",
-              "zone": "any",
-              "actual_count": 0,
-              "min_count": null,
+              "card": "Eldrazi Temple",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
               "max_count": null,
-              "exact_count": 0
+              "exact_count": null
+            },
+            {
+              "card": "Temple Garden",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
       ],
       "top_priority_matches": [
         {
-          "archetype_id": "chant-control",
-          "archetype_name": "Chant Control",
-          "subtype_id": "azorius",
-          "subtype_name": "Azorius",
-          "rule_id": "chant-control-azorius",
-          "priority": 305900,
+          "archetype_id": "eldrazi-ramp",
+          "archetype_name": "Eldrazi Ramp",
+          "subtype_id": "selesnya",
+          "subtype_name": "Selesnya",
+          "rule_id": "eldrazi-ramp-selesnya",
+          "priority": 646850,
           "evidence": [
             {
-              "card": "Orim's Chant",
+              "card": "Sowing Mycospawn",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -6709,20 +6782,28 @@
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-any-red-spell__",
-              "zone": "any",
-              "actual_count": 0,
-              "min_count": null,
+              "card": "Ugin's Labyrinth",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
               "max_count": null,
-              "exact_count": 0
+              "exact_count": null
             },
             {
-              "card": "__classifier-semantic-any-black-spell__",
-              "zone": "any",
-              "actual_count": 0,
-              "min_count": null,
+              "card": "Eldrazi Temple",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
               "max_count": null,
-              "exact_count": 0
+              "exact_count": null
+            },
+            {
+              "card": "Temple Garden",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -7716,6 +7797,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -7752,6 +7849,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -11089,6 +11202,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 7,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -11125,6 +11254,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 7,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -16098,6 +16243,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -16134,6 +16295,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -18072,6 +18249,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -18108,6 +18301,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -26401,6 +26610,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -26437,6 +26662,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -28015,6 +28256,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 7,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -28051,6 +28308,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 7,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -28317,6 +28590,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -28353,6 +28642,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 9,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -34357,6 +34662,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -34393,6 +34714,22 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 8,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }

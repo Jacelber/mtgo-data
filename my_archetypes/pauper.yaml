@@ -1069,7 +1069,7 @@ archetypes:
         zone: main
         min_count: 3
 - id: grixis-faeries
-  name: "Grixis Faeries"
+  name: Grixis Faeries
   priority: 9186
   rules:
   - id: grixis-faeries-vandalblast
@@ -1077,16 +1077,16 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Baleful Strix"
+      - card: Baleful Strix
         zone: main
         min_count: 4
-      - card: "Spellstutter Sprite"
+      - card: Spellstutter Sprite
         zone: main
         min_count: 3
-      - card: "Molten Tributary"
-        zone: main
+      - card: Molten Tributary
+        zone: any
         min_count: 1
-      - card: "Vandalblast"
+      - card: Vandalblast
         zone: side
         min_count: 2
 - id: izzet-control
@@ -1419,7 +1419,7 @@ archetypes:
         zone: main
         min_count: 3
 - id: boros-snacker
-  name: "Boros Snacker"
+  name: Boros Snacker
   priority: 8900
   rules:
   - id: boros-snacker
@@ -1427,22 +1427,16 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Sneaky Snacker"
+      - card: Sneaky Snacker
         zone: main
         min_count: 3
-      - card: "Pursue the Past"
+      - card: Pursue the Past
+        zone: main
+        min_count: 1
+      - card: Kor Skyfisher
         zone: main
         min_count: 3
-      - card: "Kor Skyfisher"
-        zone: main
-        min_count: 3
-      - card: "Melded Moxite"
-        zone: main
-        min_count: 3
-      - card: "Glint Hawk"
-        zone: main
-        max_count: 2
-      - card: "Basilisk Gate"
+      - card: Basilisk Gate
         zone: main
         exact_count: 0
 - id: naya-gates
@@ -2239,7 +2233,7 @@ archetypes:
         min_count: 3
       - card: Snuff Out
         zone: main
-        min_count: 3
+        min_count: 1
       - card: Counterspell
         zone: main
         min_count: 3

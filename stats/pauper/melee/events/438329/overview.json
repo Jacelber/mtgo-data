@@ -10,13 +10,13 @@
     "event_sha256": "9c4c5f344144773cd60595590bb5e70b3b3dd9b7655beaa0bca90b26d4ac2343",
     "event_schema_version": "2.2.0",
     "classification_path": "data/pauper/melee/classifications/438329.json",
-    "classification_sha256": "7a554e747bf6d485cc2b38decc5d97fe3269f489345721b590977fda700ff811",
+    "classification_sha256": "cad063b8cf7f29662c2d80cc3e291aec200d3aaa7eab23097aee2daa9e859be3",
     "classification_schema_version": "1.1.0",
     "opportunity_path": "data/pauper/melee/opportunities/438329.json",
-    "opportunity_sha256": "e7f11854764cd3a860b23e46475a7c921358cef66322565b38706cd54f7f71e9",
+    "opportunity_sha256": "4608bb0722bf776061bcff5767acbcc40b016671e7507d3c61d18e83174928d1",
     "opportunity_schema_version": "1.1.0",
     "taxonomy_path": "my_archetypes/pauper.yaml",
-    "taxonomy_sha256": "eb50ab50f717edc7b29e1c2a7dc253c94d2f33af3c014fbb541f8cd8e757b660",
+    "taxonomy_sha256": "2669fa945700f37611208139293bb1046fdefcd370dbe81bbd513389f74d0197",
     "taxonomy_schema_version": "1.1.0"
   },
   "event": {
@@ -3522,86 +3522,6 @@
           "subtypes": []
         },
         {
-          "group_id": "archetype:boros-synthesizer",
-          "classification_status": "classified",
-          "archetype_id": "boros-synthesizer",
-          "archetype_name": "Boros Synthesizer",
-          "expandable": false,
-          "deck_count": 4,
-          "metagame_share": 0.003738,
-          "constructed_points": 67,
-          "theoretical_rounds": 32,
-          "effective_theoretical_rounds": 32,
-          "average_points_per_effective_round": 2.09375,
-          "completed_or_officially_exempt_rounds": 32,
-          "completion_rate": 1.0,
-          "played_match_participations": 32,
-          "source_match_count": 31,
-          "result_counts": {
-            "played_draw": 1,
-            "played_loss": 9,
-            "played_win": 22
-          },
-          "drop_player_count": 0,
-          "drop_unplayed_rounds": 0,
-          "intentional_draw_opportunities": 0,
-          "bye_count": 0,
-          "top8_lock_player_count": 0,
-          "top8_lock_exemptions": 0,
-          "disqualified_player_count": 0,
-          "high_score": null,
-          "match_record": {
-            "all_matches": {
-              "wins": 22,
-              "losses": 9,
-              "draws": 1,
-              "matches": 32,
-              "win_rate": 0.703125,
-              "confidence_interval_95": {
-                "lower": 0.530203,
-                "upper": 0.832505
-              },
-              "literal_record": {
-                "wins": 22,
-                "losses": 9,
-                "draws": 1,
-                "matches": 32,
-                "win_rate": 0.6875,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.51433,
-                  "upper": 0.820476
-                }
-              }
-            },
-            "non_mirror": {
-              "wins": 21,
-              "losses": 8,
-              "draws": 1,
-              "matches": 30,
-              "win_rate": 0.716667,
-              "confidence_interval_95": {
-                "lower": 0.538272,
-                "upper": 0.845872
-              },
-              "literal_record": {
-                "wins": 21,
-                "losses": 8,
-                "draws": 1,
-                "matches": 30,
-                "win_rate": 0.7,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.521239,
-                  "upper": 0.833354
-                }
-              }
-            },
-            "mirror_match_count": 1
-          },
-          "subtypes": []
-        },
-        {
           "group_id": "archetype:cycle-storm",
           "classification_status": "classified",
           "archetype_id": "cycle-storm",
@@ -3760,6 +3680,85 @@
               }
             },
             "mirror_match_count": 0
+          },
+          "subtypes": []
+        },
+        {
+          "group_id": "archetype:boros-synthesizer",
+          "classification_status": "classified",
+          "archetype_id": "boros-synthesizer",
+          "archetype_name": "Boros Synthesizer",
+          "expandable": false,
+          "deck_count": 3,
+          "metagame_share": 0.002804,
+          "constructed_points": 51,
+          "theoretical_rounds": 24,
+          "effective_theoretical_rounds": 24,
+          "average_points_per_effective_round": 2.125,
+          "completed_or_officially_exempt_rounds": 24,
+          "completion_rate": 1.0,
+          "played_match_participations": 24,
+          "source_match_count": 23,
+          "result_counts": {
+            "played_loss": 7,
+            "played_win": 17
+          },
+          "drop_player_count": 0,
+          "drop_unplayed_rounds": 0,
+          "intentional_draw_opportunities": 0,
+          "bye_count": 0,
+          "top8_lock_player_count": 0,
+          "top8_lock_exemptions": 0,
+          "disqualified_player_count": 0,
+          "high_score": null,
+          "match_record": {
+            "all_matches": {
+              "wins": 17,
+              "losses": 7,
+              "draws": 0,
+              "matches": 24,
+              "win_rate": 0.708333,
+              "confidence_interval_95": {
+                "lower": 0.508323,
+                "upper": 0.850854
+              },
+              "literal_record": {
+                "wins": 17,
+                "losses": 7,
+                "draws": 0,
+                "matches": 24,
+                "win_rate": 0.708333,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.508319,
+                  "upper": 0.850855
+                }
+              }
+            },
+            "non_mirror": {
+              "wins": 16,
+              "losses": 6,
+              "draws": 0,
+              "matches": 22,
+              "win_rate": 0.727273,
+              "confidence_interval_95": {
+                "lower": 0.518483,
+                "upper": 0.868492
+              },
+              "literal_record": {
+                "wins": 16,
+                "losses": 6,
+                "draws": 0,
+                "matches": 22,
+                "win_rate": 0.727273,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.518479,
+                  "upper": 0.868494
+                }
+              }
+            },
+            "mirror_match_count": 1
           },
           "subtypes": []
         },
@@ -4079,6 +4078,86 @@
                 "confidence_interval_95": {
                   "lower": 0.19733,
                   "upper": 0.570487
+                }
+              }
+            },
+            "mirror_match_count": 0
+          },
+          "subtypes": []
+        },
+        {
+          "group_id": "archetype:boros-snacker",
+          "classification_status": "classified",
+          "archetype_id": "boros-snacker",
+          "archetype_name": "Boros Snacker",
+          "expandable": false,
+          "deck_count": 2,
+          "metagame_share": 0.001869,
+          "constructed_points": 37,
+          "theoretical_rounds": 16,
+          "effective_theoretical_rounds": 16,
+          "average_points_per_effective_round": 2.3125,
+          "completed_or_officially_exempt_rounds": 16,
+          "completion_rate": 1.0,
+          "played_match_participations": 16,
+          "source_match_count": 16,
+          "result_counts": {
+            "played_draw": 1,
+            "played_loss": 3,
+            "played_win": 12
+          },
+          "drop_player_count": 0,
+          "drop_unplayed_rounds": 0,
+          "intentional_draw_opportunities": 0,
+          "bye_count": 0,
+          "top8_lock_player_count": 0,
+          "top8_lock_exemptions": 0,
+          "disqualified_player_count": 0,
+          "high_score": null,
+          "match_record": {
+            "all_matches": {
+              "wins": 12,
+              "losses": 3,
+              "draws": 1,
+              "matches": 16,
+              "win_rate": 0.78125,
+              "confidence_interval_95": {
+                "lower": 0.536923,
+                "upper": 0.916672
+              },
+              "literal_record": {
+                "wins": 12,
+                "losses": 3,
+                "draws": 1,
+                "matches": 16,
+                "win_rate": 0.75,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.505012,
+                  "upper": 0.898181
+                }
+              }
+            },
+            "non_mirror": {
+              "wins": 12,
+              "losses": 3,
+              "draws": 1,
+              "matches": 16,
+              "win_rate": 0.78125,
+              "confidence_interval_95": {
+                "lower": 0.536923,
+                "upper": 0.916672
+              },
+              "literal_record": {
+                "wins": 12,
+                "losses": 3,
+                "draws": 1,
+                "matches": 16,
+                "win_rate": 0.75,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.505012,
+                  "upper": 0.898181
                 }
               }
             },
@@ -4880,85 +4959,6 @@
                 "confidence_interval_95": {
                   "lower": 0.279992,
                   "upper": 0.720008
-                }
-              }
-            },
-            "mirror_match_count": 0
-          },
-          "subtypes": []
-        },
-        {
-          "group_id": "archetype:boros-snacker",
-          "classification_status": "classified",
-          "archetype_id": "boros-snacker",
-          "archetype_name": "Boros Snacker",
-          "expandable": false,
-          "deck_count": 1,
-          "metagame_share": 0.000935,
-          "constructed_points": 21,
-          "theoretical_rounds": 8,
-          "effective_theoretical_rounds": 8,
-          "average_points_per_effective_round": 2.625,
-          "completed_or_officially_exempt_rounds": 8,
-          "completion_rate": 1.0,
-          "played_match_participations": 8,
-          "source_match_count": 8,
-          "result_counts": {
-            "played_loss": 1,
-            "played_win": 7
-          },
-          "drop_player_count": 0,
-          "drop_unplayed_rounds": 0,
-          "intentional_draw_opportunities": 0,
-          "bye_count": 0,
-          "top8_lock_player_count": 0,
-          "top8_lock_exemptions": 0,
-          "disqualified_player_count": 0,
-          "high_score": null,
-          "match_record": {
-            "all_matches": {
-              "wins": 7,
-              "losses": 1,
-              "draws": 0,
-              "matches": 8,
-              "win_rate": 0.875,
-              "confidence_interval_95": {
-                "lower": 0.529112,
-                "upper": 0.977583
-              },
-              "literal_record": {
-                "wins": 7,
-                "losses": 1,
-                "draws": 0,
-                "matches": 8,
-                "win_rate": 0.875,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.529105,
-                  "upper": 0.977583
-                }
-              }
-            },
-            "non_mirror": {
-              "wins": 7,
-              "losses": 1,
-              "draws": 0,
-              "matches": 8,
-              "win_rate": 0.875,
-              "confidence_interval_95": {
-                "lower": 0.529112,
-                "upper": 0.977583
-              },
-              "literal_record": {
-                "wins": 7,
-                "losses": 1,
-                "draws": 0,
-                "matches": 8,
-                "win_rate": 0.875,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.529105,
-                  "upper": 0.977583
                 }
               }
             },
@@ -8370,7 +8370,7 @@
             },
             "mirror_match_count": 0
           },
-          "day2_conversion": 0.5,
+          "day2_conversion": 0.666667,
           "subtypes": []
         },
         {
@@ -9341,7 +9341,7 @@
             },
             "mirror_match_count": 0
           },
-          "day2_conversion": 1.0,
+          "day2_conversion": 0.5,
           "subtypes": []
         },
         {
@@ -15743,86 +15743,6 @@
           "subtypes": []
         },
         {
-          "group_id": "archetype:boros-synthesizer",
-          "classification_status": "classified",
-          "archetype_id": "boros-synthesizer",
-          "archetype_name": "Boros Synthesizer",
-          "expandable": false,
-          "deck_count": 4,
-          "metagame_share": 0.003738,
-          "constructed_points": 85,
-          "theoretical_rounds": 44,
-          "effective_theoretical_rounds": 44,
-          "average_points_per_effective_round": 1.931818,
-          "completed_or_officially_exempt_rounds": 44,
-          "completion_rate": 1.0,
-          "played_match_participations": 44,
-          "source_match_count": 43,
-          "result_counts": {
-            "played_draw": 1,
-            "played_loss": 15,
-            "played_win": 28
-          },
-          "drop_player_count": 0,
-          "drop_unplayed_rounds": 0,
-          "intentional_draw_opportunities": 0,
-          "bye_count": 0,
-          "top8_lock_player_count": 0,
-          "top8_lock_exemptions": 0,
-          "disqualified_player_count": 0,
-          "high_score": null,
-          "match_record": {
-            "all_matches": {
-              "wins": 28,
-              "losses": 15,
-              "draws": 1,
-              "matches": 44,
-              "win_rate": 0.647727,
-              "confidence_interval_95": {
-                "lower": 0.499989,
-                "upper": 0.771741
-              },
-              "literal_record": {
-                "wins": 28,
-                "losses": 15,
-                "draws": 1,
-                "matches": 44,
-                "win_rate": 0.636364,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.488661,
-                  "upper": 0.762167
-                }
-              }
-            },
-            "non_mirror": {
-              "wins": 27,
-              "losses": 14,
-              "draws": 1,
-              "matches": 42,
-              "win_rate": 0.654762,
-              "confidence_interval_95": {
-                "lower": 0.503551,
-                "upper": 0.780035
-              },
-              "literal_record": {
-                "wins": 27,
-                "losses": 14,
-                "draws": 1,
-                "matches": 42,
-                "win_rate": 0.642857,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.491661,
-                  "upper": 0.77011
-                }
-              }
-            },
-            "mirror_match_count": 1
-          },
-          "subtypes": []
-        },
-        {
           "group_id": "archetype:cycle-storm",
           "classification_status": "classified",
           "archetype_id": "cycle-storm",
@@ -15982,6 +15902,85 @@
               }
             },
             "mirror_match_count": 0
+          },
+          "subtypes": []
+        },
+        {
+          "group_id": "archetype:boros-synthesizer",
+          "classification_status": "classified",
+          "archetype_id": "boros-synthesizer",
+          "archetype_name": "Boros Synthesizer",
+          "expandable": false,
+          "deck_count": 3,
+          "metagame_share": 0.002804,
+          "constructed_points": 69,
+          "theoretical_rounds": 36,
+          "effective_theoretical_rounds": 36,
+          "average_points_per_effective_round": 1.916667,
+          "completed_or_officially_exempt_rounds": 36,
+          "completion_rate": 1.0,
+          "played_match_participations": 36,
+          "source_match_count": 35,
+          "result_counts": {
+            "played_loss": 13,
+            "played_win": 23
+          },
+          "drop_player_count": 0,
+          "drop_unplayed_rounds": 0,
+          "intentional_draw_opportunities": 0,
+          "bye_count": 0,
+          "top8_lock_player_count": 0,
+          "top8_lock_exemptions": 0,
+          "disqualified_player_count": 0,
+          "high_score": null,
+          "match_record": {
+            "all_matches": {
+              "wins": 23,
+              "losses": 13,
+              "draws": 0,
+              "matches": 36,
+              "win_rate": 0.638889,
+              "confidence_interval_95": {
+                "lower": 0.475751,
+                "upper": 0.775244
+              },
+              "literal_record": {
+                "wins": 23,
+                "losses": 13,
+                "draws": 0,
+                "matches": 36,
+                "win_rate": 0.638889,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.475748,
+                  "upper": 0.775246
+                }
+              }
+            },
+            "non_mirror": {
+              "wins": 22,
+              "losses": 12,
+              "draws": 0,
+              "matches": 34,
+              "win_rate": 0.647059,
+              "confidence_interval_95": {
+                "lower": 0.47914,
+                "upper": 0.785121
+              },
+              "literal_record": {
+                "wins": 22,
+                "losses": 12,
+                "draws": 0,
+                "matches": 34,
+                "win_rate": 0.647059,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.479137,
+                  "upper": 0.785123
+                }
+              }
+            },
+            "mirror_match_count": 1
           },
           "subtypes": []
         },
@@ -16301,6 +16300,86 @@
                 "confidence_interval_95": {
                   "lower": 0.19733,
                   "upper": 0.570487
+                }
+              }
+            },
+            "mirror_match_count": 0
+          },
+          "subtypes": []
+        },
+        {
+          "group_id": "archetype:boros-snacker",
+          "classification_status": "classified",
+          "archetype_id": "boros-snacker",
+          "archetype_name": "Boros Snacker",
+          "expandable": false,
+          "deck_count": 2,
+          "metagame_share": 0.001869,
+          "constructed_points": 46,
+          "theoretical_rounds": 22,
+          "effective_theoretical_rounds": 22,
+          "average_points_per_effective_round": 2.090909,
+          "completed_or_officially_exempt_rounds": 22,
+          "completion_rate": 1.0,
+          "played_match_participations": 22,
+          "source_match_count": 22,
+          "result_counts": {
+            "played_draw": 1,
+            "played_loss": 6,
+            "played_win": 15
+          },
+          "drop_player_count": 0,
+          "drop_unplayed_rounds": 0,
+          "intentional_draw_opportunities": 0,
+          "bye_count": 0,
+          "top8_lock_player_count": 0,
+          "top8_lock_exemptions": 0,
+          "disqualified_player_count": 0,
+          "high_score": null,
+          "match_record": {
+            "all_matches": {
+              "wins": 15,
+              "losses": 6,
+              "draws": 1,
+              "matches": 22,
+              "win_rate": 0.704545,
+              "confidence_interval_95": {
+                "lower": 0.495621,
+                "upper": 0.852657
+              },
+              "literal_record": {
+                "wins": 15,
+                "losses": 6,
+                "draws": 1,
+                "matches": 22,
+                "win_rate": 0.681818,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.473182,
+                  "upper": 0.836396
+                }
+              }
+            },
+            "non_mirror": {
+              "wins": 15,
+              "losses": 6,
+              "draws": 1,
+              "matches": 22,
+              "win_rate": 0.704545,
+              "confidence_interval_95": {
+                "lower": 0.495621,
+                "upper": 0.852657
+              },
+              "literal_record": {
+                "wins": 15,
+                "losses": 6,
+                "draws": 1,
+                "matches": 22,
+                "win_rate": 0.681818,
+                "win_rate_method": "wins_over_valid_matches",
+                "confidence_interval_95": {
+                  "lower": 0.473182,
+                  "upper": 0.836396
                 }
               }
             },
@@ -17102,85 +17181,6 @@
                 "confidence_interval_95": {
                   "lower": 0.279992,
                   "upper": 0.720008
-                }
-              }
-            },
-            "mirror_match_count": 0
-          },
-          "subtypes": []
-        },
-        {
-          "group_id": "archetype:boros-snacker",
-          "classification_status": "classified",
-          "archetype_id": "boros-snacker",
-          "archetype_name": "Boros Snacker",
-          "expandable": false,
-          "deck_count": 1,
-          "metagame_share": 0.000935,
-          "constructed_points": 30,
-          "theoretical_rounds": 14,
-          "effective_theoretical_rounds": 14,
-          "average_points_per_effective_round": 2.142857,
-          "completed_or_officially_exempt_rounds": 14,
-          "completion_rate": 1.0,
-          "played_match_participations": 14,
-          "source_match_count": 14,
-          "result_counts": {
-            "played_loss": 4,
-            "played_win": 10
-          },
-          "drop_player_count": 0,
-          "drop_unplayed_rounds": 0,
-          "intentional_draw_opportunities": 0,
-          "bye_count": 0,
-          "top8_lock_player_count": 0,
-          "top8_lock_exemptions": 0,
-          "disqualified_player_count": 0,
-          "high_score": null,
-          "match_record": {
-            "all_matches": {
-              "wins": 10,
-              "losses": 4,
-              "draws": 0,
-              "matches": 14,
-              "win_rate": 0.714286,
-              "confidence_interval_95": {
-                "lower": 0.453509,
-                "upper": 0.882786
-              },
-              "literal_record": {
-                "wins": 10,
-                "losses": 4,
-                "draws": 0,
-                "matches": 14,
-                "win_rate": 0.714286,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.453505,
-                  "upper": 0.882788
-                }
-              }
-            },
-            "non_mirror": {
-              "wins": 10,
-              "losses": 4,
-              "draws": 0,
-              "matches": 14,
-              "win_rate": 0.714286,
-              "confidence_interval_95": {
-                "lower": 0.453509,
-                "upper": 0.882786
-              },
-              "literal_record": {
-                "wins": 10,
-                "losses": 4,
-                "draws": 0,
-                "matches": 14,
-                "win_rate": 0.714286,
-                "win_rate_method": "wins_over_valid_matches",
-                "confidence_interval_95": {
-                  "lower": 0.453505,
-                  "upper": 0.882788
                 }
               }
             },
