@@ -43,6 +43,8 @@ def verify_material(record, candidate):
     packages.verify(candidate / "product.tar.gz", manifest, target=identity["target"])
     config = load_config(root, root / "configs/pages_publication.json")
     selected = publication_paths(root, config)
+    from tools.build_archetype_visuals import require_public_representatives
+    require_public_representatives(root, selected)
     validate_compatibility(root, config, selected)
     formats = identity["scope"].get("mtgo_formats", [])
     if not formats or len(formats) != len(set(formats)):

@@ -163,8 +163,12 @@ def prepare_images(root, work, repository):
 
 def prepare_site(record, work):
     from build_pages_artifact import build_artifact, load_config, publication_paths
+    from tools.build_archetype_visuals import require_public_representatives
     root = Path(record["identity"]["root"])
     repository = record["identity"]["target"]
+    config = load_config(root, root / "configs/pages_publication.json")
+    selected = publication_paths(root, config)
+    require_public_representatives(root, selected)
     localization = prepare_localization(root, work, repository)
     image_cache = prepare_images(root, work, repository)
     # Builder accepts overlays outside its input tree. Copying verified bytes is
@@ -178,8 +182,6 @@ def prepare_site(record, work):
             source = target
         overlays[identifier] = source
     site = work / "site"
-    config = load_config(root, root / "configs/pages_publication.json")
-    selected = publication_paths(root, config)
     signature = {"source": files(root, sorted(selected | {"configs/pages_publication.json"}
                                   | set(config["compatibility_manifests"]))),
                  "overlays": {name: files(path, ["**/*"]) for name, path in overlays.items()}}

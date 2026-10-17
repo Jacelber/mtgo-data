@@ -1,6 +1,6 @@
 # 5 完整待定材料
 
-输入：第4步确定数据、既定MTGO内容范围、现有周输入及实际已展示页面。
+输入：第4步确定数据及共用代表牌、既定MTGO内容范围、现有周输入及实际已展示页面。共用代表牌已在数据上线前按1／4／12周图表确认，Landing直接复用两张；这里主要等待Feature选择及其独立的四张展示牌、中文。历史任务先补第4步遗留的真实缺项，不把旧的待补清单当成本周应重新确认的清单。
 已有绑定当前数据的内容事实时复用；只有缺失时执行 `python tools/weekly_maintenance.py facts --root ROOT --format FORMAT --week WEEK --output FACTS_DIR`，得到 SOURCE 和 FACTS。ROOT须包含第4步已交付接纳范围和metadata；入口只处理该范围及既定历史窗口，沿用landing/review下known状态，晚到未接纳赛事单列pending_event_ids。它不重新验证整包或更新线上Landing。随后执行 `python tools/weekly_maintenance.py inspect --root ROOT --source SOURCE --facts FACTS --displayed-page DISPLAYED_JSON --output NEW_DIR`。
 SOURCE用现有周内容JSON/YAML（format、week、all_top8、bindings、review），允许部分review缺项；机器忠实整理，不让用户写JSON。修订加 `--previous PREVIOUS_INVENTORY` 保留编号，删除不复用。实际对象和事实变化使用新引用。
 本次范围包含指定实体大赛选稿时，在已有SOURCE／FACTS上执行 `python tools/weekly_maintenance.py tabletop --root ROOT --source SOURCE --facts FACTS --event EVENT_ID --output NEW_DIR`（多场重复`--event`），后续使用其新source.json／facts.json。只读取本周同赛制已保留、分类与输入摘要一致的指定赛事；不重新采集或分类。独立tabletop目录列出完整可用且已分类的瑞士轮负场≤2牌表，双日合计，淘汰赛不计入；和局不算负场。成绩不明确、无已赛成绩、Unknown及不可用牌表不进入选稿目录，缺口明示；早退者显示实际已赛成绩，不隐含最低胜场要求。MTGO八强与环境统计保持原范围。inspect沿用原F编号，实体牌表追加编号，并显示赛事、名次、瑞士轮成绩及`melee:赛事编号:最终名次`引用。名单不是程序推荐或Owner已选稿。

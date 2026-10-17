@@ -17,7 +17,7 @@ description: 执行或续作本项目周维护：联合 MTGO／指定 Melee 分�
 | 开始／接续范围 | [1-start.md](references/1-start.md) |
 | 固定分类材料 | [2-classification.md](references/2-classification.md) |
 | 分类意见落实 | [3-rules.md](references/3-rules.md) |
-| 统一数据交付 | [4-data.md](references/4-data.md) |
+| 共用代表牌确认／统一数据交付 | [4-data.md](references/4-data.md) |
 | Feature／环境栏及缺项 | [5-content-options.md](references/5-content-options.md) |
 | 用户输入、英文和实际页面 | [6-content.md](references/6-content.md) |
 | 组合及确认复用 | [7-preview.md](references/7-preview.md) |
@@ -27,6 +27,7 @@ description: 执行或续作本项目周维护：联合 MTGO／指定 Melee 分�
 
 - 用户决定分类含义、Feature有无／对象／类别／展示牌、逐条Feature中文、Landing中文。缺项一次提醒，随后只提醒剩余项；无委托不建议／代写。
 - 已展示且沿用的环境配置默认接受；仅有配置不等于已展示。用户明确选择和中文定稿忠实转换不原样重复确认，英文及实际未决展示正常提交。
+- 共用代表牌在数据上线前按1／4／12周图表的实际类别并集确认两张及顺序：统计图用第一张，Landing用两张。Feature的四张牌在选稿后另定；第5步复用共用代表牌，仅处理真实新增差异。
 - 第6步展示实际页面，第7步默认复用确认。技术证据缺口由机器处理；复用判定不变成全面检查。
 - MTGO／指定Melee同赛制联合分类，来源、统计、完成记录保持分开。统一交付覆盖自动入口；Feature可按本次范围加入已确认指定Melee的瑞士轮两负以内牌表，见第5步；环境统计仍用既定MTGO来源。
 - 固定快照不覆盖，保留输入及原操作续作。未知不冒充通过；失败不清零。完成后结束，不自动追加历史修复、优化或下一周。

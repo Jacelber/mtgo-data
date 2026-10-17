@@ -431,6 +431,11 @@ def build_artifact(
 
     config = load_config(root, config_path.resolve())
     selected = publication_paths(root, config)
+    from tools.build_archetype_visuals import require_public_representatives
+    try:
+        require_public_representatives(root, selected)
+    except (OSError, ValueError) as exc:
+        raise PublicationError(str(exc)) from exc
     protected = validate_compatibility(root, config, selected)
     from mtgmeta.classifier_closure import validate_current_melee
     try:
