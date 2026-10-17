@@ -172,3 +172,25 @@ def status(target: str, operation: str | None = None) -> dict:
         else:
             result["remote"] = {"state": "unknown", "next": "Inspect the original run before repeating a write"}
     return result
+
+
+def query_operation(target: str, operation: str) -> dict:
+    """Resolve an uncertain submission read-only, including before writer claim."""
+    archive, pages = context(target)
+    archive.private()
+    state, _ = archive.load_state()
+    for key in ("current", "pending"):
+        if (state.get(key) or {}).get("operation") == operation:
+            return {"state": "recorded", "control": state, "operation": operation}
+    matches = []
+    for page in range(1, 11):
+        runs = pages.client.api(f"repos/{target}/actions/workflows/pages.yml/runs?per_page=100&page={page}")["workflow_runs"]
+        matches.extend({key: run.get(key) for key in ("id", "status", "conclusion", "html_url", "run_attempt")}
+                       for run in runs if run.get("display_title", "").startswith(f"{operation} ("))
+        if matches or len(runs) < 100:
+            break
+    # Even a completed failed run can have an outstanding external effect.
+    # Reconciliation uses the same writer record once it becomes observable.
+    return {"state": "waiting_original" if any(r["status"] != "completed" for r in matches)
+            else "inspect_original" if matches else "unknown", "operation": operation, "runs": matches,
+            "next": "Continue querying this operation; a missing claim does not authorize another send"}

@@ -15,6 +15,47 @@ from tools import build_simple_card_localization as localization
 WEBP = b"RIFF\x04\x00\x00\x00WEBP"
 
 
+@pytest.mark.parametrize("failure", ["query", "image"])
+def test_resource_failure_reuses_durable_partial_work(tmp_path, monkeypatch, failure):
+    from collections import Counter
+    root = _root(tmp_path)
+    names = [f"Card {n:02}" for n in range(1, 11)]
+    monkeypatch.setattr(localization, "product_card_names", lambda root: names)
+    monkeypatch.setattr(localization, "current_landing_names", lambda root: names)
+    monkeypatch.setattr(localization, "BATCH_SIZE", 1)
+    calls = Counter()
+    def fetch(names, page):
+        name = names[0]
+        calls["query", name] += 1
+        if failure == "query" and name == "Card 07" and calls["query", name] == 1:
+            raise OSError("interrupted query")
+        marker = name[-2:]
+        return {"page": page, "total_pages": 1, "items": [{"id": marker,
+            "display_name": name, "display_name_zh": "牌" + marker,
+            "image_url": f"https://images.mtgch.com/zhs/normal/front/{marker}.webp"}]}
+    def image(url):
+        calls["image", url] += 1
+        if failure == "image" and "07.webp" in url and calls["image", url] == 1:
+            return b"partial invalid bytes"
+        return WEBP
+    output = tmp_path / "cache"
+    with pytest.raises((OSError, ValueError)):
+        localization.build_bundle(root, output, fetch_page=fetch, fetch_image=image)
+    assert not output.exists()
+    assert (tmp_path / "cache.work/progress.json").is_file()
+    localization.build_bundle(root, output, fetch_page=fetch, fetch_image=image)
+    assert len(localization.verify_bundle(root, output)) == 10
+    for name in names[:6]:
+        assert calls["query", name] == 1
+        assert calls["image", f"https://images.mtgch.com/zhs/normal/front/{name[-2:]}.webp"] == 1
+    seed = tmp_path / "seed"
+    localization.write_seed(root, output, seed)
+    def forbidden(*args):
+        raise AssertionError("A complete valid local seed needs no external requests")
+    localization.build_bundle(root, tmp_path / "complete-local", seed=seed,
+                              fetch_page=forbidden, fetch_image=forbidden)
+
+
 @pytest.fixture(autouse=True)
 def localization_scope_without_unrelated_visual_loader(monkeypatch):
     # These fixtures exercise public card demand and cache reuse. Mana identity
@@ -27,6 +68,28 @@ def test_explicit_copy_cards_enter_localization_demand():
     copy = {"text": {"zh": "[[card:Dispatch|迅速了结]]", "en": "Plain Consider; [[card:Dispatch]]"}}
     assert set(localization._card_names(copy)) == {"Dispatch"}
     assert list(localization._card_names({"text": "普通正文 Consider"})) == []
+
+
+def test_local_and_newer_seed_only_fetch_last_two_names(tmp_path, monkeypatch):
+    from tools.delivery.resources import merge_localization
+    root = _root(tmp_path)
+    names = [f"Card {n:03}" for n in range(1, 101)]
+    monkeypatch.setattr(localization, "product_card_names", lambda root: names)
+    monkeypatch.setattr(localization, "current_landing_names", lambda root: [])
+    sources = []
+    for label, count in (("local", 95), ("newer", 98)):
+        source = tmp_path / label
+        _write_json(source / "cards.json", {name: {"zh_name": name} for name in names[:count]})
+        sources.append(source)
+    seed = merge_localization(root, sources, tmp_path / "merged")
+    requested = []
+    def fetch(batch, page):
+        requested.extend(batch)
+        return {"page": 1, "total_pages": 1, "items": [
+            {"id": name, "display_name": name, "display_name_zh": name} for name in batch]}
+    lookup = localization.build_bundle(root, tmp_path / "complete", seed=seed, fetch_page=fetch)
+    assert requested == names[98:]
+    assert len(lookup) == 100
 
 
 def _http_error(code: int) -> urllib.error.HTTPError:

@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from tools.select_trusted_pages_artifact import ArtifactSelectionError, select_trusted_artifact
+from tools.select_trusted_pages_artifact import ArtifactSelectionError, select_trusted_artifact, newest
 
 
 NOW = datetime(2026, 9, 5, tzinfo=timezone.utc)
@@ -66,6 +66,19 @@ def test_selects_only_a_completed_successful_exact_master_run():
     assert selected.run_id == 200
     assert selected.run_attempt == 1
     assert selected.head_sha == SHA
+
+
+def test_compares_creation_time_across_old_and_new_workflows():
+    artifacts = [_artifact(id=999, created_at=(NOW - timedelta(days=2)).isoformat()),
+                 _artifact(id=101, created_at=(NOW - timedelta(hours=2)).isoformat(),
+                           workflow_run={"id": 201, "head_branch": "master", "head_sha": SHA})]
+    runs = {200: _run(), 201: _run(id=201, workflow_id=88, path=".github/workflows/prepare-pages.yml")}
+    selections = [select_trusted_artifact(artifacts, repository=REPOSITORY,
+        workflow_id=identifier, workflow_path=path, get_run=runs.__getitem__,
+        name_matches=lambda name: True, now=NOW)
+        for identifier, path in ((12, ".github/workflows/pages.yml"),
+                                 (88, ".github/workflows/prepare-pages.yml"))]
+    assert newest(selections).artifact_id == 101
 
 
 def test_replacement_producer_keeps_exact_workflow_and_master_provenance():

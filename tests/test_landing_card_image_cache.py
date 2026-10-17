@@ -24,6 +24,36 @@ JPEG_B = b"\xff\xd8\xff\xe0synthetic-image-b\xff\xd9"
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_image_failure_keeps_six_verified_images_across_new_builder_call(tmp_path):
+    from collections import Counter
+    root = tmp_path / "repo"
+    names = [f"Card {n:02}" for n in range(1, 11)]
+    _write_registry(root, [("standard", True)])
+    _write_format(root, "standard", [("2026-W34", "2026-08-17")], {"2026-W34": names})
+    cards = [{"id": f"{n:08}-1111-4111-8111-111111111111",
+              "oracle_id": f"{n:08}-2222-4222-8222-222222222222", "name": name,
+              "image_uris": {"normal": f"https://cards.scryfall.io/normal/{n:02}.jpg"}}
+             for n, name in enumerate(names, 1)]
+    bulk = tmp_path / "bulk.gz"
+    _write_bulk_jsonl_gzip(bulk, cards)
+    calls = Counter()
+    def image(url):
+        calls[url] += 1
+        if url.endswith("07.jpg") and calls[url] == 1:
+            return b"incomplete"
+        return JPEG_A
+    output = tmp_path / "cache"
+    with pytest.raises(CacheBuildError):
+        build_cache_bundle(root, output, bulk_data_path=bulk, fetch_image=image)
+    assert not output.exists()
+    # Recovery uses persisted resolutions, so even the original bulk is unnecessary.
+    bulk.unlink()
+    build_cache_bundle(root, output, fetch_image=image)
+    verify_cache_bundle(root, output)
+    assert all(calls[f"https://cards.scryfall.io/normal/{n:02}.jpg"] == 1 for n in range(1, 7))
+    assert calls["https://cards.scryfall.io/normal/07.jpg"] == 2
+
+
 def _write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

@@ -383,7 +383,6 @@ def stage_publications(
     from time import perf_counter
     from ..classifier_closure import (
         _copy_repository_to_stage,
-        _resume_stage,
         _materialize_with_rollback,
         _protected_input_fingerprints,
         inspect_format,
@@ -401,13 +400,49 @@ def stage_publications(
         format_id: _protected_input_fingerprints(root, format_id)
         for format_id in formats
     }
+    from ..generation_progress import GenerationProgress, COMMON, files, implementation
+    from ..resource_progress import save
+    import shutil
+    identity = {"root": str(root), "formats": list(formats), "landing": include_landing}
+    locator = root.parent / (root.name + ".publication-" + "-".join(formats) + ".json")
+    if resume_stage is None and locator.exists():
+        previous = json.loads(locator.read_text(encoding="utf-8"))
+        if previous["identity"] != identity:
+            raise PublicationError("Existing publication belongs to another scope")
+        resume_stage = previous["stage"]
     stage_started = perf_counter()
     if resume_stage is not None:
-        stage = _resume_stage(root, resume_stage)
+        stage = Path(resume_stage).resolve()
+        if stage == root or stage.is_relative_to(root) or not stage.is_dir():
+            raise PublicationError("Resume stage must be an existing external directory")
+        # Resume runs current producers on the original mutable staging area.
+        # Individual checkpoints decide which generated products remain valid.
+        refreshed = ["src", "configs", "my_archetypes", "schemas", *(f"data/{f}" for f in formats),
+                     *(f"stats/{f}/melee" for f in formats),
+                     *(f"stats/{f}/mtgo/landing" + ("/review" if include_landing else "") for f in formats)]
+        for relative in refreshed:
+            if (root / relative).is_dir() or (stage / relative).is_dir():
+                destination = (stage / relative).resolve()
+                if not destination.is_relative_to(stage) or destination == stage:
+                    raise PublicationError("Input synchronization escapes the retained stage")
+                # Mirror only owned input files, including deletions. Never
+                # recursively remove a computed tree or another task's outputs.
+                for old in destination.rglob("*"):
+                    if old.is_symlink():
+                        raise PublicationError("Input synchronization encountered a link")
+                    if old.is_file() and not (root / relative / old.relative_to(destination)).is_file():
+                        old.unlink()
+                if (root / relative).is_dir():
+                    shutil.copytree(root / relative, stage / relative, dirs_exist_ok=True)
+        for name in ("validate_schemas.py", "validate_output_invariants.py"):
+            if (root / name).is_file():
+                shutil.copy2(root / name, stage / name)
     else:
         stage = _copy_repository_to_stage(
             root, f"mtgo-publication-{'-'.join(formats)}-"
         )
+    save(locator, {"identity": identity, "stage": str(stage)})
+    progress = GenerationProgress(stage.with_name(stage.name + ".progress.json"), identity)
     print(
         json.dumps(
             {
@@ -438,32 +473,42 @@ def stage_publications(
             before[path] = hashlib.sha256((root / path).read_bytes()).hexdigest()
     for path in ("stats/catalog.json",):
         before[path] = hashlib.sha256((root / path).read_bytes()).hexdigest()
-    if resume_stage is None:
-        for format_id in formats:
-            stats.build_all_stats(stage, format_id)
-            matchup.build_all_matchups(stage, format_id)
-            completeness.build_all_completeness(stage, format_id)
-            top8.build_all_top8(stage, format_id)
-            rules_updated = metadata.rules_last_commit_iso(
-                root, root / "my_archetypes" / f"{format_id}.yaml"
-            )
-            metadata.generate_hierarchy_catalog(
-                stage, format_id, rules_updated=rules_updated
-            )
-            landing_editorial.generate_public_name_contract(stage, format_id)
-            generate_reports(stage, format_id)
-            if include_landing:
-                result = landing.generate(stage, format_id)
-                if result["status"] in {
-                    "stale_review_required",
-                    "summary_review_required",
-                }:
-                    raise PublicationError(
-                        f"BLOCKED_OWNER_REVIEW: {format_id}: {result['status']}; "
-                        f"stage retained at {stage}"
-                    )
-            metadata.generate_metadata(stage, format_id, rules_updated=rules_updated)
-        write_catalog(stage)
+    for format_id in formats:
+        prefix = f"stats/{format_id}/mtgo/"
+        rules_updated = metadata.rules_last_commit_iso(root, root / "my_archetypes" / f"{format_id}.yaml")
+        def landing_step():
+            result = landing.generate(stage, format_id)
+            if result["status"] in {"stale_review_required", "summary_review_required"}:
+                raise PublicationError(f"BLOCKED_OWNER_REVIEW: {format_id}: {result['status']}; stage retained at {stage}")
+        steps = [
+            ("stats", ["mtgo/stats"], [prefix + "range_*", prefix + "decks_*", prefix + "index.json"], lambda: stats.build_all_stats(stage, format_id)),
+            ("matchup", ["mtgo/matchup", "mtgo/stats"], [prefix + "matchup_*.json"], lambda: matchup.build_all_matchups(stage, format_id)),
+            ("completeness", ["mtgo/completeness", "mtgo/stats", "mtgo/matchup"], [prefix + "completeness/**/*.json"], lambda: completeness.build_all_completeness(stage, format_id)),
+            ("top8", ["mtgo/top8", "mtgo/stats", "mtgo/week_lifecycle"], [prefix + "top8/**/*.json"], lambda: top8.build_all_top8(stage, format_id)),
+            ("hierarchy", ["mtgo/metadata", "mtgo/stats", "mtgo/matchup"], [prefix + "archetype_hierarchy.json"], lambda: metadata.generate_hierarchy_catalog(stage, format_id, rules_updated=rules_updated)),
+            ("names", ["mtgo/landing_editorial", "mtgo/review_submission", "review_workbook"], [f"stats/{format_id}/archetype_names.json"], lambda: landing_editorial.generate_public_name_contract(stage, format_id)),
+            ("reports", ["classification_reports_cli", "reports"], [f"reports/{format_id}/**/*"], lambda: generate_reports(stage, format_id)),
+        ]
+        if include_landing:
+            steps.append(("landing", ["mtgo/landing", "mtgo/landing_editorial", "mtgo/landing_tabletop", "mtgo/landing_screening", "mtgo/review_submission", "mtgo/stats", "mtgo/matchup", "mtgo/top8", "mtgo/week_lifecycle", "review_workbook"], [prefix + "landing/**/*.json"], landing_step))
+        for name, modules, outputs, producer in steps:
+            inputs = protected[format_id] if name in {"landing", "names"} else {
+                p: sha for p, sha in protected[format_id].items() if "/landing/review/" not in p
+                and p not in {"configs/mtgo_landing_visuals.yaml", "configs/mtgo_archetype_names.yaml"}}
+            basis = {"inputs": inputs, "code": implementation(root, COMMON + [f"src/mtgmeta/{m}.py" for m in modules]),
+                     "scope": subjects[format_id].subject_digest}
+            if name == "hierarchy":
+                basis["rules_updated"] = rules_updated
+            progress.run(f"{format_id}/{name}", basis, stage, outputs, producer)
+        # Metadata binds all final products; its basis therefore includes their bytes.
+        progress.run(f"{format_id}/metadata", {"inputs": protected[format_id],
+            "code": implementation(root, COMMON + ["src/mtgmeta/mtgo/metadata.py", "src/mtgmeta/mtgo/publication.py", "src/mtgmeta/mtgo/stats.py", "src/mtgmeta/mtgo/matchup.py"]),
+            "products": files(stage, artifact_paths(stage, format_id)),
+            "rules_updated": rules_updated}, stage, [prefix + "meta.json"],
+            lambda: metadata.generate_metadata(stage, format_id, rules_updated=rules_updated))
+    progress.run("catalog", {"meta": files(stage, ["stats/*/mtgo/meta.json", "stats/*/melee/index.json"]),
+        "code": implementation(root, ["src/mtgmeta/catalog.py", "src/mtgmeta/config.py"]), "config": files(root, ["configs/formats.yaml"])},
+        stage, ["stats/catalog.json"], lambda: write_catalog(stage))
     for format_id in formats:
         issues = inspect_publication(stage, format_id)
         if issues:
@@ -516,6 +561,7 @@ def stage_publications(
         for path, sha in before.items()
     ):
         raise PublicationError(f"final subject changed during staging; {stage}")
+    progress.validated()
     paths = sorted(
         {
             "stats/catalog.json",
@@ -548,7 +594,8 @@ def stage_publications(
                 format_id: subjects[format_id].subject_digest
                 for format_id in formats
             },
-            "changed_paths": changed}
+            "changed_paths": changed, "generation_progress": str(progress.path),
+            "reused_steps": progress.reused, "executed_steps": progress.executed}
 
 
 def stage_publication(root: Path, format_id: str, *, include_landing: bool = False,

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
 import json
 from pathlib import Path
 import sys
@@ -25,6 +26,28 @@ def write(root, path, value):
         raise ValueError("Use a new output file; retain the earlier handoff")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def confirmed_completion(envelope, candidate, state, *, target="Jacelber/mtgo-data"):
+    """Bind existing acceptance to confirmed bytes; this is not weekly acceptance."""
+    import tempfile
+    from tools.delivery import packages
+    packet = envelope["submission"]
+    manifest = read(candidate / "manifest.json")
+    current = state.get("current") or {}
+    if (current.get("health") != "passed" or current.get("package") != manifest["id"]
+            or state.get("pending") or not current.get("operation")):
+        raise ValueError("Publication has not confirmed this exact package")
+    # Keep the extraction beside the authorized private candidate. A default
+    # system-temp parent may be outside the execution sandbox on Windows.
+    with tempfile.TemporaryDirectory(prefix="review-publication-", dir=candidate.parent) as directory:
+        extracted = Path(directory) / "site"
+        packages.extract(candidate / "product.tar.gz", manifest, extracted, target=target)
+        actual = review.preview_packet(extracted, packet["format"])
+        review.require_accepted(packet, envelope["decisions"], current=actual)
+    result = deepcopy(envelope)
+    result["publication"] = {**current, "preview_digest": packet["digest"]}
+    return result
 
 
 def main():
@@ -88,25 +111,8 @@ def main():
         write(root, args.output, result)
         return
     if args.command == "completion":
-        import tempfile
-        from tools.delivery import packages
-        envelope = read(args.acceptance)
-        packet = envelope["submission"]
-        manifest = read(args.candidate / "manifest.json")
-        state = read(args.publication_state)
-        current = state.get("current") or {}
-        if (current.get("health") != "passed" or current.get("package") != manifest["id"]
-                or state.get("pending") or not current.get("operation")):
-            raise ValueError("Publication has not confirmed this exact package")
-        require_private_output(root, args.output.resolve())
-        # Read only data from the verified archive; never execute its old tools.
-        with tempfile.TemporaryDirectory(prefix="review-publication-") as directory:
-            extracted = Path(directory) / "site"
-            packages.extract(args.candidate / "product.tar.gz", manifest, extracted, target="Jacelber/mtgo-data")
-            actual = review.preview_packet(extracted, packet["format"])
-            review.require_accepted(packet, envelope["decisions"], current=actual)
-        envelope["publication"] = {**current, "preview_digest": packet["digest"]}
-        write(root, args.output, envelope)
+        result = confirmed_completion(read(args.acceptance), args.candidate, read(args.publication_state))
+        write(root, args.output, result)
         return
     if args.command == "resume":
         result = review.resume_summary(root, args.format, args.week,

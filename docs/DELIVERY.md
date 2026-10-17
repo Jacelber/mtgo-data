@@ -81,6 +81,13 @@ Actions 临时附件不是长期保障，活动工作不得任由唯一候选过
 
 ## 从失败处续作与取消
 
+周维护的本地接续入口是 `tools/weekly_maintenance.py`：`find-delivery` 定位任务目录内
+已有生成或交付记录，`inspect-delivery` 只读核对，获准后 `continue-delivery` 沿原记录接续。
+第4步数据和第7步内容共用此入口，分别保留已有接纳和页面确认；数据交付保留旧 Landing，
+不自动登记整周完成。多赛制内容用 `combine-content` 核对同一最终候选的各份既有确认。
+这些记录不赋予权限；旧任务已有包或发布操作时先查原事实，不制造新操作替代。
+详细参数随现行周维护 skill 的对应步骤维护。
+
 Pages 昂贵准备前，现有 `prepare-pages.yml` 调用 `project.py preflight`，先查询并收敛
 旧操作，再记录实际部署 base。原任务仍运行或写入未知时保留状态、暂停依赖它的准备；
 平台写入结束与产品确认分别处理，未确认产品不能冒称健康。`status` 仍是只读查询。
