@@ -803,8 +803,8 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Slickshot Show-Off", "image": "../images/representative-cards/standard/slickshot-show-off.jpg"}),
     ]),
     "izzet-prowess": Object.freeze([
-      Object.freeze({"name": "Boomerang Basics", "image": "../images/representative-cards/standard/boomerang-basics.jpg"}),
-      Object.freeze({"name": "Stormchaser's Talent", "image": "../images/representative-cards/standard/stormchasers-talent.jpg"}),
+      Object.freeze({"name": "Slickshot Show-Off", "image": "../images/representative-cards/standard/slickshot-show-off.jpg"}),
+      Object.freeze({"name": "Elusive Otter", "image": "../images/representative-cards/standard/elusive-otter.jpg"}),
     ]),
     "izzet-spellementals": Object.freeze([
       Object.freeze({"name": "Sunderflock", "image": "../images/representative-cards/standard/sunderflock.jpg"}),
@@ -869,6 +869,10 @@ const representativeCards = Object.freeze({
     "azorius-control/prepare": Object.freeze([
       Object.freeze({"name": "Emeritus of Ideation", "image": "../images/representative-cards/standard/emeritus-of-ideation.jpg"}),
       Object.freeze({"name": "Skycoach Waypoint", "image": "../images/representative-cards/standard/skycoach-waypoint.jpg"}),
+    ]),
+    "lifegain": Object.freeze([
+      Object.freeze({"name": "Liliana the Faultless", "image": "../images/representative-cards/standard/liliana-the-faultless.jpg"}),
+      Object.freeze({"name": "Ajani Resolute", "image": "../images/representative-cards/standard/ajani-resolute.jpg"}),
     ]),
   }),
   modern: Object.freeze({
@@ -1054,6 +1058,10 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Balustrade Spy", "image": "../images/representative-cards/pauper/balustrade-spy.jpg"}),
       Object.freeze({"name": "Dread Return", "image": "../images/representative-cards/pauper/dread-return.jpg"}),
     ]),
+    "dimir-control": Object.freeze([
+      Object.freeze({"name": "Baleful Strix", "image": "../images/representative-cards/pauper/baleful-strix.jpg"}),
+      Object.freeze({"name": "Counterspell", "image": "../images/representative-cards/pauper/counterspell.jpg"}),
+    ]),
   }),
   pioneer: Object.freeze({
     "izzet-prowess": Object.freeze([
@@ -1135,6 +1143,10 @@ const representativeCards = Object.freeze({
     "temur-lessons": Object.freeze([
       Object.freeze({"name": "Firebending Lesson", "image": "../images/representative-cards/pioneer/firebending-lesson.jpg"}),
       Object.freeze({"name": "Questing Druid", "image": "../images/representative-cards/pioneer/questing-druid.jpg"}),
+    ]),
+    "jund-artifact-sacrifice": Object.freeze([
+      Object.freeze({"name": "Oni-Cult Anvil", "image": "../images/representative-cards/pioneer/oni-cult-anvil.jpg"}),
+      Object.freeze({"name": "Biotech Specialist", "image": "../images/representative-cards/pioneer/biotech-specialist.jpg"}),
     ]),
   }),
 });
