@@ -598,7 +598,7 @@ const manaIdentities = Object.freeze({
     "rakdos-affinity": Object.freeze(["b", "r"]),
     "rakdos-madness": Object.freeze(["b", "r"]),
     "rakdos-synthesizer": Object.freeze(["b", "r"]),
-    "ruby-storm": Object.freeze(["r"]),
+    "ruby-storm": Object.freeze(["r", "g"]),
     "selesnya-gates": Object.freeze(["w", "g"]),
     "slivers": Object.freeze(["w", "g"]),
     "snacker-gates": Object.freeze(["u", "b"]),
@@ -878,6 +878,10 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Master of Barbs", "image": "../images/representative-cards/standard/master-of-barbs.jpg"}),
       Object.freeze({"name": "Ingris Stingerquill", "image": "../images/representative-cards/standard/ingris-stingerquill.jpg"}),
     ]),
+    "dimir-spider-man": Object.freeze([
+      Object.freeze({"name": "Superior Spider-Man", "image": "../images/representative-cards/standard/superior-spider-man.jpg"}),
+      Object.freeze({"name": "Deceit", "image": "../images/representative-cards/standard/deceit.jpg"}),
+    ]),
   }),
   modern: Object.freeze({
     "affinity": Object.freeze([
@@ -980,6 +984,10 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Amulet of Vigor", "image": "../images/representative-cards/modern/amulet-of-vigor.jpg"}),
       Object.freeze({"name": "Primeval Titan", "image": "../images/representative-cards/modern/primeval-titan.jpg"}),
     ]),
+    "rakdos-delirium": Object.freeze([
+      Object.freeze({"name": "Dark Matter Manipulator", "image": "../images/representative-cards/modern/dark-matter-manipulator.jpg"}),
+      Object.freeze({"name": "Detective's Phoenix", "image": "../images/representative-cards/modern/detectives-phoenix.jpg"}),
+    ]),
   }),
   pauper: Object.freeze({
     "battle-screech": Object.freeze([
@@ -1070,6 +1078,18 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Baleful Strix", "image": "../images/representative-cards/pauper/baleful-strix.jpg"}),
       Object.freeze({"name": "Counterspell", "image": "../images/representative-cards/pauper/counterspell.jpg"}),
     ]),
+    "dimir-affinity": Object.freeze([
+      Object.freeze({"name": "Baleful Strix", "image": "../images/representative-cards/pauper/baleful-strix.jpg"}),
+      Object.freeze({"name": "Refurbished Familiar", "image": "../images/representative-cards/pauper/refurbished-familiar.jpg"}),
+    ]),
+    "ruby-storm": Object.freeze([
+      Object.freeze({"name": "Goblin Anarchomancer", "image": "../images/representative-cards/pauper/goblin-anarchomancer.jpg"}),
+      Object.freeze({"name": "Thornscape Familiar", "image": "../images/representative-cards/pauper/thornscape-familiar.jpg"}),
+    ]),
+    "turbo-fog": Object.freeze([
+      Object.freeze({"name": "Moment's Peace", "image": "../images/representative-cards/pauper/moments-peace.jpg"}),
+      Object.freeze({"name": "Stream of Thought", "image": "../images/representative-cards/pauper/stream-of-thought.jpg"}),
+    ]),
   }),
   pioneer: Object.freeze({
     "izzet-prowess": Object.freeze([
@@ -1155,6 +1175,18 @@ const representativeCards = Object.freeze({
     "jund-artifact-sacrifice": Object.freeze([
       Object.freeze({"name": "Oni-Cult Anvil", "image": "../images/representative-cards/pioneer/oni-cult-anvil.jpg"}),
       Object.freeze({"name": "Biotech Specialist", "image": "../images/representative-cards/pioneer/biotech-specialist.jpg"}),
+    ]),
+    "boros-discard": Object.freeze([
+      Object.freeze({"name": "Cool but Rude", "image": "../images/representative-cards/pioneer/cool-but-rude.jpg"}),
+      Object.freeze({"name": "Hardened Academic", "image": "../images/representative-cards/pioneer/hardened-academic.jpg"}),
+    ]),
+    "dredge": Object.freeze([
+      Object.freeze({"name": "Exhibition Tidecaller", "image": "../images/representative-cards/pioneer/exhibition-tidecaller.jpg"}),
+      Object.freeze({"name": "Creeping Chill", "image": "../images/representative-cards/pioneer/creeping-chill.jpg"}),
+    ]),
+    "jund-sacrifice": Object.freeze([
+      Object.freeze({"name": "Biotech Specialist", "image": "../images/representative-cards/pioneer/biotech-specialist.jpg"}),
+      Object.freeze({"name": "Witch's Oven", "image": "../images/representative-cards/pioneer/witchs-oven.jpg"}),
     ]),
   }),
 });
