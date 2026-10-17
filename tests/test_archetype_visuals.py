@@ -193,7 +193,7 @@ def test_shared_pair_passes_real_packager_and_preserves_existing_landing(tmp_pat
     build_archetype_visuals.generate(root, "fixture")
     landing = "stats/fixture/mtgo/landing/current.json"
     (root / landing).parent.mkdir()
-    (root / landing).write_text('{"week":"previous","features":["retained"]}')
+    (root / landing).write_text('{"week":"previous","features":{"items":[]}}')
     selected.add(landing)
     monkeypatch.setattr(builder, "load_config", lambda *a: {"maximum_artifact_bytes": 1000000})
     monkeypatch.setattr(builder, "publication_paths", lambda *a: selected)
@@ -208,7 +208,7 @@ def test_shared_pair_passes_real_packager_and_preserves_existing_landing(tmp_pat
     build_archetype_visuals.require_public_representatives(root, {landing})
 
 
-@pytest.mark.parametrize("damage", [None, "missing_image", "excluded_image", "old_binding"])
+@pytest.mark.parametrize("damage", [None, "missing_image", "excluded_image", "old_binding", "missing_name", "excluded_names"])
 def test_retained_landing_is_protected_outside_current_statistics(tmp_path, damage):
     _write_fixture(tmp_path, cards={"previous": ["First", "Second"]},
                    statistics={1: [], 4: [], 12: []})
@@ -219,6 +219,8 @@ def test_retained_landing_is_protected_outside_current_statistics(tmp_path, dama
     landing.parent.mkdir()
     landing.write_text(json.dumps({"environment": {"rows": [{"archetype_id": "previous",
                          "key_cards": [{"name": "First"}, {"name": "Second"}]}]}}))
+    names = tmp_path / "stats/fixture/archetype_names.json"
+    names.write_text(json.dumps({"names": [{"identity_id": "previous", "display": {"en": "Previous", "zh": "旧名称"}}]}), encoding="utf-8")
     selected = {p.relative_to(tmp_path).as_posix() for p in tmp_path.rglob("*") if p.is_file()}
     image = "assets/images/representative-cards/fixture/second.jpg"
     if damage == "missing_image":
@@ -228,8 +230,12 @@ def test_retained_landing_is_protected_outside_current_statistics(tmp_path, dama
     elif damage == "old_binding":
         path = tmp_path / "assets/js/phase8/archetype-visuals.js"
         path.write_text(path.read_text().replace('"name": "First"', '"name": "Old"'))
+    elif damage == "missing_name":
+        names.write_text('{"names":[]}')
+    elif damage == "excluded_names":
+        selected.remove(names.relative_to(tmp_path).as_posix())
     if damage:
-        with pytest.raises(ValueError, match="previous.*retained Landing"):
+        with pytest.raises(ValueError, match="previous.*retained Landing|retained Landing missing bilingual names.*previous"):
             build_archetype_visuals.require_public_representatives(tmp_path, selected)
     else:
         build_archetype_visuals.require_public_representatives(tmp_path, selected)

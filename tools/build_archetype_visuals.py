@@ -167,6 +167,25 @@ def require_public_representatives(root: Path, selected: set[str]) -> None:
         match = re.fullmatch(r"stats/([^/]+)/mtgo/landing/current\.json", relative)
         if match:
             page = json.loads((root / relative).read_text(encoding="utf-8"))
+            from mtgmeta.mtgo.landing_editorial import landing_name_identities
+            decks = None
+            detail = page.get("data_files", {}).get("environment_decks")
+            if detail:
+                detail_path = (root / relative).parent / detail
+                if not detail_path.resolve().is_relative_to((root / relative).parent.resolve()):
+                    raise ValueError("Retained Landing detail path escapes its directory")
+                if detail_path.relative_to(root).as_posix() not in selected:
+                    raise ValueError("Retained Landing detail is absent from public package")
+                decks = json.loads(detail_path.read_text(encoding="utf-8"))
+            required_names = landing_name_identities(page, decks)
+            if required_names:
+                name_file = f"stats/{match[1]}/archetype_names.json"
+                names = json.loads((root / name_file).read_text(encoding="utf-8")) if name_file in selected else {}
+                displays = {row["identity_id"]: row.get("display", {}) for row in names.get("names", [])}
+                missing = sorted(identity for identity in required_names if any(
+                    not str(displays.get(identity, {}).get(lang) or "").strip() for lang in ("en", "zh")))
+                if missing:
+                    failures.append(f"{match[1]} retained Landing missing bilingual names: " + ", ".join(missing))
             choices = {row["archetype_id"]: [card["name"] for card in row["key_cards"]]
                        for row in page.get("environment", {}).get("rows", [])}
             subjects.extend((match[1], "retained Landing", row)

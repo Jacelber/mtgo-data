@@ -651,6 +651,80 @@ def _validate_name_catalog_document(
     }
 
 
+def landing_name_identities(page: dict, decks: dict | None = None) -> set[str]:
+    """Names read by the retained page, including its expanded environment deck."""
+    identities = set()
+    for row in page.get("environment", {}).get("rows", []):
+        parent = row["archetype_id"]
+        identities.add(parent)
+        for deck in (decks or {}).get("decks", {}).values():
+            if deck.get("archetype_id") != parent:
+                continue
+            subtypes = deck.get("subtypes", [])
+            best = deck.get("best_deck", {})
+            subtype = subtypes[0] if len(subtypes) == 1 else next((
+                item for item in subtypes if all(
+                    item.get("best_deck", {}).get(key) == best.get(key)
+                    for key in ("player", "event_id", "final_rank")
+                )
+            ), None)
+            if subtype:
+                identities.add(f"{parent}/{subtype['id']}")
+    for item in page.get("features", {}).get("items", []):
+        parent = item["archetype_id"]
+        identities.add(parent)
+        if item.get("subtype_id"):
+            identities.add(f"{parent}/{item['subtype_id']}")
+    return identities
+
+
+def retained_landing_names(root: Path, format_id: str, active: set[str]) -> list[dict]:
+    """Project accepted old display names without adding retired taxonomy rows."""
+    from .review_submission import require_accepted
+
+    path = root / f"stats/{format_id}/mtgo/landing/current.json"
+    if not path.is_file():
+        return []
+    page = json.loads(path.read_text(encoding="utf-8"))
+    decks = None
+    detail = page.get("data_files", {}).get("environment_decks")
+    if detail:
+        detail_path = (path.parent / detail).resolve()
+        if not detail_path.is_relative_to(path.parent.resolve()):
+            raise MTGOLandingEditorialError("Retained Landing detail path escapes its directory")
+        decks = json.loads(detail_path.read_text(encoding="utf-8"))
+    required = landing_name_identities(page, decks) - active
+    if not required:
+        return []
+    week = page["week"]["id"]
+    ledger = yaml.safe_load((root / "configs/mtgo_weekly_review_completions.yaml").read_text(encoding="utf-8"))
+    rows = []
+    for record in ledger.get("records", []):
+        if record.get("week") != week:
+            continue
+        accepted = record.get("formats", {}).get(format_id, {}).get("preview_acceptance", {})
+        packet = accepted.get("submission", {})
+        if (packet.get("kind"), packet.get("format"), packet.get("week")) != (
+            "preview", format_id, week
+        ):
+            continue
+        require_accepted(packet, accepted.get("decisions", {}))
+        names = packet.get("dimensions", {}).get("final_page", {}).get("names", {})
+        for identity in sorted(required):
+            display = names.get(identity)
+            if not isinstance(display, dict) or any(not str(display.get(lang) or "").strip() for lang in ("en", "zh")):
+                continue
+            parent, _, subtype = identity.partition("/")
+            rows.append({"identity_id": identity, "parent_id": parent,
+                         "subtype_id": subtype or None, "display": display,
+                         "retained_landing": {"week": week, "preview_digest": packet["digest"]}})
+        break
+    missing = required - {row["identity_id"] for row in rows}
+    if missing:
+        raise MTGOLandingEditorialError("Retained Landing lacks accepted bilingual names: " + ", ".join(sorted(missing)))
+    return rows
+
+
 def build_public_name_contract(
     repository_root: str | Path,
     format_id: str,
@@ -716,6 +790,12 @@ def build_public_name_contract(
         raise MTGOLandingEditorialError(
             f"bilingual name catalog has no approved identities for {format_id}"
         )
+    retained = retained_landing_names(root, format_id, {item["identity_id"] for item in names})
+    names.extend(retained)
+    if retained:
+        projection_subject_digest = document_digest({
+            "current_projection": projection_subject_digest, "retained_landing_names": retained,
+        })
     names.sort(key=lambda item: item["identity_id"])
     return versioned(
         {

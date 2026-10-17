@@ -874,6 +874,10 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Liliana the Faultless", "image": "../images/representative-cards/standard/liliana-the-faultless.jpg"}),
       Object.freeze({"name": "Ajani Resolute", "image": "../images/representative-cards/standard/ajani-resolute.jpg"}),
     ]),
+    "rakdos-lizards": Object.freeze([
+      Object.freeze({"name": "Master of Barbs", "image": "../images/representative-cards/standard/master-of-barbs.jpg"}),
+      Object.freeze({"name": "Ingris Stingerquill", "image": "../images/representative-cards/standard/ingris-stingerquill.jpg"}),
+    ]),
   }),
   modern: Object.freeze({
     "affinity": Object.freeze([
@@ -971,6 +975,10 @@ const representativeCards = Object.freeze({
     "simic-neoform": Object.freeze([
       Object.freeze({"name": "Neoform", "image": "../images/representative-cards/modern/neoform.jpg"}),
       Object.freeze({"name": "Allosaurus Rider", "image": "../images/representative-cards/modern/allosaurus-rider.jpg"}),
+    ]),
+    "amulet-titan": Object.freeze([
+      Object.freeze({"name": "Amulet of Vigor", "image": "../images/representative-cards/modern/amulet-of-vigor.jpg"}),
+      Object.freeze({"name": "Primeval Titan", "image": "../images/representative-cards/modern/primeval-titan.jpg"}),
     ]),
   }),
   pauper: Object.freeze({
