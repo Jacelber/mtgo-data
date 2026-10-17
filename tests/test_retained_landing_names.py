@@ -67,3 +67,11 @@ def test_expanded_deck_and_feature_require_subtype_names():
             "features": {"items": [{"archetype_id": "b", "subtype_id": "feature"}]}}
     decks = {"decks": {"A": {"archetype_id": "a", "subtypes": [{"id": "detail"}]}}}
     assert names.landing_name_identities(page, decks) == {"a", "a/detail", "b", "b/feature"}
+
+
+def test_empty_subtype_best_deck_is_not_the_expanded_title():
+    page = {"environment": {"rows": [{"archetype_id": "a"}]}}
+    best = {"player": "winner", "event_id": "123", "final_rank": 1}
+    decks = {"decks": {"A": {"archetype_id": "a", "best_deck": best, "subtypes": [
+        {"id": "empty", "best_deck": None}, {"id": "winner", "best_deck": best}]}}}
+    assert names.landing_name_identities(page, decks) == {"a", "a/winner"}

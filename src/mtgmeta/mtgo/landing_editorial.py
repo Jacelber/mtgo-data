@@ -661,10 +661,10 @@ def landing_name_identities(page: dict, decks: dict | None = None) -> set[str]:
             if deck.get("archetype_id") != parent:
                 continue
             subtypes = deck.get("subtypes", [])
-            best = deck.get("best_deck", {})
+            best = deck.get("best_deck") or {}
             subtype = subtypes[0] if len(subtypes) == 1 else next((
                 item for item in subtypes if all(
-                    item.get("best_deck", {}).get(key) == best.get(key)
+                    (item.get("best_deck") or {}).get(key) == best.get(key)
                     for key in ("player", "event_id", "final_rank")
                 )
             ), None)
