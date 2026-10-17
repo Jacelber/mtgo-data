@@ -1,6 +1,6 @@
 # 6 输入与实际页面
 
-输入：5的对象与缺项；用户Feature有无、对象、类别、四张不同主备牌、逐条Feature中文、Landing中文；环境代表牌仅实际未决时提供。自然语言在对话累计，机器整理SOURCE，不要求重填表。
+输入：5的对象与缺项；用户Feature有无、对象、类别、四张不同主备牌、逐条Feature中文、Landing中文。Feature四张牌独立于第4步已确认的共用两张牌；环境代表牌直接沿用，仅实际新增／改变时补差异。自然语言在对话累计，机器整理SOURCE，不要求重填表。
 用 `inspect`核对机械缺项。缺用户输入只提醒，无委托不推荐／代写。中文定稿与明确选择直接是决定，保留原消息引用；机器英文仍须确认。牌名通过共享目录规范化，真实歧义才问。无关英文不重译。
 SOURCE保留all_top8、可选tabletop及bindings不动。仅填写review.top_copy.items：`[{order:1,text:{zh:原文,en:英文草稿}}]`；review.features为`{explicit_empty:false,items:[...]}`，每项包含destination_id（已有token）、parent_id/subtype_id（从all_top8或tabletop.decks取）、category（new_deck/new_technology）、source_order（用户选择顺序）、featured_cards（4个标准牌名）、positioning（zh/en）、supporting_facts（candidate_evidence中对应reasons，无则[]）。明确不选用explicit_empty:true及items:[]。保留中文中的`[deck:...]`链接标记并在英文对应位置使用。用户不需要填写此结构。
 实体Feature沿用同样的四牌、中文、英文和实际页面审阅，正式内容保留来源、赛事名及瑞士轮成绩；链接展开本条完整牌表，不套用MTGO平均牌表或把实体成绩混入环境统计。

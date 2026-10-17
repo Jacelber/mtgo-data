@@ -5,6 +5,19 @@ import pytest
 from tools.delivery import resources
 
 
+def test_missing_shared_cards_stop_before_resource_queries(tmp_path, monkeypatch):
+    import json
+    import build_pages_artifact as builder
+    path = tmp_path / "stats/fixture/mtgo/range_12w.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({"archetypes": [{"id": "new", "high_score_share": .05}]}))
+    monkeypatch.setattr(builder, "load_config", lambda *a: {})
+    monkeypatch.setattr(builder, "publication_paths", lambda *a: {"stats/fixture/mtgo/range_12w.json"})
+    monkeypatch.setattr(resources, "prepare_localization", lambda *a: pytest.fail("Must resolve choices before resource queries"))
+    with pytest.raises(ValueError, match="two_ordered_cards_required"):
+        resources.prepare_site({"identity": {"root": str(tmp_path), "target": "synthetic"}}, tmp_path / "work")
+
+
 def test_site_promotion_failure_reuses_completed_build(tmp_path, monkeypatch):
     import build_pages_artifact as builder
     root, work = tmp_path / "root", tmp_path / "work"

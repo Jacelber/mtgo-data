@@ -54,6 +54,19 @@ def test_fixed_data_passes_without_content_acceptance(material):
     verification.verify_material(*prepare())
 
 
+def test_prebuilt_package_does_not_bypass_shared_representative_check(material):
+    import build_pages_artifact as builder
+    root, site, _, prepare = material
+    relative = "stats/standard/mtgo/range_4w.json"
+    for base in (root, site):
+        path = base / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps({"archetypes": [{"id": "unselected", "high_score_share": .04}]}))
+    builder.publication_paths(root, {}).add(relative)
+    with pytest.raises(ValueError, match="Shared representatives incomplete.*unselected"):
+        verification.verify_material(*prepare())
+
+
 @pytest.mark.parametrize("relative", ["configs/protection.json", "data/standard/100.json", "stats/catalog.json"])
 def test_source_standard_or_public_material_change_invalidates_fixed_candidate(material, relative):
     root, _, _, prepare = material

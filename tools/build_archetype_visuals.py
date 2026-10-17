@@ -1,4 +1,4 @@
-"""Generate representative-card bindings from the maintained Landing selections."""
+"""Inspect and generate the shared statistics/Landing representative bindings."""
 from __future__ import annotations
 
 import argparse
@@ -97,6 +97,70 @@ def require_public_statistics_coverage(
         )
 
 
+def inspect_statistics(root: Path, format_id: str, *, weeks=PUBLIC_STATISTICS_RANGES) -> dict:
+    """Read the chart's actual visible union, without selecting cards or writing files."""
+    required = {}
+    for window in weeks:
+        path = root / f"stats/{format_id}/mtgo/range_{window}w.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        for row in document["archetypes"]:
+            if row["id"] != "unknown" and float(row.get("high_score_share") or 0) >= 0.03:
+                required.setdefault(row["id"], []).append(window)
+    config_path = root / "configs/mtgo_landing_visuals.yaml"
+    config = yaml.safe_load(config_path.read_text(encoding="utf-8")) if config_path.is_file() else {}
+    selected = config.get("formats", {}).get(format_id, {})
+    entries = {**selected.get("parents", {}), **selected.get("subtypes", {})}
+    for identity in selected.get("allow_parent_fallback_for_subtypes", []):
+        entries.setdefault(identity, selected.get("parents", {}).get(identity.split("/")[0], []))
+    path = root / "assets/js/phase8/archetype-visuals.js"
+    text = path.read_text(encoding="utf-8") if path.is_file() else ""
+    section = text.partition("const representativeCards = Object.freeze({")[2]
+    match = re.search(rf"^  {re.escape(format_id)}: Object\.freeze\(\{{\n(.*?)^  \}}\),", section, re.M | re.S)
+    groups = dict(re.findall(r'^    "([^"]+)": Object\.freeze\(\[\n(.*?)^    \]\),', match[1], re.M | re.S)) if match else {}
+    rows = []
+    for identity, windows in sorted(required.items()):
+        cards = entries.get(identity, [])
+        rendered = [json.loads(value) for value in re.findall(r'Object\.freeze\((\{[^\n]+\})\)', groups.get(identity, ""))]
+        problems, resources = [], []
+        if (not isinstance(cards, list) or len(cards) != 2
+                or any(not isinstance(card, str) or not card.strip() for card in cards)
+                or len(set(cards)) != 2):
+            problems.append("two_ordered_cards_required")
+        else:
+            expected = [{"name": card, "image": f"../images/representative-cards/{format_id}/{image_slug(card)}.jpg"} for card in cards]
+            if rendered != expected:
+                problems.append("rendered_binding_differs")
+            for card, item in zip(cards, expected):
+                relative = "assets/" + item["image"][3:]
+                resources.append(relative)
+                try:
+                    require_art_crop_shape(root / relative, format_id=format_id, identity=identity, card=card)
+                except (OSError, ValueError) as error:
+                    problems.append(str(error))
+        rows.append({"identity": identity, "windows": windows, "cards": cards,
+                     "rendered_cards": rendered, "resources": resources, "problems": problems})
+    return {"format": format_id, "rows": rows, "ready": not any(row["problems"] for row in rows)}
+
+
+def require_public_representatives(root: Path, selected: set[str]) -> None:
+    """Validate consumer bindings and both shared images before public packaging."""
+    formats = {}
+    for relative in sorted(selected):
+        match = re.fullmatch(r"stats/([^/]+)/mtgo/range_(1|4|12)w\.json", relative)
+        if match:
+            formats.setdefault(match[1], []).append(int(match[2]))
+    failures = []
+    for format_id, weeks in formats.items():
+        for row in inspect_statistics(root, format_id, weeks=weeks)["rows"]:
+            problems = row["problems"] + ["image_not_in_public_package: " + p for p in row["resources"] if p not in selected]
+            if "assets/js/phase8/archetype-visuals.js" not in selected:
+                problems.append("rendered_binding_not_in_public_package")
+            if problems:
+                failures.append(f"{format_id}/{row['identity']} ({row['windows']}w): " + "; ".join(problems))
+    if failures:
+        raise ValueError("Shared representatives incomplete before data delivery: " + " | ".join(failures))
+
+
 def generate(root: Path, format_id: str, *, identities: set[str] | None = None, config_override=None) -> None:
     config = config_override if config_override is not None else yaml.safe_load((root / "configs/mtgo_landing_visuals.yaml").read_text(encoding="utf-8"))
     selected = config["formats"][format_id]
@@ -160,5 +224,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repository-root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--format", required=True)
+    parser.add_argument("--inspect", action="store_true", help="Read-only 1/4/12-week shared representative inventory")
+    parser.add_argument("--identity", action="append", help="Generate only these confirmed changed identities; repeat as needed")
     args = parser.parse_args()
-    generate(args.repository_root, args.format)
+    if args.inspect:
+        if args.identity:
+            parser.error("--inspect always covers all three public windows; do not filter identities")
+        print(json.dumps(inspect_statistics(args.repository_root, args.format), ensure_ascii=False, indent=2))
+    else:
+        generate(args.repository_root, args.format, identities=set(args.identity) if args.identity else None)
