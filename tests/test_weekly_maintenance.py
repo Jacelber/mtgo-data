@@ -245,6 +245,9 @@ def test_data_wrapper_orders_existing_producers_and_binds_resume(tmp_path, monke
     assert len(calls) == 1
     calls.clear()
     monkeypatch.setattr(classification, "main", lambda args: 1)
+    implementation = tmp_path / "src/mtgmeta/melee/classification.py"
+    implementation.parent.mkdir(parents=True, exist_ok=True)
+    implementation.write_text("# changed generation implementation\n")
     with pytest.raises(ValueError, match="classification failed"):
         workflow.stage_data(tmp_path, plan)
     assert calls == []  # No stats, MTGO stage, or delivery after failure.
@@ -272,6 +275,80 @@ def test_current_cohort_is_completed_even_when_plan_omits_events(tmp_path, monke
     changed = tmp_path / "my_archetypes/modern.yaml"
     changed.parent.mkdir()
     changed.write_text("changed rules", encoding="utf-8")
-    with pytest.raises(ValueError, match="Resume inputs changed"):
-        workflow.stage_data(tmp_path, plan, tmp_path, result)
+    # Legal rule edits are evaluated by current producer and consumer checks.
+    workflow.stage_data(tmp_path, plan, tmp_path, result)
     assert len(calls) == 1
+
+
+def test_failed_generation_is_discoverable_and_resumes_without_an_output_record(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+    root = tmp_path / "candidate"
+    root.mkdir()
+    plan = tmp_path / "plan.json"
+    plan.write_text('{"week":"2026-W41","mtgo_formats":["modern"]}')
+    output = tmp_path / "result.json"
+    calls = []
+    def generate(*args):
+        calls.append(args)
+        if len(calls) == 1:
+            raise OSError("third producer interrupted")
+        return {"stage": str(root)}
+    monkeypatch.setattr(workflow, "stage_data", generate)
+    monkeypatch.setattr(workflow.subprocess, "run", lambda *a, **k: SimpleNamespace(stdout="a" * 40))
+    with pytest.raises(OSError):
+        workflow.stage_data_record(root, plan, output)
+    found = workflow.find_delivery(tmp_path)["records"]
+    assert len(found) == 1 and found[0]["state"] == "repair_required"
+    assert not output.exists()
+    assert workflow.main(["continue-delivery", "--record", found[0]["record"]]) == 0
+    found = workflow.find_delivery(tmp_path)["records"]
+    assert len(found) == 1 and found[0]["kind"] == "reviewed_data"
+    original = __import__("pathlib").Path(found[0]["record"]).read_bytes()
+    assert workflow.main(["continue-delivery", "--record", str(output.with_suffix(".generation.json"))]) == 0
+    assert len(calls) == 2 and __import__("pathlib").Path(found[0]["record"]).read_bytes() == original
+    workflow.stage_data_record(root, plan, output)
+    assert len(calls) == 2
+    plan.write_text('{"week":"2026-W42","mtgo_formats":["modern"]}')
+    with pytest.raises(ValueError, match="different inputs"):
+        workflow.stage_data_record(root, plan, output)
+
+
+@pytest.mark.parametrize("change", [None, "page", "reference", "started", "duplicate"])
+def test_combined_content_reuses_decisions_without_generation(tmp_path, monkeypatch, change):
+    from tools.delivery import weekly
+    site = tmp_path / "site"
+    site.mkdir()
+    packets, paths = {}, []
+    for fmt in ("standard", "modern"):
+        packet = submissions.make_packet("preview", fmt, "2026-W41", {"final_page": {"copy": fmt}}, bindings={})
+        packets[fmt] = packet
+        receipt = submissions.record_decision(packet, None, ["final_page"], evidence="synthetic-owner",
+            accepted_on="2026-10-10", entrypoint="http://localhost/test")
+        accepted = tmp_path / (fmt + ".accepted.json")
+        workflow.write(accepted, {"submission": packet, "decisions": receipt})
+        path = tmp_path / (fmt + ".delivery.json")
+        weekly.create_record(path, kind="landing_content", root=tmp_path, site=site,
+            scope={"week": "2026-W41", "mtgo_formats": [fmt]}, references=[accepted], source="fixed")
+        paths.append(path)
+    monkeypatch.setattr(submissions, "preview_packet", lambda root, fmt: packets[fmt])
+    if change == "page":
+        packets["modern"] = submissions.make_packet("preview", "modern", "2026-W41", {"final_page": {"copy": "changed"}}, bindings={})
+    elif change == "reference":
+        workflow.write(tmp_path / "modern.accepted.json", {})
+    elif change == "started":
+        record = weekly.read(paths[0])
+        record["progress"]["base"] = None
+        weekly.save(paths[0], record)
+    elif change == "duplicate":
+        paths.append(paths[0])
+    originals = [p.read_bytes() for p in paths]
+    output = tmp_path / "batch.delivery.json"
+    if change:
+        with pytest.raises(ValueError):
+            workflow.combine_content_records(tmp_path, site, paths, output)
+        assert not output.exists()
+    else:
+        result = workflow.combine_content_records(tmp_path, site, paths, output)
+        assert result["formats"] == ["standard", "modern"]
+        assert len(weekly.read(output)["identity"]["references"]) == 2
+    assert [p.read_bytes() for p in paths] == originals

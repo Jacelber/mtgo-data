@@ -25,6 +25,7 @@ if str(SOURCE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOURCE_ROOT))
 
 from mtgmeta.card_names import card_name_lookup_candidates  # noqa: E402
+from mtgmeta.resource_progress import ResourceProgress  # noqa: E402
 
 
 CACHE_SCHEMA_VERSION = "1.1.0"
@@ -421,6 +422,8 @@ def build_cache_bundle(
     fetch_image: Callable[[str], bytes] | None = None,
     formats: tuple[str, ...] | None = None,
     private: bool = False,
+    seed: Path | None = None,
+    seeds: tuple[Path, ...] = (),
 ) -> dict[str, Any]:
     """Build an atomic cache bundle from repository Landing documents."""
 
@@ -435,11 +438,40 @@ def build_cache_bundle(
     if output.exists():
         raise CacheBuildError(f"cache bundle output already exists: {output}")
     output.parent.mkdir(parents=True, exist_ok=True)
+    progress = ResourceProgress(output.with_name(output.name + ".work"),
+                                {"kind": CACHE_PRODUCT, "schema": CACHE_SCHEMA_VERSION})
     temporary = Path(tempfile.mkdtemp(prefix="landing-card-cache-", dir=output.parent))
     try:
         subject = cache_subject(root, formats=formats, private=private)
-        unresolved = subject["cards"]
-        bulk_sha256: str | None = None
+        def validate_resolution(payload):
+            resolved = json.loads(payload)
+            _valid_scryfall_image_uri(resolved["source_image_uri"])
+            uuid.UUID(resolved["scryfall_id"])
+            uuid.UUID(resolved["oracle_id"])
+        for seed in ((seed,) if seed is not None else ()) + seeds:
+            verify_cache_bundle(root, seed, formats=formats, private=private, exact=False)
+            retained = _read_json(seed / "manifest.json", "seed manifest")
+            desired = {card["name"] for card in subject["cards"]}
+            for card in retained["cards"]:
+                if card["name"] not in desired:
+                    continue
+                resolved = {key: card[key] for key in ("source_image_uri", "scryfall_id", "oracle_id", "face_index")}
+                # The local work binding wins over a newer seed's alternate art.
+                progress.bytes({"resolve": card["name"]}, lambda: json.dumps(resolved).encode(), validate_resolution)
+                image_path = seed / Path(*PurePosixPath(card["local_path"]).relative_to(CACHE_PUBLIC_PREFIX).parts)
+                progress.bytes({"image": card["source_image_uri"]}, image_path.read_bytes,
+                               lambda data: _valid_jpeg(data, card["name"]))
+            from mtgmeta.resource_progress import save
+            if retained["bulk_data_sha256"]:
+                progress.state["bulk_sha256"] = retained["bulk_data_sha256"]
+                save(progress.record, progress.state)
+        resolutions = {}
+        for card in subject["cards"]:
+            payload = progress.lookup({"resolve": card["name"]}, validate_resolution)
+            if payload is not None:
+                resolutions[card["name"]] = json.loads(payload)
+        unresolved = [card for card in subject["cards"] if card["name"] not in resolutions]
+        bulk_sha256: str | None = progress.state.get("bulk_sha256")
         lookup: dict[str, dict[str, Any]] = {}
         if unresolved:
             downloaded_bulk = bulk_data_path is None
@@ -449,6 +481,9 @@ def build_cache_bundle(
                 else _live_bulk_data(temporary)
             )
             bulk_sha256 = _sha256_file(bulk_path)
+            from mtgmeta.resource_progress import save
+            progress.state["bulk_sha256"] = bulk_sha256
+            save(progress.record, progress.state)
             lookup_names = {
                 card["name"]: tuple(
                     _normalized_name(candidate)
@@ -471,6 +506,12 @@ def build_cache_bundle(
             ]
             if missing:
                 raise CacheBuildError("unresolved featured cards: " + ", ".join(missing))
+            for card in unresolved:
+                resolved = next(lookup[candidate] for candidate in lookup_names[card["name"]]
+                                if candidate in lookup)
+                payload = progress.bytes({"resolve": card["name"]},
+                    lambda: json.dumps(resolved).encode(), validate_resolution)
+                resolutions[card["name"]] = json.loads(payload)
 
         image_fetch = fetch_image or (
             lambda url: _download(url, IMAGE_HEADERS, maximum_bytes=MAX_IMAGE_BYTES)
@@ -479,11 +520,7 @@ def build_cache_bundle(
         entries: list[dict[str, Any]] = []
         for card in subject["cards"]:
             common = {"name": card["name"], "uses": card["uses"]}
-            resolved = next(
-                lookup[candidate]
-                for candidate in lookup_names[card["name"]]
-                if candidate in lookup
-            )
+            resolved = resolutions[card["name"]]
             suffix = "" if resolved["face_index"] is None else f"-face-{resolved['face_index']}"
             file_name = f"{resolved['scryfall_id']}{suffix}.jpg"
             image_dir.mkdir(parents=True, exist_ok=True)
@@ -491,7 +528,9 @@ def build_cache_bundle(
             if image_path.exists():
                 payload = image_path.read_bytes()
             else:
-                payload = image_fetch(resolved["source_image_uri"])
+                payload = progress.bytes({"image": resolved["source_image_uri"]},
+                    lambda: image_fetch(resolved["source_image_uri"]),
+                    lambda data: _valid_jpeg(data, card["name"]))
                 _valid_jpeg(payload, card["name"])
                 image_path.write_bytes(payload)
             entries.append(
@@ -520,6 +559,7 @@ def build_cache_bundle(
         _write_json(temporary / "manifest.json", manifest)
         verify_cache_bundle(root, temporary, formats=formats, private=private)
         temporary.replace(output)
+        progress.completed()
         return manifest
     except Exception:
         shutil.rmtree(temporary, ignore_errors=True)
@@ -541,6 +581,7 @@ def verify_cache_bundle(
     *,
     formats: tuple[str, ...] | None = None,
     private: bool = False,
+    exact: bool = True,
 ) -> dict[str, Any]:
     """Verify subject identity, path closure, and every declared cache byte."""
 
@@ -571,14 +612,16 @@ def verify_cache_bundle(
     if manifest.get("window_size_weeks") != CACHE_WINDOW_WEEKS:
         raise CacheBuildError("card-image cache window size is invalid")
     subject = cache_subject(root, formats=formats, private=private)
-    if manifest.get("subject_sha256") != subject["subject_sha256"]:
+    if exact and manifest.get("subject_sha256") != subject["subject_sha256"]:
         raise CacheBuildError("card-image cache subject SHA-256 mismatch")
-    if manifest.get("formats") != subject["formats"]:
+    if exact and manifest.get("formats") != subject["formats"]:
         raise CacheBuildError("card-image cache format window mismatch")
     subject_cards = {card["name"]: card for card in subject["cards"]}
     cards = manifest.get("cards")
     if not isinstance(cards, list) or any(not isinstance(card, dict) for card in cards):
         raise CacheBuildError("card-image cache cards are invalid")
+    if not exact:
+        subject_cards = {card.get("name"): card for card in cards}
     if [card.get("name") for card in cards] != list(subject_cards):
         raise CacheBuildError("card-image cache card closure mismatch")
 
@@ -675,6 +718,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--output", type=Path)
     parser.add_argument("--bulk-data", type=Path)
+    parser.add_argument("--seed", type=Path, action="append", default=[])
     parser.add_argument("--github-output", type=Path)
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--format", dest="formats", action="append")
@@ -705,6 +749,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.root,
                 args.output,
                 bulk_data_path=args.bulk_data,
+                seeds=tuple(args.seed),
                 formats=tuple(args.formats) if args.formats else None,
                 private=args.private,
             )

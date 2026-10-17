@@ -748,6 +748,9 @@ def _generate_melee(stage: Path, format_id: str, *, event_ids: set[str] | None =
         write_statistics_document,
     )
 
+    from .generation_progress import GenerationProgress, COMMON, files, implementation
+    progress = GenerationProgress(stage.with_name(stage.name + f".melee-{format_id}.progress.json"),
+                                  {"root": str(stage.resolve()), "format": format_id})
     _entry, catalog_path = _catalog_format(stage, format_id)
     if catalog_path is None:
         return
@@ -771,53 +774,53 @@ def _generate_melee(stage: Path, format_id: str, *, event_ids: set[str] | None =
         classification_path = base / "classifications" / f"{event_id}.json"
         opportunity_path = base / "opportunities" / f"{event_id}.json"
         event_output = stage / "stats" / format_id / "melee" / "events" / event_id
-        if event_id in rebuild:
-            classification = build_classification_overlay_from_paths(
-                event_path, taxonomy, stage
-            )
-            write_classification_overlay(
-                classification_path, classification_overlay_bytes(classification)
-            )
-            opportunity = build_opportunity_ledger_from_paths(
-                event_path, classification_path, stage
-            )
-            write_opportunity_ledger(
-                opportunity_path, opportunity_ledger_bytes(opportunity)
-            )
-            statistics = build_event_statistics_from_paths(
-                event_path, classification_path, opportunity_path, taxonomy, stage
-            )
-            for name, document in statistics.items():
-                write_statistics_document(
-                    event_output / f"{name}.json", statistics_document_bytes(document)
-                )
-            matchup = build_event_matchup_from_paths(
-                event_path, classification_path, opportunity_path, taxonomy, stage
-            )
-            write_statistics_document(
-                event_output / "matchup.json", statistics_document_bytes(matchup)
-            )
-        publication = build_event_publication_from_paths(
-            event_path,
-            classification_path,
-            opportunity_path,
-            taxonomy,
-            registry,
-            stage,
-        )
-        write_statistics_document(
-            event_output / "meta.json",
-            statistics_document_bytes(publication["meta"]),
-        )
+        def classify():
+            write_classification_overlay(classification_path, classification_overlay_bytes(
+                build_classification_overlay_from_paths(event_path, taxonomy, stage)))
+        def opportunities():
+            write_opportunity_ledger(opportunity_path, opportunity_ledger_bytes(
+                build_opportunity_ledger_from_paths(event_path, classification_path, stage)))
+        def statistics():
+            for name, document in build_event_statistics_from_paths(
+                    event_path, classification_path, opportunity_path, taxonomy, stage).items():
+                write_statistics_document(event_output / f"{name}.json", statistics_document_bytes(document))
+        def matchups():
+            write_statistics_document(event_output / "matchup.json", statistics_document_bytes(
+                build_event_matchup_from_paths(event_path, classification_path, opportunity_path, taxonomy, stage)))
+        prefix = event_output.relative_to(stage).as_posix()
+        shared = implementation(stage, COMMON + ["src/mtgmeta/melee/*.py"])
+        for name, inputs, outputs, producer in (
+            ("classification", [event_path, taxonomy, registry], [classification_path.relative_to(stage).as_posix()], classify),
+            ("opportunities", [event_path, classification_path], [opportunity_path.relative_to(stage).as_posix()], opportunities),
+            ("statistics", [event_path, classification_path, opportunity_path, taxonomy],
+             [prefix + "/" + name + ".json" for name in ("overview", "decks", "quality")], statistics),
+            ("matchup", [event_path, classification_path, opportunity_path, taxonomy], [prefix + "/matchup.json"], matchups),
+        ):
+            progress.run(f"{event_id}/{name}", {"code": shared,
+                "inputs": files(stage, [p.relative_to(stage).as_posix() for p in inputs]),
+                "config": files(stage, ["configs/melee*.yaml"])}, stage, outputs, producer)
+        def publish_event():
+            publication = build_event_publication_from_paths(event_path, classification_path,
+                opportunity_path, taxonomy, registry, stage)
+            write_statistics_document(event_output / "meta.json", statistics_document_bytes(publication["meta"]))
+            return publication["catalog"]
+        catalog_fragment = progress.run(f"{event_id}/publication", {"code": shared,
+            "inputs": files(stage, [p.relative_to(stage).as_posix() for p in
+                (event_path, classification_path, opportunity_path, taxonomy, registry)]),
+            "products": files(stage, [prefix + "/" + name + ".json" for name in ("overview", "decks", "quality", "matchup")])},
+            stage, [prefix + "/meta.json"], publish_event, retain_result=True)
         merged_catalog = (
-            dict(publication["catalog"])
+            dict(catalog_fragment)
             if merged_catalog is None
-            else merge_event_catalog(merged_catalog, publication["catalog"])
+            else merge_event_catalog(merged_catalog, catalog_fragment)
         )
     assert merged_catalog is not None
-    write_statistics_document(
-        catalog_path, statistics_document_bytes(merged_catalog)
-    )
+    progress.run("catalog", {"catalog": merged_catalog,
+        "code": implementation(stage, ["src/mtgmeta/melee/publish.py", "src/mtgmeta/melee/stats.py"])},
+        stage, [catalog_path.relative_to(stage).as_posix()],
+        lambda: write_statistics_document(catalog_path, statistics_document_bytes(merged_catalog)))
+    validate_current_melee(stage, format_id)
+    progress.validated()
 
 
 def _build_staged_format(

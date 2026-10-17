@@ -73,6 +73,62 @@ def _write(path, value):
     path.write_text(json.dumps(value), encoding="utf-8")
 
 
+def test_real_internal_failure_resumes_completed_statistics(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+    import subprocess
+    from mtgmeta import classifier_closure, catalog
+    from mtgmeta.mtgo import publication, stats, matchup, completeness, metadata, landing_editorial
+    _repository(tmp_path)
+    _generate(tmp_path, "standard")
+    calls = {"stats": 0, "matchup": 0, "completeness": 0}
+    real_stats, real_matchup = stats.build_all_stats, matchup.build_all_matchups
+    real_completeness = completeness.build_all_completeness
+    def counted(name, function):
+        def run(*args, **kwargs):
+            calls[name] += 1
+            if name == "completeness" and calls[name] == 1:
+                raise OSError("third real producer interrupted")
+            return function(*args, **kwargs)
+        return run
+    monkeypatch.setattr(stats, "build_all_stats", counted("stats", real_stats))
+    monkeypatch.setattr(matchup, "build_all_matchups", counted("matchup", real_matchup))
+    monkeypatch.setattr(completeness, "build_all_completeness", counted("completeness", real_completeness))
+    # This fixture has no Git or platform. Production generation and publication
+    # binding checks are real; unrelated registry/platform adapters are isolated.
+    monkeypatch.setattr(subprocess, "run", lambda *a, **k: SimpleNamespace(stdout="", returncode=0))
+    monkeypatch.setattr(metadata, "rules_last_commit_iso", lambda *a: "2025-02-03T00:00:00Z")
+    monkeypatch.setattr(catalog, "write_catalog", lambda *a: None)
+    monkeypatch.setattr(landing_editorial, "generate_public_name_contract", lambda *a: None)
+    monkeypatch.setattr(classifier_closure, "inspect_format", lambda *a: {"state": "CURRENT"})
+    with pytest.raises(OSError, match="third real"):
+        publication.stage_publications(tmp_path, ["standard"])
+    locator = tmp_path.parent / (tmp_path.name + ".publication-standard.json")
+    stage = __import__("pathlib").Path(json.loads(locator.read_text())["stage"])
+    original = (stage / "stats/standard/mtgo/index.json").read_bytes()
+    result = publication.stage_publications(tmp_path, ["standard"])
+    assert result["stage"] == str(stage)
+    assert calls == {"stats": 1, "matchup": 1, "completeness": 2}
+    assert (stage / "stats/standard/mtgo/index.json").read_bytes() == original
+    assert publication.inspect_publication(stage, "standard") == []
+    # Unrelated renderer change keeps those exact generated products.
+    renderer = tmp_path / "src/mtgmeta/mtgo/landing.py"
+    renderer.parent.mkdir(parents=True, exist_ok=True)
+    renderer.write_text("# unrelated renderer change\n")
+    publication.stage_publications(tmp_path, ["standard"])
+    assert calls == {"stats": 1, "matchup": 1, "completeness": 2}
+    # Git metadata affects only hierarchy/metadata, even if rule bytes match.
+    monkeypatch.setattr(metadata, "rules_last_commit_iso", lambda *a: "2025-02-04T00:00:00Z")
+    dated = publication.stage_publications(tmp_path, ["standard"])
+    assert "standard/hierarchy" in dated["executed_steps"]
+    assert "standard/metadata" in dated["executed_steps"]
+    assert calls == {"stats": 1, "matchup": 1, "completeness": 2}
+    assert json.loads((stage / "stats/standard/mtgo/meta.json").read_text())["rules_updated"] == "2025-02-04T00:00:00Z"
+    # A shared input/classification dependency invalidates affected producers.
+    (tmp_path / "src/mtgmeta/classifier.py").write_text("# changed classification implementation\n")
+    publication.stage_publications(tmp_path, ["standard"])
+    assert calls == {"stats": 2, "matchup": 2, "completeness": 3}
+
+
 def _repository(root):
     from mtgmeta.mtgo.publication import _digest
     formats, admissions, names = [], {}, []

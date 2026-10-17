@@ -15,9 +15,21 @@ def failed_product():
 
 
 class DispatchTests(unittest.TestCase):
+    def test_unknown_original_query_never_writes_or_assumes_unsent(self):
+        archive, pages = Mock(), Mock()
+        archive.load_state.return_value = (state.initial(), "sha")
+        pages.client.api.return_value = {"workflow_runs": []}
+        with patch.object(commands, "context", return_value=(archive, pages)):
+            self.assertEqual(commands.query_operation(TARGET, "original")["state"], "unknown")
+        archive.save_state.assert_not_called()
+        self.assertTrue(all(not call.kwargs for call in pages.client.api.call_args_list))
+
     def test_paused_automatic_dispatch_never_posts_but_task_dispatch_does_not_release(self):
         current = state.request_recovery(failed_product(), intent="restore", failed_operation="B", package="A", reason="Owner restore")
         current = state.end_recovery(current, "restore", reason="Owner canceled this restore")
+        # This test reaches the pause boundary with a valid archived candidate;
+        # missing preparation is a distinct rejection before dispatch.
+        current["packages"]["A"]["preparations"] = {"prepared": "B"}
         archive, pages = Mock(), Mock()
         archive.load_state.return_value = (current, "sha")
         pages.client.api.return_value = {"workflow_runs": []}

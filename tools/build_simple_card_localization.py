@@ -29,6 +29,7 @@ if str(PACKAGE_SOURCE) not in sys.path:
 
 from mtgmeta.card_names import card_name_lookup_candidates  # noqa: E402
 from mtgmeta.catalog import complete_public_formats  # noqa: E402
+from mtgmeta.resource_progress import ResourceProgress  # noqa: E402
 
 
 PUBLIC_PREFIX = "assets/card-localization"
@@ -609,13 +610,17 @@ def build_bundle(
         seed_bundle = seed.resolve() / SEED_BUNDLE_DIRECTORY
     reusable_names = sorted(product_name_set & seed_lookup.keys())
     missing_names = sorted(product_name_set - seed_lookup.keys())
+    progress = ResourceProgress(output.with_name(output.name + ".work"),
+                                {"kind": "localization", "compatibility": seed_compatibility(root)})
     api_requests = 0
     image_requests = 0
 
     def counted_page(names: list[str], page: int) -> dict[str, Any]:
         nonlocal api_requests
-        api_requests += 1
-        return fetch_page(names, page)
+        before = progress.requests
+        result = progress.page(names, page, fetch_page, MAX_PAGES)
+        api_requests += progress.requests - before
+        return result
 
     lookup = {
         name: {key: value for key, value in seed_lookup[name].items() if key != "local_image"}
@@ -652,15 +657,21 @@ def build_bundle(
                 _valid_webp(destination.read_bytes(), english)
                 reused_images += 1
             else:
-                image_requests += 1
-                payload = image_fetch(entry["image_url"])
+                before = progress.requests
+                payload = progress.bytes({"card": english, "image": entry["image_url"]},
+                    lambda: image_fetch(entry["image_url"]), lambda data: _valid_webp(data, english))
+                image_requests += progress.requests - before
                 _valid_webp(payload, english)
                 destination.write_bytes(payload)
-                fetched_images += 1
+                if progress.requests != before:
+                    fetched_images += 1
+                else:
+                    reused_images += 1
             entry["local_image"] = f"{PUBLIC_PREFIX}/images/{file_name}"
         _write_json(temporary / LOOKUP_FILE, lookup)
         verify_bundle(root, temporary)
         temporary.replace(output)
+        progress.completed()
     except Exception:
         shutil.rmtree(temporary, ignore_errors=True)
         raise

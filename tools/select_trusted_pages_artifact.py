@@ -36,6 +36,12 @@ class TrustedArtifact:
     run_id: int
     run_attempt: int
     head_sha: str
+    created_at: datetime
+
+
+def newest(artifacts):
+    """One chronological ordering across all supported producer workflows."""
+    return max(artifacts, key=lambda item: (item.created_at, item.artifact_id), default=None)
 
 
 def _timestamp(value: Any) -> datetime | None:
@@ -66,9 +72,10 @@ def select_trusted_artifact(
     if workflow_path not in TRUSTED_WORKFLOW_PATHS:
         raise ArtifactSelectionError("Only the existing Pages or replacement preparation producer is supported")
 
-    def artifact_id_key(item: dict[str, Any]) -> int:
+    def artifact_id_key(item: dict[str, Any]):
         value = item.get("id")
-        return value if isinstance(value, int) else -1
+        return (_timestamp(item.get("created_at")) or datetime.min.replace(tzinfo=timezone.utc),
+                value if isinstance(value, int) else -1)
 
     candidates = sorted(
         (item for item in artifacts if isinstance(item, dict)),
@@ -128,6 +135,7 @@ def select_trusted_artifact(
             run_id=run_id,
             run_attempt=run_attempt,
             head_sha=head_sha,
+            created_at=created_at,
         )
     return None
 
@@ -224,6 +232,8 @@ def main(argv: list[str] | None = None) -> int:
                 runs[run_id] = client.get(f"/repos/{args.repository}/actions/runs/{run_id}")
             return runs[run_id]
         artifact = None
+        selected = []
+        failures = []
         for workflow_path in ((args.workflow,) if args.workflow else TRUSTED_WORKFLOW_PATHS):
             encoded_path = urllib.parse.quote(workflow_path, safe="")
             try:
@@ -231,14 +241,22 @@ def main(argv: list[str] | None = None) -> int:
             except ArtifactSelectionError as error:
                 if isinstance(error.__cause__, urllib.error.HTTPError) and error.__cause__.code == 404:
                     continue  # The replacement need not exist before cutover.
-                raise
+                failures.append(str(error))
+                continue
             workflow_id = workflow.get("id")
             if not isinstance(workflow_id, int):
                 raise ArtifactSelectionError("Resource producer workflow identity is unavailable")
-            artifact = select_trusted_artifact(candidates, repository=args.repository,
-                workflow_id=workflow_id, workflow_path=workflow_path, get_run=get_run, name_matches=name_matches)
+            try:
+                artifact = select_trusted_artifact(candidates, repository=args.repository,
+                    workflow_id=workflow_id, workflow_path=workflow_path, get_run=get_run, name_matches=name_matches)
+            except ArtifactSelectionError as error:
+                failures.append(str(error))
+                continue
             if artifact:
-                break  # A still-applicable existing cache is sufficient.
+                selected.append(artifact)
+        artifact = newest(selected)
+        if failures and artifact is None:
+            raise ArtifactSelectionError("Cache query failed: " + "; ".join(failures))
         _write_outputs(args.github_output, artifact)
     except (ArtifactSelectionError, re.error) as exc:
         parser.error(str(exc))

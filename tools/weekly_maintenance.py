@@ -1,4 +1,4 @@
-"""Private weekly preparation; optional selected image fill, never event fetch or publication."""
+"""Weekly preparation and explicit continuation of existing confirmed deliveries."""
 from __future__ import annotations
 
 import argparse
@@ -509,19 +509,11 @@ def stage_data(root, plan, resume_stage=None, previous=None):
     before_inputs = {f: _protected_input_fingerprints(root, f) for f in sync_formats}
     generation_subject = digest({p.relative_to(root).as_posix(): p.read_text(encoding="utf-8")
         for p in (root / "src/mtgmeta").rglob("*.py")})
-    if previous and previous.get("generation_subject") != generation_subject:
-        raise ValueError("Resume generation inputs changed")
-    if previous and previous.get("input_fingerprints") != before_inputs:
-        raise ValueError("Resume inputs changed; preserve the prior stage and regenerate affected products")
     current_scope = {f: sorted(str(item["event_id"]) for item in read(root / f"stats/{f}/melee/index.json")["events"])
                      for f in sync_formats if (root / f"stats/{f}/melee/index.json").is_file()}
-    if previous and previous.get("current_melee_scope") != current_scope:
-        raise ValueError("Resume current Melee scope changed")
     sync_required = {}
     for f in sync_formats:
         required = current_melee_sync(root, f)
-        if resume_stage is not None and required:
-            raise ValueError("Resume Melee products are stale; regenerate affected products first")
         sync_required[f] = {item["event_id"] for item in required}
         for item in required:
             existing = next((m for m in members if (m["format"], m["event_id"]) == (f, item["event_id"])), None)
@@ -535,32 +527,43 @@ def stage_data(root, plan, resume_stage=None, previous=None):
             raise ValueError("Invalid Melee event identity")
         if set(item["steps"]) - set(producers) or len(item["steps"]) != len(set(item["steps"])):
             raise ValueError("Unknown or duplicate Melee producer")
+    from mtgmeta.generation_progress import GenerationProgress, COMMON, files, implementation
+    progress = GenerationProgress(root.with_name(root.name + ".data-progress.json"),
+                                  {"root": str(root), "plan": digest(plan)})
     completed = []
-    if resume_stage is None:
-        for f, ids in sync_required.items():
-            if ids:
-                started = perf_counter()
-                _generate_melee(root, f, event_ids=ids)
-                completed.append({"format": f, "events": sorted(ids), "producer": "current_melee_sync",
-                                  "seconds": round(perf_counter() - started, 4)})
-        for item in members:
-            if item["event_id"] in sync_required.get(item["format"], set()):
+    for f, ids in sync_required.items():
+        if ids:
+            started = perf_counter()
+            _generate_melee(root, f, event_ids=ids)
+            completed.append({"format": f, "events": sorted(ids), "producer": "current_melee_sync",
+                              "seconds": round(perf_counter() - started, 4)})
+    for item in members:
+        if item["event_id"] in sync_required.get(item["format"], set()):
+            continue
+        # Synchronize all already-admitted current consumers of this format.
+        for name, producer in producers.items():
+            if name not in item["steps"]:
                 continue
-            # Synchronize all already-admitted current consumers of this format.
-            for name, producer in producers.items():
-                if name not in item["steps"]:
-                    continue
-                started = perf_counter()
-                code = producer(["--root", str(root), "--format", item["format"],
-                                 "--event-id", item["event_id"], "--execute"])
+            started = perf_counter()
+            fmt, event = item["format"], item["event_id"]
+            event_prefix = f"stats/{fmt}/melee/events/{event}"
+            outputs = {"classification": [f"data/{fmt}/melee/classifications/{event}.json"],
+                       "opportunities": [f"data/{fmt}/melee/opportunities/{event}.json"],
+                       "stats": [event_prefix + "/" + value + ".json" for value in ("overview", "decks", "quality")],
+                       "matchup": [event_prefix + "/matchup.json"], "publish": [event_prefix + "/meta.json"]}[name]
+            def generate():
+                code = producer(["--root", str(root), "--format", fmt, "--event-id", event, "--execute"])
                 if code:
-                    raise ValueError(f"Melee {item['event_id']} {name} failed; retained candidate: {root}; completed={completed}")
-                completed.append({"format": item["format"], "event": item["event_id"], "producer": name,
-                                  "seconds": round(perf_counter() - started, 4)})
+                    raise ValueError(f"Melee {event} {name} failed; retained candidate: {root}")
+            progress.run(f"{fmt}/{event}/{name}", {"inputs": before_inputs[fmt],
+                "code": implementation(root, COMMON + ["src/mtgmeta/melee/*.py"])}, root, outputs, generate)
+            completed.append({"format": item["format"], "event": item["event_id"], "producer": name,
+                              "seconds": round(perf_counter() - started, 4)})
     for f in sync_formats:
         if _protected_input_fingerprints(root, f) != before_inputs[f]:
             raise ValueError("Source facts or reviewed input changed during data generation")
         validate_current_melee(root, f)
+    progress.validated()
     if formats:
         result = stage_publications(root, formats, include_landing=False, execute=False, resume_stage=resume_stage)
     else:
@@ -771,9 +774,121 @@ def finalize_source(root, source, site, acceptance, facts):
     return document
 
 
+def stage_data_record(root, plan_path, output, resume_stage=None, previous=None):
+    """Save the real entry point before generation, including failures before handoff."""
+    from tools.delivery.weekly import create_record
+    from tools.delivery.packages import sha256
+    root, plan_path, output = root.resolve(), plan_path.resolve(), output.resolve()
+    locator = output.with_suffix(".generation.json")
+    identity = {"root": str(root), "plan": str(plan_path), "plan_sha256": sha256(plan_path),
+                "output": str(output)}
+    if locator.exists():
+        record = read(locator)
+        if record["identity"] != identity:
+            raise ValueError("Generation record belongs to different inputs; retain the original")
+    else:
+        record = {"kind": "data_generation", "identity": identity, "state": "generating"}
+    write(locator, record)
+    try:
+        delivery = output.with_suffix(".delivery.json")
+        if output.is_file() and delivery.is_file():
+            # A retry, including a crash after the handoff was saved, reuses it.
+            result, handoff = read(output), read(delivery)
+            create_record(delivery, kind="reviewed_data", root=Path(result["stage"]), site=None,
+                          scope=read(plan_path), references=[plan_path, output],
+                          source=handoff["identity"]["source"])
+            record.update(state="prepared", delivery=str(delivery))
+            record.pop("failure", None)
+            write(locator, record)
+            return {"state": "prepared", "record": str(delivery), "generation": str(locator)}
+        if output.exists():
+            # Only the crash window after successful generation reaches this path.
+            previous = read(output)
+            resume_stage = Path(previous["stage"])
+        result = stage_data(root, read(plan_path), resume_stage, previous)
+        write(output, result)
+        source = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"],
+                                check=True, capture_output=True, text=True).stdout.strip()
+        create_record(delivery, kind="reviewed_data", root=Path(result["stage"]), site=None,
+                      scope=read(plan_path), references=[plan_path, output], source=source)
+        record.update(state="prepared", delivery=str(delivery))
+        record.pop("failure", None)
+        write(locator, record)
+        return {"state": "prepared", "record": str(delivery), "generation": str(locator)}
+    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
+        record.update(state="repair_required", failure={"type": type(error).__name__, "detail": str(error)})
+        write(locator, record)
+        raise
+
+
+def find_delivery(directory):
+    """Locate records inside the supplied task directory, never choose by recency."""
+    found = []
+    for path in sorted(set(directory.rglob("*.delivery.json")) | set(directory.rglob("*.generation.json"))):
+        value = read(path)
+        if value.get("kind") == "data_generation":
+            if value.get("state") == "prepared" and Path(value.get("delivery", "")).is_file():
+                continue
+            found.append({"record": str(path), "kind": "data_generation", "state": value["state"],
+                          "failure": value.get("failure"), "root": value["identity"]["root"]})
+        elif value.get("schema") == 1 and "operation" in value:
+            found.append({"record": str(path), "kind": value["identity"]["kind"],
+                          "scope": value["identity"]["scope"], "operation": value["operation"],
+                          "delivered": bool(value["progress"].get("delivered"))})
+    return {"state": "located" if found else "not_found", "records": found}
+
+
+def combine_content_records(root, site, paths, output):
+    """Bind existing per-format decisions to one final site, without generation."""
+    from tools.delivery import weekly, packages
+    records = [weekly.read(path) for path in paths]
+    if not records:
+        raise ValueError("Existing content handoffs required")
+    first = records[0]["identity"]
+    formats, references = [], []
+    for record in records:
+        identity = record["identity"]
+        if (identity["kind"] != "landing_content" or identity["target"] != first["target"]
+                or identity["source"] != first["source"] or identity["scope"]["week"] != first["scope"]["week"]):
+            raise ValueError("Content handoffs have different delivery scopes")
+        if record["progress"]:
+            raise ValueError("Existing operation already started; preserve and resolve it first")
+        formats.extend(identity["scope"]["mtgo_formats"])
+        for reference in identity["references"]:
+            path = Path(reference["path"])
+            if packages.sha256(path) != reference["sha256"]:
+                raise ValueError("Existing content reference changed")
+            if path not in references:
+                references.append(path)
+    if len(formats) != len(set(formats)):
+        raise ValueError("Duplicate format in combined content")
+    envelopes = [read(path) for path in references]
+    for fmt in formats:
+        matches = [e for e in envelopes if e.get("submission", {}).get("kind") == "preview"
+                   and e["submission"].get("format") == fmt]
+        if len(matches) != 1 or matches[0]["submission"]["week"] != first["scope"]["week"]:
+            raise ValueError("Combined content lacks the existing page acceptance")
+        submissions.require_accepted(matches[0]["submission"], matches[0]["decisions"],
+                                     current=submissions.preview_packet(site, fmt))
+    weekly.create_record(output, kind="landing_content", root=root, site=site,
+        scope={"week": first["scope"]["week"], "mtgo_formats": formats}, references=references,
+        source=first["source"], target=first["target"])
+    return {"state": "prepared", "record": str(output.resolve()), "formats": formats}
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
+    for name in ("inspect-delivery", "continue-delivery"):
+        delivery_cmd = sub.add_parser(name)
+        delivery_cmd.add_argument("--record", type=Path, required=True)
+    locate = sub.add_parser("find-delivery", help="Read task-local generation and delivery records")
+    locate.add_argument("--directory", type=Path, required=True)
+    combine = sub.add_parser("combine-content", help="Reuse existing page decisions for a combined site")
+    combine.add_argument("--root", type=Path, required=True)
+    combine.add_argument("--site", type=Path, required=True)
+    combine.add_argument("--record", type=Path, action="append", required=True)
+    combine.add_argument("--output", type=Path, required=True)
     facts_cmd = sub.add_parser("facts")
     facts_cmd.add_argument("--root", type=Path, default=ROOT)
     facts_cmd.add_argument("--format", required=True)
@@ -878,6 +993,28 @@ def main(argv=None):
     started = perf_counter()
     started_at = datetime.now(timezone.utc).isoformat()
     try:
+        if args.command == "combine-content":
+            print(json.dumps(combine_content_records(args.root, args.site, args.record, args.output), ensure_ascii=False))
+            return 0
+        if args.command == "find-delivery":
+            print(json.dumps(find_delivery(args.directory.resolve()), ensure_ascii=False, indent=2))
+            return 0
+        if args.command in {"inspect-delivery", "continue-delivery"}:
+            from tools.delivery import weekly
+            saved = read(args.record)
+            if saved.get("kind") == "data_generation":
+                if args.command == "inspect-delivery":
+                    result = saved
+                elif saved.get("state") == "prepared":
+                    result = {"state": "prepared", "record": saved["delivery"]}
+                else:
+                    item = saved["identity"]
+                    result = stage_data_record(Path(item["root"]), Path(item["plan"]), Path(item["output"]))
+            else:
+                result = (weekly.inspect if args.command == "inspect-delivery" else weekly.continue_delivery)(args.record)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            state = result.get("state", result.get("next"))
+            return 0 if state in {"prepared", "delivered", "complete"} else 3
         if args.command == "resources":
             result = finish_resources(args.preparation, fetch_missing=args.fetch_missing_resources,
                                       resource_fixture=args.resource_fixture)
@@ -888,14 +1025,16 @@ def main(argv=None):
             return 0
         if args.command in {"page-delta", "accept-page", "adopt-displayed", "finalize-source", "stage-data", "adopt-content"}:
             require_private_output(ROOT, args.output.resolve())
+            if args.command == "stage-data":
+                result = stage_data_record(args.root, args.plan, args.output, args.resume_stage,
+                                          read(args.previous_result) if args.previous_result else None)
+                print(json.dumps(result, ensure_ascii=False, indent=2))
+                return 0
             if args.output.exists():
                 raise ValueError("Record exists; choose a new immutable path")
             if args.command == "page-delta":
                 result = page_delta(args.before_site, args.after_site, args.format,
                                     read(args.before_packet) if args.before_packet else None)
-            elif args.command == "stage-data":
-                result = stage_data(args.root, read(args.plan), args.resume_stage,
-                                    read(args.previous_result) if args.previous_result else None)
             elif args.command == "finalize-source":
                 result = finalize_source(args.root, read(args.source), args.site, read(args.acceptance), read(args.facts))
             elif args.command == "adopt-content":
@@ -909,6 +1048,14 @@ def main(argv=None):
                     previous=read(args.previous) if args.previous else None,
                     delta=read(args.delta) if args.delta else None)
             write(args.output, result)
+            if args.command == "finalize-source":
+                from tools.delivery.weekly import create_record
+                source = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"],
+                                        check=True, capture_output=True, text=True).stdout.strip()
+                create_record(args.output.with_suffix(".delivery.json"), kind="landing_content",
+                    root=args.root, site=args.site,
+                    scope={"week": result["week"]["id"], "mtgo_formats": [result["format"]]},
+                    references=[args.acceptance, args.facts, args.output], source=source)
             print(json.dumps({"record": str(args.output), "state": result.get("state", "recorded"),
                               "seconds": round(perf_counter() - started, 4)}))
             return 0
@@ -1024,7 +1171,7 @@ def main(argv=None):
                 "reused_count": len(shown["resources"]["reused"]), "details": str(output / "result.json")}
         print(json.dumps(shown, ensure_ascii=False, indent=2))
         return 0
-    except (ValueError, KeyError, OSError) as exc:
+    except (ValueError, KeyError, OSError, RuntimeError, subprocess.SubprocessError) as exc:
         print(json.dumps({"state": "blocked", "error": str(exc), "seconds": round(perf_counter() - started, 4)}, ensure_ascii=False))
         return 2
 
