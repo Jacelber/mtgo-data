@@ -112,14 +112,21 @@ def inspect_statistics(root: Path, format_id: str, *, weeks=PUBLIC_STATISTICS_RA
     entries = {**selected.get("parents", {}), **selected.get("subtypes", {})}
     for identity in selected.get("allow_parent_fallback_for_subtypes", []):
         entries.setdefault(identity, selected.get("parents", {}).get(identity.split("/")[0], []))
+    rows = inspect_cards(root, format_id, {identity: entries.get(identity, []) for identity in required})
+    for row in rows:
+        row["windows"] = required[row["identity"]]
+    return {"format": format_id, "rows": rows, "ready": not any(row["problems"] for row in rows)}
+
+
+def inspect_cards(root: Path, format_id: str, choices: dict) -> list[dict]:
+    """Check the actual shared renderer against independently supplied choices."""
     path = root / "assets/js/phase8/archetype-visuals.js"
     text = path.read_text(encoding="utf-8") if path.is_file() else ""
     section = text.partition("const representativeCards = Object.freeze({")[2]
     match = re.search(rf"^  {re.escape(format_id)}: Object\.freeze\(\{{\n(.*?)^  \}}\),", section, re.M | re.S)
     groups = dict(re.findall(r'^    "([^"]+)": Object\.freeze\(\[\n(.*?)^    \]\),', match[1], re.M | re.S)) if match else {}
     rows = []
-    for identity, windows in sorted(required.items()):
-        cards = entries.get(identity, [])
+    for identity, cards in sorted(choices.items()):
         rendered = [json.loads(value) for value in re.findall(r'Object\.freeze\((\{[^\n]+\})\)', groups.get(identity, ""))]
         problems, resources = [], []
         if (not isinstance(cards, list) or len(cards) != 2
@@ -137,9 +144,9 @@ def inspect_statistics(root: Path, format_id: str, *, weeks=PUBLIC_STATISTICS_RA
                     require_art_crop_shape(root / relative, format_id=format_id, identity=identity, card=card)
                 except (OSError, ValueError) as error:
                     problems.append(str(error))
-        rows.append({"identity": identity, "windows": windows, "cards": cards,
+        rows.append({"identity": identity, "cards": cards,
                      "rendered_cards": rendered, "resources": resources, "problems": problems})
-    return {"format": format_id, "rows": rows, "ready": not any(row["problems"] for row in rows)}
+    return rows
 
 
 def require_public_representatives(root: Path, selected: set[str]) -> None:
@@ -150,13 +157,45 @@ def require_public_representatives(root: Path, selected: set[str]) -> None:
         if match:
             formats.setdefault(match[1], []).append(int(match[2]))
     failures = []
+    subjects = []
     for format_id, weeks in formats.items():
-        for row in inspect_statistics(root, format_id, weeks=weeks)["rows"]:
-            problems = row["problems"] + ["image_not_in_public_package: " + p for p in row["resources"] if p not in selected]
-            if "assets/js/phase8/archetype-visuals.js" not in selected:
-                problems.append("rendered_binding_not_in_public_package")
-            if problems:
-                failures.append(f"{format_id}/{row['identity']} ({row['windows']}w): " + "; ".join(problems))
+        subjects.extend((format_id, f"{row['windows']}w", row)
+                        for row in inspect_statistics(root, format_id, weeks=weeks)["rows"])
+    # A retained Landing can display categories absent from all current ranges.
+    # Its accepted names/order, rather than this week's config, are authoritative.
+    for relative in sorted(selected):
+        match = re.fullmatch(r"stats/([^/]+)/mtgo/landing/current\.json", relative)
+        if match:
+            page = json.loads((root / relative).read_text(encoding="utf-8"))
+            from mtgmeta.mtgo.landing_editorial import landing_name_identities
+            decks = None
+            detail = page.get("data_files", {}).get("environment_decks")
+            if detail:
+                detail_path = (root / relative).parent / detail
+                if not detail_path.resolve().is_relative_to((root / relative).parent.resolve()):
+                    raise ValueError("Retained Landing detail path escapes its directory")
+                if detail_path.relative_to(root).as_posix() not in selected:
+                    raise ValueError("Retained Landing detail is absent from public package")
+                decks = json.loads(detail_path.read_text(encoding="utf-8"))
+            required_names = landing_name_identities(page, decks)
+            if required_names:
+                name_file = f"stats/{match[1]}/archetype_names.json"
+                names = json.loads((root / name_file).read_text(encoding="utf-8")) if name_file in selected else {}
+                displays = {row["identity_id"]: row.get("display", {}) for row in names.get("names", [])}
+                missing = sorted(identity for identity in required_names if any(
+                    not str(displays.get(identity, {}).get(lang) or "").strip() for lang in ("en", "zh")))
+                if missing:
+                    failures.append(f"{match[1]} retained Landing missing bilingual names: " + ", ".join(missing))
+            choices = {row["archetype_id"]: [card["name"] for card in row["key_cards"]]
+                       for row in page.get("environment", {}).get("rows", [])}
+            subjects.extend((match[1], "retained Landing", row)
+                            for row in inspect_cards(root, match[1], choices))
+    for format_id, consumer, row in subjects:
+        problems = row["problems"] + ["image_not_in_public_package: " + p for p in row["resources"] if p not in selected]
+        if "assets/js/phase8/archetype-visuals.js" not in selected:
+            problems.append("rendered_binding_not_in_public_package")
+        if problems:
+            failures.append(f"{format_id}/{row['identity']} ({consumer}): " + "; ".join(problems))
     if failures:
         raise ValueError("Shared representatives incomplete before data delivery: " + " | ".join(failures))
 

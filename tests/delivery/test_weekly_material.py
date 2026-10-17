@@ -54,14 +54,19 @@ def test_fixed_data_passes_without_content_acceptance(material):
     verification.verify_material(*prepare())
 
 
-def test_prebuilt_package_does_not_bypass_shared_representative_check(material):
+@pytest.mark.parametrize("consumer", ["statistics", "retained_landing"])
+def test_prebuilt_package_does_not_bypass_shared_representative_check(material, consumer):
     import build_pages_artifact as builder
     root, site, _, prepare = material
-    relative = "stats/standard/mtgo/range_4w.json"
+    relative = ("stats/standard/mtgo/range_4w.json" if consumer == "statistics"
+                else "stats/standard/mtgo/landing/current.json")
+    document = ({"archetypes": [{"id": "unselected", "high_score_share": .04}]}
+                if consumer == "statistics" else {"environment": {"rows": [{"archetype_id": "unselected",
+                      "key_cards": [{"name": "First"}, {"name": "Second"}]}]}})
     for base in (root, site):
         path = base / relative
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps({"archetypes": [{"id": "unselected", "high_score_share": .04}]}))
+        path.write_text(json.dumps(document))
     builder.publication_paths(root, {}).add(relative)
     with pytest.raises(ValueError, match="Shared representatives incomplete.*unselected"):
         verification.verify_material(*prepare())

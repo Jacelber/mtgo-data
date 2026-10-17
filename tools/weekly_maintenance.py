@@ -710,26 +710,53 @@ def adopt_content(root, source, preparation):
     if bound["preview_digest"] != prepared["digest"]:
         raise ValueError("Accepted source is not bound to this preparation")
     submissions.require_accepted(bound["acceptance"]["submission"], bound["acceptance"]["decisions"], current=prepared)
+    site = preparation / "site"
+    if submissions.preview_packet(site, format_id) != prepared:
+        raise ValueError("Accepted preparation resources changed before adoption")
     configuration_path = root / "configs/mtgo_landing_visuals.yaml"
     configuration = read(configuration_path)
     proposed = read(preparation / "visuals.yaml")
-    configuration["formats"][format_id] = proposed["formats"][format_id]
-    old_config = configuration_path.read_bytes()
+    page = read(site / f"stats/{format_id}/mtgo/landing/current.json")
+    choices = {row["archetype_id"]: [card["name"] for card in row["key_cards"]]
+               for row in page["environment"]["rows"]}
+    from tools import build_archetype_visuals as visuals
+    rows = visuals.inspect_cards(site, format_id, choices)
+    for row in rows:
+        if row["problems"]:
+            raise ValueError(f"Accepted representative resources incomplete: {row['identity']}: {row['problems']}")
+        key = row["identity"]
+        if proposed["formats"][format_id]["parents"].get(key) != choices[key]:
+            raise ValueError("Representative configuration differs from the accepted page")
+        configuration["formats"][format_id]["parents"][key] = choices[key]
+    images = {relative: (site / relative).read_bytes() for row in rows for relative in row["resources"]}
     from tools.weekly_resources import replace_bytes
     from tools.import_landing_conversation import import_content
     destination = root / f"stats/{format_id}/mtgo/landing/review/{source['week']['id']}.yaml"
-    old_content = destination.read_bytes() if destination.is_file() else None
-    write(configuration_path, configuration)
-    if old_content is not None:
-        replace_bytes(destination, old_content)  # Detach any retained hardlink.
+    targets = {configuration_path, destination, *(root / relative for relative in images)}
+    if choices:
+        targets.add(root / "assets/js/phase8/archetype-visuals.js")
+    before = {path: path.read_bytes() if path.is_file() else None for path in targets}
     try:
+        write(configuration_path, configuration)
+        for relative, payload in images.items():
+            replace_bytes(root / relative, payload)
+        if choices:
+            visuals.generate(root, format_id, identities=set(choices), config_override=configuration)
+        if before[destination] is not None:
+            replace_bytes(destination, before[destination])  # Detach any retained hardlink.
         destination = import_content(root, source)
     except Exception:
-        replace_bytes(configuration_path, old_config)
-        if old_content is not None:
-            replace_bytes(destination, old_content)
+        for path, payload in before.items():
+            if payload is None:
+                path.unlink(missing_ok=True)
+            else:
+                replace_bytes(path, payload)
         raise
-    return {"source": str(destination), "visuals": str(configuration_path), "remote_writes": 0}
+    retained = sorted(images)
+    if choices:
+        retained.append("assets/js/phase8/archetype-visuals.js")
+    return {"source": str(destination), "visuals": str(configuration_path),
+            "retained_representative_files": retained, "remote_writes": 0}
 
 
 def finalize_source(root, source, site, acceptance, facts):

@@ -16,4 +16,6 @@ prepare/resources返回新的source、facts和visual_config位置；后续使用
 原始中文和选择通过 `record-input --packet PACKET --values VALUES --evidence MESSAGE_REF --accepted-on DATE --output NEW_RECORD` 记录；VALUES只含对应的features、copy.zh、feature.TOKEN.zh维度实际值。已有决定加 `--previous ENVELOPE`，英文和页面使用现有review_submission决定入口，不把原始输入冒充页面确认。
 旧缓存缺图时，page-delta 返回 evidence_required；已有固定页面记录可加 `--before-packet OLD_PREVIEW_OR_ACCEPTANCE`，工具核对其原始页面绑定后直接使用已保存的资源证据。不用重新取得旧图或让模型手工推断旧图内容；缺少这份证据仍是技术待查，不能宣称未变区域已证明。
 输出：原始输入出处、实际内容及页面对象、适用确认，供7复用。无业务变化的技术错误机器修，缺映射不重问。禁止重新筛选、采集、无关翻译、生产发布。
-实际整页确认成立后，`finalize-source --root ROOT --source SOURCE --facts FACTS --site SITE --acceptance PAGE_ACCEPTANCE --output ACCEPTED_SOURCE_JSON`把已确认页面机械对应到既有1.3内容记录，保留material_digest及接纳范围依据；只写新的私有结果，不重跑分类或页面。随后 `adopt-content --root ISOLATED_ROOT --source ACCEPTED_SOURCE_JSON --preparation NEW_DIR --output ADOPTION_JSON` 将本赛制视觉配置和内容交给既有导入校验；拒绝远端连接的生产checkout，不覆盖历史submitted快照。这两个技术动作都不产生新用户确认。
+实际整页确认成立后，`finalize-source --root ROOT --source SOURCE --facts FACTS --site SITE --acceptance PAGE_ACCEPTANCE --output ACCEPTED_SOURCE_JSON`把已确认页面机械对应到既有1.3内容记录，保留material_digest及接纳范围依据；只写新的私有结果，不重跑分类或页面。随后 `adopt-content --root ISOLATED_ROOT --source ACCEPTED_SOURCE_JSON --preparation NEW_DIR --output ADOPTION_JSON` 将已确认环境条目的选牌、显示绑定、原图片和内容一起回存并交给既有导入校验；拒绝远端连接的生产checkout，不覆盖历史submitted快照。这两个技术动作都不产生新用户确认。
+
+回存后按ADOPTION_JSON中的retained_representative_files将必要文件一并纳入本次主项目改动，保留无关条目；从干净副本验证后续候选仍可显示。临时site或发布包中存在图片，不代表主项目已经保存。交付时同时检查仍在展示的旧Landing代表牌，不能只检查当前统计窗口。
