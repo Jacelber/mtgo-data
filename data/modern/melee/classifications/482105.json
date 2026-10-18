@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "931000d0e58a12cb3e09bf0bc30c5f5796b7404c8d614b1ee58c8bc392b50a52"
+    "digest": "bd2caa7696e47873f0baf9cec2297b4955627ba8d1198d6b08aacfdc7760490d"
   },
   "input": {
     "event_path": "data/modern/melee/events/482105.json",
@@ -18,22 +18,22 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "d060a9fc0ec71e67841bb4cfdbd8e75f0c30c407b2e95cc18f2f7e514bbb247e",
+    "rule_sha256": "7e6972681b4b75e40d58cefc47a2a6d08964a4e094799d83caa1084b930b28b6",
     "rule_schema_version": "1.1.0",
     "archetype_count": 225,
-    "rule_count": 411,
-    "subtype_count": 105
+    "rule_count": 414,
+    "subtype_count": 106
   },
   "summary": {
     "total_records": 183,
-    "classified": 180,
-    "unknown": 3,
+    "classified": 183,
+    "unknown": 0,
     "conflicts": 0,
     "invalid_decks": 0,
     "multiple_matches": 72,
     "overridden_matches": 72,
-    "selected_subtypes": 81,
-    "parent_only": 99,
+    "selected_subtypes": 82,
+    "parent_only": 101,
     "same_parent_multiple_subtype_matches": 1,
     "residual_subtype_violations": 0,
     "selected_by_parent": {
@@ -45,6 +45,7 @@
       "boros-energy": 7,
       "broodscale-combo": 22,
       "chant-control": 12,
+      "darklight-phoenix": 1,
       "devoted-druid-combo": 3,
       "dimir-mill": 1,
       "dimir-persist": 1,
@@ -53,7 +54,7 @@
       "eldrazi-aggro": 1,
       "eldrazi-ramp": 3,
       "eldrazi-tron": 10,
-      "esper-blink": 10,
+      "esper-blink": 11,
       "esper-goryos": 7,
       "esper-ketramose": 1,
       "fight-rigging": 1,
@@ -68,6 +69,7 @@
       "jeskai-energy": 3,
       "jeskai-ponza": 1,
       "living-end": 4,
+      "mardu-blink": 1,
       "mono-blue-belcher": 3,
       "mono-blue-merfolk": 1,
       "prowess": 19,
@@ -84,6 +86,7 @@
       "broodscale-combo/mono-green": 21,
       "chant-control/azorius": 11,
       "chant-control/jeskai": 1,
+      "darklight-phoenix/rakdos": 1,
       "devoted-druid-combo/abzan": 3,
       "dimir-tempo/dimir": 3,
       "dimir-tempo/grixis": 1,
@@ -11917,137 +11920,189 @@
     },
     {
       "participant_id": "participant-4f0fe4a565ac150056ae68a9574ead62adf52ac2ab1be6d49e2299676778d1fc",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "darklight-phoenix",
+        "archetype_name": "Darklight Phoenix",
+        "subtype_id": "rakdos",
+        "subtype_name": "Rakdos",
+        "rule_id": "darklight-phoenix-rakdos",
+        "priority": 624503
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "darklight-phoenix",
+          "archetype_name": "Darklight Phoenix",
+          "subtype_id": "rakdos",
+          "subtype_name": "Rakdos",
+          "rule_id": "darklight-phoenix-rakdos",
+          "priority": 624503,
+          "evidence": [
+            {
+              "card": "Darklight Phoenix",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Vengevine",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Warren Soultrader",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Faithless Looting",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 5,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "darklight-phoenix",
+          "archetype_name": "Darklight Phoenix",
+          "subtype_id": "rakdos",
+          "subtype_name": "Rakdos",
+          "rule_id": "darklight-phoenix-rakdos",
+          "priority": 624503,
+          "evidence": [
+            {
+              "card": "Darklight Phoenix",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Vengevine",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Warren Soultrader",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Faithless Looting",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 5,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-white-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Blood Crypt",
-            "quantity": 3
-          },
-          {
-            "name": "Bloodghast",
-            "quantity": 4
-          },
-          {
-            "name": "Bloodstained Mire",
-            "quantity": 4
-          },
-          {
-            "name": "Darklight Phoenix",
-            "quantity": 4
-          },
-          {
-            "name": "Eyetwitch",
-            "quantity": 4
-          },
-          {
-            "name": "Faithless Looting",
-            "quantity": 4
-          },
-          {
-            "name": "Flare of Malice",
-            "quantity": 4
-          },
-          {
-            "name": "Goblin Bombardment",
-            "quantity": 3
-          },
-          {
-            "name": "Lightning Bolt",
-            "quantity": 4
-          },
-          {
-            "name": "Mountain",
-            "quantity": 1
-          },
-          {
-            "name": "Plumb the Forbidden",
-            "quantity": 1
-          },
-          {
-            "name": "Raucous Theater",
-            "quantity": 1
-          },
-          {
-            "name": "Spymaster's Vault",
-            "quantity": 2
-          },
-          {
-            "name": "Stitcher's Supplier",
-            "quantity": 4
-          },
-          {
-            "name": "Swamp",
-            "quantity": 2
-          },
-          {
-            "name": "Thoughtseize",
-            "quantity": 4
-          },
-          {
-            "name": "Timeline Culler",
-            "quantity": 1
-          },
-          {
-            "name": "Verdant Catacombs",
-            "quantity": 4
-          },
-          {
-            "name": "Village Rites",
-            "quantity": 4
-          },
-          {
-            "name": "Wooded Foothills",
-            "quantity": 2
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Claim the Firstborn",
-            "quantity": 2
-          },
-          {
-            "name": "Fatal Grudge",
-            "quantity": 1
-          },
-          {
-            "name": "How to Start a Riot",
-            "quantity": 1
-          },
-          {
-            "name": "Iroh's Demonstration",
-            "quantity": 1
-          },
-          {
-            "name": "Magebane Lizard",
-            "quantity": 2
-          },
-          {
-            "name": "Meltdown",
-            "quantity": 2
-          },
-          {
-            "name": "Nihil Spellbomb",
-            "quantity": 2
-          },
-          {
-            "name": "Ozai's Cruelty",
-            "quantity": 1
-          },
-          {
-            "name": "Price of Freedom",
-            "quantity": 3
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-4fb379e5df0f496f6134d419007dbf3a3e93544fdb41a3a9917133f190bcbae9",
@@ -14356,153 +14411,157 @@
     },
     {
       "participant_id": "participant-5f6f3e1dcb7ae9e3f02d064e5808b63c02036fdcd8645376ce6e6c75d1c35b61",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "esper-blink",
+        "archetype_name": "Esper Blink",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "esper-blink-overlord-frog",
+        "priority": 632780
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-overlord-frog",
+          "priority": 632780,
+          "evidence": [
+            {
+              "card": "Phelia, Exuberant Shepherd",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Overlord of the Balemurk",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "esper-blink",
+          "archetype_name": "Esper Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "esper-blink-overlord-frog",
+          "priority": 632780,
+          "evidence": [
+            {
+              "card": "Phelia, Exuberant Shepherd",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Overlord of the Balemurk",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Psychic Frog",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-red-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Boggart Trawler",
-            "quantity": 1
-          },
-          {
-            "name": "Concealed Courtyard",
-            "quantity": 1
-          },
-          {
-            "name": "Emperor of Bones",
-            "quantity": 2
-          },
-          {
-            "name": "Fatal Push",
-            "quantity": 4
-          },
-          {
-            "name": "Flickerwisp",
-            "quantity": 2
-          },
-          {
-            "name": "Flooded Strand",
-            "quantity": 4
-          },
-          {
-            "name": "Godless Shrine",
-            "quantity": 1
-          },
-          {
-            "name": "Hallowed Fountain",
-            "quantity": 1
-          },
-          {
-            "name": "Ketramose, the New Dawn",
-            "quantity": 3
-          },
-          {
-            "name": "Marsh Flats",
-            "quantity": 3
-          },
-          {
-            "name": "Meticulous Archive",
-            "quantity": 1
-          },
-          {
-            "name": "Overlord of the Balemurk",
-            "quantity": 4
-          },
-          {
-            "name": "Phelia, Exuberant Shepherd",
-            "quantity": 3
-          },
-          {
-            "name": "Plains",
-            "quantity": 2
-          },
-          {
-            "name": "Polluted Delta",
-            "quantity": 4
-          },
-          {
-            "name": "Prismatic Ending",
-            "quantity": 2
-          },
-          {
-            "name": "Psychic Frog",
-            "quantity": 4
-          },
-          {
-            "name": "Relic of Progenitus",
-            "quantity": 2
-          },
-          {
-            "name": "Shadowy Backstreet",
-            "quantity": 1
-          },
-          {
-            "name": "Solitude",
-            "quantity": 4
-          },
-          {
-            "name": "Swamp",
-            "quantity": 1
-          },
-          {
-            "name": "Teferi, Time Raveler",
-            "quantity": 2
-          },
-          {
-            "name": "Thoughtseize",
-            "quantity": 4
-          },
-          {
-            "name": "Watery Grave",
-            "quantity": 1
-          },
-          {
-            "name": "Witch Enchanter",
-            "quantity": 3
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Ashiok, Dream Render",
-            "quantity": 1
-          },
-          {
-            "name": "Celestial Purge",
-            "quantity": 1
-          },
-          {
-            "name": "Consign to Memory",
-            "quantity": 4
-          },
-          {
-            "name": "Damping Sphere",
-            "quantity": 2
-          },
-          {
-            "name": "High Noon",
-            "quantity": 2
-          },
-          {
-            "name": "Strategic Betrayal",
-            "quantity": 1
-          },
-          {
-            "name": "Surgical Extraction",
-            "quantity": 1
-          },
-          {
-            "name": "Wrath of the Skies",
-            "quantity": 3
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-604342fa09e784bb782b19bd7b044da88b8f8a365c671a85754b8843a6ba7efc",
@@ -18170,157 +18229,157 @@
     },
     {
       "participant_id": "participant-7a0bf7f5bbbdfd2da6bea414eb8a9de5af7d1ef66c37d7c900d54c3fef5d17e4",
-      "classification_status": "unknown",
-      "selected": null,
-      "matched_rules": [],
-      "top_priority_matches": [],
+      "classification_status": "classified",
+      "selected": {
+        "archetype_id": "mardu-blink",
+        "archetype_name": "Mardu Blink",
+        "subtype_id": null,
+        "subtype_name": null,
+        "rule_id": "mardu-blink-helix",
+        "priority": 632397
+      },
+      "matched_rules": [
+        {
+          "archetype_id": "mardu-blink",
+          "archetype_name": "Mardu Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "mardu-blink-helix",
+          "priority": 632397,
+          "evidence": [
+            {
+              "card": "Phelia, Exuberant Shepherd",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Overlord of the Balemurk",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lightning Helix",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "top_priority_matches": [
+        {
+          "archetype_id": "mardu-blink",
+          "archetype_name": "Mardu Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "mardu-blink-helix",
+          "priority": 632397,
+          "evidence": [
+            {
+              "card": "Phelia, Exuberant Shepherd",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Overlord of the Balemurk",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lightning Helix",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-blue-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
       "errors": [],
-      "unknown_deck": {
-        "main_deck": [
-          {
-            "name": "Arena of Glory",
-            "quantity": 1
-          },
-          {
-            "name": "Arid Mesa",
-            "quantity": 4
-          },
-          {
-            "name": "Blood Crypt",
-            "quantity": 1
-          },
-          {
-            "name": "Boggart Trawler",
-            "quantity": 1
-          },
-          {
-            "name": "Elegant Parlor",
-            "quantity": 1
-          },
-          {
-            "name": "Emperor of Bones",
-            "quantity": 1
-          },
-          {
-            "name": "Ephemerate",
-            "quantity": 2
-          },
-          {
-            "name": "Flickerwisp",
-            "quantity": 3
-          },
-          {
-            "name": "Galvanic Discharge",
-            "quantity": 4
-          },
-          {
-            "name": "Godless Shrine",
-            "quantity": 1
-          },
-          {
-            "name": "Lightning Helix",
-            "quantity": 4
-          },
-          {
-            "name": "March of Otherworldly Light",
-            "quantity": 2
-          },
-          {
-            "name": "Marsh Flats",
-            "quantity": 4
-          },
-          {
-            "name": "Mountain",
-            "quantity": 1
-          },
-          {
-            "name": "Orcish Bowmasters",
-            "quantity": 4
-          },
-          {
-            "name": "Overlord of the Balemurk",
-            "quantity": 4
-          },
-          {
-            "name": "Phelia, Exuberant Shepherd",
-            "quantity": 4
-          },
-          {
-            "name": "Plains",
-            "quantity": 2
-          },
-          {
-            "name": "Prismatic Ending",
-            "quantity": 2
-          },
-          {
-            "name": "Raucous Theater",
-            "quantity": 1
-          },
-          {
-            "name": "Sacred Foundry",
-            "quantity": 1
-          },
-          {
-            "name": "Shadowy Backstreet",
-            "quantity": 1
-          },
-          {
-            "name": "Solitude",
-            "quantity": 4
-          },
-          {
-            "name": "Swamp",
-            "quantity": 1
-          },
-          {
-            "name": "Thoughtseize",
-            "quantity": 4
-          },
-          {
-            "name": "Witch Enchanter",
-            "quantity": 3
-          }
-        ],
-        "sideboard": [
-          {
-            "name": "Clarion Conqueror",
-            "quantity": 2
-          },
-          {
-            "name": "Damping Sphere",
-            "quantity": 1
-          },
-          {
-            "name": "High Noon",
-            "quantity": 1
-          },
-          {
-            "name": "Surgical Extraction",
-            "quantity": 1
-          },
-          {
-            "name": "Unlicensed Hearse",
-            "quantity": 2
-          },
-          {
-            "name": "Wear",
-            "quantity": 2
-          },
-          {
-            "name": "White Orchid Phantom",
-            "quantity": 4
-          },
-          {
-            "name": "Wrath of the Skies",
-            "quantity": 2
-          }
-        ]
-      }
+      "unknown_deck": null
     },
     {
       "participant_id": "participant-7c723cc80cb34f21ba40887b368528661ded449f2a648119671085a071085f1d",
