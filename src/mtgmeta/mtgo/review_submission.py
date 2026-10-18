@@ -530,13 +530,14 @@ def image_display_subject(subjects: dict) -> dict:
     return result
 
 
-def preview_image_subjects(root: Path, format_id: str, page: dict) -> dict:
+def preview_image_subjects(root: Path, format_id: str, page: dict, *, resource_root: Path | None = None) -> dict:
     """Bind each region/language/slot to the actual consumer-selected bytes.
 
     Selection matches P8CardLocalization.resolve; cross-runtime tests guard that
     contract. Paths alone, or their intersection, do not identify displayed art.
     """
     from .landing_bundle import read_json
+    resource_root = resource_root or root
     regions = {}
     rows = page["environment"]["rows"]
     if rows:
@@ -558,7 +559,7 @@ def preview_image_subjects(root: Path, format_id: str, page: dict) -> dict:
                 path = "assets/" + relative[3:]
                 selected.append((card["name"], path))
             regions["environment:" + row["archetype_id"]] = selected
-    manifest_path = root / "assets/card-cache/v1/manifest.json"
+    manifest_path = resource_root / "assets/card-cache/v1/manifest.json"
     cache = {}
     if manifest_path.is_file():
         manifest = read_json(manifest_path)
@@ -575,7 +576,7 @@ def preview_image_subjects(root: Path, format_id: str, page: dict) -> dict:
     for feature in page["features"]["items"]:
         regions["feature:" + feature["destination_id"]] = [(c["name"], cache.get(c["name"]))
                                                           for c in feature["featured_cards"]]
-    lookup_path = root / "assets/card-localization/cards.json"
+    lookup_path = resource_root / "assets/card-localization/cards.json"
     lookup = read_json(lookup_path) if lookup_path.is_file() else {}
     result = {}
     from urllib.parse import quote
@@ -591,8 +592,9 @@ def preview_image_subjects(root: Path, format_id: str, page: dict) -> dict:
                 local = not re.match(r"^[a-z]+:", image, re.I)
                 if local and (not image.startswith("assets/") or ".." in image.split("/") or "\\" in image):
                     raise ValueError("Unsupported selected image location")
+                image_root = (resource_root if image.startswith(('assets/card-cache/', 'assets/card-localization/')) else root)
                 selected.append({"name": name, "image": image,
-                    "sha256": hashlib_sha(root / image) if local else None,
+                    "sha256": hashlib_sha(image_root / image) if local else None,
                     "display_name": entry.get("zh_name", name),
                     "link": entry.get("mtgch_url") or "https://scryfall.com/search?q=" + quote('!"' + name + '"', safe="~()*!.'-")})
             result[region][language] = selected
@@ -605,7 +607,7 @@ def preview_images(root: Path, format_id: str, page: dict) -> dict:
             for images in languages.values() for item in images if item["sha256"] is not None}
 
 
-def preview_packet(root: Path, format_id: str) -> dict:
+def preview_packet(root: Path, format_id: str, *, resource_root: Path | None = None) -> dict:
     """Bind final acceptance to actual generated product files, not a proposal."""
     from .landing_bundle import inspect_bundle
     bundle = inspect_bundle(root, format_id)
@@ -634,7 +636,7 @@ def preview_packet(root: Path, format_id: str) -> dict:
         raise ValueError("Final page is missing displayed bilingual names")
     from .preview_resources import select, SELECTION
     resources = {relative: hashlib_sha(root / relative) for relative in select(root)}
-    image_subjects = preview_image_subjects(root, format_id, page)
+    image_subjects = preview_image_subjects(root, format_id, page, resource_root=resource_root)
     images = {item["image"]: item["sha256"] for languages in image_subjects.values()
               for selected in languages.values() for item in selected if item["sha256"] is not None}
     dimensions = {"final_page": {"product_digest": digest(meaning(bundle["documents"])),
@@ -650,7 +652,8 @@ def hashlib_sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def validate_completion(root: Path, format_id: str, week: str, record: dict, *, check_current: bool = True) -> None:
+def validate_completion(root: Path, format_id: str, week: str, record: dict, *, check_current: bool = True,
+                        resource_root: Path | None = None) -> None:
     if not applies(week):
         return
     accepted = record.get("preview_acceptance", {})
@@ -679,10 +682,11 @@ def validate_completion(root: Path, format_id: str, week: str, record: dict, *, 
     from .landing_bundle import read_json
     current = read_json(root / f"stats/{format_id}/mtgo/landing/current.json")
     if current["week"]["id"] == week:
-        actual = preview_packet(root, format_id)
+        actual = preview_packet(root, format_id, resource_root=resource_root)
         repair = accepted["decisions"].get("renderer_repair")
         comparison = preview_validity(packet, actual, dimensions_only=True, renderer_repair=repair)
-        if comparison["state"] not in {"current", "equivalent"} and not (root / "assets/card-cache/v1/manifest.json").exists():
+        if (resource_root is None and comparison["state"] not in {"current", "equivalent"}
+                and not (root / "assets/card-cache/v1/manifest.json").exists()):
             retained = deepcopy(packet)
             archived_images = retained["dimensions"]["final_page"]["selected_local_images"]
             source_images = actual["dimensions"]["final_page"]["selected_local_images"]

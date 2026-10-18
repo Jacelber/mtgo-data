@@ -30,24 +30,52 @@ def write(root, path, value):
 
 def confirmed_completion(envelope, candidate, state, *, target="Jacelber/mtgo-data"):
     """Bind existing acceptance to confirmed bytes; this is not weekly acceptance."""
-    import tempfile
+    return confirmed_completions([envelope], candidate, state, target=target)[envelope['submission']['format']]
+
+
+def confirmed_completions(envelopes, candidate, state, *, target="Jacelber/mtgo-data"):
+    """Read one verified package for the whole batch, retaining it across retries."""
+    formats = [e['submission']['format'] for e in envelopes]
+    if not formats or len(formats) != len(set(formats)):
+        raise ValueError('Completion requires distinct accepted formats')
+    extracted = completion_site(candidate, state, target=target)
+    current = state['current']
+    results = {}
+    for envelope in envelopes:
+        packet = envelope['submission']
+        actual = review.preview_packet(extracted, packet["format"])
+        review.require_accepted(packet, envelope["decisions"], current=actual)
+        result = deepcopy(envelope)
+        result["publication"] = {**current, "preview_digest": packet["digest"]}
+        results[packet['format']] = result
+    return results
+
+
+def completion_site(candidate, state, *, target="Jacelber/mtgo-data"):
+    """Return verified published resources without copying them into source."""
     from tools.delivery import packages
-    packet = envelope["submission"]
+    from mtgmeta.generation_progress import files
+    from mtgmeta.resource_progress import save
+    candidate = Path(candidate).resolve()
     manifest = read(candidate / "manifest.json")
     current = state.get("current") or {}
     if (current.get("health") != "passed" or current.get("package") != manifest["id"]
             or state.get("pending") or not current.get("operation")):
         raise ValueError("Publication has not confirmed this exact package")
-    # Keep the extraction beside the authorized private candidate. A default
-    # system-temp parent may be outside the execution sandbox on Windows.
-    with tempfile.TemporaryDirectory(prefix="review-publication-", dir=candidate.parent) as directory:
-        extracted = Path(directory) / "site"
+    extracted = candidate.with_name(candidate.name + '-completion-site')
+    marker = extracted.with_name(extracted.name + '.json')
+    basis = {'manifest': manifest, 'package': packages.sha256(candidate / 'product.tar.gz'),
+             'extractor': packages.sha256(Path(packages.__file__)), 'target': target}
+    if basis['package'] != manifest['sha256'] or manifest['target'] != target:
+        raise ValueError('Confirmed package bytes or target changed')
+    if extracted.exists():
+        proof = read(marker) if marker.is_file() else {}
+        if proof.get('basis') != basis or proof.get('files') != files(extracted, ['**/*']):
+            raise ValueError('Retained completion extraction changed or is incomplete')
+    else:
         packages.extract(candidate / "product.tar.gz", manifest, extracted, target=target)
-        actual = review.preview_packet(extracted, packet["format"])
-        review.require_accepted(packet, envelope["decisions"], current=actual)
-    result = deepcopy(envelope)
-    result["publication"] = {**current, "preview_digest": packet["digest"]}
-    return result
+        save(marker, {'basis': basis, 'files': files(extracted, ['**/*'])})
+    return extracted
 
 
 def main():
@@ -78,7 +106,7 @@ def main():
     decide.add_argument("--entrypoint", required=True)
     decide.add_argument("--output", type=Path, required=True)
     completion = commands.add_parser("completion", help="Verify the accepted preview inside the actually confirmed package")
-    completion.add_argument("--acceptance", type=Path, required=True)
+    completion.add_argument("--acceptance", type=Path, action='append', required=True)
     completion.add_argument("--candidate", type=Path, required=True)
     completion.add_argument("--publication-state", type=Path, required=True)
     completion.add_argument("--output", type=Path, required=True)
@@ -111,7 +139,8 @@ def main():
         write(root, args.output, result)
         return
     if args.command == "completion":
-        result = confirmed_completion(read(args.acceptance), args.candidate, read(args.publication_state))
+        results = confirmed_completions([read(p) for p in args.acceptance], args.candidate, read(args.publication_state))
+        result = next(iter(results.values())) if len(results) == 1 else results
         write(root, args.output, result)
         return
     if args.command == "resume":

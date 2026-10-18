@@ -10,9 +10,14 @@ from .resource_progress import digest, save
 
 
 def files(root: Path, patterns):
-    return {p.relative_to(root).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
-            for pattern in patterns for p in sorted(root.glob(pattern))
-            if p.is_file() and "__pycache__" not in p.parts}
+    # Public selections already name exact files. glob() re-enumerates each
+    # parent for every name (particularly costly in Windows data directories).
+    # Hash every byte as before, but enumerate only actual wildcard patterns.
+    selected = set()
+    for pattern in patterns:
+        matches = (root / pattern,) if not any(c in pattern for c in '*?[') and not Path(pattern).anchor else root.glob(pattern)
+        selected.update(p for p in matches if p.is_file() and '__pycache__' not in p.parts)
+    return {p.relative_to(root).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(selected)}
 
 
 # Existing shared classification/input machinery. Per-producer files are added

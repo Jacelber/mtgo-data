@@ -9,6 +9,7 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "src"))
 
 from mtgmeta.weekly_review import (  # noqa: E402
@@ -39,18 +40,33 @@ def _same_event_ids(left: object, right: object) -> bool:
     )
 
 
-def attach_preview_acceptances(root: Path, record: dict, path: Path | None) -> None:
+def attach_preview_acceptances(root: Path, record: dict, path: Path | None, *, delivery_record: Path | None = None) -> None:
     from mtgmeta.mtgo.review_submission import applies, validate_completion
     if not applies(record["week"]):
         return
     if path is None:
         raise ValueError("W38 onward public completion requires confirmed preview acceptances")
     acceptances = json.loads(path.read_text(encoding="utf-8"))
+    resource_root = None
+    if delivery_record:
+        from tools.delivery.weekly import read
+        from tools.review_submission import completion_site
+        delivery = read(delivery_record)
+        progress = delivery['progress']
+        current = progress.get('delivered', {}).get('current')
+        if (delivery['identity']['kind'] != 'landing_content' or not current
+                or current.get('operation') != delivery['operation']
+                or current.get('package') != progress.get('package')):
+            raise ValueError('Existing delivery has no corresponding confirmed package')
+        resource_root = completion_site(Path(progress['candidate']), {'current': current, 'pending': None},
+                                        target=delivery['identity']['target'])
+        if any(a.get('publication', {}).get('package') != current['package'] for a in acceptances.values()):
+            raise ValueError('Preview receipts belong to another delivered package')
     for format_id, values in record["formats"].items():
         if format_id not in acceptances:
             raise ValueError(f"Missing {format_id} final preview acceptance")
         accepted = {"preview_acceptance": acceptances[format_id]}
-        validate_completion(root, format_id, record["week"], accepted)
+        validate_completion(root, format_id, record["week"], accepted, resource_root=resource_root)
         values.update(accepted)
 
 
@@ -102,6 +118,8 @@ def main(argv: list[str] | None = None) -> int:
     independent.add_argument("--evidence", required=True)
     independent.add_argument("--output", type=Path)
     independent.add_argument("--preview-acceptances", type=Path, help="Confirmed public preview receipts keyed by format")
+    for cmd in (completion, independent):
+        cmd.add_argument('--delivery-record', type=Path, help='Read verified resources from the existing confirmed package; do not copy caches into source')
 
     args = parser.parse_args(argv)
     root = args.repository_root.resolve()
@@ -219,7 +237,7 @@ def main(argv: list[str] | None = None) -> int:
                 },
             )
         if args.command in {"completion", "format-completion"} and not getattr(args, "private_landing", None):
-            attach_preview_acceptances(root, value, args.preview_acceptances)
+            attach_preview_acceptances(root, value, args.preview_acceptances, delivery_record=args.delivery_record)
         _write_or_print(value, args.output)
     except (OSError, UnicodeError, ValueError) as exc:
         print(f"Weekly classification review ERROR: {exc}")
