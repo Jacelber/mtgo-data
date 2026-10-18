@@ -1,6 +1,56 @@
 schema_version: "3.1.0"
 
 events:
+  - id: '482105'
+    url: https://melee.gg/Tournament/View/482105
+    name: MTG SEA Championship Final 2026-27 Round 1
+    date:
+      start: '2026-10-17'
+      end: '2026-10-18'
+    format: modern
+    series: regional_championship
+    structure: constructed_single_stage
+    enabled: true
+    review_status: verified
+    tabletop: true
+    team_event: false
+    mixed_format: false
+    raw_requests:
+    - id: tournament
+      resource_type: tournament
+      url: https://melee.gg/Tournament/View/482105
+      content_type: html
+    include:
+      swiss: true
+      playoffs: true
+    phases:
+    - id: day1_modern
+      stage: day1
+      round_phase: constructed
+      game_format: modern
+      swiss: true
+      rounds: [1, 2, 3, 4, 5, 6, 7, 8]
+    - id: top8_modern
+      stage: playoff
+      round_phase: playoff
+      game_format: modern
+      swiss: false
+      source_labels: [Quarterfinals, Semifinals, Finals]
+    reviewed_overrides: []
+    statistics:
+      default_match_scope: all_constructed_swiss
+      constructed_game_format: modern
+      include_playoffs: false
+    source_evidence:
+    - https://melee.gg/Tournament/View/482105
+    - https://mtgseachampionships.com/public/upcoming-events
+    - https://mtgseachampionships.com/event-series-information
+    special_handling:
+    - The official schedule specifies eight Modern Swiss rounds for 129 or more players on October 17, with only Top 8 single-elimination on October 18; there is no Day 2 Swiss stage.
+    - All eight Swiss rounds and the Finals are completed. Official Finals standings are nonempty, with pamkung first and Moonsteak second; no standings fallback is needed.
+    - The headline shows 182 enrolled players while official standings contain 184 rows; collection must reconcile actual participant, standings and decklist coverage rather than using the headline as a denominator.
+    - The organizer advertises a playoff for fifth and sixth to determine Pro Tour invitations. Retain any exposed playoff context, but exclude all playoffs from primary Swiss statistics.
+    notes: 'Completed individual Modern Regional Championship organized by Oracle Events at Singapore EXPO. Official identity, schedule, public decklists, final standings and decisive Finals result verified on 2026-10-18. Owner requested whitelist admission and cloud collection; public data publication awaits candidate review.'
   - id: '405591'
     url: https://melee.gg/Tournament/View/405591
     name: 'Regional Championship - SCG CON Los Angeles - Season 5 - Round 1 - Saturday - 9:00 am'
