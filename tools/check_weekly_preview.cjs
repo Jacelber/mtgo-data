@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const crypto = require('node:crypto');
+const { checkCopy } = require('./landing_copy_check.cjs');
 const { chromium } = require(process.env.WEEKLY_PLAYWRIGHT || 'playwright');
 
 (async () => {
@@ -71,6 +72,16 @@ const { chromium } = require(process.env.WEEKLY_PLAYWRIGHT || 'playwright');
         errors.push('Feature summary exposes internal card tokens');
       }
       if (!onlyFeature) {
+        const body = await page.locator('#weekly-brief .landing-brief-line p').evaluateAll(paragraphs => paragraphs.map(p => ({
+          text: p.textContent,
+          cards: [...p.querySelectorAll('a.card-link')].map(a => ({text: a.textContent, href: a.getAttribute('href')})),
+          decks: [...p.querySelectorAll('a.landing-deck-link')].map(a => ({
+            token: new URL(a.href).searchParams.get('feature'), text: a.textContent,
+            before: a.previousSibling?.textContent || '', after: a.nextSibling?.textContent || ''
+          }))
+        })));
+        errors.push(...checkCopy(document.weekly_summary.items, language,
+          name => context.P8CardLocalization.resolve(name, language, lookup), body));
         const links = page.locator('a[data-landing-feature-destination]');
         for (const link of await links.all()) {
           const token = await link.getAttribute('data-landing-feature-destination');

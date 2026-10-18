@@ -3166,6 +3166,9 @@ in localized Top copy use the existing card localization and preview interaction
 `tools/prepare_landing_copy.py` recognizes exact names from the shared bilingual
 catalog and inserts these tokens without changing the displayed prose. It preserves
 existing tokens, reports ambiguous mentions, and does not infer Owner acceptance.
+The weekly `prepare` entry reuses the same linker before materialization; the
+actual-page check compares rendered card labels/targets and rejects stray deck
+wrappers. Format names and explicitly recorded non-card phrases remain prose.
 These references also enter current Landing localization demand. The
 Owner does not need to type internal syntax.
 

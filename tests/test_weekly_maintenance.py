@@ -83,6 +83,38 @@ def test_scope_mismatch_rejected(inputs):
         workflow.inventory(root, source)
 
 
+def test_preparation_links_bilingual_body_and_preserves_owner_scope(inputs):
+    _, source, _ = inputs
+    source['review']['top_copy']['items'][0]['text'] = {
+        'zh': '苏勒台掘坟带颤栗再现：[deck:00000000000000000001]',
+        'en': 'Sultai Reanimator with Dread Return: [deck:00000000000000000001]'}
+    original = deepcopy(source)
+    catalog = {'Dread Return': {'zh_name': '颤栗再现'}, 'Exhume': {'zh_name': '掘坟'}}
+    result, _ = workflow.prepare_body_links(source, catalog, {'names': [
+        {'format': 'pioneer', 'chinese': '苏勒台掘坟', 'english': 'Sultai Reanimator'}]})
+    assert source == original
+    assert result['all_top8'] == source['all_top8'] and result['bindings'] == source['bindings']
+    assert result['review']['features'] == source['review']['features']
+    assert result['review']['top_copy']['items'][0]['text']['zh'] == (
+        '苏勒台掘坟带[[card:Dread Return|颤栗再现]]：deck:00000000000000000001')
+    assert result['review']['top_copy']['items'][0]['text']['en'].count('[[card:') == 1
+
+
+def test_body_check_rejects_missing_links_even_when_page_contains_no_tokens(inputs):
+    root, source, _ = inputs
+    source['review']['top_copy']['items'][0]['text'] = {'zh': '颤栗再现', 'en': 'Dread Return'}
+    workflow.write(root / 'source.json', source)
+    workflow.write(root / 'preparation.json', {'names': {'names': []}})
+    workflow.write(root / 'site/assets/card-localization/cards.json', {'Dread Return': {'zh_name': '颤栗再现'}})
+    page_path = root / 'site/stats/pioneer/mtgo/landing/current.json'
+    workflow.write(page_path, {'weekly_summary': {'items': source['review']['top_copy']['items']}})
+    with pytest.raises(ValueError, match='body links differ'):
+        workflow.check_prepared_body(root)
+    prepared, _ = workflow.prepare_body_links(source, {'Dread Return': {'zh_name': '颤栗再现'}}, {'names': []})
+    workflow.write(page_path, {'weekly_summary': {'items': prepared['review']['top_copy']['items']}})
+    workflow.check_prepared_body(root)
+
+
 def test_owner_input_is_not_later_page_or_english_acceptance():
     packet = submissions.make_packet("content", "pauper", "2026-W39",
         {"copy.zh": [{"order": 1, "text": "原文"}], "copy.en": [], "visual.feature.a": {}}, bindings={})

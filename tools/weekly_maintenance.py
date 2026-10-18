@@ -91,6 +91,38 @@ def normalize_selected_cards(source, lookup):
     return result, changes
 
 
+def prepare_body_links(source, lookup, names):
+    """Reuse the prose linker before materialization; keep Owner wording intact."""
+    from mtgmeta.mtgo.copy_links import prepare_copy
+    result = deepcopy(source)
+    copy = result['review']['top_copy']
+    protected = list(copy.get('non_card_phrases', []))
+    for entry in names['names']:
+        if entry['format'] == source['format']:
+            protected.extend([entry['chinese'], entry['english']])
+    confirmed = {name for item in source['review']['features'].get('items', [])
+                 for name in item.get('featured_cards', [])}
+    copy['items'], ambiguous = prepare_copy(copy['items'], lookup, {}, confirmed, protected)
+    unresolved = [item for item in ambiguous if re.search(r'[\u3400-\u9fff]', item['name'])]
+    if unresolved:
+        raise ValueError('Ambiguous body card names: ' + json.dumps(unresolved, ensure_ascii=False))
+    return result, {'ambiguous_non_chinese_mentions': ambiguous,
+                    'non_card_phrases': protected}
+
+
+def check_prepared_body(output):
+    """Missing authoring links must fail even when no anchor was generated."""
+    source, plan = read(output / 'source.json'), read(output / 'preparation.json')
+    site = output / 'site'
+    prepared, _ = prepare_body_links(source, read(site / 'assets/card-localization/cards.json'), plan['names'])
+    items = prepared['review']['top_copy']['items']
+    page = read(site / f"stats/{source['format']}/mtgo/landing/current.json")
+    actual = [{'order': item['order'], 'text': item['text']} for item in page['weekly_summary']['items']]
+    expected = [{'order': item['order'], 'text': item['text']} for item in items]
+    if actual != expected:
+        raise ValueError('Landing body links differ from prepared Owner copy; regenerate a new revision')
+
+
 def inventory(root, source, displayed=None, previous=None, facts=None):
     """Derive required inputs without manufacturing choices or acceptance."""
     format_id, week = scope(source)
@@ -228,6 +260,8 @@ def prepare(root, source, base, output, facts=None, *, visuals=None, fetch_missi
         raise ValueError(json.dumps({"required_user": user_missing, "errors": state["errors"],
                                      "machine_pending": state["machine_pending"]}, ensure_ascii=False))
     source, facts = deepcopy(source), deepcopy(facts)
+    names = editorial.load_name_catalog_document(root / editorial.DEFAULT_NAME_CATALOG)
+    source, copy_links = prepare_body_links(source, read(base / 'assets/card-localization/cards.json'), names)
     visual_config = read(root / "configs/mtgo_landing_visuals.yaml")
     if visuals:
         rows = {row["archetype_id"]: row for row in facts["page"]["environment"]["rows"]}
@@ -329,6 +363,7 @@ def prepare(root, source, base, output, facts=None, *, visuals=None, fetch_missi
     write(output / "visuals.yaml", visual_config)
     write(output / "facts.json", facts)
     write(output / "source.json", source)
+    write(output / "copy-links.json", copy_links)
     write(output / "preparation.json", {"root": str(root.resolve()), "visuals": visuals or {},
         "names": editorial.load_name_catalog_document(root / editorial.DEFAULT_NAME_CATALOG),
         "input_digest": digest([source, facts, visual_config, page]), "changed": changed, "reused_files": reused_files})
@@ -348,6 +383,7 @@ def finish_resources(output, *, fetch_missing=False, resource_fixture=None):
         raise ValueError("Preparation input changed; create a revision")
     from tools import weekly_resources, build_archetype_visuals
     resource_work = weekly_resources.ensure(site, page, fetch_missing=fetch_missing, fixture=resource_fixture)
+    check_prepared_body(output)
     if plan["visuals"]:
         build_archetype_visuals.generate(site, format_id, identities=set(plan["visuals"]), config_override=config)
     packet = submissions.preview_packet(site, format_id)
@@ -1088,6 +1124,8 @@ def main(argv=None):
             return 0
         if args.command == "check-preview":
             output = new_output(ROOT, args.output)
+            if not args.only_feature:
+                check_prepared_body(args.site.parent)
             checked_packet = submissions.preview_packet(args.site, args.format)
             class QuietHandler(SimpleHTTPRequestHandler):
                 def log_message(self, format, *args):

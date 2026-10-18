@@ -41,3 +41,25 @@ def test_feature_references_are_scope_local_and_unknown_rejected():
     assert items[0]['text']['zh'].endswith('【F1】')
     with pytest.raises(ValueError, match='Unknown feature'):
         prepare_copy(items, {}, {})
+
+
+def test_body_repairs_wrapper_without_editing_prose_or_relinking_tokens():
+    token = 'deck:' + 'a' * 20
+    items = [{'order': 1, 'text': {'zh': f'颤栗再现：[令人意外] [{token}]',
+                                  'en': f'Dread Return: [{token}]'}}]
+    output, questions = prepare_copy(items, CATALOG, {})
+    assert output[0]['text']['zh'] == f'[[card:Dread Return|颤栗再现]]：[令人意外] {token}'
+    assert output[0]['text']['en'] == f'[[card:Dread Return|Dread Return]]: {token}'
+    assert not questions
+    assert prepare_copy(output, CATALOG, {}) == (output, [])
+
+
+def test_same_card_front_face_is_not_ambiguous_and_context_stays_plain():
+    catalog = {'Pompous Battlemage': {'zh_name': '浮夸战巫师'},
+               'Pompous Battlemage // Improvised Act': {'zh_name': '浮夸战巫师'},
+               'Exhume': {'zh_name': '掘坟'}, 'Poison Dart Frog': {'zh_name': '毒镖蛙'}}
+    text = '苏勒台掘坟，毒镖蛙哥MacIsaac，浮夸战巫师，掘坟'
+    linked, questions = link_card_names(text, catalog, non_card_phrases=['苏勒台掘坟', '毒镖蛙哥MacIsaac'])
+    assert linked == ('苏勒台掘坟，毒镖蛙哥MacIsaac，[[card:Pompous Battlemage|浮夸战巫师]]，'
+                      '[[card:Exhume|掘坟]]')
+    assert not questions

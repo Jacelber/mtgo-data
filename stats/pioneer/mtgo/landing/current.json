@@ -1,117 +1,89 @@
 {
+  "schema_version": "1.2.0",
+  "product": "mtgo-landing",
+  "format": "pioneer",
+  "source": "mtgo",
+  "week": {
+    "id": "2026-W41",
+    "start": "2026-10-05",
+    "end": "2026-10-11"
+  },
+  "state": "ready",
+  "source_event_ids": [
+    "12855505",
+    "12856150",
+    "12856171",
+    "12856181"
+  ],
   "classifier": {
-    "digest": "0d3c2fa77f83125b423b471356b2cd6a9ad3a8111b632617ffbbeb81b48de303"
+    "digest": "882eb4829c332142d8b7db85cead534f3ee64badec15d192af82e3858c5910c1"
   },
   "comparison": {
     "available": true,
     "unavailable_reason": null
   },
-  "data_files": {
-    "completeness": "weeks/2026-W40/completeness.json",
-    "environment_decks": "weeks/2026-W40/environment_decks.json",
-    "feature_decks": "weeks/2026-W40/feature_decks.json",
-    "range": "weeks/2026-W40/range.json"
+  "thresholds": {
+    "environment_share": 0.03,
+    "share_move_pp": 5.0,
+    "exit_reference_share": 0.05,
+    "build_shift": 20,
+    "build_reference_minimum": 8
+  },
+  "populations": {
+    "current": {
+      "start": "2026-10-05",
+      "end": "2026-10-11",
+      "event_ids": [
+        "12855505",
+        "12856150",
+        "12856171",
+        "12856181"
+      ],
+      "event_count": 4,
+      "high_score_count": 57,
+      "top8_count": 32
+    },
+    "previous_week": {
+      "start": "2026-09-28",
+      "end": "2026-10-04",
+      "event_ids": [
+        "12854947",
+        "12855464",
+        "12855494"
+      ],
+      "event_count": 3,
+      "high_score_count": 42,
+      "top8_count": 24
+    },
+    "previous_four_weeks": {
+      "start": "2026-09-07",
+      "end": "2026-10-04",
+      "event_ids": [
+        "12853713",
+        "12854053",
+        "12854065",
+        "12854085",
+        "12854095",
+        "12854106",
+        "12854489",
+        "12854509",
+        "12854530",
+        "12854758",
+        "12854926",
+        "12854947",
+        "12855464",
+        "12855494"
+      ],
+      "event_count": 14,
+      "high_score_count": 232,
+      "top8_count": 112
+    }
   },
   "environment": {
-    "other_classified": {
-      "current": {
-        "count": 12,
-        "denominator": 42,
-        "share": 0.2857
-      },
-      "current_top8": {
-        "count": 5,
-        "denominator": 24,
-        "share": 0.2083
-      },
-      "previous_four_weeks": {
-        "count": 139,
-        "denominator": 265,
-        "share": 0.5245
-      },
-      "previous_week": {
-        "count": 16,
-        "denominator": 31,
-        "share": 0.5161
-      }
-    },
+    "threshold": 0.03,
     "rows": [
       {
-        "archetype_id": "izzet-prowess",
-        "current": {
-          "count": 8,
-          "denominator": 42,
-          "share": 0.1905
-        },
-        "current_top8": {
-          "count": 6,
-          "denominator": 24,
-          "share": 0.25
-        },
-        "display_name": "Izzet Prowess",
-        "key_cards": [
-          {
-            "name": "Stormchaser's Talent"
-          },
-          {
-            "name": "Academic Dispute"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 37,
-          "denominator": 265,
-          "share": 0.1396
-        },
-        "previous_week": {
-          "count": 4,
-          "denominator": 31,
-          "share": 0.129
-        }
-      },
-      {
-        "archetype_id": "jund-artifact-sacrifice",
-        "current": {
-          "count": 5,
-          "denominator": 42,
-          "share": 0.119
-        },
-        "current_top8": {
-          "count": 4,
-          "denominator": 24,
-          "share": 0.1667
-        },
-        "display_name": "Jund Artifact Sacrifice",
-        "key_cards": [
-          {
-            "name": "Oni-Cult Anvil"
-          },
-          {
-            "name": "Biotech Specialist"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 1,
-          "denominator": 265,
-          "share": 0.0038
-        },
-        "previous_week": {
-          "count": 0,
-          "denominator": 31,
-          "share": 0.0
-        }
-      },
-      {
         "archetype_id": "golgari-demons",
-        "current": {
-          "count": 4,
-          "denominator": 42,
-          "share": 0.0952
-        },
-        "current_top8": {
-          "count": 2,
-          "denominator": 24,
-          "share": 0.0833
-        },
         "display_name": "Golgari Demons",
         "key_cards": [
           {
@@ -121,29 +93,93 @@
             "name": "Professor Dellian Fel"
           }
         ],
-        "previous_four_weeks": {
-          "count": 39,
-          "denominator": 265,
-          "share": 0.1472
+        "current": {
+          "count": 10,
+          "denominator": 57,
+          "share": 0.1754
         },
         "previous_week": {
-          "count": 1,
-          "denominator": 31,
-          "share": 0.0323
-        }
-      },
-      {
-        "archetype_id": "izzet-cauldron",
-        "current": {
           "count": 4,
           "denominator": 42,
           "share": 0.0952
         },
+        "previous_four_weeks": {
+          "count": 33,
+          "denominator": 232,
+          "share": 0.1422
+        },
+        "current_top8": {
+          "count": 6,
+          "denominator": 32,
+          "share": 0.1875
+        }
+      },
+      {
+        "archetype_id": "izzet-prowess",
+        "display_name": "Izzet Prowess",
+        "key_cards": [
+          {
+            "name": "Stormchaser's Talent"
+          },
+          {
+            "name": "Academic Dispute"
+          }
+        ],
+        "current": {
+          "count": 7,
+          "denominator": 57,
+          "share": 0.1228
+        },
+        "previous_week": {
+          "count": 8,
+          "denominator": 42,
+          "share": 0.1905
+        },
+        "previous_four_weeks": {
+          "count": 33,
+          "denominator": 232,
+          "share": 0.1422
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 32,
+          "share": 0.0938
+        }
+      },
+      {
+        "archetype_id": "jund-artifact-sacrifice",
+        "display_name": "Jund Artifact Sacrifice",
+        "key_cards": [
+          {
+            "name": "Oni-Cult Anvil"
+          },
+          {
+            "name": "Biotech Specialist"
+          }
+        ],
+        "current": {
+          "count": 7,
+          "denominator": 57,
+          "share": 0.1228
+        },
+        "previous_week": {
+          "count": 5,
+          "denominator": 42,
+          "share": 0.119
+        },
+        "previous_four_weeks": {
+          "count": 6,
+          "denominator": 232,
+          "share": 0.0259
+        },
         "current_top8": {
           "count": 2,
-          "denominator": 24,
-          "share": 0.0833
-        },
+          "denominator": 32,
+          "share": 0.0625
+        }
+      },
+      {
+        "archetype_id": "izzet-cauldron",
         "display_name": "Izzet Cauldron",
         "key_cards": [
           {
@@ -153,370 +189,762 @@
             "name": "Vivi Ornitier"
           }
         ],
-        "previous_four_weeks": {
-          "count": 22,
-          "denominator": 265,
-          "share": 0.083
+        "current": {
+          "count": 6,
+          "denominator": 57,
+          "share": 0.1053
         },
         "previous_week": {
-          "count": 5,
-          "denominator": 31,
-          "share": 0.1613
+          "count": 4,
+          "denominator": 42,
+          "share": 0.0952
+        },
+        "previous_four_weeks": {
+          "count": 19,
+          "denominator": 232,
+          "share": 0.0819
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 32,
+          "share": 0.125
         }
       },
       {
-        "archetype_id": "rakdos-sacrifice",
-        "current": {
-          "count": 3,
-          "denominator": 42,
-          "share": 0.0714
-        },
-        "current_top8": {
-          "count": 2,
-          "denominator": 24,
-          "share": 0.0833
-        },
-        "display_name": "Rakdos Sacrifice",
+        "archetype_id": "dimir-ninjas",
+        "display_name": "Dimir Ninjas",
         "key_cards": [
           {
-            "name": "Witch's Oven"
+            "name": "Kaito, Bane of Nightmares"
           },
           {
-            "name": "Cauldron Familiar"
+            "name": "Moon-Circuit Hacker"
           }
         ],
-        "previous_four_weeks": {
-          "count": 8,
-          "denominator": 265,
-          "share": 0.0302
+        "current": {
+          "count": 4,
+          "denominator": 57,
+          "share": 0.0702
         },
         "previous_week": {
-          "count": 2,
-          "denominator": 31,
-          "share": 0.0645
+          "count": 1,
+          "denominator": 42,
+          "share": 0.0238
+        },
+        "previous_four_weeks": {
+          "count": 7,
+          "denominator": 232,
+          "share": 0.0302
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 32,
+          "share": 0.0938
         }
       },
       {
-        "archetype_id": "abzan-greasefang",
+        "archetype_id": "izzet-elementals",
+        "display_name": "Izzet Elementals",
+        "key_cards": [
+          {
+            "name": "Hearth Elemental"
+          },
+          {
+            "name": "Eddymurk Crab"
+          }
+        ],
         "current": {
-          "count": 2,
-          "denominator": 42,
-          "share": 0.0476
+          "count": 4,
+          "denominator": 57,
+          "share": 0.0702
         },
-        "current_top8": {
+        "previous_week": {
           "count": 0,
-          "denominator": 24,
+          "denominator": 42,
           "share": 0.0
         },
-        "display_name": "Abzan Greasefang",
+        "previous_four_weeks": {
+          "count": 4,
+          "denominator": 232,
+          "share": 0.0172
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 32,
+          "share": 0.125
+        }
+      },
+      {
+        "archetype_id": "jund-sacrifice",
+        "display_name": "Jund Sacrifice",
         "key_cards": [
           {
-            "name": "Greasefang, Okiba Boss"
+            "name": "Biotech Specialist"
           },
           {
-            "name": "Esika's Chariot"
+            "name": "Witch's Oven"
           }
         ],
+        "current": {
+          "count": 3,
+          "denominator": 57,
+          "share": 0.0526
+        },
+        "previous_week": {
+          "count": 0,
+          "denominator": 42,
+          "share": 0.0
+        },
+        "previous_four_weeks": {
+          "count": 0,
+          "denominator": 232,
+          "share": 0.0
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 32,
+          "share": 0.0625
+        }
+      },
+      {
+        "archetype_id": "boros-discard",
+        "display_name": "Boros Discard",
+        "key_cards": [
+          {
+            "name": "Cool but Rude"
+          },
+          {
+            "name": "Hardened Academic"
+          }
+        ],
+        "current": {
+          "count": 2,
+          "denominator": 57,
+          "share": 0.0351
+        },
+        "previous_week": {
+          "count": 0,
+          "denominator": 42,
+          "share": 0.0
+        },
+        "previous_four_weeks": {
+          "count": 0,
+          "denominator": 232,
+          "share": 0.0
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 32,
+          "share": 0.0625
+        }
+      },
+      {
+        "archetype_id": "dimir-bounce",
+        "display_name": "Dimir Bounce",
+        "key_cards": [
+          {
+            "name": "Hopeless Nightmare"
+          },
+          {
+            "name": "This Town Ain't Big Enough"
+          }
+        ],
+        "current": {
+          "count": 2,
+          "denominator": 57,
+          "share": 0.0351
+        },
+        "previous_week": {
+          "count": 1,
+          "denominator": 42,
+          "share": 0.0238
+        },
         "previous_four_weeks": {
           "count": 9,
-          "denominator": 265,
-          "share": 0.034
-        },
-        "previous_week": {
-          "count": 1,
-          "denominator": 31,
-          "share": 0.0323
-        }
-      },
-      {
-        "archetype_id": "izzet-phoenix",
-        "current": {
-          "count": 2,
-          "denominator": 42,
-          "share": 0.0476
+          "denominator": 232,
+          "share": 0.0388
         },
         "current_top8": {
           "count": 1,
-          "denominator": 24,
-          "share": 0.0417
-        },
-        "display_name": "Izzet Phoenix",
-        "key_cards": [
-          {
-            "name": "Arclight Phoenix"
-          },
-          {
-            "name": "Treasure Cruise"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 8,
-          "denominator": 265,
-          "share": 0.0302
-        },
-        "previous_week": {
-          "count": 1,
-          "denominator": 31,
-          "share": 0.0323
+          "denominator": 32,
+          "share": 0.0312
         }
       },
       {
-        "archetype_id": "selesnya-company",
+        "archetype_id": "dredge",
+        "display_name": "Dredge",
+        "key_cards": [
+          {
+            "name": "Exhibition Tidecaller"
+          },
+          {
+            "name": "Creeping Chill"
+          }
+        ],
         "current": {
           "count": 2,
+          "denominator": 57,
+          "share": 0.0351
+        },
+        "previous_week": {
+          "count": 0,
           "denominator": 42,
-          "share": 0.0476
+          "share": 0.0
+        },
+        "previous_four_weeks": {
+          "count": 0,
+          "denominator": 232,
+          "share": 0.0
         },
         "current_top8": {
           "count": 2,
-          "denominator": 24,
-          "share": 0.0833
-        },
-        "display_name": "Selesnya Company",
-        "key_cards": [
-          {
-            "name": "Collected Company"
-          },
-          {
-            "name": "Badgermole Cub"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 2,
-          "denominator": 265,
-          "share": 0.0075
-        },
-        "previous_week": {
-          "count": 1,
-          "denominator": 31,
-          "share": 0.0323
+          "denominator": 32,
+          "share": 0.0625
         }
       }
     ],
-    "threshold": 0.03,
+    "other_classified": {
+      "current": {
+        "count": 10,
+        "denominator": 57,
+        "share": 0.1754
+      },
+      "previous_week": {
+        "count": 19,
+        "denominator": 42,
+        "share": 0.4524
+      },
+      "previous_four_weeks": {
+        "count": 121,
+        "denominator": 232,
+        "share": 0.5216
+      },
+      "current_top8": {
+        "count": 3,
+        "denominator": 32,
+        "share": 0.0938
+      }
+    },
     "unknown": {
       "current": {
         "count": 0,
-        "denominator": 42,
-        "share": 0.0
-      },
-      "current_top8": {
-        "count": 0,
-        "denominator": 24,
-        "share": 0.0
-      },
-      "previous_four_weeks": {
-        "count": 0,
-        "denominator": 265,
+        "denominator": 57,
         "share": 0.0
       },
       "previous_week": {
         "count": 0,
-        "denominator": 31,
+        "denominator": 42,
+        "share": 0.0
+      },
+      "previous_four_weeks": {
+        "count": 0,
+        "denominator": 232,
+        "share": 0.0
+      },
+      "current_top8": {
+        "count": 0,
+        "denominator": 32,
         "share": 0.0
       }
     }
   },
-  "features": {
+  "weekly_summary": {
+    "week": "2026-W41",
     "items": [
       {
-        "archetype_id": "izzet-prowess",
-        "category": "new_technology",
-        "deck": {
-          "deck_fingerprint_sha256": "6adae035cff8f644d2b5487c453496cd333e1083990d846d9737d052bc065183",
-          "deck_id": "b92f37441ed47646f915",
-          "event_id": "12855464",
-          "final_rank": 1,
-          "main_deck": [
-            {
-              "name": "Academic Dispute",
-              "qty": 4
-            },
-            {
-              "name": "Boomerang Basics",
-              "qty": 3
-            },
-            {
-              "name": "Burst Lightning",
-              "qty": 3
-            },
-            {
-              "name": "Emberheart Challenger",
-              "qty": 4
-            },
-            {
-              "name": "Flow State",
-              "qty": 4
-            },
-            {
-              "name": "Island",
-              "qty": 1
-            },
-            {
-              "name": "Monastery Swiftspear",
-              "qty": 4
-            },
-            {
-              "name": "Monstrous Rage",
-              "qty": 1
-            },
-            {
-              "name": "Mountain",
-              "qty": 2
-            },
-            {
-              "name": "Pompous Battlemage",
-              "qty": 4
-            },
-            {
-              "name": "Reckless Rage",
-              "qty": 3
-            },
-            {
-              "name": "Riverglide Pathway",
-              "qty": 2
-            },
-            {
-              "name": "Riverpyre Verge",
-              "qty": 3
-            },
-            {
-              "name": "Screaming Nemesis",
-              "qty": 2
-            },
-            {
-              "name": "Shivan Reef",
-              "qty": 3
-            },
-            {
-              "name": "Sleight of Hand",
-              "qty": 4
-            },
-            {
-              "name": "Spell Pierce",
-              "qty": 1
-            },
-            {
-              "name": "Spirebluff Canal",
-              "qty": 4
-            },
-            {
-              "name": "Steam Vents",
-              "qty": 4
-            },
-            {
-              "name": "Stormchaser's Talent",
-              "qty": 4
-            }
-          ],
-          "player": "Mateusf34",
-          "player_count": 40,
-          "side_deck": [
-            {
-              "name": "Accumulate Wisdom",
-              "qty": 1
-            },
-            {
-              "name": "Boomerang Basics",
-              "qty": 1
-            },
-            {
-              "name": "Firebending Lesson",
-              "qty": 1
-            },
-            {
-              "name": "Iroh's Demonstration",
-              "qty": 1
-            },
-            {
-              "name": "It'll Quench Ya!",
-              "qty": 1
-            },
-            {
-              "name": "Octopus Form",
-              "qty": 1
-            },
-            {
-              "name": "Quantum Riddler",
-              "qty": 2
-            },
-            {
-              "name": "Redcap Melee",
-              "qty": 2
-            },
-            {
-              "name": "Scorching Shot",
-              "qty": 2
-            },
-            {
-              "name": "Soul-Guide Lantern",
-              "qty": 1
-            },
-            {
-              "name": "Spell Pierce",
-              "qty": 2
-            }
-          ],
-          "starttime": "2026-10-01 22:00:00.0"
-        },
-        "destination_id": "deck:b92f37441ed47646f915",
-        "display_name": "Izzet Prowess",
-        "featured_cards": [
-          {
-            "name": "Pompous Battlemage"
-          },
-          {
-            "name": "Stormchaser's Talent"
-          },
-          {
-            "name": "Academic Dispute"
-          },
-          {
-            "name": "Monastery Swiftspear"
-          }
-        ],
-        "headline": {
-          "en": "Izzet Prowess",
-          "zh": "红蓝灵技"
-        },
         "order": 1,
-        "positioning": {
-          "en": "A build incorporating [[card:Pompous Battlemage|Pompous Battlemage]].",
-          "zh": "加入[[card:Pompous Battlemage|浮夸战巫师]]的构筑"
+        "text": {
+          "zh": "勇得神器牺牲的组件开始融入传统猫炉牺牲体系，替代了[[card:Mayhem Devil|破坏魔鬼]]。[[card:Biotech Specialist|生质科技专家]]和[[card:The Sackville-Bagginses|萨克维尔巴金斯家族]]的强度确实足够高。deck:95ac01edb226abbbc3b6",
+          "en": "Cards from Jund Artifact Sacrifice are finding their way into the traditional Cat-Oven sacrifice shell, replacing [[card:Mayhem Devil|Mayhem Devil]]. [[card:Biotech Specialist|Biotech Specialist]] and [[card:The Sackville-Bagginses|The Sackville-Bagginses]] certainly have the power to make the cut. deck:95ac01edb226abbbc3b6"
         },
-        "subtype_id": null,
-        "supporting_facts": [
+        "deck_links": [
           {
-            "type": "share_increase",
-            "values": {
-              "current_high_score_count": 8,
-              "current_high_score_denominator": 42,
-              "current_share": 0.1905,
-              "delta_pp": 5.09,
-              "reference_high_score_count": 37,
-              "reference_high_score_denominator": 265,
-              "reference_share": 0.1396
-            }
-          },
-          {
-            "type": "new_card",
-            "values": {
-              "cards": [
-                "Pompous Battlemage"
-              ],
-              "set_code": "FRA"
+            "order": 1,
+            "token": "deck:95ac01edb226abbbc3b6",
+            "label": {
+              "zh": "勇德牺牲 · GhostbloodGhost · 第5名",
+              "en": "Jund Sacrifice · GhostbloodGhost · Rank 5"
+            },
+            "deck": {
+              "archetype_id": "jund-sacrifice",
+              "display_name": "Jund Sacrifice",
+              "event_id": "12856150",
+              "deck_id": "95ac01edb226abbbc3b6",
+              "deck_fingerprint_sha256": "05c35d1fe94ca2e60fefc67b9b70d3811f11bb334c7c79387567d19c83f37998",
+              "player": "GhostbloodGhost",
+              "final_rank": 5,
+              "starttime": "2026-10-08 22:00:00.0"
             }
           }
         ]
       },
       {
-        "archetype_id": "jund-artifact-sacrifice",
-        "category": "new_technology",
+        "order": 2,
+        "text": {
+          "zh": "黑绿恶魔也在尝试新组件，毕竟之前流行的2费曲线[[card:Badgermole Cub|獾地鼠幼兽]]单纯是强度高，和套牌其他部分配合并不紧密。本周一个满编[[card:Carnivorous Cultivator|食肉草培育师]]并带了两张[[card:Sanctum Lurker|圣所潜妖]]的版本席卷一场：deck:369554e47d28755d2426；并有一个满编[[card:Tarmogoyf|塔莫耶夫]]的版本拿下一个八强：deck:fa8c3e7c4011582519ee",
+          "en": "Golgari Demons is also trying new tools. After all, the previously popular two-drop [[card:Badgermole Cub|Badgermole Cub]] was there largely on raw power, without particularly close synergy with the rest of the deck. A build with a full playset of [[card:Carnivorous Cultivator|Carnivorous Cultivator]] and two copies of [[card:Sanctum Lurker|Sanctum Lurker]] won an event this week: deck:369554e47d28755d2426; another build with a full playset of [[card:Tarmogoyf|Tarmogoyf]] reached the Top 8: deck:fa8c3e7c4011582519ee"
+        },
+        "deck_links": [
+          {
+            "order": 1,
+            "token": "deck:369554e47d28755d2426",
+            "label": {
+              "zh": "黑绿恶魔 · kanara38204 · 第1名",
+              "en": "Golgari Demons · kanara38204 · Rank 1"
+            },
+            "deck": {
+              "archetype_id": "golgari-demons",
+              "display_name": "Golgari Demons",
+              "event_id": "12856171",
+              "deck_id": "369554e47d28755d2426",
+              "deck_fingerprint_sha256": "217eacad289f67c1810b1d30b4bc96225b070346e7e4e7e329f94c344f030512",
+              "player": "kanara38204",
+              "final_rank": 1,
+              "starttime": "2026-10-10 22:00:00.0"
+            }
+          },
+          {
+            "order": 2,
+            "token": "deck:fa8c3e7c4011582519ee",
+            "label": {
+              "zh": "黑绿恶魔 · tchuco · 第6名",
+              "en": "Golgari Demons · tchuco · Rank 6"
+            },
+            "deck": {
+              "archetype_id": "golgari-demons",
+              "display_name": "Golgari Demons",
+              "event_id": "12855505",
+              "deck_id": "fa8c3e7c4011582519ee",
+              "deck_fingerprint_sha256": "f5b9c5ef14d7f910843a75eb4acfca483b95cf123ec980eaba356deb8a1df22f",
+              "player": "tchuco",
+              "final_rank": 6,
+              "starttime": "2026-10-05 23:00:00.0"
+            }
+          }
+        ]
+      },
+      {
+        "order": 3,
+        "text": {
+          "zh": "还有不使用[[card:Pompous Battlemage|浮夸战巫师]]，但加入了3张[[card:Stingcaster Mage|棘咒法师]]的红蓝灵技拿下八强：deck:9e928adf39d5549aa4cd",
+          "en": "An Izzet Prowess build without [[card:Pompous Battlemage|Pompous Battlemage]], but with three copies of [[card:Stingcaster Mage|Stingcaster Mage]], also reached the Top 8: deck:9e928adf39d5549aa4cd"
+        },
+        "deck_links": [
+          {
+            "order": 1,
+            "token": "deck:9e928adf39d5549aa4cd",
+            "label": {
+              "zh": "红蓝灵技 · deleon91 · 第6名",
+              "en": "Izzet Prowess · deleon91 · Rank 6"
+            },
+            "deck": {
+              "archetype_id": "izzet-prowess",
+              "display_name": "Izzet Prowess",
+              "event_id": "12856150",
+              "deck_id": "9e928adf39d5549aa4cd",
+              "deck_fingerprint_sha256": "430d88a9677956c828bc09b3493c2d27760a9ab9e1aab4f413076fc137fdbaef",
+              "player": "deleon91",
+              "final_rank": 6,
+              "starttime": "2026-10-08 22:00:00.0"
+            }
+          }
+        ]
+      },
+      {
+        "order": 4,
+        "text": {
+          "zh": "新套牌方面，没用新牌的红白版本弃牌拿下多个八强：deck:24679085de3951a79cf4。基本是标准组件，但是有[[card:Guardian of New Benalia|新宾纳里亚守护者]]就可以不沾黑了，还有[[card:Fiery Temper|火爆]]作为弃牌收益。",
+          "en": "Among the new decks, Boros Discard made multiple Top 8s without using any new cards: deck:24679085de3951a79cf4. The core is largely the Standard shell, but [[card:Guardian of New Benalia|Guardian of New Benalia]] removes the need to splash black, while [[card:Fiery Temper|Fiery Temper]] provides another discard payoff."
+        },
+        "deck_links": [
+          {
+            "order": 1,
+            "token": "deck:24679085de3951a79cf4",
+            "label": {
+              "zh": "红白弃牌 · Ghost11157 · 第5名",
+              "en": "Boros Discard · Ghost11157 · Rank 5"
+            },
+            "deck": {
+              "archetype_id": "boros-discard",
+              "display_name": "Boros Discard",
+              "event_id": "12856171",
+              "deck_id": "24679085de3951a79cf4",
+              "deck_fingerprint_sha256": "eb11ad6fb935f17788f3ae3c07cb4cace548fa92d79d6457f13812fa02c996dd",
+              "player": "Ghost11157",
+              "final_rank": 5,
+              "starttime": "2026-10-10 22:00:00.0"
+            }
+          }
+        ]
+      },
+      {
+        "order": 5,
+        "text": {
+          "zh": "claudioh构筑的纯黑凤凰拿下一个八强，除核心[[card:Darklight Phoenix|暗光凤凰]]之外，还满编了[[card:Dark Matter Manipulator|暗物质操弄师]]，带了3张[[card:Winter, Tormented Loner|落难孤影温特]]：deck:42d92dd759bd3bef90e0。",
+          "en": "A Mono-Black Phoenix deck built by claudioh reached the Top 8. Alongside its core [[card:Darklight Phoenix|Darklight Phoenix]], it runs a full playset of [[card:Dark Matter Manipulator|Dark Matter Manipulator]] and three copies of [[card:Winter, Tormented Loner|Winter, Tormented Loner]]: deck:42d92dd759bd3bef90e0."
+        },
+        "deck_links": [
+          {
+            "order": 1,
+            "token": "deck:42d92dd759bd3bef90e0",
+            "label": {
+              "zh": "纯黑凤凰 · claudioh · 第7名",
+              "en": "Mono-Black Phoenix · claudioh · Rank 7"
+            },
+            "deck": {
+              "archetype_id": "mono-black-phoenix",
+              "display_name": "Mono-Black Phoenix",
+              "event_id": "12855505",
+              "deck_id": "42d92dd759bd3bef90e0",
+              "deck_fingerprint_sha256": "3ba70b789bbf311d4986329bbead7890909326a5f1a26b5aa9154dec50e207e8",
+              "player": "claudioh",
+              "final_rank": 7,
+              "starttime": "2026-10-05 23:00:00.0"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "features": {
+    "week": "2026-W41",
+    "items": [
+      {
+        "category": "new_deck",
+        "order": 1,
+        "destination_id": "deck:24679085de3951a79cf4",
+        "archetype_id": "boros-discard",
+        "subtype_id": null,
+        "display_name": "Boros Discard",
         "deck": {
-          "deck_fingerprint_sha256": "d3161658258ae44b6884094816c9ce0039aa6ba8e612ea31049da7acb91da3ed",
-          "deck_id": "feb656292c6012d47255",
-          "event_id": "12854947",
-          "final_rank": 1,
+          "event_id": "12856171",
+          "deck_id": "24679085de3951a79cf4",
+          "deck_fingerprint_sha256": "eb11ad6fb935f17788f3ae3c07cb4cace548fa92d79d6457f13812fa02c996dd",
+          "player": "Ghost11157",
+          "final_rank": 5,
+          "player_count": 25,
+          "starttime": "2026-10-10 22:00:00.0",
+          "main_deck": [
+            {
+              "name": "Battlefield Forge",
+              "qty": 1
+            },
+            {
+              "name": "Cool but Rude",
+              "qty": 4
+            },
+            {
+              "name": "Eiganjo, Seat of the Empire",
+              "qty": 1
+            },
+            {
+              "name": "Fear of Missing Out",
+              "qty": 4
+            },
+            {
+              "name": "Fiery Temper",
+              "qty": 3
+            },
+            {
+              "name": "Flameblade Adept",
+              "qty": 4
+            },
+            {
+              "name": "Guardian of New Benalia",
+              "qty": 4
+            },
+            {
+              "name": "Hardened Academic",
+              "qty": 4
+            },
+            {
+              "name": "Inspiring Vantage",
+              "qty": 4
+            },
+            {
+              "name": "Inti, Seneschal of the Sun",
+              "qty": 1
+            },
+            {
+              "name": "Marauding Mako",
+              "qty": 4
+            },
+            {
+              "name": "Mountain",
+              "qty": 3
+            },
+            {
+              "name": "Needleverge Pathway",
+              "qty": 4
+            },
+            {
+              "name": "Practiced Offense",
+              "qty": 4
+            },
+            {
+              "name": "Sacred Foundry",
+              "qty": 4
+            },
+            {
+              "name": "Sheltered by Ghosts",
+              "qty": 1
+            },
+            {
+              "name": "Sokenzan, Crucible of Defiance",
+              "qty": 1
+            },
+            {
+              "name": "Sunbillow Verge",
+              "qty": 4
+            },
+            {
+              "name": "Torch the Tower",
+              "qty": 3
+            },
+            {
+              "name": "Voldaren Epicure",
+              "qty": 2
+            }
+          ],
+          "side_deck": [
+            {
+              "name": "Abrade",
+              "qty": 1
+            },
+            {
+              "name": "Agatha's Soul Cauldron",
+              "qty": 2
+            },
+            {
+              "name": "Doorkeeper Thrull",
+              "qty": 2
+            },
+            {
+              "name": "Magebane Lizard",
+              "qty": 3
+            },
+            {
+              "name": "Monument to Endurance",
+              "qty": 3
+            },
+            {
+              "name": "Sheltered by Ghosts",
+              "qty": 3
+            },
+            {
+              "name": "The Legend of Roku",
+              "qty": 1
+            }
+          ]
+        },
+        "headline": {
+          "en": "Boros Discard",
+          "zh": "红白弃牌"
+        },
+        "positioning": {
+          "zh": "组件升级的标准弃牌思路",
+          "en": "The Standard discard strategy with upgraded tools."
+        },
+        "featured_cards": [
+          {
+            "name": "Hardened Academic"
+          },
+          {
+            "name": "Cool but Rude"
+          },
+          {
+            "name": "Practiced Offense"
+          },
+          {
+            "name": "Marauding Mako"
+          }
+        ],
+        "supporting_facts": [
+          {
+            "type": "new_archetype",
+            "values": {
+              "prior_record_count_under_current_classifier": 0
+            }
+          }
+        ]
+      },
+      {
+        "category": "new_deck",
+        "order": 2,
+        "destination_id": "deck:42d92dd759bd3bef90e0",
+        "archetype_id": "mono-black-phoenix",
+        "subtype_id": null,
+        "display_name": "Mono-Black Phoenix",
+        "deck": {
+          "event_id": "12855505",
+          "deck_id": "42d92dd759bd3bef90e0",
+          "deck_fingerprint_sha256": "3ba70b789bbf311d4986329bbead7890909326a5f1a26b5aa9154dec50e207e8",
+          "player": "claudioh",
+          "final_rank": 7,
+          "player_count": 50,
+          "starttime": "2026-10-05 23:00:00.0",
+          "main_deck": [
+            {
+              "name": "Agadeem's Awakening",
+              "qty": 1
+            },
+            {
+              "name": "Annihilating Glare",
+              "qty": 4
+            },
+            {
+              "name": "Bloodghast",
+              "qty": 4
+            },
+            {
+              "name": "Dark Matter Manipulator",
+              "qty": 4
+            },
+            {
+              "name": "Darklight Phoenix",
+              "qty": 4
+            },
+            {
+              "name": "Eyetwitch",
+              "qty": 4
+            },
+            {
+              "name": "Fiend Artisan",
+              "qty": 4
+            },
+            {
+              "name": "Haunted Dead",
+              "qty": 2
+            },
+            {
+              "name": "Hive of the Eye Tyrant",
+              "qty": 2
+            },
+            {
+              "name": "Priest of Forgotten Gods",
+              "qty": 4
+            },
+            {
+              "name": "Realm of Koh",
+              "qty": 1
+            },
+            {
+              "name": "Sidisi, Regent of the Mire",
+              "qty": 3
+            },
+            {
+              "name": "Stitcher's Supplier",
+              "qty": 4
+            },
+            {
+              "name": "Swamp",
+              "qty": 15
+            },
+            {
+              "name": "Takenuma, Abandoned Mire",
+              "qty": 1
+            },
+            {
+              "name": "Winter, Tormented Loner",
+              "qty": 3
+            }
+          ],
+          "side_deck": [
+            {
+              "name": "Agatha's Soul Cauldron",
+              "qty": 2
+            },
+            {
+              "name": "Dai Li Indoctrination",
+              "qty": 1
+            },
+            {
+              "name": "Decorum Dissertation",
+              "qty": 1
+            },
+            {
+              "name": "Fatal Push",
+              "qty": 2
+            },
+            {
+              "name": "Feed the Swarm",
+              "qty": 2
+            },
+            {
+              "name": "Ozai's Cruelty",
+              "qty": 1
+            },
+            {
+              "name": "Pest Summoning",
+              "qty": 1
+            },
+            {
+              "name": "Ruinous Waterbending",
+              "qty": 1
+            },
+            {
+              "name": "Thoughtseize",
+              "qty": 4
+            }
+          ]
+        },
+        "headline": {
+          "en": "Mono-Black Phoenix",
+          "zh": "纯黑凤凰"
+        },
+        "positioning": {
+          "zh": "使用大量FRA新组件和弃神僧侣、泥沼摄政谢迪西等传统牺牲源的新套牌",
+          "en": "A new deck combining many FRA additions with established sacrifice outlets such as Priest of Forgotten Gods and Sidisi, Regent of the Mire."
+        },
+        "featured_cards": [
+          {
+            "name": "Darklight Phoenix"
+          },
+          {
+            "name": "Dark Matter Manipulator"
+          },
+          {
+            "name": "Winter, Tormented Loner"
+          },
+          {
+            "name": "Stitcher's Supplier"
+          }
+        ],
+        "supporting_facts": [
+          {
+            "type": "new_card",
+            "values": {
+              "set_code": "FRA",
+              "cards": [
+                "Dark Matter Manipulator",
+                "Darklight Phoenix",
+                "Winter, Tormented Loner"
+              ]
+            }
+          },
+          {
+            "type": "new_archetype",
+            "values": {
+              "prior_record_count_under_current_classifier": 0
+            }
+          }
+        ]
+      },
+      {
+        "category": "new_technology",
+        "order": 1,
+        "destination_id": "deck:95ac01edb226abbbc3b6",
+        "archetype_id": "jund-sacrifice",
+        "subtype_id": null,
+        "display_name": "Jund Sacrifice",
+        "deck": {
+          "event_id": "12856150",
+          "deck_id": "95ac01edb226abbbc3b6",
+          "deck_fingerprint_sha256": "05c35d1fe94ca2e60fefc67b9b70d3811f11bb334c7c79387567d19c83f37998",
+          "player": "GhostbloodGhost",
+          "final_rank": 5,
+          "player_count": 44,
+          "starttime": "2026-10-08 22:00:00.0",
           "main_deck": [
             {
               "name": "Biotech Specialist",
@@ -527,12 +955,24 @@
               "qty": 4
             },
             {
+              "name": "Blazemire Verge",
+              "qty": 1
+            },
+            {
               "name": "Blood Crypt",
-              "qty": 4
+              "qty": 3
             },
             {
               "name": "Blooming Marsh",
               "qty": 3
+            },
+            {
+              "name": "Cauldron Familiar",
+              "qty": 4
+            },
+            {
+              "name": "Clockwork Percussionist",
+              "qty": 2
             },
             {
               "name": "Copperline Gorge",
@@ -547,7 +987,7 @@
               "qty": 4
             },
             {
-              "name": "Greedy Freebooter",
+              "name": "Eyetwitch",
               "qty": 4
             },
             {
@@ -555,12 +995,12 @@
               "qty": 1
             },
             {
-              "name": "Oni-Cult Anvil",
-              "qty": 4
-            },
-            {
               "name": "Overgrown Tomb",
               "qty": 2
+            },
+            {
+              "name": "Scavenger's Talent",
+              "qty": 4
             },
             {
               "name": "Shrapnel Blast",
@@ -568,7 +1008,7 @@
             },
             {
               "name": "Springleaf Drum",
-              "qty": 4
+              "qty": 2
             },
             {
               "name": "Stomping Ground",
@@ -583,58 +1023,62 @@
               "qty": 4
             },
             {
-              "name": "Thoughtseize",
-              "qty": 2
-            },
-            {
-              "name": "Torch the Tower",
-              "qty": 2
-            },
-            {
-              "name": "Voldaren Epicure",
+              "name": "Witch's Oven",
               "qty": 4
             }
           ],
-          "player": "ShatteredKingdom",
-          "player_count": 46,
           "side_deck": [
             {
-              "name": "Abrupt Decay",
-              "qty": 3
+              "name": "Academic Dispute",
+              "qty": 2
             },
             {
-              "name": "Duress",
-              "qty": 1
-            },
-            {
-              "name": "Fable of the Mirror-Breaker",
+              "name": "Decorum Dissertation",
               "qty": 1
             },
             {
               "name": "Fatal Push",
-              "qty": 3
-            },
-            {
-              "name": "Hexing Squelcher",
               "qty": 2
             },
             {
-              "name": "Soul-Guide Lantern",
-              "qty": 3
+              "name": "Firebending Lesson",
+              "qty": 1
+            },
+            {
+              "name": "Improvisation Capstone",
+              "qty": 1
+            },
+            {
+              "name": "Iroh's Demonstration",
+              "qty": 1
+            },
+            {
+              "name": "Origin of Metalbending",
+              "qty": 1
+            },
+            {
+              "name": "Ruinous Waterbending",
+              "qty": 1
+            },
+            {
+              "name": "The Ooze",
+              "qty": 1
             },
             {
               "name": "Thoughtseize",
-              "qty": 2
+              "qty": 4
             }
-          ],
-          "starttime": "2026-09-28 23:00:00.0"
+          ]
         },
-        "destination_id": "deck:feb656292c6012d47255",
-        "display_name": "Jund Artifact Sacrifice",
+        "headline": {
+          "en": "Jund Sacrifice",
+          "zh": "勇德牺牲"
+        },
+        "positioning": {
+          "zh": "神器牺牲思路的引擎加入传统猫炉牺牲体系",
+          "en": "Brings the artifact-sacrifice engine into the traditional Cat-Oven sacrifice shell."
+        },
         "featured_cards": [
-          {
-            "name": "Oni-Cult Anvil"
-          },
           {
             "name": "Biotech Specialist"
           },
@@ -642,43 +1086,404 @@
             "name": "The Sackville-Bagginses"
           },
           {
-            "name": "Voldaren Epicure"
+            "name": "Cauldron Familiar"
+          },
+          {
+            "name": "Witch's Oven"
           }
         ],
-        "headline": {
-          "en": "Jund Artifact Sacrifice",
-          "zh": "勇得神器牺牲"
-        },
-        "order": 2,
-        "positioning": {
-          "en": "Essentially an old-school Rakdos Artifact Sacrifice build splashing green for [[card:Biotech Specialist|Biotech Specialist]].",
-          "zh": "基本是很古早的红黑神器牺牲混绿带[[card:Biotech Specialist|生质科技专家]]"
-        },
-        "subtype_id": null,
         "supporting_facts": [
           {
-            "type": "new_archetype",
+            "type": "return",
             "values": {
-              "prior_record_count_under_current_classifier": 2
+              "current_high_score_count": 3,
+              "current_high_score_denominator": 57,
+              "current_share": 0.0526,
+              "reference_high_score_count": 0,
+              "reference_high_score_denominator": 232,
+              "reference_share": 0.0
             }
           }
         ]
       },
       {
-        "archetype_id": "izzet-cauldron",
         "category": "new_technology",
+        "order": 2,
+        "destination_id": "deck:369554e47d28755d2426",
+        "archetype_id": "golgari-demons",
+        "subtype_id": null,
+        "display_name": "Golgari Demons",
         "deck": {
-          "deck_fingerprint_sha256": "fa094790ee3b5817435989e2cdc9258c7b6c0716f4a16235be84b3269bc6d113",
-          "deck_id": "157c69f80c0f0c34dfd6",
-          "event_id": "12855464",
-          "final_rank": 7,
+          "event_id": "12856171",
+          "deck_id": "369554e47d28755d2426",
+          "deck_fingerprint_sha256": "217eacad289f67c1810b1d30b4bc96225b070346e7e4e7e329f94c344f030512",
+          "player": "kanara38204",
+          "final_rank": 1,
+          "player_count": 25,
+          "starttime": "2026-10-10 22:00:00.0",
           "main_deck": [
             {
-              "name": "Academic Dispute",
+              "name": "Abrupt Decay",
+              "qty": 3
+            },
+            {
+              "name": "Bitter Triumph",
+              "qty": 2
+            },
+            {
+              "name": "Blooming Marsh",
               "qty": 4
             },
             {
-              "name": "Agatha's Soul Cauldron",
+              "name": "Boseiju, Who Endures",
+              "qty": 1
+            },
+            {
+              "name": "Carnivorous Cultivator",
+              "qty": 4
+            },
+            {
+              "name": "Chevill, Bane of Monsters",
+              "qty": 1
+            },
+            {
+              "name": "Elven Passage",
+              "qty": 3
+            },
+            {
+              "name": "Emeritus of Abundance",
+              "qty": 2
+            },
+            {
+              "name": "Esika's Chariot",
+              "qty": 2
+            },
+            {
+              "name": "Fatal Push",
+              "qty": 4
+            },
+            {
+              "name": "Forest",
+              "qty": 3
+            },
+            {
+              "name": "Glissa Sunslayer",
+              "qty": 2
+            },
+            {
+              "name": "Llanowar Wastes",
+              "qty": 2
+            },
+            {
+              "name": "Mutavault",
+              "qty": 3
+            },
+            {
+              "name": "Overgrown Tomb",
+              "qty": 4
+            },
+            {
+              "name": "Professor Dellian Fel",
+              "qty": 3
+            },
+            {
+              "name": "Ral Zarek, Guest Lecturer",
+              "qty": 2
+            },
+            {
+              "name": "Restless Cottage",
+              "qty": 1
+            },
+            {
+              "name": "Sanctum Lurker",
+              "qty": 2
+            },
+            {
+              "name": "Swamp",
+              "qty": 3
+            },
+            {
+              "name": "Takenuma, Abandoned Mire",
+              "qty": 1
+            },
+            {
+              "name": "Thoughtseize",
+              "qty": 4
+            },
+            {
+              "name": "Unholy Annex // Ritual Chamber",
+              "qty": 4
+            }
+          ],
+          "side_deck": [
+            {
+              "name": "Ashiok, Dream Render",
+              "qty": 1
+            },
+            {
+              "name": "Bitter Triumph",
+              "qty": 1
+            },
+            {
+              "name": "Culling Ritual",
+              "qty": 3
+            },
+            {
+              "name": "Duress",
+              "qty": 2
+            },
+            {
+              "name": "Ray of Enfeeblement",
+              "qty": 2
+            },
+            {
+              "name": "Requiting Hex",
+              "qty": 2
+            },
+            {
+              "name": "Sunset Saboteur",
+              "qty": 2
+            },
+            {
+              "name": "Unlicensed Hearse",
+              "qty": 2
+            }
+          ]
+        },
+        "headline": {
+          "en": "Golgari Demons",
+          "zh": "黑绿恶魔"
+        },
+        "positioning": {
+          "zh": "携带FRA食肉草培育师、圣所潜妖的版本",
+          "en": "A build featuring Carnivorous Cultivator and Sanctum Lurker from FRA."
+        },
+        "featured_cards": [
+          {
+            "name": "Carnivorous Cultivator"
+          },
+          {
+            "name": "Sanctum Lurker"
+          },
+          {
+            "name": "Unholy Annex // Ritual Chamber"
+          },
+          {
+            "name": "Professor Dellian Fel"
+          }
+        ],
+        "supporting_facts": [
+          {
+            "type": "new_card",
+            "values": {
+              "set_code": "FRA",
+              "cards": [
+                "Carnivorous Cultivator",
+                "Sanctum Lurker"
+              ]
+            }
+          },
+          {
+            "type": "build_shift",
+            "values": {
+              "identity_level": "parent",
+              "identity_id": "golgari-demons",
+              "reference_sample_size": 66,
+              "score": 38
+            }
+          }
+        ]
+      },
+      {
+        "category": "new_technology",
+        "order": 3,
+        "destination_id": "deck:fa8c3e7c4011582519ee",
+        "archetype_id": "golgari-demons",
+        "subtype_id": null,
+        "display_name": "Golgari Demons",
+        "deck": {
+          "event_id": "12855505",
+          "deck_id": "fa8c3e7c4011582519ee",
+          "deck_fingerprint_sha256": "f5b9c5ef14d7f910843a75eb4acfca483b95cf123ec980eaba356deb8a1df22f",
+          "player": "tchuco",
+          "final_rank": 6,
+          "player_count": 50,
+          "starttime": "2026-10-05 23:00:00.0",
+          "main_deck": [
+            {
+              "name": "Abrupt Decay",
+              "qty": 3
+            },
+            {
+              "name": "Bitter Triumph",
+              "qty": 2
+            },
+            {
+              "name": "Blooming Marsh",
+              "qty": 4
+            },
+            {
+              "name": "Boseiju, Who Endures",
+              "qty": 1
+            },
+            {
+              "name": "Castle Locthwain",
+              "qty": 1
+            },
+            {
+              "name": "Culling Ritual",
+              "qty": 1
+            },
+            {
+              "name": "Duress",
+              "qty": 1
+            },
+            {
+              "name": "Fatal Push",
+              "qty": 4
+            },
+            {
+              "name": "Forest",
+              "qty": 1
+            },
+            {
+              "name": "Graveyard Trespasser",
+              "qty": 4
+            },
+            {
+              "name": "Llanowar Wastes",
+              "qty": 4
+            },
+            {
+              "name": "Maelstrom Pulse",
+              "qty": 1
+            },
+            {
+              "name": "Mutavault",
+              "qty": 4
+            },
+            {
+              "name": "Overgrown Tomb",
+              "qty": 4
+            },
+            {
+              "name": "Professor Dellian Fel",
+              "qty": 4
+            },
+            {
+              "name": "Restless Cottage",
+              "qty": 2
+            },
+            {
+              "name": "Sheoldred, the Apocalypse",
+              "qty": 3
+            },
+            {
+              "name": "Swamp",
+              "qty": 2
+            },
+            {
+              "name": "Takenuma, Abandoned Mire",
+              "qty": 1
+            },
+            {
+              "name": "Tarmogoyf",
+              "qty": 4
+            },
+            {
+              "name": "Thoughtseize",
+              "qty": 4
+            },
+            {
+              "name": "Unholy Annex // Ritual Chamber",
+              "qty": 4
+            },
+            {
+              "name": "Urborg, Tomb of Yawgmoth",
+              "qty": 1
+            }
+          ],
+          "side_deck": [
+            {
+              "name": "Ashiok, Dream Render",
+              "qty": 1
+            },
+            {
+              "name": "Cruelclaw's Heist",
+              "qty": 2
+            },
+            {
+              "name": "Culling Ritual",
+              "qty": 2
+            },
+            {
+              "name": "Duress",
+              "qty": 1
+            },
+            {
+              "name": "Go Blank",
+              "qty": 2
+            },
+            {
+              "name": "Invoke Despair",
+              "qty": 3
+            },
+            {
+              "name": "Languish",
+              "qty": 1
+            },
+            {
+              "name": "Nowhere to Run",
+              "qty": 1
+            },
+            {
+              "name": "Unlicensed Hearse",
+              "qty": 2
+            }
+          ]
+        },
+        "headline": {
+          "en": "Golgari Demons",
+          "zh": "黑绿恶魔"
+        },
+        "positioning": {
+          "zh": "携带塔莫耶夫的版本",
+          "en": "A version running Tarmogoyf."
+        },
+        "featured_cards": [
+          {
+            "name": "Tarmogoyf"
+          },
+          {
+            "name": "Unholy Annex // Ritual Chamber"
+          },
+          {
+            "name": "Professor Dellian Fel"
+          },
+          {
+            "name": "Sheoldred, the Apocalypse"
+          }
+        ],
+        "supporting_facts": []
+      },
+      {
+        "category": "new_technology",
+        "order": 4,
+        "destination_id": "deck:9e928adf39d5549aa4cd",
+        "archetype_id": "izzet-prowess",
+        "subtype_id": null,
+        "display_name": "Izzet Prowess",
+        "deck": {
+          "event_id": "12856150",
+          "deck_id": "9e928adf39d5549aa4cd",
+          "deck_fingerprint_sha256": "430d88a9677956c828bc09b3493c2d27760a9ab9e1aab4f413076fc137fdbaef",
+          "player": "deleon91",
+          "final_rank": 6,
+          "player_count": 44,
+          "starttime": "2026-10-08 22:00:00.0",
+          "main_deck": [
+            {
+              "name": "Academic Dispute",
               "qty": 4
             },
             {
@@ -686,43 +1491,51 @@
               "qty": 3
             },
             {
-              "name": "Fear of Missing Out",
+              "name": "Burst Lightning",
               "qty": 4
             },
             {
-              "name": "Island",
-              "qty": 3
-            },
-            {
-              "name": "Jadzi, Steward of Fate",
+              "name": "Den of the Bugbear",
               "qty": 1
             },
             {
-              "name": "Mountain",
-              "qty": 1
-            },
-            {
-              "name": "Otawara, Soaring City",
-              "qty": 1
-            },
-            {
-              "name": "Proft's Eidetic Memory",
-              "qty": 4
-            },
-            {
-              "name": "Quantum Riddler",
+              "name": "Emberheart Challenger",
               "qty": 2
             },
             {
-              "name": "Riverglide Pathway",
+              "name": "Flow State",
               "qty": 4
+            },
+            {
+              "name": "Monastery Swiftspear",
+              "qty": 4
+            },
+            {
+              "name": "Mountain",
+              "qty": 2
+            },
+            {
+              "name": "Reckless Rage",
+              "qty": 4
+            },
+            {
+              "name": "Riverglide Pathway",
+              "qty": 2
             },
             {
               "name": "Riverpyre Verge",
               "qty": 4
             },
             {
-              "name": "Seasoned Cryomancer",
+              "name": "Shivan Reef",
+              "qty": 3
+            },
+            {
+              "name": "Sleight of Hand",
+              "qty": 4
+            },
+            {
+              "name": "Soul-Scar Mage",
               "qty": 4
             },
             {
@@ -734,31 +1547,17 @@
               "qty": 4
             },
             {
-              "name": "Stormchaser's Talent",
-              "qty": 4
-            },
-            {
-              "name": "This Town Ain't Big Enough",
-              "qty": 1
-            },
-            {
-              "name": "Torch the Tower",
+              "name": "Stingcaster Mage",
               "qty": 3
             },
             {
-              "name": "Vivi Ornitier",
+              "name": "Stormchaser's Talent",
               "qty": 4
-            },
-            {
-              "name": "Voldaren Thrillseeker",
-              "qty": 1
             }
           ],
-          "player": "Messi_10",
-          "player_count": 40,
           "side_deck": [
             {
-              "name": "Ashiok, Dream Render",
+              "name": "Abandon Attachments",
               "qty": 1
             },
             {
@@ -766,19 +1565,19 @@
               "qty": 1
             },
             {
-              "name": "Change the Equation",
-              "qty": 2
-            },
-            {
-              "name": "Combustion Technique",
+              "name": "Broadside Barrage",
               "qty": 1
             },
             {
-              "name": "Fire Magic",
+              "name": "Disdainful Stroke",
               "qty": 1
             },
             {
               "name": "Firebending Lesson",
+              "qty": 1
+            },
+            {
+              "name": "Flowstone Infusion",
               "qty": 1
             },
             {
@@ -794,249 +1593,66 @@
               "qty": 1
             },
             {
-              "name": "Price of Freedom",
-              "qty": 1
+              "name": "Redcap Melee",
+              "qty": 2
             },
             {
-              "name": "Quantum Riddler",
-              "qty": 1
+              "name": "Soul-Guide Lantern",
+              "qty": 2
             },
             {
               "name": "Spell Pierce",
               "qty": 2
-            },
-            {
-              "name": "Torch the Tower",
-              "qty": 1
             }
-          ],
-          "starttime": "2026-10-01 22:00:00.0"
+          ]
         },
-        "destination_id": "deck:157c69f80c0f0c34dfd6",
-        "display_name": "Izzet Cauldron",
+        "headline": {
+          "en": "Izzet Prowess",
+          "zh": "红蓝灵技"
+        },
+        "positioning": {
+          "zh": "携带棘咒法师的版本",
+          "en": "A version running Stingcaster Mage."
+        },
         "featured_cards": [
           {
-            "name": "Seasoned Cryomancer"
+            "name": "Stingcaster Mage"
           },
           {
-            "name": "Agatha's Soul Cauldron"
+            "name": "Academic Dispute"
           },
           {
-            "name": "Vivi Ornitier"
+            "name": "Stormchaser's Talent"
           },
           {
-            "name": "Proft's Eidetic Memory"
+            "name": "Boomerang Basics"
           }
         ],
-        "headline": {
-          "en": "Izzet Cauldron",
-          "zh": "红蓝大锅"
-        },
-        "order": 3,
-        "positioning": {
-          "en": "A rummage build running a full playset of [[card:Seasoned Cryomancer|Seasoned Cryomancer]].",
-          "zh": "满编[[card:Seasoned Cryomancer|干练凛寒术士]]的温习构筑"
-        },
-        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "new_card",
             "values": {
+              "set_code": "FRA",
               "cards": [
-                "Seasoned Cryomancer"
-              ],
-              "set_code": "FRA"
-            }
-          },
-          {
-            "type": "build_shift",
-            "values": {
-              "identity_id": "izzet-cauldron",
-              "identity_level": "parent",
-              "reference_sample_size": 27,
-              "score": 22
+                "Stingcaster Mage"
+              ]
             }
           }
         ]
       }
-    ],
-    "week": "2026-W40"
+    ]
   },
-  "format": "pioneer",
-  "populations": {
-    "current": {
-      "end": "2026-10-04",
-      "event_count": 3,
-      "event_ids": [
-        "12854947",
-        "12855464",
-        "12855494"
-      ],
-      "high_score_count": 42,
-      "start": "2026-09-28",
-      "top8_count": 24
-    },
-    "previous_four_weeks": {
-      "end": "2026-09-27",
-      "event_count": 15,
-      "event_ids": [
-        "12853217",
-        "12853659",
-        "12853672",
-        "12853692",
-        "12853713",
-        "12854053",
-        "12854065",
-        "12854085",
-        "12854095",
-        "12854106",
-        "12854489",
-        "12854509",
-        "12854530",
-        "12854758",
-        "12854926"
-      ],
-      "high_score_count": 265,
-      "start": "2026-08-31",
-      "top8_count": 120
-    },
-    "previous_week": {
-      "end": "2026-09-27",
-      "event_count": 2,
-      "event_ids": [
-        "12854530",
-        "12854926"
-      ],
-      "high_score_count": 31,
-      "start": "2026-09-21",
-      "top8_count": 16
-    }
-  },
-  "product": "mtgo-landing",
   "review_binding": {
-    "classifier_digest": "0d3c2fa77f83125b423b471356b2cd6a9ad3a8111b632617ffbbeb81b48de303",
-    "machine_fact_digest": "6a4456864c4509d1663e4c853870dfe4e6c6d1afc2451c87301286fd0630beab",
-    "pickup_document_digest": "c7a94a62ec666096fff30dd92989828fede7a4aa6a1e6425f6b1473fac3d27e9",
     "source_event_ids": [
-      "12854947",
-      "12855464",
-      "12855494"
+      "12855505",
+      "12856150",
+      "12856171",
+      "12856181"
     ],
-    "summary_fact_digest": "5ac0b50317e2bf20af5d0213e8704fbee2d98ce9875df24d241d0c4e2176f37f",
-    "visual_metadata_digest": "74a3bd4f71b4e74c734f02a288b8842213bb76875e68f296a624a4419e9066a6"
-  },
-  "schema_version": "1.2.0",
-  "source": "mtgo",
-  "source_event_ids": [
-    "12854947",
-    "12855464",
-    "12855494"
-  ],
-  "state": "ready",
-  "thresholds": {
-    "build_reference_minimum": 8,
-    "build_shift": 20,
-    "environment_share": 0.03,
-    "exit_reference_share": 0.05,
-    "share_move_pp": 5.0
-  },
-  "week": {
-    "end": "2026-10-04",
-    "id": "2026-W40",
-    "start": "2026-09-28"
-  },
-  "weekly_summary": {
-    "items": [
-      {
-        "deck_links": [],
-        "order": 1,
-        "text": {
-          "en": "Pioneer attendance remains low. Still, after the weekend event was downgraded to a Challenge 16, this week had three events rather than last week's two, although that event drew a meager 25 players.",
-          "zh": "先驱继续人气低迷，不过周末的一场比赛在降格到C16之后本周相比上周的2场能多开了一场，虽然只有惨淡的25人。"
-        }
-      },
-      {
-        "deck_links": [
-          {
-            "deck": {
-              "archetype_id": "izzet-prowess",
-              "deck_fingerprint_sha256": "6adae035cff8f644d2b5487c453496cd333e1083990d846d9737d052bc065183",
-              "deck_id": "b92f37441ed47646f915",
-              "display_name": "Izzet Prowess",
-              "event_id": "12855464",
-              "final_rank": 1,
-              "player": "Mateusf34",
-              "starttime": "2026-10-01 22:00:00.0"
-            },
-            "label": {
-              "en": "Izzet Prowess · Mateusf34 · Rank 1",
-              "zh": "红蓝灵技 · Mateusf34 · 第1名"
-            },
-            "order": 1,
-            "token": "deck:b92f37441ed47646f915"
-          }
-        ],
-        "order": 2,
-        "text": {
-          "en": "In the metagame, Prowess has also gained [[card:Pompous Battlemage|Pompous Battlemage]] and returned to the top of the standings: deck:b92f37441ed47646f915.",
-          "zh": "环境方面，同样得到[[card:Pompous Battlemage|浮夸战巫师]]补强的灵技重新回到环境榜首：deck:b92f37441ed47646f915。"
-        }
-      },
-      {
-        "deck_links": [
-          {
-            "deck": {
-              "archetype_id": "jund-artifact-sacrifice",
-              "deck_fingerprint_sha256": "d3161658258ae44b6884094816c9ce0039aa6ba8e612ea31049da7acb91da3ed",
-              "deck_id": "feb656292c6012d47255",
-              "display_name": "Jund Artifact Sacrifice",
-              "event_id": "12854947",
-              "final_rank": 1,
-              "player": "ShatteredKingdom",
-              "starttime": "2026-09-28 23:00:00.0"
-            },
-            "label": {
-              "en": "Jund Artifact Sacrifice · ShatteredKingdom · Rank 1",
-              "zh": "勇得神器牺牲 · ShatteredKingdom · 第1名"
-            },
-            "order": 1,
-            "token": "deck:feb656292c6012d47255"
-          }
-        ],
-        "order": 3,
-        "text": {
-          "en": "Jund Artifact Sacrifice, which has been making waves in Standard, also made its way into Pioneer this week. Pioneer already had Anvil decks built around sacrificing artifacts; adding the recent Standard components has given them a significant boost: deck:feb656292c6012d47255",
-          "zh": "而在标准呼风唤雨的勇得神器牺牲本周也正式进入先驱环境。先驱之前本来就有以神器牺牲为主的铁砧套牌，加入了最近标准的新组件之后如虎添翼：deck:feb656292c6012d47255"
-        }
-      },
-      {
-        "deck_links": [
-          {
-            "deck": {
-              "archetype_id": "izzet-cauldron",
-              "deck_fingerprint_sha256": "fa094790ee3b5817435989e2cdc9258c7b6c0716f4a16235be84b3269bc6d113",
-              "deck_id": "157c69f80c0f0c34dfd6",
-              "display_name": "Izzet Cauldron",
-              "event_id": "12855464",
-              "final_rank": 7,
-              "player": "Messi_10",
-              "starttime": "2026-10-01 22:00:00.0"
-            },
-            "label": {
-              "en": "Izzet Cauldron · Messi_10 · Rank 7",
-              "zh": "红蓝大锅 · Messi_10 · 第7名"
-            },
-            "order": 1,
-            "token": "deck:157c69f80c0f0c34dfd6"
-          }
-        ],
-        "order": 4,
-        "text": {
-          "en": "Izzet Cauldron has been performing well lately, and a version running a full playset of [[card:Seasoned Cryomancer|Seasoned Cryomancer]] also made the Top 8: deck:157c69f80c0f0c34dfd6",
-          "zh": "最近一直表现不错的红蓝大锅套牌，也有一套满编[[card:Seasoned Cryomancer|干练凛寒术士]]的版本取得八强：deck:157c69f80c0f0c34dfd6"
-        }
-      }
-    ],
-    "week": "2026-W40"
+    "classifier_digest": "882eb4829c332142d8b7db85cead534f3ee64badec15d192af82e3858c5910c1",
+    "visual_metadata_digest": "a6475c3a7ab9f8d9218ed76da747b127275a238e8150560796aa429bda6f93fe",
+    "machine_fact_digest": "603582c57ea9cb7dfae952d439b90e2c2547fe1b61c817bafc12927a10211ec9",
+    "pickup_document_digest": "a9a59a959bbc4c231570eb457fde4c6f24a14993dff4d178b50dd58ce442435a",
+    "summary_fact_digest": "8b0f6be8762c5000d6b611b329d1069d02ff277894e53989cc0c42d30c0e7de6"
   }
 }

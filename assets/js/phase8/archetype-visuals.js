@@ -763,8 +763,8 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Tablet of Discovery", "image": "../images/representative-cards/standard/tablet-of-discovery.jpg"}),
     ]),
     "azorius-control": Object.freeze([
-      Object.freeze({"name": "No More Lies", "image": "../images/representative-cards/standard/no-more-lies.jpg"}),
-      Object.freeze({"name": "Emeritus of Ideation", "image": "../images/representative-cards/standard/emeritus-of-ideation.jpg"}),
+      Object.freeze({"name": "The Theorist, Jace Beleren", "image": "../images/representative-cards/standard/the-theorist-jace-beleren.jpg"}),
+      Object.freeze({"name": "Countersculpt", "image": "../images/representative-cards/standard/countersculpt.jpg"}),
     ]),
     "azorius-momo": Object.freeze([
       Object.freeze({"name": "Momo, Friendly Flier", "image": "../images/representative-cards/standard/momo-friendly-flier.jpg"}),
