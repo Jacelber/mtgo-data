@@ -910,7 +910,7 @@ def find_delivery(directory):
     return {"state": "located" if found else "not_found", "records": found}
 
 
-def combine_content_records(root, site, paths, output):
+def combine_content_records(root, site, paths, output, *, compose=False):
     """Bind existing per-format decisions to one final site, without generation."""
     from tools.delivery import weekly, packages
     records = [weekly.read(path) for path in paths]
@@ -942,10 +942,19 @@ def combine_content_records(root, site, paths, output):
             raise ValueError("Combined content lacks the existing page acceptance")
         submissions.require_accepted(matches[0]["submission"], matches[0]["decisions"],
                                      current=submissions.preview_packet(site, fmt))
+    composition = None
+    if compose:
+        from tools.delivery.content import compose as compose_site
+        output = output.with_suffix('.delivery.json') if not output.name.endswith('.delivery.json') else output
+        composition = compose_site(root, site, {'week': first['scope']['week'], 'mtgo_formats': formats},
+            [e for e in envelopes if e.get('submission', {}).get('kind') == 'preview'],
+            output.parent / (output.stem + '.composition'))
+        root, site = composition['root'], composition['site']
     weekly.create_record(output, kind="landing_content", root=root, site=site,
         scope={"week": first["scope"]["week"], "mtgo_formats": formats}, references=references,
         source=first["source"], target=first["target"])
-    return {"state": "prepared", "record": str(output.resolve()), "formats": formats}
+    return {"state": "prepared", "record": str(output.resolve()), "formats": formats,
+            **({'composition': {k: str(v) if isinstance(v, Path) else v for k, v in composition.items()}} if composition else {})}
 
 
 def main(argv=None):
@@ -961,6 +970,7 @@ def main(argv=None):
     combine.add_argument("--site", type=Path, required=True)
     combine.add_argument("--record", type=Path, action="append", required=True)
     combine.add_argument("--output", type=Path, required=True)
+    combine.add_argument('--compose', action='store_true', help='Preserve current data and reuse accepted content/resources in a new private composition')
     facts_cmd = sub.add_parser("facts")
     facts_cmd.add_argument("--root", type=Path, default=ROOT)
     facts_cmd.add_argument("--format", required=True)
@@ -1066,7 +1076,8 @@ def main(argv=None):
     started_at = datetime.now(timezone.utc).isoformat()
     try:
         if args.command == "combine-content":
-            print(json.dumps(combine_content_records(args.root, args.site, args.record, args.output), ensure_ascii=False))
+            require_private_output(ROOT, args.output.resolve())
+            print(json.dumps(combine_content_records(args.root, args.site, args.record, args.output, compose=args.compose), ensure_ascii=False))
             return 0
         if args.command == "find-delivery":
             print(json.dumps(find_delivery(args.directory.resolve()), ensure_ascii=False, indent=2))

@@ -13,6 +13,40 @@ from tools.delivery import packages
 from mtgmeta.generation_progress import files
 
 
+def verification_basis(record, candidate):
+    """Cheap byte identity, not another product validation or an authority token."""
+    import sys
+    from importlib.metadata import version
+    from mtgmeta.resource_progress import digest
+    root = Path(record['identity']['root'])
+    site = Path(record['progress'].get('site') or record['identity']['site'])
+    executing = Path(__file__).resolve().parents[2]
+    implementation = files(executing, [
+        'tools/delivery/*.py', 'build_pages_artifact.py', 'tools/build_*.py',
+        'src/mtgmeta/**/*.py', 'src/mtgmeta/data/*.json', 'schemas/*.json', 'requirements*.txt'])
+    return digest({'identity': record['identity'], 'material': material_snapshot(root, record['identity']['scope']),
+        'references': {r['path']: packages.sha256(Path(r['path'])) for r in record['identity']['references']},
+        'site': files(site, ['**/*']), 'manifest': packages.sha256(candidate / 'manifest.json'),
+        'package': packages.sha256(candidate / 'product.tar.gz'), 'implementation': implementation,
+        'environment': {'python': sys.version, 'platform': sys.platform,
+                        'dependencies': {name: version(name) for name in ('jsonschema', 'PyYAML')}}})
+
+
+def verify_once(record, candidate, save_record, *, verifier=None):
+    """Reuse only a completed check of the same bytes, inputs and implementation."""
+    basis = verification_basis(record, candidate)
+    if record['progress'].get('verification') == {'passed': True, 'basis': basis}:
+        return 'reused'
+    # Remove stale success before starting; a failed check never becomes reusable.
+    record['progress'].pop('verification', None)
+    (verifier or verify_material)(record, candidate)
+    if verification_basis(record, candidate) != basis:
+        raise ValueError('Candidate or verification inputs changed during validation')
+    record['progress']['verification'] = {'passed': True, 'basis': basis}
+    save_record()
+    return 'executed'
+
+
 def material_snapshot(root, scope):
     from build_pages_artifact import load_config, publication_paths
     from mtgmeta.classifier_closure import _protected_input_fingerprints

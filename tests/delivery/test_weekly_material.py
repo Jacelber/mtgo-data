@@ -81,6 +81,46 @@ def test_melee_only_release_preserves_fixed_inputs_without_mtgo_regeneration(mat
         verification.verify_material(record, candidate)
 
 
+@pytest.mark.parametrize('change', ['package', 'site', 'reference', 'policy', 'implementation'])
+def test_success_reuse_still_rejects_changes(material, monkeypatch, change):
+    root, site, accepted, prepare = material
+    record, candidate = prepare()
+    checks = []
+    def verify(*args):
+        checks.append('checked')
+        verification.verify_material(*args)
+    assert verification.verify_once(record, candidate, lambda: None, verifier=verify) == 'executed'
+    assert verification.verify_once(record, candidate, lambda: None, verifier=verify) == 'reused'
+    assert checks == ['checked']
+    if change == 'package':
+        with (candidate / 'product.tar.gz').open('ab') as handle: handle.write(b'changed')
+    elif change == 'site':
+        (site / 'index.html').write_text('changed')
+    elif change == 'reference':
+        accepted.write_text('changed')
+    elif change == 'policy':
+        (root / 'configs/protection.json').write_text('changed')
+    else:
+        original = verification.verification_basis
+        monkeypatch.setattr(verification, 'verification_basis', lambda *a: original(*a) + '-new-verifier')
+        assert verification.verify_once(record, candidate, lambda: None, verifier=verify) == 'executed'
+        assert checks == ['checked', 'checked']
+        return
+    with pytest.raises(ValueError):
+        verification.verify_once(record, candidate, lambda: None, verifier=verify)
+    assert len(checks) == 2 and 'verification' not in record['progress']
+
+
+def test_failed_validation_is_not_saved_as_success(material):
+    *_, prepare = material
+    record, candidate = prepare()
+    def fail(*args): raise ValueError('required check failed')
+    for _ in range(2):
+        with pytest.raises(ValueError, match='required check failed'):
+            verification.verify_once(record, candidate, lambda: pytest.fail('must not save success'), verifier=fail)
+    assert 'verification' not in record['progress']
+
+
 @pytest.mark.parametrize("consumer", ["statistics", "retained_landing"])
 def test_prebuilt_package_does_not_bypass_shared_representative_check(material, consumer):
     import build_pages_artifact as builder

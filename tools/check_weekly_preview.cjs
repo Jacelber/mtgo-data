@@ -4,6 +4,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const crypto = require('node:crypto');
 const { checkCopy } = require('./landing_copy_check.cjs');
+const { inspectImages } = require('./weekly_preview_images.cjs');
 const { chromium } = require(process.env.WEEKLY_PLAYWRIGHT || 'playwright');
 
 (async () => {
@@ -111,20 +112,7 @@ const { chromium } = require(process.env.WEEKLY_PLAYWRIGHT || 'playwright');
         }
       }
       const region = onlyFeature ? page.locator(`[data-feature-destination="${onlyFeature}"]`) : page.locator('body');
-      for (const img of await region.locator('img').all()) {
-        const frame = img.locator('xpath=..');
-        if (!(await frame.isVisible())) continue;
-        await frame.scrollIntoViewIfNeeded();
-        await img.evaluate(el => new Promise(resolve => {
-          if (el.complete && el.naturalWidth) return resolve();
-          const timer = setTimeout(resolve, 5000);
-          el.addEventListener('load', () => { clearTimeout(timer); resolve(); }, { once: true });
-          el.addEventListener('error', () => { clearTimeout(timer); resolve(); }, { once: true });
-        }));
-      }
-      const images = await region.locator('img').evaluateAll(elements => elements.filter(el => el.getClientRects().length).map(el => ({
-        src: el.currentSrc || el.src, alt: el.alt, loaded: el.complete && el.naturalWidth > 0
-      })));
+      const images = await inspectImages(region);
       const text = await page.locator('body').innerText();
       const entry = { language, url: page.url(), images, external, linkPreviewExternal, errors,
         text: text.slice(0, 3000), passed: images.length > 0 && images.every(x => x.loaded) && !errors.length && !external.length };
