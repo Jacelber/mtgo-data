@@ -31,7 +31,7 @@ def validate_card_tokens(value, catalog):
             )
 
 
-def link_card_names(text, catalog, confirmed_names=()):
+def link_card_names(text, catalog, confirmed_names=(), non_card_phrases=()):
     """Return internal tokens and ambiguous names; preserve existing tokens.
 
     Catalog is the shared bilingual card lookup, not a format whitelist.
@@ -47,6 +47,11 @@ def link_card_names(text, catalog, confirmed_names=()):
             identities[chinese].add(english)
     if not identities:
         return text, []
+    # A split/adventure entry and its front face are one card, not a name clash.
+    for name, matches in identities.items():
+        fronts = {value.split(' // ')[0] for value in matches}
+        if len(fronts) == 1 and next(iter(fronts)) in matches:
+            identities[name] = fronts
     names = sorted(identities, key=lambda n: (-len(n), n))
     pattern = re.compile('|'.join(re.escape(n) for n in names))
     ambiguous = set()
@@ -68,14 +73,16 @@ def link_card_names(text, catalog, confirmed_names=()):
         return pattern.sub(replace, segment)
 
     output, offset = [], 0
-    for match in TOKEN.finditer(text):
+    protected = [re.escape(phrase) for phrase in non_card_phrases if phrase]
+    token = re.compile(TOKEN.pattern + ('|' + '|'.join(sorted(protected, key=len, reverse=True)) if protected else ''))
+    for match in token.finditer(text):
         output.extend([replace_segment(text[offset:match.start()]), match.group()])
         offset = match.end()
     output.append(replace_segment(text[offset:]))
     return ''.join(output), sorted(ambiguous)
 
 
-def prepare_copy(items, catalog, feature_aliases, confirmed_names=()):
+def prepare_copy(items, catalog, feature_aliases, confirmed_names=(), non_card_phrases=()):
     """Prepare numbered bilingual items; aliases belong to one caller scope."""
     output, questions = [], []
     for item in items:
@@ -88,7 +95,9 @@ def prepare_copy(items, catalog, feature_aliases, confirmed_names=()):
                     raise ValueError(f'Unknown feature reference: {alias}')
                 return token
             text = re.sub(r'【(F[1-9][0-9]*)】', feature, text)
-            texts[language], ambiguous = link_card_names(text, catalog, confirmed_names)
+            # Repair the old skill's wrapper, not arbitrary prose punctuation.
+            text = re.sub(r'\[(deck:[0-9a-f]{20})\]', r'\1', text)
+            texts[language], ambiguous = link_card_names(text, catalog, confirmed_names, non_card_phrases)
             questions.extend({'order': item['order'], 'language': language, 'name': name} for name in ambiguous)
         output.append({**item, 'text': texts})
     return output, questions

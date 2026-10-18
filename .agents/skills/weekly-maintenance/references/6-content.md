@@ -2,13 +2,14 @@
 
 输入：5的对象与缺项；用户Feature有无、对象、类别、四张不同主备牌、逐条Feature中文、Landing中文。Feature四张牌独立于第4步已确认的共用两张牌；环境代表牌直接沿用，仅实际新增／改变时补差异。自然语言在对话累计，机器整理SOURCE，不要求重填表。
 用 `inspect`核对机械缺项。缺用户输入只提醒，无委托不推荐／代写。中文定稿与明确选择直接是决定，保留原消息引用；机器英文仍须确认。牌名通过共享目录规范化，真实歧义才问。无关英文不重译。
-SOURCE保留all_top8、可选tabletop及bindings不动。仅填写review.top_copy.items：`[{order:1,text:{zh:原文,en:英文草稿}}]`；review.features为`{explicit_empty:false,items:[...]}`，每项包含destination_id（已有token）、parent_id/subtype_id（从all_top8或tabletop.decks取）、category（new_deck/new_technology）、source_order（用户选择顺序）、featured_cards（4个标准牌名）、positioning（zh/en）、supporting_facts（candidate_evidence中对应reasons，无则[]）。明确不选用explicit_empty:true及items:[]。保留中文中的`[deck:...]`链接标记并在英文对应位置使用。用户不需要填写此结构。
+SOURCE保留all_top8、可选tabletop及bindings不动。仅填写review.top_copy.items：`[{order:1,text:{zh:原文,en:英文草稿}}]`；review.features为`{explicit_empty:false,items:[...]}`，每项包含destination_id（已有token）、parent_id/subtype_id（从all_top8或tabletop.decks取）、category（new_deck/new_technology）、source_order（用户选择顺序）、featured_cards（4个标准牌名）、positioning（zh/en）、supporting_facts（candidate_evidence中对应reasons，无则[]）。明确不选用explicit_empty:true及items:[]。套牌引用使用不带外围方括号的`deck:<20位ID>`，中英文对应同一对象。用户不需要填写此结构。
 实体Feature沿用同样的四牌、中文、英文和实际页面审阅，正式内容保留来源、赛事名及瑞士轮成绩；链接展开本条完整牌表，不套用MTGO平均牌表或把实体成绩混入环境统计。
 `python tools/weekly_maintenance.py prepare --root ROOT --source SOURCE --facts FACTS --base-site BASE_SITE --output NEW_DIR` 准备私有实际页面。FACTS是5的已接纳固定事实，含既有review_facts；BASE_SITE使用现有确定站点。工具复用事实生成material_digest，不重跑分类。
+prepare 复用 `copy_links.prepare_copy`，从基站共享双语牌名目录给正文中的明确单卡补链接，并去掉旧 skill 误加的套牌标记外围方括号；展示文字、段落、选牌和引用对象不改。已有单卡标记保留，普通套牌名称不会拆成单卡；玩家昵称等同名非单卡短语记录在 `review.top_copy.non_card_phrases`，保留原文不加链接。中文重名先查固定牌表与目录，确有不能消除的歧义才询问；普通英文单词不凭匹配猜成牌名。结果见 `copy-links.json`，本次遗漏链接不能只靠手工补页面。
 有本次明确的环境代表牌决定时，加 `--visuals CHOICES_JSON`，内容为`{"类别稳定ID":["英文牌名1","英文牌名2"]}`。机器从已有双语目录忠实转换；实际歧义才问。工具同时更新候选环境、受影响代表图配置及私有visuals.yaml，保留其它赛制和条目。用户无需填写JSON。
 必要资源缺失时，在已获准正常内容制作中加 `--fetch-missing-resources`，只查当前选中牌名和补缺图，复用有效缓存。隔离重放使用提供的`--resource-fixture FIXTURE`有限响应，禁止转到真实网络。资源失败保留NEW_DIR，从 `resources --preparation NEW_DIR --fetch-missing-resources`（隔离时换fixture参数）续作；已有preview.json即是固定快照，禁止原地修改，需新修订。不是重新抓取赛事输入。
 prepare/resources返回新的source、facts和visual_config位置；后续使用这些确定输出，不沿用修改前的事实。完整资源明细在result.json，正常回复只需缺项和计数。
-`python tools/weekly_maintenance.py check-preview --site NEW_DIR/site --format FORMAT --output CHECK_DIR --node NODE` 先按实际中英文消费者检查选中资源，然后在HTTP浏览器滚动检查实际图片。Playwright通过环境变量WEEKLY_PLAYWRIGHT指定现有安装，不重复安装。单项Feature变更且其余页面证明适用时加 `--only-feature TOKEN`，只检查受影响区域，未变化证明继续复用。
+`python tools/weekly_maintenance.py check-preview --site NEW_DIR/site --format FORMAT --output CHECK_DIR --node NODE` 先核对正文已完成牌名链接转换，再按实际中英文消费者检查选中资源；HTTP浏览器核对每段单卡链接的显示文字和目标、套牌链接对象及外围无多余方括号，并滚动检查实际图片。Playwright通过环境变量WEEKLY_PLAYWRIGHT指定现有安装，不重复安装。单项Feature变更且其余页面证明适用时加 `--only-feature TOKEN`，只检查受影响区域，未变化证明继续复用。
 `python tools/weekly_maintenance.py serve --directory NEW_DIR/site --port PORT` 用HTTP预览。先核对本次中英文实际选中资源、图片、顺序和相关交互；已有证明复用。实际页面与待确认英文／展示齐备立即提交。
 小修改仅改SOURCE对应项，以原site为base写新快照；其余文字和决定复用。原快照不得覆盖。用户确认范围可合并，不能把只确认英文当全页。
 默认逐赛制处理时，下一赛制的BASE_SITE沿用上一个已确认候选的site，使后续快照保留此前页面；最后一个site自然包含本批已完成页面。无需到7再重新生成四页。已有独立候选时仅组合已确认的实际文件及依赖，无法证明无冲突的部分保留技术缺口，不重新取得业务决定。
