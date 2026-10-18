@@ -7536,6 +7536,32 @@ archetypes:
       - card: Persist
         zone: main
         exact_count: 0
+  - id: esper-blink-overlord-frog
+    priority: 632780
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 2
+      - card: Psychic Frog
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: Goryo's Vengeance
+        zone: main
+        exact_count: 0
   - id: esper-blink-goryos-hybrid
     priority: 632790
     subtype_id: null
@@ -7744,6 +7770,32 @@ archetypes:
         zone: main
         min_count: 3
       - card: Lightning Bolt
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+      - card: Goryo's Vengeance
+        zone: main
+        exact_count: 0
+  - id: mardu-blink-helix
+    priority: 632397
+    subtype_id: null
+    conditions:
+      all:
+      - card: Phelia, Exuberant Shepherd
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 3
+      - card: Lightning Helix
         zone: main
         min_count: 3
       - card: Solitude
@@ -10078,6 +10130,8 @@ archetypes:
   name: Darklight Phoenix
   priority: 624500
   subtypes:
+  - id: rakdos
+    name: Rakdos
   - id: golgari
     name: Golgari
   - id: grixis
@@ -10106,6 +10160,32 @@ archetypes:
         zone: main
         min_count: 2
       - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+  - id: darklight-phoenix-rakdos
+    priority: 624503
+    subtype_id: rakdos
+    conditions:
+      all:
+      - *id001
+      - *id002
+      - *id003
+      - card: Faithless Looting
+        zone: main
+        min_count: 2
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
         zone: main
         exact_count: 0
   - id: darklight-phoenix-grixis
