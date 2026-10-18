@@ -27,13 +27,59 @@ def swiss_record(counts):
     return {"wins": wins, "losses": losses, "draws": draws} if wins + losses + draws else None
 
 
-def build_catalog(root, format_id, week, event_ids, *, classification_cache=None):
+POINTS_POLICY = "top8_swiss_points_minus_3"
+LEGACY_POLICY = "max_swiss_losses_2"
+
+
+def retained_policy(catalog):
+    """Keep the selection contract of an existing immutable review snapshot."""
+    if catalog.get("selection_policy") == POINTS_POLICY:
+        return POINTS_POLICY
+    if catalog.get("max_swiss_losses") == 2:
+        return LEGACY_POLICY
+    raise ValueError("Unknown retained tabletop selection policy")
+
+
+def swiss_points(item):
+    scope = item.get("scopes", {}).get("all_constructed", {})
+    score = swiss_record(scope.get("result_counts"))
+    points = scope.get("constructed_points")
+    if score is None or type(points) is not int or points != 3 * score["wins"] + score["draws"]:
+        return None
+    return points
+
+
+def points_boundary(event, public, format_id):
+    rounds = sum(r.get("swiss") is True and r.get("game_format") == format_id
+                 for r in event.get("rounds", []))
+    top8 = [d for d in public["decks"] if type(d.get("final_rank")) is int and 1 <= d["final_rank"] <= 8]
+    if (not rounds or sorted(d["final_rank"] for d in top8) != list(range(1, 9))
+            or len({d["participant_id"] for d in top8}) != 8):
+        return {"swiss_rounds": rounds, "top8_min_swiss_points": None,
+                "minimum_swiss_points": None, "selection_issue": "八强名单或瑞士轮轮数不完整，暂不扩展候选"}
+    points = [swiss_points(d) for d in top8]
+    if (any(p is None for p in points)
+            or any(sum(swiss_record(d["scopes"]["all_constructed"]["result_counts"]).values()) != rounds
+                   for d in top8)):
+        return {"swiss_rounds": rounds, "top8_min_swiss_points": None,
+                "minimum_swiss_points": None, "selection_issue": "八强瑞士轮积分或完整成绩不明确，暂不扩展候选"}
+    minimum = min(points)
+    return {"swiss_rounds": rounds, "top8_min_swiss_points": minimum,
+            "minimum_swiss_points": minimum - 3, "selection_issue": None}
+
+
+def build_catalog(root, format_id, week, event_ids, *, classification_cache=None,
+                  selection_policy=POINTS_POLICY):
     """Read only explicitly selected, already retained and classified events."""
     root = Path(root)
     year, number = week.split("-W")
     monday = date.fromisocalendar(int(year), int(number), 1)
     end = monday + timedelta(days=6)
-    result = {"max_swiss_losses": 2, "events": [], "decks": []}
+    if selection_policy not in {POINTS_POLICY, LEGACY_POLICY}:
+        raise ValueError("Unknown tabletop selection policy")
+    result = ({"selection_policy": POINTS_POLICY} if selection_policy == POINTS_POLICY
+              else {"max_swiss_losses": 2})
+    result.update(events=[], decks=[])
     classification_cache = classification_cache if classification_cache is not None else {}
     for event_id in sorted(set(event_ids)):
         if not str(event_id).isdigit():
@@ -80,6 +126,8 @@ def build_catalog(root, format_id, week, event_ids, *, classification_cache=None
                   "event_sha256": hashlib.sha256((root / event_path).read_bytes()).hexdigest(),
                   "decks_sha256": hashlib.sha256((root / deck_path).read_bytes()).hexdigest(),
                   "eligible_count": 0, "unresolved_record_count": 0}
+        if selection_policy == POINTS_POLICY:
+            record.update(points_boundary(event, public, format_id))
         for item in public["decks"]:
             score = swiss_record(item.get("scopes", {}).get("all_constructed", {}).get("result_counts"))
             if score is None:
@@ -93,8 +141,21 @@ def build_catalog(root, format_id, week, event_ids, *, classification_cache=None
                 cls = {"status": classification.status, "archetype_id": classification.archetype_id,
                        "subtype_id": classification.subtype_id, "archetype_name": classification.archetype_name,
                        "subtype_name": classification.subtype_name}
-            if score["losses"] > 2 or cls["status"] != "classified":
+            if cls["status"] != "classified":
                 continue
+            if selection_policy == LEGACY_POLICY:
+                if score["losses"] > 2:
+                    continue
+            else:
+                points = swiss_points(item)
+                if points is None:
+                    record["unresolved_record_count"] += 1
+                    continue
+                top8 = type(item.get("final_rank")) is int and 1 <= item["final_rank"] <= 8
+                if not top8 and (record["minimum_swiss_points"] is None
+                        or points < record["minimum_swiss_points"]
+                        or sum(score.values()) != record["swiss_rounds"]):
+                    continue
             cards = item["decklist"]["cards"]
             if item["decklist"]["status"] != "submitted" or not cards:
                 continue
@@ -122,7 +183,7 @@ def validate_retained(root, source, *, classification_cache=None):
         return {}
     actual = build_catalog(root, source["format"], source["week"]["id"],
                            [item["event_id"] for item in retained["events"]],
-                           classification_cache=classification_cache)
+                           classification_cache=classification_cache, selection_policy=retained_policy(retained))
     if source["bindings"].get("tabletop_digest") != digest(retained):
         raise ValueError("Retained tabletop Feature material changed")
     event_fields = ("event_id", "name", "date", "event_sha256")

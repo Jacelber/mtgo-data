@@ -99,7 +99,7 @@
         "qty": {"type": "integer", "minimum": 1}
       }
     },
-    "tabletop": {"type": "object", "additionalProperties": false, "required": ["max_swiss_losses", "events", "decks"], "properties": {"max_swiss_losses": {"const": 2}, "events": {"type": "array", "items": {"type": "object"}}, "decks": {"type": "array", "items": {"allOf": [{"$ref": "#/$defs/top8Deck"}, {"required": ["source", "event_name", "swiss_record", "reference"]}]}}}},
+    "tabletop": {"type": "object", "additionalProperties": false, "required": ["events", "decks"], "oneOf": [{"required": ["max_swiss_losses"], "not": {"required": ["selection_policy"]}}, {"required": ["selection_policy"], "not": {"required": ["max_swiss_losses"]}}], "properties": {"selection_policy": {"const": "top8_swiss_points_minus_3"}, "max_swiss_losses": {"const": 2}, "events": {"type": "array", "items": {"type": "object"}}, "decks": {"type": "array", "items": {"allOf": [{"$ref": "#/$defs/top8Deck"}, {"required": ["source", "event_name", "swiss_record", "reference"]}]}}}},
     "top8Deck": {
       "type": "object",
       "allOf": [{"if": {"required": ["source"], "properties": {"source": {"const": "melee"}}}, "then": {"required": ["event_name", "swiss_record"]}, "else": {"properties": {"final_rank": {"maximum": 8}}}}],
@@ -113,7 +113,7 @@
         "token": {"$ref": "#/$defs/deckToken"},
         "source": {"const": "melee"},
         "event_name": {"type": "string", "minLength": 1},
-        "swiss_record": {"type": "object", "additionalProperties": false, "required": ["wins", "losses", "draws"], "properties": {"wins": {"type": "integer", "minimum": 0}, "losses": {"type": "integer", "minimum": 0, "maximum": 2}, "draws": {"type": "integer", "minimum": 0}}},
+        "swiss_record": {"type": "object", "additionalProperties": false, "required": ["wins", "losses", "draws"], "properties": {"wins": {"type": "integer", "minimum": 0}, "losses": {"type": "integer", "minimum": 0}, "draws": {"type": "integer", "minimum": 0}}},
         "reference": {"type": "string", "pattern": "^melee:[0-9]+:[0-9]+$"},
         "event_id": {"type": "string", "pattern": "^[0-9]+$"},
         "deck_id": {"type": "string", "pattern": "^[0-9a-f]{20}$"},

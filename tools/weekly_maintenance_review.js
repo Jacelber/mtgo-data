@@ -82,7 +82,7 @@ if(content){
  $('#catalog').innerHTML='<h2>全部八强牌表</h2><div id="all-decks"></div>';catalog($('#all-decks'),top,{id:'八强'});
  if(M.tabletop_events?.length){
   $('nav').insertAdjacentHTML('beforeend','<a href="#tabletop-features">实体大赛选稿</a>');
-  $('main').insertAdjacentHTML('beforeend',`<section class="panel" id="tabletop-features"><h2>实体大赛 Feature 可选牌表</h2><p>已指定赛事的完整可用牌表，瑞士轮负场不超过 2 场；双日成绩合计，淘汰赛独立。退赛者显示实际已赛成绩，名单不代表推荐或已选稿。</p>${M.tabletop_events.map(e=>`<p>${esc(e.name)} · ${e.event_id} · ${e.eligible_count} 份${e.unresolved_record_count?`；${e.unresolved_record_count} 份成绩不明确或无已赛成绩，未列入`:''}</p>`).join('')}<div id="tabletop-decks"></div></section>`);
+  $('main').insertAdjacentHTML('beforeend',`<section class="panel" id="tabletop-features"><h2>实体大赛 Feature 可选牌表</h2><p>已指定赛事的完整可用牌表；按各场已保存的筛选条件列出。新候选保留八强，并纳入完成瑞士轮、积分不低于八强晋级最低分减3分的牌表。双日合计，淘汰赛不计入；名单不代表推荐或已选稿。</p>${M.tabletop_events.map(e=>`<p>${esc(e.name)} · ${e.event_id} · ${e.eligible_count} 份${e.minimum_swiss_points!=null?`；八强最低 ${e.top8_min_swiss_points} 分，候选 ≥${e.minimum_swiss_points} 分`:e.selection_issue?`；${esc(e.selection_issue)}`:`；历史快照条件：瑞士轮最多两负`}${e.unresolved_record_count?`；${e.unresolved_record_count} 份成绩不明确或无已赛成绩，未列入`:''}</p>`).join('')}<div id="tabletop-decks"></div></section>`);
   catalog($('#tabletop-decks'),M.tabletop_decks.map(d=>rows.get(ref(d))),{id:'实体大赛'});
  }
 

@@ -1355,7 +1355,7 @@ def resolve_review_decks(
     tabletop_cache: dict | None = None,
 ) -> dict[str, Mapping[str, Any]]:
     """Resolve selected stable deck references, never stored classification copies."""
-    from .landing_tabletop import build_catalog, deck_catalog
+    from .landing_tabletop import build_catalog, deck_catalog, retained_policy
 
     root = Path(repository_root)
     selected = {item["destination_id"] for item in document["review"]["features"]["items"]}
@@ -1368,7 +1368,7 @@ def resolve_review_decks(
     if tabletop and selected & {item["token"] for item in tabletop["decks"]}:
         actual = build_catalog(root, document["format"], document["week"]["id"],
                                [item["event_id"] for item in tabletop["events"]],
-                               classification_cache=tabletop_cache)
+                               classification_cache=tabletop_cache, selection_policy=retained_policy(tabletop))
         current.update({item["token"]: item for item in actual["decks"]})
     result = {}
     for token in sorted(selected):
