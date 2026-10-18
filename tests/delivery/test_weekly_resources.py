@@ -29,7 +29,9 @@ def test_site_promotion_failure_reuses_completed_build(tmp_path, monkeypatch):
         (work / name / "cache.json").write_text("verified fixture")
     monkeypatch.setattr(resources, "prepare_localization", lambda *a: work / "names")
     monkeypatch.setattr(resources, "prepare_images", lambda *a: work / "images")
-    monkeypatch.setattr(builder, "load_config", lambda *a: {"compatibility_manifests": []})
+    monkeypatch.setattr(builder, "load_config", lambda *a: {"compatibility_manifests": [],
+        "maximum_artifact_bytes": 1000000, "generated_overlays": [
+            {"id": name, "maximum_bytes": 1000000} for name in ("card_localization", "landing_card_images")]})
     monkeypatch.setattr(builder, "publication_paths", lambda *a: {"index.html"})
     builds = []
     def build(root, config, site, report, **kwargs):

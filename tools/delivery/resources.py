@@ -162,7 +162,8 @@ def prepare_images(root, work, repository):
 
 
 def prepare_site(record, work):
-    from build_pages_artifact import build_artifact, load_config, publication_paths
+    from build_pages_artifact import build_artifact, load_config, publication_paths, measure_artifact
+    from tools.delivery.packages import MAX_BYTES
     from tools.build_archetype_visuals import require_public_representatives
     root = Path(record["identity"]["root"])
     repository = record["identity"]["target"]
@@ -181,6 +182,7 @@ def prepare_site(record, work):
                 shutil.copytree(source, target)
             source = target
         overlays[identifier] = source
+    measure_artifact(root, config, selected=selected, overlays=overlays, maximum_bytes=MAX_BYTES)
     site = work / "site"
     signature = {"source": files(root, sorted(selected | {"configs/pages_publication.json"}
                                   | set(config["compatibility_manifests"]))),

@@ -95,7 +95,7 @@ def test_real_internal_failure_resumes_completed_statistics(tmp_path, monkeypatc
     monkeypatch.setattr(completeness, "build_all_completeness", counted("completeness", real_completeness))
     # This fixture has no Git or platform. Production generation and publication
     # binding checks are real; unrelated registry/platform adapters are isolated.
-    monkeypatch.setattr(subprocess, "run", lambda *a, **k: SimpleNamespace(stdout="", returncode=0))
+    monkeypatch.setattr(subprocess, "run", lambda *a, **k: SimpleNamespace(stdout=b"", returncode=0))
     monkeypatch.setattr(metadata, "rules_last_commit_iso", lambda *a: "2025-02-03T00:00:00Z")
     monkeypatch.setattr(catalog, "write_catalog", lambda *a: None)
     monkeypatch.setattr(landing_editorial, "generate_public_name_contract", lambda *a: None)
@@ -380,7 +380,7 @@ def test_execute_materializes_only_after_existing_deterministic_validation(tmp_p
     def run(command, **kwargs):
         calls.append([str(part) for part in command])
         environments.append(kwargs.get("env"))
-        return SimpleNamespace(stdout="", returncode=0)
+        return SimpleNamespace(stdout=b"", returncode=0)
     monkeypatch.setenv("PYTHONPATH", "sentinel-dependencies")
     monkeypatch.setattr(subprocess, "run", run)
     monkeypatch.setattr(metadata, "rules_last_commit_iso", lambda *args: "2025-02-03T00:00:00Z")
@@ -405,10 +405,8 @@ def test_execute_materializes_only_after_existing_deterministic_validation(tmp_p
     def replace(root, stage, paths, **kwargs):
         assert {path.relative_to(root): path.read_bytes() for path in root.rglob("*") if path.is_file()} == before
         executed = "\n".join(" ".join(command) for command in calls)
-        for name in ("validate_schemas.py", "validate_output_invariants.py",
-                     "diff --exit-code"):
+        for name in ("validate_schemas.py", "validate_output_invariants.py"):
             assert name in executed
-        assert executed.index("validate_schemas.py") < executed.index("diff --exit-code")
         assert "--format standard" in executed
         assert "--format modern" not in executed
         assert not any("--full" in command or "pytest" in command for command in calls)
@@ -432,6 +430,38 @@ def test_execute_materializes_only_after_existing_deterministic_validation(tmp_p
     for path, content in before.items():
         if str(path).replace("\\", "/").startswith(("data/", "configs/", "stats/modern/")):
             assert (tmp_path / path).read_bytes() == content
+
+
+@pytest.mark.parametrize("mutation", ["same_stat_edit", "added", "deleted"])
+def test_read_only_validator_cannot_change_candidate_bytes(tmp_path, monkeypatch, mutation):
+    from pathlib import Path
+    from types import SimpleNamespace
+    import subprocess
+    from mtgmeta import classifier_closure, catalog
+    from mtgmeta.mtgo import publication, metadata, landing_editorial
+    _repository(tmp_path)
+    _generate(tmp_path, "standard")
+    original = (tmp_path / "data/standard/100.json").read_bytes()
+    def run(command, **kwargs):
+        if any(str(item).endswith("validate_schemas.py") for item in command):
+            target = Path(kwargs["cwd"]) / "data/standard/100.json"
+            if mutation == "same_stat_edit":
+                stat = target.stat()
+                target.write_bytes(b"X" + target.read_bytes()[1:])
+                os.utime(target, ns=(stat.st_atime_ns, stat.st_mtime_ns))
+            elif mutation == "deleted":
+                target.unlink()
+            else:
+                target.with_name("unexpected.json").write_text("{}")
+        return SimpleNamespace(stdout=b"", returncode=0)
+    monkeypatch.setattr(subprocess, "run", run)
+    monkeypatch.setattr(metadata, "rules_last_commit_iso", lambda *a: "2025-02-03T00:00:00Z")
+    monkeypatch.setattr(catalog, "write_catalog", lambda *a: None)
+    monkeypatch.setattr(landing_editorial, "generate_public_name_contract", lambda *a: None)
+    monkeypatch.setattr(classifier_closure, "inspect_format", lambda *a: {"state": "CURRENT"})
+    with pytest.raises(publication.PublicationError, match="Read-only validation changed"):
+        publication.stage_publications(tmp_path, ["standard"], execute=True)
+    assert (tmp_path / "data/standard/100.json").read_bytes() == original
 
 
 def test_staged_mtgo_closure_does_not_hide_stale_mtgo_data() -> None:
@@ -473,7 +503,7 @@ def test_joint_staging_converges_two_stale_public_formats(tmp_path, monkeypatch)
 
     def run(command, **kwargs):
         calls.append([str(part) for part in command])
-        return SimpleNamespace(stdout="", returncode=0)
+        return SimpleNamespace(stdout=b"", returncode=0)
 
     monkeypatch.setattr(subprocess, "run", run)
     monkeypatch.setattr(
@@ -530,7 +560,7 @@ def test_joint_staging_rolls_back_both_formats_on_materialization_failure(
     monkeypatch.setattr(
         subprocess,
         "run",
-        lambda *args, **kwargs: SimpleNamespace(stdout="", returncode=0),
+        lambda *args, **kwargs: SimpleNamespace(stdout=b"", returncode=0),
     )
     monkeypatch.setattr(
         classifier_closure, "_protected_input_fingerprints", lambda *args: {}

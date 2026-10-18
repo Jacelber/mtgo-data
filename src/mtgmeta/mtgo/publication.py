@@ -368,6 +368,111 @@ def _staged_mtgo_closure_issues(closure: Mapping[str, Any]) -> dict[str, str | N
     return issues
 
 
+def _prepare_validation_index(root: Path, stage: Path) -> None:
+    """Seed local inventory and share objects before hashing candidate bytes."""
+    import subprocess
+    subprocess.run(["git", "init", "--quiet", str(stage)], check=True)
+    subprocess.run(["git", "-C", str(stage), "config", "core.autocrlf", "false"], check=True)
+    if (root / ".git").exists():
+        def fact(*args):
+            return subprocess.run(["git", "-C", str(root), "rev-parse", *args],
+                                  check=True, capture_output=True, text=True, encoding="utf-8").stdout.strip()
+        objects = fact("--path-format=absolute", "--git-path", "objects")
+        if not Path(objects).is_dir() or "\n" in objects or "\r" in objects:
+            raise PublicationError("Source Git objects are unavailable")
+        # An LF-only alternates file is required by Git on Windows too. No
+        # source index is changed, and no refs, remotes or credentials are copied.
+        (stage / ".git/objects/info/alternates").write_bytes(Path(objects).as_posix().encode("utf-8") + b"\n")
+        import shutil
+        shutil.copyfile(fact("--path-format=absolute", "--git-path", "index"), stage / ".git/index")
+
+
+def _index_validation_candidate(stage: Path) -> None:
+    """Compare bytes in Python; ask Git to store only changed blobs.
+
+    Copying an index alone cannot establish equality: copied files have new
+    filesystem identities, and equal size/mtime can conceal an actual change.
+    """
+    import subprocess
+    def git(*args, **kwargs):
+        return subprocess.run(["git", "-C", str(stage), *args], check=True, capture_output=True, **kwargs).stdout
+    indexed = {}
+    for record in git("ls-files", "--stage", "-z").split(b"\0"):
+        if record:
+            entry, name = record.split(b"\t", 1)
+            mode, object_id, number = entry.split()
+            if number != b"0":
+                raise PublicationError("Unmerged source index cannot seed a candidate")
+            indexed[name.decode("utf-8")] = object_id
+    algorithm = git("rev-parse", "--show-object-format").decode().strip()
+    changed, present = [], []
+    names = git("ls-files", "--cached", "--others", "--exclude-standard", "-z")
+    for name in sorted({item.decode("utf-8") for item in names.split(b"\0") if item}):
+        path = stage / name
+        if path.is_symlink():
+            raise PublicationError("Candidate contains a link")
+        if not path.is_file():
+            changed.append(name)
+            continue
+        digest = hashlib.new(algorithm)
+        digest.update(f"blob {path.stat().st_size}\0".encode("ascii"))
+        with path.open("rb") as handle:
+            while chunk := handle.read(1024 * 1024):
+                digest.update(chunk)
+        if digest.hexdigest().encode("ascii") != indexed.get(name):
+            changed.append(name)
+            present.append(name)
+    removed = [name for name in changed if name in indexed]
+    if removed:
+        git("update-index", "--force-remove", "-z", "--stdin", input=b"".join(name.encode("utf-8") + b"\0" for name in removed))
+    if present:
+        git("add", "--all", "--pathspec-from-file=-", "--pathspec-file-nul",
+            input=b"".join(b":(literal)" + name.encode("utf-8") + b"\0" for name in present))
+
+
+def _validation_snapshot(stage: Path) -> dict[str, str]:
+    from ..classifier_closure import _sha256
+    return {p.relative_to(stage).as_posix(): _sha256(p) for p in stage.rglob("*")
+            if p.is_file() and not {".git", "__pycache__"}.intersection(p.relative_to(stage).parts)}
+
+
+def _restate_retained_landing(root: Path, stage: Path, format_id: str, week: str) -> None:
+    """Rebind this same week's classifier without changing accepted content."""
+    import shutil
+    from ..classifier_closure import _inspect_landing
+    from ..classifier import classifier_digest
+    from .normalize import load_rules_for_format
+    from . import landing
+    relative = Path("stats") / format_id / "mtgo/landing"
+    if not (root / relative / "current.json").is_file():
+        return
+    shutil.copytree(root / relative, stage / relative, dirs_exist_ok=True)
+    path = stage / relative / "current.json"
+    before = json.loads(path.read_text(encoding="utf-8"))
+    if before.get("week", {}).get("id") != week:
+        return  # Older admitted weeks retain their original pinned resources.
+    desired = classifier_digest(load_rules_for_format(stage, format_id))
+    if before.get("classifier", {}).get("digest") in {None, desired}:
+        return
+    if _inspect_landing(stage, format_id, desired)["state"] != "STALE_REGENERABLE":
+        return
+    history = {p: json.loads(p.read_text(encoding="utf-8"))
+               for p in (stage / relative / "features").glob("*.json")}
+    result = landing.generate(stage, format_id, allow_classifier_restatement=True)
+    if result["status"] in {"stale_review_required", "summary_review_required"}:
+        raise PublicationError(f"BLOCKED_OWNER_REVIEW: retained {format_id} Landing material changed")
+    after = json.loads(path.read_text(encoding="utf-8"))
+    technical = {"classifier", "review_binding", "data_files"}
+    if ({k: v for k, v in before.items() if k not in technical}
+            != {k: v for k, v in after.items() if k not in technical}):
+        raise PublicationError(f"BLOCKED_OWNER_REVIEW: retained {format_id} Landing content changed")
+    for archived, original in history.items():
+        current = json.loads(archived.read_text(encoding="utf-8"))
+        if ({k: v for k, v in original.items() if k != "classifier_digest"}
+                != {k: v for k, v in current.items() if k != "classifier_digest"}):
+            raise PublicationError(f"BLOCKED_OWNER_REVIEW: retained Feature content changed: {archived.name}")
+
+
 def stage_publications(
     root: Path,
     format_ids: Sequence[str],
@@ -419,7 +524,7 @@ def stage_publications(
         # Individual checkpoints decide which generated products remain valid.
         refreshed = ["src", "configs", "my_archetypes", "schemas", *(f"data/{f}" for f in formats),
                      *(f"stats/{f}/melee" for f in formats),
-                     *(f"stats/{f}/mtgo/landing" + ("/review" if include_landing else "") for f in formats)]
+                     *(f"stats/{f}/mtgo/landing/review" for f in formats)]
         for relative in refreshed:
             if (root / relative).is_dir() or (stage / relative).is_dir():
                 destination = (stage / relative).resolve()
@@ -458,8 +563,9 @@ def stage_publications(
     )
     # A separate local index gives the existing read-only repository validator
     # its tracked inventory without creating any commit or remote publication.
-    subprocess.run(["git", "init", "--quiet", str(stage)], check=True)
-    subprocess.run(["git", "-C", str(stage), "config", "core.autocrlf", "false"], check=True)
+    index_started = perf_counter()
+    _prepare_validation_index(root, stage)
+    index_seconds = perf_counter() - index_started
     before_paths = {
         format_id: artifact_paths(root, format_id) for format_id in formats
     }
@@ -491,6 +597,13 @@ def stage_publications(
         ]
         if include_landing:
             steps.append(("landing", ["mtgo/landing", "mtgo/landing_editorial", "mtgo/landing_tabletop", "mtgo/landing_screening", "mtgo/review_submission", "mtgo/stats", "mtgo/matchup", "mtgo/top8", "mtgo/week_lifecycle", "review_workbook"], [prefix + "landing/**/*.json"], landing_step))
+        else:
+            progress.run(f"{format_id}/retained-landing", {
+                "inputs": protected[format_id], "scope": subjects[format_id].subject_digest,
+                "retained": files(root, [prefix + "landing/**/*.json"]),
+                "code": implementation(root, COMMON + ["src/mtgmeta/mtgo/landing*.py", "src/mtgmeta/mtgo/publication.py"])},
+                stage, [prefix + "landing/**/*.json"],
+                lambda: _restate_retained_landing(root, stage, format_id, subjects[format_id].week.strftime("%G-W%V")))
         for name, modules, outputs, producer in steps:
             inputs = protected[format_id] if name in {"landing", "names"} else {
                 p: sha for p, sha in protected[format_id].items() if "/landing/review/" not in p
@@ -525,7 +638,11 @@ def stage_publications(
             raise PublicationError(
                 f"staging changed a protected input for {format_id}; {stage}"
             )
-    subprocess.run(["git", "-C", str(stage), "add", "--all"], check=True)
+    index_started = perf_counter()
+    _index_validation_candidate(stage)
+    index_seconds = round(index_seconds + perf_counter() - index_started, 4)
+    print(json.dumps({"operation": "mtgo-publication-progress", "phase": "validation-index",
+                      "seconds": index_seconds}), file=sys.stderr, flush=True)
     pythonpath = str(stage / "src")
     inherited_pythonpath = os.environ.get("PYTHONPATH")
     if inherited_pythonpath:
@@ -545,10 +662,12 @@ def stage_publications(
     if selected_json:
         commands.append(("validate_schemas.py", [arg for path in selected_json for arg in ("--path", path)]))
     commands.append(("validate_output_invariants.py", [arg for fmt in formats for arg in ("--format", fmt)]))
+    validated_bytes = _validation_snapshot(stage)
     for script, arguments in commands:
         subprocess.run([sys.executable, "-B", str(stage / script), *arguments],
                        cwd=stage, env=environment, check=True)
-    subprocess.run(["git", "-C", str(stage), "diff", "--exit-code"], check=True)
+    if _validation_snapshot(stage) != validated_bytes:
+        raise PublicationError("Read-only validation changed the staged candidate")
     # No final target has been changed if any preceding operation fails.
     final_subject_changed = any(
         artifact_paths(root, format_id) != before_paths[format_id]
@@ -595,7 +714,8 @@ def stage_publications(
                 for format_id in formats
             },
             "changed_paths": changed, "generation_progress": str(progress.path),
-            "reused_steps": progress.reused, "executed_steps": progress.executed}
+            "reused_steps": progress.reused, "executed_steps": progress.executed,
+            "index_seconds": index_seconds}
 
 
 def stage_publication(root: Path, format_id: str, *, include_landing: bool = False,

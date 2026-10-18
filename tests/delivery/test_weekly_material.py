@@ -54,6 +54,33 @@ def test_fixed_data_passes_without_content_acceptance(material):
     verification.verify_material(*prepare())
 
 
+@pytest.mark.parametrize("change", [None, "missing_event", "source"])
+def test_melee_only_release_preserves_fixed_inputs_without_mtgo_regeneration(material, tmp_path, change):
+    import build_pages_artifact as builder
+    root, site, accepted, _ = material
+    relative = "stats/standard/melee/index.json"
+    for base in (root, site):
+        path = base / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps({"events": [{"event_id": "123"}]}))
+    builder.publication_paths(root, {}).add(relative)
+    record = weekly.create_record(tmp_path / "melee.delivery.json", kind="reviewed_data", root=root, site=site,
+        scope={"week": "2025-W02", "mtgo_formats": [], "melee": [{"format": "standard", "event_id": "123"}]},
+        references=[accepted], source="a" * 40, target="Jacelber/mtgo-data-governance-verification")
+    candidate = tmp_path / "melee-package"
+    packages.prepare(site, candidate, target=record["identity"]["target"], source=record["identity"]["source"])
+    if change == "source":
+        (root / "data/standard/100.json").write_text("changed")
+        with pytest.raises(ValueError, match="Fixed material changed"):
+            verification.verify_material(record, candidate)
+    elif change == "missing_event":
+        record["identity"]["scope"]["melee"][0]["event_id"] = "999"
+        with pytest.raises(ValueError, match="Selected Melee event"):
+            verification.verify_material(record, candidate)
+    else:
+        verification.verify_material(record, candidate)
+
+
 @pytest.mark.parametrize('change', ['package', 'site', 'reference', 'policy', 'implementation'])
 def test_success_reuse_still_rejects_changes(material, monkeypatch, change):
     root, site, accepted, prepare = material

@@ -786,9 +786,9 @@ def _generate_melee(stage: Path, format_id: str, *, event_ids: set[str] | None =
                 write_statistics_document(event_output / f"{name}.json", statistics_document_bytes(document))
         def matchups():
             write_statistics_document(event_output / "matchup.json", statistics_document_bytes(
-                build_event_matchup_from_paths(event_path, classification_path, opportunity_path, taxonomy, stage)))
+                build_event_matchup_from_paths(event_path, classification_path, opportunity_path, taxonomy, stage), compact=True))
         prefix = event_output.relative_to(stage).as_posix()
-        shared = implementation(stage, COMMON + ["src/mtgmeta/melee/*.py"])
+        shared = implementation(stage, COMMON + ["src/mtgmeta/melee/*.py", "src/mtgmeta/classifier_closure.py"])
         for name, inputs, outputs, producer in (
             ("classification", [event_path, taxonomy, registry], [classification_path.relative_to(stage).as_posix()], classify),
             ("opportunities", [event_path, classification_path], [opportunity_path.relative_to(stage).as_posix()], opportunities),
