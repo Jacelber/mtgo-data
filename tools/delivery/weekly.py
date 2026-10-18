@@ -145,19 +145,19 @@ def continue_delivery(path, *, remote=None, verify=None, resources=None):
             # This is the delivery fact. A data delivery never writes weekly completion.
             progress["delivered"] = {"kind": identity["kind"], "current": state["observed"]["current"]}
             if identity["kind"] == "landing_content" and not progress.get("content_completion"):
-                from tools.review_submission import confirmed_completion
+                from tools.review_submission import confirmed_completions
                 candidate = Path(progress["candidate"]) if progress.get("candidate") else work / "delivered-package"
                 if not candidate.exists():
                     remote.retrieve(record, progress["package"], candidate)
                 envelopes = [read(item["path"]) for item in identity["references"]]
-                completions = {}
+                selected = []
                 for fmt in identity["scope"]["mtgo_formats"]:
                     matching = [e for e in envelopes if e.get("submission", {}).get("kind") == "preview"
                                 and e["submission"].get("format") == fmt]
                     if len(matching) != 1:
                         raise ValueError(f"Expected one existing final page acceptance for {fmt}")
-                    completions[fmt] = confirmed_completion(matching[0], candidate, state["observed"], target=identity["target"])
-                progress["content_completion"] = completions
+                    selected.append(matching[0])
+                progress["content_completion"] = confirmed_completions(selected, candidate, state["observed"], target=identity["target"])
             save(path, record)
             return {"state": "delivered", "kind": identity["kind"], "operation": record["operation"],
                     "weekly_completion": "not_implied"}
@@ -196,7 +196,9 @@ def continue_delivery(path, *, remote=None, verify=None, resources=None):
                 progress["candidate"] = str(candidate)
             elif action == "archive":
                 candidate = Path(progress["candidate"])
-                verify(record, candidate)
+                from tools.delivery.verification import verify_once
+                verification = verify_once(record, candidate, lambda: save(path, record), verifier=verify)
+                record['history'].append({'action': 'material_verification', 'state': verification})
                 if not progress.get("archived"):
                     result = remote.archive(record, candidate)
                     progress["archived"] = result["id"]
@@ -210,7 +212,9 @@ def continue_delivery(path, *, remote=None, verify=None, resources=None):
                 manifest = read(candidate / "manifest.json")
                 if manifest["id"] != progress["package"]:
                     raise ValueError("Archived package differs from selected candidate")
-                verify(record, candidate)
+                from tools.delivery.verification import verify_once
+                verification = verify_once(record, candidate, lambda: save(path, record), verifier=verify)
+                record['history'].append({'action': 'material_verification', 'state': verification})
                 progress["send_started"] = True
                 save(path, record)
                 result = remote.send(record, "publish")

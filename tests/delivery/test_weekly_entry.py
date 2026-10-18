@@ -79,11 +79,15 @@ def test_complete_local_data_candidate_never_generates_and_is_idempotent(tmp_pat
     before = record.read_bytes()
     assert weekly.inspect(record, remote=remote)["next"] == "package"
     assert record.read_bytes() == before and remote.preparations == 0
-    first = weekly.continue_delivery(record, remote=remote, verify=lambda *a: None, resources=no_generation)
+    checked = []
+    first = weekly.continue_delivery(record, remote=remote, verify=lambda *a: checked.append('checked'), resources=no_generation)
     second = weekly.continue_delivery(record, remote=remote, verify=lambda *a: None, resources=no_generation)
     assert first == second
     assert first["kind"] == "reviewed_data" and first["weekly_completion"] == "not_implied"
     assert remote.sends == remote.archives == remote.preparations == 1
+    assert checked == ['checked']
+    assert [item['state'] for item in weekly.read(record)['history']
+            if item['action'] == 'material_verification'] == ['executed', 'reused']
 
 
 def test_lost_response_is_not_permission_to_send_again(tmp_path):
@@ -159,10 +163,12 @@ def test_registration_failure_reuses_already_archived_package(tmp_path):
     def fail(*args):
         raise OSError("registration unavailable")
     remote.remember = fail
-    assert weekly.continue_delivery(record, remote=remote, verify=lambda *a: None)["state"] == "repair_required"
+    checked = []
+    assert weekly.continue_delivery(record, remote=remote, verify=lambda *a: checked.append('checked'))["state"] == "repair_required"
     remote.remember = lambda *a: None
-    assert weekly.continue_delivery(record, remote=remote, verify=lambda *a: None)["state"] == "delivered"
+    assert weekly.continue_delivery(record, remote=remote, verify=lambda *a: checked.append('checked'))["state"] == "delivered"
     assert remote.archives == remote.sends == 1
+    assert checked == ['checked']
 
 
 def test_changed_confirmation_after_archiving_still_blocks_send(tmp_path):

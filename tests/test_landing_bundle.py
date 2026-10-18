@@ -151,7 +151,7 @@ def test_completion_requires_the_accepted_preview_in_the_confirmed_archive(site,
         review.validate_completion(root, "standard", "2026-W38", {"preview_acceptance": envelope})
 
 
-@pytest.mark.parametrize("change,expected", [("other_format", "current"), ("selected_color", "changed"), ("selected_image", "changed")])
+@pytest.mark.parametrize("change,expected", [("other_format", "current"), ("selected_color", "changed"), ("selected_image", "changed"), ('published_resources', 'current')])
 def test_direct_resources_preserve_selected_visual_semantics(site, change, expected):
     from mtgmeta.mtgo import review_submission as review
     root, base, documents = site
@@ -173,8 +173,28 @@ def test_direct_resources_preserve_selected_visual_semantics(site, change, expec
     image = root / "assets/images/representative-cards/standard/card.jpg"
     image.parent.mkdir(parents=True)
     image.write_bytes(b"synthetic selected image bytes")
+    resource_root = None
+    if change == 'published_resources':
+        import shutil
+        lookup = root / 'assets/card-localization/cards.json'
+        lookup.parent.mkdir(parents=True)
+        localized = lookup.parent / 'images/card.jpg'
+        localized.parent.mkdir()
+        localized.write_bytes(b'previously verified localized card')
+        lookup.write_text(json.dumps({'Card': {'local_image': 'assets/card-localization/images/card.jpg', 'zh_name': '牌'}}))
     before = review.preview_packet(root, "standard")
+    if change == 'published_resources':
+        resource_root = root.parent / (root.name + '-published-resources')
+        (resource_root / 'assets').mkdir(parents=True)
+        shutil.move(root / 'assets/card-localization', resource_root / 'assets/card-localization')
+        assert not (root / 'assets/card-localization').exists()
     if change == "other_format": visual.write_text(visual.read_text().replace('["g"]', '["b"]'))
     if change == "selected_color": visual.write_text(visual.read_text().replace('["u"]', '["r"]'))
     if change == "selected_image": image.write_bytes(b"changed selected image bytes")
-    assert review.packet_validity(before, review.preview_packet(root, "standard"))["state"] == expected
+    assert review.packet_validity(before, review.preview_packet(root, "standard", resource_root=resource_root))["state"] == expected
+    if resource_root:
+        visual.write_text(visual.read_text().replace('["u"]', '["r"]'))
+        assert review.packet_validity(before, review.preview_packet(root, 'standard', resource_root=resource_root))['state'] == 'changed'
+        localized = resource_root / 'assets/card-localization/images/card.jpg'
+        localized.write_bytes(b'wrong published image')
+        assert review.packet_validity(before, review.preview_packet(root, 'standard', resource_root=resource_root))['state'] == 'changed'
