@@ -490,6 +490,7 @@ const manaIdentities = Object.freeze({
     "allies": Object.freeze(["w", "u", "g"]),
     "bant-ritual-blink": Object.freeze(["w", "u", "g"]),
     "darklight-phoenix": Object.freeze(["b"]),
+    "darklight-phoenix/rakdos": Object.freeze(["b", "r"]),
     "darklight-phoenix/golgari": Object.freeze(["b", "g"]),
     "darklight-phoenix/grixis": Object.freeze(["u", "b", "r"]),
     "darklight-phoenix/sultai": Object.freeze(["u", "b", "g"]),
