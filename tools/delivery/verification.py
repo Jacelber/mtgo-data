@@ -22,8 +22,8 @@ def material_snapshot(root, scope):
         return None  # Synthetic adapter tests; the real verifier rejects this.
     config = load_config(root, config_path)
     paths = publication_paths(root, config) | {"configs/pages_publication.json"} | set(config["compatibility_manifests"])
-    inputs = {fmt: _protected_input_fingerprints(root, fmt)
-              for fmt in scope.get("mtgo_formats", [])}
+    formats = set(scope.get("mtgo_formats", [])) | {item["format"] for item in scope.get("melee", [])}
+    inputs = {fmt: _protected_input_fingerprints(root, fmt) for fmt in sorted(formats)}
     return {"files": files(root, sorted(paths)), "inputs": inputs}
 
 
@@ -47,7 +47,9 @@ def verify_material(record, candidate):
     require_public_representatives(root, selected)
     validate_compatibility(root, config, selected)
     formats = identity["scope"].get("mtgo_formats", [])
-    if not formats or len(formats) != len(set(formats)):
+    melee = identity["scope"].get("melee", [])
+    if (len(formats) != len(set(formats)) or (not formats and not melee)
+            or (identity["kind"] == "landing_content" and not formats)):
         raise ValueError("Delivery requires distinct admitted formats")
     for fmt in formats:
         approved = resolve_scope(root, fmt)
@@ -56,6 +58,16 @@ def verify_material(record, candidate):
         if inspect_publication(root, fmt):
             raise ValueError("Data consumer binding is stale")
         validate_current_melee(root, fmt)
+    for fmt in {item["format"] for item in melee} - set(formats):
+        # A single-event release without rule changes need not regenerate MTGO,
+        # but its existing consumers and selected Melee event must remain valid.
+        if inspect_publication(root, fmt):
+            raise ValueError("Retained MTGO consumer binding is stale")
+        validate_current_melee(root, fmt)
+    for item in melee:
+        catalog = json.loads((root / f"stats/{item['format']}/melee/index.json").read_text(encoding="utf-8"))
+        if sum(str(entry["event_id"]) == item["event_id"] for entry in catalog["events"]) != 1:
+            raise ValueError("Selected Melee event is missing or duplicated")
     # Compare the whole public package to the fixed selected site, not a few probes.
     site = Path(record["progress"].get("site") or identity["site"])
     expected_site = record["progress"].get("site_files") or identity.get("site_files")

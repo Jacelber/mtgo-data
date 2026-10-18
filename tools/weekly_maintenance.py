@@ -588,11 +588,14 @@ def stage_data(root, plan, resume_stage=None, previous=None):
                        "stats": [event_prefix + "/" + value + ".json" for value in ("overview", "decks", "quality")],
                        "matchup": [event_prefix + "/matchup.json"], "publish": [event_prefix + "/meta.json"]}[name]
             def generate():
-                code = producer(["--root", str(root), "--format", fmt, "--event-id", event, "--execute"])
+                arguments = ["--root", str(root), "--format", fmt, "--event-id", event, "--execute"]
+                if name == "matchup":
+                    arguments.append("--compact")
+                code = producer(arguments)
                 if code:
                     raise ValueError(f"Melee {event} {name} failed; retained candidate: {root}")
             progress.run(f"{fmt}/{event}/{name}", {"inputs": before_inputs[fmt],
-                "code": implementation(root, COMMON + ["src/mtgmeta/melee/*.py"])}, root, outputs, generate)
+                "code": implementation(root, COMMON + ["src/mtgmeta/melee/*.py", "tools/weekly_maintenance.py"])}, root, outputs, generate)
             completed.append({"format": item["format"], "event": item["event_id"], "producer": name,
                               "seconds": round(perf_counter() - started, 4)})
     for f in sync_formats:
@@ -604,6 +607,12 @@ def stage_data(root, plan, resume_stage=None, previous=None):
         result = stage_publications(root, formats, include_landing=False, execute=False, resume_stage=resume_stage)
     else:
         result = {"stage": str(root), "formats": [], "executed": False}
+    config_path = Path(result["stage"]) / "configs/pages_publication.json"
+    if config_path.is_file():
+        from build_pages_artifact import load_config, measure_artifact
+        from tools.delivery.packages import MAX_BYTES
+        staged = Path(result["stage"])
+        result["size_preflight"] = measure_artifact(staged, load_config(staged, config_path), maximum_bytes=MAX_BYTES)
     return {**result, "root": str(root), "input_fingerprints": before_inputs, "generation_subject": generation_subject, "current_melee_scope": current_scope,
             "melee_scope": members, "melee_completed": completed,
             "reused_melee": (previous.get("melee_completed", []) + previous.get("reused_melee", [])) if previous else [],

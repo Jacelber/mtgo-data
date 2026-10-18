@@ -216,7 +216,7 @@ jobs:
         if: inputs.review_standings_round_id == ''
         run: >-
           python -B -m mtgmeta.melee.matchup
-          --root . --format "$FORMAT" --event-id "$EVENT_ID" --execute
+          --root . --format "$FORMAT" --event-id "$EVENT_ID" --execute --compact
 
       - name: Package event metadata and catalog
         if: inputs.review_standings_round_id == ''

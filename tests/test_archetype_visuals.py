@@ -195,7 +195,7 @@ def test_shared_pair_passes_real_packager_and_preserves_existing_landing(tmp_pat
     (root / landing).parent.mkdir()
     (root / landing).write_text('{"week":"previous","features":{"items":[]}}')
     selected.add(landing)
-    monkeypatch.setattr(builder, "load_config", lambda *a: {"maximum_artifact_bytes": 1000000})
+    monkeypatch.setattr(builder, "load_config", lambda *a: {"maximum_artifact_bytes": 1000000, "generated_overlays": []})
     monkeypatch.setattr(builder, "publication_paths", lambda *a: selected)
     monkeypatch.setattr(builder, "validate_compatibility", lambda *a: [])
     monkeypatch.setattr(builder, "_copy_generated_overlays", lambda *a: set())

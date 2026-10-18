@@ -350,6 +350,38 @@ def _require_outside(path: Path, base: Path, message: str) -> None:
     raise PublicationError(message)
 
 
+def measure_artifact(root: Path, config: dict[str, Any], *, selected=None, overlays=None, maximum_bytes=None) -> dict[str, Any]:
+    """Check the byte budget before copying or freezing a candidate.
+
+    Without resource overlays this is explicitly a lower bound. The builder
+    still verifies resource provenance, collisions and the final copied bytes.
+    """
+    selected = publication_paths(root, config) if selected is None else selected
+    source_bytes = _tree_bytes(root, selected)
+    overlay_bytes = {}
+    configured = {item["id"]: item for item in config["generated_overlays"]}
+    if set(overlays or {}) - set(configured):
+        raise PublicationError("Unknown generated overlay")
+    for identifier, directory in (overlays or {}).items():
+        directory = Path(directory)
+        if directory.is_symlink() or not directory.is_dir():
+            raise PublicationError(f"generated overlay is not a directory: {identifier}")
+        paths = list(directory.rglob("*"))
+        if any(path.is_symlink() for path in paths):
+            raise PublicationError(f"symbolic links are prohibited in overlay: {identifier}")
+        size = sum(path.stat().st_size for path in paths if path.is_file())
+        if size > configured[identifier]["maximum_bytes"]:
+            raise PublicationError(f"generated overlay exceeds maximum_bytes: {identifier}")
+        overlay_bytes[identifier] = size
+    total = source_bytes + sum(overlay_bytes.values())
+    maximum = min(config["maximum_artifact_bytes"], maximum_bytes) if maximum_bytes is not None else config["maximum_artifact_bytes"]
+    if total > maximum:
+        raise PublicationError(f"artifact would exceed maximum_artifact_bytes: {total}")
+    return {"source_bytes": source_bytes, "overlay_bytes": overlay_bytes, "bytes": total,
+            "maximum_bytes": maximum,
+            "complete": set(overlay_bytes) == set(configured)}
+
+
 def _copy_generated_overlays(
     root: Path,
     output: Path,
@@ -443,11 +475,7 @@ def build_artifact(
             validate_current_melee(root, catalog.parent.parent.name)
     except (ValueError, RuntimeError) as exc:
         raise PublicationError(f"current Melee classification is incomplete: {exc}") from exc
-    source_bytes = _tree_bytes(root, selected)
-    if source_bytes > config["maximum_artifact_bytes"]:
-        raise PublicationError(
-            f"artifact would exceed maximum_artifact_bytes: {source_bytes}"
-        )
+    measure_artifact(root, config, selected=selected, overlays=overlays)
 
     output.mkdir(parents=True)
     for relative in sorted(selected):
