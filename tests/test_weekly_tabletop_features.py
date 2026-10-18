@@ -15,7 +15,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def retained_event(root):
     event = {"metadata": {"constructed_format": "modern", "name": "Two-day event",
-                         "date": {"start": "2026-10-03", "end": "2026-10-04"}}}
+                         "date": {"start": "2026-10-03", "end": "2026-10-04"}},
+             "rounds": ([{"swiss": True, "game_format": "modern", "stage": "day1" if n < 8 else "day2"} for n in range(12)]
+                        + [{"swiss": False, "game_format": "modern", "stage": "playoff"}])}
     paths = {"event": "data/modern/melee/events/123.json", "classification": "data/class.json",
              "opportunity": "data/opportunities.json", "taxonomy": "configs/taxonomy.json"}
     inputs = {}
@@ -27,16 +29,25 @@ def retained_event(root):
             "classification": {"status": "classified", "archetype_id": "prowess", "subtype_id": None,
                                "archetype_name": "Prowess", "subtype_name": None},
             "decklist": {"status": "submitted", "cards": [{"name": "Card A", "quantity": 60, "section": "main"}]},
-            "scopes": {"all_constructed": {"result_counts": {"played_win": 9, "played_loss": 2, "intentional_draw": 1}}}}
+            "scopes": {"all_constructed": {"constructed_points": 28, "result_counts": {"played_win": 9, "played_loss": 2, "intentional_draw": 1}}}}
     three_losses = deepcopy(base)
     three_losses.update(participant_id="p2", final_rank=12)
-    three_losses["scopes"]["all_constructed"]["result_counts"]["played_loss"] = 3
+    three_losses["scopes"]["all_constructed"].update(constructed_points=25,
+        result_counts={"played_win": 8, "played_loss": 3, "intentional_draw": 1})
     unknown_score = deepcopy(base)
     unknown_score.update(participant_id="p3", final_rank=13)
     unknown_score["scopes"]["all_constructed"]["result_counts"]["unknown_result"] = 1
+    top8 = []
+    for rank in range(1, 9):
+        entry = deepcopy(base)
+        entry.update(participant_id=f"top{rank}", final_rank=rank,
+                     decklist={"status": "unavailable", "cards": []})
+        entry["scopes"]["all_constructed"].update(constructed_points=31,
+            result_counts={"played_win": 10, "played_loss": 1, "intentional_draw": 1})
+        top8.append(entry)
     weekly_maintenance.write(root / "stats/modern/melee/events/123/decks.json",
                              {"event_id": "123", "format": "modern", "input": inputs,
-                              "decks": [base, three_losses, unknown_score]})
+                              "decks": [base, three_losses, unknown_score, *top8]})
 
 
 def test_swiss_boundary_draws_and_unresolved_results():
@@ -98,6 +109,8 @@ def test_source_qualified_public_rank_contract():
     deck.update(source="melee", event_name="Event", swiss_record={"wins": 9, "losses": 2, "draws": 1})
     assert validator.is_valid(deck)
     deck["swiss_record"]["losses"] = 3
+    assert validator.is_valid(deck)
+    deck["swiss_record"]["losses"] = -1
     assert not validator.is_valid(deck)
 
 
@@ -119,7 +132,8 @@ def test_retained_tabletop_reference_follows_current_taxonomy_without_changing_c
     assert len(cache) == 1
 
 
-def test_tabletop_accepted_import_and_generation_keep_mtgo_facts(retained_content):
+@pytest.mark.parametrize("losses", [2, 3])
+def test_tabletop_accepted_import_and_generation_keep_mtgo_facts(retained_content, losses):
     from datetime import date
     from mtgmeta.mtgo import landing, review_submission as submissions
     from tools.import_landing_conversation import import_content
@@ -131,12 +145,20 @@ def test_tabletop_accepted_import_and_generation_keep_mtgo_facts(retained_conten
     retained_event(root)
     event = weekly_maintenance.read(root / "data/modern/melee/events/123.json")
     event["metadata"].update(constructed_format="pauper", date={"start": "2026-09-26", "end": "2026-09-27"})
+    for round_ in event["rounds"]:
+        round_["game_format"] = "pauper"
     weekly_maintenance.write(root / "data/pauper/melee/events/123.json", event)
     public = weekly_maintenance.read(root / "stats/modern/melee/events/123/decks.json")
     public["format"] = "pauper"
     public["input"].update(event_path="data/pauper/melee/events/123.json",
         event_sha256=hashlib.sha256((root / "data/pauper/melee/events/123.json").read_bytes()).hexdigest())
     item = public["decks"][0]
+    if losses == 3:
+        item["scopes"]["all_constructed"].update(constructed_points=27,
+            result_counts={"played_win": 9, "played_loss": 3})
+        for qualifier in public["decks"][3:]:
+            qualifier["scopes"]["all_constructed"].update(constructed_points=30,
+                result_counts={"played_win": 10, "played_loss": 2})
     item["classification"].update(archetype_id=original["parent_id"], subtype_id=original["subtype_id"])
     item["decklist"]["cards"] = [dict(name=c["name"], quantity=c["qty"], section=section)
         for zone, section in (("main_deck", "main"), ("side_deck", "sideboard")) for c in original[zone]]
@@ -167,6 +189,88 @@ def test_tabletop_accepted_import_and_generation_keep_mtgo_facts(retained_conten
     status, page = landing.build_document(root, "pauper", today=date(2026, 9, 28))
     assert page["features"]["items"][0]["deck"]["source"] == "melee", status
     assert page["features"]["items"][0]["deck"]["final_rank"] == 11
+    assert page["features"]["items"][0]["deck"]["swiss_record"]["losses"] == losses
     assert page["populations"] == before["populations"]
     assert page["environment"] == before["environment"]
     assert page["source_event_ids"] == before["source_event_ids"]
+
+
+
+def test_points_cutoff_uses_lowest_qualifier_and_keeps_all_ties(tmp_path):
+    retained_event(tmp_path)
+    path = tmp_path / "stats/modern/melee/events/123/decks.json"
+    public = weekly_maintenance.read(path)
+    # Final 8th is not necessarily the lowest Swiss scorer: final 2nd has 30.
+    public["decks"][4]["scopes"]["all_constructed"].update(constructed_points=30,
+        result_counts={"played_win": 10, "played_loss": 2})
+    def add(pid, counts, rank=20):
+        deck = deepcopy(public["decks"][0])
+        deck.update(participant_id=pid, final_rank=rank)
+        score = landing_tabletop.swiss_record(counts)
+        deck["scopes"]["all_constructed"].update(result_counts=counts,
+            constructed_points=3 * score["wins"] + score["draws"])
+        public["decks"].append(deck)
+    add("three-loss", {"played_win": 9, "played_loss": 3})
+    add("tie", {"played_win": 8, "played_loss": 1, "intentional_draw": 3}, 99)
+    add("bye", {"played_win": 8, "bye": 1, "played_loss": 3})
+    add("exempt", {"played_win": 8, "awarded_win_top8_lock": 1, "played_loss": 3})
+    add("below", {"played_win": 8, "played_loss": 2, "intentional_draw": 2})
+    add("early", {"played_win": 9})
+    add("zero-two", {"played_loss": 2})
+    add("inconsistent", {"played_win": 9, "played_loss": 3})
+    public["decks"][-1]["scopes"]["all_constructed"]["constructed_points"] = 50
+    weekly_maintenance.write(path, public)
+    result = landing_tabletop.build_catalog(tmp_path, "modern", "2026-W40", ["123"])
+    event = result["events"][0]
+    assert event["top8_min_swiss_points"] == 30
+    assert event["minimum_swiss_points"] == 27
+    expected = {"p1", "three-loss", "tie", "bye", "exempt"}
+    assert {d["token"] for d in result["decks"]} == {
+        "deck:" + landing_tabletop.digest(["melee", "123", pid])[:20] for pid in expected}
+    # Candidate selection is not a different public statistics definition.
+    assert weekly_maintenance.read(path) == public
+
+
+@pytest.mark.parametrize("missing", ["rank", "score", "rounds"])
+def test_missing_cutoff_does_not_guess_or_expand(tmp_path, missing):
+    retained_event(tmp_path)
+    path = tmp_path / "stats/modern/melee/events/123/decks.json"
+    public = weekly_maintenance.read(path)
+    # A verified top-eight deck remains available independently of expansion.
+    public["decks"][3]["decklist"] = deepcopy(public["decks"][0]["decklist"])
+    if missing == "rank":
+        public["decks"][-1]["final_rank"] = 9
+    elif missing == "score":
+        public["decks"][-1]["scopes"]["all_constructed"]["result_counts"]["unknown_result"] = 1
+    else:
+        event_path = tmp_path / "data/modern/melee/events/123.json"
+        event = weekly_maintenance.read(event_path)
+        event["rounds"] = []
+        weekly_maintenance.write(event_path, event)
+        public["input"]["event_sha256"] = hashlib.sha256(event_path.read_bytes()).hexdigest()
+    weekly_maintenance.write(path, public)
+    result = landing_tabletop.build_catalog(tmp_path, "modern", "2026-W40", ["123"])
+    assert result["events"][0]["minimum_swiss_points"] is None
+    assert result["events"][0]["selection_issue"]
+    assert [d["final_rank"] for d in result["decks"]] == [1]
+
+
+def test_retained_legacy_selection_survives_new_candidate_policy(tmp_path):
+    retained_event(tmp_path)
+    path = tmp_path / "stats/modern/melee/events/123/decks.json"
+    public = weekly_maintenance.read(path)
+    public["decks"][0]["scopes"]["all_constructed"].update(constructed_points=0,
+        result_counts={"played_loss": 2})
+    weekly_maintenance.write(path, public)
+    old = landing_tabletop.build_catalog(tmp_path, "modern", "2026-W40", ["123"],
+        selection_policy=landing_tabletop.LEGACY_POLICY)
+    assert len(old["decks"]) == 1
+    source = {"format": "modern", "week": {"id": "2026-W40"}, "all_top8": [],
+              "tabletop": old, "bindings": {"tabletop_digest": landing_tabletop.digest(old)},
+              "review": {"features": {"items": [{"destination_id": old["decks"][0]["token"]}]}}}
+    unchanged = deepcopy(source)
+    assert not landing_tabletop.build_catalog(tmp_path, "modern", "2026-W40", ["123"])["decks"]
+    assert landing_tabletop.validate_retained(tmp_path, source) == source["bindings"]
+    resolved = landing_editorial.resolve_review_decks(tmp_path, source, mtgo_catalog={})
+    assert resolved[old["decks"][0]["token"]]["swiss_record"]["wins"] == 0
+    assert source == unchanged

@@ -371,7 +371,7 @@
         "display_name": {"type": "string", "minLength": 1},
         "source": {"const": "melee"},
         "event_name": {"type": "string", "minLength": 1},
-        "swiss_record": {"type": "object", "additionalProperties": false, "required": ["wins", "losses", "draws"], "properties": {"wins": {"type": "integer", "minimum": 0}, "losses": {"type": "integer", "minimum": 0, "maximum": 2}, "draws": {"type": "integer", "minimum": 0}}},
+        "swiss_record": {"type": "object", "additionalProperties": false, "required": ["wins", "losses", "draws"], "properties": {"wins": {"type": "integer", "minimum": 0}, "losses": {"type": "integer", "minimum": 0}, "draws": {"type": "integer", "minimum": 0}}},
         "event_id": {"type": "string", "pattern": "^[0-9]+$"},
         "deck_id": {"type": "string", "minLength": 1},
         "deck_fingerprint_sha256": {"$ref": "#/$defs/sha256"},
@@ -427,7 +427,7 @@
       "properties": {
         "source": {"const": "melee"},
         "event_name": {"type": "string", "minLength": 1},
-        "swiss_record": {"type": "object", "additionalProperties": false, "required": ["wins", "losses", "draws"], "properties": {"wins": {"type": "integer", "minimum": 0}, "losses": {"type": "integer", "minimum": 0, "maximum": 2}, "draws": {"type": "integer", "minimum": 0}}},
+        "swiss_record": {"type": "object", "additionalProperties": false, "required": ["wins", "losses", "draws"], "properties": {"wins": {"type": "integer", "minimum": 0}, "losses": {"type": "integer", "minimum": 0}, "draws": {"type": "integer", "minimum": 0}}},
         "event_id": {"type": "string", "pattern": "^[0-9]+$"},
         "deck_id": {"type": "string", "minLength": 1},
         "deck_fingerprint_sha256": {"$ref": "#/$defs/sha256"},
