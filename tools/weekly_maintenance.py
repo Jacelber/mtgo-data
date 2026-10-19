@@ -123,7 +123,7 @@ def check_prepared_body(output):
         raise ValueError('Landing body links differ from prepared Owner copy; regenerate a new revision')
 
 
-def inventory(root, source, displayed=None, previous=None, facts=None):
+def inventory(root, source, displayed=None, previous=None, facts=None, confirmed=None):
     """Derive required inputs without manufacturing choices or acceptance."""
     format_id, week = scope(source)
     page = facts["page"] if facts else read(root / f"stats/{format_id}/mtgo/landing/current.json")
@@ -201,6 +201,18 @@ def inventory(root, source, displayed=None, previous=None, facts=None):
     if displayed and displayed.get("format") != format_id:
         raise ValueError("Displayed page belongs to another format")
     old_rows = {row["archetype_id"]: row for row in (displayed or {}).get("environment", {}).get("rows", [])}
+    confirmed_rows = {}
+    if confirmed is not None:
+        if (confirmed.get("format"), confirmed.get("week")) != (format_id, week):
+            raise ValueError("Representative confirmations belong to another scope")
+        for item in confirmed.get("entries", []):
+            cards = item.get("cards", [])
+            identity = item.get("archetype_id")
+            if (not identity or identity in confirmed_rows or len(cards) != 2
+                    or len(set(cards)) != 2 or not all(isinstance(c, str) and c.strip() for c in cards)
+                    or not str(item.get("evidence", "")).strip()):
+                raise ValueError("Representative confirmation requires an identity, ordered pair and evidence")
+            confirmed_rows[identity] = item
     names_path = root / f"stats/{format_id}/archetype_names.json"
     names = {item["identity_id"]: item["display"] for item in read(names_path).get("names", [])} if names_path.is_file() else {}
     environment = []
@@ -211,13 +223,19 @@ def inventory(root, source, displayed=None, previous=None, facts=None):
         same = prior is not None and cards == [card["name"] for card in prior.get("key_cards", [])]
         same = same and row.get("display_name") == prior.get("display_name")
         status = "displayed_configuration_reused" if same else "changed" if prior else "not_previously_displayed"
-        if not same:
+        accepted = confirmed_rows.get(parent)
+        reused_confirmation = (accepted is not None and cards == accepted["cards"]
+                               and row.get("display_name") == accepted.get("display_name"))
+        if reused_confirmation and not same:
+            status = "confirmed_configuration_reused"
+        if not same and not reused_confirmation:
             required.append(f"环境栏 {parent}: {'首次展示' if not prior else '实际改变'}的代表牌／展示确认")
         underlying = facts.get("environment_decks", mtgo_decks) if facts else mtgo_decks
         environment.append({"archetype_id": parent, "status": status, "cards": cards,
                             "name": names.get(parent, {}).get("zh") or row.get("display_name") or parent,
                             "facts": row, "decks": [d for d in underlying if d["parent_id"] == parent]})
     return {"format": format_id, "week": week, "source_digest": digest(source),
+            "representative_confirmation_digest": digest(confirmed) if confirmed is not None else None,
             "displayed_page_digest": digest(displayed) if displayed else None,
             "aliases": identities, "active_aliases": aliases, "required_user": required,
             "machine_pending": machine, "errors": errors, "environment": environment,
@@ -1014,6 +1032,8 @@ def main(argv=None):
         cmd.add_argument("--localization", type=Path, help="Existing bilingual lookup; never fetched here")
         if name == "inspect":
             cmd.add_argument("--displayed-page", type=Path)
+            cmd.add_argument("--confirmed-representatives", type=Path,
+                             help="Retained explicit decisions or historical display evidence; configuration alone is insufficient")
             cmd.add_argument("--previous", type=Path)
             cmd.add_argument("--no-feature", action="store_true", help="Only when the Owner explicitly chose no Feature")
         else:
@@ -1235,7 +1255,8 @@ def main(argv=None):
                 source.setdefault("review", {})["features"] = {"explicit_empty": True, "items": []}
                 write(output / "source.json", source)
             result = inventory(root, source, read(args.displayed_page) if args.displayed_page else None,
-                               read(args.previous) if args.previous else None, read(args.facts) if args.facts else None)
+                               read(args.previous) if args.previous else None, read(args.facts) if args.facts else None,
+                               read(args.confirmed_representatives) if args.confirmed_representatives else None)
             write(output / "inventory.json", result)
             (output / "index.html").write_text(render_inventory(result, read(lookup) if lookup.is_file() else {},
                 read(root / f"stats/{source['format']}/archetype_names.json").get("names", [])
