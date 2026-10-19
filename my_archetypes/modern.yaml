@@ -1,8 +1,8 @@
 schema_version: 1.1.0
 format: modern
 semantic_features:
-  manifest_path: configs/classifier_semantic_features.yaml
-  manifest_sha256: 87120f979a4bd00e4a2aa601e3001862ce2575d12de355c3a42548b535b40b36
+  manifest_path: configs/classifier_semantic_features_modern.yaml
+  manifest_sha256: 602972886f8fd6ffd012eda79c162d42cadf7846ed650c30e33dd1ddf3da47af
 archetypes:
 - id: mono-blue-selective-memory
   name: Mono-Blue Selective Memory
@@ -992,9 +992,6 @@ archetypes:
         zone: main
         min_count: 2
       - card: Moonshadow
-        zone: main
-        min_count: 2
-      - card: Detective's Phoenix
         zone: main
         min_count: 2
       - card: Dark Matter Manipulator
@@ -2964,6 +2961,35 @@ archetypes:
       - card: __classifier-semantic-main-white-source__
         zone: main
         min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+  - id: oculus-ritual-simic-coatl
+    priority: 658089
+    subtype_id: simic
+    conditions:
+      all:
+      - card: Abhorrent Oculus
+        zone: main
+        min_count: 1
+      - card: Birthing Ritual
+        zone: main
+        min_count: 1
+      - card: Ice-Fang Coatl
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
       - card: __classifier-semantic-main-black-source__
         zone: main
         exact_count: 0
@@ -5021,6 +5047,8 @@ archetypes:
   name: Hammer Time
   priority: 626040
   subtypes:
+  - id: esper
+    name: Esper
   - id: azorius
     name: Azorius
   - id: boros
@@ -5034,6 +5062,38 @@ archetypes:
   - id: bant
     name: Bant
   rules:
+  - id: hammer-time-esper
+    priority: 690931
+    subtype_id: esper
+    conditions:
+      all:
+      - card: Colossus Hammer
+        zone: main
+        min_count: 1
+      - card: Puresteel Paladin
+        zone: main
+        min_count: 1
+      - card: Stoneforge Mystic
+        zone: main
+        min_count: 1
+      - card: Lich's Relic
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
   - id: hammer-time-orzhov
     priority: 626040
     subtype_id: orzhov
@@ -5921,6 +5981,35 @@ archetypes:
       - card: Watery Grave
         zone: main
         min_count: 1
+  - id: deaths-shadow-grixis-cutter
+    priority: 690911
+    subtype_id: grixis
+    conditions:
+      all:
+      - card: Death's Shadow
+        zone: main
+        min_count: 1
+      - card: Cori-Steel Cutter
+        zone: main
+        min_count: 1
+      - card: Nethergoyf
+        zone: main
+        min_count: 1
+      - card: Street Wraith
+        zone: main
+        min_count: 1
+      - card: Thoughtseize
+        zone: main
+        min_count: 1
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        min_count: 1
   - id: deaths-shadow-grixis-frog
     priority: 620025
     subtype_id: grixis
@@ -5986,7 +6075,7 @@ archetypes:
       all:
       - card: Death's Shadow
         zone: main
-        min_count: 3
+        min_count: 1
       - card: Thoughtseize
         zone: main
         min_count: 3
@@ -7618,8 +7707,8 @@ archetypes:
       - card: __classifier-semantic-main-black-source__
         zone: main
         exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
+      - card: __classifier-semantic-any-red-spell__
+        zone: any
         exact_count: 0
       - card: __classifier-semantic-main-green-source__
         zone: main
@@ -7718,6 +7807,9 @@ archetypes:
         max_count: 2
       - card: __classifier-semantic-main-red-source__
         zone: main
+        min_count: 1
+      - card: __classifier-semantic-any-red-spell__
+        zone: any
         min_count: 1
       - card: __classifier-semantic-main-black-source__
         zone: main
@@ -10450,3 +10542,72 @@ archetypes:
       - card: Sphinx's Approach
         zone: main
         min_count: 5
+- id: orzhov-energy
+  name: Orzhov Energy
+  priority: 692430
+  rules:
+  - id: orzhov-energy-primary
+    priority: 692430
+    subtype_id: null
+    conditions:
+      all:
+      - card: Guide of Souls
+        zone: main
+        min_count: 1
+      - card: Ocelot Pride
+        zone: main
+        min_count: 1
+      - card: Ranger-Captain of Eos
+        zone: main
+        min_count: 1
+      - card: Solitude
+        zone: main
+        min_count: 1
+      - card: Godless Shrine
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+- id: mono-green-landfall
+  name: Mono-Green Landfall
+  priority: 692440
+  rules:
+  - id: mono-green-landfall-primary
+    priority: 692440
+    subtype_id: null
+    conditions:
+      all:
+      - card: Earthbender Ascension
+        zone: main
+        min_count: 1
+      - card: Roiling Canopy
+        zone: main
+        min_count: 1
+      - card: Icetill Explorer
+        zone: main
+        min_count: 1
+      - card: Primeval Titan
+        zone: main
+        min_count: 1
+      - card: Amulet of Vigor
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-any-white-spell__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-any-blue-spell__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-any-black-spell__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-any-red-spell__
+        zone: main
+        exact_count: 0
