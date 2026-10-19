@@ -41,6 +41,30 @@ def test_no_feature_does_not_waive_chinese(inputs):
     assert "Feature 有无及选择" in workflow.inventory(root, source, page)["required_user"]
 
 
+def test_explicit_representatives_reused_without_claiming_historical_display(inputs):
+    root, source, page = inputs
+    confirmed = {"format": "pioneer", "week": "2026-W39", "entries": [{
+        "archetype_id": "test", "display_name": "Test", "cards": ["A", "B"],
+        "evidence": "Owner explicitly selected this ordered pair in the current delivery"}]}
+    source["review"]["top_copy"]["items"] = []
+    state = workflow.inventory(root, source, confirmed=confirmed)
+    assert state["environment"][0]["status"] == "confirmed_configuration_reused"
+    assert state["required_user"] == ["Landing 中文正文"]
+    assert workflow.inventory(root, source)["environment"][0]["status"] == "not_previously_displayed"
+    for changed in (["B", "A"], ["A", "C"]):
+        confirmed["entries"][0]["cards"] = changed
+        assert "环境栏 test" in workflow.inventory(root, source, confirmed=confirmed)["required_user"][-1]
+    confirmed["entries"][0]["cards"] = ["A", "B"]
+    confirmed["entries"][0]["display_name"] = "Different name"
+    assert "环境栏 test" in workflow.inventory(root, source, confirmed=confirmed)["required_user"][-1]
+    confirmed["entries"][0]["evidence"] = ""
+    with pytest.raises(ValueError, match="evidence"):
+        workflow.inventory(root, source, confirmed=confirmed)
+    confirmed["format"] = "modern"
+    with pytest.raises(ValueError, match="another scope"):
+        workflow.inventory(root, source, confirmed=confirmed)
+
+
 def test_feature_membership_and_missing_copy_are_independent(inputs):
     root, source, page = inputs
     source["review"]["features"] = {"items": [{"destination_id": source["all_top8"][0]["token"],
