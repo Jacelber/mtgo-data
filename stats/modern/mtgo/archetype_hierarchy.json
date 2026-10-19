@@ -2,11 +2,11 @@
   "schema_version": "1.1.0",
   "format": "modern",
   "source": "mtgo",
-  "classifier_digest": "bd2caa7696e47873f0baf9cec2297b4955627ba8d1198d6b08aacfdc7760490d",
-  "rules_updated": "2026-10-18T22:49:50+09:00",
+  "classifier_digest": "d1a43b6539af3cb80bca1e6ca200a82ca507a58c07f1ffbc831ea8ae39dc9a2b",
+  "rules_updated": "2026-10-19T22:09:01+09:00",
   "summary": {
-    "parents": 225,
-    "leaves": 305,
+    "parents": 227,
+    "leaves": 309,
     "expandable_parents": 25
   },
   "parents": [
@@ -231,6 +231,7 @@
       "subtype_ids": [
         "burn/boros",
         "burn/mono-red",
+        "burn/mono-red-cutter",
         "burn/rakdos"
       ]
     },
@@ -751,6 +752,7 @@
         "hammer-time/azorius",
         "hammer-time/bant",
         "hammer-time/boros",
+        "hammer-time/esper",
         "hammer-time/jeskai",
         "hammer-time/mono-white",
         "hammer-time/orzhov"
@@ -1065,6 +1067,12 @@
       "subtype_ids": []
     },
     {
+      "id": "mono-green-landfall",
+      "name": "Mono-Green Landfall",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "mono-green-stompy",
       "name": "Mono-Green Stompy",
       "expandable": false,
@@ -1177,6 +1185,12 @@
     {
       "id": "orzhov-blink",
       "name": "Orzhov Blink",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "orzhov-energy",
+      "name": "Orzhov Energy",
       "expandable": false,
       "subtype_ids": []
     },
@@ -1829,6 +1843,14 @@
       "display_name": "Mono-Red Burn",
       "parent_id": "burn",
       "subtype_id": "mono-red"
+    },
+    {
+      "id": "burn/mono-red-cutter",
+      "kind": "subtype",
+      "name": "Mono-Red Cutter Burn",
+      "display_name": "Mono-Red Cutter Burn",
+      "parent_id": "burn",
+      "subtype_id": "mono-red-cutter"
     },
     {
       "id": "burn/rakdos",
@@ -2687,6 +2709,14 @@
       "subtype_id": "boros"
     },
     {
+      "id": "hammer-time/esper",
+      "kind": "subtype",
+      "name": "Esper",
+      "display_name": "Esper Hammer Time",
+      "parent_id": "hammer-time",
+      "subtype_id": "esper"
+    },
+    {
       "id": "hammer-time/jeskai",
       "kind": "subtype",
       "name": "Jeskai",
@@ -3167,6 +3197,14 @@
       "subtype_id": null
     },
     {
+      "id": "mono-green-landfall",
+      "kind": "archetype",
+      "name": "Mono-Green Landfall",
+      "display_name": "Mono-Green Landfall",
+      "parent_id": "mono-green-landfall",
+      "subtype_id": null
+    },
+    {
       "id": "mono-green-stompy",
       "kind": "archetype",
       "name": "Mono-Green Stompy",
@@ -3380,6 +3418,14 @@
       "name": "Orzhov Blink",
       "display_name": "Orzhov Blink",
       "parent_id": "orzhov-blink",
+      "subtype_id": null
+    },
+    {
+      "id": "orzhov-energy",
+      "kind": "archetype",
+      "name": "Orzhov Energy",
+      "display_name": "Orzhov Energy",
+      "parent_id": "orzhov-energy",
       "subtype_id": null
     },
     {
