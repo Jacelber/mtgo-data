@@ -1057,6 +1057,41 @@ archetypes:
         min_count: 2
       - card: Consult the Star Charts
         min_count: 2
+  - id: dimir-control-countersculpt
+    priority: 40001
+    subtype_id: null
+    conditions:
+      all:
+      - card: Deadly Cover-Up
+        zone: main
+        min_count: 1
+      - card: Countersculpt
+        zone: main
+        min_count: 1
+      - card: The Theorist, Jace Beleren
+        zone: main
+        min_count: 1
+      - card: Consult the Star Charts
+        zone: main
+        min_count: 1
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Superior Spider-Man
+        zone: main
+        exact_count: 0
+      - card: Doomsday Excruciator
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
 - id: azorius-control
   name: Azorius Control
   priority: 39000
@@ -1924,9 +1959,6 @@ archetypes:
       - card: Professor Dellian Fel
         zone: main
         min_count: 2
-      - card: Breeding Pool
-        zone: main
-        min_count: 2
       - card: Watery Grave
         zone: main
         min_count: 2
@@ -1963,7 +1995,7 @@ archetypes:
       - card: Swamp
         min_count: 14
       - card: Timeline Culler
-        min_count: 3
+        min_count: 1
       - card: Forsaken Miner
         min_count: 2
   - id: mono-black-aggro-corpses-banner
@@ -3913,6 +3945,105 @@ archetypes:
         zone: main
         exact_count: 0
       - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+- id: mono-white-swarm
+  name: Mono-White Swarm
+  priority: 78014
+  rules:
+  - id: mono-white-swarm-primary
+    priority: 78014
+    subtype_id: null
+    conditions:
+      all:
+      - card: Delney, Streetwise Lookout
+        zone: main
+        min_count: 1
+      - card: Enduring Innocence
+        zone: main
+        min_count: 1
+      - card: The Last Ronin's Technique
+        zone: main
+        min_count: 1
+      - card: Elspeth, Storm Slayer
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+- id: azorius-fatehold
+  name: Azorius Fatehold
+  priority: 78015
+  rules:
+  - id: azorius-fatehold-primary
+    priority: 78015
+    subtype_id: null
+    conditions:
+      all:
+      - card: Denzilore Fatehold
+        zone: main
+        min_count: 1
+      - card: Fatehold Charm
+        zone: main
+        min_count: 1
+      - card: Proctor of Potential
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-green-source__
+        zone: main
+        exact_count: 0
+- id: mardu-demons
+  name: Mardu Demons
+  priority: 78016
+  rules:
+  - id: mardu-demons-primary
+    priority: 78016
+    subtype_id: null
+    conditions:
+      all:
+      - card: Unholy Annex // Ritual Chamber
+        zone: main
+        min_count: 1
+      - card: Inevitable Defeat
+        zone: main
+        min_count: 1
+      - card: Lightning Helix
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-blue-source__
         zone: main
         exact_count: 0
       - card: __classifier-semantic-main-green-source__

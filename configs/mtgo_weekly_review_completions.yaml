@@ -8984,6 +8984,72 @@ data_admissions:
                 accepted_on: '2026-10-16'
                 entrypoint: http://127.0.0.1:8871/standard-v4/index.html
                 submitted_digest: 0630e077b3b9ee3fb5942642814b38efae11bc7f0255c1249a76e19f101db9f2
+      - week: 2026-W42
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12856191'
+        - '12856199'
+        - '12856204'
+        - '12856571'
+        - '12856572'
+        - '12856581'
+        - '12856586'
+        source_manifest_digest: 861a0950c0cffee1b97564b96d3ca35b3d0354b2e4f73fa2c0a5ad46cbdd8d35
+        accepted_classifier_subject: e363a5b10128b144a5e604937439fb7a1f5e6be968b72a99441879069040efa3
+        classification_review_digest: 7f80ded4d064c8221983570fc9d6656932010a22683138cdf1880b3cc464531a
+        accepted_on: '2026-10-19'
+        evidence: 'Owner 2026-10-19 Standard W42: explicitly assigned seven Unknown decklists to Mono-Black Aggro, Mono-White Swarm,
+          Sultai Control, Dimir Control (two), Azorius Fatehold, and Mardu Demons; accepted all other Standard classifications.
+          Verification confirms precisely those seven identity changes and unchanged other 203 weekly records; full retained comparison
+          has only one explained same-identity historical diagnostic change.'
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: standard
+            week: 2026-W42
+            bindings:
+              event_ids:
+              - '12856191'
+              - '12856199'
+              - '12856204'
+              - '12856571'
+              - '12856572'
+              - '12856581'
+              - '12856586'
+              record_count: 210
+              classifier: e363a5b10128b144a5e604937439fb7a1f5e6be968b72a99441879069040efa3
+              classification_review_digest: 7f80ded4d064c8221983570fc9d6656932010a22683138cdf1880b3cc464531a
+              material_digest: 0fa0def562ea877b0eb8379a048cb052bedcfc693b0a55e3141a40c5d059d51b
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12856191'
+                - '12856199'
+                - '12856204'
+                - '12856571'
+                - '12856572'
+                - '12856581'
+                - '12856586'
+                record_count: 210
+                classifier: e363a5b10128b144a5e604937439fb7a1f5e6be968b72a99441879069040efa3
+                classification_review_digest: 7f80ded4d064c8221983570fc9d6656932010a22683138cdf1880b3cc464531a
+            digest: b25a5cb38493875d4dec06b3c9c9ce67a25f5cf813779ebffd77d29081463036
+          decisions:
+            format: standard
+            week: 2026-W42
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: 1833082fe611135b8d067e04df5f1df30b62a2ce9cb8546898aa87fcb08b67b1
+                evidence: 'Owner 2026-10-19 Standard W42: explicitly assigned seven Unknown decklists to Mono-Black Aggro, Mono-White
+                  Swarm, Sultai Control, Dimir Control (two), Azorius Fatehold, and Mardu Demons; accepted all other Standard classifications.
+                  Verification confirms precisely those seven identity changes and unchanged other 203 weekly records; full retained
+                  comparison has only one explained same-identity historical diagnostic change.'
+                accepted_on: '2026-10-19'
+                entrypoint: http://127.0.0.1:55721/review-v3/standard/2026-W42/index.html
+                submitted_digest: b25a5cb38493875d4dec06b3c9c9ce67a25f5cf813779ebffd77d29081463036
     pauper:
       initial:
         kind: owner_accepted_initial_public_scope
