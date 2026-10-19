@@ -8,7 +8,7 @@ selection_policy:
   build_shift: 20
   build_reference_minimum: 8
   active_release_sets: []
-machine_fact_digest: 791abb2e4a738d3409c78dec087e64e5adbdc3261dade11368fcc4632c3e8aba
+machine_fact_digest: b9430bb009752730db1f126db6e991d550ffc5da732ebe5ebbc481ed11d26d8c
 note: Machine candidates are evidence aids. The reviewer may select none, replace a candidate, and freely rewrite or remove all editorial copy.
 existing_changes:
 - identity_id: izzet-prowess
@@ -285,14 +285,14 @@ existing_changes:
     qty: 3
   - name: Skyreaping
     qty: 2
-- identity_id: golgari-sacrifice
-  archetype_id: golgari-sacrifice
+- identity_id: jund-sacrifice
+  archetype_id: jund-sacrifice
   subtype_id: null
   subtype: null
   event_id: '12856598'
   deck_id: 72783f790d2a68dcff03
   deck_fingerprint_sha256: 88e4dcc7f580a0b53eccbf3d76f83a7ee13b1a7bb535e9507a0c8a4a16c5dd94
-  archetype: Golgari Sacrifice
+  archetype: Jund Sacrifice
   player: GhostbloodGhost
   final_rank: 2
   swiss_score: 12
@@ -301,13 +301,14 @@ existing_changes:
   deviation: null
   source: existing
   candidate_reasons:
-  - type: return
-    current_high_score_count: 2
+  - type: share_increase
+    current_high_score_count: 8
     current_high_score_denominator: 54
-    current_share: 0.037
-    reference_high_score_count: 0
+    current_share: 0.1481
+    reference_high_score_count: 3
     reference_high_score_denominator: 194
-    reference_share: 0.0
+    reference_share: 0.0155
+    delta_pp: 13.27
   approved: false
   comment_zh: ''
   comment_en: ''
@@ -379,93 +380,6 @@ existing_changes:
     qty: 1
   - name: Ygra, Eater of All
     qty: 1
-- identity_id: jund-sacrifice
-  archetype_id: jund-sacrifice
-  subtype_id: null
-  subtype: null
-  event_id: '12856579'
-  deck_id: f890484a61abdb0bd5c8
-  deck_fingerprint_sha256: 10e44e4b846e2103f8e225fc84063ae156e372de34d1972a4b0be25dcfaf8820
-  archetype: Jund Sacrifice
-  player: xfile
-  final_rank: 3
-  swiss_score: 18
-  player_count: 40
-  starttime: '2026-10-15 22:00:00.0'
-  deviation: null
-  source: existing
-  candidate_reasons:
-  - type: share_increase
-    current_high_score_count: 6
-    current_high_score_denominator: 54
-    current_share: 0.1111
-    reference_high_score_count: 3
-    reference_high_score_denominator: 194
-    reference_share: 0.0155
-    delta_pp: 9.56
-  approved: false
-  comment_zh: ''
-  comment_en: ''
-  landing:
-    category: new_technology
-    order: null
-    headline_zh: ''
-    headline_en: ''
-    positioning_zh: ''
-    positioning_en: ''
-    featured_cards: []
-  main_deck:
-  - name: Biotech Specialist
-    qty: 4
-  - name: Blackcleave Cliffs
-    qty: 4
-  - name: Blazemire Verge
-    qty: 2
-  - name: Blooming Marsh
-    qty: 4
-  - name: Cauldron Familiar
-    qty: 4
-  - name: Deadly Dispute
-    qty: 4
-  - name: Greedy Freebooter
-    qty: 4
-  - name: Lively Dirge
-    qty: 3
-  - name: Mayhem Devil
-    qty: 4
-  - name: Overgrown Tomb
-    qty: 4
-  - name: Shambling Ghast
-    qty: 4
-  - name: Starting Town
-    qty: 4
-  - name: Stomping Ground
-    qty: 2
-  - name: Swamp
-    qty: 2
-  - name: The Sackville-Bagginses
-    qty: 4
-  - name: Thoughtseize
-    qty: 2
-  - name: Umbral Collar Zealot
-    qty: 1
-  - name: Witch's Oven
-    qty: 4
-  side_deck:
-  - name: Dark Betrayal
-    qty: 2
-  - name: Fable of the Mirror-Breaker
-    qty: 2
-  - name: Fatal Push
-    qty: 1
-  - name: Thoughtseize
-    qty: 2
-  - name: Tormod's Crypt
-    qty: 3
-  - name: Witherbloom Charm
-    qty: 3
-  - name: Ygra, Eater of All
-    qty: 2
 - identity_id: mono-red-aggro
   archetype_id: mono-red-aggro
   subtype_id: null
@@ -848,6 +762,6 @@ source_event_ids:
 - '12856579'
 - '12856598'
 - '12856608'
-classifier_digest: 882eb4829c332142d8b7db85cead534f3ee64badec15d192af82e3858c5910c1
+classifier_digest: 7951e52da7814abe5550f1f9fb682c7515fdd04465ee53ddf114ece1a3b981fc
 selection_policy_digest: d3397488f8c8cc2471cd9f216be17b74cf6c50b64b4e34a4b8bd451c4b3bed59
-link_catalog_digest: c679633134def37937d7f7d55a4618d94167f685913a552da5563800ce7720ce
+link_catalog_digest: 046febd2dd71643f187a8656ffcf6a6443fa2564d972276c99daf8ac67aadfdd
