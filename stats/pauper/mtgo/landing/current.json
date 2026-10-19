@@ -1,23 +1,4 @@
 {
-  "schema_version": "1.2.0",
-  "product": "mtgo-landing",
-  "format": "pauper",
-  "source": "mtgo",
-  "week": {
-    "id": "2026-W41",
-    "start": "2026-10-05",
-    "end": "2026-10-11"
-  },
-  "state": "ready",
-  "source_event_ids": [
-    "12855502",
-    "12855509",
-    "12855517",
-    "12856148",
-    "12856155",
-    "12856164",
-    "12856180"
-  ],
   "classifier": {
     "digest": "9b0fe4ea5db48512d7cfc891bca421bda97369465cad2506a0f020399bfa2abe"
   },
@@ -25,88 +6,48 @@
     "available": true,
     "unavailable_reason": null
   },
-  "thresholds": {
-    "environment_share": 0.03,
-    "share_move_pp": 5.0,
-    "exit_reference_share": 0.05,
-    "build_shift": 20,
-    "build_reference_minimum": 8
-  },
-  "populations": {
-    "current": {
-      "start": "2026-10-05",
-      "end": "2026-10-11",
-      "event_ids": [
-        "12855502",
-        "12855509",
-        "12855517",
-        "12856148",
-        "12856155",
-        "12856164",
-        "12856180"
-      ],
-      "event_count": 7,
-      "high_score_count": 115,
-      "top8_count": 56
-    },
-    "previous_week": {
-      "start": "2026-09-28",
-      "end": "2026-10-04",
-      "event_ids": [
-        "12854944",
-        "12854951",
-        "12855452",
-        "12855463",
-        "12855468",
-        "12855476",
-        "12855493"
-      ],
-      "event_count": 7,
-      "high_score_count": 107,
-      "top8_count": 56
-    },
-    "previous_four_weeks": {
-      "start": "2026-09-07",
-      "end": "2026-10-04",
-      "event_ids": [
-        "12853710",
-        "12853727",
-        "12853785",
-        "12854064",
-        "12854069",
-        "12854094",
-        "12854103",
-        "12854110",
-        "12854119",
-        "12854477",
-        "12854488",
-        "12854493",
-        "12854501",
-        "12854518",
-        "12854527",
-        "12854534",
-        "12854905",
-        "12854910",
-        "12854918",
-        "12854935",
-        "12854944",
-        "12854951",
-        "12855452",
-        "12855463",
-        "12855468",
-        "12855476",
-        "12855493"
-      ],
-      "event_count": 27,
-      "high_score_count": 467,
-      "top8_count": 216
-    }
+  "data_files": {
+    "completeness": "weeks/2026-W41/completeness.json",
+    "environment_decks": "weeks/2026-W41/environment_decks.json",
+    "feature_decks": "weeks/2026-W41/feature_decks.json",
+    "range": "weeks/2026-W41/range.json"
   },
   "environment": {
-    "threshold": 0.03,
+    "other_classified": {
+      "current": {
+        "count": 24,
+        "denominator": 115,
+        "share": 0.2087
+      },
+      "current_top8": {
+        "count": 7,
+        "denominator": 56,
+        "share": 0.125
+      },
+      "previous_four_weeks": {
+        "count": 207,
+        "denominator": 467,
+        "share": 0.4433
+      },
+      "previous_week": {
+        "count": 35,
+        "denominator": 107,
+        "share": 0.3271
+      }
+    },
     "rows": [
       {
         "archetype_id": "mono-red-madness",
+        "current": {
+          "count": 15,
+          "denominator": 115,
+          "share": 0.1304
+        },
+        "current_top8": {
+          "count": 7,
+          "denominator": 56,
+          "share": 0.125
+        },
         "display_name": "Mono-Red Madness",
         "key_cards": [
           {
@@ -116,29 +57,29 @@
             "name": "Fiery Temper"
           }
         ],
-        "current": {
-          "count": 15,
-          "denominator": 115,
-          "share": 0.1304
-        },
-        "previous_week": {
-          "count": 16,
-          "denominator": 107,
-          "share": 0.1495
-        },
         "previous_four_weeks": {
           "count": 75,
           "denominator": 467,
           "share": 0.1606
         },
-        "current_top8": {
-          "count": 7,
-          "denominator": 56,
-          "share": 0.125
+        "previous_week": {
+          "count": 16,
+          "denominator": 107,
+          "share": 0.1495
         }
       },
       {
         "archetype_id": "dimir-faeries",
+        "current": {
+          "count": 13,
+          "denominator": 115,
+          "share": 0.113
+        },
+        "current_top8": {
+          "count": 9,
+          "denominator": 56,
+          "share": 0.1607
+        },
         "display_name": "Dimir Faeries",
         "key_cards": [
           {
@@ -148,29 +89,29 @@
             "name": "Snuff Out"
           }
         ],
-        "current": {
-          "count": 13,
-          "denominator": 115,
-          "share": 0.113
-        },
-        "previous_week": {
-          "count": 11,
-          "denominator": 107,
-          "share": 0.1028
-        },
         "previous_four_weeks": {
           "count": 27,
           "denominator": 467,
           "share": 0.0578
         },
-        "current_top8": {
-          "count": 9,
-          "denominator": 56,
-          "share": 0.1607
+        "previous_week": {
+          "count": 11,
+          "denominator": 107,
+          "share": 0.1028
         }
       },
       {
         "archetype_id": "ruby-storm",
+        "current": {
+          "count": 12,
+          "denominator": 115,
+          "share": 0.1043
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 56,
+          "share": 0.0714
+        },
         "display_name": "Ruby Storm",
         "key_cards": [
           {
@@ -180,29 +121,29 @@
             "name": "Thornscape Familiar"
           }
         ],
-        "current": {
-          "count": 12,
-          "denominator": 115,
-          "share": 0.1043
-        },
-        "previous_week": {
-          "count": 0,
-          "denominator": 107,
-          "share": 0.0
-        },
         "previous_four_weeks": {
           "count": 1,
           "denominator": 467,
           "share": 0.0021
         },
-        "current_top8": {
-          "count": 4,
-          "denominator": 56,
-          "share": 0.0714
+        "previous_week": {
+          "count": 0,
+          "denominator": 107,
+          "share": 0.0
         }
       },
       {
         "archetype_id": "mono-blue-terror",
+        "current": {
+          "count": 11,
+          "denominator": 115,
+          "share": 0.0957
+        },
+        "current_top8": {
+          "count": 7,
+          "denominator": 56,
+          "share": 0.125
+        },
         "display_name": "Mono-Blue Terror",
         "key_cards": [
           {
@@ -212,29 +153,29 @@
             "name": "Thought Scour"
           }
         ],
-        "current": {
-          "count": 11,
-          "denominator": 115,
-          "share": 0.0957
-        },
-        "previous_week": {
-          "count": 8,
-          "denominator": 107,
-          "share": 0.0748
-        },
         "previous_four_weeks": {
           "count": 44,
           "denominator": 467,
           "share": 0.0942
         },
-        "current_top8": {
-          "count": 7,
-          "denominator": 56,
-          "share": 0.125
+        "previous_week": {
+          "count": 8,
+          "denominator": 107,
+          "share": 0.0748
         }
       },
       {
         "archetype_id": "dimir-control",
+        "current": {
+          "count": 7,
+          "denominator": 115,
+          "share": 0.0609
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 56,
+          "share": 0.0714
+        },
         "display_name": "Dimir Control",
         "key_cards": [
           {
@@ -244,29 +185,29 @@
             "name": "Counterspell"
           }
         ],
-        "current": {
-          "count": 7,
-          "denominator": 115,
-          "share": 0.0609
-        },
-        "previous_week": {
-          "count": 10,
-          "denominator": 107,
-          "share": 0.0935
-        },
         "previous_four_weeks": {
           "count": 11,
           "denominator": 467,
           "share": 0.0236
         },
-        "current_top8": {
-          "count": 4,
-          "denominator": 56,
-          "share": 0.0714
+        "previous_week": {
+          "count": 10,
+          "denominator": 107,
+          "share": 0.0935
         }
       },
       {
         "archetype_id": "grixis-affinity",
+        "current": {
+          "count": 7,
+          "denominator": 115,
+          "share": 0.0609
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 56,
+          "share": 0.0536
+        },
         "display_name": "Grixis Affinity",
         "key_cards": [
           {
@@ -276,29 +217,29 @@
             "name": "Refurbished Familiar"
           }
         ],
-        "current": {
-          "count": 7,
-          "denominator": 115,
-          "share": 0.0609
-        },
-        "previous_week": {
-          "count": 5,
-          "denominator": 107,
-          "share": 0.0467
-        },
         "previous_four_weeks": {
           "count": 18,
           "denominator": 467,
           "share": 0.0385
         },
-        "current_top8": {
-          "count": 3,
-          "denominator": 56,
-          "share": 0.0536
+        "previous_week": {
+          "count": 5,
+          "denominator": 107,
+          "share": 0.0467
         }
       },
       {
         "archetype_id": "golgari-gardens",
+        "current": {
+          "count": 5,
+          "denominator": 115,
+          "share": 0.0435
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 56,
+          "share": 0.0714
+        },
         "display_name": "Golgari Gardens",
         "key_cards": [
           {
@@ -308,29 +249,29 @@
             "name": "Tithing Blade"
           }
         ],
-        "current": {
-          "count": 5,
-          "denominator": 115,
-          "share": 0.0435
-        },
-        "previous_week": {
-          "count": 6,
-          "denominator": 107,
-          "share": 0.0561
-        },
         "previous_four_weeks": {
           "count": 21,
           "denominator": 467,
           "share": 0.045
         },
-        "current_top8": {
-          "count": 4,
-          "denominator": 56,
-          "share": 0.0714
+        "previous_week": {
+          "count": 6,
+          "denominator": 107,
+          "share": 0.0561
         }
       },
       {
         "archetype_id": "turbo-fog",
+        "current": {
+          "count": 5,
+          "denominator": 115,
+          "share": 0.0435
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 56,
+          "share": 0.0357
+        },
         "display_name": "Turbo Fog",
         "key_cards": [
           {
@@ -340,29 +281,29 @@
             "name": "Stream of Thought"
           }
         ],
-        "current": {
-          "count": 5,
-          "denominator": 115,
-          "share": 0.0435
-        },
-        "previous_week": {
-          "count": 0,
-          "denominator": 107,
-          "share": 0.0
-        },
         "previous_four_weeks": {
           "count": 2,
           "denominator": 467,
           "share": 0.0043
         },
-        "current_top8": {
-          "count": 2,
-          "denominator": 56,
-          "share": 0.0357
+        "previous_week": {
+          "count": 0,
+          "denominator": 107,
+          "share": 0.0
         }
       },
       {
         "archetype_id": "battle-screech",
+        "current": {
+          "count": 4,
+          "denominator": 115,
+          "share": 0.0348
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 56,
+          "share": 0.0536
+        },
         "display_name": "Battle Screech",
         "key_cards": [
           {
@@ -372,29 +313,29 @@
             "name": "Rally the Peasants"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 115,
-          "share": 0.0348
-        },
-        "previous_week": {
-          "count": 3,
-          "denominator": 107,
-          "share": 0.028
-        },
         "previous_four_weeks": {
           "count": 11,
           "denominator": 467,
           "share": 0.0236
         },
-        "current_top8": {
+        "previous_week": {
           "count": 3,
-          "denominator": 56,
-          "share": 0.0536
+          "denominator": 107,
+          "share": 0.028
         }
       },
       {
         "archetype_id": "bogles",
+        "current": {
+          "count": 4,
+          "denominator": 115,
+          "share": 0.0348
+        },
+        "current_top8": {
+          "count": 1,
+          "denominator": 56,
+          "share": 0.0179
+        },
         "display_name": "Bogles",
         "key_cards": [
           {
@@ -404,29 +345,29 @@
             "name": "Ethereal Armor"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 115,
-          "share": 0.0348
-        },
-        "previous_week": {
-          "count": 11,
-          "denominator": 107,
-          "share": 0.1028
-        },
         "previous_four_weeks": {
           "count": 35,
           "denominator": 467,
           "share": 0.0749
         },
-        "current_top8": {
-          "count": 1,
-          "denominator": 56,
-          "share": 0.0179
+        "previous_week": {
+          "count": 11,
+          "denominator": 107,
+          "share": 0.1028
         }
       },
       {
         "archetype_id": "dimir-affinity",
+        "current": {
+          "count": 4,
+          "denominator": 115,
+          "share": 0.0348
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 56,
+          "share": 0.0536
+        },
         "display_name": "Dimir Affinity",
         "key_cards": [
           {
@@ -436,29 +377,29 @@
             "name": "Refurbished Familiar"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 115,
-          "share": 0.0348
-        },
-        "previous_week": {
-          "count": 0,
-          "denominator": 107,
-          "share": 0.0
-        },
         "previous_four_weeks": {
           "count": 0,
           "denominator": 467,
           "share": 0.0
         },
-        "current_top8": {
-          "count": 3,
-          "denominator": 56,
-          "share": 0.0536
+        "previous_week": {
+          "count": 0,
+          "denominator": 107,
+          "share": 0.0
         }
       },
       {
         "archetype_id": "jund-wildfire",
+        "current": {
+          "count": 4,
+          "denominator": 115,
+          "share": 0.0348
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 56,
+          "share": 0.0357
+        },
         "display_name": "Jund Wildfire",
         "key_cards": [
           {
@@ -468,59 +409,28 @@
             "name": "Writhing Chrysalis"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 115,
-          "share": 0.0348
-        },
-        "previous_week": {
-          "count": 2,
-          "denominator": 107,
-          "share": 0.0187
-        },
         "previous_four_weeks": {
           "count": 15,
           "denominator": 467,
           "share": 0.0321
         },
-        "current_top8": {
+        "previous_week": {
           "count": 2,
-          "denominator": 56,
-          "share": 0.0357
+          "denominator": 107,
+          "share": 0.0187
         }
       }
     ],
-    "other_classified": {
-      "current": {
-        "count": 24,
-        "denominator": 115,
-        "share": 0.2087
-      },
-      "previous_week": {
-        "count": 35,
-        "denominator": 107,
-        "share": 0.3271
-      },
-      "previous_four_weeks": {
-        "count": 207,
-        "denominator": 467,
-        "share": 0.4433
-      },
-      "current_top8": {
-        "count": 7,
-        "denominator": 56,
-        "share": 0.125
-      }
-    },
+    "threshold": 0.03,
     "unknown": {
       "current": {
         "count": 0,
         "denominator": 115,
         "share": 0.0
       },
-      "previous_week": {
+      "current_top8": {
         "count": 0,
-        "denominator": 107,
+        "denominator": 56,
         "share": 0.0
       },
       "previous_four_weeks": {
@@ -528,90 +438,23 @@
         "denominator": 467,
         "share": 0.0
       },
-      "current_top8": {
+      "previous_week": {
         "count": 0,
-        "denominator": 56,
+        "denominator": 107,
         "share": 0.0
       }
     }
   },
-  "weekly_summary": {
-    "week": "2026-W41",
-    "items": [
-      {
-        "order": 1,
-        "text": {
-          "zh": "本周补强了[[card:Twinned Vision|双生视像]]的红风暴套牌明显爬升，占比来到了10%以上，并有多个八强。deck:70c2724c852f65b17058",
-          "en": "The red storm deck gained ground this week with the addition of [[card:Twinned Vision|Twinned Vision]], rising above 10% of the high-score metagame and earning multiple Top 8 finishes. deck:70c2724c852f65b17058"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:70c2724c852f65b17058",
-            "label": {
-              "zh": "红风暴 · AlessandroPiraccini · 第3名",
-              "en": "Ruby Storm · AlessandroPiraccini · Rank 3"
-            },
-            "deck": {
-              "archetype_id": "ruby-storm",
-              "display_name": "Ruby Storm",
-              "event_id": "12856155",
-              "deck_id": "70c2724c852f65b17058",
-              "deck_fingerprint_sha256": "00f84769edfe582d71c425f20d77d9f5a539fd23f3889c1ac54948b2af9ebf94",
-              "player": "AlessandroPiraccini",
-              "final_rank": 3,
-              "starttime": "2026-10-09 13:00:00.0"
-            }
-          }
-        ]
-      },
-      {
-        "order": 2,
-        "text": {
-          "zh": "另外有一套驮兽铺场思路的战呼套牌拿下一个四强：deck:769195c1f16bc27c047a",
-          "en": "A Battle Screech deck incorporating the [[card:Salt Road Packbeast|Salt Road Packbeast]] go-wide plan also reached the Top 4: deck:769195c1f16bc27c047a"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:769195c1f16bc27c047a",
-            "label": {
-              "zh": "纯白战呼 · cabrabr12 · 第3名",
-              "en": "Mono-White Battle Screech · cabrabr12 · Rank 3"
-            },
-            "deck": {
-              "archetype_id": "battle-screech",
-              "display_name": "Mono-White Battle Screech",
-              "event_id": "12855502",
-              "deck_id": "769195c1f16bc27c047a",
-              "deck_fingerprint_sha256": "4a2368df8622d7aca4672f1d57022f72544ff58240af08c39d9a7db35c1061f4",
-              "player": "cabrabr12",
-              "final_rank": 3,
-              "starttime": "2026-10-05 17:00:00.0"
-            }
-          }
-        ]
-      }
-    ]
-  },
   "features": {
-    "week": "2026-W41",
     "items": [
       {
-        "category": "new_technology",
-        "order": 1,
-        "destination_id": "deck:70c2724c852f65b17058",
         "archetype_id": "ruby-storm",
-        "subtype_id": null,
-        "display_name": "Ruby Storm",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856155",
-          "deck_id": "70c2724c852f65b17058",
           "deck_fingerprint_sha256": "00f84769edfe582d71c425f20d77d9f5a539fd23f3889c1ac54948b2af9ebf94",
-          "player": "AlessandroPiraccini",
+          "deck_id": "70c2724c852f65b17058",
+          "event_id": "12856155",
           "final_rank": 3,
-          "player_count": 52,
-          "starttime": "2026-10-09 13:00:00.0",
           "main_deck": [
             {
               "name": "Crossover Collaboration",
@@ -682,6 +525,8 @@
               "qty": 4
             }
           ],
+          "player": "AlessandroPiraccini",
+          "player_count": 52,
           "side_deck": [
             {
               "name": "Flaring Pain",
@@ -707,16 +552,11 @@
               "name": "Weather the Storm",
               "qty": 3
             }
-          ]
+          ],
+          "starttime": "2026-10-09 13:00:00.0"
         },
-        "headline": {
-          "en": "Ruby Storm",
-          "zh": "红风暴"
-        },
-        "positioning": {
-          "zh": "加入双生视像的版本",
-          "en": "A build adding Twinned Vision."
-        },
+        "destination_id": "deck:70c2724c852f65b17058",
+        "display_name": "Ruby Storm",
         "featured_cards": [
           {
             "name": "Twinned Vision"
@@ -731,6 +571,16 @@
             "name": "Crossover Collaboration"
           }
         ],
+        "headline": {
+          "en": "Ruby Storm",
+          "zh": "红风暴"
+        },
+        "order": 1,
+        "positioning": {
+          "en": "A build adding Twinned Vision.",
+          "zh": "加入双生视像的版本"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "share_increase",
@@ -738,38 +588,31 @@
               "current_high_score_count": 12,
               "current_high_score_denominator": 115,
               "current_share": 0.1043,
+              "delta_pp": 10.22,
               "reference_high_score_count": 1,
               "reference_high_score_denominator": 467,
-              "reference_share": 0.0021,
-              "delta_pp": 10.22
+              "reference_share": 0.0021
             }
           },
           {
             "type": "new_card",
             "values": {
-              "set_code": "FRA",
               "cards": [
                 "Twinned Vision"
-              ]
+              ],
+              "set_code": "FRA"
             }
           }
         ]
       },
       {
-        "category": "new_technology",
-        "order": 2,
-        "destination_id": "deck:769195c1f16bc27c047a",
         "archetype_id": "battle-screech",
-        "subtype_id": "mono-white",
-        "display_name": "Mono-White Battle Screech",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12855502",
-          "deck_id": "769195c1f16bc27c047a",
           "deck_fingerprint_sha256": "4a2368df8622d7aca4672f1d57022f72544ff58240af08c39d9a7db35c1061f4",
-          "player": "cabrabr12",
+          "deck_id": "769195c1f16bc27c047a",
+          "event_id": "12855502",
           "final_rank": 3,
-          "player_count": 52,
-          "starttime": "2026-10-05 17:00:00.0",
           "main_deck": [
             {
               "name": "Battle Screech",
@@ -824,6 +667,8 @@
               "qty": 4
             }
           ],
+          "player": "cabrabr12",
+          "player_count": 52,
           "side_deck": [
             {
               "name": "Dust to Dust",
@@ -849,16 +694,11 @@
               "name": "Ultimate Alliance",
               "qty": 3
             }
-          ]
+          ],
+          "starttime": "2026-10-05 17:00:00.0"
         },
-        "headline": {
-          "en": "Mono-White Battle Screech",
-          "zh": "纯白战呼"
-        },
-        "positioning": {
-          "zh": "混合战呼和驮兽铺场思路",
-          "en": "A go-wide build combining Battle Screech and Salt Road Packbeast."
-        },
+        "destination_id": "deck:769195c1f16bc27c047a",
+        "display_name": "Mono-White Battle Screech",
         "featured_cards": [
           {
             "name": "Salt Road Packbeast"
@@ -873,21 +713,107 @@
             "name": "Ramosian Rally"
           }
         ],
+        "headline": {
+          "en": "Mono-White Battle Screech",
+          "zh": "纯白战呼"
+        },
+        "order": 2,
+        "positioning": {
+          "en": "A go-wide build combining Battle Screech and Salt Road Packbeast.",
+          "zh": "混合战呼和驮兽铺场思路"
+        },
+        "subtype_id": "mono-white",
         "supporting_facts": [
           {
             "type": "build_shift",
             "values": {
-              "identity_level": "subtype",
               "identity_id": "battle-screech/mono-white",
+              "identity_level": "subtype",
               "reference_sample_size": 20,
               "score": 34
             }
           }
         ]
       }
-    ]
+    ],
+    "week": "2026-W41"
   },
+  "format": "pauper",
+  "populations": {
+    "current": {
+      "end": "2026-10-11",
+      "event_count": 7,
+      "event_ids": [
+        "12855502",
+        "12855509",
+        "12855517",
+        "12856148",
+        "12856155",
+        "12856164",
+        "12856180"
+      ],
+      "high_score_count": 115,
+      "start": "2026-10-05",
+      "top8_count": 56
+    },
+    "previous_four_weeks": {
+      "end": "2026-10-04",
+      "event_count": 27,
+      "event_ids": [
+        "12853710",
+        "12853727",
+        "12853785",
+        "12854064",
+        "12854069",
+        "12854094",
+        "12854103",
+        "12854110",
+        "12854119",
+        "12854477",
+        "12854488",
+        "12854493",
+        "12854501",
+        "12854518",
+        "12854527",
+        "12854534",
+        "12854905",
+        "12854910",
+        "12854918",
+        "12854935",
+        "12854944",
+        "12854951",
+        "12855452",
+        "12855463",
+        "12855468",
+        "12855476",
+        "12855493"
+      ],
+      "high_score_count": 467,
+      "start": "2026-09-07",
+      "top8_count": 216
+    },
+    "previous_week": {
+      "end": "2026-10-04",
+      "event_count": 7,
+      "event_ids": [
+        "12854944",
+        "12854951",
+        "12855452",
+        "12855463",
+        "12855468",
+        "12855476",
+        "12855493"
+      ],
+      "high_score_count": 107,
+      "start": "2026-09-28",
+      "top8_count": 56
+    }
+  },
+  "product": "mtgo-landing",
   "review_binding": {
+    "classifier_digest": "9b0fe4ea5db48512d7cfc891bca421bda97369465cad2506a0f020399bfa2abe",
+    "machine_fact_digest": "5db386aa0686291db4a68aeb3ba8c41e1145c2ea2713fcddfe4307175c26ad9d",
+    "pickup_document_digest": "eecaa7db3e9ba98472f6e83944bf32cfc83155b3ad3939fe76311e96a0eb7443",
     "source_event_ids": [
       "12855502",
       "12855509",
@@ -897,10 +823,90 @@
       "12856164",
       "12856180"
     ],
-    "classifier_digest": "9b0fe4ea5db48512d7cfc891bca421bda97369465cad2506a0f020399bfa2abe",
-    "visual_metadata_digest": "a6475c3a7ab9f8d9218ed76da747b127275a238e8150560796aa429bda6f93fe",
-    "machine_fact_digest": "5db386aa0686291db4a68aeb3ba8c41e1145c2ea2713fcddfe4307175c26ad9d",
-    "pickup_document_digest": "3660df07ccd432fc549da2aca8be7baa39f7e815af38c014edebb84f3cf9bcf4",
-    "summary_fact_digest": "4799df481a75d81a672b00e1ab6530c2ea8b02a358f686f1f2f8d033780988eb"
+    "summary_fact_digest": "51f597c1388c9141118bdf5f6f3c73277628d488aa0be0e9614446b61a754b42",
+    "visual_metadata_digest": "0bc91bd93fd0f4ae6793760f752da523ce60bf88e999fe663afa37e67f7f99f5"
+  },
+  "schema_version": "1.2.0",
+  "source": "mtgo",
+  "source_event_ids": [
+    "12855502",
+    "12855509",
+    "12855517",
+    "12856148",
+    "12856155",
+    "12856164",
+    "12856180"
+  ],
+  "state": "ready",
+  "thresholds": {
+    "build_reference_minimum": 8,
+    "build_shift": 20,
+    "environment_share": 0.03,
+    "exit_reference_share": 0.05,
+    "share_move_pp": 5.0
+  },
+  "week": {
+    "end": "2026-10-11",
+    "id": "2026-W41",
+    "start": "2026-10-05"
+  },
+  "weekly_summary": {
+    "items": [
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "ruby-storm",
+              "deck_fingerprint_sha256": "00f84769edfe582d71c425f20d77d9f5a539fd23f3889c1ac54948b2af9ebf94",
+              "deck_id": "70c2724c852f65b17058",
+              "display_name": "Ruby Storm",
+              "event_id": "12856155",
+              "final_rank": 3,
+              "player": "AlessandroPiraccini",
+              "starttime": "2026-10-09 13:00:00.0"
+            },
+            "label": {
+              "en": "Ruby Storm · AlessandroPiraccini · Rank 3",
+              "zh": "红风暴 · AlessandroPiraccini · 第3名"
+            },
+            "order": 1,
+            "token": "deck:70c2724c852f65b17058"
+          }
+        ],
+        "order": 1,
+        "text": {
+          "en": "The red storm deck gained ground this week with the addition of [[card:Twinned Vision|Twinned Vision]], rising above 10% of the high-score metagame and earning multiple Top 8 finishes. deck:70c2724c852f65b17058",
+          "zh": "本周补强了[[card:Twinned Vision|双生视像]]的红风暴套牌明显爬升，占比来到了10%以上，并有多个八强。deck:70c2724c852f65b17058"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "battle-screech",
+              "deck_fingerprint_sha256": "4a2368df8622d7aca4672f1d57022f72544ff58240af08c39d9a7db35c1061f4",
+              "deck_id": "769195c1f16bc27c047a",
+              "display_name": "Mono-White Battle Screech",
+              "event_id": "12855502",
+              "final_rank": 3,
+              "player": "cabrabr12",
+              "starttime": "2026-10-05 17:00:00.0"
+            },
+            "label": {
+              "en": "Mono-White Battle Screech · cabrabr12 · Rank 3",
+              "zh": "纯白战呼 · cabrabr12 · 第3名"
+            },
+            "order": 1,
+            "token": "deck:769195c1f16bc27c047a"
+          }
+        ],
+        "order": 2,
+        "text": {
+          "en": "A Battle Screech deck incorporating the [[card:Salt Road Packbeast|Salt Road Packbeast]] go-wide plan also reached the Top 4: deck:769195c1f16bc27c047a",
+          "zh": "另外有一套驮兽铺场思路的战呼套牌拿下一个四强：deck:769195c1f16bc27c047a"
+        }
+      }
+    ],
+    "week": "2026-W41"
   }
 }

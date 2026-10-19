@@ -1,27 +1,4 @@
 {
-  "schema_version": "1.2.0",
-  "product": "mtgo-landing",
-  "format": "standard",
-  "source": "mtgo",
-  "week": {
-    "id": "2026-W41",
-    "start": "2026-10-05",
-    "end": "2026-10-11"
-  },
-  "state": "ready",
-  "source_event_ids": [
-    "12855542",
-    "12855544",
-    "12856121",
-    "12856130",
-    "12856137",
-    "12856141",
-    "12856143",
-    "12856152",
-    "12856154",
-    "12856158",
-    "12856183"
-  ],
   "classifier": {
     "digest": "3fe93c3fb72f281252123789274c3b767d46cc00f7c11b0e279217bd57eed4d0"
   },
@@ -29,92 +6,48 @@
     "available": true,
     "unavailable_reason": null
   },
-  "thresholds": {
-    "environment_share": 0.03,
-    "share_move_pp": 5.0,
-    "exit_reference_share": 0.05,
-    "build_shift": 20,
-    "build_reference_minimum": 8
-  },
-  "populations": {
-    "current": {
-      "start": "2026-10-05",
-      "end": "2026-10-11",
-      "event_ids": [
-        "12855542",
-        "12855544",
-        "12856121",
-        "12856130",
-        "12856137",
-        "12856141",
-        "12856143",
-        "12856152",
-        "12856154",
-        "12856158",
-        "12856183"
-      ],
-      "event_count": 11,
-      "high_score_count": 174,
-      "top8_count": 88
-    },
-    "previous_week": {
-      "start": "2026-09-28",
-      "end": "2026-10-04",
-      "event_ids": [
-        "12854946",
-        "12855458",
-        "12855466",
-        "12855471",
-        "12855496",
-        "12855524"
-      ],
-      "event_count": 6,
-      "high_score_count": 83,
-      "top8_count": 48
-    },
-    "previous_four_weeks": {
-      "start": "2026-09-07",
-      "end": "2026-10-04",
-      "event_ids": [
-        "12853712",
-        "12853721",
-        "12853786",
-        "12854059",
-        "12854067",
-        "12854072",
-        "12854079",
-        "12854097",
-        "12854105",
-        "12854114",
-        "12854118",
-        "12854483",
-        "12854491",
-        "12854496",
-        "12854503",
-        "12854521",
-        "12854529",
-        "12854538",
-        "12854542",
-        "12854913",
-        "12854920",
-        "12854938",
-        "12854946",
-        "12855458",
-        "12855466",
-        "12855471",
-        "12855496",
-        "12855524"
-      ],
-      "event_count": 28,
-      "high_score_count": 422,
-      "top8_count": 224
-    }
+  "data_files": {
+    "completeness": "weeks/2026-W41/completeness.json",
+    "environment_decks": "weeks/2026-W41/environment_decks.json",
+    "feature_decks": "weeks/2026-W41/feature_decks.json",
+    "range": "weeks/2026-W41/range.json"
   },
   "environment": {
-    "threshold": 0.03,
+    "other_classified": {
+      "current": {
+        "count": 34,
+        "denominator": 174,
+        "share": 0.1954
+      },
+      "current_top8": {
+        "count": 16,
+        "denominator": 88,
+        "share": 0.1818
+      },
+      "previous_four_weeks": {
+        "count": 102,
+        "denominator": 422,
+        "share": 0.2417
+      },
+      "previous_week": {
+        "count": 26,
+        "denominator": 83,
+        "share": 0.3133
+      }
+    },
     "rows": [
       {
         "archetype_id": "izzet-spellementals",
+        "current": {
+          "count": 25,
+          "denominator": 174,
+          "share": 0.1437
+        },
+        "current_top8": {
+          "count": 7,
+          "denominator": 88,
+          "share": 0.0795
+        },
         "display_name": "Izzet Spellementals",
         "key_cards": [
           {
@@ -124,29 +57,29 @@
             "name": "Hearth Elemental"
           }
         ],
-        "current": {
-          "count": 25,
-          "denominator": 174,
-          "share": 0.1437
-        },
-        "previous_week": {
-          "count": 6,
-          "denominator": 83,
-          "share": 0.0723
-        },
         "previous_four_weeks": {
           "count": 64,
           "denominator": 422,
           "share": 0.1517
         },
-        "current_top8": {
-          "count": 7,
-          "denominator": 88,
-          "share": 0.0795
+        "previous_week": {
+          "count": 6,
+          "denominator": 83,
+          "share": 0.0723
         }
       },
       {
         "archetype_id": "dimir-midrange",
+        "current": {
+          "count": 21,
+          "denominator": 174,
+          "share": 0.1207
+        },
+        "current_top8": {
+          "count": 11,
+          "denominator": 88,
+          "share": 0.125
+        },
         "display_name": "Dimir Midrange",
         "key_cards": [
           {
@@ -156,29 +89,29 @@
             "name": "Enduring Curiosity"
           }
         ],
-        "current": {
-          "count": 21,
-          "denominator": 174,
-          "share": 0.1207
-        },
-        "previous_week": {
-          "count": 10,
-          "denominator": 83,
-          "share": 0.1205
-        },
         "previous_four_weeks": {
           "count": 38,
           "denominator": 422,
           "share": 0.09
         },
-        "current_top8": {
-          "count": 11,
-          "denominator": 88,
-          "share": 0.125
+        "previous_week": {
+          "count": 10,
+          "denominator": 83,
+          "share": 0.1205
         }
       },
       {
         "archetype_id": "azorius-control",
+        "current": {
+          "count": 14,
+          "denominator": 174,
+          "share": 0.0805
+        },
+        "current_top8": {
+          "count": 6,
+          "denominator": 88,
+          "share": 0.0682
+        },
         "display_name": "Azorius Control",
         "key_cards": [
           {
@@ -188,29 +121,29 @@
             "name": "Countersculpt"
           }
         ],
-        "current": {
-          "count": 14,
-          "denominator": 174,
-          "share": 0.0805
-        },
-        "previous_week": {
-          "count": 2,
-          "denominator": 83,
-          "share": 0.0241
-        },
         "previous_four_weeks": {
           "count": 18,
           "denominator": 422,
           "share": 0.0427
         },
-        "current_top8": {
-          "count": 6,
-          "denominator": 88,
-          "share": 0.0682
+        "previous_week": {
+          "count": 2,
+          "denominator": 83,
+          "share": 0.0241
         }
       },
       {
         "archetype_id": "jeskai-artifacts",
+        "current": {
+          "count": 14,
+          "denominator": 174,
+          "share": 0.0805
+        },
+        "current_top8": {
+          "count": 9,
+          "denominator": 88,
+          "share": 0.1023
+        },
         "display_name": "Jeskai Artifacts",
         "key_cards": [
           {
@@ -220,29 +153,29 @@
             "name": "Repurposing Bay"
           }
         ],
-        "current": {
-          "count": 14,
-          "denominator": 174,
-          "share": 0.0805
-        },
-        "previous_week": {
-          "count": 1,
-          "denominator": 83,
-          "share": 0.012
-        },
         "previous_four_weeks": {
           "count": 6,
           "denominator": 422,
           "share": 0.0142
         },
-        "current_top8": {
-          "count": 9,
-          "denominator": 88,
-          "share": 0.1023
+        "previous_week": {
+          "count": 1,
+          "denominator": 83,
+          "share": 0.012
         }
       },
       {
         "archetype_id": "mono-green-landfall",
+        "current": {
+          "count": 12,
+          "denominator": 174,
+          "share": 0.069
+        },
+        "current_top8": {
+          "count": 8,
+          "denominator": 88,
+          "share": 0.0909
+        },
         "display_name": "Mono-Green Landfall",
         "key_cards": [
           {
@@ -252,29 +185,29 @@
             "name": "Icetill Explorer"
           }
         ],
-        "current": {
-          "count": 12,
-          "denominator": 174,
-          "share": 0.069
-        },
-        "previous_week": {
-          "count": 4,
-          "denominator": 83,
-          "share": 0.0482
-        },
         "previous_four_weeks": {
           "count": 43,
           "denominator": 422,
           "share": 0.1019
         },
-        "current_top8": {
-          "count": 8,
-          "denominator": 88,
-          "share": 0.0909
+        "previous_week": {
+          "count": 4,
+          "denominator": 83,
+          "share": 0.0482
         }
       },
       {
         "archetype_id": "lifegain",
+        "current": {
+          "count": 11,
+          "denominator": 174,
+          "share": 0.0632
+        },
+        "current_top8": {
+          "count": 8,
+          "denominator": 88,
+          "share": 0.0909
+        },
         "display_name": "Lifegain",
         "key_cards": [
           {
@@ -284,29 +217,29 @@
             "name": "Ajani Resolute"
           }
         ],
-        "current": {
-          "count": 11,
-          "denominator": 174,
-          "share": 0.0632
-        },
-        "previous_week": {
-          "count": 7,
-          "denominator": 83,
-          "share": 0.0843
-        },
         "previous_four_weeks": {
           "count": 13,
           "denominator": 422,
           "share": 0.0308
         },
-        "current_top8": {
-          "count": 8,
-          "denominator": 88,
-          "share": 0.0909
+        "previous_week": {
+          "count": 7,
+          "denominator": 83,
+          "share": 0.0843
         }
       },
       {
         "archetype_id": "dimir-spider-man",
+        "current": {
+          "count": 10,
+          "denominator": 174,
+          "share": 0.0575
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 88,
+          "share": 0.0341
+        },
         "display_name": "Dimir Spider-Man",
         "key_cards": [
           {
@@ -316,29 +249,29 @@
             "name": "Deceit"
           }
         ],
-        "current": {
-          "count": 10,
-          "denominator": 174,
-          "share": 0.0575
-        },
-        "previous_week": {
-          "count": 3,
-          "denominator": 83,
-          "share": 0.0361
-        },
         "previous_four_weeks": {
           "count": 14,
           "denominator": 422,
           "share": 0.0332
         },
-        "current_top8": {
+        "previous_week": {
           "count": 3,
-          "denominator": 88,
-          "share": 0.0341
+          "denominator": 83,
+          "share": 0.0361
         }
       },
       {
         "archetype_id": "4-color-tablet",
+        "current": {
+          "count": 9,
+          "denominator": 174,
+          "share": 0.0517
+        },
+        "current_top8": {
+          "count": 6,
+          "denominator": 88,
+          "share": 0.0682
+        },
         "display_name": "4-Color Tablet",
         "key_cards": [
           {
@@ -348,29 +281,29 @@
             "name": "Tablet of Discovery"
           }
         ],
-        "current": {
-          "count": 9,
-          "denominator": 174,
-          "share": 0.0517
-        },
-        "previous_week": {
-          "count": 4,
-          "denominator": 83,
-          "share": 0.0482
-        },
         "previous_four_weeks": {
           "count": 9,
           "denominator": 422,
           "share": 0.0213
         },
-        "current_top8": {
-          "count": 6,
-          "denominator": 88,
-          "share": 0.0682
+        "previous_week": {
+          "count": 4,
+          "denominator": 83,
+          "share": 0.0482
         }
       },
       {
         "archetype_id": "jund-artifact-sacrifice",
+        "current": {
+          "count": 9,
+          "denominator": 174,
+          "share": 0.0517
+        },
+        "current_top8": {
+          "count": 8,
+          "denominator": 88,
+          "share": 0.0909
+        },
         "display_name": "Jund Artifact Sacrifice",
         "key_cards": [
           {
@@ -380,29 +313,29 @@
             "name": "The Sackville-Bagginses"
           }
         ],
-        "current": {
-          "count": 9,
-          "denominator": 174,
-          "share": 0.0517
-        },
-        "previous_week": {
-          "count": 12,
-          "denominator": 83,
-          "share": 0.1446
-        },
         "previous_four_weeks": {
           "count": 76,
           "denominator": 422,
           "share": 0.1801
         },
-        "current_top8": {
-          "count": 8,
-          "denominator": 88,
-          "share": 0.0909
+        "previous_week": {
+          "count": 12,
+          "denominator": 83,
+          "share": 0.1446
         }
       },
       {
         "archetype_id": "boros-dragons",
+        "current": {
+          "count": 8,
+          "denominator": 174,
+          "share": 0.046
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 88,
+          "share": 0.0227
+        },
         "display_name": "Boros Dragons",
         "key_cards": [
           {
@@ -412,29 +345,29 @@
             "name": "Nova Hellkite"
           }
         ],
-        "current": {
-          "count": 8,
-          "denominator": 174,
-          "share": 0.046
-        },
-        "previous_week": {
-          "count": 7,
-          "denominator": 83,
-          "share": 0.0843
-        },
         "previous_four_weeks": {
           "count": 31,
           "denominator": 422,
           "share": 0.0735
         },
-        "current_top8": {
-          "count": 2,
-          "denominator": 88,
-          "share": 0.0227
+        "previous_week": {
+          "count": 7,
+          "denominator": 83,
+          "share": 0.0843
         }
       },
       {
         "archetype_id": "sultai-reanimator",
+        "current": {
+          "count": 7,
+          "denominator": 174,
+          "share": 0.0402
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 88,
+          "share": 0.0455
+        },
         "display_name": "Sultai Reanimator",
         "key_cards": [
           {
@@ -444,59 +377,28 @@
             "name": "Superior Spider-Man"
           }
         ],
-        "current": {
-          "count": 7,
-          "denominator": 174,
-          "share": 0.0402
-        },
-        "previous_week": {
-          "count": 1,
-          "denominator": 83,
-          "share": 0.012
-        },
         "previous_four_weeks": {
           "count": 8,
           "denominator": 422,
           "share": 0.019
         },
-        "current_top8": {
-          "count": 4,
-          "denominator": 88,
-          "share": 0.0455
+        "previous_week": {
+          "count": 1,
+          "denominator": 83,
+          "share": 0.012
         }
       }
     ],
-    "other_classified": {
-      "current": {
-        "count": 34,
-        "denominator": 174,
-        "share": 0.1954
-      },
-      "previous_week": {
-        "count": 26,
-        "denominator": 83,
-        "share": 0.3133
-      },
-      "previous_four_weeks": {
-        "count": 102,
-        "denominator": 422,
-        "share": 0.2417
-      },
-      "current_top8": {
-        "count": 16,
-        "denominator": 88,
-        "share": 0.1818
-      }
-    },
+    "threshold": 0.03,
     "unknown": {
       "current": {
         "count": 0,
         "denominator": 174,
         "share": 0.0
       },
-      "previous_week": {
+      "current_top8": {
         "count": 0,
-        "denominator": 83,
+        "denominator": 88,
         "share": 0.0
       },
       "previous_four_weeks": {
@@ -504,306 +406,23 @@
         "denominator": 422,
         "share": 0.0
       },
-      "current_top8": {
+      "previous_week": {
         "count": 0,
-        "denominator": 88,
+        "denominator": 83,
         "share": 0.0
       }
     }
   },
-  "weekly_summary": {
-    "week": "2026-W41",
-    "items": [
-      {
-        "order": 1,
-        "text": {
-          "zh": "本周MO标准搞活动，周末有一场总决赛，周中挑战赛8强或者League5-0可以参加。最后总决赛有129人参加，蓝黑中速席卷，依旧是[[card:Yuriko, Hope from the Shadows|希望之影百合子]]和[[card:Theorix Charm|论析护符]]各挂一张的版本。亚军是蓝白模模，主牌带了一张[[card:Guiding Hydra|多头龙向导]]作为[[card:Starfield Shepherd|星空牧者]]导师的目标：deck:524eba2341891ddb59d7",
-          "en": "MTGO ran a special Standard event this week, culminating in a weekend final. Players could qualify with a Challenge Top 8 or a 5–0 League finish during the week. The final drew 129 players, and Dimir Midrange dominated, still using one copy each of [[card:Yuriko, Hope from the Shadows|Yuriko, Hope from the Shadows]] and [[card:Theorix Charm|Theorix Charm]]. The runner-up was Azorius Momo, with a single [[card:Guiding Hydra|Guiding Hydra]] in the main deck as a tutor target for [[card:Starfield Shepherd|Starfield Shepherd]]: deck:524eba2341891ddb59d7"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:524eba2341891ddb59d7",
-            "label": {
-              "zh": "蓝白模模 · zippzipp_ · 第2名",
-              "en": "Azorius Momo · zippzipp_ · Rank 2"
-            },
-            "deck": {
-              "archetype_id": "azorius-momo",
-              "display_name": "Azorius Momo",
-              "event_id": "12856137",
-              "deck_id": "524eba2341891ddb59d7",
-              "deck_fingerprint_sha256": "43739943c35d8450c8aead37f972a3aac67c9a964349922962747807b4f4a664",
-              "player": "zippzipp_",
-              "final_rank": 2,
-              "starttime": "2026-10-10 14:05:00.0"
-            }
-          }
-        ]
-      },
-      {
-        "order": 2,
-        "text": {
-          "zh": "还有带[[card:Frostcliff Siege|围攻霜崖]]的洁斯凯模模版本拿下八强：deck:3e64f2a13a79d35110e4",
-          "en": "A Jeskai Momo version with [[card:Frostcliff Siege|Frostcliff Siege]] also reached the Top 8: deck:3e64f2a13a79d35110e4"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:3e64f2a13a79d35110e4",
-            "label": {
-              "zh": "洁斯凯模模 · AFitzsimmons · 第7名",
-              "en": "Jeskai Momo · AFitzsimmons · Rank 7"
-            },
-            "deck": {
-              "archetype_id": "jeskai-momo",
-              "display_name": "Jeskai Momo",
-              "event_id": "12856158",
-              "deck_id": "3e64f2a13a79d35110e4",
-              "deck_fingerprint_sha256": "a5d1630aa4379c70bf39e1898c91e4e4330e4dea6baafad93d334813442fc10e",
-              "player": "AFitzsimmons",
-              "final_rank": 7,
-              "starttime": "2026-10-09 18:00:00.0"
-            }
-          }
-        ]
-      },
-      {
-        "order": 3,
-        "text": {
-          "zh": "本周的环境变化方面，拷打魔系套牌找到了新的蜘蛛侠复制目标：[[card:Uldaros Theorix|乌达洛论析]]。很多套牌都开始把拷打魔放进备牌，甚至备牌都不带了。以前也有不带拷打魔的版本，本周周报把所有这些套牌整合成了蓝黑蜘蛛侠一个大类，不再分开统计。同时[[card:Seasoned Cryomancer|干练凛寒术士]]和[[card:Theorix Charm|论析护符]]也同样非常适合这个思路。还有带[[card:Null Summoner|虚空唤师]]的版本。本周拿下一个亚军：deck:af9339e5c032ae7b8c75",
-          "en": "As for this week's metagame shifts, the Excruciator decks found a new creature for Spider-Man to copy: [[card:Uldaros Theorix|Uldaros Theorix]]. Many builds have moved [[card:Doomsday Excruciator|Doomsday Excruciator]] to the sideboard, or even cut it entirely. Versions without Excruciator had appeared before, and this week's report now groups all these builds under Dimir Spider-Man rather than tracking them separately. [[card:Seasoned Cryomancer|Seasoned Cryomancer]] and [[card:Theorix Charm|Theorix Charm]] also fit the strategy extremely well. There are versions with [[card:Null Summoner|Null Summoner]], too. This build finished second this week: deck:af9339e5c032ae7b8c75"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:af9339e5c032ae7b8c75",
-            "label": {
-              "zh": "蓝黑蜘蛛侠 · TheSandwichKing · 第2名",
-              "en": "Dimir Spider-Man · TheSandwichKing · Rank 2"
-            },
-            "deck": {
-              "archetype_id": "dimir-spider-man",
-              "display_name": "Dimir Spider-Man",
-              "event_id": "12855542",
-              "deck_id": "af9339e5c032ae7b8c75",
-              "deck_fingerprint_sha256": "cfab0b24c50bdd5a59b9af37ba57e11695a5c90875db34b57848a598faa5014e",
-              "player": "TheSandwichKing",
-              "final_rank": 2,
-              "starttime": "2026-10-05 20:00:00.0"
-            }
-          }
-        ]
-      },
-      {
-        "order": 4,
-        "text": {
-          "zh": "同样是[[card:Superior Spider-Man|究极蜘蛛侠]]套牌的苏勒台掘坟也用上了[[card:Seasoned Cryomancer|干练凛寒术士]]，[[card:Something Worth Saving|应救之物]]相对[[card:Cache Grab|贪婪备储]]也是纯升级：deck:43587beb61363b53cb36",
-          "en": "Sultai Reanimator, another [[card:Superior Spider-Man|Superior Spider-Man]] deck, has also adopted [[card:Seasoned Cryomancer|Seasoned Cryomancer]], while [[card:Something Worth Saving|Something Worth Saving]] is a straight upgrade over [[card:Cache Grab|Cache Grab]]: deck:43587beb61363b53cb36"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:43587beb61363b53cb36",
-            "label": {
-              "zh": "苏勒台掘坟 · Martin_Dominguez · 第7名",
-              "en": "Sultai Reanimator · Martin_Dominguez · Rank 7"
-            },
-            "deck": {
-              "archetype_id": "sultai-reanimator",
-              "display_name": "Sultai Reanimator",
-              "event_id": "12856152",
-              "deck_id": "43587beb61363b53cb36",
-              "deck_fingerprint_sha256": "a14323b0a2efcb82d9b4f3b6d18326cdadd44e557f7a1007a1d64b10237a53d2",
-              "player": "Martin_Dominguez",
-              "final_rank": 7,
-              "starttime": "2026-10-09 00:00:00.0"
-            }
-          }
-        ]
-      },
-      {
-        "order": 5,
-        "text": {
-          "zh": "地落套牌开始尝试[[card:Carnivorous Cultivator|食肉草培育师]]，并带一些[[card:Elven Passage|精灵通道]]，还有一些功能地作为导师目标，拿下一个四强：deck:37704608cf3168335752",
-          "en": "Landfall decks have started trying [[card:Carnivorous Cultivator|Carnivorous Cultivator]], adding some copies of [[card:Elven Passage|Elven Passage]] and other utility lands as tutor targets. This build reached the Top 4: deck:37704608cf3168335752"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:37704608cf3168335752",
-            "label": {
-              "zh": "纯绿地落 · jtl005 · 第3名",
-              "en": "Mono-Green Landfall · jtl005 · Rank 3"
-            },
-            "deck": {
-              "archetype_id": "mono-green-landfall",
-              "display_name": "Mono-Green Landfall",
-              "event_id": "12856183",
-              "deck_id": "37704608cf3168335752",
-              "deck_fingerprint_sha256": "587c069e156e633962a0f98a7b4e1efb3dfd67a31e7e966ff1fdb7cc626c4589",
-              "player": "jtl005",
-              "final_rank": 3,
-              "starttime": "2026-10-11 22:00:00.0"
-            }
-          }
-        ]
-      },
-      {
-        "order": 6,
-        "text": {
-          "zh": "加入[[card:The Theorist, Jace Beleren|塑理师杰斯贝连]]及其他杰斯一整套组件的蓝白控，本周也有出色表现：deck:1bb0230c61ba0a2f21eb",
-          "en": "Azorius Control with [[card:The Theorist, Jace Beleren|The Theorist, Jace Beleren]] and the rest of the new Jace package also performed well this week: deck:1bb0230c61ba0a2f21eb"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:1bb0230c61ba0a2f21eb",
-            "label": {
-              "zh": "蓝白控制 · _Atraxa_ · 第3名",
-              "en": "Azorius Control · _Atraxa_ · Rank 3"
-            },
-            "deck": {
-              "archetype_id": "azorius-control",
-              "display_name": "Azorius Control",
-              "event_id": "12856152",
-              "deck_id": "1bb0230c61ba0a2f21eb",
-              "deck_fingerprint_sha256": "8a4aeaf0dd9c926a671eef6db2fd5c040441277f35923153416349381fd2d603",
-              "player": "_Atraxa_",
-              "final_rank": 3,
-              "starttime": "2026-10-09 00:00:00.0"
-            }
-          }
-        ]
-      },
-      {
-        "order": 7,
-        "text": {
-          "zh": "上周出现的混蓝带[[card:Avatar of Burgeoning Echoes|繁响化身]]的蓝绿地落，本周也开始出成绩：deck:0fefffe03ca3c1d88390",
-          "en": "The blue-splash Simic Landfall build with [[card:Avatar of Burgeoning Echoes|Avatar of Burgeoning Echoes]] that appeared last week has started putting up results: deck:0fefffe03ca3c1d88390"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:0fefffe03ca3c1d88390",
-            "label": {
-              "zh": "蓝绿地落 · unagieel · 第1名",
-              "en": "Simic Landfall · unagieel · Rank 1"
-            },
-            "deck": {
-              "archetype_id": "simic-landfall",
-              "display_name": "Simic Landfall",
-              "event_id": "12856130",
-              "deck_id": "0fefffe03ca3c1d88390",
-              "deck_fingerprint_sha256": "9eddfde380738db473b2cd5f560c79cf4d5b35531136bf4e92cf534013adeb6d",
-              "player": "unagieel",
-              "final_rank": 1,
-              "starttime": "2026-10-06 19:30:00.0"
-            }
-          }
-        ]
-      },
-      {
-        "order": 8,
-        "text": {
-          "zh": "红蓝灵技套牌继续满编[[card:Pompous Battlemage|浮夸战巫师]]，本周加入[[card:Stingcaster Mage|棘咒法师]]、[[card:Clash of Elements|元素交锋]]的版本也拿下一个八强：deck:9db4ea144f8aea4e897f",
-          "en": "Izzet Prowess continues to run the full playset of [[card:Pompous Battlemage|Pompous Battlemage]]. A version adding [[card:Stingcaster Mage|Stingcaster Mage]] and [[card:Clash of Elements|Clash of Elements]] reached the Top 8 this week: deck:9db4ea144f8aea4e897f"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:9db4ea144f8aea4e897f",
-            "label": {
-              "zh": "红蓝灵技 · mami · 第6名",
-              "en": "Izzet Prowess · mami · Rank 6"
-            },
-            "deck": {
-              "archetype_id": "izzet-prowess",
-              "display_name": "Izzet Prowess",
-              "event_id": "12856158",
-              "deck_id": "9db4ea144f8aea4e897f",
-              "deck_fingerprint_sha256": "9b9dd20d4e9610d19c60e15ccd942af7e38db208b28580cec6fa251fb87b9946",
-              "player": "mami",
-              "final_rank": 6,
-              "starttime": "2026-10-09 18:00:00.0"
-            }
-          }
-        ]
-      },
-      {
-        "order": 9,
-        "text": {
-          "zh": "毒镖蛙哥MacIsaac操控自己招牌的投掷版本，满编[[card:Pompous Battlemage|浮夸战巫师]]也拿下一个八强：deck:883e13bc88697b093241",
-          "en": "MacIsaac, the poison-dart-frog guy, piloted his signature Fling build to another Top 8, running a full playset of [[card:Pompous Battlemage|Pompous Battlemage]]: deck:883e13bc88697b093241"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:883e13bc88697b093241",
-            "label": {
-              "zh": "红蓝投掷 · MacIsaac · 第5名",
-              "en": "Izzet Fling · MacIsaac · Rank 5"
-            },
-            "deck": {
-              "archetype_id": "izzet-fling",
-              "display_name": "Izzet Fling",
-              "event_id": "12856158",
-              "deck_id": "883e13bc88697b093241",
-              "deck_fingerprint_sha256": "68648dfde144a98614d30405ee29b4dbb37381dff991f9a9c32795f9ec5c1b24",
-              "player": "MacIsaac",
-              "final_rank": 5,
-              "starttime": "2026-10-09 18:00:00.0"
-            }
-          }
-        ]
-      },
-      {
-        "order": 10,
-        "text": {
-          "zh": "上个环境就出现过的蓝黑大眼套牌，本周加入[[card:The Theorist, Jace Beleren|塑理师杰斯贝连]]拿下一个八强：deck:cf958c77a7a11b813ab2",
-          "en": "Dimir Oculus, which had already appeared in the previous metagame, added [[card:The Theorist, Jace Beleren|The Theorist, Jace Beleren]] and reached the Top 8 this week: deck:cf958c77a7a11b813ab2"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:cf958c77a7a11b813ab2",
-            "label": {
-              "zh": "蓝黑大眼 · Nate21 · 第6名",
-              "en": "Dimir Oculus · Nate21 · Rank 6"
-            },
-            "deck": {
-              "archetype_id": "dimir-oculus",
-              "display_name": "Dimir Oculus",
-              "event_id": "12856121",
-              "deck_id": "cf958c77a7a11b813ab2",
-              "deck_fingerprint_sha256": "84c6f1a72f170960e351bea194cfc0cef4fd86f48d16c36aa9b6fcb02ebef73b",
-              "player": "Nate21",
-              "final_rank": 6,
-              "starttime": "2026-10-06 18:00:00.0"
-            }
-          }
-        ]
-      }
-    ]
-  },
   "features": {
-    "week": "2026-W41",
     "items": [
       {
-        "category": "new_technology",
-        "order": 1,
-        "destination_id": "deck:524eba2341891ddb59d7",
         "archetype_id": "azorius-momo",
-        "subtype_id": null,
-        "display_name": "Azorius Momo",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856137",
-          "deck_id": "524eba2341891ddb59d7",
           "deck_fingerprint_sha256": "43739943c35d8450c8aead37f972a3aac67c9a964349922962747807b4f4a664",
-          "player": "zippzipp_",
+          "deck_id": "524eba2341891ddb59d7",
+          "event_id": "12856137",
           "final_rank": 2,
-          "player_count": 129,
-          "starttime": "2026-10-10 14:05:00.0",
           "main_deck": [
             {
               "name": "Abandoned Air Temple",
@@ -890,6 +509,8 @@
               "qty": 1
             }
           ],
+          "player": "zippzipp_",
+          "player_count": 129,
           "side_deck": [
             {
               "name": "Clarion Conqueror",
@@ -915,16 +536,11 @@
               "name": "The Queen of Dale",
               "qty": 2
             }
-          ]
+          ],
+          "starttime": "2026-10-10 14:05:00.0"
         },
-        "headline": {
-          "en": "Azorius Momo",
-          "zh": "蓝白模模"
-        },
-        "positioning": {
-          "zh": "加入多头龙向导作为导师目标",
-          "en": "Adds Guiding Hydra as a tutor target."
-        },
+        "destination_id": "deck:524eba2341891ddb59d7",
+        "display_name": "Azorius Momo",
         "featured_cards": [
           {
             "name": "Guiding Hydra"
@@ -939,21 +555,31 @@
             "name": "Daydream"
           }
         ],
+        "headline": {
+          "en": "Azorius Momo",
+          "zh": "蓝白模模"
+        },
+        "order": 1,
+        "positioning": {
+          "en": "Adds Guiding Hydra as a tutor target.",
+          "zh": "加入多头龙向导作为导师目标"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "new_card",
             "values": {
-              "set_code": "FRA",
               "cards": [
                 "Guiding Hydra"
-              ]
+              ],
+              "set_code": "FRA"
             }
           },
           {
             "type": "build_shift",
             "values": {
-              "identity_level": "parent",
               "identity_id": "azorius-momo",
+              "identity_level": "parent",
               "reference_sample_size": 11,
               "score": 21
             }
@@ -961,20 +587,13 @@
         ]
       },
       {
-        "category": "new_technology",
-        "order": 2,
-        "destination_id": "deck:3e64f2a13a79d35110e4",
         "archetype_id": "jeskai-momo",
-        "subtype_id": null,
-        "display_name": "Jeskai Momo",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856158",
-          "deck_id": "3e64f2a13a79d35110e4",
           "deck_fingerprint_sha256": "a5d1630aa4379c70bf39e1898c91e4e4330e4dea6baafad93d334813442fc10e",
-          "player": "AFitzsimmons",
+          "deck_id": "3e64f2a13a79d35110e4",
+          "event_id": "12856158",
           "final_rank": 7,
-          "player_count": 61,
-          "starttime": "2026-10-09 18:00:00.0",
           "main_deck": [
             {
               "name": "Abandoned Air Temple",
@@ -1057,6 +676,8 @@
               "qty": 1
             }
           ],
+          "player": "AFitzsimmons",
+          "player_count": 61,
           "side_deck": [
             {
               "name": "Clarion Conqueror",
@@ -1090,16 +711,11 @@
               "name": "Spell Pierce",
               "qty": 2
             }
-          ]
+          ],
+          "starttime": "2026-10-09 18:00:00.0"
         },
-        "headline": {
-          "en": "Jeskai Momo",
-          "zh": "洁斯凯模模"
-        },
-        "positioning": {
-          "zh": "带围攻霜崖的洁斯凯版本",
-          "en": "A Jeskai version with Frostcliff Siege."
-        },
+        "destination_id": "deck:3e64f2a13a79d35110e4",
+        "display_name": "Jeskai Momo",
         "featured_cards": [
           {
             "name": "Guiding Hydra"
@@ -1114,33 +730,36 @@
             "name": "Quantum Riddler"
           }
         ],
+        "headline": {
+          "en": "Jeskai Momo",
+          "zh": "洁斯凯模模"
+        },
+        "order": 2,
+        "positioning": {
+          "en": "A Jeskai version with Frostcliff Siege.",
+          "zh": "带围攻霜崖的洁斯凯版本"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "new_card",
             "values": {
-              "set_code": "FRA",
               "cards": [
                 "Guiding Hydra"
-              ]
+              ],
+              "set_code": "FRA"
             }
           }
         ]
       },
       {
-        "category": "new_technology",
-        "order": 3,
-        "destination_id": "deck:af9339e5c032ae7b8c75",
         "archetype_id": "dimir-spider-man",
-        "subtype_id": "dimir",
-        "display_name": "Dimir Spider-Man",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12855542",
-          "deck_id": "af9339e5c032ae7b8c75",
           "deck_fingerprint_sha256": "cfab0b24c50bdd5a59b9af37ba57e11695a5c90875db34b57848a598faa5014e",
-          "player": "TheSandwichKing",
+          "deck_id": "af9339e5c032ae7b8c75",
+          "event_id": "12855542",
           "final_rank": 2,
-          "player_count": 59,
-          "starttime": "2026-10-05 20:00:00.0",
           "main_deck": [
             {
               "name": "Bitter Triumph",
@@ -1223,6 +842,8 @@
               "qty": 2
             }
           ],
+          "player": "TheSandwichKing",
+          "player_count": 59,
           "side_deck": [
             {
               "name": "Ancient Vendetta",
@@ -1264,16 +885,11 @@
               "name": "Strategic Betrayal",
               "qty": 1
             }
-          ]
+          ],
+          "starttime": "2026-10-05 20:00:00.0"
         },
-        "headline": {
-          "en": "Dimir Spider-Man",
-          "zh": "蓝黑蜘蛛侠"
-        },
-        "positioning": {
-          "zh": "加入乌达洛论析的蓝黑蜘蛛侠",
-          "en": "Dimir Spider-Man with Uldaros Theorix."
-        },
+        "destination_id": "deck:af9339e5c032ae7b8c75",
+        "display_name": "Dimir Spider-Man",
         "featured_cards": [
           {
             "name": "Uldaros Theorix"
@@ -1288,35 +904,38 @@
             "name": "Superior Spider-Man"
           }
         ],
+        "headline": {
+          "en": "Dimir Spider-Man",
+          "zh": "蓝黑蜘蛛侠"
+        },
+        "order": 3,
+        "positioning": {
+          "en": "Dimir Spider-Man with Uldaros Theorix.",
+          "zh": "加入乌达洛论析的蓝黑蜘蛛侠"
+        },
+        "subtype_id": "dimir",
         "supporting_facts": [
           {
             "type": "new_card",
             "values": {
-              "set_code": "FRA",
               "cards": [
                 "Seasoned Cryomancer",
                 "Theorix Charm",
                 "Uldaros Theorix"
-              ]
+              ],
+              "set_code": "FRA"
             }
           }
         ]
       },
       {
-        "category": "new_technology",
-        "order": 4,
-        "destination_id": "deck:43587beb61363b53cb36",
         "archetype_id": "sultai-reanimator",
-        "subtype_id": null,
-        "display_name": "Sultai Reanimator",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856152",
-          "deck_id": "43587beb61363b53cb36",
           "deck_fingerprint_sha256": "a14323b0a2efcb82d9b4f3b6d18326cdadd44e557f7a1007a1d64b10237a53d2",
-          "player": "Martin_Dominguez",
+          "deck_id": "43587beb61363b53cb36",
+          "event_id": "12856152",
           "final_rank": 7,
-          "player_count": 44,
-          "starttime": "2026-10-09 00:00:00.0",
           "main_deck": [
             {
               "name": "Ardyn, the Usurper",
@@ -1407,6 +1026,8 @@
               "qty": 2
             }
           ],
+          "player": "Martin_Dominguez",
+          "player_count": 44,
           "side_deck": [
             {
               "name": "Awaken the Honored Dead",
@@ -1444,16 +1065,11 @@
               "name": "Witherbloom Charm",
               "qty": 1
             }
-          ]
+          ],
+          "starttime": "2026-10-09 00:00:00.0"
         },
-        "headline": {
-          "en": "Sultai Reanimator",
-          "zh": "苏勒台掘坟"
-        },
-        "positioning": {
-          "zh": "满编新牌干练凛寒术士和应救之物",
-          "en": "Runs full playsets of the new cards Seasoned Cryomancer and Something Worth Saving."
-        },
+        "destination_id": "deck:43587beb61363b53cb36",
+        "display_name": "Sultai Reanimator",
         "featured_cards": [
           {
             "name": "Seasoned Cryomancer"
@@ -1468,12 +1084,22 @@
             "name": "Bringer of the Last Gift"
           }
         ],
+        "headline": {
+          "en": "Sultai Reanimator",
+          "zh": "苏勒台掘坟"
+        },
+        "order": 4,
+        "positioning": {
+          "en": "Runs full playsets of the new cards Seasoned Cryomancer and Something Worth Saving.",
+          "zh": "满编新牌干练凛寒术士和应救之物"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "build_shift",
             "values": {
-              "identity_level": "parent",
               "identity_id": "sultai-reanimator",
+              "identity_level": "parent",
               "reference_sample_size": 11,
               "score": 29
             }
@@ -1481,20 +1107,13 @@
         ]
       },
       {
-        "category": "new_technology",
-        "order": 5,
-        "destination_id": "deck:37704608cf3168335752",
         "archetype_id": "mono-green-landfall",
-        "subtype_id": null,
-        "display_name": "Mono-Green Landfall",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856183",
-          "deck_id": "37704608cf3168335752",
           "deck_fingerprint_sha256": "587c069e156e633962a0f98a7b4e1efb3dfd67a31e7e966ff1fdb7cc626c4589",
-          "player": "jtl005",
+          "deck_id": "37704608cf3168335752",
+          "event_id": "12856183",
           "final_rank": 3,
-          "player_count": 43,
-          "starttime": "2026-10-11 22:00:00.0",
           "main_deck": [
             {
               "name": "Ba Sing Se",
@@ -1569,6 +1188,8 @@
               "qty": 1
             }
           ],
+          "player": "jtl005",
+          "player_count": 43,
           "side_deck": [
             {
               "name": "Adventurer's Inn",
@@ -1606,16 +1227,11 @@
               "name": "Torpor Orb",
               "qty": 2
             }
-          ]
+          ],
+          "starttime": "2026-10-11 22:00:00.0"
         },
-        "headline": {
-          "en": "Mono-Green Landfall",
-          "zh": "纯绿地落"
-        },
-        "positioning": {
-          "zh": "满编食肉草培育师，并带一些可以被导的功能地。",
-          "en": "Runs a full playset of Carnivorous Cultivator alongside several utility lands to tutor for."
-        },
+        "destination_id": "deck:37704608cf3168335752",
+        "display_name": "Mono-Green Landfall",
         "featured_cards": [
           {
             "name": "Carnivorous Cultivator"
@@ -1630,21 +1246,31 @@
             "name": "Cryptic Caves"
           }
         ],
+        "headline": {
+          "en": "Mono-Green Landfall",
+          "zh": "纯绿地落"
+        },
+        "order": 5,
+        "positioning": {
+          "en": "Runs a full playset of Carnivorous Cultivator alongside several utility lands to tutor for.",
+          "zh": "满编食肉草培育师，并带一些可以被导的功能地。"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "new_card",
             "values": {
-              "set_code": "FRA",
               "cards": [
                 "Carnivorous Cultivator"
-              ]
+              ],
+              "set_code": "FRA"
             }
           },
           {
             "type": "build_shift",
             "values": {
-              "identity_level": "parent",
               "identity_id": "mono-green-landfall",
+              "identity_level": "parent",
               "reference_sample_size": 75,
               "score": 24
             }
@@ -1652,20 +1278,13 @@
         ]
       },
       {
-        "category": "new_technology",
-        "order": 6,
-        "destination_id": "deck:1bb0230c61ba0a2f21eb",
         "archetype_id": "azorius-control",
-        "subtype_id": "traditional",
-        "display_name": "Azorius Control",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856152",
-          "deck_id": "1bb0230c61ba0a2f21eb",
           "deck_fingerprint_sha256": "8a4aeaf0dd9c926a671eef6db2fd5c040441277f35923153416349381fd2d603",
-          "player": "_Atraxa_",
+          "deck_id": "1bb0230c61ba0a2f21eb",
+          "event_id": "12856152",
           "final_rank": 3,
-          "player_count": 44,
-          "starttime": "2026-10-09 00:00:00.0",
           "main_deck": [
             {
               "name": "Consult the Star Charts",
@@ -1756,6 +1375,8 @@
               "qty": 1
             }
           ],
+          "player": "_Atraxa_",
+          "player_count": 44,
           "side_deck": [
             {
               "name": "Beza, the Bounding Spring",
@@ -1793,16 +1414,11 @@
               "name": "Ultima",
               "qty": 2
             }
-          ]
+          ],
+          "starttime": "2026-10-09 00:00:00.0"
         },
-        "headline": {
-          "en": "Azorius Control",
-          "zh": "蓝白控制"
-        },
-        "positioning": {
-          "zh": "带上新杰斯一套的蓝白控本周表现不错",
-          "en": "Azorius Control featuring the new Jace package performed well this week."
-        },
+        "destination_id": "deck:1bb0230c61ba0a2f21eb",
+        "display_name": "Azorius Control",
         "featured_cards": [
           {
             "name": "The Theorist, Jace Beleren"
@@ -1817,11 +1433,20 @@
             "name": "Fatehold Charm"
           }
         ],
+        "headline": {
+          "en": "Azorius Control",
+          "zh": "蓝白控制"
+        },
+        "order": 6,
+        "positioning": {
+          "en": "Azorius Control featuring the new Jace package performed well this week.",
+          "zh": "带上新杰斯一套的蓝白控本周表现不错"
+        },
+        "subtype_id": "traditional",
         "supporting_facts": [
           {
             "type": "new_card",
             "values": {
-              "set_code": "FRA",
               "cards": [
                 "Countersculpt",
                 "Fatehold Charm",
@@ -1829,26 +1454,20 @@
                 "Sphinx of False Conclusions",
                 "The Theorist, Jace Beleren",
                 "Theorist's Sanctum"
-              ]
+              ],
+              "set_code": "FRA"
             }
           }
         ]
       },
       {
-        "category": "new_technology",
-        "order": 7,
-        "destination_id": "deck:0fefffe03ca3c1d88390",
         "archetype_id": "simic-landfall",
-        "subtype_id": null,
-        "display_name": "Simic Landfall",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856130",
-          "deck_id": "0fefffe03ca3c1d88390",
           "deck_fingerprint_sha256": "9eddfde380738db473b2cd5f560c79cf4d5b35531136bf4e92cf534013adeb6d",
-          "player": "unagieel",
+          "deck_id": "0fefffe03ca3c1d88390",
+          "event_id": "12856130",
           "final_rank": 1,
-          "player_count": 24,
-          "starttime": "2026-10-06 19:30:00.0",
           "main_deck": [
             {
               "name": "Avatar of Burgeoning Echoes",
@@ -1923,6 +1542,8 @@
               "qty": 3
             }
           ],
+          "player": "unagieel",
+          "player_count": 24,
           "side_deck": [
             {
               "name": "Disdainful Stroke",
@@ -1960,16 +1581,11 @@
               "name": "Warg Tactics",
               "qty": 2
             }
-          ]
+          ],
+          "starttime": "2026-10-06 19:30:00.0"
         },
-        "headline": {
-          "en": "Simic Landfall",
-          "zh": "蓝绿地落"
-        },
-        "positioning": {
-          "zh": "满编繁响化身的蓝绿版本地落套牌",
-          "en": "A Simic landfall build with a full playset of Avatar of Burgeoning Echoes."
-        },
+        "destination_id": "deck:0fefffe03ca3c1d88390",
+        "display_name": "Simic Landfall",
         "featured_cards": [
           {
             "name": "Avatar of Burgeoning Echoes"
@@ -1984,14 +1600,24 @@
             "name": "Icetill Explorer"
           }
         ],
+        "headline": {
+          "en": "Simic Landfall",
+          "zh": "蓝绿地落"
+        },
+        "order": 7,
+        "positioning": {
+          "en": "A Simic landfall build with a full playset of Avatar of Burgeoning Echoes.",
+          "zh": "满编繁响化身的蓝绿版本地落套牌"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "new_card",
             "values": {
-              "set_code": "FRA",
               "cards": [
                 "Avatar of Burgeoning Echoes"
-              ]
+              ],
+              "set_code": "FRA"
             }
           },
           {
@@ -2003,20 +1629,13 @@
         ]
       },
       {
-        "category": "new_technology",
-        "order": 8,
-        "destination_id": "deck:9db4ea144f8aea4e897f",
         "archetype_id": "izzet-prowess",
-        "subtype_id": null,
-        "display_name": "Izzet Prowess",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856158",
-          "deck_id": "9db4ea144f8aea4e897f",
           "deck_fingerprint_sha256": "9b9dd20d4e9610d19c60e15ccd942af7e38db208b28580cec6fa251fb87b9946",
-          "player": "mami",
+          "deck_id": "9db4ea144f8aea4e897f",
+          "event_id": "12856158",
           "final_rank": 6,
-          "player_count": 61,
-          "starttime": "2026-10-09 18:00:00.0",
           "main_deck": [
             {
               "name": "Burst Lightning",
@@ -2095,6 +1714,8 @@
               "qty": 2
             }
           ],
+          "player": "mami",
+          "player_count": 61,
           "side_deck": [
             {
               "name": "Clash of Elements",
@@ -2128,16 +1749,11 @@
               "name": "Spell Snare",
               "qty": 2
             }
-          ]
+          ],
+          "starttime": "2026-10-09 18:00:00.0"
         },
-        "headline": {
-          "en": "Izzet Prowess",
-          "zh": "红蓝灵技"
-        },
-        "positioning": {
-          "zh": "满编浮夸战巫师，并加入棘咒法师、元素交锋",
-          "en": "Runs a full playset of Pompous Battlemage, with Stingcaster Mage and Clash of Elements added to the mix."
-        },
+        "destination_id": "deck:9db4ea144f8aea4e897f",
+        "display_name": "Izzet Prowess",
         "featured_cards": [
           {
             "name": "Pompous Battlemage"
@@ -2152,23 +1768,33 @@
             "name": "Slickshot Show-Off"
           }
         ],
+        "headline": {
+          "en": "Izzet Prowess",
+          "zh": "红蓝灵技"
+        },
+        "order": 8,
+        "positioning": {
+          "en": "Runs a full playset of Pompous Battlemage, with Stingcaster Mage and Clash of Elements added to the mix.",
+          "zh": "满编浮夸战巫师，并加入棘咒法师、元素交锋"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "new_card",
             "values": {
-              "set_code": "FRA",
               "cards": [
                 "Clash of Elements",
                 "Pompous Battlemage",
                 "Stingcaster Mage"
-              ]
+              ],
+              "set_code": "FRA"
             }
           },
           {
             "type": "build_shift",
             "values": {
-              "identity_level": "parent",
               "identity_id": "izzet-prowess",
+              "identity_level": "parent",
               "reference_sample_size": 14,
               "score": 32
             }
@@ -2176,20 +1802,13 @@
         ]
       },
       {
-        "category": "new_technology",
-        "order": 9,
-        "destination_id": "deck:883e13bc88697b093241",
         "archetype_id": "izzet-fling",
-        "subtype_id": null,
-        "display_name": "Izzet Fling",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856158",
-          "deck_id": "883e13bc88697b093241",
           "deck_fingerprint_sha256": "68648dfde144a98614d30405ee29b4dbb37381dff991f9a9c32795f9ec5c1b24",
-          "player": "MacIsaac",
+          "deck_id": "883e13bc88697b093241",
+          "event_id": "12856158",
           "final_rank": 5,
-          "player_count": 61,
-          "starttime": "2026-10-09 18:00:00.0",
           "main_deck": [
             {
               "name": "Ancestral Anger",
@@ -2272,6 +1891,8 @@
               "qty": 4
             }
           ],
+          "player": "MacIsaac",
+          "player_count": 61,
           "side_deck": [
             {
               "name": "Dreadmaw's Ire",
@@ -2309,16 +1930,11 @@
               "name": "Spell Pierce",
               "qty": 3
             }
-          ]
+          ],
+          "starttime": "2026-10-09 18:00:00.0"
         },
-        "headline": {
-          "en": "Izzet Fling",
-          "zh": "红蓝投掷"
-        },
-        "positioning": {
-          "zh": "满编浮夸战巫师的投掷版本",
-          "en": "A Fling build with a full playset of Pompous Battlemage."
-        },
+        "destination_id": "deck:883e13bc88697b093241",
+        "display_name": "Izzet Fling",
         "featured_cards": [
           {
             "name": "Pompous Battlemage"
@@ -2333,33 +1949,36 @@
             "name": "Wild Ride"
           }
         ],
+        "headline": {
+          "en": "Izzet Fling",
+          "zh": "红蓝投掷"
+        },
+        "order": 9,
+        "positioning": {
+          "en": "A Fling build with a full playset of Pompous Battlemage.",
+          "zh": "满编浮夸战巫师的投掷版本"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "new_card",
             "values": {
-              "set_code": "FRA",
               "cards": [
                 "Pompous Battlemage"
-              ]
+              ],
+              "set_code": "FRA"
             }
           }
         ]
       },
       {
-        "category": "new_technology",
-        "order": 10,
-        "destination_id": "deck:cf958c77a7a11b813ab2",
         "archetype_id": "dimir-oculus",
-        "subtype_id": null,
-        "display_name": "Dimir Oculus",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856121",
-          "deck_id": "cf958c77a7a11b813ab2",
           "deck_fingerprint_sha256": "84c6f1a72f170960e351bea194cfc0cef4fd86f48d16c36aa9b6fcb02ebef73b",
-          "player": "Nate21",
+          "deck_id": "cf958c77a7a11b813ab2",
+          "event_id": "12856121",
           "final_rank": 6,
-          "player_count": 44,
-          "starttime": "2026-10-06 18:00:00.0",
           "main_deck": [
             {
               "name": "Abhorrent Oculus",
@@ -2434,6 +2053,8 @@
               "qty": 4
             }
           ],
+          "player": "Nate21",
+          "player_count": 44,
           "side_deck": [
             {
               "name": "Annul",
@@ -2467,16 +2088,11 @@
               "name": "Tragic Trajectory",
               "qty": 2
             }
-          ]
+          ],
+          "starttime": "2026-10-06 18:00:00.0"
         },
-        "headline": {
-          "en": "Dimir Oculus",
-          "zh": "蓝黑大眼"
-        },
-        "positioning": {
-          "zh": "本周加入塑理师杰斯贝连拿下一个八强",
-          "en": "Added The Theorist, Jace Beleren and reached the Top 8 this week."
-        },
+        "destination_id": "deck:cf958c77a7a11b813ab2",
+        "display_name": "Dimir Oculus",
         "featured_cards": [
           {
             "name": "The Theorist, Jace Beleren"
@@ -2491,21 +2107,111 @@
             "name": "Emet-Selch, Unsundered"
           }
         ],
+        "headline": {
+          "en": "Dimir Oculus",
+          "zh": "蓝黑大眼"
+        },
+        "order": 10,
+        "positioning": {
+          "en": "Added The Theorist, Jace Beleren and reached the Top 8 this week.",
+          "zh": "本周加入塑理师杰斯贝连拿下一个八强"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "new_card",
             "values": {
-              "set_code": "FRA",
               "cards": [
                 "The Theorist, Jace Beleren"
-              ]
+              ],
+              "set_code": "FRA"
             }
           }
         ]
       }
-    ]
+    ],
+    "week": "2026-W41"
   },
+  "format": "standard",
+  "populations": {
+    "current": {
+      "end": "2026-10-11",
+      "event_count": 11,
+      "event_ids": [
+        "12855542",
+        "12855544",
+        "12856121",
+        "12856130",
+        "12856137",
+        "12856141",
+        "12856143",
+        "12856152",
+        "12856154",
+        "12856158",
+        "12856183"
+      ],
+      "high_score_count": 174,
+      "start": "2026-10-05",
+      "top8_count": 88
+    },
+    "previous_four_weeks": {
+      "end": "2026-10-04",
+      "event_count": 28,
+      "event_ids": [
+        "12853712",
+        "12853721",
+        "12853786",
+        "12854059",
+        "12854067",
+        "12854072",
+        "12854079",
+        "12854097",
+        "12854105",
+        "12854114",
+        "12854118",
+        "12854483",
+        "12854491",
+        "12854496",
+        "12854503",
+        "12854521",
+        "12854529",
+        "12854538",
+        "12854542",
+        "12854913",
+        "12854920",
+        "12854938",
+        "12854946",
+        "12855458",
+        "12855466",
+        "12855471",
+        "12855496",
+        "12855524"
+      ],
+      "high_score_count": 422,
+      "start": "2026-09-07",
+      "top8_count": 224
+    },
+    "previous_week": {
+      "end": "2026-10-04",
+      "event_count": 6,
+      "event_ids": [
+        "12854946",
+        "12855458",
+        "12855466",
+        "12855471",
+        "12855496",
+        "12855524"
+      ],
+      "high_score_count": 83,
+      "start": "2026-09-28",
+      "top8_count": 48
+    }
+  },
+  "product": "mtgo-landing",
   "review_binding": {
+    "classifier_digest": "3fe93c3fb72f281252123789274c3b767d46cc00f7c11b0e279217bd57eed4d0",
+    "machine_fact_digest": "a0fd3796aa50f88d108f8d581bdc63ddc8eb221f40a699a56ef88cd1836bfed9",
+    "pickup_document_digest": "bfeceeb2c618f7853334f1a1d665e20da4ab031c012e321f1709ea33a8c123f6",
     "source_event_ids": [
       "12855542",
       "12855544",
@@ -2519,10 +2225,310 @@
       "12856158",
       "12856183"
     ],
-    "classifier_digest": "3fe93c3fb72f281252123789274c3b767d46cc00f7c11b0e279217bd57eed4d0",
-    "visual_metadata_digest": "a6475c3a7ab9f8d9218ed76da747b127275a238e8150560796aa429bda6f93fe",
-    "machine_fact_digest": "a0fd3796aa50f88d108f8d581bdc63ddc8eb221f40a699a56ef88cd1836bfed9",
-    "pickup_document_digest": "51c186b5973c724c2584ea57ff5d8244e6814c1aadbae7ecf78bbd8535b43ac1",
-    "summary_fact_digest": "eaa0c470b4d278734b1c447bb567931edf071b1798136f40887950abf3887b30"
+    "summary_fact_digest": "fe1316f5c235a920f05418ee5ed20a912d729a8370557673c84f89e2c7709445",
+    "visual_metadata_digest": "e0cc5ce1a1e7631604fab92a5b225a2aa95266dde9c6940e371b7c341f6f83ea"
+  },
+  "schema_version": "1.2.0",
+  "source": "mtgo",
+  "source_event_ids": [
+    "12855542",
+    "12855544",
+    "12856121",
+    "12856130",
+    "12856137",
+    "12856141",
+    "12856143",
+    "12856152",
+    "12856154",
+    "12856158",
+    "12856183"
+  ],
+  "state": "ready",
+  "thresholds": {
+    "build_reference_minimum": 8,
+    "build_shift": 20,
+    "environment_share": 0.03,
+    "exit_reference_share": 0.05,
+    "share_move_pp": 5.0
+  },
+  "week": {
+    "end": "2026-10-11",
+    "id": "2026-W41",
+    "start": "2026-10-05"
+  },
+  "weekly_summary": {
+    "items": [
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "azorius-momo",
+              "deck_fingerprint_sha256": "43739943c35d8450c8aead37f972a3aac67c9a964349922962747807b4f4a664",
+              "deck_id": "524eba2341891ddb59d7",
+              "display_name": "Azorius Momo",
+              "event_id": "12856137",
+              "final_rank": 2,
+              "player": "zippzipp_",
+              "starttime": "2026-10-10 14:05:00.0"
+            },
+            "label": {
+              "en": "Azorius Momo · zippzipp_ · Rank 2",
+              "zh": "蓝白模模 · zippzipp_ · 第2名"
+            },
+            "order": 1,
+            "token": "deck:524eba2341891ddb59d7"
+          }
+        ],
+        "order": 1,
+        "text": {
+          "en": "MTGO ran a special Standard event this week, culminating in a weekend final. Players could qualify with a Challenge Top 8 or a 5–0 League finish during the week. The final drew 129 players, and Dimir Midrange dominated, still using one copy each of [[card:Yuriko, Hope from the Shadows|Yuriko, Hope from the Shadows]] and [[card:Theorix Charm|Theorix Charm]]. The runner-up was Azorius Momo, with a single [[card:Guiding Hydra|Guiding Hydra]] in the main deck as a tutor target for [[card:Starfield Shepherd|Starfield Shepherd]]: deck:524eba2341891ddb59d7",
+          "zh": "本周MO标准搞活动，周末有一场总决赛，周中挑战赛8强或者League5-0可以参加。最后总决赛有129人参加，蓝黑中速席卷，依旧是[[card:Yuriko, Hope from the Shadows|希望之影百合子]]和[[card:Theorix Charm|论析护符]]各挂一张的版本。亚军是蓝白模模，主牌带了一张[[card:Guiding Hydra|多头龙向导]]作为[[card:Starfield Shepherd|星空牧者]]导师的目标：deck:524eba2341891ddb59d7"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "jeskai-momo",
+              "deck_fingerprint_sha256": "a5d1630aa4379c70bf39e1898c91e4e4330e4dea6baafad93d334813442fc10e",
+              "deck_id": "3e64f2a13a79d35110e4",
+              "display_name": "Jeskai Momo",
+              "event_id": "12856158",
+              "final_rank": 7,
+              "player": "AFitzsimmons",
+              "starttime": "2026-10-09 18:00:00.0"
+            },
+            "label": {
+              "en": "Jeskai Momo · AFitzsimmons · Rank 7",
+              "zh": "洁斯凯模模 · AFitzsimmons · 第7名"
+            },
+            "order": 1,
+            "token": "deck:3e64f2a13a79d35110e4"
+          }
+        ],
+        "order": 2,
+        "text": {
+          "en": "A Jeskai Momo version with [[card:Frostcliff Siege|Frostcliff Siege]] also reached the Top 8: deck:3e64f2a13a79d35110e4",
+          "zh": "还有带[[card:Frostcliff Siege|围攻霜崖]]的洁斯凯模模版本拿下八强：deck:3e64f2a13a79d35110e4"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "dimir-spider-man",
+              "deck_fingerprint_sha256": "cfab0b24c50bdd5a59b9af37ba57e11695a5c90875db34b57848a598faa5014e",
+              "deck_id": "af9339e5c032ae7b8c75",
+              "display_name": "Dimir Spider-Man",
+              "event_id": "12855542",
+              "final_rank": 2,
+              "player": "TheSandwichKing",
+              "starttime": "2026-10-05 20:00:00.0"
+            },
+            "label": {
+              "en": "Dimir Spider-Man · TheSandwichKing · Rank 2",
+              "zh": "蓝黑蜘蛛侠 · TheSandwichKing · 第2名"
+            },
+            "order": 1,
+            "token": "deck:af9339e5c032ae7b8c75"
+          }
+        ],
+        "order": 3,
+        "text": {
+          "en": "As for this week's metagame shifts, the Excruciator decks found a new creature for Spider-Man to copy: [[card:Uldaros Theorix|Uldaros Theorix]]. Many builds have moved [[card:Doomsday Excruciator|Doomsday Excruciator]] to the sideboard, or even cut it entirely. Versions without Excruciator had appeared before, and this week's report now groups all these builds under Dimir Spider-Man rather than tracking them separately. [[card:Seasoned Cryomancer|Seasoned Cryomancer]] and [[card:Theorix Charm|Theorix Charm]] also fit the strategy extremely well. There are versions with [[card:Null Summoner|Null Summoner]], too. This build finished second this week: deck:af9339e5c032ae7b8c75",
+          "zh": "本周的环境变化方面，拷打魔系套牌找到了新的蜘蛛侠复制目标：[[card:Uldaros Theorix|乌达洛论析]]。很多套牌都开始把拷打魔放进备牌，甚至备牌都不带了。以前也有不带拷打魔的版本，本周周报把所有这些套牌整合成了蓝黑蜘蛛侠一个大类，不再分开统计。同时[[card:Seasoned Cryomancer|干练凛寒术士]]和[[card:Theorix Charm|论析护符]]也同样非常适合这个思路。还有带[[card:Null Summoner|虚空唤师]]的版本。本周拿下一个亚军：deck:af9339e5c032ae7b8c75"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "sultai-reanimator",
+              "deck_fingerprint_sha256": "a14323b0a2efcb82d9b4f3b6d18326cdadd44e557f7a1007a1d64b10237a53d2",
+              "deck_id": "43587beb61363b53cb36",
+              "display_name": "Sultai Reanimator",
+              "event_id": "12856152",
+              "final_rank": 7,
+              "player": "Martin_Dominguez",
+              "starttime": "2026-10-09 00:00:00.0"
+            },
+            "label": {
+              "en": "Sultai Reanimator · Martin_Dominguez · Rank 7",
+              "zh": "苏勒台掘坟 · Martin_Dominguez · 第7名"
+            },
+            "order": 1,
+            "token": "deck:43587beb61363b53cb36"
+          }
+        ],
+        "order": 4,
+        "text": {
+          "en": "Sultai Reanimator, another [[card:Superior Spider-Man|Superior Spider-Man]] deck, has also adopted [[card:Seasoned Cryomancer|Seasoned Cryomancer]], while [[card:Something Worth Saving|Something Worth Saving]] is a straight upgrade over [[card:Cache Grab|Cache Grab]]: deck:43587beb61363b53cb36",
+          "zh": "同样是[[card:Superior Spider-Man|究极蜘蛛侠]]套牌的苏勒台掘坟也用上了[[card:Seasoned Cryomancer|干练凛寒术士]]，[[card:Something Worth Saving|应救之物]]相对[[card:Cache Grab|贪婪备储]]也是纯升级：deck:43587beb61363b53cb36"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "mono-green-landfall",
+              "deck_fingerprint_sha256": "587c069e156e633962a0f98a7b4e1efb3dfd67a31e7e966ff1fdb7cc626c4589",
+              "deck_id": "37704608cf3168335752",
+              "display_name": "Mono-Green Landfall",
+              "event_id": "12856183",
+              "final_rank": 3,
+              "player": "jtl005",
+              "starttime": "2026-10-11 22:00:00.0"
+            },
+            "label": {
+              "en": "Mono-Green Landfall · jtl005 · Rank 3",
+              "zh": "纯绿地落 · jtl005 · 第3名"
+            },
+            "order": 1,
+            "token": "deck:37704608cf3168335752"
+          }
+        ],
+        "order": 5,
+        "text": {
+          "en": "Landfall decks have started trying [[card:Carnivorous Cultivator|Carnivorous Cultivator]], adding some copies of [[card:Elven Passage|Elven Passage]] and other utility lands as tutor targets. This build reached the Top 4: deck:37704608cf3168335752",
+          "zh": "地落套牌开始尝试[[card:Carnivorous Cultivator|食肉草培育师]]，并带一些[[card:Elven Passage|精灵通道]]，还有一些功能地作为导师目标，拿下一个四强：deck:37704608cf3168335752"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "azorius-control",
+              "deck_fingerprint_sha256": "8a4aeaf0dd9c926a671eef6db2fd5c040441277f35923153416349381fd2d603",
+              "deck_id": "1bb0230c61ba0a2f21eb",
+              "display_name": "Azorius Control",
+              "event_id": "12856152",
+              "final_rank": 3,
+              "player": "_Atraxa_",
+              "starttime": "2026-10-09 00:00:00.0"
+            },
+            "label": {
+              "en": "Azorius Control · _Atraxa_ · Rank 3",
+              "zh": "蓝白控制 · _Atraxa_ · 第3名"
+            },
+            "order": 1,
+            "token": "deck:1bb0230c61ba0a2f21eb"
+          }
+        ],
+        "order": 6,
+        "text": {
+          "en": "Azorius Control with [[card:The Theorist, Jace Beleren|The Theorist, Jace Beleren]] and the rest of the new Jace package also performed well this week: deck:1bb0230c61ba0a2f21eb",
+          "zh": "加入[[card:The Theorist, Jace Beleren|塑理师杰斯贝连]]及其他杰斯一整套组件的蓝白控，本周也有出色表现：deck:1bb0230c61ba0a2f21eb"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "simic-landfall",
+              "deck_fingerprint_sha256": "9eddfde380738db473b2cd5f560c79cf4d5b35531136bf4e92cf534013adeb6d",
+              "deck_id": "0fefffe03ca3c1d88390",
+              "display_name": "Simic Landfall",
+              "event_id": "12856130",
+              "final_rank": 1,
+              "player": "unagieel",
+              "starttime": "2026-10-06 19:30:00.0"
+            },
+            "label": {
+              "en": "Simic Landfall · unagieel · Rank 1",
+              "zh": "蓝绿地落 · unagieel · 第1名"
+            },
+            "order": 1,
+            "token": "deck:0fefffe03ca3c1d88390"
+          }
+        ],
+        "order": 7,
+        "text": {
+          "en": "The blue-splash Simic Landfall build with [[card:Avatar of Burgeoning Echoes|Avatar of Burgeoning Echoes]] that appeared last week has started putting up results: deck:0fefffe03ca3c1d88390",
+          "zh": "上周出现的混蓝带[[card:Avatar of Burgeoning Echoes|繁响化身]]的蓝绿地落，本周也开始出成绩：deck:0fefffe03ca3c1d88390"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "izzet-prowess",
+              "deck_fingerprint_sha256": "9b9dd20d4e9610d19c60e15ccd942af7e38db208b28580cec6fa251fb87b9946",
+              "deck_id": "9db4ea144f8aea4e897f",
+              "display_name": "Izzet Prowess",
+              "event_id": "12856158",
+              "final_rank": 6,
+              "player": "mami",
+              "starttime": "2026-10-09 18:00:00.0"
+            },
+            "label": {
+              "en": "Izzet Prowess · mami · Rank 6",
+              "zh": "红蓝灵技 · mami · 第6名"
+            },
+            "order": 1,
+            "token": "deck:9db4ea144f8aea4e897f"
+          }
+        ],
+        "order": 8,
+        "text": {
+          "en": "Izzet Prowess continues to run the full playset of [[card:Pompous Battlemage|Pompous Battlemage]]. A version adding [[card:Stingcaster Mage|Stingcaster Mage]] and [[card:Clash of Elements|Clash of Elements]] reached the Top 8 this week: deck:9db4ea144f8aea4e897f",
+          "zh": "红蓝灵技套牌继续满编[[card:Pompous Battlemage|浮夸战巫师]]，本周加入[[card:Stingcaster Mage|棘咒法师]]、[[card:Clash of Elements|元素交锋]]的版本也拿下一个八强：deck:9db4ea144f8aea4e897f"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "izzet-fling",
+              "deck_fingerprint_sha256": "68648dfde144a98614d30405ee29b4dbb37381dff991f9a9c32795f9ec5c1b24",
+              "deck_id": "883e13bc88697b093241",
+              "display_name": "Izzet Fling",
+              "event_id": "12856158",
+              "final_rank": 5,
+              "player": "MacIsaac",
+              "starttime": "2026-10-09 18:00:00.0"
+            },
+            "label": {
+              "en": "Izzet Fling · MacIsaac · Rank 5",
+              "zh": "红蓝投掷 · MacIsaac · 第5名"
+            },
+            "order": 1,
+            "token": "deck:883e13bc88697b093241"
+          }
+        ],
+        "order": 9,
+        "text": {
+          "en": "MacIsaac, the poison-dart-frog guy, piloted his signature Fling build to another Top 8, running a full playset of [[card:Pompous Battlemage|Pompous Battlemage]]: deck:883e13bc88697b093241",
+          "zh": "毒镖蛙哥MacIsaac操控自己招牌的投掷版本，满编[[card:Pompous Battlemage|浮夸战巫师]]也拿下一个八强：deck:883e13bc88697b093241"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "dimir-oculus",
+              "deck_fingerprint_sha256": "84c6f1a72f170960e351bea194cfc0cef4fd86f48d16c36aa9b6fcb02ebef73b",
+              "deck_id": "cf958c77a7a11b813ab2",
+              "display_name": "Dimir Oculus",
+              "event_id": "12856121",
+              "final_rank": 6,
+              "player": "Nate21",
+              "starttime": "2026-10-06 18:00:00.0"
+            },
+            "label": {
+              "en": "Dimir Oculus · Nate21 · Rank 6",
+              "zh": "蓝黑大眼 · Nate21 · 第6名"
+            },
+            "order": 1,
+            "token": "deck:cf958c77a7a11b813ab2"
+          }
+        ],
+        "order": 10,
+        "text": {
+          "en": "Dimir Oculus, which had already appeared in the previous metagame, added [[card:The Theorist, Jace Beleren|The Theorist, Jace Beleren]] and reached the Top 8 this week: deck:cf958c77a7a11b813ab2",
+          "zh": "上个环境就出现过的蓝黑大眼套牌，本周加入[[card:The Theorist, Jace Beleren|塑理师杰斯贝连]]拿下一个八强：deck:cf958c77a7a11b813ab2"
+        }
+      }
+    ],
+    "week": "2026-W41"
   }
 }
