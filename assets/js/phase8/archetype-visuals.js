@@ -2,6 +2,9 @@
 
 const manaIdentities = Object.freeze({
   standard: Object.freeze({
+    "mono-white-swarm": Object.freeze(["w"]),
+    "azorius-fatehold": Object.freeze(["w", "u"]),
+    "mardu-demons": Object.freeze(["w", "b", "r"]),
     "dimir-spider-man": Object.freeze(["u", "b"]),
     "dimir-spider-man/dimir": Object.freeze(["u", "b"]),
     "dimir-spider-man/sultai": Object.freeze(["u", "b", "g"]),
@@ -172,6 +175,10 @@ const manaIdentities = Object.freeze({
     "lifegain": Object.freeze(["w"]),
   }),
   modern: Object.freeze({
+    "burn/mono-red-cutter": Object.freeze(["r"]),
+    "hammer-time/esper": Object.freeze(["w", "u", "b"]),
+    "orzhov-energy": Object.freeze(["w", "b"]),
+    "mono-green-landfall": Object.freeze(["g"]),
     "phoenix-prowess": Object.freeze(["r"]),
     "mono-white-tron": Object.freeze(["w"]),
     "mardu-goryos": Object.freeze(["w", "b", "r"]),
@@ -508,6 +515,7 @@ const manaIdentities = Object.freeze({
     "shifting-omni": Object.freeze(["u", "g"]),
   }),
   pauper: Object.freeze({
+    "sultai-control": Object.freeze(["u", "b", "g"]),
     "affinity-combo": Object.freeze(["u"]),
     "altar-tron": Object.freeze(["b", "g"]),
     "azorius-faeries": Object.freeze(["w", "u"]),
@@ -621,6 +629,12 @@ const manaIdentities = Object.freeze({
     "golgari-gardens/golgari": Object.freeze(["b", "g"]),
   }),
   pioneer: Object.freeze({
+    "dimir-spider-man": Object.freeze(["u", "b"]),
+    "bring-to-light-midrange": Object.freeze(["w", "u", "b", "r", "g"]),
+    "rakdos-fling": Object.freeze(["b", "r"]),
+    "temur-creativity": Object.freeze(["u", "r", "g"]),
+    "kasmina-combo": Object.freeze(["u", "b", "g"]),
+    "gruul-creativity": Object.freeze(["r", "g"]),
     "mono-black-phoenix": Object.freeze(["b"]),
     "bant-airbending": Object.freeze(["w", "u", "g"]),
     "orzhov-midrange": Object.freeze(["w", "b"]),
@@ -989,6 +1003,10 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Dark Matter Manipulator", "image": "../images/representative-cards/modern/dark-matter-manipulator.jpg"}),
       Object.freeze({"name": "Detective's Phoenix", "image": "../images/representative-cards/modern/detectives-phoenix.jpg"}),
     ]),
+    "burn": Object.freeze([
+      Object.freeze({"name": "Lava Spike", "image": "../images/representative-cards/modern/lava-spike.jpg"}),
+      Object.freeze({"name": "Boltwave", "image": "../images/representative-cards/modern/boltwave.jpg"}),
+    ]),
   }),
   pauper: Object.freeze({
     "battle-screech": Object.freeze([
@@ -1188,6 +1206,14 @@ const representativeCards = Object.freeze({
     "jund-sacrifice": Object.freeze([
       Object.freeze({"name": "Biotech Specialist", "image": "../images/representative-cards/pioneer/biotech-specialist.jpg"}),
       Object.freeze({"name": "Witch's Oven", "image": "../images/representative-cards/pioneer/witchs-oven.jpg"}),
+    ]),
+    "izzet-creativity": Object.freeze([
+      Object.freeze({"name": "Indomitable Creativity", "image": "../images/representative-cards/pioneer/indomitable-creativity.jpg"}),
+      Object.freeze({"name": "Fable of the Mirror-Breaker", "image": "../images/representative-cards/pioneer/fable-of-the-mirror-breaker.jpg"}),
+    ]),
+    "mono-green-devotion": Object.freeze([
+      Object.freeze({"name": "Nykthos, Shrine to Nyx", "image": "../images/representative-cards/pioneer/nykthos-shrine-to-nyx.jpg"}),
+      Object.freeze({"name": "Badgermole Cub", "image": "../images/representative-cards/pioneer/badgermole-cub.jpg"}),
     ]),
   }),
 });

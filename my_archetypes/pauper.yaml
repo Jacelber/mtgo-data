@@ -614,9 +614,7 @@ archetypes:
       - card: "Hyena Umbra"
         zone: main
         min_count: 3
-      - card: "Guiding Voice"
-        zone: main
-        min_count: 3
+
 - id: grixis-terror
   name: "Grixis Terror"
   priority: 9400
@@ -885,9 +883,6 @@ archetypes:
       - card: Snuff Out
         zone: main
         min_count: 4
-      - card: Trinket Mage
-        zone: main
-        min_count: 2
   - id: dimir-control-red-splash
     priority: 9292
     subtype_id: red-splash
@@ -925,9 +920,6 @@ archetypes:
       - card: Snuff Out
         zone: main
         min_count: 4
-      - card: Trinket Mage
-        zone: main
-        min_count: 2
       - card: Vandalblast
         zone: any
         min_count: 1
@@ -943,6 +935,26 @@ archetypes:
   name: "Azorius Faeries"
   priority: 9200
   rules:
+  - id: azorius-faeries-inspectors
+    priority: 9201
+    subtype_id: null
+    conditions:
+      all:
+      - card: Spellstutter Sprite
+        zone: main
+        min_count: 1
+      - card: Faerie Seer
+        zone: main
+        min_count: 1
+      - card: Thraben Inspector
+        zone: main
+        min_count: 1
+      - card: Dispatch
+        zone: main
+        min_count: 1
+      - card: Counterspell
+        zone: main
+        min_count: 1
   - id: azorius-faeries
     priority: 9200
     subtype_id: null
@@ -1843,6 +1855,38 @@ archetypes:
   name: "Grixis Affinity"
   priority: 8600
   rules:
+  - id: grixis-affinity-sacrifice
+    priority: 8666
+    subtype_id: null
+    conditions:
+      all:
+      - card: Refurbished Familiar
+        zone: main
+        min_count: 3
+      - card: Drossforge Bridge
+        zone: main
+        min_count: 3
+      - card: Galvanic Blast
+        zone: main
+        min_count: 3
+      - card: Fanatical Offering
+        zone: main
+        min_count: 3
+      - card: Thoughtcast
+        zone: main
+        min_count: 1
+      - card: Baleful Strix
+        zone: main
+        min_count: 1
+      - card: Mistvault Bridge
+        zone: main
+        min_count: 1
+      - card: Myr Enforcer
+        zone: main
+        exact_count: 0
+      - card: Cleansing Wildfire
+        zone: main
+        exact_count: 0
   - id: grixis-affinity
     priority: 8600
     subtype_id: null
@@ -2076,6 +2120,38 @@ archetypes:
   name: "Mono-Red Madness"
   priority: 8400
   rules:
+  - id: mono-red-madness-kiln-fiend
+    priority: 8401
+    subtype_id: null
+    conditions:
+      all:
+      - card: Kiln Fiend
+        zone: main
+        min_count: 1
+      - card: Guttersnipe
+        zone: main
+        min_count: 1
+      - card: Fiery Temper
+        zone: main
+        min_count: 1
+      - card: Sneaky Snacker
+        zone: main
+        min_count: 1
+      - card: Highway Robbery
+        zone: main
+        min_count: 1
+      - card: Faithless Looting
+        zone: main
+        min_count: 1
+      - card: Lava Dart
+        zone: main
+        min_count: 1
+      - card: Alms of the Vein
+        zone: main
+        exact_count: 0
+      - card: Goblin Bushwhacker
+        zone: main
+        exact_count: 0
   - id: mono-red-madness
     priority: 8400
     subtype_id: null
@@ -3220,3 +3296,45 @@ archetypes:
       - card: Eviscerator's Insight
         zone: main
         min_count: 1
+- id: sultai-control
+  name: Sultai Control
+  priority: 9300
+  rules:
+  - id: sultai-control-artifact-attrition
+    priority: 9300
+    subtype_id: null
+    conditions:
+      all:
+      - card: Baleful Strix
+        zone: main
+        min_count: 1
+      - card: Refurbished Familiar
+        zone: main
+        min_count: 1
+      - card: Eviscerator's Insight
+        zone: main
+        min_count: 1
+      - card: Cast Down
+        zone: main
+        min_count: 1
+      - card: Malevolent Rumble
+        zone: main
+        min_count: 1
+      - card: Nyxborn Hydra
+        zone: main
+        min_count: 1
+      - card: Darkmoss Bridge
+        zone: main
+        min_count: 1
+      - card: Mistvault Bridge
+        zone: main
+        min_count: 1
+      - card: Thoughtcast
+        zone: main
+        exact_count: 0
+      - card: Myr Enforcer
+        zone: main
+        exact_count: 0
+      - card: Utrom Monitor
+        zone: main
+        exact_count: 0

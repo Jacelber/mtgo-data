@@ -1,6 +1,9 @@
 # Owner-reviewed Pioneer classification, including remainder decisions.
-schema_version: 1.0.0
+schema_version: 1.1.0
 format: pioneer
+semantic_features:
+  manifest_path: configs/classifier_semantic_features.yaml
+  manifest_sha256: 87120f979a4bd00e4a2aa601e3001862ce2575d12de355c3a42548b535b40b36
 archetypes:
 - id: lotus-scapeshift
   name: Lotus Scapeshift
@@ -700,9 +703,6 @@ archetypes:
         zone: main
         min_count: 1
       - card: Deadly Dispute
-        zone: main
-        min_count: 1
-      - card: Shrapnel Blast
         zone: main
         min_count: 1
       - card: Biotech Specialist
@@ -2923,5 +2923,167 @@ archetypes:
         zone: main
         exact_count: 0
       - card: Overgrown Tomb
+        zone: main
+        exact_count: 0
+- id: dimir-spider-man
+  name: Dimir Spider-Man
+  priority: 110
+  rules:
+  - id: dimir-spider-man-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Superior Spider-Man
+        zone: main
+        min_count: 1
+      - card: Deceit
+        zone: main
+        min_count: 1
+      - card: Watery Grave
+        zone: main
+        min_count: 1
+      - card: Doomsday Excruciator
+        zone: main
+        exact_count: 0
+      - card: Stitcher's Supplier
+        zone: main
+        exact_count: 0
+      - card: Stormwing Entity
+        zone: main
+        exact_count: 0
+- id: bring-to-light-midrange
+  name: Bring to Light Midrange
+  priority: 110
+  rules:
+  - id: bring-to-light-midrange-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Bring to Light
+        zone: main
+        min_count: 1
+      - card: Omnath, Locus of Creation
+        zone: main
+        min_count: 1
+      - card: Sylvan Caryatid
+        zone: main
+        min_count: 1
+      - card: Badgermole Cub
+        zone: main
+        min_count: 1
+      - card: Niv-Mizzet, Supreme
+        zone: main
+        exact_count: 0
+      - card: Cleansing Wildfire
+        zone: main
+        exact_count: 0
+      - card: Enigmatic Incarnation
+        zone: main
+        exact_count: 0
+- id: rakdos-fling
+  name: Rakdos Fling
+  priority: 110
+  rules:
+  - id: rakdos-fling-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Callous Sell-Sword
+        zone: main
+        min_count: 1
+      - card: Slickshot Show-Off
+        zone: main
+        min_count: 1
+      - card: Monstrous Rage
+        zone: main
+        min_count: 1
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+      - card: Leyline of Resonance
+        zone: main
+        exact_count: 0
+- id: temur-creativity
+  name: Temur Creativity
+  priority: 110
+  rules:
+  - id: temur-creativity-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Indomitable Creativity
+        zone: main
+        min_count: 1
+      - card: Fable of the Mirror-Breaker
+        zone: main
+        min_count: 1
+      - card: Pawpatch Formation
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        exact_count: 0
+- id: kasmina-combo
+  name: Kasmina Combo
+  priority: 110
+  rules:
+  - id: kasmina-combo-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Kasmina, Enigma Sage
+        zone: main
+        min_count: 1
+      - card: Jace's Machinations
+        zone: main
+        min_count: 1
+      - card: Enter the Infinite
+        zone: main
+        min_count: 1
+      - card: Thassa's Oracle
+        zone: main
+        min_count: 1
+- id: gruul-creativity
+  name: Gruul Creativity
+  priority: 110
+  rules:
+  - id: gruul-creativity-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Indomitable Creativity
+        zone: main
+        min_count: 1
+      - card: Fable of the Mirror-Breaker
+        zone: main
+        min_count: 1
+      - card: Pawpatch Formation
+        zone: main
+        min_count: 1
+      - card: Stomping Ground
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-white-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-blue-source__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-main-black-source__
         zone: main
         exact_count: 0
