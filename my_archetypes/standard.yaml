@@ -4053,6 +4053,26 @@ archetypes:
   name: Jund Midrange
   priority: 1000
   rules:
+  - id: jund-midrange-stingcaster
+    priority: 2001
+    subtype_id: null
+    conditions:
+      all:
+      - card: Stingcaster Mage
+        zone: main
+        min_count: 1
+      - card: Stingerquill Charm
+        zone: main
+        min_count: 1
+      - card: Preacher of the Schism
+        zone: main
+        min_count: 1
+      - card: Blood Crypt
+        zone: main
+        min_count: 1
+      - card: Overgrown Tomb
+        zone: main
+        min_count: 1
   - id: jund-midrange-primary
     priority: 1000
     subtype_id: null
