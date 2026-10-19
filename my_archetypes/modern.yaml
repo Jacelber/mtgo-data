@@ -4343,6 +4343,8 @@ archetypes:
   name: Burn
   priority: 206300
   subtypes:
+  - id: mono-red-cutter
+    name: Mono-Red Cutter Burn
   - id: boros
     name: Boros
   - id: rakdos
@@ -4350,6 +4352,48 @@ archetypes:
   - id: mono-red
     name: Mono-Red
   rules:
+  # Direct-damage core with Cutter support; keep the Slickshot/Growth engine in Prowess.
+  - id: burn-mono-red-cutter
+    priority: 672910
+    subtype_id: mono-red-cutter
+    conditions:
+      all:
+      - card: Cori-Steel Cutter
+        zone: main
+        min_count: 1
+      - card: Lava Spike
+        zone: main
+        min_count: 1
+      - card: Boltwave
+        zone: main
+        min_count: 1
+      - card: Lightning Bolt
+        zone: main
+        min_count: 1
+      - card: Lava Dart
+        zone: main
+        min_count: 1
+      - card: Slickshot Show-Off
+        zone: main
+        exact_count: 0
+      - card: Mutagenic Growth
+        zone: main
+        exact_count: 0
+      - card: Lightning Helix
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-any-white-spell__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-any-blue-spell__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-any-black-spell__
+        zone: main
+        exact_count: 0
+      - card: __classifier-semantic-any-green-spell__
+        zone: main
+        exact_count: 0
   - id: burn-boros
     priority: 206300
     subtype_id: boros
