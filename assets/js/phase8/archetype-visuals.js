@@ -1003,6 +1003,10 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Dark Matter Manipulator", "image": "../images/representative-cards/modern/dark-matter-manipulator.jpg"}),
       Object.freeze({"name": "Detective's Phoenix", "image": "../images/representative-cards/modern/detectives-phoenix.jpg"}),
     ]),
+    "burn": Object.freeze([
+      Object.freeze({"name": "Lava Spike", "image": "../images/representative-cards/modern/lava-spike.jpg"}),
+      Object.freeze({"name": "Boltwave", "image": "../images/representative-cards/modern/boltwave.jpg"}),
+    ]),
   }),
   pauper: Object.freeze({
     "battle-screech": Object.freeze([
@@ -1202,6 +1206,14 @@ const representativeCards = Object.freeze({
     "jund-sacrifice": Object.freeze([
       Object.freeze({"name": "Biotech Specialist", "image": "../images/representative-cards/pioneer/biotech-specialist.jpg"}),
       Object.freeze({"name": "Witch's Oven", "image": "../images/representative-cards/pioneer/witchs-oven.jpg"}),
+    ]),
+    "izzet-creativity": Object.freeze([
+      Object.freeze({"name": "Indomitable Creativity", "image": "../images/representative-cards/pioneer/indomitable-creativity.jpg"}),
+      Object.freeze({"name": "Fable of the Mirror-Breaker", "image": "../images/representative-cards/pioneer/fable-of-the-mirror-breaker.jpg"}),
+    ]),
+    "mono-green-devotion": Object.freeze([
+      Object.freeze({"name": "Nykthos, Shrine to Nyx", "image": "../images/representative-cards/pioneer/nykthos-shrine-to-nyx.jpg"}),
+      Object.freeze({"name": "Badgermole Cub", "image": "../images/representative-cards/pioneer/badgermole-cub.jpg"}),
     ]),
   }),
 });
