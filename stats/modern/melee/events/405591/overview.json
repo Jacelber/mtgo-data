@@ -10,13 +10,13 @@
     "event_sha256": "53082c8819aec96ba4a039ec300c438317a3c9f3a1ddfcf0fdda8f4c7108be64",
     "event_schema_version": "2.2.0",
     "classification_path": "data/modern/melee/classifications/405591.json",
-    "classification_sha256": "4c18af54c9ee3f408ea1587a384aa9b9a293f49a7bb464fa2303fc1bb02c0e4d",
+    "classification_sha256": "79d7da8783f076e94b14a1e2de211067db5204088e07505f04e3b473932aa465",
     "classification_schema_version": "1.1.0",
     "opportunity_path": "data/modern/melee/opportunities/405591.json",
-    "opportunity_sha256": "4be86f13802e02440c9645211bd1aabc5c9852f578c41861cd71235313c6cc83",
+    "opportunity_sha256": "77a2fd3714361c5a672cffea3099cdb7234b34b41e1799f511c1e5bd0f767b94",
     "opportunity_schema_version": "1.1.0",
     "taxonomy_path": "my_archetypes/modern.yaml",
-    "taxonomy_sha256": "7e6972681b4b75e40d58cefc47a2a6d08964a4e094799d83caa1084b930b28b6",
+    "taxonomy_sha256": "cbafde2bb8d7784a7ccb487813f5ec355e0694629fcea902e9d12d719c845b5d",
     "taxonomy_schema_version": "1.1.0"
   },
   "event": {
@@ -6834,6 +6834,68 @@
           },
           "subtypes": [
             {
+              "group_id": "subtype:burn/mono-red-cutter",
+              "subtype_id": "mono-red-cutter",
+              "subtype_name": "Mono-Red Cutter Burn",
+              "display_name": "Mono-Red Cutter Burn",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
               "group_id": "subtype:burn/boros",
               "subtype_id": "boros",
               "subtype_name": "Boros",
@@ -7374,27 +7436,27 @@
           },
           "subtypes": [
             {
-              "group_id": "subtype:hammer-time/azorius",
-              "subtype_id": "azorius",
-              "subtype_name": "Azorius",
-              "display_name": "Azorius Hammer Time",
-              "deck_count": 4,
-              "metagame_share": 0.003257,
-              "constructed_points": 48,
-              "theoretical_rounds": 36,
-              "effective_theoretical_rounds": 36,
-              "average_points_per_effective_round": 1.333333,
-              "completed_or_officially_exempt_rounds": 30,
-              "completion_rate": 0.833333,
-              "played_match_participations": 30,
-              "source_match_count": 30,
+              "group_id": "subtype:hammer-time/esper",
+              "subtype_id": "esper",
+              "subtype_name": "Esper",
+              "display_name": "Esper Hammer Time",
+              "deck_count": 2,
+              "metagame_share": 0.001629,
+              "constructed_points": 33,
+              "theoretical_rounds": 18,
+              "effective_theoretical_rounds": 18,
+              "average_points_per_effective_round": 1.833333,
+              "completed_or_officially_exempt_rounds": 17,
+              "completion_rate": 0.944444,
+              "played_match_participations": 17,
+              "source_match_count": 17,
               "result_counts": {
-                "drop_unplayed": 6,
-                "played_loss": 14,
-                "played_win": 16
+                "drop_unplayed": 1,
+                "played_loss": 6,
+                "played_win": 11
               },
-              "drop_player_count": 3,
-              "drop_unplayed_rounds": 6,
+              "drop_player_count": 1,
+              "drop_unplayed_rounds": 1,
               "intentional_draw_opportunities": 0,
               "bye_count": 0,
               "top8_lock_player_count": 0,
@@ -7403,48 +7465,126 @@
               "high_score": null,
               "match_record": {
                 "all_matches": {
-                  "wins": 16,
-                  "losses": 14,
+                  "wins": 11,
+                  "losses": 6,
                   "draws": 0,
-                  "matches": 30,
-                  "win_rate": 0.533333,
+                  "matches": 17,
+                  "win_rate": 0.647059,
                   "confidence_interval_95": {
-                    "lower": 0.361423,
-                    "upper": 0.697676
+                    "lower": 0.413004,
+                    "upper": 0.826903
                   },
                   "literal_record": {
-                    "wins": 16,
-                    "losses": 14,
+                    "wins": 11,
+                    "losses": 6,
                     "draws": 0,
-                    "matches": 30,
-                    "win_rate": 0.533333,
+                    "matches": 17,
+                    "win_rate": 0.647059,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.36142,
-                      "upper": 0.697679
+                      "lower": 0.413,
+                      "upper": 0.826905
                     }
                   }
                 },
                 "non_mirror": {
-                  "wins": 16,
-                  "losses": 14,
+                  "wins": 11,
+                  "losses": 6,
                   "draws": 0,
-                  "matches": 30,
-                  "win_rate": 0.533333,
+                  "matches": 17,
+                  "win_rate": 0.647059,
                   "confidence_interval_95": {
-                    "lower": 0.361423,
-                    "upper": 0.697676
+                    "lower": 0.413004,
+                    "upper": 0.826903
                   },
                   "literal_record": {
-                    "wins": 16,
-                    "losses": 14,
+                    "wins": 11,
+                    "losses": 6,
                     "draws": 0,
-                    "matches": 30,
-                    "win_rate": 0.533333,
+                    "matches": 17,
+                    "win_rate": 0.647059,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.36142,
-                      "upper": 0.697679
+                      "lower": 0.413,
+                      "upper": 0.826905
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:hammer-time/azorius",
+              "subtype_id": "azorius",
+              "subtype_name": "Azorius",
+              "display_name": "Azorius Hammer Time",
+              "deck_count": 2,
+              "metagame_share": 0.001629,
+              "constructed_points": 15,
+              "theoretical_rounds": 18,
+              "effective_theoretical_rounds": 18,
+              "average_points_per_effective_round": 0.833333,
+              "completed_or_officially_exempt_rounds": 13,
+              "completion_rate": 0.722222,
+              "played_match_participations": 13,
+              "source_match_count": 13,
+              "result_counts": {
+                "drop_unplayed": 5,
+                "played_loss": 8,
+                "played_win": 5
+              },
+              "drop_player_count": 2,
+              "drop_unplayed_rounds": 5,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 5,
+                  "losses": 8,
+                  "draws": 0,
+                  "matches": 13,
+                  "win_rate": 0.384615,
+                  "confidence_interval_95": {
+                    "lower": 0.177097,
+                    "upper": 0.644771
+                  },
+                  "literal_record": {
+                    "wins": 5,
+                    "losses": 8,
+                    "draws": 0,
+                    "matches": 13,
+                    "win_rate": 0.384615,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.177094,
+                      "upper": 0.644775
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 5,
+                  "losses": 8,
+                  "draws": 0,
+                  "matches": 13,
+                  "win_rate": 0.384615,
+                  "confidence_interval_95": {
+                    "lower": 0.177097,
+                    "upper": 0.644771
+                  },
+                  "literal_record": {
+                    "wins": 5,
+                    "losses": 8,
+                    "draws": 0,
+                    "matches": 13,
+                    "win_rate": 0.384615,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.177094,
+                      "upper": 0.644775
                     }
                   }
                 },
@@ -19397,10 +19537,10 @@
           "day2_conversion": 0.25,
           "subtypes": [
             {
-              "group_id": "subtype:hammer-time/azorius",
-              "subtype_id": "azorius",
-              "subtype_name": "Azorius",
-              "display_name": "Azorius Hammer Time",
+              "group_id": "subtype:hammer-time/esper",
+              "subtype_id": "esper",
+              "subtype_name": "Esper",
+              "display_name": "Esper Hammer Time",
               "deck_count": 1,
               "metagame_share": 0.00361,
               "constructed_points": 12,
@@ -19472,7 +19612,70 @@
                 },
                 "mirror_match_count": 0
               },
-              "day2_conversion": 0.25
+              "day2_conversion": 0.5
+            },
+            {
+              "group_id": "subtype:hammer-time/azorius",
+              "subtype_id": "azorius",
+              "subtype_name": "Azorius",
+              "display_name": "Azorius Hammer Time",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              },
+              "day2_conversion": 0.0
             },
             {
               "group_id": "subtype:hammer-time/boros",
@@ -21652,6 +21855,69 @@
           },
           "day2_conversion": 0.0,
           "subtypes": [
+            {
+              "group_id": "subtype:burn/mono-red-cutter",
+              "subtype_id": "mono-red-cutter",
+              "subtype_name": "Mono-Red Cutter Burn",
+              "display_name": "Mono-Red Cutter Burn",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              },
+              "day2_conversion": null
+            },
             {
               "group_id": "subtype:burn/boros",
               "subtype_id": "boros",
@@ -32977,6 +33243,68 @@
           },
           "subtypes": [
             {
+              "group_id": "subtype:burn/mono-red-cutter",
+              "subtype_id": "mono-red-cutter",
+              "subtype_name": "Mono-Red Cutter Burn",
+              "display_name": "Mono-Red Cutter Burn",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
               "group_id": "subtype:burn/boros",
               "subtype_id": "boros",
               "subtype_name": "Boros",
@@ -33517,27 +33845,27 @@
           },
           "subtypes": [
             {
-              "group_id": "subtype:hammer-time/azorius",
-              "subtype_id": "azorius",
-              "subtype_name": "Azorius",
-              "display_name": "Azorius Hammer Time",
-              "deck_count": 4,
-              "metagame_share": 0.003257,
-              "constructed_points": 60,
-              "theoretical_rounds": 42,
-              "effective_theoretical_rounds": 42,
-              "average_points_per_effective_round": 1.428571,
-              "completed_or_officially_exempt_rounds": 36,
-              "completion_rate": 0.857143,
-              "played_match_participations": 36,
-              "source_match_count": 36,
+              "group_id": "subtype:hammer-time/esper",
+              "subtype_id": "esper",
+              "subtype_name": "Esper",
+              "display_name": "Esper Hammer Time",
+              "deck_count": 2,
+              "metagame_share": 0.001629,
+              "constructed_points": 45,
+              "theoretical_rounds": 24,
+              "effective_theoretical_rounds": 24,
+              "average_points_per_effective_round": 1.875,
+              "completed_or_officially_exempt_rounds": 23,
+              "completion_rate": 0.958333,
+              "played_match_participations": 23,
+              "source_match_count": 23,
               "result_counts": {
-                "drop_unplayed": 6,
-                "played_loss": 16,
-                "played_win": 20
+                "drop_unplayed": 1,
+                "played_loss": 8,
+                "played_win": 15
               },
-              "drop_player_count": 3,
-              "drop_unplayed_rounds": 6,
+              "drop_player_count": 1,
+              "drop_unplayed_rounds": 1,
               "intentional_draw_opportunities": 0,
               "bye_count": 0,
               "top8_lock_player_count": 0,
@@ -33546,48 +33874,126 @@
               "high_score": null,
               "match_record": {
                 "all_matches": {
-                  "wins": 20,
-                  "losses": 16,
+                  "wins": 15,
+                  "losses": 8,
                   "draws": 0,
-                  "matches": 36,
-                  "win_rate": 0.555556,
+                  "matches": 23,
+                  "win_rate": 0.652174,
                   "confidence_interval_95": {
-                    "lower": 0.395811,
-                    "upper": 0.704587
+                    "lower": 0.448903,
+                    "upper": 0.811887
                   },
                   "literal_record": {
-                    "wins": 20,
-                    "losses": 16,
+                    "wins": 15,
+                    "losses": 8,
                     "draws": 0,
-                    "matches": 36,
-                    "win_rate": 0.555556,
+                    "matches": 23,
+                    "win_rate": 0.652174,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.395808,
-                      "upper": 0.70459
+                      "lower": 0.4489,
+                      "upper": 0.811889
                     }
                   }
                 },
                 "non_mirror": {
-                  "wins": 20,
-                  "losses": 16,
+                  "wins": 15,
+                  "losses": 8,
                   "draws": 0,
-                  "matches": 36,
-                  "win_rate": 0.555556,
+                  "matches": 23,
+                  "win_rate": 0.652174,
                   "confidence_interval_95": {
-                    "lower": 0.395811,
-                    "upper": 0.704587
+                    "lower": 0.448903,
+                    "upper": 0.811887
                   },
                   "literal_record": {
-                    "wins": 20,
-                    "losses": 16,
+                    "wins": 15,
+                    "losses": 8,
                     "draws": 0,
-                    "matches": 36,
-                    "win_rate": 0.555556,
+                    "matches": 23,
+                    "win_rate": 0.652174,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.395808,
-                      "upper": 0.70459
+                      "lower": 0.4489,
+                      "upper": 0.811889
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:hammer-time/azorius",
+              "subtype_id": "azorius",
+              "subtype_name": "Azorius",
+              "display_name": "Azorius Hammer Time",
+              "deck_count": 2,
+              "metagame_share": 0.001629,
+              "constructed_points": 15,
+              "theoretical_rounds": 18,
+              "effective_theoretical_rounds": 18,
+              "average_points_per_effective_round": 0.833333,
+              "completed_or_officially_exempt_rounds": 13,
+              "completion_rate": 0.722222,
+              "played_match_participations": 13,
+              "source_match_count": 13,
+              "result_counts": {
+                "drop_unplayed": 5,
+                "played_loss": 8,
+                "played_win": 5
+              },
+              "drop_player_count": 2,
+              "drop_unplayed_rounds": 5,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 5,
+                  "losses": 8,
+                  "draws": 0,
+                  "matches": 13,
+                  "win_rate": 0.384615,
+                  "confidence_interval_95": {
+                    "lower": 0.177097,
+                    "upper": 0.644771
+                  },
+                  "literal_record": {
+                    "wins": 5,
+                    "losses": 8,
+                    "draws": 0,
+                    "matches": 13,
+                    "win_rate": 0.384615,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.177094,
+                      "upper": 0.644775
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 5,
+                  "losses": 8,
+                  "draws": 0,
+                  "matches": 13,
+                  "win_rate": 0.384615,
+                  "confidence_interval_95": {
+                    "lower": 0.177097,
+                    "upper": 0.644771
+                  },
+                  "literal_record": {
+                    "wins": 5,
+                    "losses": 8,
+                    "draws": 0,
+                    "matches": 13,
+                    "win_rate": 0.384615,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.177094,
+                      "upper": 0.644775
                     }
                   }
                 },

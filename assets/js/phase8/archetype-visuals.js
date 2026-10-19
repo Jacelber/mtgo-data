@@ -2,6 +2,9 @@
 
 const manaIdentities = Object.freeze({
   standard: Object.freeze({
+    "mono-white-swarm": Object.freeze(["w"]),
+    "azorius-fatehold": Object.freeze(["w", "u"]),
+    "mardu-demons": Object.freeze(["w", "b", "r"]),
     "dimir-spider-man": Object.freeze(["u", "b"]),
     "dimir-spider-man/dimir": Object.freeze(["u", "b"]),
     "dimir-spider-man/sultai": Object.freeze(["u", "b", "g"]),
@@ -172,6 +175,10 @@ const manaIdentities = Object.freeze({
     "lifegain": Object.freeze(["w"]),
   }),
   modern: Object.freeze({
+    "burn/mono-red-cutter": Object.freeze(["r"]),
+    "hammer-time/esper": Object.freeze(["w", "u", "b"]),
+    "orzhov-energy": Object.freeze(["w", "b"]),
+    "mono-green-landfall": Object.freeze(["g"]),
     "phoenix-prowess": Object.freeze(["r"]),
     "mono-white-tron": Object.freeze(["w"]),
     "mardu-goryos": Object.freeze(["w", "b", "r"]),
@@ -508,6 +515,7 @@ const manaIdentities = Object.freeze({
     "shifting-omni": Object.freeze(["u", "g"]),
   }),
   pauper: Object.freeze({
+    "sultai-control": Object.freeze(["u", "b", "g"]),
     "affinity-combo": Object.freeze(["u"]),
     "altar-tron": Object.freeze(["b", "g"]),
     "azorius-faeries": Object.freeze(["w", "u"]),
@@ -621,6 +629,12 @@ const manaIdentities = Object.freeze({
     "golgari-gardens/golgari": Object.freeze(["b", "g"]),
   }),
   pioneer: Object.freeze({
+    "dimir-spider-man": Object.freeze(["u", "b"]),
+    "bring-to-light-midrange": Object.freeze(["w", "u", "b", "r", "g"]),
+    "rakdos-fling": Object.freeze(["b", "r"]),
+    "temur-creativity": Object.freeze(["u", "r", "g"]),
+    "kasmina-combo": Object.freeze(["u", "b", "g"]),
+    "gruul-creativity": Object.freeze(["r", "g"]),
     "mono-black-phoenix": Object.freeze(["b"]),
     "bant-airbending": Object.freeze(["w", "u", "g"]),
     "orzhov-midrange": Object.freeze(["w", "b"]),

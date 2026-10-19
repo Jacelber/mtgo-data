@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "bd2caa7696e47873f0baf9cec2297b4955627ba8d1198d6b08aacfdc7760490d"
+    "digest": "d1a43b6539af3cb80bca1e6ca200a82ca507a58c07f1ffbc831ea8ae39dc9a2b"
   },
   "input": {
     "event_path": "data/modern/melee/events/405590.json",
@@ -18,11 +18,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "7e6972681b4b75e40d58cefc47a2a6d08964a4e094799d83caa1084b930b28b6",
+    "rule_sha256": "cbafde2bb8d7784a7ccb487813f5ec355e0694629fcea902e9d12d719c845b5d",
     "rule_schema_version": "1.1.0",
-    "archetype_count": 225,
-    "rule_count": 414,
-    "subtype_count": 106
+    "archetype_count": 227,
+    "rule_count": 420,
+    "subtype_count": 108
   },
   "summary": {
     "total_records": 928,
@@ -34,7 +34,7 @@
     "overridden_matches": 225,
     "selected_subtypes": 370,
     "parent_only": 553,
-    "same_parent_multiple_subtype_matches": 2,
+    "same_parent_multiple_subtype_matches": 5,
     "residual_subtype_violations": 0,
     "selected_by_parent": {
       "affinity": 45,
@@ -50,7 +50,7 @@
       "boros-energy": 34,
       "boros-land-destruction": 31,
       "broodscale-combo": 58,
-      "burn": 6,
+      "burn": 9,
       "chant-control": 25,
       "crabvine": 1,
       "deaths-shadow": 4,
@@ -116,7 +116,7 @@
       "omni-goryos": 1,
       "orzhov-blink": 2,
       "orzhov-ketramose": 1,
-      "prowess": 100,
+      "prowess": 97,
       "rakdos-hollow-one": 1,
       "rakdos-midrange": 1,
       "rakdos-through-the-breach": 1,
@@ -137,6 +137,7 @@
       "broodscale-combo/mono-green": 32,
       "burn/boros": 4,
       "burn/mono-red": 1,
+      "burn/mono-red-cutter": 3,
       "burn/rakdos": 1,
       "chant-control/azorius": 7,
       "chant-control/jeskai": 18,
@@ -163,11 +164,10 @@
       "oculus-ritual/bant": 1,
       "oculus-ritual/simic": 1,
       "oculus-ritual/sultai": 2,
-      "prowess/boros": 3,
+      "prowess/boros": 2,
       "prowess/grixis": 1,
       "prowess/izzet": 92,
       "prowess/jeskai": 1,
-      "prowess/mono-red": 2,
       "prowess/temur": 1,
       "rakdos-hollow-one/rakdos": 1,
       "rhinos/four-color": 1,
@@ -2177,6 +2177,14 @@
               "exact_count": null
             },
             {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 6,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
               "card": "__classifier-semantic-main-black-source__",
               "zone": "main",
               "actual_count": 0,
@@ -2342,6 +2350,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 5,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 6,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -4300,14 +4316,120 @@
       "participant_id": "participant-05d421fd94e75de4829d3f1860ce3e4ff3123014811a6902a282ca829b469371",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "prowess",
-        "archetype_name": "Prowess",
-        "subtype_id": "mono-red",
-        "subtype_name": "Mono-Red",
-        "rule_id": "prowess-mono-red",
-        "priority": 672300
+        "archetype_id": "burn",
+        "archetype_name": "Burn",
+        "subtype_id": "mono-red-cutter",
+        "subtype_name": "Mono-Red Cutter Burn",
+        "rule_id": "burn-mono-red-cutter",
+        "priority": 672910
       },
       "matched_rules": [
+        {
+          "archetype_id": "burn",
+          "archetype_name": "Burn",
+          "subtype_id": "mono-red-cutter",
+          "subtype_name": "Mono-Red Cutter Burn",
+          "rule_id": "burn-mono-red-cutter",
+          "priority": 672910,
+          "evidence": [
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Spike",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Boltwave",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lightning Bolt",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Dart",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Slickshot Show-Off",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Mutagenic Growth",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Lightning Helix",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-white-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-blue-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-green-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
         {
           "archetype_id": "prowess",
           "archetype_name": "Prowess",
@@ -4435,6 +4557,114 @@
       ],
       "top_priority_matches": [
         {
+          "archetype_id": "burn",
+          "archetype_name": "Burn",
+          "subtype_id": "mono-red-cutter",
+          "subtype_name": "Mono-Red Cutter Burn",
+          "rule_id": "burn-mono-red-cutter",
+          "priority": 672910,
+          "evidence": [
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Spike",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Boltwave",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lightning Bolt",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Dart",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Slickshot Show-Off",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Mutagenic Growth",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Lightning Helix",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-white-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-blue-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-green-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
           "archetype_id": "prowess",
           "archetype_name": "Prowess",
           "subtype_id": "mono-red",
@@ -4515,9 +4745,7 @@
               "exact_count": 0
             }
           ]
-        }
-      ],
-      "overridden_matches": [
+        },
         {
           "archetype_id": "burn",
           "archetype_name": "Burn",
@@ -37605,14 +37833,120 @@
       "participant_id": "participant-42b0b275e137ddaab0c38717e2256250da0a55d40c05af32b531ba205dc44de3",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "prowess",
-        "archetype_name": "Prowess",
-        "subtype_id": "boros",
-        "subtype_name": "Boros",
-        "rule_id": "prowess-boros",
-        "priority": 672400
+        "archetype_id": "burn",
+        "archetype_name": "Burn",
+        "subtype_id": "mono-red-cutter",
+        "subtype_name": "Mono-Red Cutter Burn",
+        "rule_id": "burn-mono-red-cutter",
+        "priority": 672910
       },
       "matched_rules": [
+        {
+          "archetype_id": "burn",
+          "archetype_name": "Burn",
+          "subtype_id": "mono-red-cutter",
+          "subtype_name": "Mono-Red Cutter Burn",
+          "rule_id": "burn-mono-red-cutter",
+          "priority": 672910,
+          "evidence": [
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Spike",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Boltwave",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lightning Bolt",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Dart",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Slickshot Show-Off",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Mutagenic Growth",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Lightning Helix",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-white-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-blue-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-green-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
         {
           "archetype_id": "prowess",
           "archetype_name": "Prowess",
@@ -37716,6 +38050,114 @@
       ],
       "top_priority_matches": [
         {
+          "archetype_id": "burn",
+          "archetype_name": "Burn",
+          "subtype_id": "mono-red-cutter",
+          "subtype_name": "Mono-Red Cutter Burn",
+          "rule_id": "burn-mono-red-cutter",
+          "priority": 672910,
+          "evidence": [
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Spike",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Boltwave",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lightning Bolt",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Dart",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Slickshot Show-Off",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Mutagenic Growth",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Lightning Helix",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-white-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-blue-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-green-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
           "archetype_id": "prowess",
           "archetype_name": "Prowess",
           "subtype_id": "boros",
@@ -37780,9 +38222,7 @@
               "exact_count": 0
             }
           ]
-        }
-      ],
-      "overridden_matches": [
+        },
         {
           "archetype_id": "burn",
           "archetype_name": "Burn",
@@ -58788,18 +59228,18 @@
           ]
         },
         {
-          "archetype_id": "jeskai-blink",
-          "archetype_name": "Jeskai Blink",
+          "archetype_id": "azorius-blink",
+          "archetype_name": "Azorius Blink",
           "subtype_id": null,
           "subtype_name": null,
-          "rule_id": "jeskai-blink-primary",
-          "priority": 632500,
+          "rule_id": "azorius-blink-primary",
+          "priority": 632200,
           "evidence": [
             {
               "card": "Phelia, Exuberant Shepherd",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -58820,17 +59260,17 @@
               "exact_count": null
             },
             {
-              "card": "Stoneforge Mystic",
+              "card": "Ephemerate",
               "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": 2,
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Hallowed Fountain",
               "zone": "main",
-              "actual_count": 1,
+              "actual_count": 3,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -58838,6 +59278,14 @@
             {
               "card": "__classifier-semantic-main-black-source__",
               "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
@@ -58908,18 +59356,18 @@
       ],
       "overridden_matches": [
         {
-          "archetype_id": "jeskai-blink",
-          "archetype_name": "Jeskai Blink",
+          "archetype_id": "azorius-blink",
+          "archetype_name": "Azorius Blink",
           "subtype_id": null,
           "subtype_name": null,
-          "rule_id": "jeskai-blink-primary",
-          "priority": 632500,
+          "rule_id": "azorius-blink-primary",
+          "priority": 632200,
           "evidence": [
             {
               "card": "Phelia, Exuberant Shepherd",
               "zone": "main",
               "actual_count": 4,
-              "min_count": 2,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -58940,17 +59388,17 @@
               "exact_count": null
             },
             {
-              "card": "Stoneforge Mystic",
+              "card": "Ephemerate",
               "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": 2,
+              "actual_count": 3,
+              "min_count": 2,
+              "max_count": null,
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Hallowed Fountain",
               "zone": "main",
-              "actual_count": 1,
+              "actual_count": 3,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -58958,6 +59406,14 @@
             {
               "card": "__classifier-semantic-main-black-source__",
               "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
@@ -102481,6 +102937,14 @@
               "exact_count": null
             },
             {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 10,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
               "card": "__classifier-semantic-main-black-source__",
               "zone": "main",
               "actual_count": 0,
@@ -102646,6 +103110,14 @@
               "card": "__classifier-semantic-main-red-source__",
               "zone": "main",
               "actual_count": 5,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 10,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -120789,14 +121261,120 @@
       "participant_id": "participant-e3af5d951f8157e8c3ddd143d85bbab9212f6927d32f7e4e2a291197658b80f9",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "prowess",
-        "archetype_name": "Prowess",
-        "subtype_id": "mono-red",
-        "subtype_name": "Mono-Red",
-        "rule_id": "prowess-mono-red",
-        "priority": 672300
+        "archetype_id": "burn",
+        "archetype_name": "Burn",
+        "subtype_id": "mono-red-cutter",
+        "subtype_name": "Mono-Red Cutter Burn",
+        "rule_id": "burn-mono-red-cutter",
+        "priority": 672910
       },
       "matched_rules": [
+        {
+          "archetype_id": "burn",
+          "archetype_name": "Burn",
+          "subtype_id": "mono-red-cutter",
+          "subtype_name": "Mono-Red Cutter Burn",
+          "rule_id": "burn-mono-red-cutter",
+          "priority": 672910,
+          "evidence": [
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Spike",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Boltwave",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lightning Bolt",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Dart",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Slickshot Show-Off",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Mutagenic Growth",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Lightning Helix",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-white-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-blue-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-green-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        },
         {
           "archetype_id": "prowess",
           "archetype_name": "Prowess",
@@ -120924,6 +121502,114 @@
       ],
       "top_priority_matches": [
         {
+          "archetype_id": "burn",
+          "archetype_name": "Burn",
+          "subtype_id": "mono-red-cutter",
+          "subtype_name": "Mono-Red Cutter Burn",
+          "rule_id": "burn-mono-red-cutter",
+          "priority": 672910,
+          "evidence": [
+            {
+              "card": "Cori-Steel Cutter",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Spike",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Boltwave",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lightning Bolt",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Lava Dart",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Slickshot Show-Off",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Mutagenic Growth",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Lightning Helix",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-white-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-blue-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-black-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-green-spell__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
           "archetype_id": "prowess",
           "archetype_name": "Prowess",
           "subtype_id": "mono-red",
@@ -121004,9 +121690,7 @@
               "exact_count": 0
             }
           ]
-        }
-      ],
-      "overridden_matches": [
+        },
         {
           "archetype_id": "burn",
           "archetype_name": "Burn",

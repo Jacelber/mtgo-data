@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "bd2caa7696e47873f0baf9cec2297b4955627ba8d1198d6b08aacfdc7760490d"
+    "digest": "d1a43b6539af3cb80bca1e6ca200a82ca507a58c07f1ffbc831ea8ae39dc9a2b"
   },
   "input": {
     "event_path": "data/modern/melee/events/441441.json",
@@ -18,11 +18,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "7e6972681b4b75e40d58cefc47a2a6d08964a4e094799d83caa1084b930b28b6",
+    "rule_sha256": "cbafde2bb8d7784a7ccb487813f5ec355e0694629fcea902e9d12d719c845b5d",
     "rule_schema_version": "1.1.0",
-    "archetype_count": 225,
-    "rule_count": 414,
-    "subtype_count": 106
+    "archetype_count": 227,
+    "rule_count": 420,
+    "subtype_count": 108
   },
   "summary": {
     "total_records": 571,
@@ -30,8 +30,8 @@
     "unknown": 7,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 101,
-    "overridden_matches": 101,
+    "multiple_matches": 102,
+    "overridden_matches": 102,
     "selected_subtypes": 262,
     "parent_only": 302,
     "same_parent_multiple_subtype_matches": 4,
@@ -21843,8 +21843,8 @@
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
@@ -21971,8 +21971,8 @@
               "exact_count": 0
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
-              "zone": "main",
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
@@ -41001,18 +41001,18 @@
           ]
         },
         {
-          "archetype_id": "jeskai-blink",
-          "archetype_name": "Jeskai Blink",
+          "archetype_id": "azorius-blink",
+          "archetype_name": "Azorius Blink",
           "subtype_id": null,
           "subtype_name": null,
-          "rule_id": "jeskai-blink-primary",
-          "priority": 632500,
+          "rule_id": "azorius-blink-primary",
+          "priority": 632200,
           "evidence": [
             {
               "card": "Phelia, Exuberant Shepherd",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 2,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -41033,17 +41033,17 @@
               "exact_count": null
             },
             {
-              "card": "Stoneforge Mystic",
+              "card": "Ephemerate",
               "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": 2,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Hallowed Fountain",
               "zone": "main",
-              "actual_count": 1,
+              "actual_count": 4,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -41051,6 +41051,14 @@
             {
               "card": "__classifier-semantic-main-black-source__",
               "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
@@ -41121,18 +41129,18 @@
       ],
       "overridden_matches": [
         {
-          "archetype_id": "jeskai-blink",
-          "archetype_name": "Jeskai Blink",
+          "archetype_id": "azorius-blink",
+          "archetype_name": "Azorius Blink",
           "subtype_id": null,
           "subtype_name": null,
-          "rule_id": "jeskai-blink-primary",
-          "priority": 632500,
+          "rule_id": "azorius-blink-primary",
+          "priority": 632200,
           "evidence": [
             {
               "card": "Phelia, Exuberant Shepherd",
               "zone": "main",
               "actual_count": 3,
-              "min_count": 2,
+              "min_count": 3,
               "max_count": null,
               "exact_count": null
             },
@@ -41153,17 +41161,17 @@
               "exact_count": null
             },
             {
-              "card": "Stoneforge Mystic",
+              "card": "Ephemerate",
               "zone": "main",
-              "actual_count": 0,
-              "min_count": null,
-              "max_count": 2,
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
               "exact_count": null
             },
             {
-              "card": "__classifier-semantic-main-red-source__",
+              "card": "Hallowed Fountain",
               "zone": "main",
-              "actual_count": 1,
+              "actual_count": 4,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -41171,6 +41179,14 @@
             {
               "card": "__classifier-semantic-main-black-source__",
               "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
               "actual_count": 0,
               "min_count": null,
               "max_count": null,
@@ -64818,6 +64834,88 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "azorius-blink",
+          "archetype_name": "Azorius Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "azorius-blink-primary",
+          "priority": 632200,
+          "evidence": [
+            {
+              "card": "Phelia, Exuberant Shepherd",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hallowed Fountain",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -64904,7 +65002,90 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "azorius-blink",
+          "archetype_name": "Azorius Blink",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "azorius-blink-primary",
+          "priority": 632200,
+          "evidence": [
+            {
+              "card": "Phelia, Exuberant Shepherd",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Quantum Riddler",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Solitude",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Ephemerate",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 2,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hallowed Fountain",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "__classifier-semantic-main-black-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-any-red-spell__",
+              "zone": "any",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "__classifier-semantic-main-green-source__",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Goryo's Vengeance",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
