@@ -204,6 +204,11 @@
           "required": ["reviewed", "items"],
           "properties": {
             "reviewed": {"const": true},
+            "non_card_phrases": {
+              "description": "Ordinary prose protected from automatic card-name linking during preparation.",
+              "type": "array",
+              "items": {"type": "string", "minLength": 1}
+            },
             "items": {"type": "array", "items": {"$ref": "#/$defs/copyItem"}}
           }
         },
