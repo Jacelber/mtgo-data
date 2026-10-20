@@ -1,748 +1,57 @@
 {
+  "schema_version": "1.2.0",
+  "product": "mtgo-landing",
+  "format": "pauper",
+  "source": "mtgo",
+  "week": {
+    "id": "2026-W42",
+    "start": "2026-10-12",
+    "end": "2026-10-18"
+  },
+  "state": "ready",
+  "source_event_ids": [
+    "12856189",
+    "12856196",
+    "12856206",
+    "12856578",
+    "12856583",
+    "12856591",
+    "12856607"
+  ],
   "classifier": {
-    "digest": "9b0fe4ea5db48512d7cfc891bca421bda97369465cad2506a0f020399bfa2abe"
+    "digest": "b1799d0561d80a53561c90f3aa49b13366d6c7cd24a3e58e5213fd59678e470d"
   },
   "comparison": {
     "available": true,
     "unavailable_reason": null
   },
-  "data_files": {
-    "completeness": "weeks/2026-W41/completeness.json",
-    "environment_decks": "weeks/2026-W41/environment_decks.json",
-    "feature_decks": "weeks/2026-W41/feature_decks.json",
-    "range": "weeks/2026-W41/range.json"
+  "thresholds": {
+    "environment_share": 0.03,
+    "share_move_pp": 5.0,
+    "exit_reference_share": 0.05,
+    "build_shift": 20,
+    "build_reference_minimum": 8
   },
-  "environment": {
-    "other_classified": {
-      "current": {
-        "count": 24,
-        "denominator": 115,
-        "share": 0.2087
-      },
-      "current_top8": {
-        "count": 7,
-        "denominator": 56,
-        "share": 0.125
-      },
-      "previous_four_weeks": {
-        "count": 207,
-        "denominator": 467,
-        "share": 0.4433
-      },
-      "previous_week": {
-        "count": 35,
-        "denominator": 107,
-        "share": 0.3271
-      }
-    },
-    "rows": [
-      {
-        "archetype_id": "mono-red-madness",
-        "current": {
-          "count": 15,
-          "denominator": 115,
-          "share": 0.1304
-        },
-        "current_top8": {
-          "count": 7,
-          "denominator": 56,
-          "share": 0.125
-        },
-        "display_name": "Mono-Red Madness",
-        "key_cards": [
-          {
-            "name": "Grab the Prize"
-          },
-          {
-            "name": "Fiery Temper"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 75,
-          "denominator": 467,
-          "share": 0.1606
-        },
-        "previous_week": {
-          "count": 16,
-          "denominator": 107,
-          "share": 0.1495
-        }
-      },
-      {
-        "archetype_id": "dimir-faeries",
-        "current": {
-          "count": 13,
-          "denominator": 115,
-          "share": 0.113
-        },
-        "current_top8": {
-          "count": 9,
-          "denominator": 56,
-          "share": 0.1607
-        },
-        "display_name": "Dimir Faeries",
-        "key_cards": [
-          {
-            "name": "Spellstutter Sprite"
-          },
-          {
-            "name": "Snuff Out"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 27,
-          "denominator": 467,
-          "share": 0.0578
-        },
-        "previous_week": {
-          "count": 11,
-          "denominator": 107,
-          "share": 0.1028
-        }
-      },
-      {
-        "archetype_id": "ruby-storm",
-        "current": {
-          "count": 12,
-          "denominator": 115,
-          "share": 0.1043
-        },
-        "current_top8": {
-          "count": 4,
-          "denominator": 56,
-          "share": 0.0714
-        },
-        "display_name": "Ruby Storm",
-        "key_cards": [
-          {
-            "name": "Goblin Anarchomancer"
-          },
-          {
-            "name": "Thornscape Familiar"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 1,
-          "denominator": 467,
-          "share": 0.0021
-        },
-        "previous_week": {
-          "count": 0,
-          "denominator": 107,
-          "share": 0.0
-        }
-      },
-      {
-        "archetype_id": "mono-blue-terror",
-        "current": {
-          "count": 11,
-          "denominator": 115,
-          "share": 0.0957
-        },
-        "current_top8": {
-          "count": 7,
-          "denominator": 56,
-          "share": 0.125
-        },
-        "display_name": "Mono-Blue Terror",
-        "key_cards": [
-          {
-            "name": "Tolarian Terror"
-          },
-          {
-            "name": "Thought Scour"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 44,
-          "denominator": 467,
-          "share": 0.0942
-        },
-        "previous_week": {
-          "count": 8,
-          "denominator": 107,
-          "share": 0.0748
-        }
-      },
-      {
-        "archetype_id": "dimir-control",
-        "current": {
-          "count": 7,
-          "denominator": 115,
-          "share": 0.0609
-        },
-        "current_top8": {
-          "count": 4,
-          "denominator": 56,
-          "share": 0.0714
-        },
-        "display_name": "Dimir Control",
-        "key_cards": [
-          {
-            "name": "Baleful Strix"
-          },
-          {
-            "name": "Counterspell"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 11,
-          "denominator": 467,
-          "share": 0.0236
-        },
-        "previous_week": {
-          "count": 10,
-          "denominator": 107,
-          "share": 0.0935
-        }
-      },
-      {
-        "archetype_id": "grixis-affinity",
-        "current": {
-          "count": 7,
-          "denominator": 115,
-          "share": 0.0609
-        },
-        "current_top8": {
-          "count": 3,
-          "denominator": 56,
-          "share": 0.0536
-        },
-        "display_name": "Grixis Affinity",
-        "key_cards": [
-          {
-            "name": "Myr Enforcer"
-          },
-          {
-            "name": "Refurbished Familiar"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 18,
-          "denominator": 467,
-          "share": 0.0385
-        },
-        "previous_week": {
-          "count": 5,
-          "denominator": 107,
-          "share": 0.0467
-        }
-      },
-      {
-        "archetype_id": "golgari-gardens",
-        "current": {
-          "count": 5,
-          "denominator": 115,
-          "share": 0.0435
-        },
-        "current_top8": {
-          "count": 4,
-          "denominator": 56,
-          "share": 0.0714
-        },
-        "display_name": "Golgari Gardens",
-        "key_cards": [
-          {
-            "name": "Khalni Garden"
-          },
-          {
-            "name": "Tithing Blade"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 21,
-          "denominator": 467,
-          "share": 0.045
-        },
-        "previous_week": {
-          "count": 6,
-          "denominator": 107,
-          "share": 0.0561
-        }
-      },
-      {
-        "archetype_id": "turbo-fog",
-        "current": {
-          "count": 5,
-          "denominator": 115,
-          "share": 0.0435
-        },
-        "current_top8": {
-          "count": 2,
-          "denominator": 56,
-          "share": 0.0357
-        },
-        "display_name": "Turbo Fog",
-        "key_cards": [
-          {
-            "name": "Moment's Peace"
-          },
-          {
-            "name": "Stream of Thought"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 2,
-          "denominator": 467,
-          "share": 0.0043
-        },
-        "previous_week": {
-          "count": 0,
-          "denominator": 107,
-          "share": 0.0
-        }
-      },
-      {
-        "archetype_id": "battle-screech",
-        "current": {
-          "count": 4,
-          "denominator": 115,
-          "share": 0.0348
-        },
-        "current_top8": {
-          "count": 3,
-          "denominator": 56,
-          "share": 0.0536
-        },
-        "display_name": "Battle Screech",
-        "key_cards": [
-          {
-            "name": "Battle Screech"
-          },
-          {
-            "name": "Rally the Peasants"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 11,
-          "denominator": 467,
-          "share": 0.0236
-        },
-        "previous_week": {
-          "count": 3,
-          "denominator": 107,
-          "share": 0.028
-        }
-      },
-      {
-        "archetype_id": "bogles",
-        "current": {
-          "count": 4,
-          "denominator": 115,
-          "share": 0.0348
-        },
-        "current_top8": {
-          "count": 1,
-          "denominator": 56,
-          "share": 0.0179
-        },
-        "display_name": "Bogles",
-        "key_cards": [
-          {
-            "name": "Slippery Bogle"
-          },
-          {
-            "name": "Ethereal Armor"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 35,
-          "denominator": 467,
-          "share": 0.0749
-        },
-        "previous_week": {
-          "count": 11,
-          "denominator": 107,
-          "share": 0.1028
-        }
-      },
-      {
-        "archetype_id": "dimir-affinity",
-        "current": {
-          "count": 4,
-          "denominator": 115,
-          "share": 0.0348
-        },
-        "current_top8": {
-          "count": 3,
-          "denominator": 56,
-          "share": 0.0536
-        },
-        "display_name": "Dimir Affinity",
-        "key_cards": [
-          {
-            "name": "Baleful Strix"
-          },
-          {
-            "name": "Refurbished Familiar"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 0,
-          "denominator": 467,
-          "share": 0.0
-        },
-        "previous_week": {
-          "count": 0,
-          "denominator": 107,
-          "share": 0.0
-        }
-      },
-      {
-        "archetype_id": "jund-wildfire",
-        "current": {
-          "count": 4,
-          "denominator": 115,
-          "share": 0.0348
-        },
-        "current_top8": {
-          "count": 2,
-          "denominator": 56,
-          "share": 0.0357
-        },
-        "display_name": "Jund Wildfire",
-        "key_cards": [
-          {
-            "name": "Cleansing Wildfire"
-          },
-          {
-            "name": "Writhing Chrysalis"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 15,
-          "denominator": 467,
-          "share": 0.0321
-        },
-        "previous_week": {
-          "count": 2,
-          "denominator": 107,
-          "share": 0.0187
-        }
-      }
-    ],
-    "threshold": 0.03,
-    "unknown": {
-      "current": {
-        "count": 0,
-        "denominator": 115,
-        "share": 0.0
-      },
-      "current_top8": {
-        "count": 0,
-        "denominator": 56,
-        "share": 0.0
-      },
-      "previous_four_weeks": {
-        "count": 0,
-        "denominator": 467,
-        "share": 0.0
-      },
-      "previous_week": {
-        "count": 0,
-        "denominator": 107,
-        "share": 0.0
-      }
-    }
-  },
-  "features": {
-    "items": [
-      {
-        "archetype_id": "ruby-storm",
-        "category": "new_technology",
-        "deck": {
-          "deck_fingerprint_sha256": "00f84769edfe582d71c425f20d77d9f5a539fd23f3889c1ac54948b2af9ebf94",
-          "deck_id": "70c2724c852f65b17058",
-          "event_id": "12856155",
-          "final_rank": 3,
-          "main_deck": [
-            {
-              "name": "Crossover Collaboration",
-              "qty": 4
-            },
-            {
-              "name": "Desperate Ritual",
-              "qty": 3
-            },
-            {
-              "name": "First Day of Class",
-              "qty": 2
-            },
-            {
-              "name": "Geothermal Crevice",
-              "qty": 4
-            },
-            {
-              "name": "Glimpse the Impossible",
-              "qty": 4
-            },
-            {
-              "name": "Goblin Anarchomancer",
-              "qty": 4
-            },
-            {
-              "name": "Hickory Woodlot",
-              "qty": 4
-            },
-            {
-              "name": "Manamorphose",
-              "qty": 4
-            },
-            {
-              "name": "Mountain",
-              "qty": 3
-            },
-            {
-              "name": "Reckless Impulse",
-              "qty": 4
-            },
-            {
-              "name": "Sandstone Needle",
-              "qty": 4
-            },
-            {
-              "name": "Seething Song",
-              "qty": 4
-            },
-            {
-              "name": "Seize the Storm",
-              "qty": 2
-            },
-            {
-              "name": "Thornscape Familiar",
-              "qty": 4
-            },
-            {
-              "name": "Tinder Farm",
-              "qty": 2
-            },
-            {
-              "name": "Twinned Vision",
-              "qty": 4
-            },
-            {
-              "name": "Wrenn's Resolve",
-              "qty": 4
-            }
-          ],
-          "player": "AlessandroPiraccini",
-          "player_count": 52,
-          "side_deck": [
-            {
-              "name": "Flaring Pain",
-              "qty": 1
-            },
-            {
-              "name": "Gruul Turf",
-              "qty": 2
-            },
-            {
-              "name": "Origin of Metalbending",
-              "qty": 1
-            },
-            {
-              "name": "Pyroblast",
-              "qty": 4
-            },
-            {
-              "name": "Red Elemental Blast",
-              "qty": 4
-            },
-            {
-              "name": "Weather the Storm",
-              "qty": 3
-            }
-          ],
-          "starttime": "2026-10-09 13:00:00.0"
-        },
-        "destination_id": "deck:70c2724c852f65b17058",
-        "display_name": "Ruby Storm",
-        "featured_cards": [
-          {
-            "name": "Twinned Vision"
-          },
-          {
-            "name": "Goblin Anarchomancer"
-          },
-          {
-            "name": "Thornscape Familiar"
-          },
-          {
-            "name": "Crossover Collaboration"
-          }
-        ],
-        "headline": {
-          "en": "Ruby Storm",
-          "zh": "红风暴"
-        },
-        "order": 1,
-        "positioning": {
-          "en": "A build adding Twinned Vision.",
-          "zh": "加入双生视像的版本"
-        },
-        "subtype_id": null,
-        "supporting_facts": [
-          {
-            "type": "share_increase",
-            "values": {
-              "current_high_score_count": 12,
-              "current_high_score_denominator": 115,
-              "current_share": 0.1043,
-              "delta_pp": 10.22,
-              "reference_high_score_count": 1,
-              "reference_high_score_denominator": 467,
-              "reference_share": 0.0021
-            }
-          },
-          {
-            "type": "new_card",
-            "values": {
-              "cards": [
-                "Twinned Vision"
-              ],
-              "set_code": "FRA"
-            }
-          }
-        ]
-      },
-      {
-        "archetype_id": "battle-screech",
-        "category": "new_technology",
-        "deck": {
-          "deck_fingerprint_sha256": "4a2368df8622d7aca4672f1d57022f72544ff58240af08c39d9a7db35c1061f4",
-          "deck_id": "769195c1f16bc27c047a",
-          "event_id": "12855502",
-          "final_rank": 3,
-          "main_deck": [
-            {
-              "name": "Battle Screech",
-              "qty": 3
-            },
-            {
-              "name": "Fortress Kin-Guard",
-              "qty": 4
-            },
-            {
-              "name": "Guardians' Pledge",
-              "qty": 1
-            },
-            {
-              "name": "Leonardo, Big Brother",
-              "qty": 4
-            },
-            {
-              "name": "Lunarch Veteran",
-              "qty": 3
-            },
-            {
-              "name": "Martyr's Soul",
-              "qty": 4
-            },
-            {
-              "name": "Novice Inspector",
-              "qty": 4
-            },
-            {
-              "name": "Plains",
-              "qty": 17
-            },
-            {
-              "name": "Raffine's Informant",
-              "qty": 4
-            },
-            {
-              "name": "Ramosian Rally",
-              "qty": 4
-            },
-            {
-              "name": "Salt Road Packbeast",
-              "qty": 4
-            },
-            {
-              "name": "Search Party Captain",
-              "qty": 4
-            },
-            {
-              "name": "Thraben Inspector",
-              "qty": 4
-            }
-          ],
-          "player": "cabrabr12",
-          "player_count": 52,
-          "side_deck": [
-            {
-              "name": "Dust to Dust",
-              "qty": 4
-            },
-            {
-              "name": "Holy Light",
-              "qty": 2
-            },
-            {
-              "name": "Revoke Existence",
-              "qty": 1
-            },
-            {
-              "name": "Standard Bearer",
-              "qty": 2
-            },
-            {
-              "name": "Thraben Charm",
-              "qty": 3
-            },
-            {
-              "name": "Ultimate Alliance",
-              "qty": 3
-            }
-          ],
-          "starttime": "2026-10-05 17:00:00.0"
-        },
-        "destination_id": "deck:769195c1f16bc27c047a",
-        "display_name": "Mono-White Battle Screech",
-        "featured_cards": [
-          {
-            "name": "Salt Road Packbeast"
-          },
-          {
-            "name": "Search Party Captain"
-          },
-          {
-            "name": "Battle Screech"
-          },
-          {
-            "name": "Ramosian Rally"
-          }
-        ],
-        "headline": {
-          "en": "Mono-White Battle Screech",
-          "zh": "纯白战呼"
-        },
-        "order": 2,
-        "positioning": {
-          "en": "A go-wide build combining Battle Screech and Salt Road Packbeast.",
-          "zh": "混合战呼和驮兽铺场思路"
-        },
-        "subtype_id": "mono-white",
-        "supporting_facts": [
-          {
-            "type": "build_shift",
-            "values": {
-              "identity_id": "battle-screech/mono-white",
-              "identity_level": "subtype",
-              "reference_sample_size": 20,
-              "score": 34
-            }
-          }
-        ]
-      }
-    ],
-    "week": "2026-W41"
-  },
-  "format": "pauper",
   "populations": {
     "current": {
-      "end": "2026-10-11",
+      "start": "2026-10-12",
+      "end": "2026-10-18",
+      "event_ids": [
+        "12856189",
+        "12856196",
+        "12856206",
+        "12856578",
+        "12856583",
+        "12856591",
+        "12856607"
+      ],
       "event_count": 7,
+      "high_score_count": 110,
+      "top8_count": 56
+    },
+    "previous_week": {
+      "start": "2026-10-05",
+      "end": "2026-10-11",
       "event_ids": [
         "12855502",
         "12855509",
@@ -752,20 +61,14 @@
         "12856164",
         "12856180"
       ],
+      "event_count": 7,
       "high_score_count": 115,
-      "start": "2026-10-05",
       "top8_count": 56
     },
     "previous_four_weeks": {
-      "end": "2026-10-04",
-      "event_count": 27,
+      "start": "2026-09-14",
+      "end": "2026-10-11",
       "event_ids": [
-        "12853710",
-        "12853727",
-        "12853785",
-        "12854064",
-        "12854069",
-        "12854094",
         "12854103",
         "12854110",
         "12854119",
@@ -786,127 +89,788 @@
         "12855463",
         "12855468",
         "12855476",
-        "12855493"
+        "12855493",
+        "12855502",
+        "12855509",
+        "12855517",
+        "12856148",
+        "12856155",
+        "12856164",
+        "12856180"
       ],
-      "high_score_count": 467,
-      "start": "2026-09-07",
-      "top8_count": 216
-    },
-    "previous_week": {
-      "end": "2026-10-04",
-      "event_count": 7,
-      "event_ids": [
-        "12854944",
-        "12854951",
-        "12855452",
-        "12855463",
-        "12855468",
-        "12855476",
-        "12855493"
-      ],
-      "high_score_count": 107,
-      "start": "2026-09-28",
-      "top8_count": 56
+      "event_count": 28,
+      "high_score_count": 482,
+      "top8_count": 224
     }
   },
-  "product": "mtgo-landing",
-  "review_binding": {
-    "classifier_digest": "9b0fe4ea5db48512d7cfc891bca421bda97369465cad2506a0f020399bfa2abe",
-    "machine_fact_digest": "5db386aa0686291db4a68aeb3ba8c41e1145c2ea2713fcddfe4307175c26ad9d",
-    "pickup_document_digest": "eecaa7db3e9ba98472f6e83944bf32cfc83155b3ad3939fe76311e96a0eb7443",
-    "source_event_ids": [
-      "12855502",
-      "12855509",
-      "12855517",
-      "12856148",
-      "12856155",
-      "12856164",
-      "12856180"
-    ],
-    "summary_fact_digest": "51f597c1388c9141118bdf5f6f3c73277628d488aa0be0e9614446b61a754b42",
-    "visual_metadata_digest": "0bc91bd93fd0f4ae6793760f752da523ce60bf88e999fe663afa37e67f7f99f5"
-  },
-  "schema_version": "1.2.0",
-  "source": "mtgo",
-  "source_event_ids": [
-    "12855502",
-    "12855509",
-    "12855517",
-    "12856148",
-    "12856155",
-    "12856164",
-    "12856180"
-  ],
-  "state": "ready",
-  "thresholds": {
-    "build_reference_minimum": 8,
-    "build_shift": 20,
-    "environment_share": 0.03,
-    "exit_reference_share": 0.05,
-    "share_move_pp": 5.0
-  },
-  "week": {
-    "end": "2026-10-11",
-    "id": "2026-W41",
-    "start": "2026-10-05"
-  },
-  "weekly_summary": {
-    "items": [
+  "environment": {
+    "threshold": 0.03,
+    "rows": [
       {
-        "deck_links": [
+        "archetype_id": "mono-red-madness",
+        "display_name": "Mono-Red Madness",
+        "key_cards": [
           {
-            "deck": {
-              "archetype_id": "ruby-storm",
-              "deck_fingerprint_sha256": "00f84769edfe582d71c425f20d77d9f5a539fd23f3889c1ac54948b2af9ebf94",
-              "deck_id": "70c2724c852f65b17058",
-              "display_name": "Ruby Storm",
-              "event_id": "12856155",
-              "final_rank": 3,
-              "player": "AlessandroPiraccini",
-              "starttime": "2026-10-09 13:00:00.0"
-            },
-            "label": {
-              "en": "Ruby Storm · AlessandroPiraccini · Rank 3",
-              "zh": "红风暴 · AlessandroPiraccini · 第3名"
-            },
-            "order": 1,
-            "token": "deck:70c2724c852f65b17058"
+            "name": "Grab the Prize"
+          },
+          {
+            "name": "Fiery Temper"
           }
         ],
-        "order": 1,
-        "text": {
-          "en": "The red storm deck gained ground this week with the addition of [[card:Twinned Vision|Twinned Vision]], rising above 10% of the high-score metagame and earning multiple Top 8 finishes. deck:70c2724c852f65b17058",
-          "zh": "本周补强了[[card:Twinned Vision|双生视像]]的红风暴套牌明显爬升，占比来到了10%以上，并有多个八强。deck:70c2724c852f65b17058"
+        "current": {
+          "count": 20,
+          "denominator": 110,
+          "share": 0.1818
+        },
+        "previous_week": {
+          "count": 15,
+          "denominator": 115,
+          "share": 0.1304
+        },
+        "previous_four_weeks": {
+          "count": 76,
+          "denominator": 482,
+          "share": 0.1577
+        },
+        "current_top8": {
+          "count": 9,
+          "denominator": 56,
+          "share": 0.1607
         }
       },
       {
-        "deck_links": [
+        "archetype_id": "dimir-control",
+        "display_name": "Dimir Control",
+        "key_cards": [
           {
-            "deck": {
-              "archetype_id": "battle-screech",
-              "deck_fingerprint_sha256": "4a2368df8622d7aca4672f1d57022f72544ff58240af08c39d9a7db35c1061f4",
-              "deck_id": "769195c1f16bc27c047a",
-              "display_name": "Mono-White Battle Screech",
-              "event_id": "12855502",
-              "final_rank": 3,
-              "player": "cabrabr12",
-              "starttime": "2026-10-05 17:00:00.0"
-            },
-            "label": {
-              "en": "Mono-White Battle Screech · cabrabr12 · Rank 3",
-              "zh": "纯白战呼 · cabrabr12 · 第3名"
-            },
-            "order": 1,
-            "token": "deck:769195c1f16bc27c047a"
+            "name": "Baleful Strix"
+          },
+          {
+            "name": "Counterspell"
           }
         ],
-        "order": 2,
-        "text": {
-          "en": "A Battle Screech deck incorporating the [[card:Salt Road Packbeast|Salt Road Packbeast]] go-wide plan also reached the Top 4: deck:769195c1f16bc27c047a",
-          "zh": "另外有一套驮兽铺场思路的战呼套牌拿下一个四强：deck:769195c1f16bc27c047a"
+        "current": {
+          "count": 13,
+          "denominator": 110,
+          "share": 0.1182
+        },
+        "previous_week": {
+          "count": 7,
+          "denominator": 115,
+          "share": 0.0609
+        },
+        "previous_four_weeks": {
+          "count": 18,
+          "denominator": 482,
+          "share": 0.0373
+        },
+        "current_top8": {
+          "count": 8,
+          "denominator": 56,
+          "share": 0.1429
+        }
+      },
+      {
+        "archetype_id": "mono-blue-terror",
+        "display_name": "Mono-Blue Terror",
+        "key_cards": [
+          {
+            "name": "Tolarian Terror"
+          },
+          {
+            "name": "Thought Scour"
+          }
+        ],
+        "current": {
+          "count": 13,
+          "denominator": 110,
+          "share": 0.1182
+        },
+        "previous_week": {
+          "count": 11,
+          "denominator": 115,
+          "share": 0.0957
+        },
+        "previous_four_weeks": {
+          "count": 43,
+          "denominator": 482,
+          "share": 0.0892
+        },
+        "current_top8": {
+          "count": 7,
+          "denominator": 56,
+          "share": 0.125
+        }
+      },
+      {
+        "archetype_id": "dimir-faeries",
+        "display_name": "Dimir Faeries",
+        "key_cards": [
+          {
+            "name": "Spellstutter Sprite"
+          },
+          {
+            "name": "Snuff Out"
+          }
+        ],
+        "current": {
+          "count": 7,
+          "denominator": 110,
+          "share": 0.0636
+        },
+        "previous_week": {
+          "count": 13,
+          "denominator": 115,
+          "share": 0.113
+        },
+        "previous_four_weeks": {
+          "count": 36,
+          "denominator": 482,
+          "share": 0.0747
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 56,
+          "share": 0.0714
+        }
+      },
+      {
+        "archetype_id": "elves",
+        "display_name": "Elves",
+        "key_cards": [
+          {
+            "name": "Priest of Titania"
+          },
+          {
+            "name": "Timberwatch Elf"
+          }
+        ],
+        "current": {
+          "count": 7,
+          "denominator": 110,
+          "share": 0.0636
+        },
+        "previous_week": {
+          "count": 2,
+          "denominator": 115,
+          "share": 0.0174
+        },
+        "previous_four_weeks": {
+          "count": 24,
+          "denominator": 482,
+          "share": 0.0498
+        },
+        "current_top8": {
+          "count": 1,
+          "denominator": 56,
+          "share": 0.0179
+        }
+      },
+      {
+        "archetype_id": "grixis-affinity",
+        "display_name": "Grixis Affinity",
+        "key_cards": [
+          {
+            "name": "Myr Enforcer"
+          },
+          {
+            "name": "Refurbished Familiar"
+          }
+        ],
+        "current": {
+          "count": 7,
+          "denominator": 110,
+          "share": 0.0636
+        },
+        "previous_week": {
+          "count": 7,
+          "denominator": 115,
+          "share": 0.0609
+        },
+        "previous_four_weeks": {
+          "count": 18,
+          "denominator": 482,
+          "share": 0.0373
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 56,
+          "share": 0.0714
+        }
+      },
+      {
+        "archetype_id": "battle-screech",
+        "display_name": "Battle Screech",
+        "key_cards": [
+          {
+            "name": "Battle Screech"
+          },
+          {
+            "name": "Rally the Peasants"
+          }
+        ],
+        "current": {
+          "count": 6,
+          "denominator": 110,
+          "share": 0.0545
+        },
+        "previous_week": {
+          "count": 4,
+          "denominator": 115,
+          "share": 0.0348
+        },
+        "previous_four_weeks": {
+          "count": 13,
+          "denominator": 482,
+          "share": 0.027
+        },
+        "current_top8": {
+          "count": 5,
+          "denominator": 56,
+          "share": 0.0893
+        }
+      },
+      {
+        "archetype_id": "green-tron",
+        "display_name": "Monster Tron",
+        "key_cards": [
+          {
+            "name": "Urza's Tower"
+          },
+          {
+            "name": "Giant's Boulder"
+          }
+        ],
+        "current": {
+          "count": 5,
+          "denominator": 110,
+          "share": 0.0455
+        },
+        "previous_week": {
+          "count": 1,
+          "denominator": 115,
+          "share": 0.0087
+        },
+        "previous_four_weeks": {
+          "count": 21,
+          "denominator": 482,
+          "share": 0.0436
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 56,
+          "share": 0.0536
+        }
+      },
+      {
+        "archetype_id": "bogles",
+        "display_name": "Bogles",
+        "key_cards": [
+          {
+            "name": "Slippery Bogle"
+          },
+          {
+            "name": "Ethereal Armor"
+          }
+        ],
+        "current": {
+          "count": 4,
+          "denominator": 110,
+          "share": 0.0364
+        },
+        "previous_week": {
+          "count": 4,
+          "denominator": 115,
+          "share": 0.0348
+        },
+        "previous_four_weeks": {
+          "count": 35,
+          "denominator": 482,
+          "share": 0.0726
+        },
+        "current_top8": {
+          "count": 1,
+          "denominator": 56,
+          "share": 0.0179
+        }
+      },
+      {
+        "archetype_id": "mono-red-rally",
+        "display_name": "Mono-Red Rally",
+        "key_cards": [
+          {
+            "name": "Rally at the Hornburg"
+          },
+          {
+            "name": "Burning-Tree Emissary"
+          }
+        ],
+        "current": {
+          "count": 4,
+          "denominator": 110,
+          "share": 0.0364
+        },
+        "previous_week": {
+          "count": 2,
+          "denominator": 115,
+          "share": 0.0174
+        },
+        "previous_four_weeks": {
+          "count": 6,
+          "denominator": 482,
+          "share": 0.0124
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 56,
+          "share": 0.0357
+        }
+      },
+      {
+        "archetype_id": "spy-combo",
+        "display_name": "Spy Combo",
+        "key_cards": [
+          {
+            "name": "Balustrade Spy"
+          },
+          {
+            "name": "Dread Return"
+          }
+        ],
+        "current": {
+          "count": 4,
+          "denominator": 110,
+          "share": 0.0364
+        },
+        "previous_week": {
+          "count": 3,
+          "denominator": 115,
+          "share": 0.0261
+        },
+        "previous_four_weeks": {
+          "count": 12,
+          "denominator": 482,
+          "share": 0.0249
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 56,
+          "share": 0.0357
+        }
+      },
+      {
+        "archetype_id": "turbo-fog",
+        "display_name": "Turbo Fog",
+        "key_cards": [
+          {
+            "name": "Moment's Peace"
+          },
+          {
+            "name": "Stream of Thought"
+          }
+        ],
+        "current": {
+          "count": 4,
+          "denominator": 110,
+          "share": 0.0364
+        },
+        "previous_week": {
+          "count": 5,
+          "denominator": 115,
+          "share": 0.0435
+        },
+        "previous_four_weeks": {
+          "count": 6,
+          "denominator": 482,
+          "share": 0.0124
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 56,
+          "share": 0.0536
         }
       }
     ],
-    "week": "2026-W41"
+    "other_classified": {
+      "current": {
+        "count": 16,
+        "denominator": 110,
+        "share": 0.1455
+      },
+      "previous_week": {
+        "count": 41,
+        "denominator": 115,
+        "share": 0.3565
+      },
+      "previous_four_weeks": {
+        "count": 174,
+        "denominator": 482,
+        "share": 0.361
+      },
+      "current_top8": {
+        "count": 7,
+        "denominator": 56,
+        "share": 0.125
+      }
+    },
+    "unknown": {
+      "current": {
+        "count": 0,
+        "denominator": 110,
+        "share": 0.0
+      },
+      "previous_week": {
+        "count": 0,
+        "denominator": 115,
+        "share": 0.0
+      },
+      "previous_four_weeks": {
+        "count": 0,
+        "denominator": 482,
+        "share": 0.0
+      },
+      "current_top8": {
+        "count": 0,
+        "denominator": 56,
+        "share": 0.0
+      }
+    }
+  },
+  "weekly_summary": {
+    "week": "2026-W42",
+    "items": [
+      {
+        "order": 1,
+        "text": {
+          "zh": "经过一段时间的环境演变，Zeta单卡对环境的影响基本比较明确。[[card:Baleful Strix|恶邪枭]]毫无疑问是最强单卡，蓝黑控制、蓝黑仙灵现在都处于环境顶端。[[card:Vandalblast|蛮野冲击]]虽然不是所有红色套牌都带，但备牌为了[[card:Vandalblast|蛮野冲击]]混红的控制现在是最流行的版本。而[[card:Dispatch|迅速了结]]套牌相对有些掉队，以艾斯波共鸣为首的这类套牌甚至已经可以归入“其他”。",
+          "en": "After a period of metagame evolution, the impact of the Zeta cards has become fairly clear. [[card:Baleful Strix|Baleful Strix]] is undoubtedly the strongest card, with Dimir Control and Dimir Faeries both now at the top of the metagame. Not every red deck plays [[card:Vandalblast|Vandalblast]], but control builds splashing red for it in the sideboard are now the most popular variants. Meanwhile, [[card:Dispatch|Dispatch]] decks have fallen somewhat behind. These decks, led by Esper Affinity, can now even be grouped under “Other.”"
+        },
+        "deck_links": []
+      },
+      {
+        "order": 2,
+        "text": {
+          "zh": "FRA新牌方面，[[card:Twinned Vision|双生视像]]在上周进入红风暴套牌之后，本周一些纯红疯魔套牌也开始使用。一套把[[card:Kessig Flamebreather|凯锡革喷焰师]]换成[[card:Kiln Fiend|火炉邪鬼]]的版本拿下一个八强：deck:f3bc98dff40ca00607c5，备牌带了一张[[card:Twinned Vision|双生视像]]。而另一个主1备3，用它作为备牌资源计划的版本拿下一个四强：deck:3661808034b758be269b。",
+          "en": "Among the new FRA cards, [[card:Twinned Vision|Twinned Vision]] began appearing in Ruby Storm last week, and some Mono-Red Madness decks have started using it this week as well. A build replacing [[card:Kessig Flamebreather|Kessig Flamebreather]] with [[card:Kiln Fiend|Kiln Fiend]] made the Top 8: deck:f3bc98dff40ca00607c5, with one [[card:Twinned Vision|Twinned Vision]] in the sideboard. Another build, running one copy in the main deck and three in the sideboard as a resource plan after sideboarding, reached the semifinals: deck:3661808034b758be269b."
+        },
+        "deck_links": [
+          {
+            "order": 1,
+            "token": "deck:f3bc98dff40ca00607c5",
+            "label": {
+              "zh": "纯红疯魔 · Mirozel1 · 第7名",
+              "en": "Mono-Red Madness · Mirozel1 · Rank 7"
+            },
+            "deck": {
+              "archetype_id": "mono-red-madness",
+              "display_name": "Mono-Red Madness",
+              "event_id": "12856206",
+              "deck_id": "f3bc98dff40ca00607c5",
+              "deck_fingerprint_sha256": "03d5f0e105464f414dccb99d48bc1b887298e1ba0ddfa29e0198a3839ed83c32",
+              "player": "Mirozel1",
+              "final_rank": 7,
+              "starttime": "2026-10-14 12:00:00.0"
+            }
+          },
+          {
+            "order": 2,
+            "token": "deck:3661808034b758be269b",
+            "label": {
+              "zh": "纯红疯魔 · taravangian_ · 第3名",
+              "en": "Mono-Red Madness · taravangian_ · Rank 3"
+            },
+            "deck": {
+              "archetype_id": "mono-red-madness",
+              "display_name": "Mono-Red Madness",
+              "event_id": "12856583",
+              "deck_id": "3661808034b758be269b",
+              "deck_fingerprint_sha256": "4dede14546b0994183db1d32dca4601382edff0051fcf05061ab9f47a91f105d",
+              "player": "taravangian_",
+              "final_rank": 3,
+              "starttime": "2026-10-16 13:00:00.0"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "features": {
+    "week": "2026-W42",
+    "items": [
+      {
+        "category": "new_technology",
+        "order": 1,
+        "destination_id": "deck:f3bc98dff40ca00607c5",
+        "archetype_id": "mono-red-madness",
+        "subtype_id": null,
+        "display_name": "Mono-Red Madness",
+        "deck": {
+          "event_id": "12856206",
+          "deck_id": "f3bc98dff40ca00607c5",
+          "deck_fingerprint_sha256": "03d5f0e105464f414dccb99d48bc1b887298e1ba0ddfa29e0198a3839ed83c32",
+          "player": "Mirozel1",
+          "final_rank": 7,
+          "player_count": 44,
+          "starttime": "2026-10-14 12:00:00.0",
+          "main_deck": [
+            {
+              "name": "Faithless Looting",
+              "qty": 4
+            },
+            {
+              "name": "Fiery Temper",
+              "qty": 1
+            },
+            {
+              "name": "Fireblast",
+              "qty": 2
+            },
+            {
+              "name": "Grab the Prize",
+              "qty": 2
+            },
+            {
+              "name": "Guttersnipe",
+              "qty": 4
+            },
+            {
+              "name": "Highway Robbery",
+              "qty": 4
+            },
+            {
+              "name": "Kiln Fiend",
+              "qty": 4
+            },
+            {
+              "name": "Lava Dart",
+              "qty": 4
+            },
+            {
+              "name": "Lightning Bolt",
+              "qty": 4
+            },
+            {
+              "name": "Mountain",
+              "qty": 19
+            },
+            {
+              "name": "Searing Blaze",
+              "qty": 3
+            },
+            {
+              "name": "Sneaky Snacker",
+              "qty": 4
+            },
+            {
+              "name": "Twinned Vision",
+              "qty": 1
+            },
+            {
+              "name": "Underworld Rage-Hound",
+              "qty": 1
+            },
+            {
+              "name": "Vision of Love",
+              "qty": 1
+            },
+            {
+              "name": "Witch's Mark",
+              "qty": 2
+            }
+          ],
+          "side_deck": [
+            {
+              "name": "End the Festivities",
+              "qty": 2
+            },
+            {
+              "name": "Martyr of Ashes",
+              "qty": 2
+            },
+            {
+              "name": "Red Elemental Blast",
+              "qty": 4
+            },
+            {
+              "name": "Smash to Smithereens",
+              "qty": 4
+            },
+            {
+              "name": "Twinned Vision",
+              "qty": 1
+            },
+            {
+              "name": "Underworld Rage-Hound",
+              "qty": 2
+            }
+          ]
+        },
+        "headline": {
+          "en": "Mono-Red Madness",
+          "zh": "纯红疯魔"
+        },
+        "positioning": {
+          "zh": "火炉邪鬼版本的构筑",
+          "en": "A build featuring Kiln Fiend."
+        },
+        "featured_cards": [
+          {
+            "name": "Twinned Vision"
+          },
+          {
+            "name": "Kiln Fiend"
+          },
+          {
+            "name": "Sneaky Snacker"
+          },
+          {
+            "name": "Highway Robbery"
+          }
+        ],
+        "supporting_facts": [
+          {
+            "type": "build_shift",
+            "values": {
+              "identity_level": "parent",
+              "identity_id": "mono-red-madness",
+              "reference_sample_size": 139,
+              "score": 22
+            }
+          }
+        ]
+      },
+      {
+        "category": "new_technology",
+        "order": 2,
+        "destination_id": "deck:3661808034b758be269b",
+        "archetype_id": "mono-red-madness",
+        "subtype_id": null,
+        "display_name": "Mono-Red Madness",
+        "deck": {
+          "event_id": "12856583",
+          "deck_id": "3661808034b758be269b",
+          "deck_fingerprint_sha256": "4dede14546b0994183db1d32dca4601382edff0051fcf05061ab9f47a91f105d",
+          "player": "taravangian_",
+          "final_rank": 3,
+          "player_count": 54,
+          "starttime": "2026-10-16 13:00:00.0",
+          "main_deck": [
+            {
+              "name": "Faithless Looting",
+              "qty": 3
+            },
+            {
+              "name": "Fiery Temper",
+              "qty": 4
+            },
+            {
+              "name": "Fireblast",
+              "qty": 4
+            },
+            {
+              "name": "Grab the Prize",
+              "qty": 4
+            },
+            {
+              "name": "Guttersnipe",
+              "qty": 4
+            },
+            {
+              "name": "Highway Robbery",
+              "qty": 4
+            },
+            {
+              "name": "Kessig Flamebreather",
+              "qty": 4
+            },
+            {
+              "name": "Lava Dart",
+              "qty": 4
+            },
+            {
+              "name": "Lightning Bolt",
+              "qty": 4
+            },
+            {
+              "name": "Melded Moxite",
+              "qty": 1
+            },
+            {
+              "name": "Mountain",
+              "qty": 19
+            },
+            {
+              "name": "Sneaky Snacker",
+              "qty": 4
+            },
+            {
+              "name": "Twinned Vision",
+              "qty": 1
+            }
+          ],
+          "side_deck": [
+            {
+              "name": "Pyroblast",
+              "qty": 4
+            },
+            {
+              "name": "Red Elemental Blast",
+              "qty": 2
+            },
+            {
+              "name": "Relic of Progenitus",
+              "qty": 3
+            },
+            {
+              "name": "Smash to Smithereens",
+              "qty": 3
+            },
+            {
+              "name": "Twinned Vision",
+              "qty": 3
+            }
+          ]
+        },
+        "headline": {
+          "en": "Mono-Red Madness",
+          "zh": "纯红疯魔"
+        },
+        "positioning": {
+          "zh": "主备满编4张双生视像的版本",
+          "en": "A build with a full playset of Twinned Vision across the main deck and sideboard."
+        },
+        "featured_cards": [
+          {
+            "name": "Twinned Vision"
+          },
+          {
+            "name": "Sneaky Snacker"
+          },
+          {
+            "name": "Highway Robbery"
+          },
+          {
+            "name": "Kessig Flamebreather"
+          }
+        ],
+        "supporting_facts": []
+      }
+    ]
+  },
+  "review_binding": {
+    "source_event_ids": [
+      "12856189",
+      "12856196",
+      "12856206",
+      "12856578",
+      "12856583",
+      "12856591",
+      "12856607"
+    ],
+    "classifier_digest": "b1799d0561d80a53561c90f3aa49b13366d6c7cd24a3e58e5213fd59678e470d",
+    "visual_metadata_digest": "2caff2509cbe0cca27b98259db839c48ac4b4f82b08fb9c0878722b749db0709",
+    "machine_fact_digest": "a79bd81eba2e36bb1a91d116298d8f1d5254ee8eac3689e3c0037bf963942bf6",
+    "pickup_document_digest": "1f9f2a825a4e1c1c59c4c2dd959b452306bdd38767748fd681c5f914496a0ef6",
+    "summary_fact_digest": "63bd21cba97694a230f73b934f5ffca7fa99e266b16ff49e80ef84b6214a4264"
   }
 }
