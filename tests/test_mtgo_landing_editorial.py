@@ -231,6 +231,23 @@ def test_top_copy_token_without_feature_fails_closed(imported):
         )
 
 
+def test_review_retains_protected_prose_phrases(imported):
+    _output_root, result, _scope, _workbook, _digest = imported
+    review = editorial.load_review_document(result["review_paths"][0])
+    review["review"]["top_copy"]["non_card_phrases"] = ["终结比赛"]
+    schema = ROOT / "schemas/mtgo-landing-review.schema.json"
+    editorial.validate_review_document(review, schema)
+
+    review["review"]["top_copy"]["non_card_phrases"] = [42]
+    with pytest.raises(editorial.MTGOLandingEditorialError, match="Schema"):
+        editorial.validate_review_document(review, schema)
+
+    review["review"]["top_copy"]["non_card_phrases"] = ["终结比赛"]
+    review["review"]["top_copy"]["unexpected"] = True
+    with pytest.raises(editorial.MTGOLandingEditorialError, match="Schema"):
+        editorial.validate_review_document(review, schema)
+
+
 def test_bilingual_catalog_coverage_fails_closed(imported, tmp_path):
     output_root, _result, _scope, _workbook, _digest = imported
     catalog = yaml.safe_load(
