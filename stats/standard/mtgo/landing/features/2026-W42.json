@@ -1,41 +1,16 @@
 {
-  "schema_version": "1.0.0",
-  "product": "mtgo-landing-features",
-  "format": "standard",
-  "source": "mtgo",
-  "week": {
-    "id": "2026-W42",
-    "start": "2026-10-12",
-    "end": "2026-10-18"
-  },
-  "source_event_ids": [
-    "12856191",
-    "12856199",
-    "12856204",
-    "12856571",
-    "12856572",
-    "12856581",
-    "12856586",
-    "12856610"
-  ],
   "classifier_digest": "d0495b42f3e9597d7b4e4a890c98354c5b71110b2eac4bb9e82aa29c2d048bee",
+  "content_digest": "1ea60acbf19f7d75ecc2d0b4b8a18f6969e93a495d19bb4ca1a2c26052acb8c0",
   "features": {
     "items": [
       {
-        "category": "new_technology",
-        "order": 1,
-        "destination_id": "deck:369ac5463f7f6787f020",
         "archetype_id": "mono-black-aggro",
-        "subtype_id": null,
-        "display_name": "Mono-Black Aggro",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856204",
-          "deck_id": "369ac5463f7f6787f020",
           "deck_fingerprint_sha256": "531a531baf7ef2f8e80dd8443311499eff00ff7391094b81e01884845af3d055",
-          "player": "Kerci",
+          "deck_id": "369ac5463f7f6787f020",
+          "event_id": "12856204",
           "final_rank": 8,
-          "player_count": 26,
-          "starttime": "2026-10-14 07:00:00.0",
           "main_deck": [
             {
               "name": "Bitter Triumph",
@@ -122,6 +97,8 @@
               "qty": 1
             }
           ],
+          "player": "Kerci",
+          "player_count": 26,
           "side_deck": [
             {
               "name": "Ancient Vendetta",
@@ -171,16 +148,11 @@
               "name": "The Ooze",
               "qty": 1
             }
-          ]
+          ],
+          "starttime": "2026-10-14 07:00:00.0"
         },
-        "headline": {
-          "en": "Mono-Black Aggro",
-          "zh": "纯黑快攻"
-        },
-        "positioning": {
-          "zh": "骷髅妖亲缘主题的纯黑快攻",
-          "en": "Mono-Black Aggro built around Skeleton synergies."
-        },
+        "destination_id": "deck:369ac5463f7f6787f020",
+        "display_name": "Mono-Black Aggro",
         "featured_cards": [
           {
             "name": "Forsaken Miner"
@@ -195,12 +167,22 @@
             "name": "Case of the Stashed Skeleton"
           }
         ],
+        "headline": {
+          "en": "Mono-Black Aggro",
+          "zh": "纯黑快攻"
+        },
+        "order": 1,
+        "positioning": {
+          "en": "Mono-Black Aggro built around Skeleton synergies.",
+          "zh": "骷髅妖亲缘主题的纯黑快攻"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "build_shift",
             "values": {
-              "identity_level": "parent",
               "identity_id": "mono-black-aggro",
+              "identity_level": "parent",
               "reference_sample_size": 8,
               "score": 31
             }
@@ -209,5 +191,23 @@
       }
     ]
   },
-  "content_digest": "1ea60acbf19f7d75ecc2d0b4b8a18f6969e93a495d19bb4ca1a2c26052acb8c0"
+  "format": "standard",
+  "product": "mtgo-landing-features",
+  "schema_version": "1.0.0",
+  "source": "mtgo",
+  "source_event_ids": [
+    "12856191",
+    "12856199",
+    "12856204",
+    "12856571",
+    "12856572",
+    "12856581",
+    "12856586",
+    "12856610"
+  ],
+  "week": {
+    "end": "2026-10-18",
+    "id": "2026-W42",
+    "start": "2026-10-12"
+  }
 }

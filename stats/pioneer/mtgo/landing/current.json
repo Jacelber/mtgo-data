@@ -1,20 +1,4 @@
 {
-  "schema_version": "1.2.0",
-  "product": "mtgo-landing",
-  "format": "pioneer",
-  "source": "mtgo",
-  "week": {
-    "id": "2026-W42",
-    "start": "2026-10-12",
-    "end": "2026-10-18"
-  },
-  "state": "ready",
-  "source_event_ids": [
-    "12856192",
-    "12856579",
-    "12856598",
-    "12856608"
-  ],
   "classifier": {
     "digest": "7951e52da7814abe5550f1f9fb682c7515fdd04465ee53ddf114ece1a3b981fc"
   },
@@ -22,68 +6,48 @@
     "available": true,
     "unavailable_reason": null
   },
-  "thresholds": {
-    "environment_share": 0.03,
-    "share_move_pp": 5.0,
-    "exit_reference_share": 0.05,
-    "build_shift": 20,
-    "build_reference_minimum": 8
-  },
-  "populations": {
-    "current": {
-      "start": "2026-10-12",
-      "end": "2026-10-18",
-      "event_ids": [
-        "12856192",
-        "12856579",
-        "12856598",
-        "12856608"
-      ],
-      "event_count": 4,
-      "high_score_count": 54,
-      "top8_count": 32
-    },
-    "previous_week": {
-      "start": "2026-10-05",
-      "end": "2026-10-11",
-      "event_ids": [
-        "12855505",
-        "12856150",
-        "12856171",
-        "12856181"
-      ],
-      "event_count": 4,
-      "high_score_count": 57,
-      "top8_count": 32
-    },
-    "previous_four_weeks": {
-      "start": "2026-09-14",
-      "end": "2026-10-11",
-      "event_ids": [
-        "12854106",
-        "12854489",
-        "12854509",
-        "12854530",
-        "12854758",
-        "12854926",
-        "12854947",
-        "12855464",
-        "12855494",
-        "12855505",
-        "12856150",
-        "12856171",
-        "12856181"
-      ],
-      "event_count": 13,
-      "high_score_count": 194,
-      "top8_count": 104
-    }
+  "data_files": {
+    "completeness": "weeks/2026-W42/completeness.json",
+    "environment_decks": "weeks/2026-W42/environment_decks.json",
+    "feature_decks": "weeks/2026-W42/feature_decks.json",
+    "range": "weeks/2026-W42/range.json"
   },
   "environment": {
-    "threshold": 0.03,
+    "other_classified": {
+      "current": {
+        "count": 6,
+        "denominator": 54,
+        "share": 0.1111
+      },
+      "current_top8": {
+        "count": 3,
+        "denominator": 32,
+        "share": 0.0938
+      },
+      "previous_four_weeks": {
+        "count": 95,
+        "denominator": 194,
+        "share": 0.4897
+      },
+      "previous_week": {
+        "count": 21,
+        "denominator": 57,
+        "share": 0.3684
+      }
+    },
     "rows": [
       {
         "archetype_id": "izzet-prowess",
+        "current": {
+          "count": 10,
+          "denominator": 54,
+          "share": 0.1852
+        },
+        "current_top8": {
+          "count": 6,
+          "denominator": 32,
+          "share": 0.1875
+        },
         "display_name": "Izzet Prowess",
         "key_cards": [
           {
@@ -93,29 +57,29 @@
             "name": "Academic Dispute"
           }
         ],
-        "current": {
-          "count": 10,
-          "denominator": 54,
-          "share": 0.1852
-        },
-        "previous_week": {
-          "count": 7,
-          "denominator": 57,
-          "share": 0.1228
-        },
         "previous_four_weeks": {
           "count": 24,
           "denominator": 194,
           "share": 0.1237
         },
-        "current_top8": {
-          "count": 6,
-          "denominator": 32,
-          "share": 0.1875
+        "previous_week": {
+          "count": 7,
+          "denominator": 57,
+          "share": 0.1228
         }
       },
       {
         "archetype_id": "jund-sacrifice",
+        "current": {
+          "count": 8,
+          "denominator": 54,
+          "share": 0.1481
+        },
+        "current_top8": {
+          "count": 5,
+          "denominator": 32,
+          "share": 0.1562
+        },
         "display_name": "Jund Sacrifice",
         "key_cards": [
           {
@@ -125,29 +89,29 @@
             "name": "Witch's Oven"
           }
         ],
-        "current": {
-          "count": 8,
-          "denominator": 54,
-          "share": 0.1481
-        },
-        "previous_week": {
-          "count": 3,
-          "denominator": 57,
-          "share": 0.0526
-        },
         "previous_four_weeks": {
           "count": 3,
           "denominator": 194,
           "share": 0.0155
         },
-        "current_top8": {
-          "count": 5,
-          "denominator": 32,
-          "share": 0.1562
+        "previous_week": {
+          "count": 3,
+          "denominator": 57,
+          "share": 0.0526
         }
       },
       {
         "archetype_id": "dimir-ninjas",
+        "current": {
+          "count": 5,
+          "denominator": 54,
+          "share": 0.0926
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 32,
+          "share": 0.0938
+        },
         "display_name": "Dimir Ninjas",
         "key_cards": [
           {
@@ -157,29 +121,29 @@
             "name": "Moon-Circuit Hacker"
           }
         ],
-        "current": {
-          "count": 5,
-          "denominator": 54,
-          "share": 0.0926
-        },
-        "previous_week": {
-          "count": 4,
-          "denominator": 57,
-          "share": 0.0702
-        },
         "previous_four_weeks": {
           "count": 9,
           "denominator": 194,
           "share": 0.0464
         },
-        "current_top8": {
-          "count": 3,
-          "denominator": 32,
-          "share": 0.0938
+        "previous_week": {
+          "count": 4,
+          "denominator": 57,
+          "share": 0.0702
         }
       },
       {
         "archetype_id": "mono-green-devotion",
+        "current": {
+          "count": 5,
+          "denominator": 54,
+          "share": 0.0926
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 32,
+          "share": 0.125
+        },
         "display_name": "Mono-Green Devotion",
         "key_cards": [
           {
@@ -189,29 +153,29 @@
             "name": "Badgermole Cub"
           }
         ],
-        "current": {
-          "count": 5,
-          "denominator": 54,
-          "share": 0.0926
-        },
-        "previous_week": {
-          "count": 0,
-          "denominator": 57,
-          "share": 0.0
-        },
         "previous_four_weeks": {
           "count": 0,
           "denominator": 194,
           "share": 0.0
         },
-        "current_top8": {
-          "count": 4,
-          "denominator": 32,
-          "share": 0.125
+        "previous_week": {
+          "count": 0,
+          "denominator": 57,
+          "share": 0.0
         }
       },
       {
         "archetype_id": "mono-red-aggro",
+        "current": {
+          "count": 5,
+          "denominator": 54,
+          "share": 0.0926
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 32,
+          "share": 0.0625
+        },
         "display_name": "Mono-Red Aggro",
         "key_cards": [
           {
@@ -221,29 +185,29 @@
             "name": "Sunspine Lynx"
           }
         ],
-        "current": {
-          "count": 5,
-          "denominator": 54,
-          "share": 0.0926
-        },
-        "previous_week": {
-          "count": 1,
-          "denominator": 57,
-          "share": 0.0175
-        },
         "previous_four_weeks": {
           "count": 7,
           "denominator": 194,
           "share": 0.0361
         },
-        "current_top8": {
-          "count": 2,
-          "denominator": 32,
-          "share": 0.0625
+        "previous_week": {
+          "count": 1,
+          "denominator": 57,
+          "share": 0.0175
         }
       },
       {
         "archetype_id": "izzet-cauldron",
+        "current": {
+          "count": 4,
+          "denominator": 54,
+          "share": 0.0741
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 32,
+          "share": 0.0625
+        },
         "display_name": "Izzet Cauldron",
         "key_cards": [
           {
@@ -253,29 +217,29 @@
             "name": "Vivi Ornitier"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 54,
-          "share": 0.0741
-        },
-        "previous_week": {
-          "count": 6,
-          "denominator": 57,
-          "share": 0.1053
-        },
         "previous_four_weeks": {
           "count": 20,
           "denominator": 194,
           "share": 0.1031
         },
-        "current_top8": {
-          "count": 2,
-          "denominator": 32,
-          "share": 0.0625
+        "previous_week": {
+          "count": 6,
+          "denominator": 57,
+          "share": 0.1053
         }
       },
       {
         "archetype_id": "izzet-creativity",
+        "current": {
+          "count": 4,
+          "denominator": 54,
+          "share": 0.0741
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 32,
+          "share": 0.125
+        },
         "display_name": "Izzet Creativity",
         "key_cards": [
           {
@@ -285,29 +249,29 @@
             "name": "Fable of the Mirror-Breaker"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 54,
-          "share": 0.0741
-        },
-        "previous_week": {
-          "count": 1,
-          "denominator": 57,
-          "share": 0.0175
-        },
         "previous_four_weeks": {
           "count": 3,
           "denominator": 194,
           "share": 0.0155
         },
-        "current_top8": {
-          "count": 4,
-          "denominator": 32,
-          "share": 0.125
+        "previous_week": {
+          "count": 1,
+          "denominator": 57,
+          "share": 0.0175
         }
       },
       {
         "archetype_id": "izzet-elementals",
+        "current": {
+          "count": 4,
+          "denominator": 54,
+          "share": 0.0741
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 32,
+          "share": 0.0625
+        },
         "display_name": "Izzet Elementals",
         "key_cards": [
           {
@@ -317,29 +281,29 @@
             "name": "Eddymurk Crab"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 54,
-          "share": 0.0741
-        },
-        "previous_week": {
-          "count": 4,
-          "denominator": 57,
-          "share": 0.0702
-        },
         "previous_four_weeks": {
           "count": 4,
           "denominator": 194,
           "share": 0.0206
         },
-        "current_top8": {
-          "count": 2,
-          "denominator": 32,
-          "share": 0.0625
+        "previous_week": {
+          "count": 4,
+          "denominator": 57,
+          "share": 0.0702
         }
       },
       {
         "archetype_id": "golgari-demons",
+        "current": {
+          "count": 3,
+          "denominator": 54,
+          "share": 0.0556
+        },
+        "current_top8": {
+          "count": 1,
+          "denominator": 32,
+          "share": 0.0312
+        },
         "display_name": "Golgari Demons",
         "key_cards": [
           {
@@ -349,59 +313,28 @@
             "name": "Professor Dellian Fel"
           }
         ],
-        "current": {
-          "count": 3,
-          "denominator": 54,
-          "share": 0.0556
-        },
-        "previous_week": {
-          "count": 10,
-          "denominator": 57,
-          "share": 0.1754
-        },
         "previous_four_weeks": {
           "count": 29,
           "denominator": 194,
           "share": 0.1495
         },
-        "current_top8": {
-          "count": 1,
-          "denominator": 32,
-          "share": 0.0312
+        "previous_week": {
+          "count": 10,
+          "denominator": 57,
+          "share": 0.1754
         }
       }
     ],
-    "other_classified": {
-      "current": {
-        "count": 6,
-        "denominator": 54,
-        "share": 0.1111
-      },
-      "previous_week": {
-        "count": 21,
-        "denominator": 57,
-        "share": 0.3684
-      },
-      "previous_four_weeks": {
-        "count": 95,
-        "denominator": 194,
-        "share": 0.4897
-      },
-      "current_top8": {
-        "count": 3,
-        "denominator": 32,
-        "share": 0.0938
-      }
-    },
+    "threshold": 0.03,
     "unknown": {
       "current": {
         "count": 0,
         "denominator": 54,
         "share": 0.0
       },
-      "previous_week": {
+      "current_top8": {
         "count": 0,
-        "denominator": 57,
+        "denominator": 32,
         "share": 0.0
       },
       "previous_four_weeks": {
@@ -409,135 +342,23 @@
         "denominator": 194,
         "share": 0.0
       },
-      "current_top8": {
+      "previous_week": {
         "count": 0,
-        "denominator": 32,
+        "denominator": 57,
         "share": 0.0
       }
     }
   },
-  "weekly_summary": {
-    "week": "2026-W42",
-    "items": [
-      {
-        "order": 1,
-        "text": {
-          "zh": "本周先驱有不少新科技，牺牲类套牌每周都有新花样。最开始是铁砧套牌中加入了标准的神器牺牲组件，然后是猫炉红黑牺牲套牌混绿加入[[card:Biotech Specialist|生质科技专家]]，本周开始出现黑绿牺牲混红带[[card:Biotech Specialist|生质科技专家]]的版本拿下一个亚军：deck:72783f790d2a68dcff03。两者虽然都归类为勇德牺牲，但构筑还是有一些差别。而铁砧版本的神器牺牲几乎已经迅速被环境淘汰。",
-          "en": "Pioneer saw plenty of new technology this week, with Sacrifice decks finding new twists every week. First, Anvil decks added the artifact sacrifice package from Standard. Then Rakdos Sacrifice decks built around [[card:Cauldron Familiar|Cauldron Familiar]] and [[card:Witch's Oven|Witch's Oven]] splashed green for [[card:Biotech Specialist|Biotech Specialist]]. This week, a Golgari Sacrifice build splashing red for [[card:Biotech Specialist|Biotech Specialist]] finished second: deck:72783f790d2a68dcff03. Although both builds are classified as Jund Sacrifice, their construction differs somewhat. Meanwhile, Anvil-based artifact sacrifice decks have already all but disappeared from the metagame."
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:72783f790d2a68dcff03",
-            "label": {
-              "zh": "勇得牺牲 · GhostbloodGhost · 第2名",
-              "en": "Jund Sacrifice · GhostbloodGhost · Rank 2"
-            },
-            "deck": {
-              "archetype_id": "jund-sacrifice",
-              "display_name": "Jund Sacrifice",
-              "event_id": "12856598",
-              "deck_id": "72783f790d2a68dcff03",
-              "deck_fingerprint_sha256": "88e4dcc7f580a0b53eccbf3d76f83a7ee13b1a7bb535e9507a0c8a4a16c5dd94",
-              "player": "GhostbloodGhost",
-              "final_rank": 2,
-              "starttime": "2026-10-17 22:00:00.0"
-            }
-          }
-        ]
-      },
-      {
-        "order": 2,
-        "text": {
-          "zh": "加入[[card:Hexhaven Invigorator|赫克海文茁茂兽]]的大绿献力本周席卷一场：deck:bcf6e21ae6eb7db34a4d。不光自己可以提供4点献力，还可以配合满编的[[card:Tail Swipe|甩尾扫击]]互斗找地Ramp，迅速出[[card:Craterhoof Behemoth|陨蹄贝西摩斯]]终结比赛。另外还有传统的[[card:Leyline of the Guildpact|十会盟地脉]]版本大绿献力取得四强：deck:48cb9b5b7dbea4a2216b",
-          "en": "Mono-Green Devotion featuring [[card:Hexhaven Invigorator|Hexhaven Invigorator]] swept an event this week: deck:bcf6e21ae6eb7db34a4d. The Invigorator not only provides four devotion itself, but also works with a full playset of [[card:Tail Swipe|Tail Swipe]] to fight creatures and find lands, ramping quickly into [[card:Craterhoof Behemoth|Craterhoof Behemoth]] to end the game. A traditional [[card:Leyline of the Guildpact|Leyline of the Guildpact]] build of Mono-Green Devotion also reached the semifinals: deck:48cb9b5b7dbea4a2216b"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:bcf6e21ae6eb7db34a4d",
-            "label": {
-              "zh": "大绿献力 · Thales · 第1名",
-              "en": "Mono-Green Devotion · Thales · Rank 1"
-            },
-            "deck": {
-              "archetype_id": "mono-green-devotion",
-              "display_name": "Mono-Green Devotion",
-              "event_id": "12856598",
-              "deck_id": "bcf6e21ae6eb7db34a4d",
-              "deck_fingerprint_sha256": "af9547299a59f2560e55b4235ee1a1255c867aa20d4cff5875881634389c753c",
-              "player": "Thales",
-              "final_rank": 1,
-              "starttime": "2026-10-17 22:00:00.0"
-            }
-          },
-          {
-            "order": 2,
-            "token": "deck:48cb9b5b7dbea4a2216b",
-            "label": {
-              "zh": "大绿献力 · DelverFofoqueiro · 第3名",
-              "en": "Mono-Green Devotion · DelverFofoqueiro · Rank 3"
-            },
-            "deck": {
-              "archetype_id": "mono-green-devotion",
-              "display_name": "Mono-Green Devotion",
-              "event_id": "12856608",
-              "deck_id": "48cb9b5b7dbea4a2216b",
-              "deck_fingerprint_sha256": "fbc46510671f602c070f5b201d6eb4e9f84db1944213a9da29aeea464daa122b",
-              "player": "DelverFofoqueiro",
-              "final_rank": 3,
-              "starttime": "2026-10-18 19:00:00.0"
-            }
-          }
-        ]
-      },
-      {
-        "order": 3,
-        "text": {
-          "zh": "[[card:The Theorist, Jace Beleren|塑理师杰斯贝连]]进入环境后，红蓝创新开始有上升趋势，本周席卷一场，八强占比也超过10%：deck:66772f50230d29dcc0ce。杰斯造人抓牌控场的效果相当契合套牌思路。",
-          "en": "Izzet Creativity has been on the rise since [[card:The Theorist, Jace Beleren|The Theorist, Jace Beleren]] entered the format. It swept an event this week and exceeded a 10% Top 8 share: deck:66772f50230d29dcc0ce. Jace's ability to make tokens, draw cards, and control the board fits the deck's game plan very well."
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:66772f50230d29dcc0ce",
-            "label": {
-              "zh": "红蓝创新 · VampireDiaries · 第1名",
-              "en": "Izzet Creativity · VampireDiaries · Rank 1"
-            },
-            "deck": {
-              "archetype_id": "izzet-creativity",
-              "display_name": "Izzet Creativity",
-              "event_id": "12856608",
-              "deck_id": "66772f50230d29dcc0ce",
-              "deck_fingerprint_sha256": "18236aa796efbd2739024855d92419c06a599f399a9c681810a5ddb1a8ce1073",
-              "player": "VampireDiaries",
-              "final_rank": 1,
-              "starttime": "2026-10-18 19:00:00.0"
-            }
-          }
-        ]
-      }
-    ]
-  },
   "features": {
-    "week": "2026-W42",
     "items": [
       {
-        "category": "new_technology",
-        "order": 1,
-        "destination_id": "deck:72783f790d2a68dcff03",
         "archetype_id": "jund-sacrifice",
-        "subtype_id": null,
-        "display_name": "Jund Sacrifice",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856598",
-          "deck_id": "72783f790d2a68dcff03",
           "deck_fingerprint_sha256": "88e4dcc7f580a0b53eccbf3d76f83a7ee13b1a7bb535e9507a0c8a4a16c5dd94",
-          "player": "GhostbloodGhost",
+          "deck_id": "72783f790d2a68dcff03",
+          "event_id": "12856598",
           "final_rank": 2,
-          "player_count": 26,
-          "starttime": "2026-10-17 22:00:00.0",
           "main_deck": [
             {
               "name": "Badgermole Cub",
@@ -624,6 +445,8 @@
               "qty": 3
             }
           ],
+          "player": "GhostbloodGhost",
+          "player_count": 26,
           "side_deck": [
             {
               "name": "Abrupt Decay",
@@ -657,16 +480,11 @@
               "name": "Ygra, Eater of All",
               "qty": 1
             }
-          ]
+          ],
+          "starttime": "2026-10-17 22:00:00.0"
         },
-        "headline": {
-          "en": "Jund Sacrifice",
-          "zh": "勇得牺牲"
-        },
-        "positioning": {
-          "zh": "黑绿牺牲套牌混红带生质科技专家",
-          "en": "A Golgari Sacrifice build splashing red for Biotech Specialist."
-        },
+        "destination_id": "deck:72783f790d2a68dcff03",
+        "display_name": "Jund Sacrifice",
         "featured_cards": [
           {
             "name": "Biotech Specialist"
@@ -681,6 +499,16 @@
             "name": "Scavenger's Talent"
           }
         ],
+        "headline": {
+          "en": "Jund Sacrifice",
+          "zh": "勇得牺牲"
+        },
+        "order": 1,
+        "positioning": {
+          "en": "A Golgari Sacrifice build splashing red for Biotech Specialist.",
+          "zh": "黑绿牺牲套牌混红带生质科技专家"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "share_increase",
@@ -688,29 +516,22 @@
               "current_high_score_count": 8,
               "current_high_score_denominator": 54,
               "current_share": 0.1481,
+              "delta_pp": 13.27,
               "reference_high_score_count": 3,
               "reference_high_score_denominator": 194,
-              "reference_share": 0.0155,
-              "delta_pp": 13.27
+              "reference_share": 0.0155
             }
           }
         ]
       },
       {
-        "category": "new_technology",
-        "order": 2,
-        "destination_id": "deck:bcf6e21ae6eb7db34a4d",
         "archetype_id": "mono-green-devotion",
-        "subtype_id": null,
-        "display_name": "Mono-Green Devotion",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856598",
-          "deck_id": "bcf6e21ae6eb7db34a4d",
           "deck_fingerprint_sha256": "af9547299a59f2560e55b4235ee1a1255c867aa20d4cff5875881634389c753c",
-          "player": "Thales",
+          "deck_id": "bcf6e21ae6eb7db34a4d",
+          "event_id": "12856598",
           "final_rank": 1,
-          "player_count": 26,
-          "starttime": "2026-10-17 22:00:00.0",
           "main_deck": [
             {
               "name": "Badgermole Cub",
@@ -765,6 +586,8 @@
               "qty": 4
             }
           ],
+          "player": "Thales",
+          "player_count": 26,
           "side_deck": [
             {
               "name": "Elder Gargaroth",
@@ -790,16 +613,11 @@
               "name": "Skyreaping",
               "qty": 2
             }
-          ]
+          ],
+          "starttime": "2026-10-17 22:00:00.0"
         },
-        "headline": {
-          "en": "Mono-Green Devotion",
-          "zh": "大绿献力"
-        },
-        "positioning": {
-          "zh": "茁茂兽版本的大绿献力",
-          "en": "A Hexhaven Invigorator build of Mono-Green Devotion."
-        },
+        "destination_id": "deck:bcf6e21ae6eb7db34a4d",
+        "display_name": "Mono-Green Devotion",
         "featured_cards": [
           {
             "name": "Hexhaven Invigorator"
@@ -814,6 +632,16 @@
             "name": "Badgermole Cub"
           }
         ],
+        "headline": {
+          "en": "Mono-Green Devotion",
+          "zh": "大绿献力"
+        },
+        "order": 2,
+        "positioning": {
+          "en": "A Hexhaven Invigorator build of Mono-Green Devotion.",
+          "zh": "茁茂兽版本的大绿献力"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "return",
@@ -829,20 +657,13 @@
         ]
       },
       {
-        "category": "new_technology",
-        "order": 3,
-        "destination_id": "deck:48cb9b5b7dbea4a2216b",
         "archetype_id": "mono-green-devotion",
-        "subtype_id": null,
-        "display_name": "Mono-Green Devotion",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856608",
-          "deck_id": "48cb9b5b7dbea4a2216b",
           "deck_fingerprint_sha256": "fbc46510671f602c070f5b201d6eb4e9f84db1944213a9da29aeea464daa122b",
-          "player": "DelverFofoqueiro",
+          "deck_id": "48cb9b5b7dbea4a2216b",
+          "event_id": "12856608",
           "final_rank": 3,
-          "player_count": 32,
-          "starttime": "2026-10-18 19:00:00.0",
           "main_deck": [
             {
               "name": "Boseiju, Who Endures",
@@ -913,6 +734,8 @@
               "qty": 2
             }
           ],
+          "player": "DelverFofoqueiro",
+          "player_count": 32,
           "side_deck": [
             {
               "name": "Arasta of the Endless Web",
@@ -950,16 +773,11 @@
               "name": "Unlicensed Hearse",
               "qty": 2
             }
-          ]
+          ],
+          "starttime": "2026-10-18 19:00:00.0"
         },
-        "headline": {
-          "en": "Mono-Green Devotion",
-          "zh": "大绿献力"
-        },
-        "positioning": {
-          "zh": "传统大绿献力挂一张破咒猎人贾路作为额外的奇奥拉效果",
-          "en": "Traditional Mono-Green Devotion with a single Garruk, Curse Breaker as an additional Kiora effect."
-        },
+        "destination_id": "deck:48cb9b5b7dbea4a2216b",
+        "display_name": "Mono-Green Devotion",
         "featured_cards": [
           {
             "name": "Garruk, Curse Breaker"
@@ -974,23 +792,26 @@
             "name": "Kiora, Behemoth Beckoner"
           }
         ],
+        "headline": {
+          "en": "Mono-Green Devotion",
+          "zh": "大绿献力"
+        },
+        "order": 3,
+        "positioning": {
+          "en": "Traditional Mono-Green Devotion with a single Garruk, Curse Breaker as an additional Kiora effect.",
+          "zh": "传统大绿献力挂一张破咒猎人贾路作为额外的奇奥拉效果"
+        },
+        "subtype_id": null,
         "supporting_facts": []
       },
       {
-        "category": "new_technology",
-        "order": 4,
-        "destination_id": "deck:66772f50230d29dcc0ce",
         "archetype_id": "izzet-creativity",
-        "subtype_id": null,
-        "display_name": "Izzet Creativity",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856608",
-          "deck_id": "66772f50230d29dcc0ce",
           "deck_fingerprint_sha256": "18236aa796efbd2739024855d92419c06a599f399a9c681810a5ddb1a8ce1073",
-          "player": "VampireDiaries",
+          "deck_id": "66772f50230d29dcc0ce",
+          "event_id": "12856608",
           "final_rank": 1,
-          "player_count": 32,
-          "starttime": "2026-10-18 19:00:00.0",
           "main_deck": [
             {
               "name": "Atraxa, Grand Unifier",
@@ -1085,6 +906,8 @@
               "qty": 3
             }
           ],
+          "player": "VampireDiaries",
+          "player_count": 32,
           "side_deck": [
             {
               "name": "Anger of the Gods",
@@ -1122,16 +945,11 @@
               "name": "Three Steps Ahead",
               "qty": 1
             }
-          ]
+          ],
+          "starttime": "2026-10-18 19:00:00.0"
         },
-        "headline": {
-          "en": "Izzet Creativity",
-          "zh": "红蓝创新"
-        },
-        "positioning": {
-          "zh": "加入塑理师杰斯贝连的版本",
-          "en": "A build featuring The Theorist, Jace Beleren."
-        },
+        "destination_id": "deck:66772f50230d29dcc0ce",
+        "display_name": "Izzet Creativity",
         "featured_cards": [
           {
             "name": "The Theorist, Jace Beleren"
@@ -1146,6 +964,16 @@
             "name": "Deduce"
           }
         ],
+        "headline": {
+          "en": "Izzet Creativity",
+          "zh": "红蓝创新"
+        },
+        "order": 4,
+        "positioning": {
+          "en": "A build featuring The Theorist, Jace Beleren.",
+          "zh": "加入塑理师杰斯贝连的版本"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "share_increase",
@@ -1153,27 +981,205 @@
               "current_high_score_count": 4,
               "current_high_score_denominator": 54,
               "current_share": 0.0741,
+              "delta_pp": 5.86,
               "reference_high_score_count": 3,
               "reference_high_score_denominator": 194,
-              "reference_share": 0.0155,
-              "delta_pp": 5.86
+              "reference_share": 0.0155
             }
           }
         ]
       }
-    ]
+    ],
+    "week": "2026-W42"
   },
+  "format": "pioneer",
+  "populations": {
+    "current": {
+      "end": "2026-10-18",
+      "event_count": 4,
+      "event_ids": [
+        "12856192",
+        "12856579",
+        "12856598",
+        "12856608"
+      ],
+      "high_score_count": 54,
+      "start": "2026-10-12",
+      "top8_count": 32
+    },
+    "previous_four_weeks": {
+      "end": "2026-10-11",
+      "event_count": 13,
+      "event_ids": [
+        "12854106",
+        "12854489",
+        "12854509",
+        "12854530",
+        "12854758",
+        "12854926",
+        "12854947",
+        "12855464",
+        "12855494",
+        "12855505",
+        "12856150",
+        "12856171",
+        "12856181"
+      ],
+      "high_score_count": 194,
+      "start": "2026-09-14",
+      "top8_count": 104
+    },
+    "previous_week": {
+      "end": "2026-10-11",
+      "event_count": 4,
+      "event_ids": [
+        "12855505",
+        "12856150",
+        "12856171",
+        "12856181"
+      ],
+      "high_score_count": 57,
+      "start": "2026-10-05",
+      "top8_count": 32
+    }
+  },
+  "product": "mtgo-landing",
   "review_binding": {
+    "classifier_digest": "7951e52da7814abe5550f1f9fb682c7515fdd04465ee53ddf114ece1a3b981fc",
+    "machine_fact_digest": "b9430bb009752730db1f126db6e991d550ffc5da732ebe5ebbc481ed11d26d8c",
+    "pickup_document_digest": "83e128e1cfaf470e976228695bc74f0ad8cfec67aa48e23f15107d5a33da822d",
     "source_event_ids": [
       "12856192",
       "12856579",
       "12856598",
       "12856608"
     ],
-    "classifier_digest": "7951e52da7814abe5550f1f9fb682c7515fdd04465ee53ddf114ece1a3b981fc",
-    "visual_metadata_digest": "2caff2509cbe0cca27b98259db839c48ac4b4f82b08fb9c0878722b749db0709",
-    "machine_fact_digest": "b9430bb009752730db1f126db6e991d550ffc5da732ebe5ebbc481ed11d26d8c",
-    "pickup_document_digest": "87c00d60c4e39b2469da0a39898216763fb83dd9d2c6dfb75fcca125e6ce9282",
-    "summary_fact_digest": "7cf7cd6b156fea7942512f37e5f52e86a7378af89f3bbab0e276b0c16b92c80d"
+    "summary_fact_digest": "f29eed4768945a042fbcae2bf621337527d79b4e8e6e6b4539c9215b605d4856",
+    "visual_metadata_digest": "8faca4281194382b12cca0275a70df9d005773387d426ae4abc54e8330ac0360"
+  },
+  "schema_version": "1.2.0",
+  "source": "mtgo",
+  "source_event_ids": [
+    "12856192",
+    "12856579",
+    "12856598",
+    "12856608"
+  ],
+  "state": "ready",
+  "thresholds": {
+    "build_reference_minimum": 8,
+    "build_shift": 20,
+    "environment_share": 0.03,
+    "exit_reference_share": 0.05,
+    "share_move_pp": 5.0
+  },
+  "week": {
+    "end": "2026-10-18",
+    "id": "2026-W42",
+    "start": "2026-10-12"
+  },
+  "weekly_summary": {
+    "items": [
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "jund-sacrifice",
+              "deck_fingerprint_sha256": "88e4dcc7f580a0b53eccbf3d76f83a7ee13b1a7bb535e9507a0c8a4a16c5dd94",
+              "deck_id": "72783f790d2a68dcff03",
+              "display_name": "Jund Sacrifice",
+              "event_id": "12856598",
+              "final_rank": 2,
+              "player": "GhostbloodGhost",
+              "starttime": "2026-10-17 22:00:00.0"
+            },
+            "label": {
+              "en": "Jund Sacrifice · GhostbloodGhost · Rank 2",
+              "zh": "勇得牺牲 · GhostbloodGhost · 第2名"
+            },
+            "order": 1,
+            "token": "deck:72783f790d2a68dcff03"
+          }
+        ],
+        "order": 1,
+        "text": {
+          "en": "Pioneer saw plenty of new technology this week, with Sacrifice decks finding new twists every week. First, Anvil decks added the artifact sacrifice package from Standard. Then Rakdos Sacrifice decks built around [[card:Cauldron Familiar|Cauldron Familiar]] and [[card:Witch's Oven|Witch's Oven]] splashed green for [[card:Biotech Specialist|Biotech Specialist]]. This week, a Golgari Sacrifice build splashing red for [[card:Biotech Specialist|Biotech Specialist]] finished second: deck:72783f790d2a68dcff03. Although both builds are classified as Jund Sacrifice, their construction differs somewhat. Meanwhile, Anvil-based artifact sacrifice decks have already all but disappeared from the metagame.",
+          "zh": "本周先驱有不少新科技，牺牲类套牌每周都有新花样。最开始是铁砧套牌中加入了标准的神器牺牲组件，然后是猫炉红黑牺牲套牌混绿加入[[card:Biotech Specialist|生质科技专家]]，本周开始出现黑绿牺牲混红带[[card:Biotech Specialist|生质科技专家]]的版本拿下一个亚军：deck:72783f790d2a68dcff03。两者虽然都归类为勇德牺牲，但构筑还是有一些差别。而铁砧版本的神器牺牲几乎已经迅速被环境淘汰。"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "mono-green-devotion",
+              "deck_fingerprint_sha256": "af9547299a59f2560e55b4235ee1a1255c867aa20d4cff5875881634389c753c",
+              "deck_id": "bcf6e21ae6eb7db34a4d",
+              "display_name": "Mono-Green Devotion",
+              "event_id": "12856598",
+              "final_rank": 1,
+              "player": "Thales",
+              "starttime": "2026-10-17 22:00:00.0"
+            },
+            "label": {
+              "en": "Mono-Green Devotion · Thales · Rank 1",
+              "zh": "大绿献力 · Thales · 第1名"
+            },
+            "order": 1,
+            "token": "deck:bcf6e21ae6eb7db34a4d"
+          },
+          {
+            "deck": {
+              "archetype_id": "mono-green-devotion",
+              "deck_fingerprint_sha256": "fbc46510671f602c070f5b201d6eb4e9f84db1944213a9da29aeea464daa122b",
+              "deck_id": "48cb9b5b7dbea4a2216b",
+              "display_name": "Mono-Green Devotion",
+              "event_id": "12856608",
+              "final_rank": 3,
+              "player": "DelverFofoqueiro",
+              "starttime": "2026-10-18 19:00:00.0"
+            },
+            "label": {
+              "en": "Mono-Green Devotion · DelverFofoqueiro · Rank 3",
+              "zh": "大绿献力 · DelverFofoqueiro · 第3名"
+            },
+            "order": 2,
+            "token": "deck:48cb9b5b7dbea4a2216b"
+          }
+        ],
+        "order": 2,
+        "text": {
+          "en": "Mono-Green Devotion featuring [[card:Hexhaven Invigorator|Hexhaven Invigorator]] swept an event this week: deck:bcf6e21ae6eb7db34a4d. The Invigorator not only provides four devotion itself, but also works with a full playset of [[card:Tail Swipe|Tail Swipe]] to fight creatures and find lands, ramping quickly into [[card:Craterhoof Behemoth|Craterhoof Behemoth]] to end the game. A traditional [[card:Leyline of the Guildpact|Leyline of the Guildpact]] build of Mono-Green Devotion also reached the semifinals: deck:48cb9b5b7dbea4a2216b",
+          "zh": "加入[[card:Hexhaven Invigorator|赫克海文茁茂兽]]的大绿献力本周席卷一场：deck:bcf6e21ae6eb7db34a4d。不光自己可以提供4点献力，还可以配合满编的[[card:Tail Swipe|甩尾扫击]]互斗找地Ramp，迅速出[[card:Craterhoof Behemoth|陨蹄贝西摩斯]]终结比赛。另外还有传统的[[card:Leyline of the Guildpact|十会盟地脉]]版本大绿献力取得四强：deck:48cb9b5b7dbea4a2216b"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "izzet-creativity",
+              "deck_fingerprint_sha256": "18236aa796efbd2739024855d92419c06a599f399a9c681810a5ddb1a8ce1073",
+              "deck_id": "66772f50230d29dcc0ce",
+              "display_name": "Izzet Creativity",
+              "event_id": "12856608",
+              "final_rank": 1,
+              "player": "VampireDiaries",
+              "starttime": "2026-10-18 19:00:00.0"
+            },
+            "label": {
+              "en": "Izzet Creativity · VampireDiaries · Rank 1",
+              "zh": "红蓝创新 · VampireDiaries · 第1名"
+            },
+            "order": 1,
+            "token": "deck:66772f50230d29dcc0ce"
+          }
+        ],
+        "order": 3,
+        "text": {
+          "en": "Izzet Creativity has been on the rise since [[card:The Theorist, Jace Beleren|The Theorist, Jace Beleren]] entered the format. It swept an event this week and exceeded a 10% Top 8 share: deck:66772f50230d29dcc0ce. Jace's ability to make tokens, draw cards, and control the board fits the deck's game plan very well.",
+          "zh": "[[card:The Theorist, Jace Beleren|塑理师杰斯贝连]]进入环境后，红蓝创新开始有上升趋势，本周席卷一场，八强占比也超过10%：deck:66772f50230d29dcc0ce。杰斯造人抓牌控场的效果相当契合套牌思路。"
+        }
+      }
+    ],
+    "week": "2026-W42"
   }
 }

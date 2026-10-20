@@ -1,29 +1,4 @@
 {
-  "schema_version": "1.2.0",
-  "product": "mtgo-landing",
-  "format": "modern",
-  "source": "mtgo",
-  "week": {
-    "id": "2026-W42",
-    "start": "2026-10-12",
-    "end": "2026-10-18"
-  },
-  "state": "ready",
-  "source_event_ids": [
-    "12856194",
-    "12856195",
-    "12856203",
-    "12856487",
-    "12856566",
-    "12856574",
-    "12856590",
-    "12856594",
-    "12856599",
-    "12856647",
-    "12856678",
-    "12856761",
-    "12856762"
-  ],
   "classifier": {
     "digest": "d1a43b6539af3cb80bca1e6ca200a82ca507a58c07f1ffbc831ea8ae39dc9a2b"
   },
@@ -31,125 +6,48 @@
     "available": true,
     "unavailable_reason": null
   },
-  "thresholds": {
-    "environment_share": 0.03,
-    "share_move_pp": 5.0,
-    "exit_reference_share": 0.05,
-    "build_shift": 20,
-    "build_reference_minimum": 8
-  },
-  "populations": {
-    "current": {
-      "start": "2026-10-12",
-      "end": "2026-10-18",
-      "event_ids": [
-        "12856194",
-        "12856195",
-        "12856203",
-        "12856487",
-        "12856566",
-        "12856574",
-        "12856590",
-        "12856594",
-        "12856599",
-        "12856647",
-        "12856678",
-        "12856761",
-        "12856762"
-      ],
-      "event_count": 13,
-      "high_score_count": 232,
-      "top8_count": 104
-    },
-    "previous_week": {
-      "start": "2026-10-05",
-      "end": "2026-10-11",
-      "event_ids": [
-        "12855498",
-        "12855500",
-        "12855507",
-        "12855508",
-        "12855513",
-        "12855515",
-        "12855518",
-        "12856163",
-        "12856172",
-        "12856334",
-        "12856335",
-        "12856339"
-      ],
-      "event_count": 12,
-      "high_score_count": 259,
-      "top8_count": 96
-    },
-    "previous_four_weeks": {
-      "start": "2026-09-14",
-      "end": "2026-10-11",
-      "event_ids": [
-        "12854101",
-        "12854108",
-        "12854109",
-        "12854115",
-        "12854117",
-        "12854120",
-        "12854476",
-        "12854484",
-        "12854494",
-        "12854499",
-        "12854500",
-        "12854505",
-        "12854510",
-        "12854515",
-        "12854523",
-        "12854525",
-        "12854532",
-        "12854533",
-        "12854539",
-        "12854541",
-        "12854901",
-        "12854911",
-        "12854916",
-        "12854917",
-        "12854922",
-        "12854927",
-        "12854932",
-        "12854940",
-        "12854942",
-        "12854949",
-        "12854950",
-        "12854975",
-        "12855444",
-        "12855448",
-        "12855450",
-        "12855453",
-        "12855459",
-        "12855469",
-        "12855474",
-        "12855475",
-        "12855490",
-        "12855498",
-        "12855500",
-        "12855507",
-        "12855508",
-        "12855513",
-        "12855515",
-        "12855518",
-        "12856163",
-        "12856172",
-        "12856334",
-        "12856335",
-        "12856339"
-      ],
-      "event_count": 53,
-      "high_score_count": 1385,
-      "top8_count": 424
-    }
+  "data_files": {
+    "completeness": "weeks/2026-W42/completeness.json",
+    "environment_decks": "weeks/2026-W42/environment_decks.json",
+    "feature_decks": "weeks/2026-W42/feature_decks.json",
+    "range": "weeks/2026-W42/range.json"
   },
   "environment": {
-    "threshold": 0.03,
+    "other_classified": {
+      "current": {
+        "count": 75,
+        "denominator": 232,
+        "share": 0.3233
+      },
+      "current_top8": {
+        "count": 35,
+        "denominator": 104,
+        "share": 0.3365
+      },
+      "previous_four_weeks": {
+        "count": 655,
+        "denominator": 1385,
+        "share": 0.4729
+      },
+      "previous_week": {
+        "count": 117,
+        "denominator": 259,
+        "share": 0.4517
+      }
+    },
     "rows": [
       {
         "archetype_id": "rakdos-delirium",
+        "current": {
+          "count": 37,
+          "denominator": 232,
+          "share": 0.1595
+        },
+        "current_top8": {
+          "count": 19,
+          "denominator": 104,
+          "share": 0.1827
+        },
         "display_name": "Rakdos Delirium",
         "key_cards": [
           {
@@ -159,29 +57,29 @@
             "name": "Detective's Phoenix"
           }
         ],
-        "current": {
-          "count": 37,
-          "denominator": 232,
-          "share": 0.1595
-        },
-        "previous_week": {
-          "count": 24,
-          "denominator": 259,
-          "share": 0.0927
-        },
         "previous_four_weeks": {
           "count": 33,
           "denominator": 1385,
           "share": 0.0238
         },
-        "current_top8": {
-          "count": 19,
-          "denominator": 104,
-          "share": 0.1827
+        "previous_week": {
+          "count": 24,
+          "denominator": 259,
+          "share": 0.0927
         }
       },
       {
         "archetype_id": "broodscale-combo",
+        "current": {
+          "count": 28,
+          "denominator": 232,
+          "share": 0.1207
+        },
+        "current_top8": {
+          "count": 12,
+          "denominator": 104,
+          "share": 0.1154
+        },
         "display_name": "Broodscale Combo",
         "key_cards": [
           {
@@ -191,29 +89,29 @@
             "name": "Blade of the Bloodchief"
           }
         ],
-        "current": {
-          "count": 28,
-          "denominator": 232,
-          "share": 0.1207
-        },
-        "previous_week": {
-          "count": 35,
-          "denominator": 259,
-          "share": 0.1351
-        },
         "previous_four_weeks": {
           "count": 262,
           "denominator": 1385,
           "share": 0.1892
         },
-        "current_top8": {
-          "count": 12,
-          "denominator": 104,
-          "share": 0.1154
+        "previous_week": {
+          "count": 35,
+          "denominator": 259,
+          "share": 0.1351
         }
       },
       {
         "archetype_id": "affinity",
+        "current": {
+          "count": 17,
+          "denominator": 232,
+          "share": 0.0733
+        },
+        "current_top8": {
+          "count": 7,
+          "denominator": 104,
+          "share": 0.0673
+        },
         "display_name": "Affinity",
         "key_cards": [
           {
@@ -223,29 +121,29 @@
             "name": "Kappa Cannoneer"
           }
         ],
-        "current": {
-          "count": 17,
-          "denominator": 232,
-          "share": 0.0733
-        },
-        "previous_week": {
-          "count": 16,
-          "denominator": 259,
-          "share": 0.0618
-        },
         "previous_four_weeks": {
           "count": 83,
           "denominator": 1385,
           "share": 0.0599
         },
-        "current_top8": {
-          "count": 7,
-          "denominator": 104,
-          "share": 0.0673
+        "previous_week": {
+          "count": 16,
+          "denominator": 259,
+          "share": 0.0618
         }
       },
       {
         "archetype_id": "prowess",
+        "current": {
+          "count": 16,
+          "denominator": 232,
+          "share": 0.069
+        },
+        "current_top8": {
+          "count": 8,
+          "denominator": 104,
+          "share": 0.0769
+        },
         "display_name": "Prowess",
         "key_cards": [
           {
@@ -255,29 +153,29 @@
             "name": "Dragon's Rage Channeler"
           }
         ],
-        "current": {
-          "count": 16,
-          "denominator": 232,
-          "share": 0.069
-        },
-        "previous_week": {
-          "count": 24,
-          "denominator": 259,
-          "share": 0.0927
-        },
         "previous_four_weeks": {
           "count": 143,
           "denominator": 1385,
           "share": 0.1032
         },
-        "current_top8": {
-          "count": 8,
-          "denominator": 104,
-          "share": 0.0769
+        "previous_week": {
+          "count": 24,
+          "denominator": 259,
+          "share": 0.0927
         }
       },
       {
         "archetype_id": "boros-energy",
+        "current": {
+          "count": 15,
+          "denominator": 232,
+          "share": 0.0647
+        },
+        "current_top8": {
+          "count": 5,
+          "denominator": 104,
+          "share": 0.0481
+        },
         "display_name": "Boros Energy",
         "key_cards": [
           {
@@ -287,29 +185,29 @@
             "name": "Ocelot Pride"
           }
         ],
-        "current": {
-          "count": 15,
-          "denominator": 232,
-          "share": 0.0647
-        },
-        "previous_week": {
-          "count": 8,
-          "denominator": 259,
-          "share": 0.0309
-        },
         "previous_four_weeks": {
           "count": 51,
           "denominator": 1385,
           "share": 0.0368
         },
-        "current_top8": {
-          "count": 5,
-          "denominator": 104,
-          "share": 0.0481
+        "previous_week": {
+          "count": 8,
+          "denominator": 259,
+          "share": 0.0309
         }
       },
       {
         "archetype_id": "chant-control",
+        "current": {
+          "count": 13,
+          "denominator": 232,
+          "share": 0.056
+        },
+        "current_top8": {
+          "count": 5,
+          "denominator": 104,
+          "share": 0.0481
+        },
         "display_name": "Chant Control",
         "key_cards": [
           {
@@ -319,29 +217,29 @@
             "name": "Isochron Scepter"
           }
         ],
-        "current": {
-          "count": 13,
-          "denominator": 232,
-          "share": 0.056
-        },
-        "previous_week": {
-          "count": 8,
-          "denominator": 259,
-          "share": 0.0309
-        },
         "previous_four_weeks": {
           "count": 40,
           "denominator": 1385,
           "share": 0.0289
         },
-        "current_top8": {
-          "count": 5,
-          "denominator": 104,
-          "share": 0.0481
+        "previous_week": {
+          "count": 8,
+          "denominator": 259,
+          "share": 0.0309
         }
       },
       {
         "archetype_id": "domain-zoo",
+        "current": {
+          "count": 12,
+          "denominator": 232,
+          "share": 0.0517
+        },
+        "current_top8": {
+          "count": 5,
+          "denominator": 104,
+          "share": 0.0481
+        },
         "display_name": "Domain Zoo",
         "key_cards": [
           {
@@ -351,29 +249,29 @@
             "name": "Leyline of the Guildpact"
           }
         ],
-        "current": {
-          "count": 12,
-          "denominator": 232,
-          "share": 0.0517
-        },
-        "previous_week": {
-          "count": 13,
-          "denominator": 259,
-          "share": 0.0502
-        },
         "previous_four_weeks": {
           "count": 48,
           "denominator": 1385,
           "share": 0.0347
         },
-        "current_top8": {
-          "count": 5,
-          "denominator": 104,
-          "share": 0.0481
+        "previous_week": {
+          "count": 13,
+          "denominator": 259,
+          "share": 0.0502
         }
       },
       {
         "archetype_id": "eldrazi-tron",
+        "current": {
+          "count": 12,
+          "denominator": 232,
+          "share": 0.0517
+        },
+        "current_top8": {
+          "count": 5,
+          "denominator": 104,
+          "share": 0.0481
+        },
         "display_name": "Eldrazi Tron",
         "key_cards": [
           {
@@ -383,29 +281,29 @@
             "name": "Karn, the Great Creator"
           }
         ],
-        "current": {
-          "count": 12,
-          "denominator": 232,
-          "share": 0.0517
-        },
-        "previous_week": {
-          "count": 14,
-          "denominator": 259,
-          "share": 0.0541
-        },
         "previous_four_weeks": {
           "count": 61,
           "denominator": 1385,
           "share": 0.044
         },
-        "current_top8": {
-          "count": 5,
-          "denominator": 104,
-          "share": 0.0481
+        "previous_week": {
+          "count": 14,
+          "denominator": 259,
+          "share": 0.0541
         }
       },
       {
         "archetype_id": "burn",
+        "current": {
+          "count": 7,
+          "denominator": 232,
+          "share": 0.0302
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 104,
+          "share": 0.0288
+        },
         "display_name": "Burn",
         "key_cards": [
           {
@@ -415,59 +313,28 @@
             "name": "Boltwave"
           }
         ],
-        "current": {
-          "count": 7,
-          "denominator": 232,
-          "share": 0.0302
-        },
-        "previous_week": {
-          "count": 0,
-          "denominator": 259,
-          "share": 0.0
-        },
         "previous_four_weeks": {
           "count": 9,
           "denominator": 1385,
           "share": 0.0065
         },
-        "current_top8": {
-          "count": 3,
-          "denominator": 104,
-          "share": 0.0288
+        "previous_week": {
+          "count": 0,
+          "denominator": 259,
+          "share": 0.0
         }
       }
     ],
-    "other_classified": {
-      "current": {
-        "count": 75,
-        "denominator": 232,
-        "share": 0.3233
-      },
-      "previous_week": {
-        "count": 117,
-        "denominator": 259,
-        "share": 0.4517
-      },
-      "previous_four_weeks": {
-        "count": 655,
-        "denominator": 1385,
-        "share": 0.4729
-      },
-      "current_top8": {
-        "count": 35,
-        "denominator": 104,
-        "share": 0.3365
-      }
-    },
+    "threshold": 0.03,
     "unknown": {
       "current": {
         "count": 0,
         "denominator": 232,
         "share": 0.0
       },
-      "previous_week": {
+      "current_top8": {
         "count": 0,
-        "denominator": 259,
+        "denominator": 104,
         "share": 0.0
       },
       "previous_four_weeks": {
@@ -475,79 +342,23 @@
         "denominator": 1385,
         "share": 0.0
       },
-      "current_top8": {
+      "previous_week": {
         "count": 0,
-        "denominator": 104,
+        "denominator": 259,
         "share": 0.0
       }
     }
   },
-  "weekly_summary": {
-    "week": "2026-W42",
-    "items": [
-      {
-        "order": 1,
-        "text": {
-          "zh": "本周红黑躁狂继续出色表现，MO高分、八强占比双双登顶，在东南亚RC上更是拿下接近60%的胜率。",
-          "en": "Rakdos Delirium continued its strong performance this week, leading MTGO in both high-score and Top 8 shares and posting a win rate of nearly 60% at the Southeast Asia Regional Championship."
-        },
-        "deck_links": []
-      },
-      {
-        "order": 2,
-        "text": {
-          "zh": "MO上本周也有一场大赛，比东南亚RC人数还多，Showcase挑战赛吸引了286人参加，最终由洁斯凯能量席卷。但四强另外三个席位都是灵技，还都是混色带神器结界解的版本。",
-          "en": "MTGO also hosted a major event this week. With 286 players, the Showcase Challenge drew an even larger field than the Southeast Asia Regional Championship, and Jeskai Energy swept the event. The other three semifinal slots all went to Prowess, with each list splashing for artifact and enchantment removal."
-        },
-        "deck_links": []
-      },
-      {
-        "order": 3,
-        "text": {
-          "zh": "上周RC上表现出色的暗光藤蔓套牌本周在MO上基本没有存在感，而这套黑绿暗光凤凰终于是为暗光凤凰套牌拿下了MO第一个挑战赛八强。思路是最开始就被开发出来的[[card:Buried Alive|活埋]]版本：deck:dbd7ca0c81139b07666e",
-          "en": "Darklight Vengevine, which performed well at last week's Regional Championships, barely registered on MTGO this week. This Golgari Darklight Phoenix list, however, finally earned the archetype its first MTGO Challenge Top 8. It uses the [[card:Buried Alive|Buried Alive]] approach that was developed when the archetype first emerged: deck:dbd7ca0c81139b07666e"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:dbd7ca0c81139b07666e",
-            "label": {
-              "zh": "黑绿暗光凤凰 · Wiltron92 · 第5名",
-              "en": "Golgari Darklight Phoenix · Wiltron92 · Rank 5"
-            },
-            "deck": {
-              "archetype_id": "darklight-phoenix",
-              "display_name": "Golgari Darklight Phoenix",
-              "event_id": "12856761",
-              "deck_id": "dbd7ca0c81139b07666e",
-              "deck_fingerprint_sha256": "8f0ee9788d6c0d26948a50709e47baa5327e564b98768d2bf854c2d20c503ae1",
-              "player": "Wiltron92",
-              "final_rank": 5,
-              "starttime": "2026-10-16 16:15:00.0"
-            }
-          }
-        ]
-      }
-    ]
-  },
   "features": {
-    "week": "2026-W42",
     "items": [
       {
-        "category": "new_deck",
-        "order": 1,
-        "destination_id": "deck:dbd7ca0c81139b07666e",
         "archetype_id": "darklight-phoenix",
-        "subtype_id": "golgari",
-        "display_name": "Golgari Darklight Phoenix",
+        "category": "new_deck",
         "deck": {
-          "event_id": "12856761",
-          "deck_id": "dbd7ca0c81139b07666e",
           "deck_fingerprint_sha256": "8f0ee9788d6c0d26948a50709e47baa5327e564b98768d2bf854c2d20c503ae1",
-          "player": "Wiltron92",
+          "deck_id": "dbd7ca0c81139b07666e",
+          "event_id": "12856761",
           "final_rank": 5,
-          "player_count": 51,
-          "starttime": "2026-10-16 16:15:00.0",
           "main_deck": [
             {
               "name": "Accursed Marauder",
@@ -626,6 +437,8 @@
               "qty": 4
             }
           ],
+          "player": "Wiltron92",
+          "player_count": 51,
           "side_deck": [
             {
               "name": "Break the Ice",
@@ -667,16 +480,11 @@
               "name": "Witherbloom Charm",
               "qty": 1
             }
-          ]
+          ],
+          "starttime": "2026-10-16 16:15:00.0"
         },
-        "headline": {
-          "en": "Golgari Darklight Phoenix",
-          "zh": "黑绿暗光凤凰"
-        },
-        "positioning": {
-          "zh": "活埋版本的暗光凤凰套牌",
-          "en": "A Buried Alive build of Darklight Phoenix."
-        },
+        "destination_id": "deck:dbd7ca0c81139b07666e",
+        "display_name": "Golgari Darklight Phoenix",
         "featured_cards": [
           {
             "name": "Darklight Phoenix"
@@ -691,6 +499,16 @@
             "name": "Stitcher's Supplier"
           }
         ],
+        "headline": {
+          "en": "Golgari Darklight Phoenix",
+          "zh": "黑绿暗光凤凰"
+        },
+        "order": 1,
+        "positioning": {
+          "en": "A Buried Alive build of Darklight Phoenix.",
+          "zh": "活埋版本的暗光凤凰套牌"
+        },
+        "subtype_id": "golgari",
         "supporting_facts": [
           {
             "type": "new_archetype",
@@ -700,9 +518,122 @@
           }
         ]
       }
-    ]
+    ],
+    "week": "2026-W42"
   },
+  "format": "modern",
+  "populations": {
+    "current": {
+      "end": "2026-10-18",
+      "event_count": 13,
+      "event_ids": [
+        "12856194",
+        "12856195",
+        "12856203",
+        "12856487",
+        "12856566",
+        "12856574",
+        "12856590",
+        "12856594",
+        "12856599",
+        "12856647",
+        "12856678",
+        "12856761",
+        "12856762"
+      ],
+      "high_score_count": 232,
+      "start": "2026-10-12",
+      "top8_count": 104
+    },
+    "previous_four_weeks": {
+      "end": "2026-10-11",
+      "event_count": 53,
+      "event_ids": [
+        "12854101",
+        "12854108",
+        "12854109",
+        "12854115",
+        "12854117",
+        "12854120",
+        "12854476",
+        "12854484",
+        "12854494",
+        "12854499",
+        "12854500",
+        "12854505",
+        "12854510",
+        "12854515",
+        "12854523",
+        "12854525",
+        "12854532",
+        "12854533",
+        "12854539",
+        "12854541",
+        "12854901",
+        "12854911",
+        "12854916",
+        "12854917",
+        "12854922",
+        "12854927",
+        "12854932",
+        "12854940",
+        "12854942",
+        "12854949",
+        "12854950",
+        "12854975",
+        "12855444",
+        "12855448",
+        "12855450",
+        "12855453",
+        "12855459",
+        "12855469",
+        "12855474",
+        "12855475",
+        "12855490",
+        "12855498",
+        "12855500",
+        "12855507",
+        "12855508",
+        "12855513",
+        "12855515",
+        "12855518",
+        "12856163",
+        "12856172",
+        "12856334",
+        "12856335",
+        "12856339"
+      ],
+      "high_score_count": 1385,
+      "start": "2026-09-14",
+      "top8_count": 424
+    },
+    "previous_week": {
+      "end": "2026-10-11",
+      "event_count": 12,
+      "event_ids": [
+        "12855498",
+        "12855500",
+        "12855507",
+        "12855508",
+        "12855513",
+        "12855515",
+        "12855518",
+        "12856163",
+        "12856172",
+        "12856334",
+        "12856335",
+        "12856339"
+      ],
+      "high_score_count": 259,
+      "start": "2026-10-05",
+      "top8_count": 96
+    }
+  },
+  "product": "mtgo-landing",
   "review_binding": {
+    "classifier_digest": "d1a43b6539af3cb80bca1e6ca200a82ca507a58c07f1ffbc831ea8ae39dc9a2b",
+    "machine_fact_digest": "de8ae526291aa37d252e11ee938b7a26ea7c74e4d3d51feb6e3b786dfaa5832a",
+    "pickup_document_digest": "375b7c8013720d50654c1d798633293dc831938026eb6bcf2400f033e1ef2620",
     "source_event_ids": [
       "12856194",
       "12856195",
@@ -718,10 +649,85 @@
       "12856761",
       "12856762"
     ],
-    "classifier_digest": "d1a43b6539af3cb80bca1e6ca200a82ca507a58c07f1ffbc831ea8ae39dc9a2b",
-    "visual_metadata_digest": "2caff2509cbe0cca27b98259db839c48ac4b4f82b08fb9c0878722b749db0709",
-    "machine_fact_digest": "de8ae526291aa37d252e11ee938b7a26ea7c74e4d3d51feb6e3b786dfaa5832a",
-    "pickup_document_digest": "de2d8b0b4c4d4d68d86cb60e4f41e55caf71b592f8501889764c34000e559c2b",
-    "summary_fact_digest": "257b6141ce70b0bc86a36dca396be58a12823eee60120058fdcbc5c9ab0c3338"
+    "summary_fact_digest": "5f84bcc4296c707a26df07374312f58fe66fb881a70e99ad97cf9ce5bd9c8ac9",
+    "visual_metadata_digest": "51bcf48175871e0e6cb76f18104151a4b7987650e517a009d3ca6c775fb68288"
+  },
+  "schema_version": "1.2.0",
+  "source": "mtgo",
+  "source_event_ids": [
+    "12856194",
+    "12856195",
+    "12856203",
+    "12856487",
+    "12856566",
+    "12856574",
+    "12856590",
+    "12856594",
+    "12856599",
+    "12856647",
+    "12856678",
+    "12856761",
+    "12856762"
+  ],
+  "state": "ready",
+  "thresholds": {
+    "build_reference_minimum": 8,
+    "build_shift": 20,
+    "environment_share": 0.03,
+    "exit_reference_share": 0.05,
+    "share_move_pp": 5.0
+  },
+  "week": {
+    "end": "2026-10-18",
+    "id": "2026-W42",
+    "start": "2026-10-12"
+  },
+  "weekly_summary": {
+    "items": [
+      {
+        "deck_links": [],
+        "order": 1,
+        "text": {
+          "en": "Rakdos Delirium continued its strong performance this week, leading MTGO in both high-score and Top 8 shares and posting a win rate of nearly 60% at the Southeast Asia Regional Championship.",
+          "zh": "本周红黑躁狂继续出色表现，MO高分、八强占比双双登顶，在东南亚RC上更是拿下接近60%的胜率。"
+        }
+      },
+      {
+        "deck_links": [],
+        "order": 2,
+        "text": {
+          "en": "MTGO also hosted a major event this week. With 286 players, the Showcase Challenge drew an even larger field than the Southeast Asia Regional Championship, and Jeskai Energy swept the event. The other three semifinal slots all went to Prowess, with each list splashing for artifact and enchantment removal.",
+          "zh": "MO上本周也有一场大赛，比东南亚RC人数还多，Showcase挑战赛吸引了286人参加，最终由洁斯凯能量席卷。但四强另外三个席位都是灵技，还都是混色带神器结界解的版本。"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "darklight-phoenix",
+              "deck_fingerprint_sha256": "8f0ee9788d6c0d26948a50709e47baa5327e564b98768d2bf854c2d20c503ae1",
+              "deck_id": "dbd7ca0c81139b07666e",
+              "display_name": "Golgari Darklight Phoenix",
+              "event_id": "12856761",
+              "final_rank": 5,
+              "player": "Wiltron92",
+              "starttime": "2026-10-16 16:15:00.0"
+            },
+            "label": {
+              "en": "Golgari Darklight Phoenix · Wiltron92 · Rank 5",
+              "zh": "黑绿暗光凤凰 · Wiltron92 · 第5名"
+            },
+            "order": 1,
+            "token": "deck:dbd7ca0c81139b07666e"
+          }
+        ],
+        "order": 3,
+        "text": {
+          "en": "Darklight Vengevine, which performed well at last week's Regional Championships, barely registered on MTGO this week. This Golgari Darklight Phoenix list, however, finally earned the archetype its first MTGO Challenge Top 8. It uses the [[card:Buried Alive|Buried Alive]] approach that was developed when the archetype first emerged: deck:dbd7ca0c81139b07666e",
+          "zh": "上周RC上表现出色的暗光藤蔓套牌本周在MO上基本没有存在感，而这套黑绿暗光凤凰终于是为暗光凤凰套牌拿下了MO第一个挑战赛八强。思路是最开始就被开发出来的[[card:Buried Alive|活埋]]版本：deck:dbd7ca0c81139b07666e"
+        }
+      }
+    ],
+    "week": "2026-W42"
   }
 }

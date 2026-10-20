@@ -1,23 +1,4 @@
 {
-  "schema_version": "1.2.0",
-  "product": "mtgo-landing",
-  "format": "pauper",
-  "source": "mtgo",
-  "week": {
-    "id": "2026-W42",
-    "start": "2026-10-12",
-    "end": "2026-10-18"
-  },
-  "state": "ready",
-  "source_event_ids": [
-    "12856189",
-    "12856196",
-    "12856206",
-    "12856578",
-    "12856583",
-    "12856591",
-    "12856607"
-  ],
   "classifier": {
     "digest": "b1799d0561d80a53561c90f3aa49b13366d6c7cd24a3e58e5213fd59678e470d"
   },
@@ -25,89 +6,48 @@
     "available": true,
     "unavailable_reason": null
   },
-  "thresholds": {
-    "environment_share": 0.03,
-    "share_move_pp": 5.0,
-    "exit_reference_share": 0.05,
-    "build_shift": 20,
-    "build_reference_minimum": 8
-  },
-  "populations": {
-    "current": {
-      "start": "2026-10-12",
-      "end": "2026-10-18",
-      "event_ids": [
-        "12856189",
-        "12856196",
-        "12856206",
-        "12856578",
-        "12856583",
-        "12856591",
-        "12856607"
-      ],
-      "event_count": 7,
-      "high_score_count": 110,
-      "top8_count": 56
-    },
-    "previous_week": {
-      "start": "2026-10-05",
-      "end": "2026-10-11",
-      "event_ids": [
-        "12855502",
-        "12855509",
-        "12855517",
-        "12856148",
-        "12856155",
-        "12856164",
-        "12856180"
-      ],
-      "event_count": 7,
-      "high_score_count": 115,
-      "top8_count": 56
-    },
-    "previous_four_weeks": {
-      "start": "2026-09-14",
-      "end": "2026-10-11",
-      "event_ids": [
-        "12854103",
-        "12854110",
-        "12854119",
-        "12854477",
-        "12854488",
-        "12854493",
-        "12854501",
-        "12854518",
-        "12854527",
-        "12854534",
-        "12854905",
-        "12854910",
-        "12854918",
-        "12854935",
-        "12854944",
-        "12854951",
-        "12855452",
-        "12855463",
-        "12855468",
-        "12855476",
-        "12855493",
-        "12855502",
-        "12855509",
-        "12855517",
-        "12856148",
-        "12856155",
-        "12856164",
-        "12856180"
-      ],
-      "event_count": 28,
-      "high_score_count": 482,
-      "top8_count": 224
-    }
+  "data_files": {
+    "completeness": "weeks/2026-W42/completeness.json",
+    "environment_decks": "weeks/2026-W42/environment_decks.json",
+    "feature_decks": "weeks/2026-W42/feature_decks.json",
+    "range": "weeks/2026-W42/range.json"
   },
   "environment": {
-    "threshold": 0.03,
+    "other_classified": {
+      "current": {
+        "count": 16,
+        "denominator": 110,
+        "share": 0.1455
+      },
+      "current_top8": {
+        "count": 7,
+        "denominator": 56,
+        "share": 0.125
+      },
+      "previous_four_weeks": {
+        "count": 174,
+        "denominator": 482,
+        "share": 0.361
+      },
+      "previous_week": {
+        "count": 41,
+        "denominator": 115,
+        "share": 0.3565
+      }
+    },
     "rows": [
       {
         "archetype_id": "mono-red-madness",
+        "current": {
+          "count": 20,
+          "denominator": 110,
+          "share": 0.1818
+        },
+        "current_top8": {
+          "count": 9,
+          "denominator": 56,
+          "share": 0.1607
+        },
         "display_name": "Mono-Red Madness",
         "key_cards": [
           {
@@ -117,29 +57,29 @@
             "name": "Fiery Temper"
           }
         ],
-        "current": {
-          "count": 20,
-          "denominator": 110,
-          "share": 0.1818
-        },
-        "previous_week": {
-          "count": 15,
-          "denominator": 115,
-          "share": 0.1304
-        },
         "previous_four_weeks": {
           "count": 76,
           "denominator": 482,
           "share": 0.1577
         },
-        "current_top8": {
-          "count": 9,
-          "denominator": 56,
-          "share": 0.1607
+        "previous_week": {
+          "count": 15,
+          "denominator": 115,
+          "share": 0.1304
         }
       },
       {
         "archetype_id": "dimir-control",
+        "current": {
+          "count": 13,
+          "denominator": 110,
+          "share": 0.1182
+        },
+        "current_top8": {
+          "count": 8,
+          "denominator": 56,
+          "share": 0.1429
+        },
         "display_name": "Dimir Control",
         "key_cards": [
           {
@@ -149,29 +89,29 @@
             "name": "Counterspell"
           }
         ],
-        "current": {
-          "count": 13,
-          "denominator": 110,
-          "share": 0.1182
-        },
-        "previous_week": {
-          "count": 7,
-          "denominator": 115,
-          "share": 0.0609
-        },
         "previous_four_weeks": {
           "count": 18,
           "denominator": 482,
           "share": 0.0373
         },
-        "current_top8": {
-          "count": 8,
-          "denominator": 56,
-          "share": 0.1429
+        "previous_week": {
+          "count": 7,
+          "denominator": 115,
+          "share": 0.0609
         }
       },
       {
         "archetype_id": "mono-blue-terror",
+        "current": {
+          "count": 13,
+          "denominator": 110,
+          "share": 0.1182
+        },
+        "current_top8": {
+          "count": 7,
+          "denominator": 56,
+          "share": 0.125
+        },
         "display_name": "Mono-Blue Terror",
         "key_cards": [
           {
@@ -181,29 +121,29 @@
             "name": "Thought Scour"
           }
         ],
-        "current": {
-          "count": 13,
-          "denominator": 110,
-          "share": 0.1182
-        },
-        "previous_week": {
-          "count": 11,
-          "denominator": 115,
-          "share": 0.0957
-        },
         "previous_four_weeks": {
           "count": 43,
           "denominator": 482,
           "share": 0.0892
         },
-        "current_top8": {
-          "count": 7,
-          "denominator": 56,
-          "share": 0.125
+        "previous_week": {
+          "count": 11,
+          "denominator": 115,
+          "share": 0.0957
         }
       },
       {
         "archetype_id": "dimir-faeries",
+        "current": {
+          "count": 7,
+          "denominator": 110,
+          "share": 0.0636
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 56,
+          "share": 0.0714
+        },
         "display_name": "Dimir Faeries",
         "key_cards": [
           {
@@ -213,29 +153,29 @@
             "name": "Snuff Out"
           }
         ],
-        "current": {
-          "count": 7,
-          "denominator": 110,
-          "share": 0.0636
-        },
-        "previous_week": {
-          "count": 13,
-          "denominator": 115,
-          "share": 0.113
-        },
         "previous_four_weeks": {
           "count": 36,
           "denominator": 482,
           "share": 0.0747
         },
-        "current_top8": {
-          "count": 4,
-          "denominator": 56,
-          "share": 0.0714
+        "previous_week": {
+          "count": 13,
+          "denominator": 115,
+          "share": 0.113
         }
       },
       {
         "archetype_id": "elves",
+        "current": {
+          "count": 7,
+          "denominator": 110,
+          "share": 0.0636
+        },
+        "current_top8": {
+          "count": 1,
+          "denominator": 56,
+          "share": 0.0179
+        },
         "display_name": "Elves",
         "key_cards": [
           {
@@ -245,29 +185,29 @@
             "name": "Timberwatch Elf"
           }
         ],
-        "current": {
-          "count": 7,
-          "denominator": 110,
-          "share": 0.0636
-        },
-        "previous_week": {
-          "count": 2,
-          "denominator": 115,
-          "share": 0.0174
-        },
         "previous_four_weeks": {
           "count": 24,
           "denominator": 482,
           "share": 0.0498
         },
-        "current_top8": {
-          "count": 1,
-          "denominator": 56,
-          "share": 0.0179
+        "previous_week": {
+          "count": 2,
+          "denominator": 115,
+          "share": 0.0174
         }
       },
       {
         "archetype_id": "grixis-affinity",
+        "current": {
+          "count": 7,
+          "denominator": 110,
+          "share": 0.0636
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 56,
+          "share": 0.0714
+        },
         "display_name": "Grixis Affinity",
         "key_cards": [
           {
@@ -277,29 +217,29 @@
             "name": "Refurbished Familiar"
           }
         ],
-        "current": {
-          "count": 7,
-          "denominator": 110,
-          "share": 0.0636
-        },
-        "previous_week": {
-          "count": 7,
-          "denominator": 115,
-          "share": 0.0609
-        },
         "previous_four_weeks": {
           "count": 18,
           "denominator": 482,
           "share": 0.0373
         },
-        "current_top8": {
-          "count": 4,
-          "denominator": 56,
-          "share": 0.0714
+        "previous_week": {
+          "count": 7,
+          "denominator": 115,
+          "share": 0.0609
         }
       },
       {
         "archetype_id": "battle-screech",
+        "current": {
+          "count": 6,
+          "denominator": 110,
+          "share": 0.0545
+        },
+        "current_top8": {
+          "count": 5,
+          "denominator": 56,
+          "share": 0.0893
+        },
         "display_name": "Battle Screech",
         "key_cards": [
           {
@@ -309,29 +249,29 @@
             "name": "Rally the Peasants"
           }
         ],
-        "current": {
-          "count": 6,
-          "denominator": 110,
-          "share": 0.0545
-        },
-        "previous_week": {
-          "count": 4,
-          "denominator": 115,
-          "share": 0.0348
-        },
         "previous_four_weeks": {
           "count": 13,
           "denominator": 482,
           "share": 0.027
         },
-        "current_top8": {
-          "count": 5,
-          "denominator": 56,
-          "share": 0.0893
+        "previous_week": {
+          "count": 4,
+          "denominator": 115,
+          "share": 0.0348
         }
       },
       {
         "archetype_id": "green-tron",
+        "current": {
+          "count": 5,
+          "denominator": 110,
+          "share": 0.0455
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 56,
+          "share": 0.0536
+        },
         "display_name": "Monster Tron",
         "key_cards": [
           {
@@ -341,29 +281,29 @@
             "name": "Giant's Boulder"
           }
         ],
-        "current": {
-          "count": 5,
-          "denominator": 110,
-          "share": 0.0455
-        },
-        "previous_week": {
-          "count": 1,
-          "denominator": 115,
-          "share": 0.0087
-        },
         "previous_four_weeks": {
           "count": 21,
           "denominator": 482,
           "share": 0.0436
         },
-        "current_top8": {
-          "count": 3,
-          "denominator": 56,
-          "share": 0.0536
+        "previous_week": {
+          "count": 1,
+          "denominator": 115,
+          "share": 0.0087
         }
       },
       {
         "archetype_id": "bogles",
+        "current": {
+          "count": 4,
+          "denominator": 110,
+          "share": 0.0364
+        },
+        "current_top8": {
+          "count": 1,
+          "denominator": 56,
+          "share": 0.0179
+        },
         "display_name": "Bogles",
         "key_cards": [
           {
@@ -373,29 +313,29 @@
             "name": "Ethereal Armor"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 110,
-          "share": 0.0364
-        },
-        "previous_week": {
-          "count": 4,
-          "denominator": 115,
-          "share": 0.0348
-        },
         "previous_four_weeks": {
           "count": 35,
           "denominator": 482,
           "share": 0.0726
         },
-        "current_top8": {
-          "count": 1,
-          "denominator": 56,
-          "share": 0.0179
+        "previous_week": {
+          "count": 4,
+          "denominator": 115,
+          "share": 0.0348
         }
       },
       {
         "archetype_id": "mono-red-rally",
+        "current": {
+          "count": 4,
+          "denominator": 110,
+          "share": 0.0364
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 56,
+          "share": 0.0357
+        },
         "display_name": "Mono-Red Rally",
         "key_cards": [
           {
@@ -405,29 +345,29 @@
             "name": "Burning-Tree Emissary"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 110,
-          "share": 0.0364
-        },
-        "previous_week": {
-          "count": 2,
-          "denominator": 115,
-          "share": 0.0174
-        },
         "previous_four_weeks": {
           "count": 6,
           "denominator": 482,
           "share": 0.0124
         },
-        "current_top8": {
+        "previous_week": {
           "count": 2,
-          "denominator": 56,
-          "share": 0.0357
+          "denominator": 115,
+          "share": 0.0174
         }
       },
       {
         "archetype_id": "spy-combo",
+        "current": {
+          "count": 4,
+          "denominator": 110,
+          "share": 0.0364
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 56,
+          "share": 0.0357
+        },
         "display_name": "Spy Combo",
         "key_cards": [
           {
@@ -437,29 +377,29 @@
             "name": "Dread Return"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 110,
-          "share": 0.0364
-        },
-        "previous_week": {
-          "count": 3,
-          "denominator": 115,
-          "share": 0.0261
-        },
         "previous_four_weeks": {
           "count": 12,
           "denominator": 482,
           "share": 0.0249
         },
-        "current_top8": {
-          "count": 2,
-          "denominator": 56,
-          "share": 0.0357
+        "previous_week": {
+          "count": 3,
+          "denominator": 115,
+          "share": 0.0261
         }
       },
       {
         "archetype_id": "turbo-fog",
+        "current": {
+          "count": 4,
+          "denominator": 110,
+          "share": 0.0364
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 56,
+          "share": 0.0536
+        },
         "display_name": "Turbo Fog",
         "key_cards": [
           {
@@ -469,59 +409,28 @@
             "name": "Stream of Thought"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 110,
-          "share": 0.0364
-        },
-        "previous_week": {
-          "count": 5,
-          "denominator": 115,
-          "share": 0.0435
-        },
         "previous_four_weeks": {
           "count": 6,
           "denominator": 482,
           "share": 0.0124
         },
-        "current_top8": {
-          "count": 3,
-          "denominator": 56,
-          "share": 0.0536
+        "previous_week": {
+          "count": 5,
+          "denominator": 115,
+          "share": 0.0435
         }
       }
     ],
-    "other_classified": {
-      "current": {
-        "count": 16,
-        "denominator": 110,
-        "share": 0.1455
-      },
-      "previous_week": {
-        "count": 41,
-        "denominator": 115,
-        "share": 0.3565
-      },
-      "previous_four_weeks": {
-        "count": 174,
-        "denominator": 482,
-        "share": 0.361
-      },
-      "current_top8": {
-        "count": 7,
-        "denominator": 56,
-        "share": 0.125
-      }
-    },
+    "threshold": 0.03,
     "unknown": {
       "current": {
         "count": 0,
         "denominator": 110,
         "share": 0.0
       },
-      "previous_week": {
+      "current_top8": {
         "count": 0,
-        "denominator": 115,
+        "denominator": 56,
         "share": 0.0
       },
       "previous_four_weeks": {
@@ -529,89 +438,23 @@
         "denominator": 482,
         "share": 0.0
       },
-      "current_top8": {
+      "previous_week": {
         "count": 0,
-        "denominator": 56,
+        "denominator": 115,
         "share": 0.0
       }
     }
   },
-  "weekly_summary": {
-    "week": "2026-W42",
-    "items": [
-      {
-        "order": 1,
-        "text": {
-          "zh": "经过一段时间的环境演变，Zeta单卡对环境的影响基本比较明确。[[card:Baleful Strix|恶邪枭]]毫无疑问是最强单卡，蓝黑控制、蓝黑仙灵现在都处于环境顶端。[[card:Vandalblast|蛮野冲击]]虽然不是所有红色套牌都带，但备牌为了[[card:Vandalblast|蛮野冲击]]混红的控制现在是最流行的版本。而[[card:Dispatch|迅速了结]]套牌相对有些掉队，以艾斯波共鸣为首的这类套牌甚至已经可以归入“其他”。",
-          "en": "After a period of metagame evolution, the impact of the Zeta cards has become fairly clear. [[card:Baleful Strix|Baleful Strix]] is undoubtedly the strongest card, with Dimir Control and Dimir Faeries both now at the top of the metagame. Not every red deck plays [[card:Vandalblast|Vandalblast]], but control builds splashing red for it in the sideboard are now the most popular variants. Meanwhile, [[card:Dispatch|Dispatch]] decks have fallen somewhat behind. These decks, led by Esper Affinity, can now even be grouped under “Other.”"
-        },
-        "deck_links": []
-      },
-      {
-        "order": 2,
-        "text": {
-          "zh": "FRA新牌方面，[[card:Twinned Vision|双生视像]]在上周进入红风暴套牌之后，本周一些纯红疯魔套牌也开始使用。一套把[[card:Kessig Flamebreather|凯锡革喷焰师]]换成[[card:Kiln Fiend|火炉邪鬼]]的版本拿下一个八强：deck:f3bc98dff40ca00607c5，备牌带了一张[[card:Twinned Vision|双生视像]]。而另一个主1备3，用它作为备牌资源计划的版本拿下一个四强：deck:3661808034b758be269b。",
-          "en": "Among the new FRA cards, [[card:Twinned Vision|Twinned Vision]] began appearing in Ruby Storm last week, and some Mono-Red Madness decks have started using it this week as well. A build replacing [[card:Kessig Flamebreather|Kessig Flamebreather]] with [[card:Kiln Fiend|Kiln Fiend]] made the Top 8: deck:f3bc98dff40ca00607c5, with one [[card:Twinned Vision|Twinned Vision]] in the sideboard. Another build, running one copy in the main deck and three in the sideboard as a resource plan after sideboarding, reached the semifinals: deck:3661808034b758be269b."
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:f3bc98dff40ca00607c5",
-            "label": {
-              "zh": "纯红疯魔 · Mirozel1 · 第7名",
-              "en": "Mono-Red Madness · Mirozel1 · Rank 7"
-            },
-            "deck": {
-              "archetype_id": "mono-red-madness",
-              "display_name": "Mono-Red Madness",
-              "event_id": "12856206",
-              "deck_id": "f3bc98dff40ca00607c5",
-              "deck_fingerprint_sha256": "03d5f0e105464f414dccb99d48bc1b887298e1ba0ddfa29e0198a3839ed83c32",
-              "player": "Mirozel1",
-              "final_rank": 7,
-              "starttime": "2026-10-14 12:00:00.0"
-            }
-          },
-          {
-            "order": 2,
-            "token": "deck:3661808034b758be269b",
-            "label": {
-              "zh": "纯红疯魔 · taravangian_ · 第3名",
-              "en": "Mono-Red Madness · taravangian_ · Rank 3"
-            },
-            "deck": {
-              "archetype_id": "mono-red-madness",
-              "display_name": "Mono-Red Madness",
-              "event_id": "12856583",
-              "deck_id": "3661808034b758be269b",
-              "deck_fingerprint_sha256": "4dede14546b0994183db1d32dca4601382edff0051fcf05061ab9f47a91f105d",
-              "player": "taravangian_",
-              "final_rank": 3,
-              "starttime": "2026-10-16 13:00:00.0"
-            }
-          }
-        ]
-      }
-    ]
-  },
   "features": {
-    "week": "2026-W42",
     "items": [
       {
-        "category": "new_technology",
-        "order": 1,
-        "destination_id": "deck:f3bc98dff40ca00607c5",
         "archetype_id": "mono-red-madness",
-        "subtype_id": null,
-        "display_name": "Mono-Red Madness",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856206",
-          "deck_id": "f3bc98dff40ca00607c5",
           "deck_fingerprint_sha256": "03d5f0e105464f414dccb99d48bc1b887298e1ba0ddfa29e0198a3839ed83c32",
-          "player": "Mirozel1",
+          "deck_id": "f3bc98dff40ca00607c5",
+          "event_id": "12856206",
           "final_rank": 7,
-          "player_count": 44,
-          "starttime": "2026-10-14 12:00:00.0",
           "main_deck": [
             {
               "name": "Faithless Looting",
@@ -678,6 +521,8 @@
               "qty": 2
             }
           ],
+          "player": "Mirozel1",
+          "player_count": 44,
           "side_deck": [
             {
               "name": "End the Festivities",
@@ -703,16 +548,11 @@
               "name": "Underworld Rage-Hound",
               "qty": 2
             }
-          ]
+          ],
+          "starttime": "2026-10-14 12:00:00.0"
         },
-        "headline": {
-          "en": "Mono-Red Madness",
-          "zh": "纯红疯魔"
-        },
-        "positioning": {
-          "zh": "火炉邪鬼版本的构筑",
-          "en": "A build featuring Kiln Fiend."
-        },
+        "destination_id": "deck:f3bc98dff40ca00607c5",
+        "display_name": "Mono-Red Madness",
         "featured_cards": [
           {
             "name": "Twinned Vision"
@@ -727,12 +567,22 @@
             "name": "Highway Robbery"
           }
         ],
+        "headline": {
+          "en": "Mono-Red Madness",
+          "zh": "纯红疯魔"
+        },
+        "order": 1,
+        "positioning": {
+          "en": "A build featuring Kiln Fiend.",
+          "zh": "火炉邪鬼版本的构筑"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "build_shift",
             "values": {
-              "identity_level": "parent",
               "identity_id": "mono-red-madness",
+              "identity_level": "parent",
               "reference_sample_size": 139,
               "score": 22
             }
@@ -740,20 +590,13 @@
         ]
       },
       {
-        "category": "new_technology",
-        "order": 2,
-        "destination_id": "deck:3661808034b758be269b",
         "archetype_id": "mono-red-madness",
-        "subtype_id": null,
-        "display_name": "Mono-Red Madness",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856583",
-          "deck_id": "3661808034b758be269b",
           "deck_fingerprint_sha256": "4dede14546b0994183db1d32dca4601382edff0051fcf05061ab9f47a91f105d",
-          "player": "taravangian_",
+          "deck_id": "3661808034b758be269b",
+          "event_id": "12856583",
           "final_rank": 3,
-          "player_count": 54,
-          "starttime": "2026-10-16 13:00:00.0",
           "main_deck": [
             {
               "name": "Faithless Looting",
@@ -808,6 +651,8 @@
               "qty": 1
             }
           ],
+          "player": "taravangian_",
+          "player_count": 54,
           "side_deck": [
             {
               "name": "Pyroblast",
@@ -829,16 +674,11 @@
               "name": "Twinned Vision",
               "qty": 3
             }
-          ]
+          ],
+          "starttime": "2026-10-16 13:00:00.0"
         },
-        "headline": {
-          "en": "Mono-Red Madness",
-          "zh": "纯红疯魔"
-        },
-        "positioning": {
-          "zh": "主备满编4张双生视像的版本",
-          "en": "A build with a full playset of Twinned Vision across the main deck and sideboard."
-        },
+        "destination_id": "deck:3661808034b758be269b",
+        "display_name": "Mono-Red Madness",
         "featured_cards": [
           {
             "name": "Twinned Vision"
@@ -853,11 +693,98 @@
             "name": "Kessig Flamebreather"
           }
         ],
+        "headline": {
+          "en": "Mono-Red Madness",
+          "zh": "纯红疯魔"
+        },
+        "order": 2,
+        "positioning": {
+          "en": "A build with a full playset of Twinned Vision across the main deck and sideboard.",
+          "zh": "主备满编4张双生视像的版本"
+        },
+        "subtype_id": null,
         "supporting_facts": []
       }
-    ]
+    ],
+    "week": "2026-W42"
   },
+  "format": "pauper",
+  "populations": {
+    "current": {
+      "end": "2026-10-18",
+      "event_count": 7,
+      "event_ids": [
+        "12856189",
+        "12856196",
+        "12856206",
+        "12856578",
+        "12856583",
+        "12856591",
+        "12856607"
+      ],
+      "high_score_count": 110,
+      "start": "2026-10-12",
+      "top8_count": 56
+    },
+    "previous_four_weeks": {
+      "end": "2026-10-11",
+      "event_count": 28,
+      "event_ids": [
+        "12854103",
+        "12854110",
+        "12854119",
+        "12854477",
+        "12854488",
+        "12854493",
+        "12854501",
+        "12854518",
+        "12854527",
+        "12854534",
+        "12854905",
+        "12854910",
+        "12854918",
+        "12854935",
+        "12854944",
+        "12854951",
+        "12855452",
+        "12855463",
+        "12855468",
+        "12855476",
+        "12855493",
+        "12855502",
+        "12855509",
+        "12855517",
+        "12856148",
+        "12856155",
+        "12856164",
+        "12856180"
+      ],
+      "high_score_count": 482,
+      "start": "2026-09-14",
+      "top8_count": 224
+    },
+    "previous_week": {
+      "end": "2026-10-11",
+      "event_count": 7,
+      "event_ids": [
+        "12855502",
+        "12855509",
+        "12855517",
+        "12856148",
+        "12856155",
+        "12856164",
+        "12856180"
+      ],
+      "high_score_count": 115,
+      "start": "2026-10-05",
+      "top8_count": 56
+    }
+  },
+  "product": "mtgo-landing",
   "review_binding": {
+    "classifier_digest": "b1799d0561d80a53561c90f3aa49b13366d6c7cd24a3e58e5213fd59678e470d",
+    "machine_fact_digest": "a79bd81eba2e36bb1a91d116298d8f1d5254ee8eac3689e3c0037bf963942bf6",
+    "pickup_document_digest": "e7aa76f3ba9356141cb10e28b4d174368e71de1efd284de6afba47f9e071225e",
     "source_event_ids": [
       "12856189",
       "12856196",
@@ -867,10 +794,89 @@
       "12856591",
       "12856607"
     ],
-    "classifier_digest": "b1799d0561d80a53561c90f3aa49b13366d6c7cd24a3e58e5213fd59678e470d",
-    "visual_metadata_digest": "2caff2509cbe0cca27b98259db839c48ac4b4f82b08fb9c0878722b749db0709",
-    "machine_fact_digest": "a79bd81eba2e36bb1a91d116298d8f1d5254ee8eac3689e3c0037bf963942bf6",
-    "pickup_document_digest": "1f9f2a825a4e1c1c59c4c2dd959b452306bdd38767748fd681c5f914496a0ef6",
-    "summary_fact_digest": "63bd21cba97694a230f73b934f5ffca7fa99e266b16ff49e80ef84b6214a4264"
+    "summary_fact_digest": "1b22018d004fceacb940694cc6797e7c7b4a0adbe8588204ea53a016e265bf43",
+    "visual_metadata_digest": "01e8c0c8fab12ea42246ad47ff4d1dc299812a7ea3277135dc6e6db8d8c3e625"
+  },
+  "schema_version": "1.2.0",
+  "source": "mtgo",
+  "source_event_ids": [
+    "12856189",
+    "12856196",
+    "12856206",
+    "12856578",
+    "12856583",
+    "12856591",
+    "12856607"
+  ],
+  "state": "ready",
+  "thresholds": {
+    "build_reference_minimum": 8,
+    "build_shift": 20,
+    "environment_share": 0.03,
+    "exit_reference_share": 0.05,
+    "share_move_pp": 5.0
+  },
+  "week": {
+    "end": "2026-10-18",
+    "id": "2026-W42",
+    "start": "2026-10-12"
+  },
+  "weekly_summary": {
+    "items": [
+      {
+        "deck_links": [],
+        "order": 1,
+        "text": {
+          "en": "After a period of metagame evolution, the impact of the Zeta cards has become fairly clear. [[card:Baleful Strix|Baleful Strix]] is undoubtedly the strongest card, with Dimir Control and Dimir Faeries both now at the top of the metagame. Not every red deck plays [[card:Vandalblast|Vandalblast]], but control builds splashing red for it in the sideboard are now the most popular variants. Meanwhile, [[card:Dispatch|Dispatch]] decks have fallen somewhat behind. These decks, led by Esper Affinity, can now even be grouped under “Other.”",
+          "zh": "经过一段时间的环境演变，Zeta单卡对环境的影响基本比较明确。[[card:Baleful Strix|恶邪枭]]毫无疑问是最强单卡，蓝黑控制、蓝黑仙灵现在都处于环境顶端。[[card:Vandalblast|蛮野冲击]]虽然不是所有红色套牌都带，但备牌为了[[card:Vandalblast|蛮野冲击]]混红的控制现在是最流行的版本。而[[card:Dispatch|迅速了结]]套牌相对有些掉队，以艾斯波共鸣为首的这类套牌甚至已经可以归入“其他”。"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "mono-red-madness",
+              "deck_fingerprint_sha256": "03d5f0e105464f414dccb99d48bc1b887298e1ba0ddfa29e0198a3839ed83c32",
+              "deck_id": "f3bc98dff40ca00607c5",
+              "display_name": "Mono-Red Madness",
+              "event_id": "12856206",
+              "final_rank": 7,
+              "player": "Mirozel1",
+              "starttime": "2026-10-14 12:00:00.0"
+            },
+            "label": {
+              "en": "Mono-Red Madness · Mirozel1 · Rank 7",
+              "zh": "纯红疯魔 · Mirozel1 · 第7名"
+            },
+            "order": 1,
+            "token": "deck:f3bc98dff40ca00607c5"
+          },
+          {
+            "deck": {
+              "archetype_id": "mono-red-madness",
+              "deck_fingerprint_sha256": "4dede14546b0994183db1d32dca4601382edff0051fcf05061ab9f47a91f105d",
+              "deck_id": "3661808034b758be269b",
+              "display_name": "Mono-Red Madness",
+              "event_id": "12856583",
+              "final_rank": 3,
+              "player": "taravangian_",
+              "starttime": "2026-10-16 13:00:00.0"
+            },
+            "label": {
+              "en": "Mono-Red Madness · taravangian_ · Rank 3",
+              "zh": "纯红疯魔 · taravangian_ · 第3名"
+            },
+            "order": 2,
+            "token": "deck:3661808034b758be269b"
+          }
+        ],
+        "order": 2,
+        "text": {
+          "en": "Among the new FRA cards, [[card:Twinned Vision|Twinned Vision]] began appearing in Ruby Storm last week, and some Mono-Red Madness decks have started using it this week as well. A build replacing [[card:Kessig Flamebreather|Kessig Flamebreather]] with [[card:Kiln Fiend|Kiln Fiend]] made the Top 8: deck:f3bc98dff40ca00607c5, with one [[card:Twinned Vision|Twinned Vision]] in the sideboard. Another build, running one copy in the main deck and three in the sideboard as a resource plan after sideboarding, reached the semifinals: deck:3661808034b758be269b.",
+          "zh": "FRA新牌方面，[[card:Twinned Vision|双生视像]]在上周进入红风暴套牌之后，本周一些纯红疯魔套牌也开始使用。一套把[[card:Kessig Flamebreather|凯锡革喷焰师]]换成[[card:Kiln Fiend|火炉邪鬼]]的版本拿下一个八强：deck:f3bc98dff40ca00607c5，备牌带了一张[[card:Twinned Vision|双生视像]]。而另一个主1备3，用它作为备牌资源计划的版本拿下一个四强：deck:3661808034b758be269b。"
+        }
+      }
+    ],
+    "week": "2026-W42"
   }
 }

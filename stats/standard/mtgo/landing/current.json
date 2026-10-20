@@ -1,24 +1,4 @@
 {
-  "schema_version": "1.2.0",
-  "product": "mtgo-landing",
-  "format": "standard",
-  "source": "mtgo",
-  "week": {
-    "id": "2026-W42",
-    "start": "2026-10-12",
-    "end": "2026-10-18"
-  },
-  "state": "ready",
-  "source_event_ids": [
-    "12856191",
-    "12856199",
-    "12856204",
-    "12856571",
-    "12856572",
-    "12856581",
-    "12856586",
-    "12856610"
-  ],
   "classifier": {
     "digest": "d0495b42f3e9597d7b4e4a890c98354c5b71110b2eac4bb9e82aa29c2d048bee"
   },
@@ -26,97 +6,48 @@
     "available": true,
     "unavailable_reason": null
   },
-  "thresholds": {
-    "environment_share": 0.03,
-    "share_move_pp": 5.0,
-    "exit_reference_share": 0.05,
-    "build_shift": 20,
-    "build_reference_minimum": 8
-  },
-  "populations": {
-    "current": {
-      "start": "2026-10-12",
-      "end": "2026-10-18",
-      "event_ids": [
-        "12856191",
-        "12856199",
-        "12856204",
-        "12856571",
-        "12856572",
-        "12856581",
-        "12856586",
-        "12856610"
-      ],
-      "event_count": 8,
-      "high_score_count": 132,
-      "top8_count": 64
-    },
-    "previous_week": {
-      "start": "2026-10-05",
-      "end": "2026-10-11",
-      "event_ids": [
-        "12855542",
-        "12855544",
-        "12856121",
-        "12856130",
-        "12856137",
-        "12856141",
-        "12856143",
-        "12856152",
-        "12856154",
-        "12856158",
-        "12856183"
-      ],
-      "event_count": 11,
-      "high_score_count": 174,
-      "top8_count": 88
-    },
-    "previous_four_weeks": {
-      "start": "2026-09-14",
-      "end": "2026-10-11",
-      "event_ids": [
-        "12854105",
-        "12854114",
-        "12854118",
-        "12854483",
-        "12854491",
-        "12854496",
-        "12854503",
-        "12854521",
-        "12854529",
-        "12854538",
-        "12854542",
-        "12854913",
-        "12854920",
-        "12854938",
-        "12854946",
-        "12855458",
-        "12855466",
-        "12855471",
-        "12855496",
-        "12855524",
-        "12855542",
-        "12855544",
-        "12856121",
-        "12856130",
-        "12856137",
-        "12856141",
-        "12856143",
-        "12856152",
-        "12856154",
-        "12856158",
-        "12856183"
-      ],
-      "event_count": 31,
-      "high_score_count": 472,
-      "top8_count": 248
-    }
+  "data_files": {
+    "completeness": "weeks/2026-W42/completeness.json",
+    "environment_decks": "weeks/2026-W42/environment_decks.json",
+    "feature_decks": "weeks/2026-W42/feature_decks.json",
+    "range": "weeks/2026-W42/range.json"
   },
   "environment": {
-    "threshold": 0.03,
+    "other_classified": {
+      "current": {
+        "count": 13,
+        "denominator": 132,
+        "share": 0.0985
+      },
+      "current_top8": {
+        "count": 6,
+        "denominator": 64,
+        "share": 0.0938
+      },
+      "previous_four_weeks": {
+        "count": 101,
+        "denominator": 472,
+        "share": 0.214
+      },
+      "previous_week": {
+        "count": 32,
+        "denominator": 174,
+        "share": 0.1839
+      }
+    },
     "rows": [
       {
         "archetype_id": "dimir-midrange",
+        "current": {
+          "count": 22,
+          "denominator": 132,
+          "share": 0.1667
+        },
+        "current_top8": {
+          "count": 10,
+          "denominator": 64,
+          "share": 0.1562
+        },
         "display_name": "Dimir Midrange",
         "key_cards": [
           {
@@ -126,29 +57,29 @@
             "name": "Enduring Curiosity"
           }
         ],
-        "current": {
-          "count": 22,
-          "denominator": 132,
-          "share": 0.1667
-        },
-        "previous_week": {
-          "count": 21,
-          "denominator": 174,
-          "share": 0.1207
-        },
         "previous_four_weeks": {
           "count": 46,
           "denominator": 472,
           "share": 0.0975
         },
-        "current_top8": {
-          "count": 10,
-          "denominator": 64,
-          "share": 0.1562
+        "previous_week": {
+          "count": 21,
+          "denominator": 174,
+          "share": 0.1207
         }
       },
       {
         "archetype_id": "dimir-spider-man",
+        "current": {
+          "count": 21,
+          "denominator": 132,
+          "share": 0.1591
+        },
+        "current_top8": {
+          "count": 10,
+          "denominator": 64,
+          "share": 0.1562
+        },
         "display_name": "Dimir Spider-Man",
         "key_cards": [
           {
@@ -158,29 +89,29 @@
             "name": "Deceit"
           }
         ],
-        "current": {
-          "count": 21,
-          "denominator": 132,
-          "share": 0.1591
-        },
-        "previous_week": {
-          "count": 10,
-          "denominator": 174,
-          "share": 0.0575
-        },
         "previous_four_weeks": {
           "count": 21,
           "denominator": 472,
           "share": 0.0445
         },
-        "current_top8": {
+        "previous_week": {
           "count": 10,
-          "denominator": 64,
-          "share": 0.1562
+          "denominator": 174,
+          "share": 0.0575
         }
       },
       {
         "archetype_id": "lifegain",
+        "current": {
+          "count": 16,
+          "denominator": 132,
+          "share": 0.1212
+        },
+        "current_top8": {
+          "count": 5,
+          "denominator": 64,
+          "share": 0.0781
+        },
         "display_name": "Lifegain",
         "key_cards": [
           {
@@ -190,29 +121,29 @@
             "name": "Ajani Resolute"
           }
         ],
-        "current": {
-          "count": 16,
-          "denominator": 132,
-          "share": 0.1212
-        },
-        "previous_week": {
-          "count": 11,
-          "denominator": 174,
-          "share": 0.0632
-        },
         "previous_four_weeks": {
           "count": 24,
           "denominator": 472,
           "share": 0.0508
         },
-        "current_top8": {
-          "count": 5,
-          "denominator": 64,
-          "share": 0.0781
+        "previous_week": {
+          "count": 11,
+          "denominator": 174,
+          "share": 0.0632
         }
       },
       {
         "archetype_id": "4-color-tablet",
+        "current": {
+          "count": 11,
+          "denominator": 132,
+          "share": 0.0833
+        },
+        "current_top8": {
+          "count": 5,
+          "denominator": 64,
+          "share": 0.0781
+        },
         "display_name": "4-Color Tablet",
         "key_cards": [
           {
@@ -222,29 +153,29 @@
             "name": "Tablet of Discovery"
           }
         ],
-        "current": {
-          "count": 11,
-          "denominator": 132,
-          "share": 0.0833
-        },
-        "previous_week": {
-          "count": 9,
-          "denominator": 174,
-          "share": 0.0517
-        },
         "previous_four_weeks": {
           "count": 15,
           "denominator": 472,
           "share": 0.0318
         },
-        "current_top8": {
-          "count": 5,
-          "denominator": 64,
-          "share": 0.0781
+        "previous_week": {
+          "count": 9,
+          "denominator": 174,
+          "share": 0.0517
         }
       },
       {
         "archetype_id": "mono-green-landfall",
+        "current": {
+          "count": 11,
+          "denominator": 132,
+          "share": 0.0833
+        },
+        "current_top8": {
+          "count": 7,
+          "denominator": 64,
+          "share": 0.1094
+        },
         "display_name": "Mono-Green Landfall",
         "key_cards": [
           {
@@ -254,29 +185,29 @@
             "name": "Icetill Explorer"
           }
         ],
-        "current": {
-          "count": 11,
-          "denominator": 132,
-          "share": 0.0833
-        },
-        "previous_week": {
-          "count": 12,
-          "denominator": 174,
-          "share": 0.069
-        },
         "previous_four_weeks": {
           "count": 41,
           "denominator": 472,
           "share": 0.0869
         },
-        "current_top8": {
-          "count": 7,
-          "denominator": 64,
-          "share": 0.1094
+        "previous_week": {
+          "count": 12,
+          "denominator": 174,
+          "share": 0.069
         }
       },
       {
         "archetype_id": "izzet-prowess",
+        "current": {
+          "count": 8,
+          "denominator": 132,
+          "share": 0.0606
+        },
+        "current_top8": {
+          "count": 5,
+          "denominator": 64,
+          "share": 0.0781
+        },
         "display_name": "Izzet Prowess",
         "key_cards": [
           {
@@ -286,29 +217,29 @@
             "name": "Elusive Otter"
           }
         ],
-        "current": {
-          "count": 8,
-          "denominator": 132,
-          "share": 0.0606
-        },
-        "previous_week": {
-          "count": 4,
-          "denominator": 174,
-          "share": 0.023
-        },
         "previous_four_weeks": {
           "count": 11,
           "denominator": 472,
           "share": 0.0233
         },
-        "current_top8": {
-          "count": 5,
-          "denominator": 64,
-          "share": 0.0781
+        "previous_week": {
+          "count": 4,
+          "denominator": 174,
+          "share": 0.023
         }
       },
       {
         "archetype_id": "azorius-control",
+        "current": {
+          "count": 6,
+          "denominator": 132,
+          "share": 0.0455
+        },
+        "current_top8": {
+          "count": 1,
+          "denominator": 64,
+          "share": 0.0156
+        },
         "display_name": "Azorius Control",
         "key_cards": [
           {
@@ -318,29 +249,29 @@
             "name": "Countersculpt"
           }
         ],
-        "current": {
-          "count": 6,
-          "denominator": 132,
-          "share": 0.0455
-        },
-        "previous_week": {
-          "count": 14,
-          "denominator": 174,
-          "share": 0.0805
-        },
         "previous_four_weeks": {
           "count": 30,
           "denominator": 472,
           "share": 0.0636
         },
-        "current_top8": {
-          "count": 1,
-          "denominator": 64,
-          "share": 0.0156
+        "previous_week": {
+          "count": 14,
+          "denominator": 174,
+          "share": 0.0805
         }
       },
       {
         "archetype_id": "jeskai-artifacts",
+        "current": {
+          "count": 6,
+          "denominator": 132,
+          "share": 0.0455
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 64,
+          "share": 0.0625
+        },
         "display_name": "Jeskai Artifacts",
         "key_cards": [
           {
@@ -350,29 +281,29 @@
             "name": "Repurposing Bay"
           }
         ],
-        "current": {
-          "count": 6,
-          "denominator": 132,
-          "share": 0.0455
-        },
-        "previous_week": {
-          "count": 14,
-          "denominator": 174,
-          "share": 0.0805
-        },
         "previous_four_weeks": {
           "count": 18,
           "denominator": 472,
           "share": 0.0381
         },
-        "current_top8": {
-          "count": 4,
-          "denominator": 64,
-          "share": 0.0625
+        "previous_week": {
+          "count": 14,
+          "denominator": 174,
+          "share": 0.0805
         }
       },
       {
         "archetype_id": "azorius-momo",
+        "current": {
+          "count": 5,
+          "denominator": 132,
+          "share": 0.0379
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 64,
+          "share": 0.0469
+        },
         "display_name": "Azorius Momo",
         "key_cards": [
           {
@@ -382,29 +313,29 @@
             "name": "Quantum Riddler"
           }
         ],
-        "current": {
-          "count": 5,
-          "denominator": 132,
-          "share": 0.0379
-        },
-        "previous_week": {
-          "count": 5,
-          "denominator": 174,
-          "share": 0.0287
-        },
         "previous_four_weeks": {
           "count": 10,
           "denominator": 472,
           "share": 0.0212
         },
-        "current_top8": {
-          "count": 3,
-          "denominator": 64,
-          "share": 0.0469
+        "previous_week": {
+          "count": 5,
+          "denominator": 174,
+          "share": 0.0287
         }
       },
       {
         "archetype_id": "izzet-spellementals",
+        "current": {
+          "count": 5,
+          "denominator": 132,
+          "share": 0.0379
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 64,
+          "share": 0.0625
+        },
         "display_name": "Izzet Spellementals",
         "key_cards": [
           {
@@ -414,29 +345,29 @@
             "name": "Hearth Elemental"
           }
         ],
-        "current": {
-          "count": 5,
-          "denominator": 132,
-          "share": 0.0379
-        },
-        "previous_week": {
-          "count": 25,
-          "denominator": 174,
-          "share": 0.1437
-        },
         "previous_four_weeks": {
           "count": 62,
           "denominator": 472,
           "share": 0.1314
         },
-        "current_top8": {
-          "count": 4,
-          "denominator": 64,
-          "share": 0.0625
+        "previous_week": {
+          "count": 25,
+          "denominator": 174,
+          "share": 0.1437
         }
       },
       {
         "archetype_id": "boros-dragons",
+        "current": {
+          "count": 4,
+          "denominator": 132,
+          "share": 0.0303
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 64,
+          "share": 0.0312
+        },
         "display_name": "Boros Dragons",
         "key_cards": [
           {
@@ -446,29 +377,29 @@
             "name": "Nova Hellkite"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 132,
-          "share": 0.0303
-        },
-        "previous_week": {
-          "count": 8,
-          "denominator": 174,
-          "share": 0.046
-        },
         "previous_four_weeks": {
           "count": 38,
           "denominator": 472,
           "share": 0.0805
         },
-        "current_top8": {
-          "count": 2,
-          "denominator": 64,
-          "share": 0.0312
+        "previous_week": {
+          "count": 8,
+          "denominator": 174,
+          "share": 0.046
         }
       },
       {
         "archetype_id": "jund-artifact-sacrifice",
+        "current": {
+          "count": 4,
+          "denominator": 132,
+          "share": 0.0303
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 64,
+          "share": 0.0312
+        },
         "display_name": "Jund Artifact Sacrifice",
         "key_cards": [
           {
@@ -478,59 +409,28 @@
             "name": "The Sackville-Bagginses"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 132,
-          "share": 0.0303
-        },
-        "previous_week": {
-          "count": 9,
-          "denominator": 174,
-          "share": 0.0517
-        },
         "previous_four_weeks": {
           "count": 55,
           "denominator": 472,
           "share": 0.1165
         },
-        "current_top8": {
-          "count": 2,
-          "denominator": 64,
-          "share": 0.0312
+        "previous_week": {
+          "count": 9,
+          "denominator": 174,
+          "share": 0.0517
         }
       }
     ],
-    "other_classified": {
-      "current": {
-        "count": 13,
-        "denominator": 132,
-        "share": 0.0985
-      },
-      "previous_week": {
-        "count": 32,
-        "denominator": 174,
-        "share": 0.1839
-      },
-      "previous_four_weeks": {
-        "count": 101,
-        "denominator": 472,
-        "share": 0.214
-      },
-      "current_top8": {
-        "count": 6,
-        "denominator": 64,
-        "share": 0.0938
-      }
-    },
+    "threshold": 0.03,
     "unknown": {
       "current": {
         "count": 0,
         "denominator": 132,
         "share": 0.0
       },
-      "previous_week": {
+      "current_top8": {
         "count": 0,
-        "denominator": 174,
+        "denominator": 64,
         "share": 0.0
       },
       "previous_four_weeks": {
@@ -538,79 +438,23 @@
         "denominator": 472,
         "share": 0.0
       },
-      "current_top8": {
+      "previous_week": {
         "count": 0,
-        "denominator": 64,
+        "denominator": 174,
         "share": 0.0
       }
     }
   },
-  "weekly_summary": {
-    "week": "2026-W42",
-    "items": [
-      {
-        "order": 1,
-        "text": {
-          "zh": "上周开始拷打魔系套牌找到了新的蜘蛛侠复制目标：[[card:Uldaros Theorix|乌达洛论析]]。很多套牌都开始把拷打魔放进备牌，甚至备牌都不带了。包括以前就不带拷打魔的版本在内，上周周报开始把所有这些套牌都整合成了【蓝黑蜘蛛侠】一个大类，不再分开统计。",
-          "en": "Starting last week, Excruciator decks found a new target for [[card:Superior Spider-Man|Superior Spider-Man]] to copy: [[card:Uldaros Theorix|Uldaros Theorix]]. Many lists have moved [[card:Doomsday Excruciator|Doomsday Excruciator]] to the sideboard, or cut it altogether. Since last week's report, all of these lists, including variants that already ran no Excruciator, have been grouped under the single Dimir Spider-Man archetype and counted together."
-        },
-        "deck_links": []
-      },
-      {
-        "order": 2,
-        "text": {
-          "zh": "本周两套蓝黑，蓝黑中速和蓝黑蜘蛛侠并驾齐驱领跑环境，基本都还是上周确立下来的构筑。其他套牌基本也进入构筑稳定期。",
-          "en": "This week, Dimir Midrange and Dimir Spider-Man are running neck and neck at the top of the metagame. Both mostly retain the builds established last week, while the rest of the field has largely settled into stable configurations."
-        },
-        "deck_links": []
-      },
-      {
-        "order": 3,
-        "text": {
-          "zh": "一套骷髅妖思路的纯黑快攻本周拿下一个8强，满编[[card:Tinybones, the Pickpocket|扒手细骨]]和[[card:Corpses of the Lost|失落者之骸]]。不过比赛本身人数较少，3-2进八强然后一轮游，并不算是有说服力的成绩：deck:369ac5463f7f6787f020",
-          "en": "A Skeleton-focused Mono-Black Aggro list made one Top 8 this week, running the full four copies of [[card:Tinybones, the Pickpocket|Tinybones, the Pickpocket]] and [[card:Corpses of the Lost|Corpses of the Lost]]. The event itself was small, however: it made Top 8 at 3-2 and lost in the quarterfinals, so the result is not especially convincing: deck:369ac5463f7f6787f020"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:369ac5463f7f6787f020",
-            "label": {
-              "zh": "纯黑快攻 · Kerci · 第8名",
-              "en": "Mono-Black Aggro · Kerci · Rank 8"
-            },
-            "deck": {
-              "archetype_id": "mono-black-aggro",
-              "display_name": "Mono-Black Aggro",
-              "event_id": "12856204",
-              "deck_id": "369ac5463f7f6787f020",
-              "deck_fingerprint_sha256": "531a531baf7ef2f8e80dd8443311499eff00ff7391094b81e01884845af3d055",
-              "player": "Kerci",
-              "final_rank": 8,
-              "starttime": "2026-10-14 07:00:00.0"
-            }
-          }
-        ]
-      }
-    ]
-  },
   "features": {
-    "week": "2026-W42",
     "items": [
       {
-        "category": "new_technology",
-        "order": 1,
-        "destination_id": "deck:369ac5463f7f6787f020",
         "archetype_id": "mono-black-aggro",
-        "subtype_id": null,
-        "display_name": "Mono-Black Aggro",
+        "category": "new_technology",
         "deck": {
-          "event_id": "12856204",
-          "deck_id": "369ac5463f7f6787f020",
           "deck_fingerprint_sha256": "531a531baf7ef2f8e80dd8443311499eff00ff7391094b81e01884845af3d055",
-          "player": "Kerci",
+          "deck_id": "369ac5463f7f6787f020",
+          "event_id": "12856204",
           "final_rank": 8,
-          "player_count": 26,
-          "starttime": "2026-10-14 07:00:00.0",
           "main_deck": [
             {
               "name": "Bitter Triumph",
@@ -697,6 +541,8 @@
               "qty": 1
             }
           ],
+          "player": "Kerci",
+          "player_count": 26,
           "side_deck": [
             {
               "name": "Ancient Vendetta",
@@ -746,16 +592,11 @@
               "name": "The Ooze",
               "qty": 1
             }
-          ]
+          ],
+          "starttime": "2026-10-14 07:00:00.0"
         },
-        "headline": {
-          "en": "Mono-Black Aggro",
-          "zh": "纯黑快攻"
-        },
-        "positioning": {
-          "zh": "骷髅妖亲缘主题的纯黑快攻",
-          "en": "Mono-Black Aggro built around Skeleton synergies."
-        },
+        "destination_id": "deck:369ac5463f7f6787f020",
+        "display_name": "Mono-Black Aggro",
         "featured_cards": [
           {
             "name": "Forsaken Miner"
@@ -770,21 +611,116 @@
             "name": "Case of the Stashed Skeleton"
           }
         ],
+        "headline": {
+          "en": "Mono-Black Aggro",
+          "zh": "纯黑快攻"
+        },
+        "order": 1,
+        "positioning": {
+          "en": "Mono-Black Aggro built around Skeleton synergies.",
+          "zh": "骷髅妖亲缘主题的纯黑快攻"
+        },
+        "subtype_id": null,
         "supporting_facts": [
           {
             "type": "build_shift",
             "values": {
-              "identity_level": "parent",
               "identity_id": "mono-black-aggro",
+              "identity_level": "parent",
               "reference_sample_size": 8,
               "score": 31
             }
           }
         ]
       }
-    ]
+    ],
+    "week": "2026-W42"
   },
+  "format": "standard",
+  "populations": {
+    "current": {
+      "end": "2026-10-18",
+      "event_count": 8,
+      "event_ids": [
+        "12856191",
+        "12856199",
+        "12856204",
+        "12856571",
+        "12856572",
+        "12856581",
+        "12856586",
+        "12856610"
+      ],
+      "high_score_count": 132,
+      "start": "2026-10-12",
+      "top8_count": 64
+    },
+    "previous_four_weeks": {
+      "end": "2026-10-11",
+      "event_count": 31,
+      "event_ids": [
+        "12854105",
+        "12854114",
+        "12854118",
+        "12854483",
+        "12854491",
+        "12854496",
+        "12854503",
+        "12854521",
+        "12854529",
+        "12854538",
+        "12854542",
+        "12854913",
+        "12854920",
+        "12854938",
+        "12854946",
+        "12855458",
+        "12855466",
+        "12855471",
+        "12855496",
+        "12855524",
+        "12855542",
+        "12855544",
+        "12856121",
+        "12856130",
+        "12856137",
+        "12856141",
+        "12856143",
+        "12856152",
+        "12856154",
+        "12856158",
+        "12856183"
+      ],
+      "high_score_count": 472,
+      "start": "2026-09-14",
+      "top8_count": 248
+    },
+    "previous_week": {
+      "end": "2026-10-11",
+      "event_count": 11,
+      "event_ids": [
+        "12855542",
+        "12855544",
+        "12856121",
+        "12856130",
+        "12856137",
+        "12856141",
+        "12856143",
+        "12856152",
+        "12856154",
+        "12856158",
+        "12856183"
+      ],
+      "high_score_count": 174,
+      "start": "2026-10-05",
+      "top8_count": 88
+    }
+  },
+  "product": "mtgo-landing",
   "review_binding": {
+    "classifier_digest": "d0495b42f3e9597d7b4e4a890c98354c5b71110b2eac4bb9e82aa29c2d048bee",
+    "machine_fact_digest": "1536e283d4fbf8a10fb01b5993ab363dade9a156e80abfec83478cb38d3ce92a",
+    "pickup_document_digest": "b8cec2ac32750d87239083f3ea95b2e3654e59704e4d586a4e3ae68118d3dd1c",
     "source_event_ids": [
       "12856191",
       "12856199",
@@ -795,10 +731,80 @@
       "12856586",
       "12856610"
     ],
-    "classifier_digest": "d0495b42f3e9597d7b4e4a890c98354c5b71110b2eac4bb9e82aa29c2d048bee",
-    "visual_metadata_digest": "2caff2509cbe0cca27b98259db839c48ac4b4f82b08fb9c0878722b749db0709",
-    "machine_fact_digest": "1536e283d4fbf8a10fb01b5993ab363dade9a156e80abfec83478cb38d3ce92a",
-    "pickup_document_digest": "b7e7f40511f32b63e40b8f3fe5a44b41a682427ee283bb704dd7795453a6e3f8",
-    "summary_fact_digest": "35953f90f72a8a5e775436982fab8b6d19ad77c761777adc6c8f038904bb1f0a"
+    "summary_fact_digest": "1473c5e5aab0bd53e4a98907b62c6ffa736cacd3d9ce3b3fe47450321d1cabba",
+    "visual_metadata_digest": "81a83348ad55a4cda3b65c328a4146cc2cb387fc3295e76e06b5ba9fab76bfe5"
+  },
+  "schema_version": "1.2.0",
+  "source": "mtgo",
+  "source_event_ids": [
+    "12856191",
+    "12856199",
+    "12856204",
+    "12856571",
+    "12856572",
+    "12856581",
+    "12856586",
+    "12856610"
+  ],
+  "state": "ready",
+  "thresholds": {
+    "build_reference_minimum": 8,
+    "build_shift": 20,
+    "environment_share": 0.03,
+    "exit_reference_share": 0.05,
+    "share_move_pp": 5.0
+  },
+  "week": {
+    "end": "2026-10-18",
+    "id": "2026-W42",
+    "start": "2026-10-12"
+  },
+  "weekly_summary": {
+    "items": [
+      {
+        "deck_links": [],
+        "order": 1,
+        "text": {
+          "en": "Starting last week, Excruciator decks found a new target for [[card:Superior Spider-Man|Superior Spider-Man]] to copy: [[card:Uldaros Theorix|Uldaros Theorix]]. Many lists have moved [[card:Doomsday Excruciator|Doomsday Excruciator]] to the sideboard, or cut it altogether. Since last week's report, all of these lists, including variants that already ran no Excruciator, have been grouped under the single Dimir Spider-Man archetype and counted together.",
+          "zh": "上周开始拷打魔系套牌找到了新的蜘蛛侠复制目标：[[card:Uldaros Theorix|乌达洛论析]]。很多套牌都开始把拷打魔放进备牌，甚至备牌都不带了。包括以前就不带拷打魔的版本在内，上周周报开始把所有这些套牌都整合成了【蓝黑蜘蛛侠】一个大类，不再分开统计。"
+        }
+      },
+      {
+        "deck_links": [],
+        "order": 2,
+        "text": {
+          "en": "This week, Dimir Midrange and Dimir Spider-Man are running neck and neck at the top of the metagame. Both mostly retain the builds established last week, while the rest of the field has largely settled into stable configurations.",
+          "zh": "本周两套蓝黑，蓝黑中速和蓝黑蜘蛛侠并驾齐驱领跑环境，基本都还是上周确立下来的构筑。其他套牌基本也进入构筑稳定期。"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "mono-black-aggro",
+              "deck_fingerprint_sha256": "531a531baf7ef2f8e80dd8443311499eff00ff7391094b81e01884845af3d055",
+              "deck_id": "369ac5463f7f6787f020",
+              "display_name": "Mono-Black Aggro",
+              "event_id": "12856204",
+              "final_rank": 8,
+              "player": "Kerci",
+              "starttime": "2026-10-14 07:00:00.0"
+            },
+            "label": {
+              "en": "Mono-Black Aggro · Kerci · Rank 8",
+              "zh": "纯黑快攻 · Kerci · 第8名"
+            },
+            "order": 1,
+            "token": "deck:369ac5463f7f6787f020"
+          }
+        ],
+        "order": 3,
+        "text": {
+          "en": "A Skeleton-focused Mono-Black Aggro list made one Top 8 this week, running the full four copies of [[card:Tinybones, the Pickpocket|Tinybones, the Pickpocket]] and [[card:Corpses of the Lost|Corpses of the Lost]]. The event itself was small, however: it made Top 8 at 3-2 and lost in the quarterfinals, so the result is not especially convincing: deck:369ac5463f7f6787f020",
+          "zh": "一套骷髅妖思路的纯黑快攻本周拿下一个8强，满编[[card:Tinybones, the Pickpocket|扒手细骨]]和[[card:Corpses of the Lost|失落者之骸]]。不过比赛本身人数较少，3-2进八强然后一轮游，并不算是有说服力的成绩：deck:369ac5463f7f6787f020"
+        }
+      }
+    ],
+    "week": "2026-W42"
   }
 }
