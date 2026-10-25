@@ -1,0 +1,32 @@
+name: Archive an existing private package from parts
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: Exact pages-SHA256 identifier of the private fixed candidate
+        type: string
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: archive-fixed-${{ inputs.package }}
+  cancel-in-progress: false
+jobs:
+  archive:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: product-archive
+    steps:
+      - name: Check out trusted tools, never candidate code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12'
+      - name: Reassemble, verify and archive without generating or deploying
+        env:
+          ARCHIVE_TOKEN: ${{ secrets.ARCHIVE_TOKEN }}
+          PACKAGE: ${{ inputs.package }}
+        run: python tools/archive_product_parts.py upload "$PACKAGE" --token-env ARCHIVE_TOKEN
