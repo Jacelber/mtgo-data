@@ -31,4 +31,4 @@ python -m mtgmeta.mtgo --root <candidate> --format <format> publication stage
 - 工作流所有 shell 块通过 `bash -n`，依赖关系检查、实际通知 JavaScript 模拟、相关 Ruff 与差异空白检查通过。没有将这些本地检查冒称 GitHub Actions 实际运行。
 - 原已验收完整包 SHA-256 仍为 `86088c19a1c150487e03af97d363a458732e49c55efb47a3fb0b257159d33699`，没有改动页面、公开统计或已接受内容，也没有触发重新验收。
 
-本地明细保留于 `/workspace/scratch/collection-decoupling/`，其中 `weekly-review-verification.json` 包含四赛制材料摘要。新旧 schema、原 workflow 备份亦保留。本单元源码与证明独立保存为本地提交；后续分类器、统计与前端版本化及远端输入整合已完成，见[源码交付准备](SOURCE_DELIVERY_PREPARATION.md)。远端 API 网络限制和暂停发布状态未改变，不能声称新的日常链已在线生效。
+本地明细保留于 `/workspace/scratch/collection-decoupling/`，其中 `weekly-review-verification.json` 包含四赛制材料摘要。新旧 schema、原 workflow 备份亦保留。本单元源码与证明独立保存为本地提交；后续分类器、统计与前端版本化及远端输入整合已完成，见[源码交付准备](SOURCE_DELIVERY_PREPARATION.md)。GitHub API 已恢复，附件上传域名仍受限；站点发布继续暂停。新日常链是否已生效以该 PR 的实际合并状态为准。
