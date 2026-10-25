@@ -339,21 +339,32 @@ roles. Do not manually edit generated output as a permanent fix.
 
 ## Production operations
 
-`.github/workflows/update.yml` runs the scheduled MTGO production pipeline
-daily at `09:00 UTC` and may be manually dispatched on `master`. Read-only fetch
-and build jobs exchange short-lived verified artifacts; only the final publish
-job receives `contents: write`, stages the approved generated scopes, and
-confirms the published commit.
+`.github/workflows/update.yml` collects MTGO inputs daily at `09:00 UTC` and
+may be manually dispatched on `master`. The read-only fetch job validates raw
+inputs and transfers an encrypted candidate to a separate retain job with
+`contents: write`. That job commits only collected events, matches and collection
+state. Daily collection does not classify decks, regenerate public products or
+request Pages delivery. Missing generated products do not prevent input retention.
 
-An interrupted input collection may produce a seven-day checkpoint artifact.
-Reuse depends on the relevant inputs and operation plan after checksum and
-archive-boundary validation, not merely on the master commit identifier. It cannot reach generation or
-publication while incomplete and is not durable storage.
+An interrupted collection or failed candidate transfer may produce a seven-day
+checkpoint. Reuse depends on relevant inputs and the operation plan after
+checksum and archive-boundary validation. Successful collection candidates are
+retained as encrypted Actions artifacts for 30 days; retry a failed retain job
+with its existing candidate. Unrelated deliveries are preserved, overlapping input
+edits require focused repair, and an unchanged candidate creates no commit.
+Active artifacts must be preserved before expiration; they are not durable storage.
 
-On failure, a separate least-privilege notification job creates or updates one
-ordinary open issue for the failed pipeline stage. It records only the stage,
-commit, and workflow link; it cannot write repository contents. A successful
-run creates no issue.
+A lightweight private inventory reports retained inputs and completed weeks with
+events outside recorded admissions. Its issue is deduplicated and cannot close
+existing weekly review records or establish acceptance. Full classification
+materials are prepared on demand through the existing weekly review entry point.
+After classification acceptance and explicit event admission, use the existing
+`publication stage` command to generate the affected public products and resume
+failed steps. Landing content keeps its separate acceptance boundary.
+
+A separate least-privilege failure notifier creates or updates an ordinary open
+issue for the failed collection or retention stage, recording its stage, commit
+and workflow link. It cannot write repository contents.
 
 Before operating or changing production, review
 [`docs/DELIVERY.md`](docs/DELIVERY.md),
