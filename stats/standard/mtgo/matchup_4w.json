@@ -2,7 +2,7 @@
   "schema_version": "1.1.0",
   "format": "standard",
   "source": "mtgo",
-  "classifier_digest": "d0495b42f3e9597d7b4e4a890c98354c5b71110b2eac4bb9e82aa29c2d048bee",
+  "classifier_digest": "77aa77d0fdbc62064681155494279247e37fa8f8de789f5f187595e4fcdc9248",
   "period": {
     "type": "4w",
     "start": "2026-09-21",
@@ -168,7 +168,8 @@
         "subtype_ids": [
           "boros-manufacturing/boros",
           "boros-manufacturing/jeskai",
-          "boros-manufacturing/mardu"
+          "boros-manufacturing/mardu",
+          "boros-manufacturing/wubr"
         ]
       },
       {
@@ -261,6 +262,7 @@
         "expandable": true,
         "subtype_ids": [
           "dimir-spider-man/dimir",
+          "dimir-spider-man/grixis",
           "dimir-spider-man/sultai"
         ]
       },
@@ -307,6 +309,12 @@
       {
         "id": "golgari-demon",
         "name": "Golgari Demon",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "golgari-landfall",
+        "name": "Golgari Landfall",
         "expandable": false,
         "subtype_ids": []
       },
@@ -515,6 +523,12 @@
         "subtype_ids": []
       },
       {
+        "id": "jeskai-looting",
+        "name": "Jeskai Looting",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "jeskai-momo",
         "name": "Jeskai Momo",
         "expandable": false,
@@ -562,7 +576,9 @@
         "expandable": true,
         "subtype_ids": [
           "kona-omniscience/bant",
+          "kona-omniscience/four-color",
           "kona-omniscience/simic",
+          "kona-omniscience/sultai",
           "kona-omniscience/temur"
         ]
       },
@@ -721,6 +737,12 @@
         "subtype_ids": []
       },
       {
+        "id": "naya-landfall",
+        "name": "Naya Landfall",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "orzhov-control",
         "name": "Orzhov Control",
         "expandable": false,
@@ -759,6 +781,12 @@
       {
         "id": "rakdos-discard",
         "name": "Rakdos Discard",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "rakdos-goblins",
+        "name": "Rakdos Goblins",
         "expandable": false,
         "subtype_ids": []
       },
@@ -885,6 +913,12 @@
       {
         "id": "temur-otters",
         "name": "Temur Otters",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "temur-prowess",
+        "name": "Temur Prowess",
         "expandable": false,
         "subtype_ids": []
       },
@@ -1145,6 +1179,14 @@
         "subtype_id": "mardu"
       },
       {
+        "id": "boros-manufacturing/wubr",
+        "kind": "subtype",
+        "name": "WUBR",
+        "display_name": "WUBR Manufacturing",
+        "parent_id": "boros-manufacturing",
+        "subtype_id": "wubr"
+      },
+      {
         "id": "boros-ponza",
         "kind": "archetype",
         "name": "Boros Ponza",
@@ -1265,6 +1307,14 @@
         "subtype_id": "dimir"
       },
       {
+        "id": "dimir-spider-man/grixis",
+        "kind": "subtype",
+        "name": "Grixis Spider-Man",
+        "display_name": "Grixis Spider-Man",
+        "parent_id": "dimir-spider-man",
+        "subtype_id": "grixis"
+      },
+      {
         "id": "dimir-spider-man/sultai",
         "kind": "subtype",
         "name": "Sultai Spider-Man",
@@ -1342,6 +1392,14 @@
         "name": "Golgari Demon",
         "display_name": "Golgari Demon",
         "parent_id": "golgari-demon",
+        "subtype_id": null
+      },
+      {
+        "id": "golgari-landfall",
+        "kind": "archetype",
+        "name": "Golgari Landfall",
+        "display_name": "Golgari Landfall",
+        "parent_id": "golgari-landfall",
         "subtype_id": null
       },
       {
@@ -1617,6 +1675,14 @@
         "subtype_id": null
       },
       {
+        "id": "jeskai-looting",
+        "kind": "archetype",
+        "name": "Jeskai Looting",
+        "display_name": "Jeskai Looting",
+        "parent_id": "jeskai-looting",
+        "subtype_id": null
+      },
+      {
         "id": "jeskai-momo",
         "kind": "archetype",
         "name": "Jeskai Momo",
@@ -1681,12 +1747,28 @@
         "subtype_id": "bant"
       },
       {
+        "id": "kona-omniscience/four-color",
+        "kind": "subtype",
+        "name": "Four-Color",
+        "display_name": "Four-Color Kona Omniscience",
+        "parent_id": "kona-omniscience",
+        "subtype_id": "four-color"
+      },
+      {
         "id": "kona-omniscience/simic",
         "kind": "subtype",
         "name": "Simic",
         "display_name": "Simic Kona Omniscience",
         "parent_id": "kona-omniscience",
         "subtype_id": "simic"
+      },
+      {
+        "id": "kona-omniscience/sultai",
+        "kind": "subtype",
+        "name": "Sultai",
+        "display_name": "Sultai Kona Omniscience",
+        "parent_id": "kona-omniscience",
+        "subtype_id": "sultai"
       },
       {
         "id": "kona-omniscience/temur",
@@ -1937,6 +2019,14 @@
         "subtype_id": null
       },
       {
+        "id": "naya-landfall",
+        "kind": "archetype",
+        "name": "Naya Landfall",
+        "display_name": "Naya Landfall",
+        "parent_id": "naya-landfall",
+        "subtype_id": null
+      },
+      {
         "id": "orzhov-control",
         "kind": "archetype",
         "name": "Orzhov Control",
@@ -1990,6 +2080,14 @@
         "name": "Rakdos Discard",
         "display_name": "Rakdos Discard",
         "parent_id": "rakdos-discard",
+        "subtype_id": null
+      },
+      {
+        "id": "rakdos-goblins",
+        "kind": "archetype",
+        "name": "Rakdos Goblins",
+        "display_name": "Rakdos Goblins",
+        "parent_id": "rakdos-goblins",
         "subtype_id": null
       },
       {
@@ -2161,6 +2259,14 @@
         "subtype_id": null
       },
       {
+        "id": "temur-prowess",
+        "kind": "archetype",
+        "name": "Temur Prowess",
+        "display_name": "Temur Prowess",
+        "parent_id": "temur-prowess",
+        "subtype_id": null
+      },
+      {
         "id": "temur-spellementals",
         "kind": "archetype",
         "name": "Temur Spellementals",
@@ -2264,6 +2370,7 @@
     "mardu-demons",
     "sultai-control",
     "five-color-control",
+    "golgari-landfall",
     "grixis-artifact-sacrifice",
     "mono-black-phoenix",
     "mono-white-swarm",
@@ -2338,23 +2445,23 @@
     },
     "mono-green-landfall": {
       "wins": 161,
-      "losses": 148,
+      "losses": 146,
       "draws": 0,
-      "matches": 309,
-      "win_rate": 0.521,
-      "ci_half": 0.0554,
+      "matches": 307,
+      "win_rate": 0.5244,
+      "ci_half": 0.0555,
       "low_sample": false,
       "mirror": false,
       "literal_record": {
         "wins": 161,
-        "losses": 148,
+        "losses": 146,
         "draws": 0,
-        "matches": 309,
-        "win_rate": 0.521036,
+        "matches": 307,
+        "win_rate": 0.52443,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.465419,
-          "upper": 0.576136
+          "lower": 0.468609,
+          "upper": 0.579647
         }
       }
     },
@@ -3612,6 +3719,28 @@
         }
       }
     },
+    "golgari-landfall": {
+      "wins": 0,
+      "losses": 2,
+      "draws": 0,
+      "matches": 2,
+      "win_rate": 0.0,
+      "ci_half": 0.3288,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.0,
+          "upper": 0.657628
+        }
+      }
+    },
     "grixis-artifact-sacrifice": {
       "wins": 0,
       "losses": 2,
@@ -3786,26 +3915,26 @@
     "mono-green-landfall": {
       "all_matches": {
         "wins": 172,
-        "losses": 159,
+        "losses": 157,
         "draws": 0,
-        "matches": 331,
-        "win_rate": 0.519637,
+        "matches": 329,
+        "win_rate": 0.522796,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.465897,
-          "upper": 0.572927
+          "lower": 0.468872,
+          "upper": 0.576194
         }
       },
       "non_mirror": {
         "wins": 161,
-        "losses": 148,
+        "losses": 146,
         "draws": 0,
-        "matches": 309,
-        "win_rate": 0.521036,
+        "matches": 307,
+        "win_rate": 0.52443,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.465419,
-          "upper": 0.576136
+          "lower": 0.468609,
+          "upper": 0.579647
         }
       },
       "mirror_match_count": 11
@@ -5349,6 +5478,33 @@
       },
       "mirror_match_count": 0
     },
+    "golgari-landfall": {
+      "all_matches": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.0,
+          "upper": 0.657628
+        }
+      },
+      "non_mirror": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.0,
+          "upper": 0.657628
+        }
+      },
+      "mirror_match_count": 0
+    },
     "grixis-artifact-sacrifice": {
       "all_matches": {
         "wins": 0,
@@ -5743,6 +5899,28 @@
           "confidence_interval_95": {
             "lower": 0.207655,
             "upper": 0.93851
+          }
+        }
+      },
+      "golgari-landfall": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -6209,24 +6387,24 @@
         }
       },
       "mono-green-landfall": {
-        "wins": 25,
+        "wins": 24,
         "losses": 17,
         "draws": 0,
-        "matches": 42,
-        "win_rate": 0.5952,
-        "ci_half": 0.1423,
+        "matches": 41,
+        "win_rate": 0.5854,
+        "ci_half": 0.1444,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 25,
+          "wins": 24,
           "losses": 17,
           "draws": 0,
-          "matches": 42,
-          "win_rate": 0.595238,
+          "matches": 41,
+          "win_rate": 0.585366,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.44494,
-            "upper": 0.729574
+            "lower": 0.433668,
+            "upper": 0.722437
           }
         }
       },
@@ -6760,6 +6938,28 @@
           }
         }
       },
+      "golgari-landfall": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "golgari-midrange": {
         "wins": 1,
         "losses": 0,
@@ -7267,24 +7467,24 @@
         }
       },
       "mono-green-landfall": {
-        "wins": 28,
+        "wins": 27,
         "losses": 12,
         "draws": 0,
-        "matches": 40,
-        "win_rate": 0.7,
-        "ci_half": 0.1368,
+        "matches": 39,
+        "win_rate": 0.6923,
+        "ci_half": 0.1393,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 28,
+          "wins": 27,
           "losses": 12,
           "draws": 0,
-          "matches": 40,
-          "win_rate": 0.7,
+          "matches": 39,
+          "win_rate": 0.692308,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.545697,
-            "upper": 0.819253
+            "lower": 0.535785,
+            "upper": 0.814342
           }
         }
       },
@@ -8680,23 +8880,23 @@
       },
       "dimir-midrange": {
         "wins": 17,
-        "losses": 25,
+        "losses": 24,
         "draws": 0,
-        "matches": 42,
-        "win_rate": 0.4048,
-        "ci_half": 0.1423,
+        "matches": 41,
+        "win_rate": 0.4146,
+        "ci_half": 0.1444,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
           "wins": 17,
-          "losses": 25,
+          "losses": 24,
           "draws": 0,
-          "matches": 42,
-          "win_rate": 0.404762,
+          "matches": 41,
+          "win_rate": 0.414634,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.270426,
-            "upper": 0.55506
+            "lower": 0.277563,
+            "upper": 0.566332
           }
         }
       },
@@ -8966,23 +9166,23 @@
       },
       "izzet-spellementals": {
         "wins": 12,
-        "losses": 28,
+        "losses": 27,
         "draws": 0,
-        "matches": 40,
-        "win_rate": 0.3,
-        "ci_half": 0.1368,
+        "matches": 39,
+        "win_rate": 0.3077,
+        "ci_half": 0.1393,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
           "wins": 12,
-          "losses": 28,
+          "losses": 27,
           "draws": 0,
-          "matches": 40,
-          "win_rate": 0.3,
+          "matches": 39,
+          "win_rate": 0.307692,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.180747,
-            "upper": 0.454303
+            "lower": 0.185658,
+            "upper": 0.464215
           }
         }
       },
@@ -25799,6 +25999,52 @@
         }
       }
     },
+    "golgari-landfall": {
+      "dimir-midrange": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "izzet-spellementals": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      }
+    },
     "grixis-artifact-sacrifice": {
       "azorius-control": {
         "wins": 0,
@@ -26045,12 +26291,13 @@
     "jeskai-momo",
     "kona-omniscience/bant",
     "leyline-aggro/gruul",
-    "leyline-aggro/rakdos",
+    "leyline-aggro/mono-red",
     "mono-white-swarm-aggro",
     "azorius-fatehold",
     "mardu-demons",
     "sultai-control",
     "five-color-control",
+    "golgari-landfall",
     "grixis-artifact-sacrifice",
     "mono-black-phoenix",
     "mono-white-swarm",
@@ -26125,23 +26372,23 @@
     },
     "mono-green-landfall": {
       "wins": 161,
-      "losses": 148,
+      "losses": 146,
       "draws": 0,
-      "matches": 309,
-      "win_rate": 0.521,
-      "ci_half": 0.0554,
+      "matches": 307,
+      "win_rate": 0.5244,
+      "ci_half": 0.0555,
       "low_sample": false,
       "mirror": false,
       "literal_record": {
         "wins": 161,
-        "losses": 148,
+        "losses": 146,
         "draws": 0,
-        "matches": 309,
-        "win_rate": 0.521036,
+        "matches": 307,
+        "win_rate": 0.52443,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.465419,
-          "upper": 0.576136
+          "lower": 0.468609,
+          "upper": 0.579647
         }
       }
     },
@@ -27377,7 +27624,7 @@
         }
       }
     },
-    "leyline-aggro/rakdos": {
+    "leyline-aggro/mono-red": {
       "wins": 1,
       "losses": 3,
       "draws": 0,
@@ -27488,6 +27735,28 @@
       }
     },
     "five-color-control": {
+      "wins": 0,
+      "losses": 2,
+      "draws": 0,
+      "matches": 2,
+      "win_rate": 0.0,
+      "ci_half": 0.3288,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.0,
+          "upper": 0.657628
+        }
+      }
+    },
+    "golgari-landfall": {
       "wins": 0,
       "losses": 2,
       "draws": 0,
@@ -27683,26 +27952,26 @@
     "mono-green-landfall": {
       "all_matches": {
         "wins": 172,
-        "losses": 159,
+        "losses": 157,
         "draws": 0,
-        "matches": 331,
-        "win_rate": 0.519637,
+        "matches": 329,
+        "win_rate": 0.522796,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.465897,
-          "upper": 0.572927
+          "lower": 0.468872,
+          "upper": 0.576194
         }
       },
       "non_mirror": {
         "wins": 161,
-        "losses": 148,
+        "losses": 146,
         "draws": 0,
-        "matches": 309,
-        "win_rate": 0.521036,
+        "matches": 307,
+        "win_rate": 0.52443,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.465419,
-          "upper": 0.576136
+          "lower": 0.468609,
+          "upper": 0.579647
         }
       },
       "mirror_match_count": 11
@@ -29219,7 +29488,7 @@
       },
       "mirror_match_count": 0
     },
-    "leyline-aggro/rakdos": {
+    "leyline-aggro/mono-red": {
       "all_matches": {
         "wins": 1,
         "losses": 3,
@@ -29355,6 +29624,33 @@
       "mirror_match_count": 0
     },
     "five-color-control": {
+      "all_matches": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.0,
+          "upper": 0.657628
+        }
+      },
+      "non_mirror": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.0,
+          "upper": 0.657628
+        }
+      },
+      "mirror_match_count": 0
+    },
+    "golgari-landfall": {
       "all_matches": {
         "wins": 0,
         "losses": 2,
@@ -29800,6 +30096,28 @@
           }
         }
       },
+      "golgari-landfall": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "golgari-midrange": {
         "wins": 4,
         "losses": 0,
@@ -30174,7 +30492,7 @@
           }
         }
       },
-      "leyline-aggro/rakdos": {
+      "leyline-aggro/mono-red": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -30263,24 +30581,24 @@
         }
       },
       "mono-green-landfall": {
-        "wins": 25,
+        "wins": 24,
         "losses": 17,
         "draws": 0,
-        "matches": 42,
-        "win_rate": 0.5952,
-        "ci_half": 0.1423,
+        "matches": 41,
+        "win_rate": 0.5854,
+        "ci_half": 0.1444,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 25,
+          "wins": 24,
           "losses": 17,
           "draws": 0,
-          "matches": 42,
-          "win_rate": 0.595238,
+          "matches": 41,
+          "win_rate": 0.585366,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.44494,
-            "upper": 0.729574
+            "lower": 0.433668,
+            "upper": 0.722437
           }
         }
       },
@@ -30814,6 +31132,28 @@
           }
         }
       },
+      "golgari-landfall": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "golgari-midrange": {
         "wins": 1,
         "losses": 0,
@@ -31210,7 +31550,7 @@
           }
         }
       },
-      "leyline-aggro/rakdos": {
+      "leyline-aggro/mono-red": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -31387,24 +31727,24 @@
         }
       },
       "mono-green-landfall": {
-        "wins": 28,
+        "wins": 27,
         "losses": 12,
         "draws": 0,
-        "matches": 40,
-        "win_rate": 0.7,
-        "ci_half": 0.1368,
+        "matches": 39,
+        "win_rate": 0.6923,
+        "ci_half": 0.1393,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 28,
+          "wins": 27,
           "losses": 12,
           "draws": 0,
-          "matches": 40,
-          "win_rate": 0.7,
+          "matches": 39,
+          "win_rate": 0.692308,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.545697,
-            "upper": 0.819253
+            "lower": 0.535785,
+            "upper": 0.814342
           }
         }
       },
@@ -32800,23 +33140,23 @@
       },
       "dimir-midrange": {
         "wins": 17,
-        "losses": 25,
+        "losses": 24,
         "draws": 0,
-        "matches": 42,
-        "win_rate": 0.4048,
-        "ci_half": 0.1423,
+        "matches": 41,
+        "win_rate": 0.4146,
+        "ci_half": 0.1444,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
           "wins": 17,
-          "losses": 25,
+          "losses": 24,
           "draws": 0,
-          "matches": 42,
-          "win_rate": 0.404762,
+          "matches": 41,
+          "win_rate": 0.414634,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.270426,
-            "upper": 0.55506
+            "lower": 0.277563,
+            "upper": 0.566332
           }
         }
       },
@@ -33086,23 +33426,23 @@
       },
       "izzet-spellementals": {
         "wins": 12,
-        "losses": 28,
+        "losses": 27,
         "draws": 0,
-        "matches": 40,
-        "win_rate": 0.3,
-        "ci_half": 0.1368,
+        "matches": 39,
+        "win_rate": 0.3077,
+        "ci_half": 0.1393,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
           "wins": 12,
-          "losses": 28,
+          "losses": 27,
           "draws": 0,
-          "matches": 40,
-          "win_rate": 0.3,
+          "matches": 39,
+          "win_rate": 0.307692,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.180747,
-            "upper": 0.454303
+            "lower": 0.185658,
+            "upper": 0.464215
           }
         }
       },
@@ -34054,7 +34394,7 @@
           }
         }
       },
-      "leyline-aggro/rakdos": {
+      "leyline-aggro/mono-red": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -40738,7 +41078,7 @@
           }
         }
       },
-      "leyline-aggro/rakdos": {
+      "leyline-aggro/mono-red": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -50115,7 +50455,7 @@
         }
       }
     },
-    "leyline-aggro/rakdos": {
+    "leyline-aggro/mono-red": {
       "dimir-midrange": {
         "wins": 0,
         "losses": 1,
@@ -50545,6 +50885,52 @@
         }
       }
     },
+    "golgari-landfall": {
+      "dimir-midrange": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "izzet-spellementals": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      }
+    },
     "grixis-artifact-sacrifice": {
       "azorius-control/traditional": {
         "wins": 0,
@@ -50792,6 +51178,7 @@
     "Mardu Demons",
     "Sultai Control",
     "5-Color Control",
+    "Golgari Landfall",
     "Grixis Artifact Sacrifice",
     "Mono-Black Phoenix",
     "Mono-White Swarm",
@@ -50866,23 +51253,23 @@
     },
     "Mono-Green Landfall": {
       "wins": 161,
-      "losses": 148,
+      "losses": 146,
       "draws": 0,
-      "matches": 309,
-      "win_rate": 0.521,
-      "ci_half": 0.0554,
+      "matches": 307,
+      "win_rate": 0.5244,
+      "ci_half": 0.0555,
       "low_sample": false,
       "mirror": false,
       "literal_record": {
         "wins": 161,
-        "losses": 148,
+        "losses": 146,
         "draws": 0,
-        "matches": 309,
-        "win_rate": 0.521036,
+        "matches": 307,
+        "win_rate": 0.52443,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.465419,
-          "upper": 0.576136
+          "lower": 0.468609,
+          "upper": 0.579647
         }
       }
     },
@@ -52140,6 +52527,28 @@
         }
       }
     },
+    "Golgari Landfall": {
+      "wins": 0,
+      "losses": 2,
+      "draws": 0,
+      "matches": 2,
+      "win_rate": 0.0,
+      "ci_half": 0.3288,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.0,
+          "upper": 0.657628
+        }
+      }
+    },
     "Grixis Artifact Sacrifice": {
       "wins": 0,
       "losses": 2,
@@ -52514,6 +52923,28 @@
           "confidence_interval_95": {
             "lower": 0.207655,
             "upper": 0.93851
+          }
+        }
+      },
+      "Golgari Landfall": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -52980,24 +53411,24 @@
         }
       },
       "Mono-Green Landfall": {
-        "wins": 25,
+        "wins": 24,
         "losses": 17,
         "draws": 0,
-        "matches": 42,
-        "win_rate": 0.5952,
-        "ci_half": 0.1423,
+        "matches": 41,
+        "win_rate": 0.5854,
+        "ci_half": 0.1444,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 25,
+          "wins": 24,
           "losses": 17,
           "draws": 0,
-          "matches": 42,
-          "win_rate": 0.595238,
+          "matches": 41,
+          "win_rate": 0.585366,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.44494,
-            "upper": 0.729574
+            "lower": 0.433668,
+            "upper": 0.722437
           }
         }
       },
@@ -53531,6 +53962,28 @@
           }
         }
       },
+      "Golgari Landfall": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "Golgari Midrange": {
         "wins": 1,
         "losses": 0,
@@ -54038,24 +54491,24 @@
         }
       },
       "Mono-Green Landfall": {
-        "wins": 28,
+        "wins": 27,
         "losses": 12,
         "draws": 0,
-        "matches": 40,
-        "win_rate": 0.7,
-        "ci_half": 0.1368,
+        "matches": 39,
+        "win_rate": 0.6923,
+        "ci_half": 0.1393,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 28,
+          "wins": 27,
           "losses": 12,
           "draws": 0,
-          "matches": 40,
-          "win_rate": 0.7,
+          "matches": 39,
+          "win_rate": 0.692308,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.545697,
-            "upper": 0.819253
+            "lower": 0.535785,
+            "upper": 0.814342
           }
         }
       },
@@ -55451,23 +55904,23 @@
       },
       "Dimir Midrange": {
         "wins": 17,
-        "losses": 25,
+        "losses": 24,
         "draws": 0,
-        "matches": 42,
-        "win_rate": 0.4048,
-        "ci_half": 0.1423,
+        "matches": 41,
+        "win_rate": 0.4146,
+        "ci_half": 0.1444,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
           "wins": 17,
-          "losses": 25,
+          "losses": 24,
           "draws": 0,
-          "matches": 42,
-          "win_rate": 0.404762,
+          "matches": 41,
+          "win_rate": 0.414634,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.270426,
-            "upper": 0.55506
+            "lower": 0.277563,
+            "upper": 0.566332
           }
         }
       },
@@ -55737,23 +56190,23 @@
       },
       "Izzet Spellementals": {
         "wins": 12,
-        "losses": 28,
+        "losses": 27,
         "draws": 0,
-        "matches": 40,
-        "win_rate": 0.3,
-        "ci_half": 0.1368,
+        "matches": 39,
+        "win_rate": 0.3077,
+        "ci_half": 0.1393,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
           "wins": 12,
-          "losses": 28,
+          "losses": 27,
           "draws": 0,
-          "matches": 40,
-          "win_rate": 0.3,
+          "matches": 39,
+          "win_rate": 0.307692,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.180747,
-            "upper": 0.454303
+            "lower": 0.185658,
+            "upper": 0.464215
           }
         }
       },
@@ -72548,6 +73001,52 @@
         }
       },
       "Mono-Green Landfall": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      }
+    },
+    "Golgari Landfall": {
+      "Dimir Midrange": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "Izzet Spellementals": {
         "wins": 0,
         "losses": 1,
         "draws": 0,

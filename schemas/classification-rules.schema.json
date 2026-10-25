@@ -2,73 +2,229 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://jacelber.github.io/mtgo-data/schemas/classification-rules.schema.json",
   "title": "Versioned constructed classification rules",
-  "x-schema-version": "1.1.0",
+  "x-schema-version": "1.2.0",
   "type": "object",
-  "required": ["schema_version", "format", "archetypes"],
+  "required": [
+    "schema_version",
+    "format",
+    "archetypes"
+  ],
   "properties": {
-    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
-    "format": {"$ref": "#/$defs/id"},
-    "semantic_features": {"$ref": "#/$defs/semantic_features"},
-    "archetypes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/archetype"}}
+    "schema_version": {
+      "enum": [
+        "1.0.0",
+        "1.1.0",
+        "1.2.0"
+      ]
+    },
+    "format": {
+      "$ref": "#/$defs/id"
+    },
+    "semantic_features": {
+      "$ref": "#/$defs/semantic_features"
+    },
+    "archetypes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {}
+    },
+    "card_facts_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
   },
   "additionalProperties": false,
   "allOf": [
     {
-      "if": {"properties": {"schema_version": {"const": "1.1.0"}}},
-      "then": {"required": ["semantic_features"]},
-      "else": {"not": {"required": ["semantic_features"]}}
+      "if": {
+        "properties": {
+          "schema_version": {
+            "enum": [
+              "1.1.0",
+              "1.2.0"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "semantic_features"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "semantic_features"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "schema_version": {
+            "const": "1.2.0"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "archetypes": {
+            "items": {
+              "$ref": "#/$defs/archetype_v12"
+            }
+          }
+        },
+        "required": [
+          "card_facts_sha256"
+        ]
+      },
+      "else": {
+        "properties": {
+          "archetypes": {
+            "items": {
+              "$ref": "#/$defs/archetype"
+            }
+          }
+        },
+        "not": {
+          "required": [
+            "card_facts_sha256"
+          ]
+        }
+      }
     }
   ],
   "$defs": {
-    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
-    "priority": {"type": "integer", "minimum": 0},
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 0
+    },
     "semantic_features": {
       "type": "object",
-      "required": ["manifest_path", "manifest_sha256"],
+      "required": [
+        "manifest_path",
+        "manifest_sha256"
+      ],
       "properties": {
         "manifest_path": {
           "type": "string",
           "pattern": "^configs/[a-z0-9][a-z0-9_./-]*\\.ya?ml$"
         },
-        "manifest_sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"}
+        "manifest_sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        }
       },
       "additionalProperties": false
     },
     "subtype": {
       "type": "object",
-      "required": ["id", "name"],
-      "properties": {"id": {"$ref": "#/$defs/id"}, "name": {"type": "string", "minLength": 1}},
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
       "additionalProperties": false
     },
     "condition": {
       "type": "object",
-      "required": ["card"],
+      "required": [
+        "card"
+      ],
       "properties": {
-        "card": {"type": "string", "minLength": 1},
-        "zone": {"enum": ["any", "main", "side"]},
-        "min_count": {"type": "integer", "minimum": 0},
-        "max_count": {"type": "integer", "minimum": 0},
-        "exact_count": {"type": "integer", "minimum": 0}
+        "card": {
+          "type": "string",
+          "minLength": 1
+        },
+        "zone": {
+          "enum": [
+            "any",
+            "main",
+            "side"
+          ]
+        },
+        "min_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "exact_count": {
+          "type": "integer",
+          "minimum": 0
+        }
       },
       "additionalProperties": false,
       "not": {
         "anyOf": [
-          {"required": ["exact_count", "min_count"]},
-          {"required": ["exact_count", "max_count"]}
+          {
+            "required": [
+              "exact_count",
+              "min_count"
+            ]
+          },
+          {
+            "required": [
+              "exact_count",
+              "max_count"
+            ]
+          }
         ]
       }
     },
     "rule": {
       "type": "object",
-      "required": ["id", "priority", "conditions"],
+      "required": [
+        "id",
+        "priority",
+        "conditions"
+      ],
       "properties": {
-        "id": {"$ref": "#/$defs/id"},
-        "priority": {"$ref": "#/$defs/priority"},
-        "subtype_id": {"oneOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "priority": {
+          "$ref": "#/$defs/priority"
+        },
+        "subtype_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
         "conditions": {
           "type": "object",
-          "required": ["all"],
-          "properties": {"all": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/condition"}}},
+          "required": [
+            "all"
+          ],
+          "properties": {
+            "all": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          },
           "additionalProperties": false
         }
       },
@@ -76,13 +232,262 @@
     },
     "archetype": {
       "type": "object",
-      "required": ["id", "name", "priority", "rules"],
+      "required": [
+        "id",
+        "name",
+        "priority",
+        "rules"
+      ],
       "properties": {
-        "id": {"$ref": "#/$defs/id"},
-        "name": {"type": "string", "minLength": 1},
-        "priority": {"$ref": "#/$defs/priority"},
-        "subtypes": {"type": "array", "items": {"$ref": "#/$defs/subtype"}},
-        "rules": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/rule"}}
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priority": {
+          "$ref": "#/$defs/priority"
+        },
+        "subtypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/subtype"
+          }
+        },
+        "rules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "conditions_v12": {
+      "type": "object",
+      "required": [
+        "all"
+      ],
+      "properties": {
+        "all": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition_v12"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "condition_v12": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "card": {
+              "type": "string",
+              "minLength": 1
+            },
+            "zone": {
+              "enum": [
+                "any",
+                "main",
+                "side"
+              ]
+            },
+            "min_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "exact_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "total_count": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "additionalProperties": false,
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "exact_count",
+                  "min_count"
+                ]
+              },
+              {
+                "required": [
+                  "exact_count",
+                  "max_count"
+                ]
+              }
+            ]
+          },
+          "oneOf": [
+            {
+              "required": [
+                "card"
+              ]
+            },
+            {
+              "required": [
+                "total_count"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "any"
+          ],
+          "properties": {
+            "any": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/conditions_v12"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "rule_v12": {
+      "type": "object",
+      "required": [
+        "id",
+        "priority",
+        "conditions"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "priority": {
+          "$ref": "#/$defs/priority"
+        },
+        "subtype_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "conditions": {
+          "$ref": "#/$defs/conditions_v12"
+        },
+        "colors": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "white",
+              "blue",
+              "black",
+              "red",
+              "green"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "archetype_v12": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "priority",
+        "rules"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priority": {
+          "$ref": "#/$defs/priority"
+        },
+        "subtypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/subtype"
+          }
+        },
+        "rules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/rule_v12"
+          }
+        },
+        "conditions": {
+          "$ref": "#/$defs/conditions_v12"
+        },
+        "color_profile": {
+          "enum": [
+            "default",
+            "modern-goryos",
+            "modern-creativity",
+            "standard-fling",
+            "standard-spider-man",
+            "pauper-packbeast",
+            "pauper-battle-screech"
+          ]
+        },
+        "require_color_subtype": {
+          "type": "boolean"
+        },
+        "color_subtypes": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "white",
+                "blue",
+                "black",
+                "red",
+                "green"
+              ]
+            }
+          }
+        },
+        "card_uses": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "normal_cast",
+              "noncast",
+              "noncast_without_support",
+              "front_only",
+              "adventure_only",
+              "fling_secondary"
+            ]
+          }
+        }
       },
       "additionalProperties": false
     }

@@ -173,8 +173,8 @@ def _classification() -> dict[str, Any]:
     }
 
 
-def _documents() -> tuple[dict[str, Any], dict[str, dict[str, Any]], dict[str, Any]]:
-    event = _event()
+def _documents(event=None) -> tuple[dict[str, Any], dict[str, dict[str, Any]], dict[str, Any]]:
+    event = _event() if event is None else event
     classification = _classification()
     ledger = build_opportunity_ledger(
         event,
@@ -301,6 +301,9 @@ def test_deck_share_and_matchup_use_only_available_classification_identities() -
     assert scope["known_deck_count"] == 1
     assert scope["unknown_deck_count"] == 0
     assert scope["unavailable_deck_count"] == 1
+    assert scope["literal_record"]["wins"] == 2
+    assert scope["literal_record"]["losses"] == 2
+    assert scope["literal_record"]["matches"] == 4
     assert scope["archetypes"][0]["deck_count"] == 1
     assert scope["archetypes"][0]["metagame_share"] == 1.0
     assert ledger["scope_summaries"]["all_constructed"]["source_match_count"] == 2
@@ -386,3 +389,31 @@ def test_new_documents_validate_against_public_schemas() -> None:
 
     for schema_name, document in documents.items():
         assert not validate_instance(document, schemas[schema_name], registry)
+
+
+def test_overview_overall_counts_draws_excludes_dq_and_preserves_empty() -> None:
+    event = _event()
+    for competitor in event["matches"][1]["competitors"]:
+        competitor.update(result_type="played_draw", match_points=1)
+    _, statistics, _ = _documents(event)
+    record = statistics["overview"]["scopes"]["all_constructed"]["literal_record"]
+    assert (record["wins"], record["losses"], record["draws"], record["matches"]) == (1, 1, 2, 4)
+    assert record["win_rate"] == 0.25
+    event["participants"][1]["status"] = "disqualified"
+    for match in event["matches"]:
+        match.update(constructed_statistics_eligible=False, matchup_eligible=False)
+    _, statistics, _ = _documents(event)
+    record = statistics["overview"]["scopes"]["all_constructed"]["literal_record"]
+    assert record["matches"] == 0
+    assert record["win_rate"] is None
+
+
+def test_overview_contract_requires_overall_only_for_new_version() -> None:
+    _, statistics, _ = _documents()
+    schemas, registry = load_schemas(ROOT / "schemas")
+    overview = statistics["overview"]
+    del overview["scopes"]["all_constructed"]["literal_record"]
+    schema = schemas["melee-event-overview.schema.json"]
+    assert validate_instance(overview, schema, registry)
+    overview["schema_version"] = "1.1.0"
+    assert not validate_instance(overview, schema, registry)

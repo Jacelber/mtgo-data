@@ -101,6 +101,7 @@
         "card": {"type": "string", "minLength": 1},
         "zone": {"enum": ["any", "main", "side"]},
         "actual_count": {"type": "integer", "minimum": 0},
+        "scope": {"enum": ["parent", "color-profile", "binding-domain-convention"]},
         "min_count": {"type": ["integer", "null"], "minimum": 0},
         "max_count": {"type": ["integer", "null"], "minimum": 0},
         "exact_count": {"type": ["integer", "null"], "minimum": 0}
@@ -191,6 +192,7 @@
           "type": "array",
           "items": {"type": "string", "minLength": 1}
         },
+        "color_diagnostics": {"$ref": "https://jacelber.github.io/mtgo-data/schemas/classifier-color-diagnostics.schema.json"},
         "unknown_deck": {"$ref": "#/$defs/unknown_deck"}
       },
       "allOf": [
@@ -219,14 +221,23 @@
           "then": {
             "properties": {
               "selected": {"type": "null"},
-              "matched_rules": {"maxItems": 0},
               "top_priority_matches": {"maxItems": 0},
               "overridden_matches": {"maxItems": 0},
               "conflict_matches": {"maxItems": 0},
               "conflict_kind": {"type": "null"},
-              "errors": {"maxItems": 0},
               "unknown_deck": {"type": "object"}
-            }
+            },
+            "allOf": [{
+              "if": {"anyOf": [
+                {"properties": {"matched_rules": {"minItems": 1}}},
+                {"properties": {"errors": {"minItems": 1}}},
+                {"required": ["color_diagnostics"]}
+              ]},
+              "then": {
+                "required": ["color_diagnostics"],
+                "properties": {"errors": {"minItems": 1}}
+              }
+            }]
           }
         },
         {

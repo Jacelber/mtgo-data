@@ -24,9 +24,10 @@ from ..classifier import (
     ConditionEvidence,
     RuleMatch,
     classifier_digest,
+    color_diagnostics_payload,
     classify_deck,
 )
-from ..card_names import front_face_card_name
+from ..classifier_cards import classifier_card_name
 from ..config import load_rule_set
 from ..deck import deck_to_counts
 from ..rules import RuleSet
@@ -44,14 +45,9 @@ class MeleeClassificationError(ValueError):
 
 
 def _classifier_card_name(name: str) -> str:
-    """Bridge reviewed split cards to the shared classifier's legacy spelling."""
+    """Resolve the same physical card identity used by MTGO classification."""
 
-    stripped = name.strip()
-    reviewed_split_names = {
-        "Dead // Gone": "Dead/Gone",
-        "Fire // Ice": "Fire/Ice",
-    }
-    return reviewed_split_names.get(stripped, front_face_card_name(stripped))
+    return classifier_card_name(name)
 
 
 def _sha256_bytes(payload: bytes) -> str:
@@ -81,6 +77,7 @@ def _repository_relative(path: Path, root: Path) -> str:
 def _condition_evidence(item: ConditionEvidence) -> dict[str, Any]:
     return {
         "card": item.card,
+        **({"scope": item.scope} if item.scope != "rule" else {}),
         "zone": item.zone,
         "actual_count": item.actual_count,
         "min_count": item.min_count,
@@ -211,6 +208,8 @@ def _classification_record(
         "priority_tie": result.priority_tie,
         "errors": list(result.errors),
         "unknown_deck": unknown_deck,
+        **({"color_diagnostics": color_diagnostics_payload(result)}
+           if result.status == "unknown" and result.color_diagnostics else {}),
     }
 
 

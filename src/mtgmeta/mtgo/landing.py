@@ -667,6 +667,7 @@ def _feature_archive_documents(
     mtgo_catalog: Mapping[str, Mapping[str, Any]] | None = None,
     rules_digest: str | None = None,
     tabletop_cache: dict | None = None,
+    preserve_archives_before: str | None = None,
 ) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
     editorial.validate_name_catalog(root, name_catalog_path, formats={format_id})
     names = editorial.load_name_catalog(name_catalog_path)
@@ -697,26 +698,37 @@ def _feature_archive_documents(
             if existing.is_file():
                 raise MTGOLandingError("existing public Landing feature source is outside the admitted scope")
             continue
-        decks = editorial.resolve_review_decks(root, review, mtgo_catalog=mtgo_catalog,
-                                              tabletop_cache=tabletop_cache)
-        materialized = editorial.materialize_review(review, names, decks=decks)
-        items = [_public_feature(item) for item in materialized["features"]]
-        destinations = [item["destination_id"] for item in items]
-        if len(destinations) != len(set(destinations)):
-            raise MTGOLandingError(
-                f"{review_path}: Landing feature destinations must be unique"
-            )
-        document = {
-            "schema_version": FEATURE_ARCHIVE_SCHEMA_VERSION,
-            "product": FEATURE_ARCHIVE_PRODUCT_ID,
-            "format": format_id,
-            "source": SOURCE_ID,
-            "week": week,
-            "source_event_ids": review["bindings"]["source_event_ids"],
-            "classifier_digest": rules_digest,
-            "content_digest": editorial.document_digest(items),
-            "features": {"items": items},
-        }
+        # Restatement preserves historical publication objects without
+        # reclassifying their reviewed decks under today's taxonomy.
+        existing = root / "stats" / format_id / "mtgo/landing/features" / f"{week['id']}.json"
+        if (preserve_archives_before is not None and week["id"] < preserve_archives_before
+                and existing.is_file()):
+            document = json.loads(existing.read_text(encoding="utf-8"))
+            if (document.get("format") != format_id or document.get("week") != week
+                    or document.get("source_event_ids") != review["bindings"]["source_event_ids"]):
+                raise MTGOLandingError("historical Feature archive source binding changed")
+            items = document["features"]["items"]
+        else:
+            decks = editorial.resolve_review_decks(root, review, mtgo_catalog=mtgo_catalog,
+                                                  tabletop_cache=tabletop_cache)
+            materialized = editorial.materialize_review(review, names, decks=decks)
+            items = [_public_feature(item) for item in materialized["features"]]
+            destinations = [item["destination_id"] for item in items]
+            if len(destinations) != len(set(destinations)):
+                raise MTGOLandingError(
+                    f"{review_path}: Landing feature destinations must be unique"
+                )
+            document = {
+                "schema_version": FEATURE_ARCHIVE_SCHEMA_VERSION,
+                "product": FEATURE_ARCHIVE_PRODUCT_ID,
+                "format": format_id,
+                "source": SOURCE_ID,
+                "week": week,
+                "source_event_ids": review["bindings"]["source_event_ids"],
+                "classifier_digest": rules_digest,
+                "content_digest": editorial.document_digest(items),
+                "features": {"items": items},
+            }
         week_documents[week["id"]] = document
         index_entries.append(
             {
@@ -1394,6 +1406,7 @@ def generate(
         mtgo_catalog=feature_catalog,
         rules_digest=document["classifier"]["digest"],
         tabletop_cache=tabletop_cache,
+        preserve_archives_before=document["week"]["id"] if allow_classifier_restatement else None,
     )
     current_feature = feature_weeks.get(document["week"]["id"])
     if current_feature is None or current_feature["features"]["items"] != document["features"]["items"]:
@@ -1419,6 +1432,9 @@ def generate(
         newline="\n",
     )
     for week_id, week_document in feature_weeks.items():
+        if (allow_classifier_restatement and week_id < document["week"]["id"]
+                and (feature_output / f"{week_id}.json").is_file()):
+            continue
         (feature_output / f"{week_id}.json").write_text(
             json.dumps(week_document, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",

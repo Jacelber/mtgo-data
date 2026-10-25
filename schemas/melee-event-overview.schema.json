@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-overview.schema.json",
-  "x-schema-version": "1.1.0",
+  "x-schema-version": "1.2.0",
   "title": "Melee per-event overview statistics",
   "type": "object",
   "additionalProperties": false,
@@ -26,7 +26,7 @@
       "required": ["zh", "en"],
       "properties": {"zh": {"type": "string"}, "en": {"type": "string"}}
     },
-    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
+    "schema_version": {"enum": ["1.0.0", "1.1.0", "1.2.0"]},
     "document_type": {"const": "overview"},
     "source": {"const": "melee"},
     "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
@@ -94,6 +94,29 @@
   "allOf": [
     {
       "if": {
+        "properties": {
+          "schema_version": {
+            "const": "1.2.0"
+          }
+        },
+        "required": [
+          "schema_version"
+        ]
+      },
+      "then": {
+        "properties": {
+          "scopes": {
+            "additionalProperties": {
+              "required": [
+                "literal_record"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
         "properties": {"event_structure": {"const": "mixed"}},
         "required": ["event_structure"]
       },
@@ -145,7 +168,7 @@
     },
     {
       "if": {
-        "properties": {"schema_version": {"const": "1.1.0"}},
+        "properties": {"schema_version": {"enum": ["1.1.0", "1.2.0"]}},
         "required": ["schema_version"]
       },
       "then": {
@@ -190,6 +213,7 @@
         "archetypes"
       ],
       "properties": {
+        "literal_record": {"$ref": "https://jacelber.github.io/mtgo-data/schemas/phase8-public-contract.schema.json#/$defs/literalRecord"},
         "population": {
           "enum": [
             "starting_field",

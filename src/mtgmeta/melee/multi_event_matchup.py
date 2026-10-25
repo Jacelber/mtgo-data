@@ -10,7 +10,7 @@ from typing import Any
 from ..consumer import literal_match_record
 
 
-SUPPORTED_MATCHUP_SCHEMA_VERSIONS = frozenset({"1.0.0"})
+SUPPORTED_MATCHUP_SCHEMA_VERSIONS = frozenset({"1.0.0", "1.1.0"})
 LOW_SAMPLE_THRESHOLD = 20
 ERROR_CODES = frozenset(
     {
@@ -301,6 +301,7 @@ def _validate_scope_matrix(
     event_id: str,
     parent_order: Sequence[str],
     leaf_order: Sequence[str],
+    sparse: bool = False,
 ) -> tuple[
     dict[str, dict[str, dict[str, int]]],
     int,
@@ -331,7 +332,8 @@ def _validate_scope_matrix(
             raw_matrix[row_id],
             f"event {event_id} matrix row {row_id} is invalid",
         )
-        if set(raw_columns) != set(leaf_order):
+        if (not set(raw_columns).issubset(leaf_order)
+                or (not sparse and set(raw_columns) != set(leaf_order))):
             _fail(
                 "matrix_invariant_failed",
                 f"event {event_id} matrix row {row_id} has incomplete columns",
@@ -339,7 +341,7 @@ def _validate_scope_matrix(
         matrix[row_id] = {}
         for column_id in leaf_order:
             raw_cell = _mapping(
-                raw_columns[column_id],
+                raw_columns.get(column_id, {field: 0 for field in COUNT_FIELDS}),
                 f"event {event_id} matrix cell {row_id}/{column_id} is invalid",
             )
             if any(not _nonnegative_integer(raw_cell.get(field)) for field in COUNT_FIELDS):
@@ -589,6 +591,9 @@ def aggregate_multi_event_matchups(
         elif event_format != format_id:
             _fail("format_mismatch", "selected events use different formats")
         schema_version = matchup.get("schema_version")
+        sparse = schema_version == "1.1.0"
+        if matchup.get("matrix_encoding") != ("sparse-zero-v1" if sparse else None):
+            _fail("unsupported_matchup_schema", "unsupported matrix encoding")
         if schema_version not in SUPPORTED_MATCHUP_SCHEMA_VERSIONS:
             _fail(
                 "unsupported_matchup_schema",
@@ -672,6 +677,7 @@ def aggregate_multi_event_matchups(
             event_id=event_id,
             parent_order=parent_order,
             leaf_order=leaf_order,
+            sparse=sparse,
         )
         observed_parent_ids.update(parent_order)
         observed_leaf_ids.update(leaf_order)

@@ -140,3 +140,37 @@ test("Landing excludes empty past weeks but preserves the current empty week", a
   );
   assert.equal(selectedHistory.featureDocument.features.items.length, 1);
 });
+
+test("mainstream matchup refresh stages the range and refuses mismatched periods or classifiers", async () => {
+  const period = { weeks: 4, type: "4w", start: "2026-09-21", end: "2026-10-18" };
+  const prefix = "stats/pauper/mtgo";
+  const matrix = `${prefix}/matchup_4w.json`;
+  const range = `${prefix}/range_4w.json`;
+  const completeness = `${prefix}/completeness/4w.json`;
+  const documents = Object.fromEntries([matrix, range, completeness].map(key => [key,
+    { format: "pauper", period: { ...period }, classifier_digest: "same" }]));
+  let paths, commits = 0;
+  const context = { P8Runtime: {
+    ResourceError: class ResourceError extends Error {},
+    createJsonClient: () => ({ stage: async requested => {
+      paths = [...requested];
+      return { changed: true, get: key => documents[key], values: documents, commit() { commits += 1; } };
+    } }),
+  } };
+  context.globalThis = context;
+  vm.runInNewContext(source, context);
+  const stage = includeRange => context.P8MtgoController.stageMatchup("pauper", 4, { includeRange });
+  await stage(false);
+  assert.equal(paths.includes(range), false);
+  const valid = await stage(true);
+  assert.equal(paths.includes(range), true);
+  assert.equal(commits, 0);
+  valid.commit();
+  assert.equal(commits, 1);
+  documents[range].period.end = "2026-10-19";
+  await assert.rejects(() => stage(true));
+  documents[range].period = { ...period };
+  documents[range].classifier_digest = "different";
+  await assert.rejects(() => stage(true));
+  assert.equal(commits, 1);
+});

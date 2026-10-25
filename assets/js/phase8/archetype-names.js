@@ -109,5 +109,28 @@
     };
   }
 
-  return Object.freeze({ identityId, localizeHierarchy, normalize, resolve, resolveIdentity });
+  function validateCoverage(contract, documents) {
+    const requireName = (parent, subtype = null) => {
+      resolve(contract, parent, subtype, "en", "Unknown");
+    };
+    const groups = rows => (rows || []).forEach(row => {
+      const parent = row.group_id === "unknown" && row.classification_status === "unknown"
+        && row.archetype_id === null ? "unknown" : row.archetype_id || row.id;
+      requireName(parent);
+      (row.subtypes || []).forEach(subtype => requireName(parent, subtype.subtype_id || subtype.id));
+    });
+    documents.forEach(document => {
+      groups(document.archetypes);
+      Object.values(document.scopes || {}).forEach(scope => groups(scope.archetypes));
+      if (document.hierarchy) localizeHierarchy(contract, document.hierarchy, "en", "Unknown");
+      (document.events || []).forEach(event => (event.placements || []).forEach(placement => {
+        if (placement.deck_status === "available") {
+          requireName(placement.identity.parent_id, placement.identity.subtype_id);
+        }
+      }));
+      (document.features?.items || []).forEach(item => requireName(item.archetype_id, item.subtype_id));
+    });
+  }
+
+  return Object.freeze({ identityId, localizeHierarchy, normalize, resolve, resolveIdentity, validateCoverage });
 });

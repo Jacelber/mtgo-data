@@ -33,9 +33,16 @@
         <h1><a id="site-title" class="brand-home" href="./index.html">猫猫万智周报</a></h1>
       </div>
       <nav class="format-tabs" id="format-tabs" aria-label="赛制"></nav>
-      <div class="lang-switch" aria-label="语言">
-        <button id="lang-zh" class="active" type="button" aria-pressed="true">中文</button>
-        <button id="lang-en" type="button" aria-pressed="false">EN</button>
+      <div class="header-actions">
+        <div class="lang-switch" aria-label="语言">
+          <button id="lang-zh" class="active" type="button" aria-pressed="true">中文</button>
+          <button id="lang-en" type="button" aria-pressed="false">EN</button>
+        </div>
+        <button type="button" class="header-share-icon" data-share-view disabled
+          aria-label="复制当前视图链接" title="复制当前视图链接">
+          <svg class="share-chain" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.1 0l3-3a5 5 0 0 0-7.1-7.1l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.1 0l-3 3a5 5 0 0 0 7.1 7.1l1.7-1.7"/></svg>
+          <svg class="share-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+        </button>
       </div>
     </div>
     <span id="unavailable-navigation-description" class="sr-only">暂未上线，正在开发中</span>
@@ -43,10 +50,15 @@
   </header>
 
   <main class="page-shell">
+    <span id="share-status" class="sr-only" role="status"></span>
+    <div id="share-fallback" class="share-fallback" hidden>
+      <label for="share-link">请复制下方链接</label>
+      <input id="share-link" type="text" readonly hidden aria-label="当前视图链接">
+    </div>
     <span id="payload-status" class="sr-only" role="status">正在载入产品目录……</span>
     <p id="availability-message" class="availability-message" role="status" hidden></p>
     <div id="refresh-status" class="refresh-status" role="status" hidden></div>
-    <div id="view" aria-live="polite"><p class="loading-state">正在载入真实数据……</p></div>
+    <div id="view" aria-live="polite"><p class="loading-state">正在载入数据……</p></div>
   </main>
 
   <button class="return-to-top" type="button" data-return-to-top aria-label="回到顶部" title="回到顶部">

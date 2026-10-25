@@ -1,4 +1,5 @@
-schema_version: 1.1.0
+schema_version: 1.2.0
+card_facts_sha256: b342090c746ad7a3b8e7bf9a258585abb564866d654bea4f8035ab95141c0612
 format: standard
 semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
@@ -179,7 +180,7 @@ archetypes:
   rules:
   - id: dwarves-izzet
     priority: 76700
-    subtype_id: izzet
+    subtype_id: null
     conditions:
       all:
       - card: Dwarven Mauler
@@ -188,26 +189,17 @@ archetypes:
       - card: Dwalin, Weaponmaster
         zone: main
         min_count: 4
-      - card: Steam Vents
-        zone: main
-        min_count: 1
   - id: dwarves-boros
     priority: 76690
-    subtype_id: boros
+    subtype_id: null
     conditions:
       all:
-      - card: Dwarven Mauler
-        zone: main
-        min_count: 2
       - card: Dáin's Company
         zone: main
         min_count: 2
-      - card: Sacred Foundry
-        zone: main
-        min_count: 1
   - id: dwarves-mono-red
     priority: 76680
-    subtype_id: mono-red
+    subtype_id: null
     conditions:
       all:
       - card: Dwarven Mauler
@@ -216,9 +208,22 @@ archetypes:
       - card: Thorin, Mountain-king
         zone: main
         min_count: 3
-      - card: Mountain
-        zone: main
-        min_count: 12
+  color_profile: default
+  require_color_subtype: true
+  color_subtypes:
+    izzet:
+    - blue
+    - red
+    boros:
+    - white
+    - red
+    mono-red:
+    - red
+  conditions:
+    all:
+    - card: Dwarven Mauler
+      zone: main
+      min_count: 2
 - id: monument-lessons
   name: Monument Lessons
   priority: 76000
@@ -288,7 +293,7 @@ archetypes:
   - id: mono-green-landfall-primary
     priority: 73000
     subtype_id: null
-    conditions:
+    conditions: &standard_harmonizer_landfall_core
       all:
       - card: Mightform Harmonizer
         min_count: 1
@@ -298,35 +303,33 @@ archetypes:
         min_count: 4
       - card: Earthbender Ascension
         min_count: 3
-      - card: Stomping Ground
-        exact_count: 0
-      - card: Temple Garden
-        exact_count: 0
-      - card: Breeding Pool
-        exact_count: 0
-      - card: Overgrown Tomb
-        exact_count: 0
-      - card: Plains
-        exact_count: 0
+    colors:
+    - green
+  color_profile: default
 - id: gruul-landfall
   name: Gruul Landfall
   priority: 72000
+  color_profile: default
   rules:
   - id: gruul-landfall-primary
     priority: 72000
     subtype_id: null
-    conditions:
-      all:
-      - card: Mightform Harmonizer
-        min_count: 1
-      - card: Sazh's Chocobo
-        min_count: 4
-      - card: Fabled Passage
-        min_count: 4
-      - card: Earthbender Ascension
-        min_count: 3
-      - card: Stomping Ground
-        min_count: 3
+    conditions: *standard_harmonizer_landfall_core
+    colors:
+    - green
+    - red
+- id: golgari-landfall
+  name: Golgari Landfall
+  priority: 72000
+  color_profile: default
+  rules:
+  - id: golgari-landfall-primary
+    priority: 72000
+    subtype_id: null
+    conditions: *standard_harmonizer_landfall_core
+    colors:
+    - black
+    - green
 - id: selesnya-landfall
   name: Selesnya Landfall
   priority: 71000
@@ -334,7 +337,7 @@ archetypes:
   - id: selesnya-landfall-primary
     priority: 71000
     subtype_id: null
-    conditions:
+    conditions: &standard_selesnya_landfall_core
       all:
       - card: Sazh's Chocobo
         min_count: 4
@@ -342,25 +345,20 @@ archetypes:
         min_count: 4
       - card: Earthbender Ascension
         min_count: 3
-      - card: Plains
-        min_count: 1
+    colors:
+    - white
+    - green
   - id: selesnya-landfall-temple-garden
     priority: 70999
     subtype_id: null
-    conditions:
-      all:
-      - card: Sazh's Chocobo
-        min_count: 4
-      - card: Fabled Passage
-        min_count: 4
-      - card: Earthbender Ascension
-        min_count: 3
-      - card: Temple Garden
-        min_count: 1
+    conditions: *standard_selesnya_landfall_core
+    colors:
+    - white
+    - green
   - id: selesnya-landfall-sideboard-white
     priority: 78008
     subtype_id: null
-    conditions:
+    conditions: &standard_selesnya_landfall_sideboard_core
       all:
       - card: Earthbender Ascension
         zone: main
@@ -374,21 +372,31 @@ archetypes:
       - card: Fabled Passage
         zone: main
         min_count: 1
-      - card: Plains
-        zone: side
-        min_count: 1
       - card: Sheltered by Ghosts
         zone: side
         min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - white
+    - green
+  color_profile: default
+- id: naya-landfall
+  name: Naya Landfall
+  priority: 71000
+  color_profile: default
+  rules:
+  - id: naya-landfall-primary
+    priority: 71000
+    subtype_id: null
+    conditions: *standard_selesnya_landfall_core
+    colors: &standard_naya_landfall_colors
+    - white
+    - red
+    - green
+  - id: naya-landfall-sideboard-white
+    priority: 78008
+    subtype_id: null
+    conditions: *standard_selesnya_landfall_sideboard_core
+    colors: *standard_naya_landfall_colors
 - id: bant-rhythm
   name: Bant Rhythm
   priority: 69000
@@ -524,15 +532,14 @@ archetypes:
       - card: Analyze the Pollen
         zone: main
         min_count: 2
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        min_count: 1
       - card: Stormchaser's Talent
         zone: main
         exact_count: 0
+    colors:
+    - blue
+    - red
+    - green
+  color_profile: default
 - id: izzet-spellementals
   name: Izzet Spellementals
   priority: 64000
@@ -650,6 +657,10 @@ archetypes:
         min_count: 2
       - card: Stock Up
         min_count: 2
+    colors:
+    - white
+    - blue
+    - red
   - id: jeskai-control-consult-helix
     priority: 56990
     subtype_id: null
@@ -670,6 +681,10 @@ archetypes:
       - card: Inevitable Defeat
         zone: any
         exact_count: 0
+    colors:
+    - white
+    - blue
+    - red
   - id: jeskai-control-stock-up-helix
     priority: 56980
     subtype_id: null
@@ -690,15 +705,14 @@ archetypes:
       - card: Way of the Pyromancer
         zone: main
         exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
       - card: Jeskai Revelation
         zone: any
         exact_count: 0
+    colors:
+    - white
+    - blue
+    - red
+  color_profile: default
 - id: boros-dragons
   name: Boros Dragons
   priority: 55000
@@ -750,6 +764,7 @@ archetypes:
 - id: izzet-fling
   name: Izzet Fling
   priority: 53000
+  color_profile: standard-fling
   rules:
   - id: izzet-fling-primary
     priority: 53000
@@ -765,12 +780,15 @@ archetypes:
       - card: Wild Ride
         zone: main
         min_count: 3
-      - card: Spirebluff Canal
-        zone: main
-        min_count: 1
       - card: Leyline of Resonance
         zone: main
         max_count: 1
+    colors:
+    - blue
+    - red
+  card_uses:
+    Callous Sell-Sword: fling_secondary
+    Elusive Otter: fling_secondary
 - id: gruul-fling
   name: Gruul Fling
   priority: 52000
@@ -789,26 +807,28 @@ archetypes:
 - id: izzet-prowess
   name: Izzet Prowess
   priority: 51010
+  color_profile: standard-fling
   rules:
   - id: izzet-prowess-primary
     priority: 51000
     subtype_id: null
-    conditions:
+    conditions: &standard-prowess-001
       all:
       - card: Stormchaser's Talent
         min_count: 4
       - card: Boomerang Basics
         min_count: 3
-      - card: Spirebluff Canal
-        min_count: 1
       - card: Gran-Gran
         exact_count: 0
       - card: Accumulate Wisdom
         exact_count: 0
+    colors:
+    - blue
+    - red
   - id: izzet-prowess-drake-hatcher
     priority: 51010
     subtype_id: null
-    conditions:
+    conditions: &standard-prowess-002
       all:
       - card: Drake Hatcher
         min_count: 3
@@ -816,12 +836,13 @@ archetypes:
         min_count: 3
       - card: Gandalf, Goblins' Bane
         min_count: 3
-      - card: Steam Vents
-        min_count: 2
+    colors:
+    - blue
+    - red
   - id: izzet-prowess-drake-hatcher-flow-state
     priority: 51009
     subtype_id: null
-    conditions:
+    conditions: &standard-prowess-003
       all:
       - card: Drake Hatcher
         zone: main
@@ -835,13 +856,13 @@ archetypes:
       - card: Flow State
         zone: main
         min_count: 3
-      - card: Steam Vents
-        zone: main
-        min_count: 2
+    colors:
+    - blue
+    - red
   - id: izzet-prowess-colorstorm
     priority: 50990
     subtype_id: null
-    conditions:
+    conditions: &standard-prowess-004
       all:
       - card: Slickshot Show-Off
         zone: main
@@ -855,10 +876,13 @@ archetypes:
       - card: Stormchaser's Talent
         zone: main
         exact_count: 0
+    colors:
+    - blue
+    - red
   - id: izzet-prowess-battlemage-cantrips
     priority: 51008
     subtype_id: null
-    conditions:
+    conditions: &standard-prowess-005
       all:
       - card: Slickshot Show-Off
         zone: main
@@ -875,6 +899,58 @@ archetypes:
       - card: Flow State
         zone: main
         min_count: 1
+    colors:
+    - blue
+    - red
+  card_uses: &standard-prowess-006
+    Callous Sell-Sword: fling_secondary
+    Elusive Otter: fling_secondary
+- id: temur-prowess
+  name: Temur Prowess
+  priority: 24980
+  color_profile: standard-fling
+  rules:
+  - id: temur-prowess-primary
+    priority: 24970
+    subtype_id: null
+    conditions: *standard-prowess-001
+    colors:
+    - blue
+    - red
+    - green
+  - id: temur-prowess-drake-hatcher
+    priority: 24980
+    subtype_id: null
+    conditions: *standard-prowess-002
+    colors:
+    - blue
+    - red
+    - green
+  - id: temur-prowess-drake-hatcher-flow-state
+    priority: 24979
+    subtype_id: null
+    conditions: *standard-prowess-003
+    colors:
+    - blue
+    - red
+    - green
+  - id: temur-prowess-colorstorm
+    priority: 24960
+    subtype_id: null
+    conditions: *standard-prowess-004
+    colors:
+    - blue
+    - red
+    - green
+  - id: temur-prowess-battlemage-cantrips
+    priority: 24978
+    subtype_id: null
+    conditions: *standard-prowess-005
+    colors:
+    - blue
+    - red
+    - green
+  card_uses: *standard-prowess-006
 - id: bant-airbending
   name: Bant Airbending
   priority: 50000
@@ -1057,6 +1133,9 @@ archetypes:
         min_count: 2
       - card: Consult the Star Charts
         min_count: 2
+    colors:
+    - blue
+    - black
   - id: dimir-control-countersculpt
     priority: 40001
     subtype_id: null
@@ -1074,24 +1153,16 @@ archetypes:
       - card: Consult the Star Charts
         zone: main
         min_count: 1
-      - card: Watery Grave
-        zone: main
-        min_count: 1
       - card: Superior Spider-Man
         zone: main
         exact_count: 0
       - card: Doomsday Excruciator
         zone: main
         exact_count: 0
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - blue
+    - black
+  color_profile: default
 - id: azorius-control
   name: Azorius Control
   priority: 39000
@@ -1118,6 +1189,9 @@ archetypes:
       - card: Day of Judgment
         zone: any
         exact_count: 0
+    colors:
+    - white
+    - blue
   - id: azorius-control-prepare-ugin
     priority: 77205
     subtype_id: prepare
@@ -1144,6 +1218,9 @@ archetypes:
       - card: Ugin, Eye of the Storms
         zone: main
         min_count: 1
+    colors:
+    - white
+    - blue
   - id: azorius-control-iceberg
     priority: 38999
     subtype_id: traditional
@@ -1161,6 +1238,9 @@ archetypes:
       - card: Hallowed Fountain
         zone: main
         min_count: 2
+    colors:
+    - white
+    - blue
   - id: azorius-control-primary
     priority: 39000
     subtype_id: traditional
@@ -1176,6 +1256,9 @@ archetypes:
         min_count: 3
       - card: Jeskai Revelation
         exact_count: 0
+    colors:
+    - white
+    - blue
   - id: azorius-control-consult
     priority: 38990
     subtype_id: traditional
@@ -1205,6 +1288,9 @@ archetypes:
       - card: Swamp
         zone: any
         exact_count: 0
+    colors:
+    - white
+    - blue
   - id: azorius-control-consult-ugin
     priority: 38995
     subtype_id: traditional
@@ -1225,6 +1311,9 @@ archetypes:
       - card: Jeskai Revelation
         zone: any
         exact_count: 0
+    colors:
+    - white
+    - blue
   - id: azorius-control-trollshaws
     priority: 38998
     subtype_id: traditional
@@ -1242,6 +1331,9 @@ archetypes:
       - card: Day of Judgment
         zone: main
         min_count: 3
+    colors:
+    - white
+    - blue
   - id: azorius-control-day-stock
     priority: 38989
     subtype_id: traditional
@@ -1271,6 +1363,9 @@ archetypes:
       - card: Consult the Star Charts
         zone: any
         exact_count: 0
+    colors:
+    - white
+    - blue
   - id: azorius-control-theorist
     priority: 38988
     subtype_id: traditional
@@ -1280,9 +1375,6 @@ archetypes:
         zone: main
         min_count: 1
       - card: The Theorist, Jace Beleren
-        zone: main
-        min_count: 1
-      - card: Jace's Machinations
         zone: main
         min_count: 1
       - card: No More Lies
@@ -1297,15 +1389,10 @@ archetypes:
       - card: Jeskai Revelation
         zone: any
         exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - white
+    - blue
+  color_profile: default
 - id: mono-white-momo
   name: Mono-White Momo
   priority: 38000
@@ -1505,9 +1592,11 @@ archetypes:
       - card: Brightglass Gearhulk
         zone: main
         min_count: 2
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        min_count: 1
+    colors:
+    - white
+    - blue
+    - green
+  color_profile: default
 - id: temur-battlecrier
   name: Temur Battlecrier
   priority: 30000
@@ -1528,14 +1617,34 @@ archetypes:
   - id: izzet-looting-primary
     priority: 29000
     subtype_id: null
-    conditions:
-      all:
-      - card: Tiger-Seal
-        min_count: 1
-      - card: Duelist of the Mind
-        min_count: 1
-      - card: Fear of Missing Out
-        min_count: 1
+    conditions: &standard-looting-001
+      all: []
+    colors:
+    - blue
+    - red
+  color_profile: default
+  conditions: &standard-looting-002
+    all:
+    - card: Tiger-Seal
+      min_count: 1
+    - card: Duelist of the Mind
+      min_count: 1
+    - card: Fear of Missing Out
+      min_count: 1
+- id: jeskai-looting
+  name: Jeskai Looting
+  priority: 29000
+  rules:
+  - id: jeskai-looting-primary
+    priority: 29000
+    subtype_id: null
+    conditions: *standard-looting-001
+    colors:
+    - white
+    - blue
+    - red
+  color_profile: default
+  conditions: *standard-looting-002
 - id: jeskai-artifacts
   name: Jeskai Artifacts
   priority: 28000
@@ -1556,6 +1665,7 @@ archetypes:
 - id: leyline-aggro
   name: Leyline Aggro
   priority: 27040
+  color_profile: standard-fling
   subtypes:
   - id: izzet
     name: Izzet
@@ -1572,103 +1682,53 @@ archetypes:
     priority: 27040
     subtype_id: izzet
     conditions:
-      all:
-      - &id001
-        card: Leyline of Resonance
-        zone: main
-        min_count: 4
-      - &id002
-        card: Slickshot Show-Off
-        zone: main
-        min_count: 4
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
+      all: []
+    colors:
+    - blue
+    - red
   - id: leyline-aggro-gruul
     priority: 27030
     subtype_id: gruul
     conditions:
-      all:
-      - *id001
-      - *id002
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
+      all: []
+    colors:
+    - red
+    - green
   - id: leyline-aggro-boros
     priority: 27020
     subtype_id: boros
     conditions:
-      all:
-      - *id001
-      - *id002
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
+      all: []
+    colors:
+    - white
+    - red
   - id: leyline-aggro-rakdos
     priority: 27010
     subtype_id: rakdos
     conditions:
-      all:
-      - *id001
-      - *id002
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
+      all: []
+    colors:
+    - black
+    - red
   - id: leyline-aggro-mono-red
     priority: 27000
     subtype_id: mono-red
     conditions:
-      all:
-      - *id001
-      - *id002
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
+      all: []
+    colors:
+    - red
+  card_uses:
+    Callous Sell-Sword: fling_secondary
+    Elusive Otter: fling_secondary
+  conditions:
+    all:
+    - card: Leyline of Resonance
+      zone: main
+      min_count: 4
+    - card: Slickshot Show-Off
+      zone: main
+      min_count: 4
+  require_color_subtype: true
 - id: 4-color-allies
   name: Allies Kindred
   priority: 26000
@@ -1832,55 +1892,55 @@ archetypes:
     name: Mardu
   - id: boros
     name: Boros
+  - id: wubr
+    name: WUBR
   rules:
+  - id: boros-manufacturing-wubr
+    priority: 16000
+    subtype_id: wubr
+    conditions:
+      all: []
+    colors:
+    - white
+    - blue
+    - black
+    - red
   - id: boros-manufacturing-jeskai
     priority: 16000
     subtype_id: jeskai
     conditions:
-      all:
-      - &id003
-        card: Weapons Manufacturing
-        zone: main
-        min_count: 3
-      - &id004
-        card: United Battlefront
-        zone: main
-        min_count: 3
-      - &id005
-        card: Sacred Foundry
-        zone: main
-        min_count: 1
-      - card: Cryogen Relic
-        zone: main
-        min_count: 2
+      all: []
+    colors:
+    - white
+    - blue
+    - red
   - id: boros-manufacturing-mardu
     priority: 15950
     subtype_id: mardu
     conditions:
-      all:
-      - *id003
-      - *id004
-      - *id005
-      - card: Cryogen Relic
-        zone: main
-        max_count: 1
-      - card: Tithing Blade
-        zone: main
-        min_count: 2
+      all: []
+    colors:
+    - white
+    - black
+    - red
   - id: boros-manufacturing-boros
     priority: 15900
     subtype_id: boros
     conditions:
-      all:
-      - *id003
-      - *id004
-      - *id005
-      - card: Cryogen Relic
-        zone: main
-        max_count: 1
-      - card: Tithing Blade
-        zone: main
-        max_count: 1
+      all: []
+    colors:
+    - white
+    - red
+  conditions:
+    all:
+    - card: Weapons Manufacturing
+      zone: main
+      min_count: 3
+    - card: United Battlefront
+      zone: main
+      min_count: 3
+  color_profile: default
+  require_color_subtype: true
 - id: golgari-reanimator
   name: Golgari Reanimator
   priority: 14000
@@ -2150,6 +2210,9 @@ archetypes:
         exact_count: 0
       - card: Unholy Annex // Ritual Chamber
         max_count: 1
+    colors:
+    - black
+    - green
   - id: golgari-midrange-badgermole-sentinel
     priority: 1990
     subtype_id: null
@@ -2176,6 +2239,9 @@ archetypes:
       - card: Unholy Annex // Ritual Chamber
         zone: any
         max_count: 1
+    colors:
+    - black
+    - green
   - id: golgari-midrange-wastewood
     priority: 1980
     subtype_id: null
@@ -2199,15 +2265,10 @@ archetypes:
       - card: Unholy Annex // Ritual Chamber
         zone: any
         max_count: 1
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - black
+    - green
+  color_profile: default
 - id: selesnya-midrange
   name: Selesnya Midrange
   priority: 1000
@@ -2282,6 +2343,15 @@ archetypes:
 - id: kona-omniscience
   name: Kona Omniscience
   priority: 41020
+  color_profile: default
+  conditions:
+    all:
+    - card: Kona, Rescue Beastie
+      zone: main
+      min_count: 3
+    - card: Omniscience
+      zone: main
+      min_count: 3
   subtypes:
   - id: temur
     name: Temur
@@ -2289,78 +2359,55 @@ archetypes:
     name: Bant
   - id: simic
     name: Simic
+  - id: sultai
+    name: Sultai
+  - id: four-color
+    name: Four-Color
   rules:
   - id: kona-omniscience-temur
     priority: 41020
     subtype_id: temur
-    conditions:
+    conditions: &standard_kona_station_route
       all:
-      - &id008
-        card: Kona, Rescue Beastie
-        zone: main
-        min_count: 4
-      - &id009
-        card: Omniscience
-        zone: main
-        min_count: 4
-      - &id010
-        card: Uthros, Titanic Godcore
+      - card: Uthros, Titanic Godcore
         zone: main
         min_count: 3
-      - card: Ashling, Rekindled
-        zone: main
-        min_count: 1
-      - card: Adagia, Windswept Bastion
-        zone: main
-        exact_count: 0
-      - card: Hallowed Fountain
-        zone: main
-        exact_count: 0
-  - id: kona-omniscience-bant-adagia
+    colors:
+    - blue
+    - red
+    - green
+  - id: kona-omniscience-bant
     priority: 41010
     subtype_id: bant
-    conditions:
-      all:
-      - *id008
-      - *id009
-      - *id010
-      - card: Adagia, Windswept Bastion
-        zone: main
-        min_count: 1
-      - card: Ashling, Rekindled
-        zone: main
-        exact_count: 0
-  - id: kona-omniscience-bant-hallowed-fountain
-    priority: 41005
-    subtype_id: bant
-    conditions:
-      all:
-      - *id008
-      - *id009
-      - *id010
-      - card: Hallowed Fountain
-        zone: main
-        min_count: 1
-      - card: Ashling, Rekindled
-        zone: main
-        exact_count: 0
+    conditions: *standard_kona_station_route
+    colors:
+    - white
+    - blue
+    - green
   - id: kona-omniscience-simic
     priority: 41000
     subtype_id: simic
-    conditions:
-      all:
-      - *id008
-      - *id009
-      - *id010
-      - card: Ashling, Rekindled
-        zone: main
-        exact_count: 0
-      - card: Adagia, Windswept Bastion
-        zone: main
-        exact_count: 0
-      - card: Hallowed Fountain
-        zone: main
-        exact_count: 0
+    conditions: *standard_kona_station_route
+    colors:
+    - blue
+    - green
+  - id: kona-omniscience-sultai
+    priority: 41000
+    subtype_id: sultai
+    conditions: *standard_kona_station_route
+    colors:
+    - blue
+    - black
+    - green
+  - id: kona-omniscience-four-color
+    priority: 41020
+    subtype_id: four-color
+    conditions: *standard_kona_station_route
+    colors:
+    - white
+    - blue
+    - red
+    - green
 - id: dark-jeskai-control
   name: Dark Jeskai Control
   priority: 56000
@@ -2438,7 +2485,7 @@ archetypes:
   rules:
   - id: lifegain-orzhov
     priority: 77000
-    subtype_id: orzhov
+    subtype_id: null
     conditions:
       all:
       - card: Amalia Benavides Aguirre
@@ -2450,12 +2497,9 @@ archetypes:
       - card: Hinterland Sanctifier
         zone: main
         min_count: 3
-      - card: Godless Shrine
-        zone: main
-        min_count: 2
   - id: lifegain-abzan
     priority: 77010
-    subtype_id: abzan
+    subtype_id: null
     conditions:
       all:
       - card: Amalia Benavides Aguirre
@@ -2467,41 +2511,20 @@ archetypes:
       - card: Lunar Convocation
         zone: main
         min_count: 1
-      - card: Case of the Uneaten Feast
-        zone: main
-        min_count: 1
       - card: Professor Dellian Fel
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-green-source__
         zone: main
         min_count: 1
   - id: lifegain-mono-white
     priority: 77020
-    subtype_id: mono-white
+    subtype_id: null
     conditions:
       all:
-      - card: Case of the Uneaten Feast
-        zone: main
-        min_count: 1
       - card: Haliya, Guided by Light
         zone: main
         min_count: 1
       - card: Leonardo, Cutting Edge
         zone: main
         min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
   subtypes:
   - id: orzhov
     name: Orzhov Lifegain
@@ -2509,6 +2532,23 @@ archetypes:
     name: Abzan Lifegain
   - id: mono-white
     name: Mono-White Lifegain
+  color_profile: default
+  require_color_subtype: true
+  color_subtypes:
+    orzhov:
+    - white
+    - black
+    abzan:
+    - white
+    - black
+    - green
+    mono-white:
+    - white
+  conditions:
+    all:
+    - card: Case of the Uneaten Feast
+      zone: main
+      min_count: 1
 - id: five-color-humans
   name: Five-Color Humans
   priority: 25990
@@ -2578,18 +2618,50 @@ archetypes:
       - card: No More Lies
         zone: main
         min_count: 2
-      - card: Hallowed Fountain
-        zone: main
-        min_count: 2
-      - card: Ancient Vendetta
-        zone: any
-        min_count: 1
-      - card: Swamp
-        zone: main
-        min_count: 1
       - card: Jeskai Revelation
         zone: any
         exact_count: 0
+    colors:
+    - white
+    - blue
+    - black
+  - id: esper-control-deadly-cover-up
+    priority: 39010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Deadly Cover-Up
+        min_count: 2
+      - card: Demolition Field
+        min_count: 2
+      - card: Three Steps Ahead
+        min_count: 2
+      - card: Consult the Star Charts
+        min_count: 2
+    colors:
+    - white
+    - blue
+    - black
+  - id: esper-control-seam-rip
+    priority: 39010
+    subtype_id: null
+    conditions:
+      all:
+      - card: No More Lies
+        min_count: 3
+      - card: Seam Rip
+        min_count: 3
+      - card: Get Lost
+        min_count: 3
+      - card: Consult the Star Charts
+        min_count: 3
+      - card: Jeskai Revelation
+        exact_count: 0
+    colors:
+    - white
+    - blue
+    - black
+  color_profile: default
 - id: azorius-prowess
   name: Azorius Prowess
   priority: 50990
@@ -2816,15 +2888,10 @@ archetypes:
       - card: Day of Judgment
         zone: main
         min_count: 3
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - white
+    - green
+  color_profile: default
 - id: azorius-cage
   name: Azorius Cage
   priority: 76880
@@ -3115,18 +3182,9 @@ archetypes:
       - card: Tablet of Discovery
         zone: main
         min_count: 3
-      - card: Stomping Ground
-        zone: main
-        min_count: 3
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - red
+    - green
   - id: gruul-ramp-weather-maker
     priority: 67870
     subtype_id: null
@@ -3138,18 +3196,9 @@ archetypes:
       - card: Weather Maker
         zone: main
         min_count: 3
-      - card: Stomping Ground
-        zone: main
-        min_count: 3
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - red
+    - green
   - id: gruul-ramp-heartwood-roxanne
     priority: 67860
     subtype_id: null
@@ -3167,18 +3216,10 @@ archetypes:
       - card: Trumpeting Carnosaur
         zone: main
         min_count: 1
-      - card: Stomping Ground
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - red
+    - green
+  color_profile: default
 - id: break-out-aggro
   name: Break Out Aggro
   priority: 67950
@@ -3248,12 +3289,10 @@ archetypes:
       - card: Opt
         zone: main
         min_count: 3
-      - card: Watery Grave
-        zone: main
-        min_count: 2
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - blue
+    - black
+  color_profile: default
 - id: abzan-offense
   name: Abzan Offense
   priority: 77080
@@ -3272,15 +3311,11 @@ archetypes:
       - card: Practiced Offense
         zone: main
         min_count: 3
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        min_count: 1
+    colors:
+    - white
+    - black
+    - green
+  color_profile: default
 - id: gruul-meek-attack
   name: Gruul Meek Attack
   priority: 77140
@@ -3314,32 +3349,21 @@ archetypes:
       - card: Caustic Bronco
         zone: main
         min_count: 2
-      - card: Godless Shrine
-        zone: main
-        min_count: 1
+    colors:
+    - white
+    - black
   - id: orzhov-midrange-dual-land-fallback
     priority: 1900
     subtype_id: null
     conditions:
       all:
-      - card: Godless Shrine
-        zone: main
-        min_count: 1
-      - card: Concealed Courtyard
-        zone: main
-        min_count: 1
       - card: Deep-Cavern Bat
         zone: main
         min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - white
+    - black
+  color_profile: default
 - id: naya-delirium
   name: Naya Delirium
   priority: 77190
@@ -3599,16 +3623,10 @@ archetypes:
       - card: Way of the Pyromancer
         zone: main
         min_count: 1
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
-
+    colors:
+    - blue
+    - red
+  color_profile: default
 - id: rakdos-lizards
   name: Rakdos Lizards
   priority: 78002
@@ -3655,19 +3673,9 @@ archetypes:
       - card: Rankle's Prank
         zone: main
         min_count: 1
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
-
+    colors:
+    - black
+  color_profile: default
 - id: simic-landfall
   name: Simic Landfall
   priority: 78004
@@ -3683,18 +3691,10 @@ archetypes:
       - card: Earthbender Ascension
         zone: main
         min_count: 1
-      - card: Breeding Pool
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - blue
+    - green
+  color_profile: default
 - id: jeskai-superfriends
   name: Jeskai Superfriends
   priority: 78005
@@ -3786,10 +3786,12 @@ archetypes:
     name: Dimir Spider-Man
   - id: sultai
     name: Sultai Spider-Man
+  - id: grixis
+    name: Grixis Spider-Man
   rules:
   - id: sultai-excruciator-primary
     priority: 70010
-    subtype_id: sultai
+    subtype_id: null
     conditions:
       all:
       - card: Doomsday Excruciator
@@ -3801,19 +3803,16 @@ archetypes:
       - card: Wistfulness
         zone: main
         min_count: 1
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        min_count: 1
   - id: dimir-excruciator-primary
     priority: 70000
-    subtype_id: dimir
+    subtype_id: null
     conditions:
       all:
       - card: Doomsday Excruciator
         min_count: 1
   - id: dimir-deceit-primary
     priority: 19000
-    subtype_id: dimir
+    subtype_id: null
     conditions:
       all:
       - card: Deceit
@@ -3824,6 +3823,19 @@ archetypes:
         min_count: 3
       - card: Doomsday Excruciator
         exact_count: 0
+  color_profile: standard-spider-man
+  color_subtypes:
+    dimir:
+    - blue
+    - black
+    sultai:
+    - blue
+    - black
+    - green
+    grixis:
+    - blue
+    - black
+    - red
 - id: boros-superfriends
   name: Boros Superfriends
   priority: 78010
@@ -3845,18 +3857,10 @@ archetypes:
       - card: Gideon's Memorial
         zone: main
         min_count: 1
-      - card: Sacred Foundry
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - white
+    - red
+  color_profile: default
 - id: mono-white-swarm-aggro
   name: Mono-White Swarm Aggro
   priority: 78011
@@ -3878,18 +3882,9 @@ archetypes:
       - card: The Last Ronin's Technique
         zone: main
         min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - white
+  color_profile: default
 - id: grixis-artifact-sacrifice
   name: Grixis Artifact Sacrifice
   priority: 78012
@@ -3911,15 +3906,11 @@ archetypes:
       - card: Cryogen Relic
         zone: main
         min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        min_count: 1
+    colors:
+    - blue
+    - black
+    - red
+  color_profile: default
 - id: mono-white-angels
   name: Mono-White Angels
   priority: 78013
@@ -3938,18 +3929,9 @@ archetypes:
       - card: Youthful Valkyrie
         zone: main
         min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - white
+  color_profile: default
 - id: mono-white-swarm
   name: Mono-White Swarm
   priority: 78014
@@ -3971,18 +3953,9 @@ archetypes:
       - card: Elspeth, Storm Slayer
         zone: main
         min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - white
+  color_profile: default
 - id: azorius-fatehold
   name: Azorius Fatehold
   priority: 78015
@@ -4001,21 +3974,10 @@ archetypes:
       - card: Proctor of Potential
         zone: main
         min_count: 1
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - white
+    - blue
+  color_profile: default
 - id: mardu-demons
   name: Mardu Demons
   priority: 78016
@@ -4034,21 +3996,11 @@ archetypes:
       - card: Lightning Helix
         zone: main
         min_count: 1
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-red-source__
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-green-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - white
+    - black
+    - red
+  color_profile: default
 - id: jund-midrange
   name: Jund Midrange
   priority: 1000
@@ -4096,3 +4048,36 @@ archetypes:
       - card: Superior Spider-Man
         zone: any
         exact_count: 0
+- id: rakdos-goblins
+  name: Rakdos Goblins
+  priority: 76700
+  color_profile: default
+  conditions:
+    all:
+    - any:
+      - all:
+        - card: Boggart Cursecrafter
+          zone: main
+          min_count: 3
+      - all:
+        - card: Boggart Mischief
+          zone: main
+          min_count: 3
+    - any:
+      - all:
+        - card: Howlsquad Heavy
+          zone: main
+          min_count: 3
+      - all:
+        - card: Mudbutton Cursetosser
+          zone: main
+          min_count: 3
+  rules:
+  - id: rakdos-goblins-primary
+    priority: 76700
+    subtype_id: null
+    conditions:
+      all: []
+    colors:
+    - black
+    - red

@@ -4,6 +4,7 @@ let lastResponsiveFocusKey = null;
 
 function renderFocusSelector(element, root) {
   if (!element || !root.contains(element)) return null;
+  if (element.dataset.matrixCell) return `[data-matrix-cell="${CSS.escape(element.dataset.matrixCell)}"]`;
   if (element.id) return `#${CSS.escape(element.id)}`;
   const attributes = [...element.attributes];
   const stableAttribute = attributes.find(attribute => attribute.name === "data-responsive-key")
@@ -118,7 +119,7 @@ async function handleMobileListClick(button) {
     toggleSet(state.statsExpanded, parentId);
     if (opening) setCompositionSelection(parentId);
     else if (state.compositionIdentity === parentId) setCompositionSelection(null);
-    if (state.detailIdentity) queueUrlWrite();
+    queueUrlWrite();
     state.detailIdentity = null;
     const revealSelector = opening
       ? `[data-mobile-card-identity="${CSS.escape(parentId)}"]`
@@ -168,6 +169,7 @@ async function handleMobileListClick(button) {
     const opening = !state.tabletopExpanded.has(parentId);
     toggleSet(state.tabletopExpanded, parentId);
     state.tabletopDetailIdentity = null;
+    queueUrlWrite();
     await renderViewWithFocus(null, opening
       ? `[data-mobile-expanded-content="tabletop-subtypes:${CSS.escape(parentId)}"]`
       : null);
@@ -244,11 +246,19 @@ function updateMatrixStickyHeader() {
 }
 
 function updateMatrixPresentation() {
+  const cells = [...document.querySelectorAll(".matrix-cell[data-record]")];
+  const active = cells.includes(document.activeElement) ? document.activeElement : cells[0];
+  cells.forEach(cell => { cell.tabIndex = cell === active ? 0 : -1; });
   updateMatrixRowClipping();
   updateMatrixStickyHeader();
 }
 
 document.addEventListener("focusin", event => {
+  if (event.target.matches(".matrix-cell[data-record]")) {
+    document.querySelectorAll(".matrix-cell[data-record]").forEach(cell => {
+      cell.tabIndex = cell === event.target ? 0 : -1;
+    });
+  }
   if (event.target.dataset.responsiveKey) {
     lastResponsiveFocusKey = event.target.dataset.responsiveKey;
   }
@@ -264,7 +274,61 @@ document.addEventListener("scroll", event => {
 }, true);
 
 document.addEventListener("keydown", event => {
-  if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+  if (event.defaultPrevented || document.querySelector("#card-preview-modal:not([hidden])")) return;
+  if (event.key === "Escape") {
+    const matchupDocument = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
+    if (state.matchupFilterOpen && matchupDocument) {
+      event.preventDefault();
+      setMatchupFilterMenuOpen(false, matchupDocument);
+      return;
+    }
+    const tooltip = document.querySelector("#matrix-hover-pop:not([hidden])");
+    if (tooltip) {
+      event.preventDefault();
+      tooltip.hidden = true;
+      return;
+    }
+    if (event.target.id === "share-link") {
+      event.preventDefault();
+      resetShareFeedback();
+      document.querySelector("[data-share-view]")?.focus();
+      return;
+    }
+    if (event.target.closest("#view")) {
+      const container = event.target.closest(".landing-feature-item, section") || document.querySelector("#view");
+      const close = [...container.querySelectorAll("button.deck-close")]
+        .find(button => button.getClientRects().length);
+      if (close) { event.preventDefault(); close.click(); }
+    }
+    return;
+  }
+  const cell = event.target.closest(".matrix-cell[data-record]");
+  if (!cell || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+  if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+  event.preventDefault();
+  const row = cell.closest("tr");
+  const cells = [...row.querySelectorAll(".matrix-cell[data-record]")];
+  let next;
+  if (event.key === "Home") next = cells[0];
+  else if (event.key === "End") next = cells.at(-1);
+  else if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+    next = cells[cells.indexOf(cell) + (event.key === "ArrowLeft" ? -1 : 1)];
+  } else {
+    const rows = [...row.parentElement.rows];
+    const step = event.key === "ArrowUp" ? -1 : 1;
+    for (let i = rows.indexOf(row) + step; i >= 0 && i < rows.length; i += step) {
+      const candidate = rows[i].cells[cell.cellIndex];
+      if (candidate?.matches(".matrix-cell[data-record]")) { next = candidate; break; }
+    }
+  }
+  if (next) {
+    next.focus({ preventScroll: true });
+    next.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.defaultPrevented || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) return;
   if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
   const scroller = event.target.closest?.(".matrix-scroll[data-scroll-hint-key]");
   if (!scroller) return;

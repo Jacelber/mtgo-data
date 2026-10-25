@@ -516,23 +516,23 @@ capability, metadata catalog, or product renderer remains. Landing generation
 does not read a published Pickup week. Standalone Pickup files remain frozen
 compatibility and rollback resources and are not modified by this boundary.
 
-The daily MTGO production workflow may generate one private weekly-maintenance
-readiness artifact after a successful production result. That artifact binds
-the exact publication commit, review week, format-specific event IDs and
-classifier digests. Before creating that handoff, it requires the current rule
-digest to match the latest Top 8 week and index, every indexed rolling-range and
-representative-deck document, every indexed matchup document, and the maintained
-hierarchy catalog. A missing or different binding stops the handoff rather than
-allowing visual-metadata or Landing review to continue on a local overlay. Its
-classification section contains the complete retained
-Unknown diagnostic corpus, partitioned into unresolved records and exact
-Owner-accepted intentional Unknown records, and includes each deck's complete
-main deck and sideboard. It also carries classification blockers and Landing
-screening candidate counts, and may report manual inputs or later producers as explicitly
-unavailable. It is an Actions artifact and Issue handoff only: it is not
-generated public data, does not enter `stats/catalog.json` or Pages, and does
-not authorize a review or repository mutation. Its current operating contract
-is `docs/WEEKLY_MAINTENANCE.md`.
+The daily MTGO collection workflow retains validated raw events, matches,
+discovery state and the fetched ledger independently of public generation.
+Its schema 1.9.0 private collection notice binds the retained and source commits,
+reports retained input counts, closed weeks with events outside recorded data
+admissions, and discovered or deferred sources. This inventory does not run
+classification, require generated Top 8 or range products, verify acceptance,
+prove completeness, or mark a review completed. Its deduplicated notice does
+not replace, close or reopen full weekly review notices.
+
+Full classification and Unknown materials remain available through the existing
+on-demand weekly review tools. Public generation follows explicit classification
+acceptance and event admission; Landing retains its separate content acceptance.
+The legacy full readiness schemas remain readable. Neither the collection notice
+nor full review materials enter `stats/catalog.json` or Pages. Actions handoffs
+are encrypted and retained through the existing private archive mechanism;
+creating them does not authorize a review, publication or repository mutation.
+The operating contracts are `docs/WEEKLY_MAINTENANCE.md` and `docs/DELIVERY.md`.
 
 `configs/mtgo_weekly_review_completions.yaml` is the maintained non-public
 completion ledger. Legacy records retain their Top-8-only meaning: each format
@@ -1577,6 +1577,12 @@ front-end presentation.
 
 ### 11.10 Deterministic per-event hierarchical matchup statistics
 
+Overview Schema `1.2.0` adds a scope-level `literal_record` over all eligible
+participant perspectives, including unavailable decklists and excluding both
+sides of disqualified matches. Consumers can render the overall W-L-D without
+loading `decks.json`. Older overview versions retain the participant-record
+fallback; a missing record in `1.2.0` is an invalid current product, not zero.
+
 P7-06 reuses the P7-05 input validation boundary and reads the same normalized
 event, classification overlay, opportunity ledger, and maintained taxonomy.
 It verifies the opportunity-ledger digest again immediately before
@@ -1606,9 +1612,19 @@ Each emitted scope contains:
 - included round numbers and physical-match reconciliation;
 - reviewed exclusion counts;
 - ordered parent and leaf identities;
-- complete parent and leaf matrices, including zero cells;
+- complete parent and leaf matrix domains, with versioned zero-cell encoding;
 - non-mirror overall parent and leaf records;
 - raw W-L-D counts, derived rates, and 95% Wilson intervals.
+
+Matchup Schema `1.0.0` emits all cells. Schema `1.1.0` requires
+`matrix_encoding: "sparse-zero-v1"`: every ordered row remains present, but
+zero W-L-D columns may be omitted. Only under that explicit contract does an
+omitted cell mean zero observations, null rates and intervals, and the usual
+diagonal mirror flag. Nonzero records and all overall values retain their
+existing fields and meaning. Generation still checks the complete matrix
+before serialization; multi-event consumers retain identity-domain, inverse,
+mirror and physical-match conservation checks. Missing cells in a dense
+legacy input must not silently acquire sparse semantics.
 
 The overview and opportunity ledger must declare the same structure and exact
 ordered scope set. A mismatch fails before aggregation. Pure structures do not

@@ -2,7 +2,7 @@
   "schema_version": "1.1.0",
   "format": "pauper",
   "source": "mtgo",
-  "classifier_digest": "b1799d0561d80a53561c90f3aa49b13366d6c7cd24a3e58e5213fd59678e470d",
+  "classifier_digest": "751aeebfc17301e63bbeb51a4beedd94a97ed4f2de48078ece11e062b98c1d0a",
   "period": {
     "type": "4w",
     "start": "2026-09-21",
@@ -53,7 +53,9 @@
         "expandable": true,
         "subtype_ids": [
           "battle-screech/boros",
-          "battle-screech/mono-white"
+          "battle-screech/mono-white",
+          "battle-screech/naya",
+          "battle-screech/orzhov"
         ]
       },
       {
@@ -218,7 +220,8 @@
         "expandable": true,
         "subtype_ids": [
           "golgari-gardens/golgari",
-          "golgari-gardens/jund"
+          "golgari-gardens/jund",
+          "golgari-gardens/sultai"
         ]
       },
       {
@@ -673,6 +676,22 @@
         "subtype_id": "mono-white"
       },
       {
+        "id": "battle-screech/naya",
+        "kind": "subtype",
+        "name": "Naya",
+        "display_name": "Naya Battle Screech",
+        "parent_id": "battle-screech",
+        "subtype_id": "naya"
+      },
+      {
+        "id": "battle-screech/orzhov",
+        "kind": "subtype",
+        "name": "Orzhov",
+        "display_name": "Orzhov Battle Screech",
+        "parent_id": "battle-screech",
+        "subtype_id": "orzhov"
+      },
+      {
         "id": "bogles",
         "kind": "archetype",
         "name": "Bogles",
@@ -903,6 +922,14 @@
         "display_name": "Jund Garden",
         "parent_id": "golgari-gardens",
         "subtype_id": "jund"
+      },
+      {
+        "id": "golgari-gardens/sultai",
+        "kind": "subtype",
+        "name": "Sultai Gardens",
+        "display_name": "Sultai Gardens",
+        "parent_id": "golgari-gardens",
+        "subtype_id": "sultai"
       },
       {
         "id": "green-tron",

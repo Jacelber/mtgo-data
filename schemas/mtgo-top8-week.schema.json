@@ -20,6 +20,7 @@
     "source": {"const": "mtgo"},
     "format": {"$ref": "common.schema.json#/$defs/formatId"},
     "classifier_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "construction_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "week": {"$ref": "#/$defs/week"},
     "events": {
       "type": "array",

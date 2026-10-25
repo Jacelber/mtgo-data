@@ -390,3 +390,92 @@ test("multi-event admission rejects the same incompatible fixture mutations as P
     );
   });
 });
+
+test("versioned sparse events preserve every multi-event result and reject lost observations", () => {
+  const inputs = [...new Map(deepClone(multiEventParityFixture.event_inputs)
+    .map(input => [input.meta.event_id, input])).values()];
+  const catalog = deepClone(multiEventParityFixture.catalog);
+  const denseRow = Object.values(inputs[0].matchup.scopes.all_constructed.leaf_matrix)
+    .find(row => Object.values(row).some(cell => cell.wins + cell.losses + cell.draws === 0));
+  const zeroId = Object.keys(denseRow).find(id => {
+    const cell = denseRow[id];
+    return cell.wins + cell.losses + cell.draws === 0;
+  });
+  const zeroCell = denseRow[zeroId];
+  delete denseRow[zeroId];
+  assert.throws(() => matchup.buildMultiEventMatchupContract(inputs,
+    deepClone(multiEventParityFixture.canonical_hierarchy), catalog),
+  error => error.code === "matrix_invariant_failed");
+  denseRow[zeroId] = zeroCell;
+  inputs.forEach(({ matchup: document }) => {
+    document.schema_version = "1.1.0";
+    document.matrix_encoding = "sparse-zero-v1";
+    Object.values(document.scopes).forEach(scope => {
+      Object.values(scope.leaf_matrix).forEach(row => {
+        Object.entries(row).forEach(([id, cell]) => {
+          if (cell.wins + cell.losses + cell.draws === 0) delete row[id];
+        });
+      });
+    });
+  });
+  catalog.events.forEach(event => { event.matchup_compatibility.matchup_schema_version = "1.1.0"; });
+  const expected = deepClone(multiEventParityFixture.expected);
+  expected.compatibility.matchup_schema_version = "1.1.0";
+  expected.inputs.forEach(input => { input.matchup_schema_version = "1.1.0"; });
+  const build = () => matchup.buildMultiEventMatchupContract(inputs,
+    deepClone(multiEventParityFixture.canonical_hierarchy), catalog);
+  assert.deepEqual(build(), expected);
+  const first = inputs[0].matchup;
+  delete first.matrix_encoding;
+  assert.throws(build, error => error.code === "unsupported_matchup_schema");
+  first.matrix_encoding = "sparse-zero-v1";
+  const row = Object.values(first.scopes.all_constructed.leaf_matrix).find(r => Object.keys(r).length);
+  delete row[Object.keys(row)[0]];
+  assert.throws(build, error => error.code === "matrix_invariant_failed");
+});
+
+test("single-event validation covers every scope and the sparse/dense contract", () => {
+  const original = multiEventParityFixture.event_inputs[0];
+  const validate = input => matchup.validateEventMatchup(input.meta, input.matchup);
+  validate(deepClone(original));
+  function sparse() {
+    const input = deepClone(original);
+    input.matchup.schema_version = "1.1.0";
+    input.matchup.matrix_encoding = "sparse-zero-v1";
+    for (const scope of Object.values(input.matchup.scopes)) {
+      for (const row of Object.values(scope.leaf_matrix)) {
+        for (const [id, cell] of Object.entries(row)) {
+          if (cell.wins + cell.losses + cell.draws === 0) delete row[id];
+        }
+      }
+    }
+    return input;
+  }
+  validate(sparse());
+  const mutations = [
+    input => delete input.matchup.matrix_encoding,
+    input => { input.matchup.schema_version = "9.0.0"; },
+    input => { input.matchup.event_id = "999999"; },
+    input => { delete input.matchup.scopes.all_constructed.leaf_matrix.alpha; },
+    input => { input.matchup.scopes.all_constructed.leaf_matrix.alpha.invalid = { wins: 0, losses: 0, draws: 0 }; },
+    input => { input.matchup.scopes.all_constructed.leaf_matrix.alpha.alpha = { wins: -1, losses: 0, draws: 0 }; },
+    input => { input.matchup.scopes.all_constructed.leaf_matrix.alpha.alpha = { wins: 0, losses: 0, draws: 1 }; },
+    input => { input.matchup.scopes.all_constructed.directed_observation_count += 2; },
+    input => { input.matchup.scopes.all_constructed.source_match_count += 1; },
+    input => { input.matchup.scopes.all_constructed.leaf_matrix.alpha.alpha = { wins: 0, losses: 0, draws: 0, literal_record: { wins: 1, losses: 0, draws: 0 } }; },
+    input => {
+      input.meta.scope_order.unshift("day1");
+      input.matchup.scope_order = [...input.meta.scope_order];
+      input.matchup.scopes.day1 = deepClone(input.matchup.scopes.all_constructed);
+      input.matchup.scopes.day1.included_match_count += 1;
+    },
+  ];
+  mutations.forEach(mutate => {
+    const input = sparse();
+    mutate(input);
+    assert.throws(() => validate(input), matchup.MultiEventMatchupError);
+  });
+  const dense = deepClone(original);
+  delete dense.matchup.scopes.all_constructed.leaf_matrix.alpha.alpha;
+  assert.throws(() => validate(dense), /incomplete columns/);
+});

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "document_type": "overview",
   "source": "melee",
   "event_id": "459699",
@@ -10,14 +10,14 @@
     "event_sha256": "bb541a83f9c1e11a66344633847c7508bbc7282de294897f3ea709c836030448",
     "event_schema_version": "2.2.0",
     "classification_path": "data/modern/melee/classifications/459699.json",
-    "classification_sha256": "a78d2036f533dfe42a9a721aea4583ab098f7ff252c444f78033734a7d6214ac",
+    "classification_sha256": "da7f990eb5b6846314ac8004f06619c9ec7409cb48dfb47cc31f452736995be6",
     "classification_schema_version": "1.1.0",
     "opportunity_path": "data/modern/melee/opportunities/459699.json",
-    "opportunity_sha256": "091bc4d3d46d078c85749ad50f4d8346524c4bcfa0654abb963bf36073f0c0db",
+    "opportunity_sha256": "d62c7e83863426d7a0551d4a8e0ac138830ddb8d4d80e43b65d746cb3b6caa54",
     "opportunity_schema_version": "1.1.0",
     "taxonomy_path": "my_archetypes/modern.yaml",
-    "taxonomy_sha256": "cbafde2bb8d7784a7ccb487813f5ec355e0694629fcea902e9d12d719c845b5d",
-    "taxonomy_schema_version": "1.1.0"
+    "taxonomy_sha256": "216b29f54617b30246c6bb65b2989cef2f8ed93f806c3575dbcd6f812ca7f5f4",
+    "taxonomy_schema_version": "1.2.0"
   },
   "event": {
     "name": "Ottawa 2026-27 Round 1 Regional Championship",
@@ -37,6 +37,18 @@
   "advancement_metric": "day2_conversion",
   "scopes": {
     "day1": {
+      "literal_record": {
+        "wins": 1637,
+        "losses": 1637,
+        "draws": 70,
+        "matches": 3344,
+        "win_rate": 0.489533,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.472612,
+          "upper": 0.506479
+        }
+      },
       "population": "starting_field",
       "selection_bias_warning": false,
       "participant_count": 462,
@@ -1144,7 +1156,7 @@
           "classification_status": "classified",
           "archetype_id": "esper-goryos",
           "archetype_name": "Esper Goryo's",
-          "expandable": false,
+          "expandable": true,
           "deck_count": 31,
           "metagame_share": 0.0671,
           "constructed_points": 247,
@@ -1219,14 +1231,157 @@
             },
             "mirror_match_count": 7
           },
-          "subtypes": []
+          "subtypes": [
+            {
+              "group_id": "subtype:esper-goryos/esper",
+              "subtype_id": "esper",
+              "subtype_name": "Esper",
+              "display_name": "Esper Goryo's",
+              "deck_count": 31,
+              "metagame_share": 0.0671,
+              "constructed_points": 247,
+              "theoretical_rounds": 279,
+              "effective_theoretical_rounds": 279,
+              "average_points_per_effective_round": 0.885305,
+              "completed_or_officially_exempt_rounds": 198,
+              "completion_rate": 0.709677,
+              "played_match_participations": 197,
+              "source_match_count": 191,
+              "result_counts": {
+                "bye": 1,
+                "drop_unplayed": 81,
+                "played_draw": 7,
+                "played_loss": 111,
+                "played_win": 79
+              },
+              "drop_player_count": 21,
+              "drop_unplayed_rounds": 81,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 1,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 79,
+                  "losses": 111,
+                  "draws": 7,
+                  "matches": 197,
+                  "win_rate": 0.418782,
+                  "confidence_interval_95": {
+                    "lower": 0.352086,
+                    "upper": 0.488584
+                  },
+                  "literal_record": {
+                    "wins": 79,
+                    "losses": 111,
+                    "draws": 7,
+                    "matches": 197,
+                    "win_rate": 0.401015,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.3351,
+                      "upper": 0.470717
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 73,
+                  "losses": 105,
+                  "draws": 5,
+                  "matches": 183,
+                  "win_rate": 0.412568,
+                  "confidence_interval_95": {
+                    "lower": 0.343754,
+                    "upper": 0.484978
+                  },
+                  "literal_record": {
+                    "wins": 73,
+                    "losses": 105,
+                    "draws": 5,
+                    "matches": 183,
+                    "win_rate": 0.398907,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.330741,
+                      "upper": 0.471231
+                    }
+                  }
+                },
+                "mirror_match_count": 7
+              }
+            },
+            {
+              "group_id": "subtype:esper-goryos/wubg",
+              "subtype_id": "wubg",
+              "subtype_name": "WUBG",
+              "display_name": "WUBG Goryo's",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            }
+          ]
         },
         {
           "group_id": "archetype:esper-blink",
           "classification_status": "classified",
           "archetype_id": "esper-blink",
           "archetype_name": "Esper Blink",
-          "expandable": false,
+          "expandable": true,
           "deck_count": 22,
           "metagame_share": 0.047619,
           "constructed_points": 297,
@@ -1300,7 +1455,149 @@
             },
             "mirror_match_count": 4
           },
-          "subtypes": []
+          "subtypes": [
+            {
+              "group_id": "subtype:esper-blink/esper",
+              "subtype_id": "esper",
+              "subtype_name": "Esper Blink",
+              "display_name": "Esper Blink",
+              "deck_count": 22,
+              "metagame_share": 0.047619,
+              "constructed_points": 297,
+              "theoretical_rounds": 198,
+              "effective_theoretical_rounds": 198,
+              "average_points_per_effective_round": 1.5,
+              "completed_or_officially_exempt_rounds": 176,
+              "completion_rate": 0.888889,
+              "played_match_participations": 176,
+              "source_match_count": 172,
+              "result_counts": {
+                "drop_unplayed": 22,
+                "played_draw": 3,
+                "played_loss": 75,
+                "played_win": 98
+              },
+              "drop_player_count": 10,
+              "drop_unplayed_rounds": 22,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 98,
+                  "losses": 75,
+                  "draws": 3,
+                  "matches": 176,
+                  "win_rate": 0.565341,
+                  "confidence_interval_95": {
+                    "lower": 0.491483,
+                    "upper": 0.636408
+                  },
+                  "literal_record": {
+                    "wins": 98,
+                    "losses": 75,
+                    "draws": 3,
+                    "matches": 176,
+                    "win_rate": 0.556818,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.482991,
+                      "upper": 0.628218
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 94,
+                  "losses": 71,
+                  "draws": 3,
+                  "matches": 168,
+                  "win_rate": 0.568452,
+                  "confidence_interval_95": {
+                    "lower": 0.492853,
+                    "upper": 0.640991
+                  },
+                  "literal_record": {
+                    "wins": 94,
+                    "losses": 71,
+                    "draws": 3,
+                    "matches": 168,
+                    "win_rate": 0.559524,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.483954,
+                      "upper": 0.632432
+                    }
+                  }
+                },
+                "mirror_match_count": 4
+              }
+            },
+            {
+              "group_id": "subtype:esper-blink/wubr",
+              "subtype_id": "wubr",
+              "subtype_name": "WUBR Blink",
+              "display_name": "WUBR Blink",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            }
+          ]
         },
         {
           "group_id": "archetype:boros-energy",
@@ -6276,6 +6573,68 @@
                 },
                 "mirror_match_count": 0
               }
+            },
+            {
+              "group_id": "subtype:steel-cutter/temur",
+              "subtype_id": "temur",
+              "subtype_name": "Temur Steel Cutter",
+              "display_name": "Temur Steel Cutter Steel-Cutter",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
             }
           ]
         },
@@ -9230,6 +9589,18 @@
       ]
     },
     "day2": {
+      "literal_record": {
+        "wins": 243,
+        "losses": 243,
+        "draws": 10,
+        "matches": 496,
+        "win_rate": 0.489919,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.446172,
+          "upper": 0.533822
+        }
+      },
       "population": "qualified_field",
       "selection_bias_warning": false,
       "participant_count": 108,
@@ -10363,7 +10734,7 @@
           "classification_status": "classified",
           "archetype_id": "esper-blink",
           "archetype_name": "Esper Blink",
-          "expandable": false,
+          "expandable": true,
           "deck_count": 8,
           "metagame_share": 0.074074,
           "constructed_points": 33,
@@ -10438,7 +10809,151 @@
             "mirror_match_count": 1
           },
           "day2_conversion": 0.363636,
-          "subtypes": []
+          "subtypes": [
+            {
+              "group_id": "subtype:esper-blink/esper",
+              "subtype_id": "esper",
+              "subtype_name": "Esper Blink",
+              "display_name": "Esper Blink",
+              "deck_count": 8,
+              "metagame_share": 0.074074,
+              "constructed_points": 33,
+              "theoretical_rounds": 40,
+              "effective_theoretical_rounds": 40,
+              "average_points_per_effective_round": 0.825,
+              "completed_or_officially_exempt_rounds": 33,
+              "completion_rate": 0.825,
+              "played_match_participations": 32,
+              "source_match_count": 32,
+              "result_counts": {
+                "bye": 1,
+                "drop_unplayed": 7,
+                "played_loss": 22,
+                "played_win": 10
+              },
+              "drop_player_count": 3,
+              "drop_unplayed_rounds": 7,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 1,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 10,
+                  "losses": 22,
+                  "draws": 0,
+                  "matches": 32,
+                  "win_rate": 0.3125,
+                  "confidence_interval_95": {
+                    "lower": 0.179525,
+                    "upper": 0.485667
+                  },
+                  "literal_record": {
+                    "wins": 10,
+                    "losses": 22,
+                    "draws": 0,
+                    "matches": 32,
+                    "win_rate": 0.3125,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.179524,
+                      "upper": 0.48567
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 9,
+                  "losses": 21,
+                  "draws": 0,
+                  "matches": 30,
+                  "win_rate": 0.3,
+                  "confidence_interval_95": {
+                    "lower": 0.166647,
+                    "upper": 0.478758
+                  },
+                  "literal_record": {
+                    "wins": 9,
+                    "losses": 21,
+                    "draws": 0,
+                    "matches": 30,
+                    "win_rate": 0.3,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.166646,
+                      "upper": 0.478761
+                    }
+                  }
+                },
+                "mirror_match_count": 1
+              },
+              "day2_conversion": 0.363636
+            },
+            {
+              "group_id": "subtype:esper-blink/wubr",
+              "subtype_id": "wubr",
+              "subtype_name": "WUBR Blink",
+              "display_name": "WUBR Blink",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              },
+              "day2_conversion": null
+            }
+          ]
         },
         {
           "group_id": "archetype:boros-energy",
@@ -10989,7 +11504,7 @@
           "classification_status": "classified",
           "archetype_id": "esper-goryos",
           "archetype_name": "Esper Goryo's",
-          "expandable": false,
+          "expandable": true,
           "deck_count": 4,
           "metagame_share": 0.037037,
           "constructed_points": 15,
@@ -11064,7 +11579,151 @@
             "mirror_match_count": 1
           },
           "day2_conversion": 0.129032,
-          "subtypes": []
+          "subtypes": [
+            {
+              "group_id": "subtype:esper-goryos/esper",
+              "subtype_id": "esper",
+              "subtype_name": "Esper",
+              "display_name": "Esper Goryo's",
+              "deck_count": 4,
+              "metagame_share": 0.037037,
+              "constructed_points": 15,
+              "theoretical_rounds": 20,
+              "effective_theoretical_rounds": 20,
+              "average_points_per_effective_round": 0.75,
+              "completed_or_officially_exempt_rounds": 15,
+              "completion_rate": 0.75,
+              "played_match_participations": 15,
+              "source_match_count": 14,
+              "result_counts": {
+                "drop_unplayed": 5,
+                "played_draw": 3,
+                "played_loss": 8,
+                "played_win": 4
+              },
+              "drop_player_count": 2,
+              "drop_unplayed_rounds": 5,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 4,
+                  "losses": 8,
+                  "draws": 3,
+                  "matches": 15,
+                  "win_rate": 0.366667,
+                  "confidence_interval_95": {
+                    "lower": 0.174568,
+                    "upper": 0.613135
+                  },
+                  "literal_record": {
+                    "wins": 4,
+                    "losses": 8,
+                    "draws": 3,
+                    "matches": 15,
+                    "win_rate": 0.266667,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.108973,
+                      "upper": 0.519509
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 4,
+                  "losses": 8,
+                  "draws": 1,
+                  "matches": 13,
+                  "win_rate": 0.346154,
+                  "confidence_interval_95": {
+                    "lower": 0.15134,
+                    "upper": 0.611151
+                  },
+                  "literal_record": {
+                    "wins": 4,
+                    "losses": 8,
+                    "draws": 1,
+                    "matches": 13,
+                    "win_rate": 0.307692,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.126805,
+                      "upper": 0.576311
+                    }
+                  }
+                },
+                "mirror_match_count": 1
+              },
+              "day2_conversion": 0.129032
+            },
+            {
+              "group_id": "subtype:esper-goryos/wubg",
+              "subtype_id": "wubg",
+              "subtype_name": "WUBG",
+              "display_name": "WUBG Goryo's",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              },
+              "day2_conversion": null
+            }
+          ]
         },
         {
           "group_id": "archetype:amulet-titan",
@@ -14071,6 +14730,69 @@
               "subtype_id": "jeskai",
               "subtype_name": "Jeskai",
               "display_name": "Jeskai Steel-Cutter",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              },
+              "day2_conversion": null
+            },
+            {
+              "group_id": "subtype:steel-cutter/temur",
+              "subtype_id": "temur",
+              "subtype_name": "Temur Steel Cutter",
+              "display_name": "Temur Steel Cutter Steel-Cutter",
               "deck_count": 0,
               "metagame_share": 0.0,
               "constructed_points": 0,
@@ -17855,6 +18577,18 @@
       "day2_conversion": 0.233766
     },
     "all_constructed": {
+      "literal_record": {
+        "wins": 1880,
+        "losses": 1880,
+        "draws": 80,
+        "matches": 3840,
+        "win_rate": 0.489583,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.47379,
+          "upper": 0.505397
+        }
+      },
       "population": "starting_field_with_qualified_day2_opportunities",
       "selection_bias_warning": false,
       "participant_count": 462,
@@ -18969,7 +19703,7 @@
           "classification_status": "classified",
           "archetype_id": "esper-goryos",
           "archetype_name": "Esper Goryo's",
-          "expandable": false,
+          "expandable": true,
           "deck_count": 31,
           "metagame_share": 0.0671,
           "constructed_points": 262,
@@ -19044,14 +19778,157 @@
             },
             "mirror_match_count": 8
           },
-          "subtypes": []
+          "subtypes": [
+            {
+              "group_id": "subtype:esper-goryos/esper",
+              "subtype_id": "esper",
+              "subtype_name": "Esper",
+              "display_name": "Esper Goryo's",
+              "deck_count": 31,
+              "metagame_share": 0.0671,
+              "constructed_points": 262,
+              "theoretical_rounds": 299,
+              "effective_theoretical_rounds": 299,
+              "average_points_per_effective_round": 0.876254,
+              "completed_or_officially_exempt_rounds": 213,
+              "completion_rate": 0.712375,
+              "played_match_participations": 212,
+              "source_match_count": 205,
+              "result_counts": {
+                "bye": 1,
+                "drop_unplayed": 86,
+                "played_draw": 10,
+                "played_loss": 119,
+                "played_win": 83
+              },
+              "drop_player_count": 23,
+              "drop_unplayed_rounds": 86,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 1,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 83,
+                  "losses": 119,
+                  "draws": 10,
+                  "matches": 212,
+                  "win_rate": 0.415094,
+                  "confidence_interval_95": {
+                    "lower": 0.350853,
+                    "upper": 0.482358
+                  },
+                  "literal_record": {
+                    "wins": 83,
+                    "losses": 119,
+                    "draws": 10,
+                    "matches": 212,
+                    "win_rate": 0.391509,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.328296,
+                      "upper": 0.458585
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 77,
+                  "losses": 113,
+                  "draws": 6,
+                  "matches": 196,
+                  "win_rate": 0.408163,
+                  "confidence_interval_95": {
+                    "lower": 0.341762,
+                    "upper": 0.478095
+                  },
+                  "literal_record": {
+                    "wins": 77,
+                    "losses": 113,
+                    "draws": 6,
+                    "matches": 196,
+                    "win_rate": 0.392857,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.327172,
+                      "upper": 0.462662
+                    }
+                  }
+                },
+                "mirror_match_count": 8
+              }
+            },
+            {
+              "group_id": "subtype:esper-goryos/wubg",
+              "subtype_id": "wubg",
+              "subtype_name": "WUBG",
+              "display_name": "WUBG Goryo's",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            }
+          ]
         },
         {
           "group_id": "archetype:esper-blink",
           "classification_status": "classified",
           "archetype_id": "esper-blink",
           "archetype_name": "Esper Blink",
-          "expandable": false,
+          "expandable": true,
           "deck_count": 22,
           "metagame_share": 0.047619,
           "constructed_points": 330,
@@ -19126,7 +20003,150 @@
             },
             "mirror_match_count": 5
           },
-          "subtypes": []
+          "subtypes": [
+            {
+              "group_id": "subtype:esper-blink/esper",
+              "subtype_id": "esper",
+              "subtype_name": "Esper Blink",
+              "display_name": "Esper Blink",
+              "deck_count": 22,
+              "metagame_share": 0.047619,
+              "constructed_points": 330,
+              "theoretical_rounds": 238,
+              "effective_theoretical_rounds": 238,
+              "average_points_per_effective_round": 1.386555,
+              "completed_or_officially_exempt_rounds": 209,
+              "completion_rate": 0.878151,
+              "played_match_participations": 208,
+              "source_match_count": 204,
+              "result_counts": {
+                "bye": 1,
+                "drop_unplayed": 29,
+                "played_draw": 3,
+                "played_loss": 97,
+                "played_win": 108
+              },
+              "drop_player_count": 13,
+              "drop_unplayed_rounds": 29,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 1,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 108,
+                  "losses": 97,
+                  "draws": 3,
+                  "matches": 208,
+                  "win_rate": 0.526442,
+                  "confidence_interval_95": {
+                    "lower": 0.458725,
+                    "upper": 0.593201
+                  },
+                  "literal_record": {
+                    "wins": 108,
+                    "losses": 97,
+                    "draws": 3,
+                    "matches": 208,
+                    "win_rate": 0.519231,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.451599,
+                      "upper": 0.586165
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 103,
+                  "losses": 92,
+                  "draws": 3,
+                  "matches": 198,
+                  "win_rate": 0.527778,
+                  "confidence_interval_95": {
+                    "lower": 0.458375,
+                    "upper": 0.596123
+                  },
+                  "literal_record": {
+                    "wins": 103,
+                    "losses": 92,
+                    "draws": 3,
+                    "matches": 198,
+                    "win_rate": 0.520202,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.450893,
+                      "upper": 0.588742
+                    }
+                  }
+                },
+                "mirror_match_count": 5
+              }
+            },
+            {
+              "group_id": "subtype:esper-blink/wubr",
+              "subtype_id": "wubr",
+              "subtype_name": "WUBR Blink",
+              "display_name": "WUBR Blink",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            }
+          ]
         },
         {
           "group_id": "archetype:boros-energy",
@@ -24049,6 +25069,68 @@
               "subtype_id": "jeskai",
               "subtype_name": "Jeskai",
               "display_name": "Jeskai Steel-Cutter",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:steel-cutter/temur",
+              "subtype_id": "temur",
+              "subtype_name": "Temur Steel Cutter",
+              "display_name": "Temur Steel Cutter Steel-Cutter",
               "deck_count": 0,
               "metagame_share": 0.0,
               "constructed_points": 0,

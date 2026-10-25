@@ -34,8 +34,10 @@
     return `stats/${format}/mtgo`;
   }
 
-  async function loadStatistics(format, weeks, { includeDecks = false } = {}) {
+  async function loadStatistics(format, weeks, { includeDecks = false, retain = null } = {}) {
     const base = rootPath(format);
+    retain?.(client, [`${base}/meta.json`, `${base}/range_${weeks}w.json`,
+      `${base}/completeness/${weeks}w.json`, ...(includeDecks ? [`${base}/decks_${weeks}w.json`] : [])]);
     const [meta, range, decks, completeness] = await Promise.all([
       client.fetchJson(`${base}/meta.json`),
       client.fetchJson(`${base}/range_${weeks}w.json`),
@@ -45,8 +47,10 @@
     return { meta, range, decks, completeness };
   }
 
-  function loadRangeStatistics(format, weeks) {
-    return client.fetchJson(`${rootPath(format)}/range_${weeks}w.json`);
+  function loadRangeStatistics(format, weeks, { retain = null } = {}) {
+    const path = `${rootPath(format)}/range_${weeks}w.json`;
+    retain?.(client, [path]);
+    return client.fetchJson(path);
   }
 
   function landingDataPaths(format, landing) {
@@ -188,6 +192,7 @@
 
   async function loadLanding(format, landingPath, selectedFeatureFile, options = {}) {
     const base = rootPath(format);
+    options.retain?.(client, [landingPath, `${base}/landing/features/index.json`]);
     const landing = await client.fetchJson(landingPath);
     const data = landingDataPaths(format, landing);
     const featureIndex = await client.fetchJson(`${base}/landing/features/index.json`);
@@ -201,6 +206,11 @@
       || selectableWeeks[0]
       || null;
     const featureFile = selectedEntry?.file || null;
+    options.retain?.(client, [`${base}/meta.json`, data.range, data.completeness,
+      ...(featureFile ? [`${base}/landing/features/${featureFile}`] : []),
+      ...(options.includeEnvironmentDecks ? [data.environment_decks] : []),
+      ...(options.includeFeatureDecks ? [data.feature_decks] : []),
+    ]);
     const [
       meta,
       range,
@@ -233,8 +243,9 @@
     });
   }
 
-  async function loadMatchup(format, weeks) {
+  async function loadMatchup(format, weeks, { retain = null } = {}) {
     const base = rootPath(format);
+    retain?.(client, [`${base}/matchup_${weeks}w.json`, `${base}/completeness/${weeks}w.json`]);
     const [document, completeness] = await Promise.all([
       client.fetchJson(`${base}/matchup_${weeks}w.json`),
       client.fetchJson(`${base}/completeness/${weeks}w.json`),
@@ -242,12 +253,15 @@
     return { document, completeness };
   }
 
-  async function loadTop8(indexPath, selectedFile, { includeBases = false } = {}) {
+  async function loadTop8(indexPath, selectedFile, { includeBases = false, retain = null } = {}) {
+    retain?.(client, [indexPath]);
     const index = await client.fetchJson(indexPath);
     const weekEntry = index.weeks.find(item => item.file === selectedFile)
       || index.weeks[0];
     if (!weekEntry) throw new Error("MTGO 八强目录中没有可用周。");
     const base = Runtime.dirname(indexPath);
+    retain?.(client, [weekEntry.file, ...(includeBases ? [weekEntry.comparison_bases_file] : [])]
+      .map(path => Runtime.joinPath(base, path)));
     const [top8, bases] = await Promise.all([
       client.fetchJson(Runtime.joinPath(base, weekEntry.file)),
       includeBases
@@ -257,8 +271,10 @@
     return { index, weekEntry, top8, bases };
   }
 
-  function loadComparisonDecks(format) {
-    return client.fetchJson(`${rootPath(format)}/decks_4w.json`);
+  function loadComparisonDecks(format, { retain = null } = {}) {
+    const path = `${rootPath(format)}/decks_4w.json`;
+    retain?.(client, [path]);
+    return client.fetchJson(path);
   }
 
   function requireFormat(staged, paths, format) {
@@ -294,6 +310,7 @@
       environmentDecks: data.get(pinned.environment_decks), featureDecks: data.get(pinned.feature_decks),
     });
     return { changed: head.changed || data.changed,
+      values: Object.freeze({ ...head.values, ...data.values }),
       get: path => path === landingPath ? head.get(path) : data.get(path),
       commit() { head.commit(); data.commit(); } };
   }
@@ -303,13 +320,28 @@
     return requireFormat(await client.stage([path]), [path], format);
   }
 
-  async function stageMatchup(format, weeks) {
+  async function stageMatchup(format, weeks, { includeRange = false } = {}) {
     const base = rootPath(format);
     const paths = [
       `${base}/matchup_${weeks}w.json`,
       `${base}/completeness/${weeks}w.json`,
     ];
-    return requireFormat(await client.stage(paths), paths, format);
+    const rangePath = `${base}/range_${weeks}w.json`;
+    if (includeRange) paths.push(rangePath);
+    const staged = requireFormat(await client.stage(paths), paths, format);
+    if (includeRange) {
+      const matrix = staged.get(paths[0]);
+      const range = staged.get(rangePath);
+      const completeness = staged.get(paths[1]);
+      const periods = [matrix, range, completeness].map(doc => doc.period);
+      if (periods.some(period => !period || period.weeks !== weeks
+        || period.start !== periods[0]?.start || period.end !== periods[0]?.end
+        || period.type !== periods[0]?.type)
+        || range.classifier_digest !== matrix.classifier_digest) {
+        throw new Runtime.ResourceError("invalid", rangePath);
+      }
+    }
+    return staged;
   }
 
   async function stageTop8(

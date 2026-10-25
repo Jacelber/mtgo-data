@@ -1311,20 +1311,28 @@
 }
 
 .column-axis-controls .axis-name {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
   position: absolute;
   bottom: 0;
-  left: 34px;
+  left: 50%;
   overflow: visible;
   max-height: none;
-  writing-mode: vertical-rl;
+  writing-mode: horizontal-tb;
   transform: translateX(-50%);
   text-overflow: clip;
   white-space: nowrap;
 }
 
+.column-axis-controls .axis-name-text {
+  writing-mode: vertical-rl;
+}
+
 .column-axis-controls .mana-identity {
-  display: inline-flex;
-  margin: 6px 0 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
   writing-mode: horizontal-tb;
 }
 
@@ -1355,18 +1363,8 @@
   border-left-width: 8px;
 }
 
-.matrix-record {
-  position: sticky;
-  left: 0;
-  margin-top: 8px;
-  padding: 8px 10px;
-  border-radius: 6px;
-  background: #252a30;
-  color: #fff;
-  font-size: 12px;
-}
-
 .matrix-hover-pop {
+  box-sizing: border-box;
   position: fixed;
   z-index: 50;
   pointer-events: none;
@@ -1376,7 +1374,8 @@
   color: #fff;
   box-shadow: 0 3px 12px rgba(0, 0, 0, .25);
   font-size: 12px;
-  white-space: nowrap;
+  max-width: min(450px, calc(100vw - 16px));
+  white-space: normal;
 }
 
 .top8-week-table {

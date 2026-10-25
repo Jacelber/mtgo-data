@@ -10,6 +10,29 @@
   const CANONICAL_SCOPES = ["day1", "day2", "all_constructed"];
   const EVENT_ID_PATTERN = /^[1-9][0-9]*$/;
 
+  // JSON client entries are immutable snapshots. Cache only successful validation;
+  // a staged refresh creates new objects and must be validated before commit.
+  const validatedMatchups = new WeakMap();
+  function requireEventMatchup(meta, matchup, eventEntry, loadedBase = null) {
+    try {
+      if (meta.event_id !== eventEntry.event_id || matchup.event_id !== eventEntry.event_id) {
+        throw new Error("Tabletop matchup does not match the selected event");
+      }
+      if (validatedMatchups.get(matchup)?.has(meta)) return;
+      ReviewData.validateEventMatchup(meta, matchup);
+      if (!validatedMatchups.has(matchup)) validatedMatchups.set(matchup, new WeakSet());
+      validatedMatchups.get(matchup).add(meta);
+    } catch (error) {
+      // An initial invalid response must be fetchable again on Retry. Staged
+      // refresh failures leave the currently displayed cache untouched.
+      if (loadedBase !== null) {
+        client.invalidate(Runtime.joinPath(loadedBase, eventEntry.meta));
+        client.invalidate(Runtime.joinPath(loadedBase, eventEntry.matchup));
+      }
+      throw error;
+    }
+  }
+
   function numericEventOrder(left, right) {
     return left.length - right.length || left.localeCompare(right);
   }
@@ -220,10 +243,13 @@
     {
       includeMatchup = false,
       includeDecks = false,
+      requireOverall = false,
+      retain = null,
       includeComparisonDecks = includeDecks,
       selectedEventIds = null,
     } = {}
   ) {
+    retain?.(client, [indexPath]);
     const index = await client.fetchJson(indexPath);
     const selection = resolveEventSelection(
       index.events,
@@ -234,7 +260,11 @@
     const eventEntry = selection.activeEvent;
 
     const base = Runtime.dirname(indexPath);
-    const [meta, overview, matchup, quality, tabletopDecks, mtgoDecks] = await Promise.all([
+    retain?.(client, [eventEntry.meta, eventEntry.overview, eventEntry.quality,
+      ...(includeMatchup ? [eventEntry.matchup] : []),
+      ...(includeDecks ? [eventEntry.decks] : []),
+    ].map(path => Runtime.joinPath(base, path)));
+    let [meta, overview, matchup, quality, tabletopDecks, mtgoDecks] = await Promise.all([
       client.fetchJson(Runtime.joinPath(base, eventEntry.meta)),
       client.fetchJson(Runtime.joinPath(base, eventEntry.overview)),
       includeMatchup
@@ -244,8 +274,17 @@
       includeDecks
         ? client.fetchJson(Runtime.joinPath(base, eventEntry.decks))
         : null,
-      includeComparisonDecks ? mtgoController.loadComparisonDecks(format) : null,
+      includeComparisonDecks ? mtgoController.loadComparisonDecks(format, { retain }) : null,
     ]);
+    if (requireOverall && Object.values(overview.scopes).some(scope => !scope.literal_record)) {
+      if (overview.schema_version === "1.2.0") {
+        throw new Error("Overview 1.2.0 requires an overall record for every scope");
+      }
+      // Retained legacy documents remain readable without presenting a
+      // missing overall record as zero. Current documents need no decks here.
+      retain?.(client, [Runtime.joinPath(base, eventEntry.decks)]);
+      tabletopDecks ||= await client.fetchJson(Runtime.joinPath(base, eventEntry.decks));
+    }
     const eventFormat = resolveEventFormat({
       requestedFormat: format,
       index,
@@ -257,6 +296,7 @@
       mtgoDecks,
     });
 
+    if (matchup) requireEventMatchup(meta, matchup, eventEntry, base);
     return {
       eventFormat,
       eventEntry,
@@ -276,10 +316,12 @@
     index,
     eventEntries,
     format,
-    canonicalIdentityOrder
+    canonicalIdentityOrder,
+    retain = null
   ) {
     const base = Runtime.dirname(indexPath);
     const eventInputs = await Promise.all(eventEntries.map(async eventEntry => {
+      retain?.(client, [eventEntry.meta, eventEntry.matchup].map(path => Runtime.joinPath(base, path)));
       const [meta, matchup] = await Promise.all([
         client.fetchJson(Runtime.joinPath(base, eventEntry.meta)),
         client.fetchJson(Runtime.joinPath(base, eventEntry.matchup)),
@@ -290,6 +332,7 @@
         meta,
         matchup,
       });
+      requireEventMatchup(meta, matchup, eventEntry, base);
       return { meta, matchup };
     }));
     const canonicalHierarchy = canonicalMultiEventHierarchy(
@@ -353,6 +396,10 @@
       tabletopDecks: decksPath ? staged.get(decksPath) : null,
       mtgoDecks: mtgoStaged?.values[`stats/${format}/mtgo/decks_4w.json`],
     });
+    matchupEntries.forEach(item => requireEventMatchup(
+      staged.get(Runtime.joinPath(base, item.meta)),
+      staged.get(Runtime.joinPath(base, item.matchup)), item
+    ));
     if (matchupEntries.length > 1) {
       const eventInputs = matchupEntries.map(item => ({
         meta: staged.get(Runtime.joinPath(base, item.meta)),
@@ -371,6 +418,7 @@
     if (!mtgoStaged) return staged;
     return Object.freeze({
       changed: staged.changed || mtgoStaged.changed,
+      values: Object.freeze({ ...staged.values, ...mtgoStaged.values }),
       commit() {
         staged.commit();
         mtgoStaged.commit();

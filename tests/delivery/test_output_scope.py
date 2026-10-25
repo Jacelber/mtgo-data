@@ -44,6 +44,12 @@ class OutputScopeTests(unittest.TestCase):
             self.assertEqual(bad["state"], "failed")
             self.assertTrue(any("sum(count)=5" in error for error in bad["failures"]))
             self.assertEqual(check(root, ["README.md"])["state"], "not_required")
+            write("reports/unmapped.json", {"invalid": "must not pass as not_required"})
+            missing = check(root, ["reports/unmapped.json"])
+            self.assertEqual(missing["state"], "failed")
+            self.assertTrue(any("no schema mapping" in e for e in missing["failures"]))
+            mixed = check(root, [selected, "reports/unmapped.json"])
+            self.assertTrue(any("no schema mapping" in e for e in mixed["failures"]))
 
     def test_unrelated_malformed_format_does_not_block_valid_selected_result(self):
         with tempfile.TemporaryDirectory() as directory:

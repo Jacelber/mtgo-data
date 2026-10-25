@@ -420,7 +420,7 @@ def test_event_publisher_wires_catalog_version_and_compatibility(
     )
     monkeypatch.setattr(
         publish,
-        "build_event_matchup_from_paths",
+        "build_event_matchup_from_statistics",
         lambda *args: event_input["matchup"],
     )
     monkeypatch.setattr(

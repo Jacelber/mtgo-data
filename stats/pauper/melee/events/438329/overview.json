@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "document_type": "overview",
   "source": "melee",
   "event_id": "438329",
@@ -10,14 +10,14 @@
     "event_sha256": "9c4c5f344144773cd60595590bb5e70b3b3dd9b7655beaa0bca90b26d4ac2343",
     "event_schema_version": "2.2.0",
     "classification_path": "data/pauper/melee/classifications/438329.json",
-    "classification_sha256": "0cb1967237c1d058b45be0b1d11de895fc04867baaf2444f92ab6959c826c2a6",
+    "classification_sha256": "467004caba90b0da0ff13a7b8f1d52a9bd5fc3a20e7a6fabe119ea8c04d3f73c",
     "classification_schema_version": "1.1.0",
     "opportunity_path": "data/pauper/melee/opportunities/438329.json",
-    "opportunity_sha256": "4a7c5179de755c486c8353f930d7d2fc9ab40b6cbac1f0f68ac13121b1417ba7",
+    "opportunity_sha256": "4cd775529e4101adf349fa5f0b82372adc4e67caa39452c3444c6bde05601cdf",
     "opportunity_schema_version": "1.1.0",
     "taxonomy_path": "my_archetypes/pauper.yaml",
-    "taxonomy_sha256": "857fff838006b3d036f47007bc10f88dbfe156a0fa124292e6296dafd8a8da8c",
-    "taxonomy_schema_version": "1.1.0"
+    "taxonomy_sha256": "01d283056072c171e350b45ff004560786c3349e2d468faef9b7850bdf99f303",
+    "taxonomy_schema_version": "1.2.0"
   },
   "event": {
     "name": "Paupergeddon Summer 2026 Main Event",
@@ -37,6 +37,18 @@
   "advancement_metric": "day2_conversion",
   "scopes": {
     "day1": {
+      "literal_record": {
+        "wins": 3508,
+        "losses": 3508,
+        "draws": 264,
+        "matches": 7280,
+        "win_rate": 0.481868,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.470402,
+          "upper": 0.493353
+        }
+      },
       "population": "starting_field",
       "selection_bias_warning": false,
       "participant_count": 1086,
@@ -1052,20 +1064,20 @@
               "subtype_id": "boros",
               "subtype_name": "Boros",
               "display_name": "Boros Battle Screech",
-              "deck_count": 2,
-              "metagame_share": 0.001869,
-              "constructed_points": 15,
-              "theoretical_rounds": 16,
-              "effective_theoretical_rounds": 16,
-              "average_points_per_effective_round": 0.9375,
-              "completed_or_officially_exempt_rounds": 11,
-              "completion_rate": 0.6875,
-              "played_match_participations": 11,
-              "source_match_count": 11,
+              "deck_count": 3,
+              "metagame_share": 0.002804,
+              "constructed_points": 33,
+              "theoretical_rounds": 24,
+              "effective_theoretical_rounds": 24,
+              "average_points_per_effective_round": 1.375,
+              "completed_or_officially_exempt_rounds": 19,
+              "completion_rate": 0.791667,
+              "played_match_participations": 19,
+              "source_match_count": 19,
               "result_counts": {
                 "drop_unplayed": 5,
-                "played_loss": 6,
-                "played_win": 5
+                "played_loss": 8,
+                "played_win": 11
               },
               "drop_player_count": 2,
               "drop_unplayed_rounds": 5,
@@ -1077,48 +1089,48 @@
               "high_score": null,
               "match_record": {
                 "all_matches": {
-                  "wins": 5,
-                  "losses": 6,
+                  "wins": 11,
+                  "losses": 8,
                   "draws": 0,
-                  "matches": 11,
-                  "win_rate": 0.454545,
+                  "matches": 19,
+                  "win_rate": 0.578947,
                   "confidence_interval_95": {
-                    "lower": 0.212713,
-                    "upper": 0.719908
+                    "lower": 0.362759,
+                    "upper": 0.768581
                   },
                   "literal_record": {
-                    "wins": 5,
-                    "losses": 6,
+                    "wins": 11,
+                    "losses": 8,
                     "draws": 0,
-                    "matches": 11,
-                    "win_rate": 0.454545,
+                    "matches": 19,
+                    "win_rate": 0.578947,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.21271,
-                      "upper": 0.719912
+                      "lower": 0.362756,
+                      "upper": 0.768584
                     }
                   }
                 },
                 "non_mirror": {
-                  "wins": 5,
-                  "losses": 6,
+                  "wins": 11,
+                  "losses": 8,
                   "draws": 0,
-                  "matches": 11,
-                  "win_rate": 0.454545,
+                  "matches": 19,
+                  "win_rate": 0.578947,
                   "confidence_interval_95": {
-                    "lower": 0.212713,
-                    "upper": 0.719908
+                    "lower": 0.362759,
+                    "upper": 0.768581
                   },
                   "literal_record": {
-                    "wins": 5,
-                    "losses": 6,
+                    "wins": 11,
+                    "losses": 8,
                     "draws": 0,
-                    "matches": 11,
-                    "win_rate": 0.454545,
+                    "matches": 19,
+                    "win_rate": 0.578947,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.21271,
-                      "upper": 0.719912
+                      "lower": 0.362756,
+                      "upper": 0.768584
                     }
                   }
                 },
@@ -1130,25 +1142,25 @@
               "subtype_id": "mono-white",
               "subtype_name": "Mono-White",
               "display_name": "Mono-White Battle Screech",
-              "deck_count": 30,
-              "metagame_share": 0.028037,
-              "constructed_points": 302,
-              "theoretical_rounds": 240,
-              "effective_theoretical_rounds": 240,
-              "average_points_per_effective_round": 1.258333,
-              "completed_or_officially_exempt_rounds": 206,
-              "completion_rate": 0.858333,
-              "played_match_participations": 201,
-              "source_match_count": 204,
+              "deck_count": 28,
+              "metagame_share": 0.026168,
+              "constructed_points": 284,
+              "theoretical_rounds": 224,
+              "effective_theoretical_rounds": 224,
+              "average_points_per_effective_round": 1.267857,
+              "completed_or_officially_exempt_rounds": 195,
+              "completion_rate": 0.870536,
+              "played_match_participations": 190,
+              "source_match_count": 193,
               "result_counts": {
                 "bye": 5,
-                "drop_unplayed": 34,
+                "drop_unplayed": 29,
                 "played_draw": 5,
-                "played_loss": 102,
-                "played_win": 94
+                "played_loss": 97,
+                "played_win": 88
               },
-              "drop_player_count": 10,
-              "drop_unplayed_rounds": 34,
+              "drop_player_count": 9,
+              "drop_unplayed_rounds": 29,
               "intentional_draw_opportunities": 0,
               "bye_count": 5,
               "top8_lock_player_count": 0,
@@ -1157,52 +1169,191 @@
               "high_score": null,
               "match_record": {
                 "all_matches": {
-                  "wins": 94,
-                  "losses": 102,
+                  "wins": 88,
+                  "losses": 97,
                   "draws": 5,
-                  "matches": 201,
-                  "win_rate": 0.4801,
+                  "matches": 190,
+                  "win_rate": 0.476316,
                   "confidence_interval_95": {
-                    "lower": 0.412055,
-                    "upper": 0.548891
+                    "lower": 0.406475,
+                    "upper": 0.547095
                   },
                   "literal_record": {
-                    "wins": 94,
-                    "losses": 102,
+                    "wins": 88,
+                    "losses": 97,
                     "draws": 5,
-                    "matches": 201,
-                    "win_rate": 0.467662,
+                    "matches": 190,
+                    "win_rate": 0.463158,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.399936,
-                      "upper": 0.5366
+                      "lower": 0.393687,
+                      "upper": 0.534089
                     }
                   }
                 },
                 "non_mirror": {
-                  "wins": 92,
-                  "losses": 100,
+                  "wins": 86,
+                  "losses": 95,
                   "draws": 5,
-                  "matches": 197,
-                  "win_rate": 0.479695,
+                  "matches": 186,
+                  "win_rate": 0.475806,
                   "confidence_interval_95": {
-                    "lower": 0.41099,
-                    "upper": 0.549178
+                    "lower": 0.405253,
+                    "upper": 0.547339
                   },
                   "literal_record": {
-                    "wins": 92,
-                    "losses": 100,
+                    "wins": 86,
+                    "losses": 95,
                     "draws": 5,
-                    "matches": 197,
-                    "win_rate": 0.467005,
+                    "matches": 186,
+                    "win_rate": 0.462366,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.398633,
-                      "upper": 0.536639
+                      "lower": 0.392199,
+                      "upper": 0.534056
                     }
                   }
                 },
                 "mirror_match_count": 2
+              }
+            },
+            {
+              "group_id": "subtype:battle-screech/orzhov",
+              "subtype_id": "orzhov",
+              "subtype_name": "Orzhov",
+              "display_name": "Orzhov Battle Screech",
+              "deck_count": 1,
+              "metagame_share": 0.000935,
+              "constructed_points": 0,
+              "theoretical_rounds": 8,
+              "effective_theoretical_rounds": 8,
+              "average_points_per_effective_round": 0.0,
+              "completed_or_officially_exempt_rounds": 3,
+              "completion_rate": 0.375,
+              "played_match_participations": 3,
+              "source_match_count": 3,
+              "result_counts": {
+                "drop_unplayed": 5,
+                "played_loss": 3
+              },
+              "drop_player_count": 1,
+              "drop_unplayed_rounds": 5,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 3,
+                  "draws": 0,
+                  "matches": 3,
+                  "win_rate": 0.0,
+                  "confidence_interval_95": {
+                    "lower": 0.0,
+                    "upper": 0.561497
+                  },
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 3,
+                    "draws": 0,
+                    "matches": 3,
+                    "win_rate": 0.0,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.0,
+                      "upper": 0.561506
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 3,
+                  "draws": 0,
+                  "matches": 3,
+                  "win_rate": 0.0,
+                  "confidence_interval_95": {
+                    "lower": 0.0,
+                    "upper": 0.561497
+                  },
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 3,
+                    "draws": 0,
+                    "matches": 3,
+                    "win_rate": 0.0,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.0,
+                      "upper": 0.561506
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:battle-screech/naya",
+              "subtype_id": "naya",
+              "subtype_name": "Naya",
+              "display_name": "Naya Battle Screech",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
               }
             }
           ]
@@ -1533,25 +1684,25 @@
               "subtype_id": "golgari",
               "subtype_name": "Golgari Gardens",
               "display_name": "Golgari Gardens",
-              "deck_count": 26,
-              "metagame_share": 0.024299,
-              "constructed_points": 263,
-              "theoretical_rounds": 208,
-              "effective_theoretical_rounds": 208,
-              "average_points_per_effective_round": 1.264423,
-              "completed_or_officially_exempt_rounds": 167,
-              "completion_rate": 0.802885,
-              "played_match_participations": 166,
-              "source_match_count": 167,
+              "deck_count": 21,
+              "metagame_share": 0.019626,
+              "constructed_points": 200,
+              "theoretical_rounds": 168,
+              "effective_theoretical_rounds": 168,
+              "average_points_per_effective_round": 1.190476,
+              "completed_or_officially_exempt_rounds": 131,
+              "completion_rate": 0.779762,
+              "played_match_participations": 130,
+              "source_match_count": 131,
               "result_counts": {
                 "bye": 1,
-                "drop_unplayed": 41,
+                "drop_unplayed": 37,
                 "played_draw": 11,
-                "played_loss": 72,
-                "played_win": 83
+                "played_loss": 57,
+                "played_win": 62
               },
-              "drop_player_count": 16,
-              "drop_unplayed_rounds": 41,
+              "drop_player_count": 15,
+              "drop_unplayed_rounds": 37,
               "intentional_draw_opportunities": 0,
               "bye_count": 1,
               "top8_lock_player_count": 0,
@@ -1560,48 +1711,48 @@
               "high_score": null,
               "match_record": {
                 "all_matches": {
-                  "wins": 83,
-                  "losses": 72,
+                  "wins": 62,
+                  "losses": 57,
                   "draws": 11,
-                  "matches": 166,
-                  "win_rate": 0.533133,
+                  "matches": 130,
+                  "win_rate": 0.519231,
                   "confidence_interval_95": {
-                    "lower": 0.457348,
-                    "upper": 0.607418
+                    "lower": 0.434032,
+                    "upper": 0.603326
                   },
                   "literal_record": {
-                    "wins": 83,
-                    "losses": 72,
+                    "wins": 62,
+                    "losses": 57,
                     "draws": 11,
-                    "matches": 166,
-                    "win_rate": 0.5,
+                    "matches": 130,
+                    "win_rate": 0.476923,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.424802,
-                      "upper": 0.575198
+                      "lower": 0.392964,
+                      "upper": 0.562207
                     }
                   }
                 },
                 "non_mirror": {
-                  "wins": 83,
-                  "losses": 72,
+                  "wins": 62,
+                  "losses": 57,
                   "draws": 11,
-                  "matches": 166,
-                  "win_rate": 0.533133,
+                  "matches": 130,
+                  "win_rate": 0.519231,
                   "confidence_interval_95": {
-                    "lower": 0.457348,
-                    "upper": 0.607418
+                    "lower": 0.434032,
+                    "upper": 0.603326
                   },
                   "literal_record": {
-                    "wins": 83,
-                    "losses": 72,
+                    "wins": 62,
+                    "losses": 57,
                     "draws": 11,
-                    "matches": 166,
-                    "win_rate": 0.5,
+                    "matches": 130,
+                    "win_rate": 0.476923,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.424802,
-                      "upper": 0.575198
+                      "lower": 0.392964,
+                      "upper": 0.562207
                     }
                   }
                 },
@@ -1613,17 +1764,20 @@
               "subtype_id": "jund",
               "subtype_name": "Jund Garden",
               "display_name": "Jund Garden",
-              "deck_count": 0,
-              "metagame_share": 0.0,
-              "constructed_points": 0,
-              "theoretical_rounds": 0,
-              "effective_theoretical_rounds": 0,
-              "average_points_per_effective_round": null,
-              "completed_or_officially_exempt_rounds": 0,
-              "completion_rate": null,
-              "played_match_participations": 0,
-              "source_match_count": 0,
-              "result_counts": {},
+              "deck_count": 4,
+              "metagame_share": 0.003738,
+              "constructed_points": 63,
+              "theoretical_rounds": 32,
+              "effective_theoretical_rounds": 32,
+              "average_points_per_effective_round": 1.96875,
+              "completed_or_officially_exempt_rounds": 32,
+              "completion_rate": 1.0,
+              "played_match_participations": 32,
+              "source_match_count": 32,
+              "result_counts": {
+                "played_loss": 11,
+                "played_win": 21
+              },
               "drop_player_count": 0,
               "drop_unplayed_rounds": 0,
               "intentional_draw_opportunities": 0,
@@ -1634,37 +1788,126 @@
               "high_score": null,
               "match_record": {
                 "all_matches": {
-                  "wins": 0,
-                  "losses": 0,
+                  "wins": 21,
+                  "losses": 11,
                   "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
+                  "matches": 32,
+                  "win_rate": 0.65625,
+                  "confidence_interval_95": {
+                    "lower": 0.483111,
+                    "upper": 0.795896
+                  },
+                  "literal_record": {
+                    "wins": 21,
+                    "losses": 11,
+                    "draws": 0,
+                    "matches": 32,
+                    "win_rate": 0.65625,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.483108,
+                      "upper": 0.795898
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 21,
+                  "losses": 11,
+                  "draws": 0,
+                  "matches": 32,
+                  "win_rate": 0.65625,
+                  "confidence_interval_95": {
+                    "lower": 0.483111,
+                    "upper": 0.795896
+                  },
+                  "literal_record": {
+                    "wins": 21,
+                    "losses": 11,
+                    "draws": 0,
+                    "matches": 32,
+                    "win_rate": 0.65625,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.483108,
+                      "upper": 0.795898
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:golgari-gardens/sultai",
+              "subtype_id": "sultai",
+              "subtype_name": "Sultai Gardens",
+              "display_name": "Sultai Gardens",
+              "deck_count": 1,
+              "metagame_share": 0.000935,
+              "constructed_points": 0,
+              "theoretical_rounds": 8,
+              "effective_theoretical_rounds": 8,
+              "average_points_per_effective_round": 0.0,
+              "completed_or_officially_exempt_rounds": 4,
+              "completion_rate": 0.5,
+              "played_match_participations": 4,
+              "source_match_count": 4,
+              "result_counts": {
+                "drop_unplayed": 4,
+                "played_loss": 4
+              },
+              "drop_player_count": 1,
+              "drop_unplayed_rounds": 4,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 4,
+                  "draws": 0,
+                  "matches": 4,
+                  "win_rate": 0.0,
+                  "confidence_interval_95": {
+                    "lower": 0.0,
+                    "upper": 0.489891
+                  },
                   "literal_record": {
                     "wins": 0,
-                    "losses": 0,
+                    "losses": 4,
                     "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
+                    "matches": 4,
+                    "win_rate": 0.0,
                     "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
+                    "confidence_interval_95": {
+                      "lower": 0.0,
+                      "upper": 0.4899
+                    }
                   }
                 },
                 "non_mirror": {
                   "wins": 0,
-                  "losses": 0,
+                  "losses": 4,
                   "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
+                  "matches": 4,
+                  "win_rate": 0.0,
+                  "confidence_interval_95": {
+                    "lower": 0.0,
+                    "upper": 0.489891
+                  },
                   "literal_record": {
                     "wins": 0,
-                    "losses": 0,
+                    "losses": 4,
                     "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
+                    "matches": 4,
+                    "win_rate": 0.0,
                     "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
+                    "confidence_interval_95": {
+                      "lower": 0.0,
+                      "upper": 0.4899
+                    }
                   }
                 },
                 "mirror_match_count": 0
@@ -6391,6 +6634,18 @@
       ]
     },
     "day2": {
+      "literal_record": {
+        "wins": 409,
+        "losses": 409,
+        "draws": 40,
+        "matches": 858,
+        "win_rate": 0.47669,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.443448,
+          "upper": 0.51014
+        }
+      },
       "population": "qualified_field",
       "selection_bias_warning": false,
       "participant_count": 150,
@@ -7463,6 +7718,166 @@
               "subtype_id": "boros",
               "subtype_name": "Boros",
               "display_name": "Boros Battle Screech",
+              "deck_count": 1,
+              "metagame_share": 0.006667,
+              "constructed_points": 11,
+              "theoretical_rounds": 6,
+              "effective_theoretical_rounds": 6,
+              "average_points_per_effective_round": 1.833333,
+              "completed_or_officially_exempt_rounds": 6,
+              "completion_rate": 1.0,
+              "played_match_participations": 6,
+              "source_match_count": 6,
+              "result_counts": {
+                "played_draw": 2,
+                "played_loss": 1,
+                "played_win": 3
+              },
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 3,
+                  "losses": 1,
+                  "draws": 2,
+                  "matches": 6,
+                  "win_rate": 0.666667,
+                  "confidence_interval_95": {
+                    "lower": 0.299993,
+                    "upper": 0.903229
+                  },
+                  "literal_record": {
+                    "wins": 3,
+                    "losses": 1,
+                    "draws": 2,
+                    "matches": 6,
+                    "win_rate": 0.5,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.187613,
+                      "upper": 0.812387
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 3,
+                  "losses": 1,
+                  "draws": 2,
+                  "matches": 6,
+                  "win_rate": 0.666667,
+                  "confidence_interval_95": {
+                    "lower": 0.299993,
+                    "upper": 0.903229
+                  },
+                  "literal_record": {
+                    "wins": 3,
+                    "losses": 1,
+                    "draws": 2,
+                    "matches": 6,
+                    "win_rate": 0.5,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.187613,
+                      "upper": 0.812387
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              },
+              "day2_conversion": 0.333333
+            },
+            {
+              "group_id": "subtype:battle-screech/mono-white",
+              "subtype_id": "mono-white",
+              "subtype_name": "Mono-White",
+              "display_name": "Mono-White Battle Screech",
+              "deck_count": 4,
+              "metagame_share": 0.026667,
+              "constructed_points": 30,
+              "theoretical_rounds": 24,
+              "effective_theoretical_rounds": 24,
+              "average_points_per_effective_round": 1.25,
+              "completed_or_officially_exempt_rounds": 23,
+              "completion_rate": 0.958333,
+              "played_match_participations": 21,
+              "source_match_count": 23,
+              "result_counts": {
+                "drop_unplayed": 1,
+                "intentional_draw": 2,
+                "played_draw": 1,
+                "played_loss": 11,
+                "played_win": 9
+              },
+              "drop_player_count": 1,
+              "drop_unplayed_rounds": 1,
+              "intentional_draw_opportunities": 2,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 9,
+                  "losses": 11,
+                  "draws": 1,
+                  "matches": 21,
+                  "win_rate": 0.452381,
+                  "confidence_interval_95": {
+                    "lower": 0.263879,
+                    "upper": 0.65561
+                  },
+                  "literal_record": {
+                    "wins": 9,
+                    "losses": 11,
+                    "draws": 1,
+                    "matches": 21,
+                    "win_rate": 0.428571,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.244697,
+                      "upper": 0.634538
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 9,
+                  "losses": 11,
+                  "draws": 1,
+                  "matches": 21,
+                  "win_rate": 0.452381,
+                  "confidence_interval_95": {
+                    "lower": 0.263879,
+                    "upper": 0.65561
+                  },
+                  "literal_record": {
+                    "wins": 9,
+                    "losses": 11,
+                    "draws": 1,
+                    "matches": 21,
+                    "win_rate": 0.428571,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.244697,
+                      "upper": 0.634538
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              },
+              "day2_conversion": 0.142857
+            },
+            {
+              "group_id": "subtype:battle-screech/orzhov",
+              "subtype_id": "orzhov",
+              "subtype_name": "Orzhov",
+              "display_name": "Orzhov Battle Screech",
               "deck_count": 0,
               "metagame_share": 0.0,
               "constructed_points": 0,
@@ -7522,30 +7937,24 @@
               "day2_conversion": 0.0
             },
             {
-              "group_id": "subtype:battle-screech/mono-white",
-              "subtype_id": "mono-white",
-              "subtype_name": "Mono-White",
-              "display_name": "Mono-White Battle Screech",
-              "deck_count": 5,
-              "metagame_share": 0.033333,
-              "constructed_points": 41,
-              "theoretical_rounds": 30,
-              "effective_theoretical_rounds": 30,
-              "average_points_per_effective_round": 1.366667,
-              "completed_or_officially_exempt_rounds": 29,
-              "completion_rate": 0.966667,
-              "played_match_participations": 27,
-              "source_match_count": 29,
-              "result_counts": {
-                "drop_unplayed": 1,
-                "intentional_draw": 2,
-                "played_draw": 3,
-                "played_loss": 12,
-                "played_win": 12
-              },
-              "drop_player_count": 1,
-              "drop_unplayed_rounds": 1,
-              "intentional_draw_opportunities": 2,
+              "group_id": "subtype:battle-screech/naya",
+              "subtype_id": "naya",
+              "subtype_name": "Naya",
+              "display_name": "Naya Battle Screech",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
               "bye_count": 0,
               "top8_lock_player_count": 0,
               "top8_lock_exemptions": 0,
@@ -7553,54 +7962,42 @@
               "high_score": null,
               "match_record": {
                 "all_matches": {
-                  "wins": 12,
-                  "losses": 12,
-                  "draws": 3,
-                  "matches": 27,
-                  "win_rate": 0.5,
-                  "confidence_interval_95": {
-                    "lower": 0.323538,
-                    "upper": 0.676462
-                  },
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
                   "literal_record": {
-                    "wins": 12,
-                    "losses": 12,
-                    "draws": 3,
-                    "matches": 27,
-                    "win_rate": 0.444444,
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
                     "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": {
-                      "lower": 0.275856,
-                      "upper": 0.626873
-                    }
+                    "confidence_interval_95": null
                   }
                 },
                 "non_mirror": {
-                  "wins": 12,
-                  "losses": 12,
-                  "draws": 3,
-                  "matches": 27,
-                  "win_rate": 0.5,
-                  "confidence_interval_95": {
-                    "lower": 0.323538,
-                    "upper": 0.676462
-                  },
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
                   "literal_record": {
-                    "wins": 12,
-                    "losses": 12,
-                    "draws": 3,
-                    "matches": 27,
-                    "win_rate": 0.444444,
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
                     "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": {
-                      "lower": 0.275856,
-                      "upper": 0.626873
-                    }
+                    "confidence_interval_95": null
                   }
                 },
                 "mirror_match_count": 0
               },
-              "day2_conversion": 0.166667
+              "day2_conversion": null
             }
           ]
         },
@@ -7688,19 +8085,19 @@
               "subtype_id": "golgari",
               "subtype_name": "Golgari Gardens",
               "display_name": "Golgari Gardens",
-              "deck_count": 5,
-              "metagame_share": 0.033333,
-              "constructed_points": 48,
-              "theoretical_rounds": 30,
-              "effective_theoretical_rounds": 30,
-              "average_points_per_effective_round": 1.6,
-              "completed_or_officially_exempt_rounds": 30,
+              "deck_count": 3,
+              "metagame_share": 0.02,
+              "constructed_points": 30,
+              "theoretical_rounds": 18,
+              "effective_theoretical_rounds": 18,
+              "average_points_per_effective_round": 1.666667,
+              "completed_or_officially_exempt_rounds": 18,
               "completion_rate": 1.0,
-              "played_match_participations": 30,
-              "source_match_count": 30,
+              "played_match_participations": 18,
+              "source_match_count": 18,
               "result_counts": {
-                "played_loss": 14,
-                "played_win": 16
+                "played_loss": 8,
+                "played_win": 10
               },
               "drop_player_count": 0,
               "drop_unplayed_rounds": 0,
@@ -7712,60 +8109,138 @@
               "high_score": null,
               "match_record": {
                 "all_matches": {
-                  "wins": 16,
-                  "losses": 14,
+                  "wins": 10,
+                  "losses": 8,
                   "draws": 0,
-                  "matches": 30,
-                  "win_rate": 0.533333,
+                  "matches": 18,
+                  "win_rate": 0.555556,
                   "confidence_interval_95": {
-                    "lower": 0.361423,
-                    "upper": 0.697676
+                    "lower": 0.337164,
+                    "upper": 0.754405
                   },
                   "literal_record": {
-                    "wins": 16,
-                    "losses": 14,
+                    "wins": 10,
+                    "losses": 8,
                     "draws": 0,
-                    "matches": 30,
-                    "win_rate": 0.533333,
+                    "matches": 18,
+                    "win_rate": 0.555556,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.36142,
-                      "upper": 0.697679
+                      "lower": 0.337161,
+                      "upper": 0.754408
                     }
                   }
                 },
                 "non_mirror": {
-                  "wins": 16,
-                  "losses": 14,
+                  "wins": 10,
+                  "losses": 8,
                   "draws": 0,
-                  "matches": 30,
-                  "win_rate": 0.533333,
+                  "matches": 18,
+                  "win_rate": 0.555556,
                   "confidence_interval_95": {
-                    "lower": 0.361423,
-                    "upper": 0.697676
+                    "lower": 0.337164,
+                    "upper": 0.754405
                   },
                   "literal_record": {
-                    "wins": 16,
-                    "losses": 14,
+                    "wins": 10,
+                    "losses": 8,
                     "draws": 0,
-                    "matches": 30,
-                    "win_rate": 0.533333,
+                    "matches": 18,
+                    "win_rate": 0.555556,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.36142,
-                      "upper": 0.697679
+                      "lower": 0.337161,
+                      "upper": 0.754408
                     }
                   }
                 },
                 "mirror_match_count": 0
               },
-              "day2_conversion": 0.192308
+              "day2_conversion": 0.142857
             },
             {
               "group_id": "subtype:golgari-gardens/jund",
               "subtype_id": "jund",
               "subtype_name": "Jund Garden",
               "display_name": "Jund Garden",
+              "deck_count": 2,
+              "metagame_share": 0.013333,
+              "constructed_points": 18,
+              "theoretical_rounds": 12,
+              "effective_theoretical_rounds": 12,
+              "average_points_per_effective_round": 1.5,
+              "completed_or_officially_exempt_rounds": 12,
+              "completion_rate": 1.0,
+              "played_match_participations": 12,
+              "source_match_count": 12,
+              "result_counts": {
+                "played_loss": 6,
+                "played_win": 6
+              },
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 6,
+                  "losses": 6,
+                  "draws": 0,
+                  "matches": 12,
+                  "win_rate": 0.5,
+                  "confidence_interval_95": {
+                    "lower": 0.253782,
+                    "upper": 0.746218
+                  },
+                  "literal_record": {
+                    "wins": 6,
+                    "losses": 6,
+                    "draws": 0,
+                    "matches": 12,
+                    "win_rate": 0.5,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.253778,
+                      "upper": 0.746222
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 6,
+                  "losses": 6,
+                  "draws": 0,
+                  "matches": 12,
+                  "win_rate": 0.5,
+                  "confidence_interval_95": {
+                    "lower": 0.253782,
+                    "upper": 0.746218
+                  },
+                  "literal_record": {
+                    "wins": 6,
+                    "losses": 6,
+                    "draws": 0,
+                    "matches": 12,
+                    "win_rate": 0.5,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.253778,
+                      "upper": 0.746222
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              },
+              "day2_conversion": 0.5
+            },
+            {
+              "group_id": "subtype:golgari-gardens/sultai",
+              "subtype_id": "sultai",
+              "subtype_name": "Sultai Gardens",
+              "display_name": "Sultai Gardens",
               "deck_count": 0,
               "metagame_share": 0.0,
               "constructed_points": 0,
@@ -7822,7 +8297,7 @@
                 },
                 "mirror_match_count": 0
               },
-              "day2_conversion": null
+              "day2_conversion": 0.0
             }
           ]
         },
@@ -12253,6 +12728,18 @@
       "day2_conversion": 0.138122
     },
     "all_constructed": {
+      "literal_record": {
+        "wins": 3917,
+        "losses": 3917,
+        "draws": 304,
+        "matches": 8138,
+        "win_rate": 0.481322,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.470478,
+          "upper": 0.492184
+        }
+      },
       "population": "starting_field_with_qualified_day2_opportunities",
       "selection_bias_warning": false,
       "participant_count": 1086,
@@ -13271,20 +13758,21 @@
               "subtype_id": "boros",
               "subtype_name": "Boros",
               "display_name": "Boros Battle Screech",
-              "deck_count": 2,
-              "metagame_share": 0.001869,
-              "constructed_points": 15,
-              "theoretical_rounds": 16,
-              "effective_theoretical_rounds": 16,
-              "average_points_per_effective_round": 0.9375,
-              "completed_or_officially_exempt_rounds": 11,
-              "completion_rate": 0.6875,
-              "played_match_participations": 11,
-              "source_match_count": 11,
+              "deck_count": 3,
+              "metagame_share": 0.002804,
+              "constructed_points": 44,
+              "theoretical_rounds": 30,
+              "effective_theoretical_rounds": 30,
+              "average_points_per_effective_round": 1.466667,
+              "completed_or_officially_exempt_rounds": 25,
+              "completion_rate": 0.833333,
+              "played_match_participations": 25,
+              "source_match_count": 25,
               "result_counts": {
                 "drop_unplayed": 5,
-                "played_loss": 6,
-                "played_win": 5
+                "played_draw": 2,
+                "played_loss": 9,
+                "played_win": 14
               },
               "drop_player_count": 2,
               "drop_unplayed_rounds": 5,
@@ -13296,48 +13784,48 @@
               "high_score": null,
               "match_record": {
                 "all_matches": {
-                  "wins": 5,
-                  "losses": 6,
-                  "draws": 0,
-                  "matches": 11,
-                  "win_rate": 0.454545,
+                  "wins": 14,
+                  "losses": 9,
+                  "draws": 2,
+                  "matches": 25,
+                  "win_rate": 0.6,
                   "confidence_interval_95": {
-                    "lower": 0.212713,
-                    "upper": 0.719908
+                    "lower": 0.407395,
+                    "upper": 0.765967
                   },
                   "literal_record": {
-                    "wins": 5,
-                    "losses": 6,
-                    "draws": 0,
-                    "matches": 11,
-                    "win_rate": 0.454545,
+                    "wins": 14,
+                    "losses": 9,
+                    "draws": 2,
+                    "matches": 25,
+                    "win_rate": 0.56,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.21271,
-                      "upper": 0.719912
+                      "lower": 0.37067,
+                      "upper": 0.733346
                     }
                   }
                 },
                 "non_mirror": {
-                  "wins": 5,
-                  "losses": 6,
-                  "draws": 0,
-                  "matches": 11,
-                  "win_rate": 0.454545,
+                  "wins": 14,
+                  "losses": 9,
+                  "draws": 2,
+                  "matches": 25,
+                  "win_rate": 0.6,
                   "confidence_interval_95": {
-                    "lower": 0.212713,
-                    "upper": 0.719908
+                    "lower": 0.407395,
+                    "upper": 0.765967
                   },
                   "literal_record": {
-                    "wins": 5,
-                    "losses": 6,
-                    "draws": 0,
-                    "matches": 11,
-                    "win_rate": 0.454545,
+                    "wins": 14,
+                    "losses": 9,
+                    "draws": 2,
+                    "matches": 25,
+                    "win_rate": 0.56,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.21271,
-                      "upper": 0.719912
+                      "lower": 0.37067,
+                      "upper": 0.733346
                     }
                   }
                 },
@@ -13349,26 +13837,26 @@
               "subtype_id": "mono-white",
               "subtype_name": "Mono-White",
               "display_name": "Mono-White Battle Screech",
-              "deck_count": 30,
-              "metagame_share": 0.028037,
-              "constructed_points": 343,
-              "theoretical_rounds": 270,
-              "effective_theoretical_rounds": 270,
-              "average_points_per_effective_round": 1.27037,
-              "completed_or_officially_exempt_rounds": 235,
-              "completion_rate": 0.87037,
-              "played_match_participations": 228,
-              "source_match_count": 233,
+              "deck_count": 28,
+              "metagame_share": 0.026168,
+              "constructed_points": 314,
+              "theoretical_rounds": 248,
+              "effective_theoretical_rounds": 248,
+              "average_points_per_effective_round": 1.266129,
+              "completed_or_officially_exempt_rounds": 218,
+              "completion_rate": 0.879032,
+              "played_match_participations": 211,
+              "source_match_count": 216,
               "result_counts": {
                 "bye": 5,
-                "drop_unplayed": 35,
+                "drop_unplayed": 30,
                 "intentional_draw": 2,
-                "played_draw": 8,
-                "played_loss": 114,
-                "played_win": 106
+                "played_draw": 6,
+                "played_loss": 108,
+                "played_win": 97
               },
-              "drop_player_count": 11,
-              "drop_unplayed_rounds": 35,
+              "drop_player_count": 10,
+              "drop_unplayed_rounds": 30,
               "intentional_draw_opportunities": 2,
               "bye_count": 5,
               "top8_lock_player_count": 0,
@@ -13377,52 +13865,191 @@
               "high_score": null,
               "match_record": {
                 "all_matches": {
-                  "wins": 106,
-                  "losses": 114,
-                  "draws": 8,
-                  "matches": 228,
-                  "win_rate": 0.482456,
+                  "wins": 97,
+                  "losses": 108,
+                  "draws": 6,
+                  "matches": 211,
+                  "win_rate": 0.473934,
                   "confidence_interval_95": {
-                    "lower": 0.418425,
-                    "upper": 0.547069
+                    "lower": 0.40763,
+                    "upper": 0.541169
                   },
                   "literal_record": {
-                    "wins": 106,
-                    "losses": 114,
-                    "draws": 8,
-                    "matches": 228,
-                    "win_rate": 0.464912,
+                    "wins": 97,
+                    "losses": 108,
+                    "draws": 6,
+                    "matches": 211,
+                    "win_rate": 0.459716,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.401288,
-                      "upper": 0.5297
+                      "lower": 0.393789,
+                      "upper": 0.527083
                     }
                   }
                 },
                 "non_mirror": {
-                  "wins": 104,
-                  "losses": 112,
-                  "draws": 8,
-                  "matches": 224,
-                  "win_rate": 0.482143,
+                  "wins": 95,
+                  "losses": 106,
+                  "draws": 6,
+                  "matches": 207,
+                  "win_rate": 0.47343,
                   "confidence_interval_95": {
-                    "lower": 0.417561,
-                    "upper": 0.547327
+                    "lower": 0.406518,
+                    "upper": 0.541311
                   },
                   "literal_record": {
-                    "wins": 104,
-                    "losses": 112,
-                    "draws": 8,
-                    "matches": 224,
-                    "win_rate": 0.464286,
+                    "wins": 95,
+                    "losses": 106,
+                    "draws": 6,
+                    "matches": 207,
+                    "win_rate": 0.458937,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.400126,
-                      "upper": 0.529649
+                      "lower": 0.392418,
+                      "upper": 0.526953
                     }
                   }
                 },
                 "mirror_match_count": 2
+              }
+            },
+            {
+              "group_id": "subtype:battle-screech/orzhov",
+              "subtype_id": "orzhov",
+              "subtype_name": "Orzhov",
+              "display_name": "Orzhov Battle Screech",
+              "deck_count": 1,
+              "metagame_share": 0.000935,
+              "constructed_points": 0,
+              "theoretical_rounds": 8,
+              "effective_theoretical_rounds": 8,
+              "average_points_per_effective_round": 0.0,
+              "completed_or_officially_exempt_rounds": 3,
+              "completion_rate": 0.375,
+              "played_match_participations": 3,
+              "source_match_count": 3,
+              "result_counts": {
+                "drop_unplayed": 5,
+                "played_loss": 3
+              },
+              "drop_player_count": 1,
+              "drop_unplayed_rounds": 5,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 3,
+                  "draws": 0,
+                  "matches": 3,
+                  "win_rate": 0.0,
+                  "confidence_interval_95": {
+                    "lower": 0.0,
+                    "upper": 0.561497
+                  },
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 3,
+                    "draws": 0,
+                    "matches": 3,
+                    "win_rate": 0.0,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.0,
+                      "upper": 0.561506
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 3,
+                  "draws": 0,
+                  "matches": 3,
+                  "win_rate": 0.0,
+                  "confidence_interval_95": {
+                    "lower": 0.0,
+                    "upper": 0.561497
+                  },
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 3,
+                    "draws": 0,
+                    "matches": 3,
+                    "win_rate": 0.0,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.0,
+                      "upper": 0.561506
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:battle-screech/naya",
+              "subtype_id": "naya",
+              "subtype_name": "Naya",
+              "display_name": "Naya Battle Screech",
+              "deck_count": 0,
+              "metagame_share": 0.0,
+              "constructed_points": 0,
+              "theoretical_rounds": 0,
+              "effective_theoretical_rounds": 0,
+              "average_points_per_effective_round": null,
+              "completed_or_officially_exempt_rounds": 0,
+              "completion_rate": null,
+              "played_match_participations": 0,
+              "source_match_count": 0,
+              "result_counts": {},
+              "drop_player_count": 0,
+              "drop_unplayed_rounds": 0,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "non_mirror": {
+                  "wins": 0,
+                  "losses": 0,
+                  "draws": 0,
+                  "matches": 0,
+                  "win_rate": null,
+                  "confidence_interval_95": null,
+                  "literal_record": {
+                    "wins": 0,
+                    "losses": 0,
+                    "draws": 0,
+                    "matches": 0,
+                    "win_rate": null,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": null
+                  }
+                },
+                "mirror_match_count": 0
               }
             }
           ]
@@ -13753,25 +14380,25 @@
               "subtype_id": "golgari",
               "subtype_name": "Golgari Gardens",
               "display_name": "Golgari Gardens",
-              "deck_count": 26,
-              "metagame_share": 0.024299,
-              "constructed_points": 311,
-              "theoretical_rounds": 238,
-              "effective_theoretical_rounds": 238,
-              "average_points_per_effective_round": 1.306723,
-              "completed_or_officially_exempt_rounds": 197,
-              "completion_rate": 0.827731,
-              "played_match_participations": 196,
-              "source_match_count": 197,
+              "deck_count": 21,
+              "metagame_share": 0.019626,
+              "constructed_points": 230,
+              "theoretical_rounds": 186,
+              "effective_theoretical_rounds": 186,
+              "average_points_per_effective_round": 1.236559,
+              "completed_or_officially_exempt_rounds": 149,
+              "completion_rate": 0.801075,
+              "played_match_participations": 148,
+              "source_match_count": 149,
               "result_counts": {
                 "bye": 1,
-                "drop_unplayed": 41,
+                "drop_unplayed": 37,
                 "played_draw": 11,
-                "played_loss": 86,
-                "played_win": 99
+                "played_loss": 65,
+                "played_win": 72
               },
-              "drop_player_count": 16,
-              "drop_unplayed_rounds": 41,
+              "drop_player_count": 15,
+              "drop_unplayed_rounds": 37,
               "intentional_draw_opportunities": 0,
               "bye_count": 1,
               "top8_lock_player_count": 0,
@@ -13780,48 +14407,48 @@
               "high_score": null,
               "match_record": {
                 "all_matches": {
-                  "wins": 99,
-                  "losses": 86,
+                  "wins": 72,
+                  "losses": 65,
                   "draws": 11,
-                  "matches": 196,
-                  "win_rate": 0.533163,
+                  "matches": 148,
+                  "win_rate": 0.523649,
                   "confidence_interval_95": {
-                    "lower": 0.463353,
-                    "upper": 0.601699
+                    "lower": 0.443609,
+                    "upper": 0.602492
                   },
                   "literal_record": {
-                    "wins": 99,
-                    "losses": 86,
+                    "wins": 72,
+                    "losses": 65,
                     "draws": 11,
-                    "matches": 196,
-                    "win_rate": 0.505102,
+                    "matches": 148,
+                    "win_rate": 0.486486,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.435684,
-                      "upper": 0.574324
+                      "lower": 0.407327,
+                      "upper": 0.56633
                     }
                   }
                 },
                 "non_mirror": {
-                  "wins": 99,
-                  "losses": 86,
+                  "wins": 72,
+                  "losses": 65,
                   "draws": 11,
-                  "matches": 196,
-                  "win_rate": 0.533163,
+                  "matches": 148,
+                  "win_rate": 0.523649,
                   "confidence_interval_95": {
-                    "lower": 0.463353,
-                    "upper": 0.601699
+                    "lower": 0.443609,
+                    "upper": 0.602492
                   },
                   "literal_record": {
-                    "wins": 99,
-                    "losses": 86,
+                    "wins": 72,
+                    "losses": 65,
                     "draws": 11,
-                    "matches": 196,
-                    "win_rate": 0.505102,
+                    "matches": 148,
+                    "win_rate": 0.486486,
                     "win_rate_method": "wins_over_valid_matches",
                     "confidence_interval_95": {
-                      "lower": 0.435684,
-                      "upper": 0.574324
+                      "lower": 0.407327,
+                      "upper": 0.56633
                     }
                   }
                 },
@@ -13833,17 +14460,20 @@
               "subtype_id": "jund",
               "subtype_name": "Jund Garden",
               "display_name": "Jund Garden",
-              "deck_count": 0,
-              "metagame_share": 0.0,
-              "constructed_points": 0,
-              "theoretical_rounds": 0,
-              "effective_theoretical_rounds": 0,
-              "average_points_per_effective_round": null,
-              "completed_or_officially_exempt_rounds": 0,
-              "completion_rate": null,
-              "played_match_participations": 0,
-              "source_match_count": 0,
-              "result_counts": {},
+              "deck_count": 4,
+              "metagame_share": 0.003738,
+              "constructed_points": 81,
+              "theoretical_rounds": 44,
+              "effective_theoretical_rounds": 44,
+              "average_points_per_effective_round": 1.840909,
+              "completed_or_officially_exempt_rounds": 44,
+              "completion_rate": 1.0,
+              "played_match_participations": 44,
+              "source_match_count": 44,
+              "result_counts": {
+                "played_loss": 17,
+                "played_win": 27
+              },
               "drop_player_count": 0,
               "drop_unplayed_rounds": 0,
               "intentional_draw_opportunities": 0,
@@ -13854,37 +14484,126 @@
               "high_score": null,
               "match_record": {
                 "all_matches": {
-                  "wins": 0,
-                  "losses": 0,
+                  "wins": 27,
+                  "losses": 17,
                   "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
+                  "matches": 44,
+                  "win_rate": 0.613636,
+                  "confidence_interval_95": {
+                    "lower": 0.466236,
+                    "upper": 0.742788
+                  },
+                  "literal_record": {
+                    "wins": 27,
+                    "losses": 17,
+                    "draws": 0,
+                    "matches": 44,
+                    "win_rate": 0.613636,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.466233,
+                      "upper": 0.74279
+                    }
+                  }
+                },
+                "non_mirror": {
+                  "wins": 27,
+                  "losses": 17,
+                  "draws": 0,
+                  "matches": 44,
+                  "win_rate": 0.613636,
+                  "confidence_interval_95": {
+                    "lower": 0.466236,
+                    "upper": 0.742788
+                  },
+                  "literal_record": {
+                    "wins": 27,
+                    "losses": 17,
+                    "draws": 0,
+                    "matches": 44,
+                    "win_rate": 0.613636,
+                    "win_rate_method": "wins_over_valid_matches",
+                    "confidence_interval_95": {
+                      "lower": 0.466233,
+                      "upper": 0.74279
+                    }
+                  }
+                },
+                "mirror_match_count": 0
+              }
+            },
+            {
+              "group_id": "subtype:golgari-gardens/sultai",
+              "subtype_id": "sultai",
+              "subtype_name": "Sultai Gardens",
+              "display_name": "Sultai Gardens",
+              "deck_count": 1,
+              "metagame_share": 0.000935,
+              "constructed_points": 0,
+              "theoretical_rounds": 8,
+              "effective_theoretical_rounds": 8,
+              "average_points_per_effective_round": 0.0,
+              "completed_or_officially_exempt_rounds": 4,
+              "completion_rate": 0.5,
+              "played_match_participations": 4,
+              "source_match_count": 4,
+              "result_counts": {
+                "drop_unplayed": 4,
+                "played_loss": 4
+              },
+              "drop_player_count": 1,
+              "drop_unplayed_rounds": 4,
+              "intentional_draw_opportunities": 0,
+              "bye_count": 0,
+              "top8_lock_player_count": 0,
+              "top8_lock_exemptions": 0,
+              "disqualified_player_count": 0,
+              "high_score": null,
+              "match_record": {
+                "all_matches": {
+                  "wins": 0,
+                  "losses": 4,
+                  "draws": 0,
+                  "matches": 4,
+                  "win_rate": 0.0,
+                  "confidence_interval_95": {
+                    "lower": 0.0,
+                    "upper": 0.489891
+                  },
                   "literal_record": {
                     "wins": 0,
-                    "losses": 0,
+                    "losses": 4,
                     "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
+                    "matches": 4,
+                    "win_rate": 0.0,
                     "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
+                    "confidence_interval_95": {
+                      "lower": 0.0,
+                      "upper": 0.4899
+                    }
                   }
                 },
                 "non_mirror": {
                   "wins": 0,
-                  "losses": 0,
+                  "losses": 4,
                   "draws": 0,
-                  "matches": 0,
-                  "win_rate": null,
-                  "confidence_interval_95": null,
+                  "matches": 4,
+                  "win_rate": 0.0,
+                  "confidence_interval_95": {
+                    "lower": 0.0,
+                    "upper": 0.489891
+                  },
                   "literal_record": {
                     "wins": 0,
-                    "losses": 0,
+                    "losses": 4,
                     "draws": 0,
-                    "matches": 0,
-                    "win_rate": null,
+                    "matches": 4,
+                    "win_rate": 0.0,
                     "win_rate_method": "wins_over_valid_matches",
-                    "confidence_interval_95": null
+                    "confidence_interval_95": {
+                      "lower": 0.0,
+                      "upper": 0.4899
+                    }
                   }
                 },
                 "mirror_match_count": 0

@@ -1,0 +1,255 @@
+{
+  "basis": "Owner-confirmed full-deck invariants from the initial audit; variants exchange one main-deck copy.",
+  "cases": [
+    {
+      "case": "company",
+      "source": "data/modern/Modern_Challenge_16_12854500.json",
+      "rank": 25,
+      "replace": [
+        "Noble Hierarch",
+        "Birds of Paradise"
+      ],
+      "main": {
+        "Aang, Swift Savior": 2,
+        "Abandoned Air Temple": 1,
+        "Badgermole Cub": 4,
+        "Windswept Heath": 4,
+        "Plains": 1,
+        "Collected Company": 3,
+        "Noble Hierarch": 4,
+        "Echoing Deeps": 1,
+        "Elven Raft-Steerer": 3,
+        "Fiend Artisan": 2,
+        "Flooded Strand": 1,
+        "Misty Rainforest": 3,
+        "Knight of the Reliquary": 4,
+        "Kessig Wolf Run": 1,
+        "Hedge Maze": 1,
+        "Hallowed Fountain": 1,
+        "Green Sun's Zenith": 4,
+        "Sylvan Safekeeper": 1,
+        "Mole Man, Moloid Master": 1,
+        "Shifting Woodland": 1,
+        "Nissa, Resurgent Animist": 1,
+        "Dryad Arbor": 1,
+        "Breeding Pool": 1,
+        "Sejiri Steppe": 1,
+        "Shang-Chi, Master of Kung Fu": 2,
+        "Stomping Ground": 1,
+        "Teferi, Time Raveler": 2,
+        "Temple Garden": 1,
+        "Haywire Mite": 1,
+        "Birds of Paradise": 2,
+        "Yavimaya, Cradle of Growth": 1,
+        "Aven Interrupter": 1,
+        "Urza's Saga": 1,
+        "Forest": 1
+      },
+      "side": {
+        "Gaddock Teeg": 1,
+        "Collector Ouphe": 1,
+        "Consign to Memory": 2,
+        "Force of Vigor": 2,
+        "Knight of Autumn": 1,
+        "Path to Exile": 2,
+        "Bojuka Bog": 1,
+        "Stern Scolding": 2,
+        "Pithing Needle": 1,
+        "Kraul Harpooner": 1,
+        "Thrun, the Last Troll": 1
+      },
+      "expected": [
+        "bant-company",
+        null
+      ]
+    },
+    {
+      "case": "tempo",
+      "source": "data/modern/Modern_Challenge_32_12837907.json",
+      "rank": 27,
+      "replace": [
+        "Steam Vents",
+        "Thundering Falls"
+      ],
+      "main": {
+        "Cling to Dust": 2,
+        "Subtlety": 4,
+        "Force of Negation": 1,
+        "Flooded Strand": 4,
+        "Kaito, Bane of Nightmares": 1,
+        "Logic Knot": 1,
+        "Polluted Delta": 4,
+        "Orcish Bowmasters": 4,
+        "Watery Grave": 3,
+        "Sheoldred's Edict": 3,
+        "Spell Pierce": 1,
+        "Consult the Star Charts": 4,
+        "Wan Shi Tong, Librarian": 4,
+        "Swamp": 1,
+        "Undercity Sewers": 3,
+        "Counterspell": 4,
+        "Steam Vents": 1,
+        "Field of Ruin": 4,
+        "Spell Snare": 3,
+        "Fatal Push": 4,
+        "Island": 4
+      },
+      "side": {
+        "Break the Ice": 4,
+        "Consign to Memory": 4,
+        "Mystical Dispute": 3,
+        "Meltdown": 2,
+        "Engineered Explosives": 2
+      },
+      "expected": [
+        "dimir-tempo",
+        "grixis"
+      ]
+    },
+    {
+      "case": "oculus",
+      "source": "data/modern/Modern_Challenge_64_12849467.json",
+      "rank": 21,
+      "replace": [
+        "Watery Grave",
+        "Undercity Sewers"
+      ],
+      "main": {
+        "Warren Soultrader": 4,
+        "Phyrexian Tower": 2,
+        "Boggart Trawler": 3,
+        "Spymaster's Vault": 3,
+        "Bloodghast": 1,
+        "Birthing Ritual": 3,
+        "Swamp": 3,
+        "Marionette Apprentice": 4,
+        "Flare of Malice": 4,
+        "Chthonian Nightmare": 1,
+        "Orcish Bowmasters": 4,
+        "Overgrown Tomb": 2,
+        "Stitcher's Supplier": 4,
+        "Underground Mortuary": 1,
+        "Bloodstained Mire": 4,
+        "Polluted Delta": 2,
+        "Gravecrawler": 4,
+        "Unearth": 4,
+        "Watery Grave": 1,
+        "Wight of the Reliquary": 2,
+        "Abhorrent Oculus": 3,
+        "Liliana, Heretical Healer": 1
+      },
+      "side": {
+        "Phoenix Fleet Airship": 1,
+        "Chomping Changeling": 1,
+        "Dauthi Voidwalker": 2,
+        "Thoughtseize": 4,
+        "Fatal Push": 3,
+        "Haywire Mite": 2,
+        "Consign to Memory": 2
+      },
+      "expected": [
+        "oculus-ritual",
+        "sultai"
+      ]
+    },
+    {
+      "case": "tron",
+      "source": "data/modern/Modern_Challenge_32_12851614.json",
+      "rank": 6,
+      "replace": [
+        "Urza's Mine",
+        "Forest"
+      ],
+      "main": {
+        "Thought-Knot Seer": 3,
+        "Devourer of Destiny": 4,
+        "Urza's Mine": 4,
+        "Trinisphere": 2,
+        "Forest": 2,
+        "Karn, the Great Creator": 4,
+        "Kozilek's Command": 4,
+        "Sire of Seven Deaths": 1,
+        "Sowing Mycospawn": 4,
+        "Talisman of Resilience": 4,
+        "Expedition Map": 4,
+        "Ugin, Eye of the Storms": 4,
+        "Ugin's Labyrinth": 4,
+        "Ulamog, the Ceaseless Hunger": 1,
+        "Eldrazi Temple": 4,
+        "Dismember": 2,
+        "Vexing Bauble": 1,
+        "Urza's Power Plant": 4,
+        "Urza's Tower": 4
+      },
+      "side": {
+        "Torpor Orb": 1,
+        "Cursed Totem": 1,
+        "Disruptor Flute": 2,
+        "The Filigree Sylex": 1,
+        "Extinguisher Battleship": 1,
+        "Soulless Jailer": 1,
+        "Liquimetal Coating": 1,
+        "Grafdigger's Cage": 1,
+        "Ensnaring Bridge": 1,
+        "The Stone Brain": 1,
+        "The Ten Rings": 1,
+        "Tormod's Crypt": 1,
+        "Chalice of the Void": 1,
+        "Walking Ballista": 1
+      },
+      "expected": [
+        "eldrazi-tron",
+        "mono-green"
+      ]
+    },
+    {
+      "case": "hammer",
+      "source": "data/modern/Modern_Challenge_32_12856762.json",
+      "rank": 27,
+      "replace": [
+        "Stoneforge Mystic",
+        "Steelshaper's Gift"
+      ],
+      "main": {
+        "Arid Mesa": 4,
+        "Colossus Hammer": 4,
+        "Cryptic Coat": 1,
+        "Super-Soldier Serum": 1,
+        "Stoneforge Mystic": 4,
+        "Steelshaper's Gift": 1,
+        "Kíli the Resourceful": 4,
+        "Lavaspur Boots": 1,
+        "Puresteel Paladin": 4,
+        "Lich's Relic": 1,
+        "Memnite": 3,
+        "Metallic Rebuke": 4,
+        "Plains": 2,
+        "Ornithopter": 3,
+        "Mox Opal": 4,
+        "Meticulous Archive": 1,
+        "Shadowspear": 1,
+        "Leyline Axe": 4,
+        "Inkmoth Nexus": 2,
+        "Hallowed Fountain": 2,
+        "Urza's Saga": 4,
+        "Godless Shrine": 1,
+        "Windswept Heath": 4
+      },
+      "side": {
+        "Consign to Memory": 4,
+        "Erode": 1,
+        "Tormod's Crypt": 1,
+        "Lich's Relic": 1,
+        "March of Otherworldly Light": 2,
+        "Pithing Needle": 1,
+        "Surge of Salvation": 2,
+        "Grafdigger's Cage": 2,
+        "Vexing Bauble": 1
+      },
+      "expected": [
+        "hammer-time",
+        "esper"
+      ]
+    }
+  ]
+}

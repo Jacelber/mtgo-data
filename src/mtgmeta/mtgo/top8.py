@@ -82,7 +82,11 @@ def _identity(
 
 
 def _versioned(document: dict[str, Any]) -> dict[str, Any]:
-    return {"schema_version": TOP8_SCHEMA_VERSION, **document}
+    return {
+        "schema_version": TOP8_SCHEMA_VERSION,
+        "construction_digest": stats.construction_digest(),
+        **document,
+    }
 
 
 def _missing_placement(rank: int) -> dict[str, Any]:

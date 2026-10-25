@@ -12,6 +12,7 @@ from typing import Any
 from .classifier import (
     ClassificationResult,
     ConditionEvidence,
+    color_diagnostics_payload,
     RuleMatch,
     classifier_digest,
     classify_deck,
@@ -58,6 +59,7 @@ def _deck_id(event_id: str, player_index: int, deck: Mapping[str, Any]) -> str:
 def _evidence(item: ConditionEvidence) -> dict[str, Any]:
     return {
         "card": item.card,
+        **({"scope": item.scope} if item.scope != "rule" else {}),
         "zone": item.zone,
         "actual_count": item.actual_count,
         "min_count": item.min_count,
@@ -168,6 +170,9 @@ def build_classification_reports(
                     **identity,
                     "main_deck": _card_list(main_counts),
                     "sideboard": _card_list(side_counts),
+                    **({"errors": list(result.errors), "color_diagnostics": color_diagnostics_payload(result),
+                        "matched_rules": [_match(item) for item in result.matched_rules]}
+                       if result.color_diagnostics else {}),
                 })
                 continue
 

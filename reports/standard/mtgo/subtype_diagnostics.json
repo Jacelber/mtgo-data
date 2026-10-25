@@ -3,37 +3,41 @@
   "report_type": "subtype_diagnostics",
   "format": "standard",
   "source": "mtgo",
-  "classifier_digest": "d0495b42f3e9597d7b4e4a890c98354c5b71110b2eac4bb9e82aa29c2d048bee",
+  "classifier_digest": "77aa77d0fdbc62064681155494279247e37fa8f8de789f5f187595e4fcdc9248",
   "scope": "all_admitted_events",
   "event_count": 223,
   "data_through": "2026-10-18 22:00:00.0",
   "summary": {
-    "record_count": 928,
+    "record_count": 927,
     "blocking": false,
-    "selected_record_count": 900,
+    "selected_record_count": 899,
     "selected_by_subtype": {
       "azorius-control/prepare": 6,
-      "azorius-control/traditional": 79,
-      "boros-manufacturing/boros": 17,
-      "boros-manufacturing/jeskai": 16,
-      "boros-manufacturing/mardu": 6,
-      "dimir-spider-man/dimir": 507,
-      "dimir-spider-man/sultai": 4,
+      "azorius-control/traditional": 78,
+      "boros-manufacturing/boros": 16,
+      "boros-manufacturing/jeskai": 13,
+      "boros-manufacturing/mardu": 7,
+      "boros-manufacturing/wubr": 3,
+      "dimir-spider-man/dimir": 493,
+      "dimir-spider-man/grixis": 6,
+      "dimir-spider-man/sultai": 12,
       "dwarves/boros": 66,
       "dwarves/izzet": 1,
       "dwarves/mono-red": 1,
-      "kona-omniscience/bant": 1,
-      "kona-omniscience/simic": 16,
-      "kona-omniscience/temur": 35,
+      "kona-omniscience/bant": 2,
+      "kona-omniscience/four-color": 1,
+      "kona-omniscience/simic": 13,
+      "kona-omniscience/temur": 36,
       "leyline-aggro/boros": 2,
       "leyline-aggro/gruul": 1,
       "leyline-aggro/izzet": 13,
-      "leyline-aggro/rakdos": 3,
+      "leyline-aggro/mono-red": 2,
+      "leyline-aggro/rakdos": 1,
       "lifegain/abzan": 2,
       "lifegain/mono-white": 1,
       "lifegain/orzhov": 123
     },
-    "same_parent_multiple_subtype_matches": 5
+    "same_parent_multiple_subtype_matches": 0
   },
   "records": [
     {
@@ -119,14 +123,10 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
-        },
-        {
-          "archetype_id": "dimir-spider-man",
           "subtype_id": "sultai"
         }
       ],
-      "same_parent_multiple_subtype_matches": true
+      "same_parent_multiple_subtype_matches": false
     },
     {
       "deck_id": "2c9ae6cf60e0598d6783",
@@ -137,15 +137,15 @@
       "selected": {
         "archetype_id": "leyline-aggro",
         "archetype_name": "Leyline Aggro",
-        "subtype_id": "rakdos",
-        "subtype_name": "Rakdos",
-        "rule_id": "leyline-aggro-rakdos",
-        "priority": 27010
+        "subtype_id": "mono-red",
+        "subtype_name": "Mono-Red",
+        "rule_id": "leyline-aggro-mono-red",
+        "priority": 27000
       },
       "matched_subtypes": [
         {
           "archetype_id": "leyline-aggro",
-          "subtype_id": "rakdos"
+          "subtype_id": "mono-red"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -293,8 +293,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -557,8 +557,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -755,8 +755,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -2786,13 +2786,9 @@
         {
           "archetype_id": "lifegain",
           "subtype_id": "abzan"
-        },
-        {
-          "archetype_id": "lifegain",
-          "subtype_id": "orzhov"
         }
       ],
-      "same_parent_multiple_subtype_matches": true
+      "same_parent_multiple_subtype_matches": false
     },
     {
       "deck_id": "3634f61f3fdd2b812a34",
@@ -3317,7 +3313,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -3507,15 +3503,15 @@
       "selected": {
         "archetype_id": "kona-omniscience",
         "archetype_name": "Kona Omniscience",
-        "subtype_id": "simic",
-        "subtype_name": "Simic",
-        "rule_id": "kona-omniscience-simic",
-        "priority": 41000
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "kona-omniscience-temur",
+        "priority": 41020
       },
       "matched_subtypes": [
         {
           "archetype_id": "kona-omniscience",
-          "subtype_id": "simic"
+          "subtype_id": "temur"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -3551,15 +3547,15 @@
       "selected": {
         "archetype_id": "kona-omniscience",
         "archetype_name": "Kona Omniscience",
-        "subtype_id": "simic",
-        "subtype_name": "Simic",
-        "rule_id": "kona-omniscience-simic",
-        "priority": 41000
+        "subtype_id": "temur",
+        "subtype_name": "Temur",
+        "rule_id": "kona-omniscience-temur",
+        "priority": 41020
       },
       "matched_subtypes": [
         {
           "archetype_id": "kona-omniscience",
-          "subtype_id": "simic"
+          "subtype_id": "temur"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -3581,7 +3577,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -3691,7 +3687,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -3823,7 +3819,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -4681,7 +4677,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -4791,7 +4787,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -4805,15 +4801,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "grixis",
+        "subtype_name": "Grixis Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "grixis"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -4923,7 +4919,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -5003,15 +4999,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "grixis",
+        "subtype_name": "Grixis Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "grixis"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -5033,7 +5029,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -5135,15 +5131,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "grixis",
+        "subtype_name": "Grixis Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "grixis"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -5201,15 +5197,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "grixis",
+        "subtype_name": "Grixis Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "grixis"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -5311,15 +5307,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "grixis",
+        "subtype_name": "Grixis Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "grixis"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -5333,15 +5329,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "grixis",
+        "subtype_name": "Grixis Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "grixis"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -5561,7 +5557,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -6411,15 +6407,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "sultai",
+        "subtype_name": "Sultai Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -6573,7 +6569,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -6763,15 +6759,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "sultai",
+        "subtype_name": "Sultai Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -7475,14 +7471,10 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
-        },
-        {
-          "archetype_id": "dimir-spider-man",
           "subtype_id": "sultai"
         }
       ],
-      "same_parent_multiple_subtype_matches": true
+      "same_parent_multiple_subtype_matches": false
     },
     {
       "deck_id": "10b8bec0fde3f833271e",
@@ -8623,7 +8615,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -8777,7 +8769,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -8923,15 +8915,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "sultai",
+        "subtype_name": "Sultai Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -9055,15 +9047,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "sultai",
+        "subtype_name": "Sultai Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -9891,15 +9883,15 @@
       "selected": {
         "archetype_id": "boros-manufacturing",
         "archetype_name": "Boros Manufacturing",
-        "subtype_id": "jeskai",
-        "subtype_name": "Jeskai",
-        "rule_id": "boros-manufacturing-jeskai",
+        "subtype_id": "wubr",
+        "subtype_name": "WUBR",
+        "rule_id": "boros-manufacturing-wubr",
         "priority": 16000
       },
       "matched_subtypes": [
         {
           "archetype_id": "boros-manufacturing",
-          "subtype_id": "jeskai"
+          "subtype_id": "wubr"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -10155,15 +10147,15 @@
       "selected": {
         "archetype_id": "boros-manufacturing",
         "archetype_name": "Boros Manufacturing",
-        "subtype_id": "jeskai",
-        "subtype_name": "Jeskai",
-        "rule_id": "boros-manufacturing-jeskai",
+        "subtype_id": "wubr",
+        "subtype_name": "WUBR",
+        "rule_id": "boros-manufacturing-wubr",
         "priority": 16000
       },
       "matched_subtypes": [
         {
           "archetype_id": "boros-manufacturing",
-          "subtype_id": "jeskai"
+          "subtype_id": "wubr"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -10771,15 +10763,15 @@
       "selected": {
         "archetype_id": "boros-manufacturing",
         "archetype_name": "Boros Manufacturing",
-        "subtype_id": "jeskai",
-        "subtype_name": "Jeskai",
-        "rule_id": "boros-manufacturing-jeskai",
+        "subtype_id": "wubr",
+        "subtype_name": "WUBR",
+        "rule_id": "boros-manufacturing-wubr",
         "priority": 16000
       },
       "matched_subtypes": [
         {
           "archetype_id": "boros-manufacturing",
-          "subtype_id": "jeskai"
+          "subtype_id": "wubr"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -10823,7 +10815,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -11659,7 +11651,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -12619,15 +12611,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "sultai",
+        "subtype_name": "Sultai Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -12775,8 +12767,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -12949,15 +12941,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "sultai",
+        "subtype_name": "Sultai Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -13017,8 +13009,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -13521,15 +13513,15 @@
       "selected": {
         "archetype_id": "kona-omniscience",
         "archetype_name": "Kona Omniscience",
-        "subtype_id": "temur",
-        "subtype_name": "Temur",
-        "rule_id": "kona-omniscience-temur",
+        "subtype_id": "four-color",
+        "subtype_name": "Four-Color",
+        "rule_id": "kona-omniscience-four-color",
         "priority": 41020
       },
       "matched_subtypes": [
         {
           "archetype_id": "kona-omniscience",
-          "subtype_id": "temur"
+          "subtype_id": "four-color"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -13675,15 +13667,15 @@
       "selected": {
         "archetype_id": "boros-manufacturing",
         "archetype_name": "Boros Manufacturing",
-        "subtype_id": "boros",
-        "subtype_name": "Boros",
-        "rule_id": "boros-manufacturing-boros",
-        "priority": 15900
+        "subtype_id": "mardu",
+        "subtype_name": "Mardu",
+        "rule_id": "boros-manufacturing-mardu",
+        "priority": 15950
       },
       "matched_subtypes": [
         {
           "archetype_id": "boros-manufacturing",
-          "subtype_id": "boros"
+          "subtype_id": "mardu"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -13807,15 +13799,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "sultai",
+        "subtype_name": "Sultai Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -13875,8 +13867,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -14117,8 +14109,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -14227,8 +14219,8 @@
         "archetype_name": "Dwarves",
         "subtype_id": "boros",
         "subtype_name": "Boros",
-        "rule_id": "dwarves-boros",
-        "priority": 76690
+        "rule_id": "dwarves-izzet",
+        "priority": 76700
       },
       "matched_subtypes": [
         {
@@ -14337,8 +14329,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -14467,15 +14459,15 @@
       "selected": {
         "archetype_id": "kona-omniscience",
         "archetype_name": "Kona Omniscience",
-        "subtype_id": "simic",
-        "subtype_name": "Simic",
-        "rule_id": "kona-omniscience-simic",
-        "priority": 41000
+        "subtype_id": "bant",
+        "subtype_name": "Bant",
+        "rule_id": "kona-omniscience-bant",
+        "priority": 41010
       },
       "matched_subtypes": [
         {
           "archetype_id": "kona-omniscience",
-          "subtype_id": "simic"
+          "subtype_id": "bant"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -14491,8 +14483,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -14520,6 +14512,28 @@
         {
           "archetype_id": "lifegain",
           "subtype_id": "orzhov"
+        }
+      ],
+      "same_parent_multiple_subtype_matches": false
+    },
+    {
+      "deck_id": "0d0137feeaeb4dd2e978",
+      "event_id": "12853183",
+      "event_name": "Standard Challenge 32",
+      "event_start": "2026-08-28 18:00:00.0",
+      "source_file": "data/standard/Standard_Challenge_32_12853183.json",
+      "selected": {
+        "archetype_id": "dimir-spider-man",
+        "archetype_name": "Dimir Spider-Man",
+        "subtype_id": "dimir",
+        "subtype_name": "Dimir Spider-Man",
+        "rule_id": "dimir-deceit-primary",
+        "priority": 19000
+      },
+      "matched_subtypes": [
+        {
+          "archetype_id": "dimir-spider-man",
+          "subtype_id": "dimir"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -14563,14 +14577,10 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
-        },
-        {
-          "archetype_id": "dimir-spider-man",
           "subtype_id": "sultai"
         }
       ],
-      "same_parent_multiple_subtype_matches": true
+      "same_parent_multiple_subtype_matches": false
     },
     {
       "deck_id": "9149662f5512fe0f33db",
@@ -14639,28 +14649,6 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
-      "deck_id": "b39ebf3b55e1fb60832a",
-      "event_id": "12853183",
-      "event_name": "Standard Challenge 32",
-      "event_start": "2026-08-28 18:00:00.0",
-      "source_file": "data/standard/Standard_Challenge_32_12853183.json",
-      "selected": {
-        "archetype_id": "dimir-spider-man",
-        "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
-        "rule_id": "dimir-deceit-primary",
-        "priority": 19000
-      },
-      "matched_subtypes": [
-        {
-          "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
-        }
-      ],
-      "same_parent_multiple_subtype_matches": false
-    },
-    {
       "deck_id": "d948f85cea89eb844556",
       "event_id": "12853183",
       "event_name": "Standard Challenge 32",
@@ -14715,8 +14703,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -14765,14 +14753,10 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
-        },
-        {
-          "archetype_id": "dimir-spider-man",
           "subtype_id": "sultai"
         }
       ],
-      "same_parent_multiple_subtype_matches": true
+      "same_parent_multiple_subtype_matches": false
     },
     {
       "deck_id": "92bc363101509bf86521",
@@ -14829,8 +14813,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -15599,8 +15583,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -15715,7 +15699,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -16171,8 +16155,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -16193,8 +16177,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -16667,28 +16651,6 @@
       "same_parent_multiple_subtype_matches": false
     },
     {
-      "deck_id": "f2fae5d60a73d5ad3e97",
-      "event_id": "12854496",
-      "event_name": "Standard Challenge 32",
-      "event_start": "2026-09-18 18:00:00.0",
-      "source_file": "data/standard/Standard_Challenge_32_12854496.json",
-      "selected": {
-        "archetype_id": "azorius-control",
-        "archetype_name": "Azorius Control",
-        "subtype_id": "traditional",
-        "subtype_name": "Azorius",
-        "rule_id": "azorius-control-primary",
-        "priority": 39000
-      },
-      "matched_subtypes": [
-        {
-          "archetype_id": "azorius-control",
-          "subtype_id": "traditional"
-        }
-      ],
-      "same_parent_multiple_subtype_matches": false
-    },
-    {
       "deck_id": "18a871a063ac5e38a483",
       "event_id": "12854503",
       "event_name": "Standard Challenge 32",
@@ -16765,8 +16727,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -16793,7 +16755,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -17161,8 +17123,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -17315,8 +17277,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -17425,8 +17387,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -17557,8 +17519,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -17931,7 +17893,7 @@
         "archetype_name": "Kona Omniscience",
         "subtype_id": "bant",
         "subtype_name": "Bant",
-        "rule_id": "kona-omniscience-bant-adagia",
+        "rule_id": "kona-omniscience-bant",
         "priority": 41010
       },
       "matched_subtypes": [
@@ -18985,15 +18947,15 @@
       "selected": {
         "archetype_id": "leyline-aggro",
         "archetype_name": "Leyline Aggro",
-        "subtype_id": "rakdos",
-        "subtype_name": "Rakdos",
-        "rule_id": "leyline-aggro-rakdos",
-        "priority": 27010
+        "subtype_id": "mono-red",
+        "subtype_name": "Mono-Red",
+        "rule_id": "leyline-aggro-mono-red",
+        "priority": 27000
       },
       "matched_subtypes": [
         {
           "archetype_id": "leyline-aggro",
-          "subtype_id": "rakdos"
+          "subtype_id": "mono-red"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -19053,8 +19015,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {
@@ -19301,7 +19263,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -19587,7 +19549,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -19843,15 +19805,15 @@
       "selected": {
         "archetype_id": "dimir-spider-man",
         "archetype_name": "Dimir Spider-Man",
-        "subtype_id": "dimir",
-        "subtype_name": "Dimir Spider-Man",
+        "subtype_id": "sultai",
+        "subtype_name": "Sultai Spider-Man",
         "rule_id": "dimir-deceit-primary",
         "priority": 19000
       },
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -20247,7 +20209,7 @@
       "matched_subtypes": [
         {
           "archetype_id": "dimir-spider-man",
-          "subtype_id": "dimir"
+          "subtype_id": "sultai"
         }
       ],
       "same_parent_multiple_subtype_matches": false
@@ -20395,8 +20357,8 @@
         "archetype_name": "Lifegain",
         "subtype_id": "orzhov",
         "subtype_name": "Orzhov Lifegain",
-        "rule_id": "lifegain-orzhov",
-        "priority": 77000
+        "rule_id": "lifegain-mono-white",
+        "priority": 77020
       },
       "matched_subtypes": [
         {

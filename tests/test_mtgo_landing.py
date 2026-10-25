@@ -17,6 +17,40 @@ PICKUP_DIGEST = "d" * 64
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_classifier_restatement_preserves_historical_feature_provenance(tmp_path, monkeypatch):
+    from mtgmeta.mtgo import landing_editorial as editorial
+
+    review_root = tmp_path / "reviews"
+    review_root.mkdir()
+    week = {"id": "2026-W41", "start": "2026-10-05", "end": "2026-10-11"}
+    (review_root / "2026-W41.yaml").touch()
+    review = {"format": "modern", "source": "mtgo", "week": week,
+              "bindings": {"source_event_ids": ["123"]}}
+    archive = {"format": "modern", "source": "mtgo", "week": week,
+               "source_event_ids": ["123"], "classifier_digest": "historical",
+               "features": {"items": [{"destination_id": "retained-deck"}]}}
+    path = tmp_path / "stats/modern/mtgo/landing/features/2026-W41.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps(archive))
+    monkeypatch.setattr(editorial, "validate_name_catalog", lambda *a, **k: None)
+    monkeypatch.setattr(editorial, "load_name_catalog", lambda *a: {})
+    monkeypatch.setattr(editorial, "load_review_document", lambda *a: review)
+    def reject_reclassification(*args, **kwargs):
+        raise AssertionError("historical decks must not be reclassified")
+    monkeypatch.setattr(editorial, "resolve_review_decks", reject_reclassification)
+    index, weeks = landing._feature_archive_documents(
+        tmp_path, "modern", review_root, tmp_path / "names.yaml", private=True,
+        rules_digest="current", preserve_archives_before="2026-W42")
+    assert weeks["2026-W41"] == archive
+    assert index["weeks"][0]["feature_count"] == 1
+    archive["source_event_ids"] = ["456"]
+    path.write_text(json.dumps(archive))
+    with pytest.raises(landing.MTGOLandingError, match="source binding changed"):
+        landing._feature_archive_documents(
+            tmp_path, "modern", review_root, tmp_path / "names.yaml", private=True,
+            rules_digest="current", preserve_archives_before="2026-W42")
+
+
 def test_classifier_restatement_requires_identical_accepted_material():
     material = {
         field: {"value": field}

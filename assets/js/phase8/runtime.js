@@ -57,6 +57,7 @@
     const successful = new Map();
     const foregroundRequests = new Map();
     const refreshRequests = new Map();
+    const retained = new Map();
     const maxEntries = options.maxEntries ?? 24;
     const maxBytes = options.maxBytes ?? 16 * 1024 * 1024;
     const foregroundTimeoutMs = options.foregroundTimeoutMs ?? 30_000;
@@ -82,7 +83,8 @@
         successful.size > 1
         && (successful.size > maxEntries || successfulBytes > maxBytes)
       ) {
-        const oldestPath = successful.keys().next().value;
+        const oldestPath = [...successful.keys()].find(path => !retained.has(path));
+        if (oldestPath === undefined) break;
         const oldest = successful.get(oldestPath);
         successful.delete(oldestPath);
         successfulBytes -= oldest.bytes;
@@ -186,6 +188,22 @@
     }
 
     return Object.freeze({
+      retain(paths) {
+        const unique = [...new Set(paths)];
+        unique.forEach(assertAdmitted);
+        unique.forEach(path => retained.set(path, (retained.get(path) || 0) + 1));
+        let released = false;
+        return () => {
+          if (released) return;
+          released = true;
+          unique.forEach(path => {
+            const count = retained.get(path) - 1;
+            if (count) retained.set(path, count);
+            else retained.delete(path);
+          });
+          evict();
+        };
+      },
       clear() {
         successful.clear();
         foregroundRequests.clear();
@@ -204,6 +222,7 @@
           inFlight: foregroundRequests.size + refreshRequests.size,
           successBytes: successfulBytes,
           successPaths: Object.freeze([...successful.keys()]),
+          retainedPaths: Object.freeze([...retained.keys()]),
         });
       },
       scope,

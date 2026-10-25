@@ -9,6 +9,7 @@
     "schema_version": {"const": "1.1.0"},
     "format": {"$ref": "common.schema.json#/$defs/formatId"}, "source": {"const": "mtgo"},
     "classifier_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "construction_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "generated": {"type": "string", "minLength": 1}, "latest_complete_week": {"type": "string", "format": "date"},
     "base_weeks": {"type": "integer", "minimum": 1}, "global_d99": {"type": "number", "minimum": 0},
     "ranges": {"type": "array", "items": {"type": "object", "required": ["file", "decks_file", "type", "start", "end", "weeks", "total_decks"], "properties": {

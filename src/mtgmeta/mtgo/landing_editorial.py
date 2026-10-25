@@ -16,7 +16,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 from mtgmeta.public_contract import versioned
 from mtgmeta.review_workbook import ReviewWorkbookError, read_workbook_rows
 
-from . import landing_screening as screening, load_mtgo_context, stats
+from . import landing_screening as screening, stats
 from .normalize import load_rules_for_format
 from .top8 import classifier_digest
 
@@ -475,6 +475,8 @@ def _display_english(parent_name: str, subtype_name: str | None) -> str:
     # A fully spelled subtype already supplies the family noun, including
     # reviewed singular names such as Jund Garden under Golgari Gardens.
     family_noun = parent_words[-1]
+    if "-" in family_noun and subtype_name.endswith(" " + family_noun.replace("-", " ")):
+        return subtype_name
     if len(subtype_words) > 1 and subtype_words[-1] in {
         family_noun, family_noun[:-1] if family_noun.endswith("s") else family_noun
     }:

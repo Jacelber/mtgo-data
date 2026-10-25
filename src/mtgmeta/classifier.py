@@ -3,14 +3,24 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, replace
 from hashlib import sha256
 import json
 from typing import Any, Literal
 
 from .classifier_features import SemanticFeatureError, augment_semantic_counts
 from .deck import count_card, deck_to_counts
-from .rules import CardCondition, ClassificationRule, RuleSet
+from .rules import AnyCondition, CardCondition, RuleSet
+from .classifier_cards import (
+    card_facts,
+    classifier_card_name,
+    normalize_counts,
+    deck_colors,
+    DeckColors,
+    IDENTITY_CONTRACT_VERSION,
+    color_policy_subject,
+)
+from .card_names import CARD_ALIASES, equivalent_basic_land_names
 
 
 ClassificationStatus = Literal["classified", "unknown", "conflict", "invalid_deck"]
@@ -18,53 +28,44 @@ ConflictKind = Literal["parent_archetype", "subtype"]
 
 # Bump this only when classifier evaluation semantics change.  Rule and
 # semantic-feature changes are independently included in each rule digest.
-CLASSIFIER_ENGINE_VERSION = "1.1.0"
+CLASSIFIER_ENGINE_VERSION = "1.2.2"
 
 
 def classifier_digest(rules: RuleSet) -> str:
     """Hash every rule input plus the explicit classifier engine contract."""
 
-    subject = {
-        "engine_version": CLASSIFIER_ENGINE_VERSION,
-        "rule_schema_version": rules.schema_version,
-        "format": rules.format,
-        "semantic_feature_path": rules.semantic_feature_path,
-        "semantic_feature_sha256": rules.semantic_feature_sha256,
-        "archetypes": [
-            {
-                "id": parent.id,
-                "name": parent.name,
-                "priority": parent.priority,
-                "subtypes": [
-                    {
-                        "id": subtype.id,
-                        "name": subtype.name,
-                        "parent_archetype_id": subtype.parent_archetype_id,
-                    }
-                    for subtype in parent.subtypes
-                ],
-                "rules": [
-                    {
-                        "id": rule.id,
-                        "priority": rule.priority,
-                        "subtype_id": rule.subtype_id,
-                        "conditions": [
-                            {
-                                "card": condition.card,
-                                "zone": condition.zone,
-                                "min_count": condition.min_count,
-                                "max_count": condition.max_count,
-                                "exact_count": condition.exact_count,
-                            }
-                            for condition in rule.conditions
-                        ],
-                    }
-                    for rule in parent.rules
-                ],
-            }
-            for parent in rules.archetypes
-        ],
-    }
+    def canonical(value: Any) -> Any:
+        if isinstance(value, (set, frozenset)):
+            return sorted(value)
+        if isinstance(value, dict):
+            return {k: canonical(v) for k, v in value.items()}
+        if isinstance(value, (tuple, list)):
+            return [canonical(v) for v in value]
+        return value
+
+    parents = []
+    for parent in sorted(rules.archetypes, key=lambda p: p.id):
+        item = asdict(parent)
+        item["rules"] = [asdict(r) for r in sorted(parent.rules, key=lambda r: r.id)]
+        item["subtypes"] = [
+            asdict(t) for t in sorted(parent.subtypes, key=lambda t: t.id)
+        ]
+        parents.append(item)
+    subject = canonical(
+        {
+            "engine_version": CLASSIFIER_ENGINE_VERSION,
+            "rule_schema_version": rules.schema_version,
+            "format": rules.format,
+            "identity_contract": IDENTITY_CONTRACT_VERSION,
+            "aliases": CARD_ALIASES,
+            "color_policies": color_policy_subject(),
+            "card_facts_sha256": card_facts().digest,
+            "semantic_features": asdict(rules.semantic_features)
+            if rules.semantic_features
+            else None,
+            "archetypes": parents,
+        }
+    )
     encoded = json.dumps(
         subject,
         ensure_ascii=False,
@@ -82,6 +83,7 @@ class ConditionEvidence:
     min_count: int | None
     max_count: int | None
     exact_count: int | None
+    scope: str = "rule"
 
 
 @dataclass(frozen=True)
@@ -111,6 +113,7 @@ class ClassificationResult:
     conflict_kind: ConflictKind | None
     priority_tie: bool
     errors: tuple[str, ...] = ()
+    color_diagnostics: tuple[tuple[str, DeckColors], ...] = ()
 
 
 def _condition_evidence(
@@ -119,9 +122,25 @@ def _condition_evidence(
     side_counts: Mapping[str, int],
 ) -> ConditionEvidence:
     return ConditionEvidence(
-        card=condition.card,
+        card=(
+            "total_count:" + "|".join(condition.cards)
+            if condition.cards
+            else condition.card
+        ),
         zone=condition.zone,
-        actual_count=count_card(condition.card, condition.zone, main_counts, side_counts),
+        actual_count=(
+            count_card(condition.card, condition.zone, main_counts, side_counts)
+            if not condition.cards
+            else sum(
+                (main_counts.get(name, 0) if condition.zone != "side" else 0)
+                + (side_counts.get(name, 0) if condition.zone != "main" else 0)
+                for name in dict.fromkeys(
+                    alias
+                    for n in (condition.cards or (condition.card,))
+                    for alias in equivalent_basic_land_names(classifier_card_name(n))
+                )
+            )
+        ),
         min_count=condition.min_count,
         max_count=condition.max_count,
         exact_count=condition.exact_count,
@@ -138,17 +157,32 @@ def condition_matches(evidence: ConditionEvidence) -> bool:
     return True
 
 
-def _rule_evidence(
-    rule: ClassificationRule,
+def _conditions_evidence(
+    conditions: tuple[CardCondition | AnyCondition, ...],
     main_counts: Mapping[str, int],
     side_counts: Mapping[str, int],
+    *,
+    scope: str = "rule",
 ) -> tuple[ConditionEvidence, ...] | None:
-    evidence = []
-    for condition in rule.conditions:
-        item = _condition_evidence(condition, main_counts, side_counts)
-        if not condition_matches(item):
-            return None
-        evidence.append(item)
+    evidence: list[ConditionEvidence] = []
+    for condition in conditions:
+        if isinstance(condition, AnyCondition):
+            alternatives = [
+                _conditions_evidence(alt, main_counts, side_counts, scope=scope)
+                for alt in condition.alternatives
+            ]
+            successful = [alt for alt in alternatives if alt is not None]
+            if not successful:
+                return None
+            # Retain all successful alternatives in declared order.
+            evidence.extend(item for alt in successful for item in alt)
+        else:
+            item = _condition_evidence(condition, main_counts, side_counts)
+            if scope != "rule":
+                item = replace(item, scope=scope)
+            if not condition_matches(item):
+                return None
+            evidence.append(item)
     return tuple(evidence)
 
 
@@ -156,35 +190,126 @@ def _match_sort_key(match: RuleMatch) -> tuple[int, str, str, str]:
     return (-match.priority, match.archetype_id, match.rule_id, match.subtype_id or "")
 
 
-def evaluate_matches(
+def _evaluate(
     rule_set: RuleSet,
     main_counts: Mapping[str, int],
     side_counts: Mapping[str, int],
-) -> tuple[RuleMatch, ...]:
-    """Return every matching rule in deterministic priority/identity order."""
-
+) -> tuple[
+    tuple[RuleMatch, ...], list[tuple[int, str]], tuple[tuple[str, DeckColors], ...]
+]:
     matches = []
+    unresolved = []
+    diagnostics = []
+    colors_by_profile = {}
     for archetype in rule_set.archetypes:
-        subtype_names = {subtype.id: subtype.name for subtype in archetype.subtypes}
+        inherited = _conditions_evidence(
+            archetype.conditions, main_counts, side_counts, scope="parent"
+        )
+        if inherited is None:
+            continue
+        subtype_names = {s.id: s.name for s in archetype.subtypes}
+        structural = []
         for rule in archetype.rules:
-            evidence = _rule_evidence(rule, main_counts, side_counts)
+            evidence = _conditions_evidence(rule.conditions, main_counts, side_counts)
             if evidence is not None:
-                matches.append(
-                    RuleMatch(
-                        archetype_id=archetype.id,
-                        archetype_name=archetype.name,
-                        subtype_id=rule.subtype_id,
-                        subtype_name=(
-                            subtype_names.get(rule.subtype_id)
-                            if rule.subtype_id is not None
-                            else None
-                        ),
-                        rule_id=rule.id,
-                        priority=rule.priority,
-                        evidence=evidence,
-                    )
+                structural.append((rule, inherited + evidence))
+        if not structural:
+            continue
+        colors = None
+        if archetype.color_profile is not None:
+            profile = archetype.color_profile
+            cache_key = (profile, archetype.card_uses)
+            if cache_key not in colors_by_profile:
+                colors_by_profile[cache_key] = deck_colors(
+                    main_counts,
+                    side_counts,
+                    profile=profile,
+                    uses=dict(archetype.card_uses),
                 )
-    return tuple(sorted(matches, key=_match_sort_key))
+            colors = colors_by_profile[cache_key]
+            diagnostics.append((archetype.id, colors))
+        accepted = False
+        for rule, evidence in structural:
+            subtype_id = rule.subtype_id
+            required_colors = rule.colors
+            if subtype_id is None and archetype.color_subtypes:
+                if colors is None or colors.missing or colors.unresolved_uses:
+                    continue
+                subtype_id = next(
+                    (
+                        key
+                        for key, names in archetype.color_subtypes
+                        if frozenset(names) == colors.colors
+                    ),
+                    None,
+                )
+                if subtype_id is None:
+                    continue
+                required_colors = tuple(sorted(colors.colors))
+            if required_colors is not None:
+                if colors is None or colors.missing or colors.unresolved_uses:
+                    continue
+                observed = colors.colors
+                convention = (
+                    archetype.color_profile == "modern-creativity"
+                    and count_card("Leyline Binding", "any", main_counts, side_counts)
+                    > 0
+                    and len(colors.basic_land_types) == 5
+                )
+                if convention:
+                    observed = frozenset({"white", "blue", "black", "red", "green"})
+                if observed != frozenset(required_colors):
+                    continue
+                evidence += (
+                    ConditionEvidence(
+                        "colors:" + ",".join(sorted(observed)),
+                        "any",
+                        1,
+                        1,
+                        None,
+                        None,
+                        "binding-domain-convention" if convention else "color-profile",
+                    ),
+                )
+            accepted = True
+            matches.append(
+                RuleMatch(
+                    archetype.id,
+                    archetype.name,
+                    subtype_id,
+                    subtype_names.get(subtype_id) if subtype_id else None,
+                    rule.id,
+                    rule.priority,
+                    evidence,
+                )
+            )
+        if (
+            not accepted
+            and colors is not None
+            and (colors.missing or colors.unresolved_uses or archetype.require_color_subtype)
+        ):
+            reason = (
+                "missing card facts: " + ", ".join(colors.missing)
+                if colors.missing
+                else "unresolved card uses: " + ", ".join(colors.unresolved_uses)
+                if colors.unresolved_uses
+                else "unresolved colors: " + ", ".join(sorted(colors.colors))
+            )
+            unresolved.append(
+                (max(r.priority for r, _ in structural), archetype.id + ": " + reason)
+            )
+    return (
+        tuple(sorted(matches, key=_match_sort_key)),
+        sorted(unresolved, key=lambda item: (-item[0], item[1])),
+        tuple(sorted(diagnostics, key=lambda item: item[0])),
+    )
+
+
+def evaluate_matches(
+    rule_set: RuleSet, main_counts: Mapping[str, int], side_counts: Mapping[str, int]
+) -> tuple[RuleMatch, ...]:
+    """Return every successful inherited rule in deterministic priority order."""
+    return _evaluate(rule_set, main_counts, side_counts)[0]
 
 
 def _invalid_result(*errors: str) -> ClassificationResult:
@@ -229,6 +354,9 @@ def classify_counts(
     if errors:
         return _invalid_result(*dict.fromkeys(errors))
 
+    main_counts = normalize_counts(main_counts)
+    side_counts = normalize_counts(side_counts)
+
     if rule_set.semantic_feature_path is not None:
         if rule_set.semantic_features is None:
             return _invalid_result("rules: semantic feature manifest is not loaded")
@@ -241,8 +369,18 @@ def classify_counts(
         except SemanticFeatureError as exc:
             return _invalid_result(f"deck: cannot add semantic features ({exc})")
 
-    matches = evaluate_matches(rule_set, main_counts, side_counts)
-    if not matches:
+    matches, unresolved, diagnostics = _evaluate(rule_set, main_counts, side_counts)
+    blocking = tuple(
+        reason
+        for priority, reason in unresolved
+        if not matches or priority >= matches[0].priority
+    )
+    if not matches or blocking:
+        if not matches and not blocking:
+            blocking = tuple(
+                parent + ": unresolved colors: " + ", ".join(sorted(colors.colors))
+                for parent, colors in diagnostics
+            )
         return ClassificationResult(
             status="unknown",
             archetype_id=None,
@@ -251,12 +389,14 @@ def classify_counts(
             subtype_name=None,
             selected_rule_id=None,
             selected_priority=None,
-            matched_rules=(),
+            matched_rules=matches,
             top_priority_matches=(),
             overridden_matches=(),
             conflict_matches=(),
             conflict_kind=None,
             priority_tie=False,
+            errors=blocking,
+            color_diagnostics=diagnostics,
         )
 
     selected_priority = matches[0].priority
@@ -278,6 +418,7 @@ def classify_counts(
             conflict_matches=top,
             conflict_kind="parent_archetype",
             priority_tie=True,
+            color_diagnostics=diagnostics,
         )
 
     subtype_ids = {match.subtype_id for match in top}
@@ -297,6 +438,7 @@ def classify_counts(
             conflict_matches=top,
             conflict_kind="subtype",
             priority_tie=True,
+            color_diagnostics=diagnostics,
         )
 
     selected = top[0]
@@ -314,6 +456,7 @@ def classify_counts(
         conflict_matches=(),
         conflict_kind=None,
         priority_tie=len(top) > 1,
+        color_diagnostics=diagnostics,
     )
 
 
@@ -327,3 +470,21 @@ def classify_deck(rule_set: RuleSet, deck: Mapping[str, Any]) -> ClassificationR
     except (KeyError, TypeError, ValueError) as exc:
         return _invalid_result(f"deck: cannot normalize input ({type(exc).__name__})")
     return classify_counts(rule_set, main_counts, side_counts)
+
+
+def color_diagnostics_payload(result: ClassificationResult) -> list[dict[str, Any]]:
+    """Serialize review evidence only where needed, without duplicating all decks."""
+    return [
+        {
+            "archetype_id": parent,
+            "colors": sorted(colors.colors),
+            "missing": list(colors.missing),
+            "mana_support": sorted(colors.mana_support),
+            "basic_land_types": sorted(colors.basic_land_types),
+            "contributions": [
+                {**asdict(item), "colors": list(item.colors)}
+                for item in colors.contributions
+            ],
+        }
+        for parent, colors in result.color_diagnostics
+    ]

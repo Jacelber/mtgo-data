@@ -23,7 +23,7 @@ const TABLETOP_SORT_KEYS = new Set([
 const TABLETOP_VIEWS = new Set(["overview", "matchup"]);
 const TABLETOP_SCOPES = new Set(["day1", "day2", "all_constructed"]);
 const EXTENDED_URL_KEYS = [
-  "range", "sort", "dir", "week", "event", "events", "view", "scope", "detail", "section", "feature",
+  "range", "sort", "dir", "week", "event", "events", "view", "scope", "detail", "section", "feature", "mode", "mainstream", "filter", "rows", "cols", "expanded",
 ];
 let pendingUrlWrite = null;
 let touchedCompositionIdentity = null;
@@ -52,6 +52,7 @@ function resetUrlBackedState() {
   state.statsSort = "high_score_share";
   state.statsDirection = "desc";
   state.detailMode = "average";
+  state.matchupMainstreamOnly = false;
   state.top8WeekFile = null;
   state.landingFeatureWeekFile = null;
   state.landingFeatureDestination = null;
@@ -73,6 +74,19 @@ function resetUrlBackedState() {
 function requestedWeekFile(parameters) {
   const week = parameters.get("week");
   return /^\d{4}-W\d{2}$/.test(week || "") ? `${week}.json` : null;
+}
+
+function routeIdentities(parameters, key) {
+  const raw = parameters.get(key);
+  if (!raw || raw.length > 20000) return new Set();
+  const ids = raw.split(",");
+  const valid = /^[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)?$/;
+  return ids.length <= 500 && ids.every(id => valid.test(id)) ? new Set(ids) : new Set();
+}
+
+function isMatchupView() {
+  return state.product === "mtgo-matchups"
+    || (state.product === "tabletop-major-events" && state.tabletopView === "matchup");
 }
 
 function applyUrlState(parameters) {
@@ -161,6 +175,23 @@ function applyUrlState(parameters) {
       if (detail.includes("/")) state.tabletopExpanded.add(detail.split("/", 1)[0]);
     }
   }
+  if (state.detailIdentity || state.top8Detail || state.tabletopDetailIdentity
+      || state.landingFeatureDestination) {
+    state.detailMode = parameters.get("mode") === "typical" ? "typical" : "average";
+  }
+  if (state.product === "mtgo-statistics") {
+    routeIdentities(parameters, "expanded").forEach(id => state.statsExpanded.add(id));
+  } else if (state.product === "tabletop-major-events" && state.tabletopView === "overview") {
+    routeIdentities(parameters, "expanded").forEach(id => state.tabletopExpanded.add(id));
+  }
+  if (isMatchupView()) {
+    state.matchupMainstreamOnly = parameters.get("mainstream") === "1";
+    const selected = routeIdentities(parameters, "filter");
+    state.matchupFilterIdentities = selected.size ? selected : null;
+    state.matchupRows = routeIdentities(parameters, "rows");
+    state.matchupColumns = routeIdentities(parameters, "cols");
+  }
+
 }
 
 function weekId(file) {
@@ -204,6 +235,21 @@ function urlStateParameters() {
       }
     }
   }
+  const identities = (key, values) => {
+    if (values?.size) parameters.set(key, [...values].sort().join(","));
+  };
+  if (state.detailMode === "typical" && (state.detailIdentity || state.top8Detail
+      || state.tabletopDetailIdentity || state.landingFeatureDestination)) parameters.set("mode", "typical");
+  if (state.product === "mtgo-statistics") identities("expanded", state.statsExpanded);
+  if (state.product === "tabletop-major-events" && state.tabletopView === "overview") {
+    identities("expanded", state.tabletopExpanded);
+  }
+  if (isMatchupView()) {
+    if (state.matchupMainstreamOnly) parameters.set("mainstream", "1");
+    identities("filter", state.matchupFilterIdentities);
+    identities("rows", state.matchupRows);
+    identities("cols", state.matchupColumns);
+  }
   parameters.set("lang", I18n.language());
   return parameters;
 }
@@ -223,6 +269,75 @@ function flushUrlWrite() {
   if (next !== current) window.history[`${mode}State`]({}, "", next);
   updateDocumentMetadata();
 }
+
+let shareFeedbackTimer = null;
+let shareAttempt = 0;
+
+function resetShareFeedback() {
+  shareAttempt += 1;
+  clearTimeout(shareFeedbackTimer);
+  shareFeedbackTimer = null;
+  const button = document.querySelector("[data-share-view]");
+  button?.classList.remove("is-copied");
+  button?.setAttribute("title", t("share.copy"));
+  button?.setAttribute("aria-label", t("share.copy"));
+  const status = document.querySelector("#share-status");
+  if (status) status.textContent = "";
+  const input = document.querySelector("#share-link");
+  if (input) input.hidden = true;
+  const fallback = document.querySelector("#share-fallback");
+  if (fallback) fallback.hidden = true;
+}
+
+function positionShareFallback() {
+  const panel = document.querySelector("#share-fallback");
+  const button = document.querySelector("[data-share-view]");
+  if (!panel || panel.hidden || !button) return;
+  const box = button.getBoundingClientRect();
+  panel.style.left = `${Math.max(12, Math.min(box.right - panel.offsetWidth, window.innerWidth - panel.offsetWidth - 12))}px`;
+  const top = box.bottom + 8 + panel.offsetHeight <= window.innerHeight - 12
+    ? box.bottom + 8 : box.top - panel.offsetHeight - 8;
+  panel.style.top = `${Math.max(12, Math.min(top, window.innerHeight - panel.offsetHeight - 12))}px`;
+}
+
+async function copyCurrentView() {
+  if (document.querySelector("[data-share-view]")?.disabled
+    || document.querySelector("#view").getAttribute("aria-busy") === "true" || state.failedRender) return;
+  resetShareFeedback();
+  const attempt = shareAttempt;
+  const target = new URL(window.location.href);
+  target.search = urlStateParameters().toString();
+  target.hash = "";
+  const token = state.renderToken;
+  const status = document.querySelector("#share-status");
+  const input = document.querySelector("#share-link");
+  const button = document.querySelector("[data-share-view]");
+  try {
+    await navigator.clipboard.writeText(target.href);
+    if (token !== state.renderToken || attempt !== shareAttempt) return;
+    status.textContent = t("share.copied");
+    button.classList.add("is-copied");
+    button.setAttribute("title", t("share.copied"));
+    button.setAttribute("aria-label", t("share.copied"));
+    shareFeedbackTimer = setTimeout(resetShareFeedback, 1800);
+  } catch {
+    if (token !== state.renderToken || attempt !== shareAttempt) return;
+    status.textContent = t("share.manual");
+    input.value = target.href;
+    input.hidden = false;
+    document.querySelector("#share-fallback").hidden = false;
+    positionShareFallback();
+    input.focus({ preventScroll: true });
+    input.select();
+  }
+}
+
+document.addEventListener("click", event => {
+  if (!document.querySelector("#share-fallback")?.hidden
+    && !event.target.closest("#share-fallback, [data-share-view]")) resetShareFeedback();
+});
+window.addEventListener("resize", positionShareFallback);
+document.addEventListener("scroll", positionShareFallback, { capture: true, passive: true });
 
 function canonicalUrl() {
   const target = new URL(window.location.href);
@@ -342,11 +457,25 @@ async function renderViewWithFocus(
   clearTouchedComposition();
   const focusSelector = focusOverride || renderFocusSelector(document.activeElement, root);
   const position = captureRenderPosition(root, focusSelector);
-  const preserveExistingContent = root.childElementCount > 0
+  const target = captureRenderTarget();
+  const preserveExistingContent = state.renderedViewKey === renderedViewKey(target)
+    && root.childElementCount > 0
     && !root.querySelector(".loading-state, .error-state");
   const token = ++state.renderToken;
+  const resourceReleases = [];
+  let resourcesCommitted = false;
+  const isCurrent = () => token === state.renderToken;
+  discardPendingRefresh();
+  // Navigation and URL describe the requested object even when loading fails.
+  flushUrlWrite();
+  document.querySelector("#payload-status").textContent = t("loading.data");
+  const matrixPop = document.querySelector("#matrix-hover-pop");
+  if (matrixPop) matrixPop.hidden = true;
   globalThis.P8CardImages?.cancelQueued("view");
   root.querySelectorAll(".inline-error-state, .load-error-row").forEach(node => node.remove());
+  const share = document.querySelector("[data-share-view]");
+  if (share) share.disabled = true;
+  resetShareFeedback();
   root.setAttribute("aria-busy", "true");
   root.inert = true;
   document.querySelector(".view-loading-overlay")?.remove();
@@ -358,24 +487,54 @@ async function renderViewWithFocus(
   if (preserveExistingContent) {
     root.style.minHeight = `${Math.ceil(root.getBoundingClientRect().height)}px`;
   } else {
+    state.renderedViewKey = null;
+    currentContext = {};
+    root.style.removeProperty("min-height");
     root.innerHTML = loadingSkeleton();
   }
+  // Keep the previous lease until the replacement has acquired its resources;
+  // scope/filter changes often need the same oversized document.
   try {
     await new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 0)));
     if (token !== state.renderToken) return;
-    await ensureClassifierNames(state.format);
+    const [contract, localization] = await Promise.all([
+      ensureClassifierNames(target.format),
+      needsCardLocalization(target) ? MtgoController.loadCardLocalization() : null,
+    ]);
+    if (!isCurrent()) return;
+    const request = Object.freeze({
+      target, contract, isCurrent,
+      retain(client, paths) {
+        resourceReleases.push(client.retain(paths));
+      },
+      commit(render) {
+        if (!isCurrent()) return null;
+        // All view-local canonicalization, context and HTML creation below
+        // are synchronous. No stale load can enter this commit section.
+        state.classifierNameContract = contract;
+        if (localization) state.cardLocalization = localization;
+        const html = render();
+        state.releaseViewResources?.();
+        state.releaseViewResources = () => resourceReleases.forEach(release => release());
+        resourcesCommitted = true;
+        return html;
+      },
+    });
     let html;
-    if (state.product === "mtgo-landing") html = await landingView();
-    else if (state.product === "mtgo-statistics") html = await statsView();
-    else if (state.product === "mtgo-matchups") html = await matchupView();
-    else if (state.product === "mtgo-top8") html = await top8View();
-    else if (state.product === "tabletop-major-events") html = await tabletopView();
-    else throw new Error(`Unsupported product: ${state.product}`);
+    if (target.product === "mtgo-landing") html = await landingView(request);
+    else if (target.product === "mtgo-statistics") html = await statsView(request);
+    else if (target.product === "mtgo-matchups") html = await matchupView(request);
+    else if (target.product === "mtgo-top8") html = await top8View(request);
+    else if (target.product === "tabletop-major-events") html = await tabletopView(request);
+    else throw new Error(`Unsupported product: ${target.product}`);
     if (token !== state.renderToken) return;
     root.innerHTML = html;
+    state.renderedViewKey = renderedViewKey();
+    if (!pendingUrlWrite) queueUrlWrite("replace");
     root.removeAttribute("aria-busy");
     root.inert = false;
     state.failedRender = null;
+    if (share) share.disabled = false;
     if (!state.viewCheckedAt.has(currentViewKey())) {
       state.viewCheckedAt.set(currentViewKey(), Date.now());
     }
@@ -384,10 +543,12 @@ async function renderViewWithFocus(
     restoreRenderPosition(root, focusSelector, position);
     updateMatrixStickyHeader();
     requestAnimationFrame(() => {
+      if (!isCurrent()) return;
       updateFreshnessLayouts(root);
       restoreRenderPosition(root, focusSelector, position);
       root.style.removeProperty("min-height");
       requestAnimationFrame(() => {
+        if (!isCurrent()) return;
         restoreRenderPosition(root, focusSelector, position);
         if (focusTitle) focusViewTitle(root);
         else restoreRenderFocus(root, focusSelector);
@@ -410,6 +571,8 @@ async function renderViewWithFocus(
     if (preserveExistingContent) {
       placeScopedError(root, focusSelector);
     } else {
+      state.releaseViewResources?.();
+      state.releaseViewResources = null;
       root.innerHTML = `<section class="error-state" role="alert">${retryMarkup()}</section>`;
       root.querySelector("button")?.focus({ preventScroll: true });
     }
@@ -419,6 +582,7 @@ async function renderViewWithFocus(
     document.querySelector("#payload-status").textContent = t("loading.failed");
     console.error(error);
   } finally {
+    if (!resourcesCommitted) resourceReleases.forEach(release => release());
     loadingOverlay.remove();
   }
   flushUrlWrite();
@@ -490,6 +654,10 @@ document.addEventListener("click", async event => {
     if (landingRow && !cardLink && matchMedia("(max-width: 780px)").matches) {
       await toggleDetailIdentity(landingRow.dataset.landingRow);
     }
+    return;
+  }
+  if (button.hasAttribute("data-share-view")) {
+    await copyCurrentView();
     return;
   }
   if (button.hasAttribute("data-return-to-top")) {
@@ -582,7 +750,7 @@ document.addEventListener("click", async event => {
     setCompositionSelection(parentId);
     if (action.kind === "subtypes") {
       state.statsExpanded.add(action.parentId);
-      if (state.detailIdentity) queueUrlWrite();
+      queueUrlWrite();
       state.detailIdentity = null;
       const revealSelector = matchMedia("(max-width: 780px)").matches
         ? `[data-mobile-card-identity="${CSS.escape(action.parentId)}"]`
@@ -622,7 +790,7 @@ document.addEventListener("click", async event => {
     toggleSet(state.statsExpanded, parentId);
     if (opening) setCompositionSelection(parentId);
     else if (state.compositionIdentity === parentId) setCompositionSelection(null);
-    if (state.detailIdentity) queueUrlWrite();
+    queueUrlWrite();
     state.detailIdentity = null;
     if (!renderStatsExpansion(button)) await renderView();
   } else if (button.dataset.statsSort) {
@@ -638,7 +806,7 @@ document.addEventListener("click", async event => {
     if (state.statsExpanded.size) state.statsExpanded.clear();
     else expandable.forEach(item => state.statsExpanded.add(item.id));
     setCompositionSelection(null);
-    if (state.detailIdentity) queueUrlWrite();
+    queueUrlWrite();
     state.detailIdentity = null;
     if (!renderStatsExpansion(button)) await renderView();
   } else if (button.dataset.detailIdentity) {
@@ -653,6 +821,7 @@ document.addEventListener("click", async event => {
     await renderViewWithFocus(`[data-detail-identity="${CSS.escape(identity || "")}"]`);
   } else if (button.dataset.deckMode) {
     state.detailMode = button.dataset.deckMode;
+    queueUrlWrite();
     await renderView();
   } else if (button.hasAttribute("data-matchup-mainstream-retry")) {
     await renderViewWithFocus("[data-matchup-mainstream]");
@@ -676,6 +845,7 @@ document.addEventListener("click", async event => {
       : new Set(state.matchupFilterDraft);
     if (state.matchupFilterIdentities === null) state.matchupRows.clear();
     state.matchupFilterOpen = false;
+    queueUrlWrite();
     await renderViewWithFocus("[data-matchup-filter-toggle]");
   } else if (button.hasAttribute("data-matchup-filter-cancel")) {
     const matchupDocument = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
@@ -684,14 +854,17 @@ document.addEventListener("click", async event => {
     state.matchupFilterIdentities = null;
     state.matchupRows.clear();
     state.matchupFilterOpen = false;
+    queueUrlWrite();
     await renderViewWithFocus("[data-matchup-filter-toggle]");
   } else if (button.dataset.matchupRow) {
     const parentId = button.dataset.matchupRow;
     toggleSet(state.matchupRows, parentId);
+    queueUrlWrite();
     await renderMatchupExpansion();
   } else if (button.dataset.matchupColumn) {
     const parentId = button.dataset.matchupColumn;
     toggleSet(state.matchupColumns, parentId);
+    queueUrlWrite();
     await renderMatchupExpansion();
   } else if (button.id === "matchup-expand-all") {
     const document = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
@@ -707,6 +880,7 @@ document.addEventListener("click", async event => {
         state.matchupColumns.add(id);
       });
     }
+    queueUrlWrite();
     await renderMatchupExpansion();
   } else if (button.dataset.top8Detail) {
     state.top8Detail = state.top8Detail === button.dataset.top8Detail
@@ -744,6 +918,7 @@ document.addEventListener("click", async event => {
   } else if (button.dataset.tabletopToggle) {
     toggleSet(state.tabletopExpanded, button.dataset.tabletopToggle);
     state.tabletopDetailIdentity = null;
+    queueUrlWrite();
     await renderView();
   } else if (button.dataset.tabletopDetail) {
     state.tabletopDetailIdentity = state.tabletopDetailIdentity === button.dataset.tabletopDetail
@@ -772,6 +947,7 @@ document.addEventListener("click", async event => {
     if (state.tabletopExpanded.size) state.tabletopExpanded.clear();
     else parents.forEach(item => state.tabletopExpanded.add(item.archetype_id));
     state.tabletopDetailIdentity = null;
+    queueUrlWrite();
     await renderView();
   } else if (button.dataset.landingFeatureToggle) {
     const destination = button.dataset.landingFeatureToggle;
@@ -806,6 +982,7 @@ document.addEventListener("change", async event => {
   if (event.target.hasAttribute("data-matchup-mainstream")) {
     state.matchupMainstreamOnly = event.target.checked;
     state.matchupFilterOpen = false;
+    queueUrlWrite();
     await renderViewWithFocus("[data-matchup-mainstream]");
   } else if (event.target.hasAttribute("data-matchup-filter-select-all")) {
     const matchupDocument = currentContext.matchupDocument || currentContext.matchupDisplayDocument;
@@ -870,42 +1047,63 @@ document.addEventListener("change", async event => {
   }
 });
 
+function showMatrixTooltip(cell, x, y) {
+  const pop = document.querySelector("#matrix-hover-pop");
+  if (!pop) return;
+  const box = cell.getBoundingClientRect();
+  pop.textContent = cell.dataset.tooltip;
+  pop.dataset.input = x == null ? "focus" : "pointer";
+  pop.hidden = false;
+  pop.style.left = `${Math.max(8, Math.min(window.innerWidth - pop.offsetWidth - 8, (x ?? box.left) + 12))}px`;
+  pop.style.top = `${Math.max(8, (y ?? box.top) - pop.offsetHeight - 8)}px`;
+}
+
 document.addEventListener("mousemove", event => {
   const cell = event.target.closest("[data-record]");
-  const pop = document.querySelector("#matrix-hover-pop");
-  if (cell && pop) {
-    pop.textContent = t("matchup.record", { record: cell.dataset.record });
-    pop.hidden = false;
-    pop.style.left = `${Math.min(window.innerWidth - 190, event.clientX + 12)}px`;
-    pop.style.top = `${Math.max(8, event.clientY - 38)}px`;
-  }
+  if (cell) showMatrixTooltip(cell, event.clientX, event.clientY);
 });
 
 document.addEventListener("mouseout", event => {
-  if (event.target.closest("[data-record]")) {
-    const pop = document.querySelector("#matrix-hover-pop");
-    if (pop) pop.hidden = true;
-  }
+  const cell = event.target.closest("[data-record]");
+  if (!cell || cell.contains(event.relatedTarget) || document.activeElement === cell) return;
+  const pop = document.querySelector("#matrix-hover-pop");
+  if (pop) pop.hidden = true;
 });
 
 document.addEventListener("focusin", event => {
   const cell = event.target.closest("[data-record]");
   if (!cell) return;
-  const node = document.querySelector("#matrix-record");
-  if (node) {
-    node.textContent = t("matchup.record", { record: cell.dataset.record });
-    node.hidden = false;
-  }
+  showMatrixTooltip(cell);
 });
 
 document.addEventListener("click", event => {
   const cell = event.target.closest("[data-record]");
-  if (!cell) return;
-  const node = document.querySelector("#matrix-record");
-  if (node) {
-    node.textContent = t("matchup.record", { record: cell.dataset.record });
-    node.hidden = false;
+  if (!cell) {
+    const pop = document.querySelector("#matrix-hover-pop");
+    if (pop) pop.hidden = true;
+    return;
   }
+  showMatrixTooltip(cell);
+});
+
+document.addEventListener("scroll", () => {
+  const pop = document.querySelector("#matrix-hover-pop");
+  if (!pop || pop.hidden) return;
+  const focusedCell = document.activeElement?.closest("[data-record]");
+  if (pop.dataset.input === "focus" && focusedCell) {
+    const box = focusedCell.getBoundingClientRect();
+    if (box.bottom > 0 && box.top < window.innerHeight && box.right > 0 && box.left < window.innerWidth) {
+      showMatrixTooltip(focusedCell);
+      return;
+    }
+  }
+  pop.hidden = true;
+}, { capture: true, passive: true });
+
+document.addEventListener("focusout", event => {
+  if (!event.target.closest("[data-record]")) return;
+  const pop = document.querySelector("#matrix-hover-pop");
+  if (pop) pop.hidden = true;
 });
 
 function updateLanguageChrome(language) {
@@ -926,6 +1124,15 @@ function updateLanguageChrome(language) {
     returnToTop.setAttribute("aria-label", label);
     returnToTop.setAttribute("title", label);
   }
+  const shareButton = document.querySelector("[data-share-view]");
+  if (shareButton) {
+    shareButton.setAttribute("title", t("share.copy"));
+    shareButton.setAttribute("aria-label", t("share.copy"));
+  }
+  const shareManual = document.querySelector('#share-fallback label');
+  if (shareManual) shareManual.textContent = t("share.manual");
+  const shareLink = document.querySelector("#share-link");
+  if (shareLink) shareLink.setAttribute("aria-label", t("share.link"));
   renderSiteAttribution();
   updateDocumentMetadata();
 }
@@ -960,10 +1167,7 @@ async function initialize({ retry = false } = {}) {
     view.innerHTML = loadingSkeleton();
   }
   try {
-    [state.catalog, state.cardLocalization] = await Promise.all([
-      Runtime.catalog.fetchJson("stats/catalog.json"),
-      MtgoController.loadCardLocalization(),
-    ]);
+    state.catalog = await Runtime.catalog.fetchJson("stats/catalog.json");
     const parameters = P8Metadata.normalizedRoute(new URLSearchParams(window.location.search));
     resetUrlBackedState();
     applyUrlState(parameters);

@@ -145,6 +145,49 @@ test("successful entries use bounded least-recently-used eviction", async () => 
   ]);
 });
 
+test("active resource leases preserve oversized bundles and release the normal LRU budget", async () => {
+  const calls = [];
+  const client = runtimeWith(async url => {
+    calls.push(url);
+    return response({ payload: "x".repeat(200) });
+  }).createJsonClient("test", path => path.startsWith("stats/"), { maxBytes: 100, maxEntries: 2 });
+  const paths = ["stats/meta.json", "stats/matrix.json", "stats/overview.json"];
+  const release = client.retain(paths);
+  const overlap = client.retain(paths);
+  for (let pass = 0; pass < 3; pass += 1) await Promise.all(paths.map(p => client.fetchJson(p)));
+  assert.equal(calls.length, 3);
+  release();
+  release();
+  assert.equal(client.snapshot().successPaths.length, 3);
+  assert.throws(() => client.retain(["stats/other.json", "private/no.json"]));
+  assert.deepEqual([...client.snapshot().retainedPaths].sort(), [...paths].sort());
+  overlap();
+  assert.equal(client.snapshot().retainedPaths.length, 0);
+  assert.equal(client.snapshot().successPaths.length, 1);
+});
+
+test("refresh replaces an active oversized bundle only after all members succeed", async () => {
+  let version = 1;
+  let fail = false;
+  const client = runtimeWith(async url => {
+    if (fail && url.endsWith("b.json")) throw new Error("offline");
+    return response({ version, payload: "x".repeat(200) });
+  }).createJsonClient("test", () => true, { maxBytes: 100 });
+  const paths = ["stats/a.json", "stats/b.json"];
+  const release = client.retain(paths);
+  await Promise.all(paths.map(p => client.fetchJson(p)));
+  version = 2;
+  fail = true;
+  await assert.rejects(client.stage(paths));
+  assert.equal((await client.fetchJson(paths[0])).version, 1);
+  fail = false;
+  const staged = await client.stage(paths);
+  assert.equal((await client.fetchJson(paths[0])).version, 1);
+  staged.commit();
+  for (const p of paths) assert.equal((await client.fetchJson(p)).version, 2);
+  release();
+});
+
 test("staged refreshes commit atomically and preserve old data on failure", async () => {
   const values = new Map([
     ["./stats/test/a.json", { version: 1 }],

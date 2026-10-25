@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "b1799d0561d80a53561c90f3aa49b13366d6c7cd24a3e58e5213fd59678e470d"
+    "digest": "751aeebfc17301e63bbeb51a4beedd94a97ed4f2de48078ece11e062b98c1d0a"
   },
   "input": {
     "event_path": "data/pauper/melee/events/438329.json",
@@ -18,11 +18,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/pauper.yaml",
-    "rule_sha256": "857fff838006b3d036f47007bc10f88dbfe156a0fa124292e6296dafd8a8da8c",
-    "rule_schema_version": "1.1.0",
+    "rule_sha256": "01d283056072c171e350b45ff004560786c3349e2d468faef9b7850bdf99f303",
+    "rule_schema_version": "1.2.0",
     "archetype_count": 95,
-    "rule_count": 159,
-    "subtype_count": 16
+    "rule_count": 162,
+    "subtype_count": 19
   },
   "summary": {
     "total_records": 1070,
@@ -30,11 +30,11 @@
     "unknown": 1,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 392,
-    "overridden_matches": 392,
+    "multiple_matches": 393,
+    "overridden_matches": 393,
     "selected_subtypes": 113,
     "parent_only": 956,
-    "same_parent_multiple_subtype_matches": 1,
+    "same_parent_multiple_subtype_matches": 0,
     "residual_subtype_violations": 0,
     "selected_by_parent": {
       "affinity-combo": 4,
@@ -105,11 +105,14 @@
     },
     "selected_by_subtype": {
       "azorius-familiars/azorius": 23,
-      "battle-screech/boros": 2,
-      "battle-screech/mono-white": 30,
+      "battle-screech/boros": 3,
+      "battle-screech/mono-white": 28,
+      "battle-screech/orzhov": 1,
       "ephemerate/four-color": 1,
       "ephemerate/jeskai": 30,
-      "golgari-gardens/golgari": 26,
+      "golgari-gardens/golgari": 21,
+      "golgari-gardens/jund": 4,
+      "golgari-gardens/sultai": 1,
       "packbeast-swarm/mono-white": 1
     },
     "strict_validation": "pass"
@@ -143,6 +146,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -158,10 +162,11 @@
               "exact_count": null
             },
             {
-              "card": "Boros Garrison",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 2,
+              "card": "colors:red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -170,13 +175,14 @@
         {
           "archetype_id": "battle-screech",
           "archetype_name": "Battle Screech",
-          "subtype_id": "mono-white",
-          "subtype_name": "Mono-White",
+          "subtype_id": "boros",
+          "subtype_name": "Boros",
           "rule_id": "mono-white-battle-screech",
           "priority": 8000,
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -196,6 +202,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -213,6 +228,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -228,10 +244,11 @@
               "exact_count": null
             },
             {
-              "card": "Boros Garrison",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 2,
+              "card": "colors:red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -242,13 +259,14 @@
         {
           "archetype_id": "battle-screech",
           "archetype_name": "Battle Screech",
-          "subtype_id": "mono-white",
-          "subtype_name": "Mono-White",
+          "subtype_id": "boros",
+          "subtype_name": "Boros",
           "rule_id": "mono-white-battle-screech",
           "priority": 8000,
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -268,6 +286,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -757,6 +784,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -765,6 +793,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -773,9 +802,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -793,6 +832,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -801,6 +841,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -809,9 +850,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -847,6 +898,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -855,6 +907,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -863,9 +916,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -883,6 +946,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -891,6 +955,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -899,9 +964,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -2431,6 +2506,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -2439,6 +2515,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -2449,6 +2526,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -2467,6 +2553,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -2475,6 +2562,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -2485,6 +2573,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -3215,6 +3312,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -3223,6 +3321,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -3231,9 +3330,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -3251,6 +3360,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -3259,6 +3369,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -3267,9 +3378,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -4992,6 +5113,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -5000,6 +5122,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -5010,6 +5133,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -5064,6 +5196,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -5072,6 +5205,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -5082,6 +5216,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -5175,6 +5318,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -5183,6 +5327,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -5191,9 +5336,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -5211,6 +5366,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -5219,6 +5375,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -5227,9 +5384,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -7135,6 +7302,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -7143,6 +7311,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -7151,9 +7320,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -7171,6 +7350,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -7179,6 +7359,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -7187,9 +7368,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -7808,6 +7999,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -7816,6 +8008,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -7824,9 +8017,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -7844,6 +8047,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -7852,6 +8056,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -7860,9 +8065,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -7972,6 +8187,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -7980,6 +8196,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -7988,9 +8205,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -8008,6 +8235,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -8016,6 +8244,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -8024,9 +8253,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -8861,6 +9100,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -8880,6 +9120,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -8897,6 +9146,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -8916,6 +9166,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -10583,22 +10842,23 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": "golgari",
-        "subtype_name": "Golgari Gardens",
-        "rule_id": "golgari-gardens",
-        "priority": 7800
+        "subtype_id": "jund",
+        "subtype_name": "Jund Garden",
+        "rule_id": "golgari-gardens-red-splash",
+        "priority": 7802
       },
       "matched_rules": [
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": "golgari",
-          "subtype_name": "Golgari Gardens",
-          "rule_id": "golgari-gardens",
-          "priority": 7800,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Garden",
+          "rule_id": "golgari-gardens-red-splash",
+          "priority": 7802,
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -10607,6 +10867,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -10620,6 +10881,15 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "colors:black,green,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -10628,13 +10898,14 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": "golgari",
-          "subtype_name": "Golgari Gardens",
-          "rule_id": "golgari-gardens",
-          "priority": 7800,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Garden",
+          "rule_id": "golgari-gardens-red-splash",
+          "priority": 7802,
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -10643,6 +10914,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -10653,6 +10925,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -11870,6 +12151,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -11878,6 +12160,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -11886,9 +12169,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -11906,6 +12199,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -11914,6 +12208,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -11922,9 +12217,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -13126,6 +13431,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -13134,6 +13440,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -13144,6 +13451,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -13162,6 +13478,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -13170,6 +13487,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -13180,6 +13498,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -13741,6 +14068,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -13760,6 +14088,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -13777,6 +14114,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -13796,6 +14134,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -13831,6 +14178,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -13839,6 +14187,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -13849,6 +14198,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -13867,6 +14225,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -13875,6 +14234,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -13885,6 +14245,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -13921,6 +14290,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -13940,6 +14310,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -13957,6 +14336,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -13976,6 +14356,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -14011,6 +14400,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -14019,6 +14409,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -14027,9 +14418,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -14047,6 +14448,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -14055,6 +14457,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -14063,9 +14466,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -14896,6 +15309,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -14915,6 +15329,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -14932,6 +15355,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -14951,6 +15375,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -15526,6 +15959,7 @@
           "evidence": [
             {
               "card": "Salt Road Packbeast",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -15595,6 +16029,15 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -15610,6 +16053,7 @@
           "evidence": [
             {
               "card": "Salt Road Packbeast",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -15679,6 +16123,15 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -18706,6 +19159,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -18714,6 +19168,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -18722,9 +19177,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -18742,6 +19207,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -18750,6 +19216,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -18758,9 +19225,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -19485,6 +19962,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -19493,6 +19971,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -19503,6 +19982,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -19521,6 +20009,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -19529,6 +20018,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -19539,6 +20029,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -19575,6 +20074,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -19583,6 +20083,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -19593,6 +20094,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -19611,6 +20121,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -19619,6 +20130,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -19629,6 +20141,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -24530,8 +25051,8 @@
       "selected": {
         "archetype_id": "battle-screech",
         "archetype_name": "Battle Screech",
-        "subtype_id": "mono-white",
-        "subtype_name": "Mono-White",
+        "subtype_id": "orzhov",
+        "subtype_name": "Orzhov",
         "rule_id": "mono-white-battle-screech",
         "priority": 8000
       },
@@ -24539,13 +25060,14 @@
         {
           "archetype_id": "battle-screech",
           "archetype_name": "Battle Screech",
-          "subtype_id": "mono-white",
-          "subtype_name": "Mono-White",
+          "subtype_id": "orzhov",
+          "subtype_name": "Orzhov",
           "rule_id": "mono-white-battle-screech",
           "priority": 8000,
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -24565,6 +25087,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -24575,13 +25106,14 @@
         {
           "archetype_id": "battle-screech",
           "archetype_name": "Battle Screech",
-          "subtype_id": "mono-white",
-          "subtype_name": "Mono-White",
+          "subtype_id": "orzhov",
+          "subtype_name": "Orzhov",
           "rule_id": "mono-white-battle-screech",
           "priority": 8000,
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -24601,6 +25133,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -24636,6 +25177,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -24655,6 +25197,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -24672,6 +25223,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -24691,6 +25243,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -25023,6 +25584,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -25031,6 +25593,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -25039,9 +25602,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -25059,6 +25632,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -25067,6 +25641,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -25075,9 +25650,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -27000,6 +27585,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -27008,6 +27594,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -27018,6 +27605,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -27036,6 +27632,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -27044,6 +27641,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -27054,6 +27652,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -27471,22 +28078,23 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": "golgari",
-        "subtype_name": "Golgari Gardens",
-        "rule_id": "golgari-gardens",
-        "priority": 7800
+        "subtype_id": "jund",
+        "subtype_name": "Jund Garden",
+        "rule_id": "golgari-gardens-red-splash",
+        "priority": 7802
       },
       "matched_rules": [
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": "golgari",
-          "subtype_name": "Golgari Gardens",
-          "rule_id": "golgari-gardens",
-          "priority": 7800,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Garden",
+          "rule_id": "golgari-gardens-red-splash",
+          "priority": 7802,
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -27495,6 +28103,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -27508,6 +28117,15 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "colors:black,green,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -27516,13 +28134,14 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": "golgari",
-          "subtype_name": "Golgari Gardens",
-          "rule_id": "golgari-gardens",
-          "priority": 7800,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Garden",
+          "rule_id": "golgari-gardens-red-splash",
+          "priority": 7802,
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -27531,6 +28150,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -27541,6 +28161,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -28001,6 +28630,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -28020,6 +28650,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -28037,6 +28676,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -28056,6 +28696,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -28091,6 +28740,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -28099,6 +28749,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -28107,9 +28758,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -28127,6 +28788,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -28135,6 +28797,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -28143,9 +28806,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -29056,6 +29729,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -29064,6 +29738,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -29072,9 +29747,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -29092,6 +29777,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -29100,6 +29786,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -29108,9 +29795,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -31096,6 +31793,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -31115,6 +31813,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -31132,6 +31839,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -31151,6 +31859,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -36151,6 +36868,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -36170,6 +36888,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -36187,6 +36914,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -36206,6 +36934,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -39281,6 +40018,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -39289,6 +40027,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -39297,9 +40036,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -39317,6 +40066,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -39325,6 +40075,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -39333,9 +40084,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -41332,6 +42093,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -41351,6 +42113,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -41368,6 +42139,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -41387,6 +42159,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -42074,6 +42855,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -42089,10 +42871,11 @@
               "exact_count": null
             },
             {
-              "card": "Boros Garrison",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 2,
+              "card": "colors:red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -42110,6 +42893,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -42125,10 +42909,11 @@
               "exact_count": null
             },
             {
-              "card": "Boros Garrison",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 2,
+              "card": "colors:red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -42466,6 +43251,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -42474,6 +43260,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -42484,6 +43271,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -42502,6 +43298,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -42510,6 +43307,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -42520,6 +43318,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -44772,6 +45579,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -44780,6 +45588,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -44790,6 +45599,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -44808,6 +45626,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -44816,6 +45635,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -44826,6 +45646,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -45069,6 +45898,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -45088,6 +45918,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -45105,6 +45944,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -45124,6 +45964,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -47576,6 +48425,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -47584,6 +48434,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -47594,6 +48445,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -47612,6 +48472,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -47620,6 +48481,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -47630,6 +48492,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -51130,6 +52001,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -51149,6 +52021,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -51166,6 +52047,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -51185,6 +52067,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -52206,6 +53097,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -52214,6 +53106,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -52222,9 +53115,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -52242,6 +53145,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -52250,6 +53154,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -52258,9 +53163,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -52444,6 +53359,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -52452,6 +53368,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -52462,6 +53379,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -52480,6 +53406,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -52488,6 +53415,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -52498,6 +53426,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -52762,22 +53699,23 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": "golgari",
-        "subtype_name": "Golgari Gardens",
-        "rule_id": "golgari-gardens-artifact",
-        "priority": 7795
+        "subtype_id": "sultai",
+        "subtype_name": "Sultai Gardens",
+        "rule_id": "golgari-gardens-artifact-blue-splash",
+        "priority": 7796
       },
       "matched_rules": [
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": "golgari",
-          "subtype_name": "Golgari Gardens",
-          "rule_id": "golgari-gardens-artifact",
-          "priority": 7795,
+          "subtype_id": "sultai",
+          "subtype_name": "Sultai Gardens",
+          "rule_id": "golgari-gardens-artifact-blue-splash",
+          "priority": 7796,
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -52786,6 +53724,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -52823,6 +53762,15 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "colors:black,blue,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -52831,13 +53779,14 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": "golgari",
-          "subtype_name": "Golgari Gardens",
-          "rule_id": "golgari-gardens-artifact",
-          "priority": 7795,
+          "subtype_id": "sultai",
+          "subtype_name": "Sultai Gardens",
+          "rule_id": "golgari-gardens-artifact-blue-splash",
+          "priority": 7796,
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -52846,6 +53795,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -52883,6 +53833,15 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "colors:black,blue,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -56160,6 +57119,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -56179,6 +57139,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -56196,6 +57165,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -56215,6 +57185,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -56430,6 +57409,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -56459,6 +57439,15 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -56474,6 +57463,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -56503,6 +57493,15 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -57966,6 +58965,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -57985,6 +58985,15 @@
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -58002,6 +59011,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -58021,6 +59031,15 @@
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -58649,6 +59668,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -58657,6 +59677,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -58665,9 +59686,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -58685,6 +59716,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -58693,6 +59725,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -58701,9 +59734,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -63371,6 +64414,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -63379,6 +64423,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -63387,9 +64432,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -63407,6 +64462,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -63415,6 +64471,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -63423,9 +64480,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -64521,6 +65588,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -64540,6 +65608,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -64557,6 +65634,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -64576,6 +65654,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -67058,6 +68145,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -67066,6 +68154,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -67076,6 +68165,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -67094,6 +68192,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -67102,6 +68201,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -67112,6 +68212,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -67487,22 +68596,23 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": "golgari",
-        "subtype_name": "Golgari Gardens",
-        "rule_id": "golgari-gardens",
-        "priority": 7800
+        "subtype_id": "jund",
+        "subtype_name": "Jund Garden",
+        "rule_id": "golgari-gardens-red-splash",
+        "priority": 7802
       },
       "matched_rules": [
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": "golgari",
-          "subtype_name": "Golgari Gardens",
-          "rule_id": "golgari-gardens",
-          "priority": 7800,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Garden",
+          "rule_id": "golgari-gardens-red-splash",
+          "priority": 7802,
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -67511,6 +68621,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -67524,6 +68635,15 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "colors:black,green,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -67532,13 +68652,14 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": "golgari",
-          "subtype_name": "Golgari Gardens",
-          "rule_id": "golgari-gardens",
-          "priority": 7800,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Garden",
+          "rule_id": "golgari-gardens-red-splash",
+          "priority": 7802,
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -67547,6 +68668,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -67557,6 +68679,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -71502,6 +72633,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -71521,6 +72653,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -71538,6 +72679,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -71557,6 +72699,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -73563,6 +74714,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -73582,6 +74734,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -73599,6 +74760,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -73618,6 +74780,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -74628,6 +75799,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -74647,6 +75819,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -74664,6 +75845,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -74683,6 +75865,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -76986,6 +78177,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -76994,6 +78186,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -77004,6 +78197,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -77022,6 +78224,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -77030,6 +78233,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -77040,6 +78244,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -77516,6 +78729,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -77524,6 +78738,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -77532,9 +78747,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -77552,6 +78777,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -77560,6 +78786,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -77568,9 +78795,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -80155,6 +81392,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -80174,6 +81412,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -80191,6 +81438,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -80210,6 +81458,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -82678,6 +83935,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -82697,6 +83955,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -82714,6 +83981,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -82733,6 +84001,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -87036,6 +88313,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -87044,6 +88322,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -87054,6 +88333,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -87108,6 +88396,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -87116,6 +88405,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -87126,6 +88416,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -87336,6 +88635,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -87344,6 +88644,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -87352,9 +88653,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -87372,6 +88683,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -87380,6 +88692,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -87388,9 +88701,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -88194,6 +89517,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -88202,6 +89526,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -88210,9 +89535,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -88230,6 +89565,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -88238,6 +89574,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -88246,9 +89583,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -91356,6 +92703,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -91364,6 +92712,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -91374,6 +92723,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -91392,6 +92750,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -91400,6 +92759,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -91410,6 +92770,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -94557,6 +95926,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -94576,6 +95946,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -94593,6 +95972,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -94612,6 +95992,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -104134,22 +105523,23 @@
       "selected": {
         "archetype_id": "golgari-gardens",
         "archetype_name": "Golgari Gardens",
-        "subtype_id": "golgari",
-        "subtype_name": "Golgari Gardens",
-        "rule_id": "golgari-gardens",
-        "priority": 7800
+        "subtype_id": "jund",
+        "subtype_name": "Jund Garden",
+        "rule_id": "golgari-gardens-red-splash",
+        "priority": 7802
       },
       "matched_rules": [
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": "golgari",
-          "subtype_name": "Golgari Gardens",
-          "rule_id": "golgari-gardens",
-          "priority": 7800,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Garden",
+          "rule_id": "golgari-gardens-red-splash",
+          "priority": 7802,
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -104158,6 +105548,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -104171,6 +105562,15 @@
               "min_count": 1,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "colors:black,green,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -104179,13 +105579,14 @@
         {
           "archetype_id": "golgari-gardens",
           "archetype_name": "Golgari Gardens",
-          "subtype_id": "golgari",
-          "subtype_name": "Golgari Gardens",
-          "rule_id": "golgari-gardens",
-          "priority": 7800,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Garden",
+          "rule_id": "golgari-gardens-red-splash",
+          "priority": 7802,
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -104194,6 +105595,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -104204,6 +105606,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -104558,6 +105969,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -104566,6 +105978,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -104576,6 +105989,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -104594,6 +106016,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -104602,6 +106025,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -104612,6 +106036,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -106142,6 +107575,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -106161,6 +107595,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -106178,6 +107621,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -106197,6 +107641,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -108124,6 +109577,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -108132,6 +109586,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -108142,6 +109597,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -108160,6 +109624,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -108168,6 +109633,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -108178,6 +109644,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -110916,6 +112391,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -110935,6 +112411,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -110952,6 +112437,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -110971,6 +112457,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -114317,6 +115812,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -114325,6 +115821,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -114335,6 +115832,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -114353,6 +115859,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -114361,6 +115868,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -114371,6 +115879,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -115738,6 +117255,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -115757,6 +117275,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -115774,6 +117301,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -115793,6 +117321,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -117555,6 +119092,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -117563,6 +119101,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -117573,6 +119112,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -117591,6 +119139,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -117599,6 +119148,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -117609,6 +119159,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -118944,6 +120503,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -118952,6 +120512,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -118960,9 +120521,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -118980,6 +120551,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -118988,6 +120560,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -118996,9 +120569,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -127482,22 +129065,59 @@
       "selected": {
         "archetype_id": "battle-screech",
         "archetype_name": "Battle Screech",
-        "subtype_id": "mono-white",
-        "subtype_name": "Mono-White",
-        "rule_id": "mono-white-battle-screech",
-        "priority": 8000
+        "subtype_id": "boros",
+        "subtype_name": "Boros",
+        "rule_id": "boros-battle-screech",
+        "priority": 8090
       },
       "matched_rules": [
         {
           "archetype_id": "battle-screech",
           "archetype_name": "Battle Screech",
-          "subtype_id": "mono-white",
-          "subtype_name": "Mono-White",
+          "subtype_id": "boros",
+          "subtype_name": "Boros",
+          "rule_id": "boros-battle-screech",
+          "priority": 8090,
+          "evidence": [
+            {
+              "card": "Battle Screech",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Rally the Peasants",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
+        {
+          "archetype_id": "battle-screech",
+          "archetype_name": "Battle Screech",
+          "subtype_id": "boros",
+          "subtype_name": "Boros",
           "rule_id": "mono-white-battle-screech",
           "priority": 8000,
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -127517,6 +129137,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -127527,13 +129156,52 @@
         {
           "archetype_id": "battle-screech",
           "archetype_name": "Battle Screech",
-          "subtype_id": "mono-white",
-          "subtype_name": "Mono-White",
+          "subtype_id": "boros",
+          "subtype_name": "Boros",
+          "rule_id": "boros-battle-screech",
+          "priority": 8090,
+          "evidence": [
+            {
+              "card": "Battle Screech",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Rally the Peasants",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
+          "archetype_id": "battle-screech",
+          "archetype_name": "Battle Screech",
+          "subtype_id": "boros",
+          "subtype_name": "Boros",
           "rule_id": "mono-white-battle-screech",
           "priority": 8000,
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -127555,11 +129223,19 @@
               "min_count": 3,
               "max_count": null,
               "exact_count": null
+            },
+            {
+              "card": "colors:red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
       ],
-      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -131509,6 +133185,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -131528,6 +133205,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -131545,6 +133231,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -131564,6 +133251,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -132558,6 +134254,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -132577,6 +134274,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -132594,6 +134300,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -132613,6 +134320,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -132860,6 +134576,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -132868,6 +134585,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -132878,6 +134596,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -132896,6 +134623,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 3,
               "min_count": 3,
@@ -132904,6 +134632,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -132914,6 +134643,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -133040,6 +134778,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -133059,6 +134798,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -133076,6 +134824,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -133095,6 +134844,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -133469,6 +135227,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -133477,6 +135236,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -133487,6 +135247,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -133505,6 +135274,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -133513,6 +135283,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -133523,6 +135294,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -134513,6 +136293,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -134521,6 +136302,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -134529,9 +136311,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -134549,6 +136341,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -134557,6 +136350,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -134565,9 +136359,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -136432,6 +138236,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -136440,6 +138245,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -136450,6 +138256,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -136468,6 +138283,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -136476,6 +138292,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -136486,6 +138303,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -138170,6 +139996,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -138178,6 +140005,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -138188,6 +140016,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -138206,6 +140043,7 @@
           "evidence": [
             {
               "card": "Khalni Garden",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -138214,6 +140052,7 @@
             },
             {
               "card": "Fanatical Offering",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -138224,6 +140063,15 @@
               "card": "Crypt Rats",
               "zone": "main",
               "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:black,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -141354,6 +143202,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -141362,6 +143211,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -141370,9 +143220,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -141390,6 +143250,7 @@
           "evidence": [
             {
               "card": "Sunscape Familiar",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -141398,6 +143259,7 @@
             },
             {
               "card": "Snap",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -141406,9 +143268,19 @@
             },
             {
               "card": "God-Pharaoh's Faithful",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -143597,6 +145469,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -143616,6 +145489,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }
@@ -143633,6 +145515,7 @@
           "evidence": [
             {
               "card": "Battle Screech",
+              "scope": "parent",
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
@@ -143652,6 +145535,15 @@
               "zone": "main",
               "actual_count": 4,
               "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
               "max_count": null,
               "exact_count": null
             }

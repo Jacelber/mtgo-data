@@ -1,5 +1,6 @@
 # Owner-reviewed Pioneer classification, including remainder decisions.
-schema_version: 1.1.0
+schema_version: 1.2.0
+card_facts_sha256: b342090c746ad7a3b8e7bf9a258585abb564866d654bea4f8035ab95141c0612
 format: pioneer
 semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
@@ -13,121 +14,49 @@ archetypes:
     priority: 100
     subtype_id: sultai
     conditions:
-      all:
-      - card: Lotus Field
-        zone: main
-        min_count: 1
-      - card: Scapeshift
-        zone: main
-        min_count: 1
-      - card: Spelunking
-        zone: main
-        min_count: 1
-      - card: Underground Mortuary
-        zone: main
-        min_count: 1
+      all: []
+    colors:
+    - blue
+    - black
+    - green
   - id: lotus-scapeshift-simic-primary
     priority: 100
     subtype_id: simic
     conditions:
-      all:
-      - card: Lotus Field
-        zone: main
-        min_count: 1
-      - card: Scapeshift
-        zone: main
-        min_count: 1
-      - card: Spelunking
-        zone: main
-        min_count: 1
-      - card: Underground Mortuary
-        zone: main
-        max_count: 0
-      - card: Swamp
-        zone: main
-        max_count: 0
-      - card: Abrupt Decay
-        zone: side
-        max_count: 0
-      - card: Culling Ritual
-        zone: side
-        max_count: 0
-      - card: Glissa Sunslayer
-        zone: side
-        max_count: 0
-  - id: lotus-scapeshift-sultai-swamp
+      all: []
+    colors:
+    - blue
+    - green
+  - id: lotus-scapeshift-wubg-primary
     priority: 100
-    subtype_id: sultai
+    subtype_id: wubg
     conditions:
-      all:
-      - card: Lotus Field
-        zone: main
-        min_count: 1
-      - card: Scapeshift
-        zone: main
-        min_count: 1
-      - card: Spelunking
-        zone: main
-        min_count: 1
-      - card: Swamp
-        zone: main
-        min_count: 1
-  - id: lotus-scapeshift-sultai-abrupt-decay
-    priority: 100
-    subtype_id: sultai
-    conditions:
-      all:
-      - card: Lotus Field
-        zone: main
-        min_count: 1
-      - card: Scapeshift
-        zone: main
-        min_count: 1
-      - card: Spelunking
-        zone: main
-        min_count: 1
-      - card: Abrupt Decay
-        zone: side
-        min_count: 1
-  - id: lotus-scapeshift-sultai-culling-ritual
-    priority: 100
-    subtype_id: sultai
-    conditions:
-      all:
-      - card: Lotus Field
-        zone: main
-        min_count: 1
-      - card: Scapeshift
-        zone: main
-        min_count: 1
-      - card: Spelunking
-        zone: main
-        min_count: 1
-      - card: Culling Ritual
-        zone: side
-        min_count: 1
-  - id: lotus-scapeshift-sultai-glissa-sunslayer
-    priority: 100
-    subtype_id: sultai
-    conditions:
-      all:
-      - card: Lotus Field
-        zone: main
-        min_count: 1
-      - card: Scapeshift
-        zone: main
-        min_count: 1
-      - card: Spelunking
-        zone: main
-        min_count: 1
-      - card: Glissa Sunslayer
-        zone: side
-        min_count: 1
+      all: []
+    colors:
+    - white
+    - blue
+    - black
+    - green
   subtypes:
   - id: sultai
     name: Sultai
   - id: simic
     name: Simic
+  - id: wubg
+    name: WUBG
+  conditions:
+    all:
+    - card: Lotus Field
+      zone: main
+      min_count: 1
+    - card: Scapeshift
+      zone: main
+      min_count: 1
+    - card: Spelunking
+      zone: main
+      min_count: 1
+  color_profile: default
+  require_color_subtype: true
 - id: azorius-control
   name: Azorius Control
   priority: 100
@@ -135,7 +64,7 @@ archetypes:
   - id: azorius-control-primary
     priority: 100
     subtype_id: non-yorion
-    conditions:
+    conditions: &pioneer_control_primary
       all:
       - card: Teferi, Hero of Dominaria
         zone: main
@@ -155,10 +84,13 @@ archetypes:
       - card: Firebending Lesson
         zone: main
         max_count: 0
+    colors:
+    - white
+    - blue
   - id: azorius-control-yorion-primary
     priority: 100
     subtype_id: yorion
-    conditions:
+    conditions: &pioneer_control_yorion_primary
       all:
       - card: Teferi, Hero of Dominaria
         zone: main
@@ -178,10 +110,13 @@ archetypes:
       - card: Firebending Lesson
         zone: main
         max_count: 0
+    colors:
+    - white
+    - blue
   - id: azorius-control-yorion-dovins-veto
     priority: 100
     subtype_id: yorion
-    conditions:
+    conditions: &pioneer_control_yorion_veto
       all:
       - card: Teferi, Hero of Dominaria
         zone: main
@@ -204,10 +139,13 @@ archetypes:
       - card: Firebending Lesson
         zone: main
         max_count: 0
+    colors:
+    - white
+    - blue
   - id: azorius-control-no-teferi-non-yorion
     priority: 100
     subtype_id: non-yorion
-    conditions:
+    conditions: &pioneer_control_no_teferi
       all:
       - card: No More Lies
         zone: main
@@ -230,10 +168,13 @@ archetypes:
       - card: Yorion, Sky Nomad
         zone: side
         max_count: 0
+    colors:
+    - white
+    - blue
   - id: azorius-control-no-teferi-yorion
     priority: 100
     subtype_id: yorion
-    conditions:
+    conditions: &pioneer_control_no_teferi_yorion
       all:
       - card: No More Lies
         zone: main
@@ -256,11 +197,48 @@ archetypes:
       - card: Yorion, Sky Nomad
         zone: side
         min_count: 1
+    colors:
+    - white
+    - blue
   subtypes:
   - id: non-yorion
     name: Azorius Control
   - id: yorion
     name: Yorion Azorius Control
+  color_profile: default
+- id: esper-control
+  name: Esper Control
+  priority: 100
+  color_profile: default
+  rules:
+  - id: esper-control-primary
+    priority: 100
+    subtype_id: null
+    conditions: *pioneer_control_primary
+    colors: &pioneer_esper_colors
+    - white
+    - blue
+    - black
+  - id: esper-control-yorion-primary
+    priority: 100
+    subtype_id: null
+    conditions: *pioneer_control_yorion_primary
+    colors: *pioneer_esper_colors
+  - id: esper-control-yorion-dovins-veto
+    priority: 100
+    subtype_id: null
+    conditions: *pioneer_control_yorion_veto
+    colors: *pioneer_esper_colors
+  - id: esper-control-no-teferi-non-yorion
+    priority: 100
+    subtype_id: null
+    conditions: *pioneer_control_no_teferi
+    colors: *pioneer_esper_colors
+  - id: esper-control-no-teferi-yorion
+    priority: 100
+    subtype_id: null
+    conditions: *pioneer_control_no_teferi_yorion
+    colors: *pioneer_esper_colors
 - id: izzet-prowess
   name: Izzet Prowess
   priority: 100
@@ -282,6 +260,10 @@ archetypes:
       - card: Stomping Ground
         zone: main
         max_count: 0
+    colors:
+    - blue
+    - red
+  color_profile: default
 - id: golgari-demons
   name: Golgari Demons
   priority: 100
@@ -348,6 +330,9 @@ archetypes:
       - card: Favored Hoplite
         zone: main
         max_count: 0
+    colors:
+    - red
+  color_profile: default
 - id: orzhov-greasefang-monument
   name: Orzhov Greasefang Monument
   priority: 100
@@ -423,6 +408,10 @@ archetypes:
       - card: Steam Vents
         zone: main
         min_count: 1
+    colors:
+    - blue
+    - red
+  color_profile: default
 - id: dimir-ninjas
   name: Dimir Ninjas
   priority: 100
@@ -1352,6 +1341,13 @@ archetypes:
       - card: Monastery Swiftspear
         zone: main
         min_count: 1
+    colors:
+    - black
+    - red
+  color_profile: default
+  card_uses:
+    Callous Sell-Sword: fling_secondary
+    Elusive Otter: fling_secondary
 - id: orzhov-demons
   name: Orzhov Demons
   priority: 100
@@ -1924,6 +1920,10 @@ archetypes:
       - card: Favored Hoplite
         zone: main
         max_count: 0
+    colors:
+    - white
+    - red
+  color_profile: default
 - id: boros-burn
   name: Boros Burn
   priority: 100
@@ -3000,12 +3000,16 @@ archetypes:
       - card: Monstrous Rage
         zone: main
         min_count: 1
-      - card: Blood Crypt
-        zone: main
-        min_count: 1
       - card: Leyline of Resonance
         zone: main
         exact_count: 0
+    colors:
+    - black
+    - red
+  card_uses:
+    Callous Sell-Sword: fling_secondary
+    Elusive Otter: fling_secondary
+  color_profile: default
 - id: temur-creativity
   name: Temur Creativity
   priority: 110
@@ -3024,15 +3028,13 @@ archetypes:
       - card: Pawpatch Formation
         zone: main
         min_count: 1
-      - card: Steam Vents
-        zone: main
-        min_count: 1
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - blue
+    - red
+    - green
+  color_profile: default
+  card_uses:
+    Valgavoth, Terror Eater: noncast
 - id: kasmina-combo
   name: Kasmina Combo
   priority: 110
@@ -3072,18 +3074,7 @@ archetypes:
       - card: Pawpatch Formation
         zone: main
         min_count: 1
-      - card: Stomping Ground
-        zone: main
-        min_count: 1
-      - card: Steam Vents
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-white-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-blue-source__
-        zone: main
-        exact_count: 0
-      - card: __classifier-semantic-main-black-source__
-        zone: main
-        exact_count: 0
+    colors:
+    - red
+    - green
+  color_profile: default

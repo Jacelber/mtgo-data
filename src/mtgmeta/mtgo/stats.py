@@ -4,12 +4,14 @@ from __future__ import annotations
 
 import json
 import math
+from hashlib import sha256
 from collections.abc import Callable
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-from mtgmeta.card_names import canonical_basic_land_name
+from mtgmeta.card_names import BASIC_LAND_PRINTING_PAIRS, CARD_ALIASES, canonical_basic_land_name
+from mtgmeta.classifier_cards import IDENTITY_CONTRACT_VERSION, card_facts, classifier_card_name
 from mtgmeta.classifier import classifier_digest, classify_deck
 from mtgmeta.legacy_rules import LegacyArchetypeRules
 from mtgmeta.rules import RuleSet
@@ -27,12 +29,31 @@ MTGO_RANGE_SCHEMA_VERSION = "1.1.0"
 MTGO_DECKS_SCHEMA_VERSION = "1.2.0"
 MTGO_CATALOG_SCHEMA_VERSION = "1.1.0"
 
-# Preserve the narrower legacy public-output aliases. The broader shared OM1/SPM
-# mapping is intentionally not used for deck construction metrics in P3-04.
+# Preserve the narrower source-display and fingerprint aliases. Construction
+# metrics use shared entity identity instead; changing these would migrate IDs.
 _LEGACY_PUBLIC_CARD_ALIASES = {
     "Kavaero, Mind-Bitten": "Superior Spider-Man",
     "Leyline Weaver": "Spider Manifestation",
 }
+
+CONSTRUCTION_CONTRACT_VERSION = "1.0.0"
+
+
+def construction_digest() -> str:
+    """Bind construction identity independently of archetype classification.
+
+    Missing digests identify retained legacy products; exact source spellings
+    and record fingerprints deliberately keep their existing representation.
+    """
+    material = {
+        "version": CONSTRUCTION_CONTRACT_VERSION,
+        "identity_contract": IDENTITY_CONTRACT_VERSION,
+        "card_facts": card_facts().digest,
+        "aliases": CARD_ALIASES,
+        "basic_land_comparison": BASIC_LAND_PRINTING_PAIRS,
+    }
+    return sha256(json.dumps(material, sort_keys=True, ensure_ascii=False,
+                             separators=(",", ":")).encode("utf-8")).hexdigest()
 
 
 class MTGOStatisticsError(RuntimeError):
@@ -501,7 +522,7 @@ def deck_vector(record):
     vec = {}
     for c in record.get("main_deck", []):
         name = canonical_basic_land_name(
-            normalize_legacy_card_name(c.get("name", "?"))
+            classifier_card_name(c.get("name", "?"))
         )
         vec[name] = vec.get(name, 0) + to_int(c.get("qty", 0))
     return vec
@@ -1029,6 +1050,7 @@ def build_range(
             "format": format_id,
             "source": SOURCE_ID,
             "classifier_digest": rules_digest,
+            "construction_digest": construction_digest(),
             "period": period,
             **agg,
         },
@@ -1045,6 +1067,7 @@ def build_range(
             "format": format_id,
             "source": SOURCE_ID,
             "classifier_digest": rules_digest,
+            "construction_digest": construction_digest(),
             "period": period,
             "decks": attach_subtype_decks(
                 parent_decks,
@@ -1155,6 +1178,7 @@ def build_all_stats(
         "format": format_id,
         "source": SOURCE_ID,
         "classifier_digest": rules_digest,
+        "construction_digest": construction_digest(),
         "generated": generated_value,
         "latest_complete_week": end_monday.isoformat(),
         "base_weeks": BASE_WEEKS,
