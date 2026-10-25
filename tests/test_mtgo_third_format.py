@@ -65,6 +65,20 @@ def repository(root, state):
     entries = [definition("standard"), definition("modern"),
                definition(THIRD, public=state.endswith("public"), enabled=state != "planned")]
     write(root, "configs/formats.yaml", {"schema_version": "1.3.0", "formats": entries})
+    # Catalog admission now also checks the existing approved color-display contract.
+    # These synthetic formats use one explicit blue identity; do not disable that check.
+    from mtgmeta.mana_identity import ManaIdentityEntry, render_mana_identity_block
+    write(root, "configs/archetype_mana_identities.yaml", {
+        "schema_version": "1.0", "formats": {
+            entry["id"]: {"approved": {"alpha": ["u"]}} for entry in entries}})
+    rendered = render_mana_identity_block({
+        entry["id"]: {"alpha": ManaIdentityEntry(("u",), "approved")} for entry in entries})
+    rendered_path = root / "assets/js/phase8/archetype-visuals.js"
+    rendered_path.parent.mkdir(parents=True, exist_ok=True)
+    rendered_path.write_text(rendered, encoding="utf-8")
+    for entry in entries:
+        write(root, f"stats/{entry['id']}/mtgo/archetype_hierarchy.json", {
+            "parents": [{"id": "alpha"}], "leaves": []})
     write(root, "configs/pages_publication.json", POLICY)
     write(root, "index.html", "synthetic entry")
     # These are catalog-boundary fixtures, not claims of Landing content acceptance.

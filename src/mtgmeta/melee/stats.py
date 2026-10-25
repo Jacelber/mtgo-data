@@ -20,6 +20,7 @@ from ..rules import RuleSet
 
 
 EVENT_STATISTICS_SCHEMA_VERSION = "1.1.0"
+EVENT_OVERVIEW_SCHEMA_VERSION = "1.2.0"
 FORMAT_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 EVENT_ID_PATTERN = re.compile(r"^[1-9][0-9]*$")
 SCOPE_ORDER = ("day1", "day2", "all_constructed")
@@ -745,7 +746,18 @@ def _scope_documents(
             raise MeleeStatisticsError(f"{scope} archetype deck counts do not conserve")
 
         scope_summary = ledger["scope_summaries"][scope]
+        # All eligible participant perspectives, including unavailable decks.
+        # result_counts also includes excluded opportunities, so cannot stand
+        # in for this record (in particular for disqualified matches).
+        played = Counter(
+            str(item["result_type"])
+            for item in scope_opportunities
+            if item["win_rate_included"]
+        )
         scope_document = {
+            "literal_record": literal_match_record(
+                played["played_win"], played["played_loss"], played["played_draw"]
+            ),
             "population": (
                 "starting_field"
                 if scope == "day1"
@@ -1235,7 +1247,7 @@ def build_event_overview_and_decks(
         else []
     )
     overview: dict[str, Any] = {
-        "schema_version": EVENT_STATISTICS_SCHEMA_VERSION,
+        "schema_version": EVENT_OVERVIEW_SCHEMA_VERSION,
         "document_type": "overview",
         "source": "melee",
         "event_id": event_id,

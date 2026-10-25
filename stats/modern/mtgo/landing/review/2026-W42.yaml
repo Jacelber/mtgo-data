@@ -6,7 +6,7 @@ week:
   start: '2026-10-12'
   end: '2026-10-18'
 bindings:
-  source_event_ids:
+  source_event_ids: &id001
   - '12856194'
   - '12856195'
   - '12856203'
@@ -20,10 +20,10 @@ bindings:
   - '12856678'
   - '12856761'
   - '12856762'
-  classifier_digest: d1a43b6539af3cb80bca1e6ca200a82ca507a58c07f1ffbc831ea8ae39dc9a2b
+  classifier_digest: bb7eb335377a3cce1a448d25f8c9fa6bf31eb187903be31f719c90447818985e
   selection_policy_digest: d3397488f8c8cc2471cd9f216be17b74cf6c50b64b4e34a4b8bd451c4b3bed59
-  machine_fact_digest: de8ae526291aa37d252e11ee938b7a26ea7c74e4d3d51feb6e3b786dfaa5832a
-  link_catalog_digest: 7dee4a8dcc52ac0f1ac7dd4f29ea0be3ac2af1f681aab0570a6f9a9ec2e4944b
+  machine_fact_digest: 74bc812677449f7bbc97f33e52e852531fbc9692bcfcd6b95b5a1978e0fffa9c
+  link_catalog_digest: 4832cc44d9bdc8d317b4ba65ce78166de803f82fd007e21d8f26bfac6e1d2e52
   bilingual_catalog_digest: 3e9382771126ab5465c017fd26d835847867fa98209417fa577d2a1170eafb65
   content_sha256: d79ffc91e2c6ed14c9fbc36d543eb012ba0ea4cc3bb5fb664595c7d76009c0c2
 candidate_evidence:
@@ -8883,24 +8883,11 @@ acceptance:
     format: modern
     week: 2026-W42
     bindings:
-      source_event_ids:
-      - '12856194'
-      - '12856195'
-      - '12856203'
-      - '12856487'
-      - '12856566'
-      - '12856574'
-      - '12856590'
-      - '12856594'
-      - '12856599'
-      - '12856647'
-      - '12856678'
-      - '12856761'
-      - '12856762'
-      classifier_digest: d1a43b6539af3cb80bca1e6ca200a82ca507a58c07f1ffbc831ea8ae39dc9a2b
+      source_event_ids: *id001
+      classifier_digest: bb7eb335377a3cce1a448d25f8c9fa6bf31eb187903be31f719c90447818985e
       selection_policy_digest: d3397488f8c8cc2471cd9f216be17b74cf6c50b64b4e34a4b8bd451c4b3bed59
-      machine_fact_digest: de8ae526291aa37d252e11ee938b7a26ea7c74e4d3d51feb6e3b786dfaa5832a
-      link_catalog_digest: 7dee4a8dcc52ac0f1ac7dd4f29ea0be3ac2af1f681aab0570a6f9a9ec2e4944b
+      machine_fact_digest: 74bc812677449f7bbc97f33e52e852531fbc9692bcfcd6b95b5a1978e0fffa9c
+      link_catalog_digest: 4832cc44d9bdc8d317b4ba65ce78166de803f82fd007e21d8f26bfac6e1d2e52
       established_names:
         name.modern|rakdos-delirium|none.zh: 红黑躁狂
         name.modern|rakdos-delirium|none.en: Rakdos Delirium
@@ -8922,7 +8909,7 @@ acceptance:
         name.modern|chant-control|none.en: Chant Control
         name.modern|darklight-phoenix|golgari.zh: 黑绿暗光凤凰
         name.modern|darklight-phoenix|golgari.en: Golgari Darklight Phoenix
-      material_digest: 600c6f9408263c44acc28daaeb58e185c33ed88b7d4e3a7d689139de248838d9
+      material_digest: c657661cb2fd48eaf2d80d0a94994bc5b8aa569f87e2fbe6fd774deda389b11d
     dimensions:
       copy.zh:
       - order: 1
@@ -9038,7 +9025,7 @@ acceptance:
       name.modern|prowess|none.en: Prowess
       name.modern|rakdos-delirium|none.zh: 红黑躁狂
       name.modern|rakdos-delirium|none.en: Rakdos Delirium
-    digest: 7ef01653cf168f95a02509181b2468f1b8f61df2a438cacf1fa01b8ebf1f1e74
+    digest: 7a9f701509d4129a7bdaff0e022a71534750bd706762332420c089c5eb3533a6
   decisions:
     format: modern
     week: 2026-W42

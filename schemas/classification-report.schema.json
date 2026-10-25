@@ -17,7 +17,15 @@
             "required": ["main_deck", "sideboard"],
             "properties": {
               "main_deck": {"type": "array", "items": {"$ref": "classification-report-common.schema.json#/$defs/card"}},
-              "sideboard": {"type": "array", "items": {"$ref": "classification-report-common.schema.json#/$defs/card"}}
+              "sideboard": {"type": "array", "items": {"$ref": "classification-report-common.schema.json#/$defs/card"}},
+              "errors": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+              "matched_rules": {"type": "array", "items": {"$ref": "classification-report-common.schema.json#/$defs/rule_match"}},
+              "color_diagnostics": {"$ref": "classifier-color-diagnostics.schema.json"}
+            },
+            "dependentRequired": {
+              "color_diagnostics": ["errors", "matched_rules"],
+              "errors": ["color_diagnostics"],
+              "matched_rules": ["color_diagnostics"]
             },
             "unevaluatedProperties": false
           }

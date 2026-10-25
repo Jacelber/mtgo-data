@@ -2,7 +2,7 @@
   "schema_version": "1.1.0",
   "format": "modern",
   "source": "mtgo",
-  "classifier_digest": "d1a43b6539af3cb80bca1e6ca200a82ca507a58c07f1ffbc831ea8ae39dc9a2b",
+  "classifier_digest": "70b64c2a7e7976ef589d21b1363808f46f0430c01d9ec6147a147b67e78a98cd",
   "period": {
     "type": "4w",
     "start": "2026-09-21",
@@ -505,8 +505,11 @@
       {
         "id": "esper-blink",
         "name": "Esper Blink",
-        "expandable": false,
-        "subtype_ids": []
+        "expandable": true,
+        "subtype_ids": [
+          "esper-blink/esper",
+          "esper-blink/wubr"
+        ]
       },
       {
         "id": "esper-control",
@@ -529,8 +532,11 @@
       {
         "id": "esper-goryos",
         "name": "Esper Goryo's",
-        "expandable": false,
-        "subtype_ids": []
+        "expandable": true,
+        "subtype_ids": [
+          "esper-goryos/esper",
+          "esper-goryos/wubg"
+        ]
       },
       {
         "id": "esper-ketramose",
@@ -611,8 +617,14 @@
         "subtype_ids": []
       },
       {
+        "id": "four-color-control",
+        "name": "Four-Color Control",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "four-color-goryos",
-        "name": "Four-Color Goryo's",
+        "name": "WUBR Goryo's",
         "expandable": false,
         "subtype_ids": []
       },
@@ -869,8 +881,11 @@
       {
         "id": "jeskai-ascendancy-combo",
         "name": "Jeskai Ascendancy Combo",
-        "expandable": false,
-        "subtype_ids": []
+        "expandable": true,
+        "subtype_ids": [
+          "jeskai-ascendancy-combo/four-color",
+          "jeskai-ascendancy-combo/jeskai"
+        ]
       },
       {
         "id": "jeskai-blink",
@@ -917,8 +932,11 @@
       {
         "id": "jund-creativity",
         "name": "Jund Creativity",
-        "expandable": false,
-        "subtype_ids": []
+        "expandable": true,
+        "subtype_ids": [
+          "jund-creativity/four-color",
+          "jund-creativity/jund"
+        ]
       },
       {
         "id": "jund-goblins",
@@ -1257,6 +1275,12 @@
         "subtype_ids": []
       },
       {
+        "id": "rakdos-creativity",
+        "name": "Rakdos Creativity",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "rakdos-delirium",
         "name": "Rakdos Delirium",
         "expandable": false,
@@ -1363,10 +1387,12 @@
         "expandable": true,
         "subtype_ids": [
           "sewer-combo/azorius",
+          "sewer-combo/bant",
           "sewer-combo/izzet",
           "sewer-combo/jeskai",
           "sewer-combo/mono-blue",
-          "sewer-combo/simic"
+          "sewer-combo/simic",
+          "sewer-combo/temur"
         ]
       },
       {
@@ -1446,7 +1472,8 @@
         "expandable": true,
         "subtype_ids": [
           "steel-cutter/izzet",
-          "steel-cutter/jeskai"
+          "steel-cutter/jeskai",
+          "steel-cutter/temur"
         ]
       },
       {
@@ -1476,6 +1503,12 @@
       {
         "id": "temur-reclamation",
         "name": "Temur Reclamation",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "temur-wizards",
+        "name": "Temur Wizards",
         "expandable": false,
         "subtype_ids": []
       },
@@ -2361,12 +2394,20 @@
         "subtype_id": null
       },
       {
-        "id": "esper-blink",
-        "kind": "archetype",
+        "id": "esper-blink/esper",
+        "kind": "subtype",
         "name": "Esper Blink",
         "display_name": "Esper Blink",
         "parent_id": "esper-blink",
-        "subtype_id": null
+        "subtype_id": "esper"
+      },
+      {
+        "id": "esper-blink/wubr",
+        "kind": "subtype",
+        "name": "WUBR Blink",
+        "display_name": "WUBR Blink",
+        "parent_id": "esper-blink",
+        "subtype_id": "wubr"
       },
       {
         "id": "esper-control",
@@ -2393,12 +2434,20 @@
         "subtype_id": null
       },
       {
-        "id": "esper-goryos",
-        "kind": "archetype",
-        "name": "Esper Goryo's",
+        "id": "esper-goryos/esper",
+        "kind": "subtype",
+        "name": "Esper",
         "display_name": "Esper Goryo's",
         "parent_id": "esper-goryos",
-        "subtype_id": null
+        "subtype_id": "esper"
+      },
+      {
+        "id": "esper-goryos/wubg",
+        "kind": "subtype",
+        "name": "WUBG",
+        "display_name": "WUBG Goryo's",
+        "parent_id": "esper-goryos",
+        "subtype_id": "wubg"
       },
       {
         "id": "esper-ketramose",
@@ -2505,10 +2554,18 @@
         "subtype_id": null
       },
       {
+        "id": "four-color-control",
+        "kind": "archetype",
+        "name": "Four-Color Control",
+        "display_name": "Four-Color Control",
+        "parent_id": "four-color-control",
+        "subtype_id": null
+      },
+      {
         "id": "four-color-goryos",
         "kind": "archetype",
-        "name": "Four-Color Goryo's",
-        "display_name": "Four-Color Goryo's",
+        "name": "WUBR Goryo's",
+        "display_name": "WUBR Goryo's",
         "parent_id": "four-color-goryos",
         "subtype_id": null
       },
@@ -2905,12 +2962,20 @@
         "subtype_id": null
       },
       {
-        "id": "jeskai-ascendancy-combo",
-        "kind": "archetype",
-        "name": "Jeskai Ascendancy Combo",
+        "id": "jeskai-ascendancy-combo/four-color",
+        "kind": "subtype",
+        "name": "Four-Color",
+        "display_name": "Four-Color Ascendancy Combo",
+        "parent_id": "jeskai-ascendancy-combo",
+        "subtype_id": "four-color"
+      },
+      {
+        "id": "jeskai-ascendancy-combo/jeskai",
+        "kind": "subtype",
+        "name": "Jeskai",
         "display_name": "Jeskai Ascendancy Combo",
         "parent_id": "jeskai-ascendancy-combo",
-        "subtype_id": null
+        "subtype_id": "jeskai"
       },
       {
         "id": "jeskai-blink",
@@ -2969,12 +3034,20 @@
         "subtype_id": null
       },
       {
-        "id": "jund-creativity",
-        "kind": "archetype",
+        "id": "jund-creativity/four-color",
+        "kind": "subtype",
+        "name": "UBRG Creativity",
+        "display_name": "UBRG Creativity",
+        "parent_id": "jund-creativity",
+        "subtype_id": "four-color"
+      },
+      {
+        "id": "jund-creativity/jund",
+        "kind": "subtype",
         "name": "Jund Creativity",
         "display_name": "Jund Creativity",
         "parent_id": "jund-creativity",
-        "subtype_id": null
+        "subtype_id": "jund"
       },
       {
         "id": "jund-goblins",
@@ -3561,6 +3634,14 @@
         "subtype_id": null
       },
       {
+        "id": "rakdos-creativity",
+        "kind": "archetype",
+        "name": "Rakdos Creativity",
+        "display_name": "Rakdos Creativity",
+        "parent_id": "rakdos-creativity",
+        "subtype_id": null
+      },
+      {
         "id": "rakdos-delirium",
         "kind": "archetype",
         "name": "Rakdos Delirium",
@@ -3729,6 +3810,14 @@
         "subtype_id": "azorius"
       },
       {
+        "id": "sewer-combo/bant",
+        "kind": "subtype",
+        "name": "Bant Sewer Combo",
+        "display_name": "Bant Sewer Combo",
+        "parent_id": "sewer-combo",
+        "subtype_id": "bant"
+      },
+      {
         "id": "sewer-combo/izzet",
         "kind": "subtype",
         "name": "Izzet",
@@ -3759,6 +3848,14 @@
         "display_name": "Simic Sewer Combo",
         "parent_id": "sewer-combo",
         "subtype_id": "simic"
+      },
+      {
+        "id": "sewer-combo/temur",
+        "kind": "subtype",
+        "name": "Temur Sewer Combo",
+        "display_name": "Temur Sewer Combo",
+        "parent_id": "sewer-combo",
+        "subtype_id": "temur"
       },
       {
         "id": "shape-anew",
@@ -3889,6 +3986,14 @@
         "subtype_id": "jeskai"
       },
       {
+        "id": "steel-cutter/temur",
+        "kind": "subtype",
+        "name": "Temur Steel Cutter",
+        "display_name": "Temur Steel Cutter Steel-Cutter",
+        "parent_id": "steel-cutter",
+        "subtype_id": "temur"
+      },
+      {
         "id": "sultai-control",
         "kind": "archetype",
         "name": "Sultai Control",
@@ -3926,6 +4031,14 @@
         "name": "Temur Reclamation",
         "display_name": "Temur Reclamation",
         "parent_id": "temur-reclamation",
+        "subtype_id": null
+      },
+      {
+        "id": "temur-wizards",
+        "kind": "archetype",
+        "name": "Temur Wizards",
+        "display_name": "Temur Wizards",
+        "parent_id": "temur-wizards",
         "subtype_id": null
       },
       {
@@ -40743,9 +40856,9 @@
     "ruby-storm",
     "chant-control/azorius",
     "eldrazi-tron/mono-green",
-    "esper-blink",
+    "esper-blink/esper",
     "amulet-titan",
-    "esper-goryos",
+    "esper-goryos/esper",
     "living-end/temur",
     "izzet-tempo",
     "simic-neoform",
@@ -40775,10 +40888,9 @@
     "eldrazi-tron/simic",
     "five-color-ritual",
     "living-end/sultai",
-    "broodscale-combo/golgari",
     "hammer-time/azorius",
     "eldrazi-ramp/golgari",
-    "sewer-combo/mono-blue",
+    "sewer-combo/simic",
     "azorius-control",
     "mardu-energy",
     "steel-cutter/izzet",
@@ -40792,6 +40904,7 @@
     "prowess/lessons",
     "burn/mono-red",
     "deaths-shadow/rakdos",
+    "broodscale-combo/golgari",
     "necrodominance/mono-black",
     "eldrazi-aggro",
     "orzhov-energy",
@@ -40841,7 +40954,7 @@
     "eldrazi-ramp/mono-green",
     "five-color-elementals",
     "hammer-time/boros",
-    "jeskai-ascendancy-combo",
+    "jeskai-ascendancy-combo/jeskai",
     "leyline-fling",
     "oculus-ritual/bant",
     "rakdos-hollow-one/rakdos",
@@ -40849,24 +40962,24 @@
   ],
   "leaf_overall": {
     "broodscale-combo/mono-green": {
-      "wins": 522,
-      "losses": 467,
+      "wins": 530,
+      "losses": 468,
       "draws": 0,
-      "matches": 989,
-      "win_rate": 0.5278,
-      "ci_half": 0.0311,
+      "matches": 998,
+      "win_rate": 0.5311,
+      "ci_half": 0.0309,
       "low_sample": false,
       "mirror": false,
       "literal_record": {
-        "wins": 522,
-        "losses": 467,
+        "wins": 530,
+        "losses": 468,
         "draws": 0,
-        "matches": 989,
-        "win_rate": 0.527806,
+        "matches": 998,
+        "win_rate": 0.531062,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.496644,
-          "upper": 0.558752
+          "lower": 0.500041,
+          "upper": 0.561845
         }
       }
     },
@@ -41068,7 +41181,7 @@
         }
       }
     },
-    "esper-blink": {
+    "esper-blink/esper": {
       "wins": 102,
       "losses": 92,
       "draws": 0,
@@ -41112,7 +41225,7 @@
         }
       }
     },
-    "esper-goryos": {
+    "esper-goryos/esper": {
       "wins": 103,
       "losses": 83,
       "draws": 0,
@@ -41772,28 +41885,6 @@
         }
       }
     },
-    "broodscale-combo/golgari": {
-      "wins": 12,
-      "losses": 6,
-      "draws": 0,
-      "matches": 18,
-      "win_rate": 0.6667,
-      "ci_half": 0.1999,
-      "low_sample": true,
-      "mirror": false,
-      "literal_record": {
-        "wins": 12,
-        "losses": 6,
-        "draws": 0,
-        "matches": 18,
-        "win_rate": 0.666667,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.437491,
-          "upper": 0.837214
-        }
-      }
-    },
     "hammer-time/azorius": {
       "wins": 11,
       "losses": 7,
@@ -41838,7 +41929,7 @@
         }
       }
     },
-    "sewer-combo/mono-blue": {
+    "sewer-combo/simic": {
       "wins": 7,
       "losses": 9,
       "draws": 0,
@@ -42143,6 +42234,28 @@
         "confidence_interval_95": {
           "lower": 0.23659,
           "upper": 0.76341
+        }
+      }
+    },
+    "broodscale-combo/golgari": {
+      "wins": 4,
+      "losses": 5,
+      "draws": 0,
+      "matches": 9,
+      "win_rate": 0.4444,
+      "ci_half": 0.2723,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 4,
+        "losses": 5,
+        "draws": 0,
+        "matches": 9,
+        "win_rate": 0.444444,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.188775,
+          "upper": 0.733353
         }
       }
     },
@@ -43224,7 +43337,7 @@
         }
       }
     },
-    "jeskai-ascendancy-combo": {
+    "jeskai-ascendancy-combo/jeskai": {
       "wins": 0,
       "losses": 2,
       "draws": 0,
@@ -43338,27 +43451,27 @@
   "leaf_match_records": {
     "broodscale-combo/mono-green": {
       "all_matches": {
-        "wins": 624,
-        "losses": 569,
+        "wins": 632,
+        "losses": 570,
         "draws": 0,
-        "matches": 1193,
-        "win_rate": 0.523051,
+        "matches": 1202,
+        "win_rate": 0.52579,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.49468,
-          "upper": 0.551275
+          "lower": 0.497524,
+          "upper": 0.553892
         }
       },
       "non_mirror": {
-        "wins": 522,
-        "losses": 467,
+        "wins": 530,
+        "losses": 468,
         "draws": 0,
-        "matches": 989,
-        "win_rate": 0.527806,
+        "matches": 998,
+        "win_rate": 0.531062,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.496644,
-          "upper": 0.558752
+          "lower": 0.500041,
+          "upper": 0.561845
         }
       },
       "mirror_match_count": 102
@@ -43606,7 +43719,7 @@
       },
       "mirror_match_count": 4
     },
-    "esper-blink": {
+    "esper-blink/esper": {
       "all_matches": {
         "wins": 104,
         "losses": 94,
@@ -43660,7 +43773,7 @@
       },
       "mirror_match_count": 2
     },
-    "esper-goryos": {
+    "esper-goryos/esper": {
       "all_matches": {
         "wins": 104,
         "losses": 84,
@@ -44470,33 +44583,6 @@
       },
       "mirror_match_count": 0
     },
-    "broodscale-combo/golgari": {
-      "all_matches": {
-        "wins": 12,
-        "losses": 6,
-        "draws": 0,
-        "matches": 18,
-        "win_rate": 0.666667,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.437491,
-          "upper": 0.837214
-        }
-      },
-      "non_mirror": {
-        "wins": 12,
-        "losses": 6,
-        "draws": 0,
-        "matches": 18,
-        "win_rate": 0.666667,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.437491,
-          "upper": 0.837214
-        }
-      },
-      "mirror_match_count": 0
-    },
     "hammer-time/azorius": {
       "all_matches": {
         "wins": 11,
@@ -44551,7 +44637,7 @@
       },
       "mirror_match_count": 0
     },
-    "sewer-combo/mono-blue": {
+    "sewer-combo/simic": {
       "all_matches": {
         "wins": 7,
         "losses": 9,
@@ -44925,6 +45011,33 @@
         "confidence_interval_95": {
           "lower": 0.23659,
           "upper": 0.76341
+        }
+      },
+      "mirror_match_count": 0
+    },
+    "broodscale-combo/golgari": {
+      "all_matches": {
+        "wins": 4,
+        "losses": 5,
+        "draws": 0,
+        "matches": 9,
+        "win_rate": 0.444444,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.188775,
+          "upper": 0.733353
+        }
+      },
+      "non_mirror": {
+        "wins": 4,
+        "losses": 5,
+        "draws": 0,
+        "matches": 9,
+        "win_rate": 0.444444,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.188775,
+          "upper": 0.733353
         }
       },
       "mirror_match_count": 0
@@ -46252,7 +46365,7 @@
       },
       "mirror_match_count": 0
     },
-    "jeskai-ascendancy-combo": {
+    "jeskai-ascendancy-combo/jeskai": {
       "all_matches": {
         "wins": 0,
         "losses": 2,
@@ -46391,46 +46504,46 @@
   "leaf_matrix": {
     "broodscale-combo/mono-green": {
       "affinity": {
-        "wins": 33,
+        "wins": 35,
         "losses": 24,
         "draws": 0,
-        "matches": 57,
-        "win_rate": 0.5789,
-        "ci_half": 0.1242,
+        "matches": 59,
+        "win_rate": 0.5932,
+        "ci_half": 0.1216,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 33,
+          "wins": 35,
           "losses": 24,
           "draws": 0,
-          "matches": 57,
-          "win_rate": 0.578947,
+          "matches": 59,
+          "win_rate": 0.59322,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.449799,
-            "upper": 0.698126
+            "lower": 0.465932,
+            "upper": 0.709112
           }
         }
       },
       "amulet-titan": {
-        "wins": 14,
+        "wins": 15,
         "losses": 14,
         "draws": 0,
-        "matches": 28,
-        "win_rate": 0.5,
-        "ci_half": 0.1737,
+        "matches": 29,
+        "win_rate": 0.5172,
+        "ci_half": 0.1709,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 14,
+          "wins": 15,
           "losses": 14,
           "draws": 0,
-          "matches": 28,
-          "win_rate": 0.5,
+          "matches": 29,
+          "win_rate": 0.517241,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.326328,
-            "upper": 0.673672
+            "lower": 0.344307,
+            "upper": 0.686142
           }
         }
       },
@@ -46831,24 +46944,24 @@
         }
       },
       "devoted-druid-combo/abzan": {
-        "wins": 32,
-        "losses": 42,
+        "wins": 33,
+        "losses": 43,
         "draws": 0,
-        "matches": 74,
-        "win_rate": 0.4324,
-        "ci_half": 0.1101,
+        "matches": 76,
+        "win_rate": 0.4342,
+        "ci_half": 0.1088,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 32,
-          "losses": 42,
+          "wins": 33,
+          "losses": 43,
           "draws": 0,
-          "matches": 74,
-          "win_rate": 0.432432,
+          "matches": 76,
+          "win_rate": 0.434211,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.325659,
-            "upper": 0.545875
+            "lower": 0.328608,
+            "upper": 0.546144
           }
         }
       },
@@ -47029,24 +47142,24 @@
         }
       },
       "eldrazi-tron/mono-green": {
-        "wins": 20,
+        "wins": 22,
         "losses": 20,
         "draws": 0,
-        "matches": 40,
-        "win_rate": 0.5,
-        "ci_half": 0.148,
+        "matches": 42,
+        "win_rate": 0.5238,
+        "ci_half": 0.1446,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 20,
+          "wins": 22,
           "losses": 20,
           "draws": 0,
-          "matches": 40,
-          "win_rate": 0.5,
+          "matches": 42,
+          "win_rate": 0.52381,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.351993,
-            "upper": 0.648007
+            "lower": 0.377222,
+            "upper": 0.666406
           }
         }
       },
@@ -47072,29 +47185,29 @@
           }
         }
       },
-      "esper-blink": {
-        "wins": 12,
+      "esper-blink/esper": {
+        "wins": 13,
         "losses": 12,
         "draws": 0,
-        "matches": 24,
-        "win_rate": 0.5,
-        "ci_half": 0.1857,
+        "matches": 25,
+        "win_rate": 0.52,
+        "ci_half": 0.1824,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 12,
+          "wins": 13,
           "losses": 12,
           "draws": 0,
-          "matches": 24,
-          "win_rate": 0.5,
+          "matches": 25,
+          "win_rate": 0.52,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.314271,
-            "upper": 0.685729
+            "lower": 0.334982,
+            "upper": 0.69969
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 16,
         "losses": 12,
         "draws": 0,
@@ -47710,6 +47823,28 @@
           }
         }
       },
+      "mono-blue-tron": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "mono-white-tron": {
         "wins": 1,
         "losses": 1,
@@ -48128,7 +48263,7 @@
           }
         }
       },
-      "sewer-combo/mono-blue": {
+      "sewer-combo/simic": {
         "wins": 2,
         "losses": 1,
         "draws": 0,
@@ -48812,7 +48947,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 7,
         "losses": 8,
         "draws": 0,
@@ -48834,7 +48969,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 3,
         "losses": 8,
         "draws": 0,
@@ -49516,7 +49651,7 @@
           }
         }
       },
-      "sewer-combo/mono-blue": {
+      "sewer-combo/simic": {
         "wins": 1,
         "losses": 2,
         "draws": 0,
@@ -50134,7 +50269,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 7,
         "losses": 5,
         "draws": 0,
@@ -50156,7 +50291,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 4,
         "draws": 0,
@@ -50974,45 +51109,45 @@
       },
       "broodscale-combo/golgari": {
         "wins": 2,
-        "losses": 2,
+        "losses": 0,
         "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 2,
-          "losses": 2,
+          "losses": 0,
           "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
+          "matches": 2,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
+            "lower": 0.342372,
+            "upper": 1.0
           }
         }
       },
       "broodscale-combo/mono-green": {
         "wins": 24,
-        "losses": 33,
+        "losses": 35,
         "draws": 0,
-        "matches": 57,
-        "win_rate": 0.4211,
-        "ci_half": 0.1242,
+        "matches": 59,
+        "win_rate": 0.4068,
+        "ci_half": 0.1216,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
           "wins": 24,
-          "losses": 33,
+          "losses": 35,
           "draws": 0,
-          "matches": 57,
-          "win_rate": 0.421053,
+          "matches": 59,
+          "win_rate": 0.40678,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.301874,
-            "upper": 0.550201
+            "lower": 0.290888,
+            "upper": 0.534068
           }
         }
       },
@@ -51412,7 +51547,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 11,
         "losses": 5,
         "draws": 0,
@@ -51434,7 +51569,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 4,
         "losses": 6,
         "draws": 0,
@@ -52138,7 +52273,7 @@
           }
         }
       },
-      "sewer-combo/mono-blue": {
+      "sewer-combo/simic": {
         "wins": 2,
         "losses": 0,
         "draws": 0,
@@ -52316,47 +52451,25 @@
           }
         }
       },
-      "broodscale-combo/golgari": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      },
       "broodscale-combo/mono-green": {
-        "wins": 42,
-        "losses": 32,
+        "wins": 43,
+        "losses": 33,
         "draws": 0,
-        "matches": 74,
-        "win_rate": 0.5676,
-        "ci_half": 0.1101,
+        "matches": 76,
+        "win_rate": 0.5658,
+        "ci_half": 0.1088,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 42,
-          "losses": 32,
+          "wins": 43,
+          "losses": 33,
           "draws": 0,
-          "matches": 74,
-          "win_rate": 0.567568,
+          "matches": 76,
+          "win_rate": 0.565789,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.454125,
-            "upper": 0.674341
+            "lower": 0.453856,
+            "upper": 0.671392
           }
         }
       },
@@ -52668,7 +52781,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 2,
         "losses": 4,
         "draws": 0,
@@ -52690,7 +52803,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 3,
         "losses": 4,
         "draws": 0,
@@ -53262,7 +53375,7 @@
           }
         }
       },
-      "sewer-combo/mono-blue": {
+      "sewer-combo/simic": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -53836,7 +53949,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 10,
         "losses": 7,
         "draws": 0,
@@ -53858,7 +53971,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 4,
         "losses": 5,
         "draws": 0,
@@ -54584,7 +54697,7 @@
           }
         }
       },
-      "sewer-combo/mono-blue": {
+      "sewer-combo/simic": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -55180,7 +55293,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 4,
         "losses": 4,
         "draws": 0,
@@ -55202,7 +55315,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 6,
         "losses": 5,
         "draws": 0,
@@ -56238,7 +56351,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 6,
         "losses": 4,
         "draws": 0,
@@ -56260,7 +56373,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 7,
         "losses": 5,
         "draws": 0,
@@ -57450,7 +57563,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 7,
         "losses": 2,
         "draws": 0,
@@ -57472,7 +57585,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 3,
         "losses": 6,
         "draws": 0,
@@ -58000,7 +58113,7 @@
           }
         }
       },
-      "sewer-combo/mono-blue": {
+      "sewer-combo/simic": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -58158,23 +58271,23 @@
       },
       "broodscale-combo/golgari": {
         "wins": 0,
-        "losses": 3,
+        "losses": 1,
         "draws": 0,
-        "matches": 3,
+        "matches": 1,
         "win_rate": 0.0,
-        "ci_half": 0.2808,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 0,
-          "losses": 3,
+          "losses": 1,
           "draws": 0,
-          "matches": 3,
+          "matches": 1,
           "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
             "lower": 0.0,
-            "upper": 0.561506
+            "upper": 0.793457
           }
         }
       },
@@ -58202,23 +58315,23 @@
       },
       "broodscale-combo/mono-green": {
         "wins": 20,
-        "losses": 20,
+        "losses": 22,
         "draws": 0,
-        "matches": 40,
-        "win_rate": 0.5,
-        "ci_half": 0.148,
+        "matches": 42,
+        "win_rate": 0.4762,
+        "ci_half": 0.1446,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
           "wins": 20,
-          "losses": 20,
+          "losses": 22,
           "draws": 0,
-          "matches": 40,
-          "win_rate": 0.5,
+          "matches": 42,
+          "win_rate": 0.47619,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.351993,
-            "upper": 0.648007
+            "lower": 0.333594,
+            "upper": 0.622778
           }
         }
       },
@@ -58486,7 +58599,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 3,
         "losses": 0,
         "draws": 0,
@@ -58508,7 +58621,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 4,
         "losses": 2,
         "draws": 0,
@@ -58706,7 +58819,7 @@
           }
         }
       },
-      "jeskai-ascendancy-combo": {
+      "jeskai-ascendancy-combo/jeskai": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -58992,7 +59105,7 @@
           }
         }
       },
-      "sewer-combo/mono-blue": {
+      "sewer-combo/simic": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -59059,7 +59172,7 @@
         }
       }
     },
-    "esper-blink": {
+    "esper-blink/esper": {
       "affinity": {
         "wins": 5,
         "losses": 11,
@@ -59214,47 +59327,25 @@
           }
         }
       },
-      "broodscale-combo/golgari": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
       "broodscale-combo/mono-green": {
         "wins": 12,
-        "losses": 12,
+        "losses": 13,
         "draws": 0,
-        "matches": 24,
-        "win_rate": 0.5,
-        "ci_half": 0.1857,
+        "matches": 25,
+        "win_rate": 0.48,
+        "ci_half": 0.1824,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
           "wins": 12,
-          "losses": 12,
+          "losses": 13,
           "draws": 0,
-          "matches": 24,
-          "win_rate": 0.5,
+          "matches": 25,
+          "win_rate": 0.48,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.314271,
-            "upper": 0.685729
+            "lower": 0.30031,
+            "upper": 0.665018
           }
         }
       },
@@ -59500,7 +59591,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 2,
         "losses": 2,
         "draws": 0,
@@ -59522,7 +59613,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 8,
         "losses": 1,
         "draws": 0,
@@ -60162,47 +60253,25 @@
           }
         }
       },
-      "broodscale-combo/golgari": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
       "broodscale-combo/mono-green": {
         "wins": 14,
-        "losses": 14,
+        "losses": 15,
         "draws": 0,
-        "matches": 28,
-        "win_rate": 0.5,
-        "ci_half": 0.1737,
+        "matches": 29,
+        "win_rate": 0.4828,
+        "ci_half": 0.1709,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
           "wins": 14,
-          "losses": 14,
+          "losses": 15,
           "draws": 0,
-          "matches": 28,
-          "win_rate": 0.5,
+          "matches": 29,
+          "win_rate": 0.482759,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.326328,
-            "upper": 0.673672
+            "lower": 0.313858,
+            "upper": 0.655693
           }
         }
       },
@@ -60514,7 +60583,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 2,
         "losses": 2,
         "draws": 0,
@@ -60536,7 +60605,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 5,
         "draws": 0,
@@ -61043,7 +61112,7 @@
         }
       }
     },
-    "esper-goryos": {
+    "esper-goryos/esper": {
       "affinity": {
         "wins": 6,
         "losses": 4,
@@ -61440,7 +61509,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 1,
         "losses": 8,
         "draws": 0,
@@ -61462,7 +61531,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 1,
         "draws": 0,
@@ -61924,7 +61993,7 @@
           }
         }
       },
-      "sewer-combo/mono-blue": {
+      "sewer-combo/simic": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -62454,7 +62523,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 1,
         "losses": 1,
         "draws": 0,
@@ -62476,7 +62545,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 2,
         "draws": 0,
@@ -63004,7 +63073,7 @@
           }
         }
       },
-      "sewer-combo/mono-blue": {
+      "sewer-combo/simic": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -63402,7 +63471,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 2,
         "losses": 1,
         "draws": 0,
@@ -63424,7 +63493,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 3,
         "draws": 0,
@@ -64438,7 +64507,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 2,
         "draws": 0,
@@ -64460,7 +64529,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 4,
         "draws": 0,
@@ -65210,7 +65279,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 2,
         "losses": 3,
         "draws": 0,
@@ -65232,7 +65301,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 1,
         "draws": 0,
@@ -65960,7 +66029,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 1,
         "losses": 3,
         "draws": 0,
@@ -65982,7 +66051,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -66710,7 +66779,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 3,
         "draws": 0,
@@ -66732,7 +66801,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 3,
         "draws": 0,
@@ -67394,7 +67463,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 1,
         "losses": 6,
         "draws": 0,
@@ -67416,7 +67485,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 2,
         "losses": 1,
         "draws": 0,
@@ -67614,7 +67683,7 @@
           }
         }
       },
-      "jeskai-ascendancy-combo": {
+      "jeskai-ascendancy-combo/jeskai": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -68100,7 +68169,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 4,
         "losses": 3,
         "draws": 0,
@@ -68122,7 +68191,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 2,
         "draws": 0,
@@ -68696,7 +68765,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 4,
         "losses": 2,
         "draws": 0,
@@ -69358,7 +69427,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -69380,7 +69449,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 2,
         "losses": 2,
         "draws": 0,
@@ -70064,7 +70133,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -70086,7 +70155,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 3,
         "draws": 0,
@@ -70616,7 +70685,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 3,
         "draws": 0,
@@ -71168,7 +71237,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 2,
         "draws": 0,
@@ -71190,7 +71259,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 3,
         "draws": 0,
@@ -71786,7 +71855,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 2,
         "draws": 0,
@@ -72846,7 +72915,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -73420,7 +73489,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -73906,7 +73975,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -74436,7 +74505,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 2,
         "draws": 0,
@@ -74458,7 +74527,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -75276,7 +75345,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -75740,7 +75809,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -75762,7 +75831,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 2,
         "losses": 0,
         "draws": 0,
@@ -76734,7 +76803,7 @@
           }
         }
       },
-      "sewer-combo/mono-blue": {
+      "sewer-combo/simic": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -76890,7 +76959,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -76912,7 +76981,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -77642,7 +77711,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -77664,7 +77733,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -78152,7 +78221,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -78174,7 +78243,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -78329,250 +78398,6 @@
         }
       }
     },
-    "broodscale-combo/golgari": {
-      "affinity": {
-        "wins": 2,
-        "losses": 2,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 2,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
-          }
-        }
-      },
-      "amulet-titan": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "azorius-control": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "boros-energy": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "broodscale-combo/mono-green": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      },
-      "burn/boros": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "devoted-druid-combo/abzan": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      },
-      "eldrazi-tron/mono-green": {
-        "wins": 3,
-        "losses": 0,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 1.0,
-        "ci_half": 0.2808,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 3,
-          "losses": 0,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.438494,
-            "upper": 1.0
-          }
-        }
-      },
-      "esper-blink": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "izzet-tempo": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "mono-blue-tron": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      }
-    },
     "hammer-time/azorius": {
       "affinity": {
         "wins": 2,
@@ -78706,7 +78531,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -78994,7 +78819,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -79127,7 +78952,7 @@
         }
       }
     },
-    "sewer-combo/mono-blue": {
+    "sewer-combo/simic": {
       "affinity": {
         "wins": 0,
         "losses": 2,
@@ -79282,7 +79107,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -79748,7 +79573,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -80126,7 +79951,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -80436,7 +80261,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -80658,7 +80483,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -80680,7 +80505,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -80880,7 +80705,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 2,
         "draws": 0,
@@ -81570,7 +81395,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -82059,6 +81884,162 @@
         }
       }
     },
+    "broodscale-combo/golgari": {
+      "affinity": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "azorius-control": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "boros-energy": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "broodscale-combo/mono-green": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
+      "burn/boros": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "eldrazi-tron/mono-green": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "izzet-tempo": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      }
+    },
     "necrodominance/mono-black": {
       "azorius-control": {
         "wins": 1,
@@ -82260,7 +82241,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -82282,7 +82263,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -83152,7 +83133,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -83824,7 +83805,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -83892,7 +83873,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -84564,7 +84545,7 @@
           }
         }
       },
-      "broodscale-combo/golgari": {
+      "broodscale-combo/mono-green": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -85058,7 +85039,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -85170,7 +85151,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -85260,7 +85241,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -85778,7 +85759,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -86026,7 +86007,7 @@
           }
         }
       },
-      "sewer-combo/mono-blue": {
+      "sewer-combo/simic": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -86162,7 +86143,7 @@
           }
         }
       },
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -86412,7 +86393,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -86642,7 +86623,7 @@
       }
     },
     "five-color-elementals": {
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -86664,7 +86645,7 @@
           }
         }
       },
-      "esper-goryos": {
+      "esper-goryos/esper": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -86733,7 +86714,7 @@
         }
       }
     },
-    "jeskai-ascendancy-combo": {
+    "jeskai-ascendancy-combo/jeskai": {
       "eldrazi-tron/mono-green": {
         "wins": 0,
         "losses": 1,
@@ -86826,7 +86807,7 @@
       }
     },
     "oculus-ritual/bant": {
-      "esper-blink": {
+      "esper-blink/esper": {
         "wins": 1,
         "losses": 0,
         "draws": 0,

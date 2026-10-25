@@ -15,16 +15,26 @@ from validate_output_invariants import validate_repository_output
 
 
 def check(root: Path, paths: list[str], *, timeout_seconds: float | None = None) -> dict:
+    resource = "src/mtgmeta/data/classifier_card_facts.json"
     selected = {path for path in paths if path.endswith(".json") and (root / path).is_file()
-                and (path.startswith(("stats/", "reports/")) or
+                and (path == resource or path.startswith(("stats/", "reports/")) or
                      (path.startswith("data/") and "/melee/" in path))}
     deadline = monotonic() + schema_timeout_seconds(timeout_seconds)
     failures = []
     checked = 0
-    for manifest in ("schemas/manifest.json", "schemas/melee-data-manifest.json"):
+    manifests = ["schemas/manifest.json", "schemas/melee-data-manifest.json"]
+    if resource in selected:
+        manifests.append("schemas/classifier-data-manifest.json")
+    mapped: set[str] = set()
+    for manifest in manifests:
+        spec = json.loads((root / manifest).read_text(encoding="utf-8"))
+        for mapping in spec["mappings"]:
+            mapped.update(path.relative_to(root).as_posix() for path in root.glob(mapping["pattern"])
+                          if path.relative_to(root).as_posix() in selected)
         count, errors = validate_manifest(root, root / manifest, selected, timeout_seconds=max(0.001, deadline - monotonic()))
         checked += count
         failures.extend(f"{error.path} {error.location}: {error.message}" for error in errors)
+    failures.extend(f"{path}: required output has no schema mapping" for path in sorted(selected - mapped))
     formats = {parts[1] for path in selected
                if len(parts := path.split("/")) >= 4 and parts[0] == "stats" and parts[2] == "mtgo"}
     if formats:

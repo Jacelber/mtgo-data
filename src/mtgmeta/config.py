@@ -164,6 +164,10 @@ def load_rule_set(path: str | Path) -> RuleSet:
     except (OSError, UnicodeError) as exc:
         raise RuleConfigError([RuleValidationFailure(str(source), f"cannot read input: {exc}")]) from exc
     rule_set = parse_rule_text(text)
+    if rule_set.card_facts_sha256 is not None:
+        from .classifier_cards import card_facts
+        if rule_set.card_facts_sha256 != card_facts().digest:
+            raise RuleConfigError([RuleValidationFailure("card_facts_sha256", "does not match the installed classifier fact snapshot")])
     if rule_set.semantic_feature_path is None:
         return rule_set
     if source.parent.name != "my_archetypes":
@@ -216,12 +220,14 @@ def load_rule_set(path: str | Path) -> RuleSet:
             [RuleValidationFailure("semantic_features.manifest_path", str(exc))]
         ) from exc
     allowed_markers = semantic_feature_names()
+    from .rules import leaf_conditions
     used_markers = {
-        condition.card
+        name
         for archetype in rule_set.archetypes
         for rule in archetype.rules
-        for condition in rule.conditions
-        if condition.card.startswith("__classifier-semantic-")
+        for condition in leaf_conditions(archetype.conditions + rule.conditions)
+        for name in condition.cards or (condition.card,)
+        if name.startswith("__classifier-semantic-")
     }
     unknown_markers = sorted(used_markers - allowed_markers)
     if unknown_markers:

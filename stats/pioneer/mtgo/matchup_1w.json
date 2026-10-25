@@ -2,7 +2,7 @@
   "schema_version": "1.1.0",
   "format": "pioneer",
   "source": "mtgo",
-  "classifier_digest": "7951e52da7814abe5550f1f9fb682c7515fdd04465ee53ddf114ece1a3b981fc",
+  "classifier_digest": "4aa52bb4890b2e76c3bb7140889af2b1dd2e9a2efa78dac77900168874bdf700",
   "period": {
     "type": "1w",
     "start": "2026-10-12",
@@ -236,6 +236,12 @@
       {
         "id": "esper-bounce",
         "name": "Esper Bounce",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "esper-control",
+        "name": "Esper Control",
         "expandable": false,
         "subtype_ids": []
       },
@@ -503,7 +509,8 @@
         "expandable": true,
         "subtype_ids": [
           "lotus-scapeshift/simic",
-          "lotus-scapeshift/sultai"
+          "lotus-scapeshift/sultai",
+          "lotus-scapeshift/wubg"
         ]
       },
       {
@@ -1113,6 +1120,14 @@
         "subtype_id": null
       },
       {
+        "id": "esper-control",
+        "kind": "archetype",
+        "name": "Esper Control",
+        "display_name": "Esper Control",
+        "parent_id": "esper-control",
+        "subtype_id": null
+      },
+      {
         "id": "esper-legends",
         "kind": "archetype",
         "name": "Esper Legends",
@@ -1471,6 +1486,14 @@
         "display_name": "Sultai Lotus Scapeshift",
         "parent_id": "lotus-scapeshift",
         "subtype_id": "sultai"
+      },
+      {
+        "id": "lotus-scapeshift/wubg",
+        "kind": "subtype",
+        "name": "WUBG",
+        "display_name": "WUBG Lotus Scapeshift",
+        "parent_id": "lotus-scapeshift",
+        "subtype_id": "wubg"
       },
       {
         "id": "mardu-doom",

@@ -22,7 +22,7 @@ from .stats import (
 )
 
 
-MATCHUP_SCHEMA_VERSION = "1.0.0"
+MATCHUP_SCHEMA_VERSION = "1.1.0"
 FORMAT_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 EVENT_ID_PATTERN = re.compile(r"^[1-9][0-9]*$")
 WILSON_Z = 1.959963984540054
@@ -467,6 +467,7 @@ def _emit_matrix(
                 mirror=row_id == column_id,
             )
             for column_id in order
+            if any(matrix[row_id][column_id].values())
         }
         for row_id in order
     }
@@ -664,6 +665,7 @@ def build_event_matchup(
     ]
     return {
         "schema_version": MATCHUP_SCHEMA_VERSION,
+        "matrix_encoding": "sparse-zero-v1",
         "document_type": "matchup",
         "source": "melee",
         "event_id": overview["event_id"],
@@ -703,6 +705,17 @@ def build_event_matchup_from_paths(
         taxonomy_path,
         repository_root,
     )
+    return build_event_matchup_from_statistics(statistics, opportunity_path)
+
+
+def build_event_matchup_from_statistics(
+    statistics: Mapping[str, Mapping[str, Any]], opportunity_path: Path,
+) -> dict[str, Any]:
+    """Reuse validated statistics from this operation, checking the exact ledger.
+
+    No cross-operation cache: resumed callers without a generated result use
+    build_event_matchup_from_paths and perform the normal source validation.
+    """
     overview = statistics["overview"]
     ledger, ledger_bytes = _read_json_object(opportunity_path)
     expected_hash = overview["input"]["opportunity_sha256"]

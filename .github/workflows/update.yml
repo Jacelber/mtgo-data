@@ -1,4 +1,4 @@
-name: MTGO production data update
+name: MTGO daily input collection
 
 on:
   workflow_dispatch:
@@ -20,13 +20,12 @@ jobs:
     timeout-minutes: 45
     outputs:
       failure-stage: ${{ steps.fetch-stage.outputs.stage }}
-      generation-needed: ${{ steps.generation-subject.outputs.needed }}
-      generation-subject-sha256: ${{ steps.generation-subject.outputs.sha256 }}
+      collection-sha256: ${{ steps.export.outputs.sha256 }}
     permissions:
       actions: read
       contents: read
     env:
-      PYTHONPATH: src
+      PYTHONPATH: .:src
       MTGO_TRANSIENT_EXIT_CODE: "75"
     steps:
       - name: Check out full history without persisted credentials
@@ -47,14 +46,13 @@ jobs:
       - name: Select registry-admitted production formats
         shell: bash
         run: |
-          COLLECTION_FORMATS=$(python -B validate_production_candidate.py formats --kind collection)
-          PRODUCT_FORMATS=$(python -B validate_production_candidate.py formats --kind product)
+          COLLECTION_FORMATS=$(python -B validate_production_candidate.py formats --kind collection --collection-only)
+          PRODUCT_FORMATS=$(python -B validate_production_candidate.py formats --kind product --collection-only)
           echo "MTGO_EVENT_FORMATS=$COLLECTION_FORMATS" >> "$GITHUB_ENV"
           echo "MTGO_PRODUCT_FORMATS=$PRODUCT_FORMATS" >> "$GITHUB_ENV"
-          echo "MTGO_HIERARCHY_FORMATS=$PRODUCT_FORMATS" >> "$GITHUB_ENV"
 
       - name: Snapshot production data baseline
-        run: python -B validate_production_candidate.py snapshot --output "$RUNNER_TEMP/production-baseline.json"
+        run: python -B validate_production_candidate.py snapshot --collection-only --output "$RUNNER_TEMP/production-baseline.json"
 
       - name: Record input collection stage
         id: fetch-stage
@@ -211,29 +209,40 @@ jobs:
           done
           exit "$STATUS"
 
-      - name: Identify the immutable generation subject
-        id: generation-subject
+      - name: Validate and export collected inputs
+        id: export
         shell: bash
         run: |
-          SUBJECT_TAR="$RUNNER_TEMP/mtgo-generation-subject.tar"
-          INPUTS=(src data configs my_archetypes schemas fetched.txt pyproject.toml requirements.txt)
-          if [ -d rules ]; then
-            INPUTS+=(rules)
-          fi
-          tar --sort=name --mtime='UTC 1970-01-01' --owner=0 --group=0 \
-            --numeric-owner -cf "$SUBJECT_TAR" "${INPUTS[@]}"
-          SUBJECT_SHA="$(sha256sum "$SUBJECT_TAR" | awk '{print $1}')"
-          PREVIOUS_SHA="$(git log --format='%(trailers:key=Generation-Subject-SHA256,valueonly)' \
-            | grep -m1 -E '^[0-9a-f]{64}$' || true)"
-          if [ "$SUBJECT_SHA" = "$PREVIOUS_SHA" ]; then
-            NEEDED=false
-            echo "Generation subject is unchanged; build and publication will be skipped."
-          else
-            NEEDED=true
-            echo "Generation subject requires one validated build."
-          fi
-          echo "sha256=$SUBJECT_SHA" >> "$GITHUB_OUTPUT"
-          echo "needed=$NEEDED" >> "$GITHUB_OUTPUT"
+          ARTIFACT_DIR="$RUNNER_TEMP/mtgo-collection-candidate"
+          python -B tools/integrate_mtgo_collection.py export \
+            --artifact "$ARTIFACT_DIR" --baseline "$RUNNER_TEMP/production-baseline.json"
+          (cd "$ARTIFACT_DIR" && sha256sum collection.patch source.txt validation.json > SHA256SUMS)
+
+      - name: Encrypt collected inputs for retention
+        env:
+          CERTIFICATE: ${{ vars.ARCHIVE_HANDOFF_CERT }}
+        run: |
+          printf '%s' "$CERTIFICATE" > "$RUNNER_TEMP/collection-public.pem"
+          # CMS streaming cannot encode an empty payload; gzip also represents a no-op patch.
+          gzip -n -c "$RUNNER_TEMP/mtgo-collection-candidate/collection.patch" \
+            > "$RUNNER_TEMP/mtgo-collection-candidate/collection.patch.gz"
+          openssl cms -encrypt -binary -stream -outform DER -aes-256-gcm \
+            -in "$RUNNER_TEMP/mtgo-collection-candidate/collection.patch.gz" \
+            -out "$RUNNER_TEMP/mtgo-collection-candidate/collection.patch.gz.cms" \
+            -recip "$RUNNER_TEMP/collection-public.pem" \
+            -keyopt rsa_padding_mode:oaep -keyopt rsa_oaep_md:sha256
+
+      - name: Upload immutable collected inputs
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: mtgo-collection-candidate
+          path: |
+            ${{ runner.temp }}/mtgo-collection-candidate/collection.patch.gz.cms
+            ${{ runner.temp }}/mtgo-collection-candidate/source.txt
+            ${{ runner.temp }}/mtgo-collection-candidate/validation.json
+            ${{ runner.temp }}/mtgo-collection-candidate/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Package resumable fetch checkpoint
         if: failure() && steps.checkpoint.outcome == 'success'
@@ -258,70 +267,40 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-      - name: Package fetched candidate for the build job
-        if: steps.generation-subject.outputs.needed == 'true'
-        shell: bash
-        run: |
-          ARTIFACT_DIR="$RUNNER_TEMP/mtgo-fetch-candidate"
-          mkdir -p "$ARTIFACT_DIR"
-          tar -cf "$ARTIFACT_DIR/fetched-inputs.tar" data fetched.txt
-          cp "$RUNNER_TEMP/production-baseline.json" "$ARTIFACT_DIR/production-baseline.json"
-          (
-            cd "$ARTIFACT_DIR"
-            sha256sum fetched-inputs.tar production-baseline.json > SHA256SUMS
-          )
-
-      - name: Upload immutable fetched candidate
-        if: steps.generation-subject.outputs.needed == 'true'
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: mtgo-fetch-candidate
-          path: ${{ runner.temp }}/mtgo-fetch-candidate
-          if-no-files-found: error
-          retention-days: 1
-
       - name: Write fetch summary
         if: always()
-        shell: bash
         run: |
           {
-            echo "## MTGO production fetch"
-            echo
-            echo "- Job result: ${{ job.status }}"
-            echo "- Trigger: ${{ github.event_name }}"
-            echo "- Candidate transfer: immutable \`mtgo-fetch-candidate\` artifact"
-            echo "- Generation subject: \`${{ steps.generation-subject.outputs.sha256 || 'not-reached' }}\`"
-            echo "- Build required: \`${{ steps.generation-subject.outputs.needed || 'not-reached' }}\`"
-            echo "- Restart transfer: a seven-day \`mtgo-fetch-checkpoint\` reused when relevant inputs and the operation plan remain unchanged"
-            echo "- Transient MTGO event recovery: three rounds with 120-second and 300-second cooldowns"
-            echo "- Event formats: ${MTGO_EVENT_FORMATS}"
-            echo "- Match formats: ${MTGO_PRODUCT_FORMATS}"
-            echo "- The checkpoint is verified before reuse and is never sent to build or publish."
-            echo "- No repository write permission is available to this job; Actions read is limited to locating a prior checkpoint."
+            echo "## MTGO input collection"
+            echo "- Result: ${{ job.status }}"
+            echo "- Inputs changed: ${{ steps.export.outputs.changed || 'not-reached' }}"
+            echo "- Candidate: encrypted mtgo-collection-candidate; retained for 30 days"
+            echo "- Partial fetch: compatible seven-day mtgo-fetch-checkpoint remains reusable"
+            echo "- Daily collection does not classify, generate public products or request Pages delivery."
           } >> "$GITHUB_STEP_SUMMARY"
 
-  build:
-    name: Build and validate MTGO candidate
-    if: >-
-      github.ref == 'refs/heads/master' &&
-      needs.fetch.outputs.generation-needed == 'true'
+  retain:
+    name: Retain collected MTGO inputs
+    if: github.ref == 'refs/heads/master'
     needs: fetch
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    environment: product-archive
+    timeout-minutes: 15
     outputs:
-      generation-subject-sha256: ${{ needs.fetch.outputs.generation-subject-sha256 }}
-      validated-output-sha256: ${{ steps.output-evidence.outputs.sha256 }}
+      retained-commit: ${{ steps.retain.outputs.commit }}
+      source-commit: ${{ github.sha }}
     permissions:
-      contents: read
+      actions: read
+      contents: write
     env:
-      PYTHONPATH: src
+      PYTHONPATH: .:src
     steps:
-      - name: Check out full history without persisted credentials
+      - name: Check out full history for input retention
         uses: actions/checkout@v7.0.0
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
-          persist-credentials: false
+          persist-credentials: true
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v6.3.0
@@ -331,197 +310,11 @@ jobs:
       - name: Install pinned runtime dependencies
         run: python -m pip install --disable-pip-version-check -r requirements.txt
 
-      - name: Select registry-admitted production formats
-        shell: bash
-        run: |
-          COLLECTION_FORMATS=$(python -B validate_production_candidate.py formats --kind collection)
-          PRODUCT_FORMATS=$(python -B validate_production_candidate.py formats --kind product)
-          echo "MTGO_EVENT_FORMATS=$COLLECTION_FORMATS" >> "$GITHUB_ENV"
-          echo "MTGO_PRODUCT_FORMATS=$PRODUCT_FORMATS" >> "$GITHUB_ENV"
-          echo "MTGO_HIERARCHY_FORMATS=$PRODUCT_FORMATS" >> "$GITHUB_ENV"
-
-      - name: Download immutable fetched candidate
+      - name: Download existing collected inputs
         uses: actions/download-artifact@v4.3.0
         with:
-          name: mtgo-fetch-candidate
-          path: ${{ runner.temp }}/mtgo-fetch-candidate
-
-      - name: Verify and restore fetched candidate
-        shell: bash
-        run: |
-          ARTIFACT_DIR="$RUNNER_TEMP/mtgo-fetch-candidate"
-          (
-            cd "$ARTIFACT_DIR"
-            sha256sum --check SHA256SUMS
-          )
-          tar -xf "$ARTIFACT_DIR/fetched-inputs.tar" -C "$GITHUB_WORKSPACE"
-
-      - name: Build product statistics
-        shell: bash
-        run: |
-          for FORMAT in $MTGO_PRODUCT_FORMATS; do
-            echo "Building MTGO statistics for ${FORMAT}."
-            python -B -m mtgmeta.mtgo --format "$FORMAT" build-statistics
-          done
-
-      - name: Build product matchup statistics
-        shell: bash
-        run: |
-          for FORMAT in $MTGO_PRODUCT_FORMATS; do
-            echo "Building matchup statistics for ${FORMAT}."
-            python -B -m mtgmeta.mtgo --format "$FORMAT" build-matchups
-          done
-
-      - name: Build product completeness reports
-        shell: bash
-        run: |
-          for FORMAT in $MTGO_PRODUCT_FORMATS; do
-            echo "Building MTGO completeness reports for ${FORMAT}."
-            python -B -m mtgmeta.mtgo --format "$FORMAT" build-completeness
-          done
-
-      - name: Build weekly Top 8 decklists
-        shell: bash
-        run: |
-          for FORMAT in $MTGO_PRODUCT_FORMATS; do
-            echo "Building weekly MTGO Top 8 data for ${FORMAT}."
-            python -B -m mtgmeta.mtgo --format "$FORMAT" build-top8
-          done
-
-      - name: Prepare Landing screening candidates when absent
-        continue-on-error: true
-        shell: bash
-        run: |
-          STATUS=0
-          for FORMAT in $MTGO_PRODUCT_FORMATS; do
-            echo "Preparing Landing screening candidates for ${FORMAT}."
-            python -B -m mtgmeta.mtgo --format "$FORMAT" landing-review prepare --if-absent || STATUS=$?
-          done
-          exit "$STATUS"
-
-      - name: Build latest MTGO Landing documents
-        shell: bash
-        run: |
-          for FORMAT in $MTGO_PRODUCT_FORMATS; do
-            echo "Building latest MTGO Landing for ${FORMAT}."
-            python -B -m mtgmeta.mtgo --format "$FORMAT" build-landing
-          done
-
-      - name: Generate maintained hierarchy catalogs
-        shell: bash
-        run: |
-          for FORMAT in $MTGO_HIERARCHY_FORMATS; do
-            echo "Generating archetype hierarchy for ${FORMAT}."
-            python -B -m mtgmeta.mtgo --format "$FORMAT" generate-hierarchy
-          done
-
-      - name: Generate and strictly validate product classification diagnostics
-        shell: bash
-        run: |
-          for FORMAT in $MTGO_PRODUCT_FORMATS; do
-            echo "Generating classification diagnostics for ${FORMAT}."
-            python -B -m mtgmeta.mtgo --format "$FORMAT" classification-reports --strict
-          done
-
-      - name: Generate product metadata
-        shell: bash
-        run: |
-          for FORMAT in $MTGO_PRODUCT_FORMATS; do
-            echo "Binding all reviewed MTGO output bytes for ${FORMAT}."
-            python -B -m mtgmeta.mtgo --format "$FORMAT" generate-metadata
-          done
-
-      - name: Generate format-first consumer catalog
-        run: python -B -m mtgmeta.catalog --root .
-
-      - name: Validate production candidate scope and data increments
-        run: >-
-          python -B validate_production_candidate.py validate
-          --baseline "$RUNNER_TEMP/mtgo-fetch-candidate/production-baseline.json"
-
-      - name: Check changed product outputs
-        run: python -B tools/check_outputs.py --changed-from HEAD
-
-      - name: Package validated output for the publish job
-        id: output-evidence
-        shell: bash
-        run: |
-          ARTIFACT_DIR="$RUNNER_TEMP/mtgo-build-candidate"
-          mkdir -p "$ARTIFACT_DIR"
-          python -B tools/integrate_mtgo_candidate.py export --artifact "$ARTIFACT_DIR"
-          printf '%s\n' '${{ needs.fetch.outputs.generation-subject-sha256 }}' \
-            > "$ARTIFACT_DIR/generation-subject.txt"
-          (
-            cd "$ARTIFACT_DIR"
-            sha256sum output.patch source.txt generation-subject.txt > SHA256SUMS
-          )
-          OUTPUT_SHA="$(sha256sum "$ARTIFACT_DIR/output.patch" | awk '{print $1}')"
-          echo "sha256=$OUTPUT_SHA" >> "$GITHUB_OUTPUT"
-
-      - name: Encrypt unpublished output without archive credentials
-        env:
-          CERTIFICATE: ${{ vars.ARCHIVE_HANDOFF_CERT }}
-        run: |
-          printf '%s' "$CERTIFICATE" > "$RUNNER_TEMP/mtgo-public.pem"
-          openssl cms -encrypt -binary -stream -outform DER -aes-256-gcm \
-            -in "$RUNNER_TEMP/mtgo-build-candidate/output.patch" \
-            -out "$RUNNER_TEMP/mtgo-build-candidate/output.patch.cms" \
-            -recip "$RUNNER_TEMP/mtgo-public.pem" \
-            -keyopt rsa_padding_mode:oaep -keyopt rsa_oaep_md:sha256
-
-      - name: Upload immutable validated output
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: mtgo-build-candidate
-          path: |
-            ${{ runner.temp }}/mtgo-build-candidate/output.patch.cms
-            ${{ runner.temp }}/mtgo-build-candidate/source.txt
-            ${{ runner.temp }}/mtgo-build-candidate/generation-subject.txt
-            ${{ runner.temp }}/mtgo-build-candidate/SHA256SUMS
-          if-no-files-found: error
-          retention-days: 1
-
-      - name: Write build summary
-        if: always()
-        shell: bash
-        run: |
-          {
-            echo "## MTGO production build and validation"
-            echo
-            echo "- Job result: ${{ job.status }}"
-            echo "- Candidate transfer: verified \`mtgo-fetch-candidate\` input and immutable \`mtgo-build-candidate\` output"
-            echo "- Product formats: ${MTGO_PRODUCT_FORMATS}"
-            echo "- Hierarchy formats: ${MTGO_HIERARCHY_FORMATS}"
-            echo "- Validation: selected production scope and increments, changed output schemas and relevant format arithmetic. No mechanism suite or browser test is implied by this run."
-            echo "- No repository write permission is available to this job."
-          } >> "$GITHUB_STEP_SUMMARY"
-
-  publish:
-    name: Publish validated MTGO data
-    if: github.ref == 'refs/heads/master'
-    needs: build
-    runs-on: ubuntu-latest
-    environment: product-archive
-    timeout-minutes: 15
-    outputs:
-      published-commit: ${{ steps.publish.outputs.commit }}
-      source-commit: ${{ github.sha }}
-    permissions:
-      actions: write
-      contents: write
-    steps:
-      - name: Check out full history for publication
-        uses: actions/checkout@v7.0.0
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
-          persist-credentials: true
-
-      - name: Download existing validated output
-        uses: actions/download-artifact@v4.3.0
-        with:
-          name: mtgo-build-candidate
-          path: ${{ runner.temp }}/mtgo-build-candidate
+          name: mtgo-collection-candidate
+          path: ${{ runner.temp }}/mtgo-collection-candidate
 
       - name: Decrypt the existing output in the trusted integration job
         env:
@@ -532,16 +325,16 @@ jobs:
           trap 'rm -f "$KEY"' EXIT
           printf '%s' "$HANDOFF_KEY" > "$KEY"
           openssl cms -decrypt -binary -inform DER \
-            -in "$RUNNER_TEMP/mtgo-build-candidate/output.patch.cms" \
-            -inkey "$KEY" -out "$RUNNER_TEMP/mtgo-build-candidate/output.patch"
+            -in "$RUNNER_TEMP/mtgo-collection-candidate/collection.patch.gz.cms" \
+            -inkey "$KEY" -out "$RUNNER_TEMP/mtgo-collection-candidate/collection.patch.gz"
+          gzip -d "$RUNNER_TEMP/mtgo-collection-candidate/collection.patch.gz"
 
       - name: Verify candidate transfer
         shell: bash
         run: |
-          ARTIFACT_DIR="$RUNNER_TEMP/mtgo-build-candidate"
+          ARTIFACT_DIR="$RUNNER_TEMP/mtgo-collection-candidate"
           (cd "$ARTIFACT_DIR" && sha256sum --check SHA256SUMS)
-          test "$(sha256sum "$ARTIFACT_DIR/output.patch" | awk '{print $1}')" = '${{ needs.build.outputs.validated-output-sha256 }}'
-          test "$(tr -d '\r\n' < "$ARTIFACT_DIR/generation-subject.txt")" = '${{ needs.build.outputs.generation-subject-sha256 }}'
+          test "$(sha256sum "$ARTIFACT_DIR/collection.patch" | awk '{print $1}')" = '${{ needs.fetch.outputs.collection-sha256 }}'
           test "$(tr -d '\r\n' < "$ARTIFACT_DIR/source.txt")" = "$GITHUB_SHA"
 
       - name: Integrate the existing result with current master
@@ -551,11 +344,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch --no-tags origin master
-          python -B tools/integrate_mtgo_candidate.py integrate \
-            --artifact "$RUNNER_TEMP/mtgo-build-candidate" --run "$GITHUB_RUN_ID"
+          python -B tools/integrate_mtgo_collection.py integrate \
+            --artifact "$RUNNER_TEMP/mtgo-collection-candidate" --run "$GITHUB_RUN_ID"
 
       - name: Push only the prepared data change and query actual result
-        id: publish
+        id: retain
         shell: bash
         env:
           CANDIDATE_COMMIT: ${{ steps.integrate.outputs.commit }}
@@ -568,71 +361,46 @@ jobs:
           fi
           git fetch --no-tags origin master
           if ! git merge-base --is-ancestor "$CANDIDATE_COMMIT" origin/master; then
-            echo "Candidate retained in mtgo-build-candidate. Resume the failed publish job and integrate only; do not restart collection or generation." >&2
+            echo "Candidate retained in mtgo-collection-candidate. Resume the failed retain job and integrate only; do not restart collection." >&2
             exit 1
           fi
           echo "commit=$CANDIDATE_COMMIT" >> "$GITHUB_OUTPUT"
           echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
-          echo "status=published" >> "$GITHUB_OUTPUT"
+          echo "status=retained" >> "$GITHUB_OUTPUT"
 
-      - name: Prepare published data for automatic Pages delivery
-        if: steps.publish.outputs.status == 'published' && steps.publish.outputs.changed == 'true'
-        uses: actions/github-script@v7.0.1
-        with:
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: "prepare-pages.yml",
-              ref: "master",
-              inputs: {
-                source: "${{ steps.publish.outputs.commit }}",
-                operation: "mtgo-${{ github.run_id }}",
-                publish_automatically: "true",
-              },
-            });
-
-      - name: Write publication summary
+      - name: Write retention summary
         if: always()
         shell: bash
         run: |
           {
-            echo "## MTGO data integration"
+            echo "## MTGO input retention"
             echo "- Result: ${{ job.status }}"
-            echo "- Existing candidate: mtgo-build-candidate from this run"
-            echo "- Integrated commit: ${{ steps.publish.outputs.commit || 'not-published' }}"
-            echo "- Changed outputs: ${{ steps.publish.outputs.changed || 'not-published' }}"
-            echo "- Disjoint changes are preserved. Changed inputs or overlapping outputs need focused integration, not automatic workflow restart or Owner reauthorization."
-            echo "- If publication fails, resume the failed job with the retained candidate; successful fetch and build results remain reusable."
+            echo "- Existing candidate: mtgo-collection-candidate from this run"
+            echo "- Integrated commit: ${{ steps.retain.outputs.commit || 'not-retained' }}"
+            echo "- Changed inputs: ${{ steps.retain.outputs.changed || 'not-retained' }}"
+            echo "- Disjoint changes are preserved. Overlapping collected inputs need focused integration, not automatic workflow restart or Owner reauthorization."
+            echo "- If retention fails, resume this job with the retained candidate; successful collection remains reusable."
           } >> "$GITHUB_STEP_SUMMARY"
 
   weekly-readiness:
-    name: Build private weekly maintenance readiness
-    if: >-
-      always() && github.ref == 'refs/heads/master' &&
-      needs.fetch.result == 'success' &&
-      ((needs.fetch.outputs.generation-needed == 'true' && needs.publish.result == 'success') ||
-      (needs.fetch.outputs.generation-needed == 'false' && needs.publish.result == 'skipped'))
-    needs:
-      - fetch
-      - publish
+    name: Summarize retained inputs for weekly maintenance
+    if: github.ref == 'refs/heads/master'
+    needs: retain
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:
       artifact-name: ${{ steps.generate.outputs.artifact-name }}
       readiness-digest: ${{ steps.generate.outputs.readiness-digest }}
-      review-id: ${{ steps.generate.outputs.review-id }}
       status: ${{ steps.generate.outputs.status }}
-      week: ${{ steps.generate.outputs.week }}
     permissions:
       contents: read
     env:
-      PYTHONPATH: src
+      PYTHONPATH: .:src
     steps:
-      - name: Check out the verified production publication
+      - name: Check out the verified retained inputs
         uses: actions/checkout@v7.0.0
         with:
-          ref: ${{ needs.publish.outputs.published-commit || github.sha }}
+          ref: ${{ needs.retain.outputs.retained-commit }}
           fetch-depth: 1
           persist-credentials: false
 
@@ -644,24 +412,22 @@ jobs:
       - name: Install pinned runtime dependencies
         run: python -m pip install --disable-pip-version-check -r requirements.txt
 
-      - name: Generate the private weekly handoff
+      - name: Generate the lightweight private collection notice
         id: generate
         shell: bash
         env:
-          PUBLICATION_SHA: ${{ needs.publish.outputs.published-commit || github.sha }}
+          RETAINED_SHA: ${{ needs.retain.outputs.retained-commit }}
         run: |
           OUTPUT_DIR="$RUNNER_TEMP/weekly-maintenance-readiness"
           mkdir -p "$OUTPUT_DIR"
-          python -B tools/generate_weekly_maintenance_readiness.py \
+          python -B tools/generate_mtgo_collection_readiness.py \
             --repository-root . \
             --output "$OUTPUT_DIR/readiness.json" \
-            --publication-sha "$PUBLICATION_SHA" \
-            --production-run-id "$GITHUB_RUN_ID" \
-            --production-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --retained-sha "$RETAINED_SHA" \
+            --run-id "$GITHUB_RUN_ID" \
+            --run-attempt "$GITHUB_RUN_ATTEMPT" \
             --source-sha "$GITHUB_SHA" \
             --github-output "$GITHUB_OUTPUT"
-          WEEK="$(python -c 'import json,os; d=json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "weekly-maintenance-readiness", "readiness.json"), encoding="utf-8")); print(d.get("review_label") or d["week"]["id"])')"
-          echo "artifact-name=weekly-maintenance-readiness-${WEEK}" >> "$GITHUB_OUTPUT"
 
       - name: Encrypt the private weekly handoff without write credentials
         env:
@@ -687,15 +453,14 @@ jobs:
         shell: bash
         run: |
           {
-            echo "## Weekly MTGO maintenance readiness"
+            echo "## Retained-input notice for weekly maintenance"
             echo
             echo "- Job result: ${{ job.status }}"
-            echo "- Review week: ${{ steps.generate.outputs.week || 'not-reached' }}"
             echo "- Readiness status: ${{ steps.generate.outputs.status || 'not-reached' }}"
             echo "- Readiness digest: \`${{ steps.generate.outputs.readiness-digest || 'not-reached' }}\`"
             echo "- Handoff artifact: \`${{ steps.generate.outputs.artifact-name || 'not-reached' }}\`"
             echo "- The public workflow attachment contains ciphertext only; the readable report is retained in the private archive, outside Pages packages."
-            echo "- No Codex scheduled task or repository mutation is authorized by this handoff."
+            echo "- This is an input inventory, not classification review, acceptance or publication. Full review remains an on-demand weekly operation."
           } >> "$GITHUB_STEP_SUMMARY"
 
   weekly-readiness-notify:
@@ -816,6 +581,35 @@ jobs:
                 state: "closed",
                 state_reason: "completed",
               });
+            }
+            if (readiness.schema_version === "1.9.0") {
+              // An inventory never closes or overwrites a full weekly review.
+              // Keep one deduplicated collection notice; no daily comment spam.
+              const marker = "<!-- mtgo-retained-inputs -->";
+              const digestMarker = `<!-- collection-digest:${readiness.readiness_digest} -->`;
+              const pending = readiness.formats.flatMap(item => item.pending_weeks.map(week =>
+                `- ${item.format} / ${week.week}: ${week.unadmitted_event_ids.length} retained event(s) not yet listed in data admissions.`));
+              const deferred = readiness.formats.reduce((n, item) => n + item.deferred_sources.length, 0);
+              const existing = issues.find(issue => !issue.pull_request && issue.body?.includes(marker) && issue.state === "open");
+              if (!existing && !pending.length && !deferred) return;
+              if (existing?.body?.includes(digestMarker)) return;
+              const body = [marker, digestMarker, "## Retained MTGO inputs", "",
+                `- Collection run: [${context.runId}](${runUrl})`,
+                `- Retained commit: \`${readiness.collection.retained_sha}\``,
+                "", ...pending,
+                ...(pending.length ? [] : ["No completed-week events outside recorded data admissions were found."]),
+                `- Sources awaiting collection: ${deferred}.`, "",
+                "This lightweight inventory does not run classification, verify acceptance, establish completeness, or publish products.",
+                "Full classification materials are prepared through the existing weekly review entry point. Existing weekly review notices remain unchanged.",
+              ].join("\n");
+              if (existing) {
+                await github.rest.issues.update({owner: context.repo.owner, repo: context.repo.repo, issue_number: existing.number, body});
+              } else {
+                await github.rest.issues.create({owner: context.repo.owner, repo: context.repo.repo, title: "MTGO retained inputs for weekly maintenance", body});
+              }
+              core.summary.addRaw("Retained-input inventory updated; weekly acceptance was not inferred.").addEOL();
+              await core.summary.write({overwrite: false});
+              return;
             }
             if (readiness.schema_version === "1.7.0") {
               // A legacy shared notice requires verified completion of both formats.
@@ -1003,14 +797,13 @@ jobs:
             await core.summary.write({ overwrite: false });
 
   notify:
-    name: Record deduplicated MTGO production failure
+    name: Record deduplicated MTGO collection failure
     if: >-
       always() && github.ref == 'refs/heads/master' &&
-      (needs.fetch.result == 'failure' || needs.build.result == 'failure' || needs.publish.result == 'failure')
+      (needs.fetch.result == 'failure' || needs.retain.result == 'failure')
     needs:
       - fetch
-      - build
-      - publish
+      - retain
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -1021,15 +814,12 @@ jobs:
         shell: bash
         env:
           FETCH_RESULT: ${{ needs.fetch.result }}
-          BUILD_RESULT: ${{ needs.build.result }}
-          PUBLISH_RESULT: ${{ needs.publish.result }}
+          RETAIN_RESULT: ${{ needs.retain.result }}
         run: |
           if [ "$FETCH_RESULT" = "failure" ]; then
             STAGE="fetch"
-          elif [ "$BUILD_RESULT" = "failure" ]; then
-            STAGE="build"
-          elif [ "$PUBLISH_RESULT" = "failure" ]; then
-            STAGE="publish"
+          elif [ "$RETAIN_RESULT" = "failure" ]; then
+            STAGE="retain"
           else
             echo "No failed production stage was available for notification." >&2
             exit 1

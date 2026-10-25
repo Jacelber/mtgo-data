@@ -8,7 +8,7 @@
   const WILSON_Z = 1.96;
   const MULTI_EVENT_SCHEMA_VERSION = "1.0.0";
   const MULTI_EVENT_LOW_SAMPLE_THRESHOLD = 20;
-  const SUPPORTED_MULTI_EVENT_MATCHUP_SCHEMAS = new Set(["1.0.0"]);
+  const SUPPORTED_MULTI_EVENT_MATCHUP_SCHEMAS = new Set(["1.0.0", "1.1.0"]);
   const SUPPORTED_MULTI_EVENT_CATALOG_SCHEMAS = new Set(["1.2.0"]);
   const SUPPORTED_MULTI_EVENT_COMPATIBILITY_SCHEMAS = new Set(["1.0.0"]);
   const SUPPORTED_ACTIVE_TAXONOMY_SCHEMAS = new Set(["1.0.0"]);
@@ -209,7 +209,7 @@
     return { parentIndex, leafIndex, parentOrder, leafOrder };
   }
 
-  function deduplicateMultiEventInputs(eventInputs) {
+  function deduplicateMultiEventInputs(eventInputs, minimum = 2) {
     if (!Array.isArray(eventInputs)) {
       multiEventFail("invalid_event_input", "event inputs must be an array");
     }
@@ -253,7 +253,7 @@
       }
       unique.set(eventId, { eventId, meta, matchup, eventInput });
     });
-    if (unique.size < 2) {
+    if (unique.size < minimum) {
       multiEventFail("too_few_events", "at least two distinct event IDs are required");
     }
     return [...unique.values()].sort((left, right) => (
@@ -363,11 +363,11 @@
     return { parentOrder, leafOrder };
   }
 
-  function validateMultiEventScope(scope, eventId, parentOrder, leafOrder) {
+  function validateMultiEventScope(scope, eventId, parentOrder, leafOrder, sparse = false) {
     const eventScope = multiEventObject(
       scope,
       "invalid_event_input",
-      `event ${eventId} all_constructed scope is invalid`
+      `event ${eventId} scope is invalid`
     );
     if (
       !sameValue(eventScope.parent_order, parentOrder)
@@ -381,7 +381,7 @@
     const rawMatrix = multiEventObject(
       eventScope.leaf_matrix,
       "invalid_event_input",
-      `event ${eventId} all_constructed leaf matrix is invalid`
+      `event ${eventId} leaf matrix is invalid`
     );
     if (!sameValue(Object.keys(rawMatrix).sort(), [...leafOrder].sort())) {
       multiEventFail(
@@ -397,7 +397,8 @@
         "invalid_event_input",
         `event ${eventId} matrix row ${rowId} is invalid`
       );
-      if (!sameValue(Object.keys(rawColumns).sort(), [...leafOrder].sort())) {
+      if (Object.keys(rawColumns).some(id => !leafOrder.includes(id))
+        || (!sparse && !sameValue(Object.keys(rawColumns).sort(), [...leafOrder].sort()))) {
         multiEventFail(
           "matrix_invariant_failed",
           `event ${eventId} matrix row ${rowId} has incomplete columns`
@@ -406,7 +407,8 @@
       matrix[rowId] = {};
       leafOrder.forEach(columnId => {
         const rawCell = multiEventObject(
-          rawColumns[columnId],
+          Object.hasOwn(rawColumns, columnId)
+            ? rawColumns[columnId] : { wins: 0, losses: 0, draws: 0 },
           "invalid_event_input",
           `event ${eventId} matrix cell ${rowId}/${columnId} is invalid`
         );
@@ -421,6 +423,14 @@
           losses: rawCell.losses,
           draws: rawCell.draws,
         };
+        if ((rawCell.matches !== undefined
+          && rawCell.matches !== cell.wins + cell.losses + cell.draws)
+          || (rawCell.literal_record !== undefined
+            && (!rawCell.literal_record || COUNT_FIELDS.some(field =>
+              rawCell.literal_record[field] !== cell[field])))) {
+          multiEventFail("matrix_invariant_failed",
+            `event ${eventId} matrix cell ${rowId}/${columnId} has inconsistent records`);
+        }
         matrix[rowId][columnId] = cell;
         observations += cell.wins + cell.losses + cell.draws;
       });
@@ -521,6 +531,93 @@
     }));
   }
 
+  function validateEventMatchup(meta, matchup, canonicalHierarchy = matchup?.hierarchy) {
+    const [{ eventId }] = deduplicateMultiEventInputs([{ meta, matchup }], 1);
+    const canonical = canonicalMultiEventHierarchy(canonicalHierarchy);
+    if (meta.document_type !== "meta" || matchup.document_type !== "matchup") {
+      multiEventFail("invalid_event_input", `event ${eventId} requires meta and matchup`);
+    }
+    if (meta.source !== "melee" || matchup.source !== "melee") {
+      multiEventFail("source_mismatch", `event ${eventId} is not from Melee`);
+    }
+    if (meta.product !== "tabletop-major-events") {
+      multiEventFail("product_mismatch", `event ${eventId} is not a Tabletop input`);
+    }
+    const eventFormat = meta.format;
+    if (typeof eventFormat !== "string" || matchup.format !== eventFormat) {
+      multiEventFail("format_mismatch", `event ${eventId} metadata and format differ`);
+    }
+    const sparse = matchup.schema_version === "1.1.0";
+    if (!SUPPORTED_MULTI_EVENT_MATCHUP_SCHEMAS.has(matchup.schema_version)
+      || (matchup.matrix_encoding ?? null) !== (sparse ? "sparse-zero-v1" : null)) {
+      multiEventFail(
+        "unsupported_matchup_schema",
+        `event ${eventId} matchup Schema is unsupported`
+      );
+    }
+    const quality = multiEventObject(
+      meta.quality,
+      "invalid_event_input",
+      `event ${eventId} quality is invalid`
+    );
+    if (
+      quality.blocking !== false
+      || !["pass", "warning"].includes(quality.status)
+    ) {
+      multiEventFail("blocking_quality", `event ${eventId} has blocking quality`);
+    }
+    const scopes = multiEventObject(
+      matchup.scopes,
+      "invalid_event_input",
+      `event ${eventId} scopes are invalid`
+    );
+    if (
+      !Array.isArray(meta.scope_order)
+      || !meta.scope_order.includes("all_constructed")
+      || !sameValue(matchup.scope_order, meta.scope_order)
+      || !Object.hasOwn(scopes, "all_constructed")
+      || new Set(meta.scope_order).size !== meta.scope_order.length
+      || meta.scope_order.some(scope => !["day1", "day2", "all_constructed"].includes(scope))
+      || !sameValue(Object.keys(scopes).sort(), [...meta.scope_order].sort())
+    ) {
+      multiEventFail(
+        "missing_all_constructed_scope",
+        `event ${eventId} does not expose all_constructed`
+      );
+    }
+    const taxonomy = validateMultiEventTaxonomy(meta, matchup, eventId);
+    const metaEvent = multiEventObject(
+      meta.event,
+      "invalid_event_input",
+      `event ${eventId} has no event metadata`
+    );
+    const matchupEvent = multiEventObject(
+      matchup.event,
+      "invalid_event_input",
+      `event ${eventId} matchup has no event metadata`
+    );
+    if (
+      typeof metaEvent.name !== "string"
+      || !metaEvent.name
+      || matchupEvent.name !== metaEvent.name
+    ) {
+      multiEventFail("event_identity_mismatch", `event ${eventId} name differs`);
+    }
+    const identity = validateMultiEventIdentitySubset(
+      matchup.hierarchy,
+      eventId,
+      canonical
+    );
+    const validatedScopes = {};
+    meta.scope_order.forEach(scopeName => {
+      validatedScopes[scopeName] = validateMultiEventScope(
+        scopes[scopeName], `${eventId}/${scopeName}`,
+        identity.parentOrder, identity.leafOrder, sparse
+      );
+    });
+    return { eventFormat, taxonomy, identity, metaEvent, validatedScopes };
+  }
+
   function aggregateMultiEventMatchups(eventInputs, canonicalHierarchy) {
     const canonical = canonicalMultiEventHierarchy(canonicalHierarchy);
     const inputs = deduplicateMultiEventInputs(eventInputs);
@@ -532,57 +629,12 @@
     let taxonomyDigest = null;
 
     inputs.forEach(({ eventId, meta, matchup }) => {
-      if (meta.document_type !== "meta" || matchup.document_type !== "matchup") {
-        multiEventFail("invalid_event_input", `event ${eventId} requires meta and matchup`);
-      }
-      if (meta.source !== "melee" || matchup.source !== "melee") {
-        multiEventFail("source_mismatch", `event ${eventId} is not from Melee`);
-      }
-      if (meta.product !== "tabletop-major-events") {
-        multiEventFail("product_mismatch", `event ${eventId} is not a Tabletop input`);
-      }
-      const eventFormat = meta.format;
-      if (typeof eventFormat !== "string" || matchup.format !== eventFormat) {
-        multiEventFail("format_mismatch", `event ${eventId} metadata and format differ`);
-      }
+      const { eventFormat, taxonomy, identity, metaEvent, validatedScopes } =
+        validateEventMatchup(meta, matchup, canonicalHierarchy);
       if (formatId === null) formatId = eventFormat;
       else if (eventFormat !== formatId) {
         multiEventFail("format_mismatch", "selected events use different formats");
       }
-      if (!SUPPORTED_MULTI_EVENT_MATCHUP_SCHEMAS.has(matchup.schema_version)) {
-        multiEventFail(
-          "unsupported_matchup_schema",
-          `event ${eventId} matchup Schema is unsupported`
-        );
-      }
-      const quality = multiEventObject(
-        meta.quality,
-        "invalid_event_input",
-        `event ${eventId} quality is invalid`
-      );
-      if (
-        quality.blocking !== false
-        || !["pass", "warning"].includes(quality.status)
-      ) {
-        multiEventFail("blocking_quality", `event ${eventId} has blocking quality`);
-      }
-      const scopes = multiEventObject(
-        matchup.scopes,
-        "invalid_event_input",
-        `event ${eventId} scopes are invalid`
-      );
-      if (
-        !Array.isArray(meta.scope_order)
-        || !meta.scope_order.includes("all_constructed")
-        || !sameValue(matchup.scope_order, meta.scope_order)
-        || !Object.hasOwn(scopes, "all_constructed")
-      ) {
-        multiEventFail(
-          "missing_all_constructed_scope",
-          `event ${eventId} does not expose all_constructed`
-        );
-      }
-      const taxonomy = validateMultiEventTaxonomy(meta, matchup, eventId);
       if (taxonomyVersion === null) taxonomyVersion = taxonomy.version;
       else if (taxonomy.version !== taxonomyVersion) {
         multiEventFail(
@@ -597,34 +649,7 @@
           "selected events use different taxonomy digests"
         );
       }
-      const metaEvent = multiEventObject(
-        meta.event,
-        "invalid_event_input",
-        `event ${eventId} has no event metadata`
-      );
-      const matchupEvent = multiEventObject(
-        matchup.event,
-        "invalid_event_input",
-        `event ${eventId} matchup has no event metadata`
-      );
-      if (
-        typeof metaEvent.name !== "string"
-        || !metaEvent.name
-        || matchupEvent.name !== metaEvent.name
-      ) {
-        multiEventFail("event_identity_mismatch", `event ${eventId} name differs`);
-      }
-      const identity = validateMultiEventIdentitySubset(
-        matchup.hierarchy,
-        eventId,
-        canonical
-      );
-      const scope = validateMultiEventScope(
-        scopes.all_constructed,
-        eventId,
-        identity.parentOrder,
-        identity.leafOrder
-      );
+      const scope = validatedScopes.all_constructed;
       identity.parentOrder.forEach(identityId => observedParentIds.add(identityId));
       identity.leafOrder.forEach(identityId => observedLeafIds.add(identityId));
       validated.push({
@@ -1284,6 +1309,7 @@
   }
 
   return {
+    validateEventMatchup,
     activeMatchupDocument,
     buildMultiEventMatchupContract,
     buildView,

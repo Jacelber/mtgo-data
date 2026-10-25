@@ -2,7 +2,7 @@
   "schema_version": "1.1.0",
   "format": "standard",
   "source": "mtgo",
-  "classifier_digest": "d0495b42f3e9597d7b4e4a890c98354c5b71110b2eac4bb9e82aa29c2d048bee",
+  "classifier_digest": "77aa77d0fdbc62064681155494279247e37fa8f8de789f5f187595e4fcdc9248",
   "period": {
     "type": "1w",
     "start": "2026-10-12",
@@ -168,7 +168,8 @@
         "subtype_ids": [
           "boros-manufacturing/boros",
           "boros-manufacturing/jeskai",
-          "boros-manufacturing/mardu"
+          "boros-manufacturing/mardu",
+          "boros-manufacturing/wubr"
         ]
       },
       {
@@ -261,6 +262,7 @@
         "expandable": true,
         "subtype_ids": [
           "dimir-spider-man/dimir",
+          "dimir-spider-man/grixis",
           "dimir-spider-man/sultai"
         ]
       },
@@ -307,6 +309,12 @@
       {
         "id": "golgari-demon",
         "name": "Golgari Demon",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "golgari-landfall",
+        "name": "Golgari Landfall",
         "expandable": false,
         "subtype_ids": []
       },
@@ -515,6 +523,12 @@
         "subtype_ids": []
       },
       {
+        "id": "jeskai-looting",
+        "name": "Jeskai Looting",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "jeskai-momo",
         "name": "Jeskai Momo",
         "expandable": false,
@@ -562,7 +576,9 @@
         "expandable": true,
         "subtype_ids": [
           "kona-omniscience/bant",
+          "kona-omniscience/four-color",
           "kona-omniscience/simic",
+          "kona-omniscience/sultai",
           "kona-omniscience/temur"
         ]
       },
@@ -721,6 +737,12 @@
         "subtype_ids": []
       },
       {
+        "id": "naya-landfall",
+        "name": "Naya Landfall",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
         "id": "orzhov-control",
         "name": "Orzhov Control",
         "expandable": false,
@@ -759,6 +781,12 @@
       {
         "id": "rakdos-discard",
         "name": "Rakdos Discard",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "rakdos-goblins",
+        "name": "Rakdos Goblins",
         "expandable": false,
         "subtype_ids": []
       },
@@ -885,6 +913,12 @@
       {
         "id": "temur-otters",
         "name": "Temur Otters",
+        "expandable": false,
+        "subtype_ids": []
+      },
+      {
+        "id": "temur-prowess",
+        "name": "Temur Prowess",
         "expandable": false,
         "subtype_ids": []
       },
@@ -1145,6 +1179,14 @@
         "subtype_id": "mardu"
       },
       {
+        "id": "boros-manufacturing/wubr",
+        "kind": "subtype",
+        "name": "WUBR",
+        "display_name": "WUBR Manufacturing",
+        "parent_id": "boros-manufacturing",
+        "subtype_id": "wubr"
+      },
+      {
         "id": "boros-ponza",
         "kind": "archetype",
         "name": "Boros Ponza",
@@ -1265,6 +1307,14 @@
         "subtype_id": "dimir"
       },
       {
+        "id": "dimir-spider-man/grixis",
+        "kind": "subtype",
+        "name": "Grixis Spider-Man",
+        "display_name": "Grixis Spider-Man",
+        "parent_id": "dimir-spider-man",
+        "subtype_id": "grixis"
+      },
+      {
         "id": "dimir-spider-man/sultai",
         "kind": "subtype",
         "name": "Sultai Spider-Man",
@@ -1342,6 +1392,14 @@
         "name": "Golgari Demon",
         "display_name": "Golgari Demon",
         "parent_id": "golgari-demon",
+        "subtype_id": null
+      },
+      {
+        "id": "golgari-landfall",
+        "kind": "archetype",
+        "name": "Golgari Landfall",
+        "display_name": "Golgari Landfall",
+        "parent_id": "golgari-landfall",
         "subtype_id": null
       },
       {
@@ -1617,6 +1675,14 @@
         "subtype_id": null
       },
       {
+        "id": "jeskai-looting",
+        "kind": "archetype",
+        "name": "Jeskai Looting",
+        "display_name": "Jeskai Looting",
+        "parent_id": "jeskai-looting",
+        "subtype_id": null
+      },
+      {
         "id": "jeskai-momo",
         "kind": "archetype",
         "name": "Jeskai Momo",
@@ -1681,12 +1747,28 @@
         "subtype_id": "bant"
       },
       {
+        "id": "kona-omniscience/four-color",
+        "kind": "subtype",
+        "name": "Four-Color",
+        "display_name": "Four-Color Kona Omniscience",
+        "parent_id": "kona-omniscience",
+        "subtype_id": "four-color"
+      },
+      {
         "id": "kona-omniscience/simic",
         "kind": "subtype",
         "name": "Simic",
         "display_name": "Simic Kona Omniscience",
         "parent_id": "kona-omniscience",
         "subtype_id": "simic"
+      },
+      {
+        "id": "kona-omniscience/sultai",
+        "kind": "subtype",
+        "name": "Sultai",
+        "display_name": "Sultai Kona Omniscience",
+        "parent_id": "kona-omniscience",
+        "subtype_id": "sultai"
       },
       {
         "id": "kona-omniscience/temur",
@@ -1937,6 +2019,14 @@
         "subtype_id": null
       },
       {
+        "id": "naya-landfall",
+        "kind": "archetype",
+        "name": "Naya Landfall",
+        "display_name": "Naya Landfall",
+        "parent_id": "naya-landfall",
+        "subtype_id": null
+      },
+      {
         "id": "orzhov-control",
         "kind": "archetype",
         "name": "Orzhov Control",
@@ -1990,6 +2080,14 @@
         "name": "Rakdos Discard",
         "display_name": "Rakdos Discard",
         "parent_id": "rakdos-discard",
+        "subtype_id": null
+      },
+      {
+        "id": "rakdos-goblins",
+        "kind": "archetype",
+        "name": "Rakdos Goblins",
+        "display_name": "Rakdos Goblins",
+        "parent_id": "rakdos-goblins",
         "subtype_id": null
       },
       {
@@ -2158,6 +2256,14 @@
         "name": "Temur Otters",
         "display_name": "Temur Otters",
         "parent_id": "temur-otters",
+        "subtype_id": null
+      },
+      {
+        "id": "temur-prowess",
+        "kind": "archetype",
+        "name": "Temur Prowess",
+        "display_name": "Temur Prowess",
+        "parent_id": "temur-prowess",
         "subtype_id": null
       },
       {

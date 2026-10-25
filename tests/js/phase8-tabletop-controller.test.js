@@ -281,3 +281,21 @@ test("single-event scope restoration remains independent of multi-event scope", 
   });
   assert.equal(restored.scope, "day1");
 });
+
+test("new overview avoids decks; old overview loads its eligible-record fallback", async () => {
+  const documents = eventDocuments();
+  const base = "./stats/modern/melee/events/20";
+  const overview = documents.get(`${base}/overview.json`);
+  overview.schema_version = "1.2.0";
+  Object.values(overview.scopes).forEach(scope => {
+    scope.literal_record = { wins: 1, losses: 1, draws: 2, matches: 4, win_rate: 0.25 };
+  });
+  const load = () => controllerWith(documents).loadEvent(
+    "stats/modern/melee/index.json", "20", "modern", {}, { requireOverall: true });
+  assert.equal((await load()).tabletopDecks, null); // No decks endpoint exists.
+  Object.values(overview.scopes).forEach(scope => { delete scope.literal_record; });
+  await assert.rejects(load(), /requires an overall record/);
+  overview.schema_version = "1.1.0";
+  documents.set(`${base}/decks.json`, { format: "modern", event_id: "20", decks: [] });
+  assert.equal((await load()).tabletopDecks.decks.length, 0);
+});

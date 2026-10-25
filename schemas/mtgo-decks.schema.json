@@ -9,6 +9,7 @@
     "schema_version": {"const": "1.2.0"},
     "format": {"$ref": "common.schema.json#/$defs/formatId"}, "source": {"const": "mtgo"},
     "classifier_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "construction_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "period": {"$ref": "common.schema.json#/$defs/period"},
     "decks": {
       "type": "object",

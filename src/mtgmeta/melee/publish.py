@@ -15,7 +15,7 @@ from ..mtgo.landing_editorial import (
     build_public_name_contract,
 )
 from .config import MeleeConfigError, load_melee_event_registry
-from .matchup import MeleeMatchupError, build_event_matchup_from_paths
+from .matchup import MeleeMatchupError, build_event_matchup_from_statistics
 from .stats import (
     MeleeStatisticsError,
     build_event_statistics_from_paths,
@@ -294,13 +294,7 @@ def build_event_publication_from_paths(
         taxonomy_path,
         root,
     )
-    matchup = build_event_matchup_from_paths(
-        event_path,
-        classification_path,
-        opportunity_path,
-        taxonomy_path,
-        root,
-    )
+    matchup = build_event_matchup_from_statistics(statistics, opportunity_path)
     overview = statistics["overview"]
     event_id = overview.get("event_id")
     format_id = overview.get("format")

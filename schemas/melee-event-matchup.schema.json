@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event-matchup.schema.json",
-  "x-schema-version": "1.0.0",
+  "x-schema-version": "1.1.0",
   "title": "Hierarchical matchup statistics for one Melee event",
   "type": "object",
   "additionalProperties": false,
@@ -24,7 +24,11 @@
     "warnings"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
+    "matrix_encoding": {
+      "const": "sparse-zero-v1",
+      "description": "All ordered rows remain present. Omitted columns within those rows represent zero W/L/D, with null rates and confidence intervals; the diagonal remains a mirror. This convention applies only to schema 1.1.0."
+    },
     "document_type": {"const": "matchup"},
     "source": {"const": "melee"},
     "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
@@ -105,6 +109,11 @@
     }
   },
   "allOf": [
+    {
+      "if": {"properties": {"schema_version": {"const": "1.1.0"}}},
+      "then": {"required": ["matrix_encoding"]},
+      "else": {"not": {"required": ["matrix_encoding"]}}
+    },
     {
       "if": {
         "properties": {

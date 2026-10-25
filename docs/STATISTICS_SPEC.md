@@ -1555,6 +1555,13 @@ A percentage without a valid match count is incomplete.
 
 Where confidence intervals are shown, use a 95% Wilson score interval.
 
+Matchup hover, touch and keyboard-focus tooltips show the concise record and
+sample count without repeating the full confidence interval or a separate
+bottom record panel. Accessible cell labels retain the actual lower and upper
+bounds. A displayed half-width does not imply symmetric bounds around the
+observed win rate; accessible endpoint text uses the calculated bounds rather
+than `win_rate ± half_width`.
+
 The approved target and visible record uses literal wins as successes and
 `wins + losses + normal played draws` as trials, as specified in section 10.
 
@@ -1841,6 +1848,30 @@ new data or approved taxonomy changes need not reproduce Phase 6 output bytes.
 Average decklists, representative decklists, Core/Flex classification, construction deviation, and recent construction change are MTGO product features.
 
 These calculations are not automatically required for tabletop event pages.
+
+Construction vectors use the shared card-entity identity and known printed-name
+aliases used by the classifier. A split, modal, or adventure card contributes
+its quantity once as one entity; aliases in the same deck are summed before
+calculating means and per-deck appearance rates. Classification-only casting
+exceptions do not remove cards from construction vectors. Unrecognized names
+retain their quantities under their submitted name rather than disappearing.
+Exact deck display and record fingerprints retain their existing source-name
+contract; construction identity is not a migration of deck IDs.
+
+For registered ordered pairs of card faces, complete front/back spellings with
+one or two separating slashes and surrounding whitespace resolve to the same
+entity. Exact registered names take precedence. Unknown, mismatched, reversed,
+or ambiguous pairs remain unresolved; slashes inside a card name are not
+globally removed or split. Runtime identity and offline fact selection use the
+same pair-matching rule.
+
+Current rolling catalogs, ranges, representative-deck documents, and Top 8
+indexes, weeks and comparison bases carry `construction_digest`. It binds the
+construction identity contract, card facts, aliases and basic-land comparison
+policy independently of `classifier_digest`. Legacy documents without this
+field remain readable as legacy construction results; regenerable current
+statistics require the current digest. Accepted Landing snapshots and editorial
+archives retain their bound historical context unless explicitly restated.
 
 Construction-comparison vectors treat each ordinary basic land and its
 Snow-Covered printing as the same card: Plains, Island, Swamp, Mountain,
@@ -2131,8 +2162,9 @@ generation rebuilds all indexed weeks and their companion bases with the
 current classifier rather than treating an older derived result as authority.
 Each week, base, and index records the same classifier digest, which binds the
 classifier engine contract, normalized rules, and semantic-feature manifest.
-Identical source facts and classifier digest must produce identical week and
-base bytes. A different digest permits and requires derived restatement while
+Identical source facts, classifier digest and construction digest must produce
+identical week and base bytes. A different classifier or construction digest
+permits and requires the corresponding derived restatement while
 source facts remain unchanged. The old-to-new classification and base diff is
 an impact report for review, not a zero-difference acceptance gate. The catalog
 exposes `status`, `provisional_through`, and `seal_on`; those fields govern only

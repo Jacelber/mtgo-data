@@ -9,7 +9,6 @@ import pytest
 import yaml
 
 from mtgmeta.classifier_closure import (
-    BLOCKED_OWNER_REVIEW,
     CURRENT,
     STALE,
     ClassifierClosureError,
@@ -85,11 +84,14 @@ def test_allowed_refresh_includes_data_generated_for_new_admission() -> None:
 
 def test_landing_refresh_declares_pinned_week_files(tmp_path: Path) -> None:
     path = tmp_path / "stats/modern/mtgo/landing/current.json"
-    document = {"classifier": {"digest": "current"},
+    document = {"week": {"id": "2026-W36"}, "classifier": {"digest": "current"},
                 "review_binding": {"classifier_digest": "current"}}
     _write_json(path, document)
     original = _inspect_landing(tmp_path, "modern", "current")
     assert original["state"] == CURRENT
+    assert {"stats/modern/mtgo/landing/features/index.json",
+            "stats/modern/mtgo/landing/features/2026-W36.json"} <= set(original["artifacts"])
+    assert "stats/modern/mtgo/landing/features/2026-W35.json" not in original["artifacts"]
     document["data_files"] = {
         name: f"weeks/2026-W36/{name}.json"
         for name in ("range", "environment_decks", "feature_decks", "completeness")
@@ -150,7 +152,7 @@ def test_data_advance_retains_only_bound_older_landing(tmp_path, monkeypatch, da
     current = base / "landing/current.json"
     _write_json(current, document)
     paths = [current]
-    for relative in files.values():
+    for relative in [*files.values(), "features/index.json", "features/2026-W36.json"]:
         path = base / "landing" / relative
         _write_json(path, {"retained": True})
         paths.append(path)
@@ -327,7 +329,10 @@ def test_melee_closure_follows_public_catalog_and_exact_sha_chain(
         "opportunity_sha256": _digest(opportunity),
     }
     for name in ("overview", "decks", "matchup", "quality"):
-        _write_json(public / f"{name}.json", {"input": shared_input})
+        _write_json(public / f"{name}.json", {
+            "input": shared_input,
+            "schema_version": "1.2.0" if name == "overview" else "1.1.0",
+        })
     descriptors = {
         name: {"sha256": _digest(public / f"{name}.json")}
         for name in ("overview", "decks", "matchup", "quality")
@@ -413,6 +418,25 @@ def test_melee_closure_follows_public_catalog_and_exact_sha_chain(
     normalized_event_sha = _digest(event)
 
     assert _inspect_melee(tmp_path, "modern", desired, catalog)["state"] == CURRENT
+
+    # A coherent old output hash chain still needs regeneration when its
+    # public contract cannot supply the current consumer's required data.
+    meta_path = public / "meta.json"
+    original_meta = meta_path.read_bytes()
+    for name, old_version in (("overview", "1.1.0"), ("matchup", "1.0.0")):
+        path = public / f"{name}.json"
+        original = path.read_bytes()
+        document = json.loads(original)
+        document["schema_version"] = old_version
+        _write_json(path, document)
+        meta = json.loads(original_meta)
+        meta["outputs"][name]["sha256"] = _digest(path)
+        _write_json(meta_path, meta)
+        result = _inspect_melee(tmp_path, "modern", desired, catalog)
+        assert result["state"] == STALE
+        assert any(f"{name} contract is stale" in issue for issue in result["issues"])
+        path.write_bytes(original)
+        meta_path.write_bytes(original_meta)
 
     opportunity_document = json.loads(opportunity.read_text(encoding="utf-8"))
     opportunity_document["input"]["classification_sha256"] = "b" * 64

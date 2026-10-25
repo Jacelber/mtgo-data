@@ -452,3 +452,26 @@ def test_inverse_and_match_conservation_fail_closed() -> None:
     ]["wins"] += 1
 
     assert _error_code([event_20, event_10]) == "matrix_invariant_failed"
+
+
+def test_sparse_inputs_preserve_aggregation_and_fail_closed() -> None:
+    inputs = list(_compatible_inputs())
+    expected = aggregate_multi_event_matchups(inputs, canonical_hierarchy=CANONICAL_HIERARCHY)
+    for item in inputs:
+        document = item["matchup"]
+        document["schema_version"] = "1.1.0"
+        document["matrix_encoding"] = "sparse-zero-v1"
+        for scope in document["scopes"].values():
+            for row in scope["leaf_matrix"].values():
+                for key, cell in list(row.items()):
+                    if not any(cell[field] for field in ("wins", "losses", "draws")):
+                        del row[key]
+    expected["compatibility"]["matchup_schema_version"] = "1.1.0"
+    assert aggregate_multi_event_matchups(inputs, canonical_hierarchy=CANONICAL_HIERARCHY) == expected
+    document = inputs[0]["matchup"]
+    del document["matrix_encoding"]
+    assert _error_code(inputs) == "unsupported_matchup_schema"
+    document["matrix_encoding"] = "sparse-zero-v1"
+    row = next(row for row in document["scopes"]["all_constructed"]["leaf_matrix"].values() if row)
+    del row[next(iter(row))]
+    assert _error_code(inputs) == "matrix_invariant_failed"

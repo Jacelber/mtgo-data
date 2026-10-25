@@ -2,9 +2,9 @@
   "schema_version": "1.1.0",
   "format": "modern",
   "provenance": {
-    "classifier_identity_digest": "47e16e60053f9dd008ac0272a06a83298e7fddf50a504b6109686d63d8b83244",
-    "name_catalog_digest": "7837c81560b5456fddb0c9074bf5170d0fdd4a05f711c9e9bcf3abee9654e0e1",
-    "projection_subject_digest": "9f180968c170500bc8b011abe169d14907068a87fa5c1143ccd000fd313de086"
+    "classifier_identity_digest": "698968fe8c4771e670fcf2bbe627f6d6b10ea2b19575865168cabe27bbe4a9f8",
+    "name_catalog_digest": "381fe085921b9d4c9ee0ac697eefe9114fb7f99f166702e9739aeb1caecc81fa",
+    "projection_subject_digest": "03c06c8fe4714c4c75f329a2bdb01b946fbb3c0de1bb713ebb22f8f5f26ead0c"
   },
   "names": [
     {
@@ -1070,6 +1070,24 @@
       }
     },
     {
+      "identity_id": "esper-blink/esper",
+      "parent_id": "esper-blink",
+      "subtype_id": "esper",
+      "display": {
+        "en": "Esper Blink",
+        "zh": "艾斯波云移"
+      }
+    },
+    {
+      "identity_id": "esper-blink/wubr",
+      "parent_id": "esper-blink",
+      "subtype_id": "wubr",
+      "display": {
+        "en": "WUBR Blink",
+        "zh": "四色云移（无绿）"
+      }
+    },
+    {
       "identity_id": "esper-control",
       "parent_id": "esper-control",
       "subtype_id": null,
@@ -1103,6 +1121,24 @@
       "display": {
         "en": "Esper Goryo's",
         "zh": "艾斯波怨灵"
+      }
+    },
+    {
+      "identity_id": "esper-goryos/esper",
+      "parent_id": "esper-goryos",
+      "subtype_id": "esper",
+      "display": {
+        "en": "Esper Goryo's",
+        "zh": "艾斯波怨灵"
+      }
+    },
+    {
+      "identity_id": "esper-goryos/wubg",
+      "parent_id": "esper-goryos",
+      "subtype_id": "wubg",
+      "display": {
+        "en": "WUBG Goryo's",
+        "zh": "四色怨灵（无红）"
       }
     },
     {
@@ -1223,12 +1259,21 @@
       }
     },
     {
+      "identity_id": "four-color-control",
+      "parent_id": "four-color-control",
+      "subtype_id": null,
+      "display": {
+        "en": "Four-Color Control",
+        "zh": "四色控制"
+      }
+    },
+    {
       "identity_id": "four-color-goryos",
       "parent_id": "four-color-goryos",
       "subtype_id": null,
       "display": {
-        "en": "Four-Color Goryo's",
-        "zh": "四色怨灵"
+        "en": "WUBR Goryo's",
+        "zh": "四色怨灵（无绿）"
       }
     },
     {
@@ -1709,6 +1754,24 @@
       }
     },
     {
+      "identity_id": "jeskai-ascendancy-combo/four-color",
+      "parent_id": "jeskai-ascendancy-combo",
+      "subtype_id": "four-color",
+      "display": {
+        "en": "Four-Color Ascendancy Combo",
+        "zh": "四色霸权组合技"
+      }
+    },
+    {
+      "identity_id": "jeskai-ascendancy-combo/jeskai",
+      "parent_id": "jeskai-ascendancy-combo",
+      "subtype_id": "jeskai",
+      "display": {
+        "en": "Jeskai Ascendancy Combo",
+        "zh": "霸权组合技"
+      }
+    },
+    {
       "identity_id": "jeskai-blink",
       "parent_id": "jeskai-blink",
       "subtype_id": null,
@@ -1775,6 +1838,24 @@
       "identity_id": "jund-creativity",
       "parent_id": "jund-creativity",
       "subtype_id": null,
+      "display": {
+        "en": "Jund Creativity",
+        "zh": "勇得创新"
+      }
+    },
+    {
+      "identity_id": "jund-creativity/four-color",
+      "parent_id": "jund-creativity",
+      "subtype_id": "four-color",
+      "display": {
+        "en": "UBRG Creativity",
+        "zh": "四色创新（无白）"
+      }
+    },
+    {
+      "identity_id": "jund-creativity/jund",
+      "parent_id": "jund-creativity",
+      "subtype_id": "jund",
       "display": {
         "en": "Jund Creativity",
         "zh": "勇得创新"
@@ -2474,6 +2555,15 @@
       }
     },
     {
+      "identity_id": "rakdos-creativity",
+      "parent_id": "rakdos-creativity",
+      "subtype_id": null,
+      "display": {
+        "en": "Rakdos Creativity",
+        "zh": "红黑创新"
+      }
+    },
+    {
       "identity_id": "rakdos-delirium",
       "parent_id": "rakdos-delirium",
       "subtype_id": null,
@@ -2699,6 +2789,15 @@
       }
     },
     {
+      "identity_id": "sewer-combo/bant",
+      "parent_id": "sewer-combo",
+      "subtype_id": "bant",
+      "display": {
+        "en": "Bant Sewer Combo",
+        "zh": "班特下水道组合技"
+      }
+    },
+    {
       "identity_id": "sewer-combo/izzet",
       "parent_id": "sewer-combo",
       "subtype_id": "izzet",
@@ -2732,6 +2831,15 @@
       "display": {
         "en": "Simic Sewer Combo",
         "zh": "蓝绿下水道组合技"
+      }
+    },
+    {
+      "identity_id": "sewer-combo/temur",
+      "parent_id": "sewer-combo",
+      "subtype_id": "temur",
+      "display": {
+        "en": "Temur Sewer Combo",
+        "zh": "铁木尔下水道组合技"
       }
     },
     {
@@ -2897,6 +3005,15 @@
       }
     },
     {
+      "identity_id": "steel-cutter/temur",
+      "parent_id": "steel-cutter",
+      "subtype_id": "temur",
+      "display": {
+        "en": "Temur Steel Cutter",
+        "zh": "铁木尔介刀"
+      }
+    },
+    {
       "identity_id": "sultai-control",
       "parent_id": "sultai-control",
       "subtype_id": null,
@@ -2939,6 +3056,15 @@
       "display": {
         "en": "Temur Reclamation",
         "zh": "铁木尔复归"
+      }
+    },
+    {
+      "identity_id": "temur-wizards",
+      "parent_id": "temur-wizards",
+      "subtype_id": null,
+      "display": {
+        "en": "Temur Wizards",
+        "zh": "铁木尔法术师"
       }
     },
     {

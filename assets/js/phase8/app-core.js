@@ -90,6 +90,8 @@ const state = {
   tabletopDirection: "desc",
   scrollHintsSeen: new Set(),
   renderToken: 0,
+  renderedViewKey: null,
+  releaseViewResources: null,
   failedRender: null,
   pendingRefresh: null,
   refreshInProgress: false,
@@ -172,7 +174,6 @@ async function ensureClassifierNames(formatId) {
     contract = ArchetypeNames.normalize(document, formatId);
     state.classifierNameContracts.set(formatId, contract);
   }
-  state.classifierNameContract = contract;
   return contract;
 }
 

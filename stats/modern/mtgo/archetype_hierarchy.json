@@ -2,12 +2,12 @@
   "schema_version": "1.1.0",
   "format": "modern",
   "source": "mtgo",
-  "classifier_digest": "d1a43b6539af3cb80bca1e6ca200a82ca507a58c07f1ffbc831ea8ae39dc9a2b",
+  "classifier_digest": "70b64c2a7e7976ef589d21b1363808f46f0430c01d9ec6147a147b67e78a98cd",
   "rules_updated": "2026-10-19T22:09:01+09:00",
   "summary": {
-    "parents": 227,
-    "leaves": 309,
-    "expandable_parents": 25
+    "parents": 230,
+    "leaves": 319,
+    "expandable_parents": 29
   },
   "parents": [
     {
@@ -501,8 +501,11 @@
     {
       "id": "esper-blink",
       "name": "Esper Blink",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "esper-blink/esper",
+        "esper-blink/wubr"
+      ]
     },
     {
       "id": "esper-control",
@@ -525,8 +528,11 @@
     {
       "id": "esper-goryos",
       "name": "Esper Goryo's",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "esper-goryos/esper",
+        "esper-goryos/wubg"
+      ]
     },
     {
       "id": "esper-ketramose",
@@ -607,8 +613,14 @@
       "subtype_ids": []
     },
     {
+      "id": "four-color-control",
+      "name": "Four-Color Control",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "four-color-goryos",
-      "name": "Four-Color Goryo's",
+      "name": "WUBR Goryo's",
       "expandable": false,
       "subtype_ids": []
     },
@@ -865,8 +877,11 @@
     {
       "id": "jeskai-ascendancy-combo",
       "name": "Jeskai Ascendancy Combo",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "jeskai-ascendancy-combo/four-color",
+        "jeskai-ascendancy-combo/jeskai"
+      ]
     },
     {
       "id": "jeskai-blink",
@@ -913,8 +928,11 @@
     {
       "id": "jund-creativity",
       "name": "Jund Creativity",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "jund-creativity/four-color",
+        "jund-creativity/jund"
+      ]
     },
     {
       "id": "jund-goblins",
@@ -1253,6 +1271,12 @@
       "subtype_ids": []
     },
     {
+      "id": "rakdos-creativity",
+      "name": "Rakdos Creativity",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "rakdos-delirium",
       "name": "Rakdos Delirium",
       "expandable": false,
@@ -1359,10 +1383,12 @@
       "expandable": true,
       "subtype_ids": [
         "sewer-combo/azorius",
+        "sewer-combo/bant",
         "sewer-combo/izzet",
         "sewer-combo/jeskai",
         "sewer-combo/mono-blue",
-        "sewer-combo/simic"
+        "sewer-combo/simic",
+        "sewer-combo/temur"
       ]
     },
     {
@@ -1442,7 +1468,8 @@
       "expandable": true,
       "subtype_ids": [
         "steel-cutter/izzet",
-        "steel-cutter/jeskai"
+        "steel-cutter/jeskai",
+        "steel-cutter/temur"
       ]
     },
     {
@@ -1472,6 +1499,12 @@
     {
       "id": "temur-reclamation",
       "name": "Temur Reclamation",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "temur-wizards",
+      "name": "Temur Wizards",
       "expandable": false,
       "subtype_ids": []
     },
@@ -2357,12 +2390,20 @@
       "subtype_id": null
     },
     {
-      "id": "esper-blink",
-      "kind": "archetype",
+      "id": "esper-blink/esper",
+      "kind": "subtype",
       "name": "Esper Blink",
       "display_name": "Esper Blink",
       "parent_id": "esper-blink",
-      "subtype_id": null
+      "subtype_id": "esper"
+    },
+    {
+      "id": "esper-blink/wubr",
+      "kind": "subtype",
+      "name": "WUBR Blink",
+      "display_name": "WUBR Blink",
+      "parent_id": "esper-blink",
+      "subtype_id": "wubr"
     },
     {
       "id": "esper-control",
@@ -2389,12 +2430,20 @@
       "subtype_id": null
     },
     {
-      "id": "esper-goryos",
-      "kind": "archetype",
-      "name": "Esper Goryo's",
+      "id": "esper-goryos/esper",
+      "kind": "subtype",
+      "name": "Esper",
       "display_name": "Esper Goryo's",
       "parent_id": "esper-goryos",
-      "subtype_id": null
+      "subtype_id": "esper"
+    },
+    {
+      "id": "esper-goryos/wubg",
+      "kind": "subtype",
+      "name": "WUBG",
+      "display_name": "WUBG Goryo's",
+      "parent_id": "esper-goryos",
+      "subtype_id": "wubg"
     },
     {
       "id": "esper-ketramose",
@@ -2501,10 +2550,18 @@
       "subtype_id": null
     },
     {
+      "id": "four-color-control",
+      "kind": "archetype",
+      "name": "Four-Color Control",
+      "display_name": "Four-Color Control",
+      "parent_id": "four-color-control",
+      "subtype_id": null
+    },
+    {
       "id": "four-color-goryos",
       "kind": "archetype",
-      "name": "Four-Color Goryo's",
-      "display_name": "Four-Color Goryo's",
+      "name": "WUBR Goryo's",
+      "display_name": "WUBR Goryo's",
       "parent_id": "four-color-goryos",
       "subtype_id": null
     },
@@ -2901,12 +2958,20 @@
       "subtype_id": null
     },
     {
-      "id": "jeskai-ascendancy-combo",
-      "kind": "archetype",
-      "name": "Jeskai Ascendancy Combo",
+      "id": "jeskai-ascendancy-combo/four-color",
+      "kind": "subtype",
+      "name": "Four-Color",
+      "display_name": "Four-Color Ascendancy Combo",
+      "parent_id": "jeskai-ascendancy-combo",
+      "subtype_id": "four-color"
+    },
+    {
+      "id": "jeskai-ascendancy-combo/jeskai",
+      "kind": "subtype",
+      "name": "Jeskai",
       "display_name": "Jeskai Ascendancy Combo",
       "parent_id": "jeskai-ascendancy-combo",
-      "subtype_id": null
+      "subtype_id": "jeskai"
     },
     {
       "id": "jeskai-blink",
@@ -2965,12 +3030,20 @@
       "subtype_id": null
     },
     {
-      "id": "jund-creativity",
-      "kind": "archetype",
+      "id": "jund-creativity/four-color",
+      "kind": "subtype",
+      "name": "UBRG Creativity",
+      "display_name": "UBRG Creativity",
+      "parent_id": "jund-creativity",
+      "subtype_id": "four-color"
+    },
+    {
+      "id": "jund-creativity/jund",
+      "kind": "subtype",
       "name": "Jund Creativity",
       "display_name": "Jund Creativity",
       "parent_id": "jund-creativity",
-      "subtype_id": null
+      "subtype_id": "jund"
     },
     {
       "id": "jund-goblins",
@@ -3557,6 +3630,14 @@
       "subtype_id": null
     },
     {
+      "id": "rakdos-creativity",
+      "kind": "archetype",
+      "name": "Rakdos Creativity",
+      "display_name": "Rakdos Creativity",
+      "parent_id": "rakdos-creativity",
+      "subtype_id": null
+    },
+    {
       "id": "rakdos-delirium",
       "kind": "archetype",
       "name": "Rakdos Delirium",
@@ -3725,6 +3806,14 @@
       "subtype_id": "azorius"
     },
     {
+      "id": "sewer-combo/bant",
+      "kind": "subtype",
+      "name": "Bant Sewer Combo",
+      "display_name": "Bant Sewer Combo",
+      "parent_id": "sewer-combo",
+      "subtype_id": "bant"
+    },
+    {
       "id": "sewer-combo/izzet",
       "kind": "subtype",
       "name": "Izzet",
@@ -3755,6 +3844,14 @@
       "display_name": "Simic Sewer Combo",
       "parent_id": "sewer-combo",
       "subtype_id": "simic"
+    },
+    {
+      "id": "sewer-combo/temur",
+      "kind": "subtype",
+      "name": "Temur Sewer Combo",
+      "display_name": "Temur Sewer Combo",
+      "parent_id": "sewer-combo",
+      "subtype_id": "temur"
     },
     {
       "id": "shape-anew",
@@ -3885,6 +3982,14 @@
       "subtype_id": "jeskai"
     },
     {
+      "id": "steel-cutter/temur",
+      "kind": "subtype",
+      "name": "Temur Steel Cutter",
+      "display_name": "Temur Steel Cutter Steel-Cutter",
+      "parent_id": "steel-cutter",
+      "subtype_id": "temur"
+    },
+    {
       "id": "sultai-control",
       "kind": "archetype",
       "name": "Sultai Control",
@@ -3922,6 +4027,14 @@
       "name": "Temur Reclamation",
       "display_name": "Temur Reclamation",
       "parent_id": "temur-reclamation",
+      "subtype_id": null
+    },
+    {
+      "id": "temur-wizards",
+      "kind": "archetype",
+      "name": "Temur Wizards",
+      "display_name": "Temur Wizards",
+      "parent_id": "temur-wizards",
       "subtype_id": null
     },
     {

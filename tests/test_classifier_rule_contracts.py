@@ -39,6 +39,8 @@ def _deck(*cards: tuple[str, int]) -> dict[str, list[dict[str, object]]]:
                 ("Fabled Passage", 4),
                 ("Earthbender Ascension", 3),
                 ("Temple Garden", 1),
+                # A land is not evidence of normally cast white spells.
+                ("Sheltered by Ghosts", 1),
             ),
             "selesnya-landfall",
         ),
@@ -49,6 +51,7 @@ def _deck(*cards: tuple[str, int]) -> dict[str, list[dict[str, object]]]:
                 ("Deceit", 4),
                 ("Wistfulness", 2),
                 ("Overgrown Tomb", 4),
+                ("Watery Grave", 4),
             ),
             "dimir-spider-man",
         ),
@@ -93,6 +96,7 @@ def _deck(*cards: tuple[str, int]) -> dict[str, list[dict[str, object]]]:
                 ("Flow State", 3),
                 ("Opt", 3),
                 ("Watery Grave", 2),
+                ("Duress", 1),
             ),
             "dimir-spellementals",
         ),
@@ -104,6 +108,7 @@ def _deck(*cards: tuple[str, int]) -> dict[str, list[dict[str, object]]]:
                 ("Godless Shrine", 1),
                 ("Temple Garden", 1),
                 ("Overgrown Tomb", 1),
+                ("Duress", 1),
             ),
             "abzan-offense",
         ),
@@ -112,6 +117,7 @@ def _deck(*cards: tuple[str, int]) -> dict[str, list[dict[str, object]]]:
                 ("Emeritus of Truce", 3),
                 ("Emeritus of Ideation", 3),
                 ("Skycoach Waypoint", 2),
+                ("Hallowed Fountain", 4),
             ),
             "azorius-control",
         ),
@@ -266,6 +272,7 @@ def test_standard_prepare_control_is_azorius_control_subtype() -> None:
             ("Emeritus of Truce", 4),
             ("Emeritus of Ideation", 4),
             ("Skycoach Waypoint", 2),
+            ("Hallowed Fountain", 4),
         ),
     )
 
@@ -299,7 +306,8 @@ def test_standard_prepare_control_is_azorius_control_subtype() -> None:
             (("Emeritus of Truce", 2), ("Emeritus of Ideation", 2),
              ("Skycoach Waypoint", 2), ("Bender's Waterskin", 2),
              ("Pinnacle Starcage", 2), ("Stock Up", 2),
-             ("Ugin, Eye of the Storms", 1), ("Day of Judgment", 1)),
+             ("Ugin, Eye of the Storms", 1), ("Day of Judgment", 1),
+             ("Hallowed Fountain", 4)),
             "azorius-control", "prepare", "azorius-control-prepare-ugin",
         ),
         (
@@ -344,7 +352,7 @@ def test_melee_split_card_adapter_contract() -> None:
         "main_deck": [
             {"name": "Dead/Gone", "qty": 2},
             {"name": "Fire/Ice", "qty": 3},
-            {"name": "Wear", "qty": 1},
+            {"name": "Wear/Tear", "qty": 1},
         ],
         "sideboard": [{"name": "SP//dr", "qty": 1}],
     }
@@ -409,6 +417,7 @@ def test_melee_split_card_adapter_contract() -> None:
                 ("Sewer-veillance Cam", 3),
                 ("Grinding Station", 3),
                 ("Malevolent Rumble", 4),
+                ("Breeding Pool", 4),
             ),
             ("classified", "sewer-combo", "simic"),
         ),
@@ -453,7 +462,7 @@ def test_melee_split_card_adapter_contract() -> None:
                 ("Hallowed Fountain", 2),
                 ("Steam Vents", 2),
             ),
-            ("classified", "jeskai-ascendancy-combo", None),
+            ("classified", "jeskai-ascendancy-combo", "jeskai"),
         ),
         (
             (
@@ -531,6 +540,7 @@ def test_melee_split_card_adapter_contract() -> None:
                 ("Island", 3),
                 ("Emry, Lurker of the Loch", 4),
                 ("Cori-Steel Cutter", 4),
+                ("Steam Vents", 4),
             ),
             ("classified", "steel-cutter", "izzet"),
         ),
@@ -545,7 +555,7 @@ def test_melee_split_card_adapter_contract() -> None:
                 ("Hallowed Fountain", 1),
                 ("Steam Vents", 1),
             ),
-            ("classified", "sewer-combo", "azorius"),
+            ("classified", "sewer-combo", "jeskai"),
         ),
         (
             (
@@ -645,9 +655,10 @@ def test_modern_owner_rule_contracts(
                 ("Archon of Cruelty", 1),
                 ("Wrenn and Six", 3),
                 ("Fatal Push", 3),
+                ("Overgrown Tomb", 4),
             ),
             (),
-            ("jund-creativity", None),
+            ("jund-creativity", "jund"),
         ),
         (
             (
@@ -809,6 +820,7 @@ def test_modern_broodscale_firespout_with_grove_only() -> None:
                 ("Leonardo, Big Brother", 4),
                 ("Winding Way", 2),
                 ("Khalni Garden", 4),
+                ("Plains", 8),
             ),
             ("packbeast-swarm", "selesnya"),
         ),
@@ -818,6 +830,8 @@ def test_modern_broodscale_firespout_with_grove_only() -> None:
                 ("Leonardo, Big Brother", 4),
                 ("Winding Way", 4),
                 ("Ardent Recruit", 4),
+                ("Plains", 8),
+                ("Forest", 8),
             ),
             ("packbeast-swarm", "selesnya"),
         ),

@@ -48,6 +48,7 @@
         "card": {"type": "string", "minLength": 1},
         "zone": {"enum": ["any", "main", "side"]},
         "actual_count": {"type": "integer", "minimum": 0},
+        "scope": {"enum": ["parent", "color-profile", "binding-domain-convention"]},
         "min_count": {"type": ["integer", "null"], "minimum": 0},
         "max_count": {"type": ["integer", "null"], "minimum": 0},
         "exact_count": {"type": ["integer", "null"], "minimum": 0}

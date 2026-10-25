@@ -693,7 +693,7 @@ def test_real_weekly_producer_continues_across_feature_readiness_and_completion(
         "classification_acceptance": {"submission": packet, "decisions": accept(packet)}}
     completed = build_v2_completion_record([raw], week_id=raw["week"], completed_on="2026-09-21",
         evidence="synthetic", landing_content_digests={"standard": "c" * 64}, independent_format=True)
-    preview = submission.make_packet("preview", "standard", raw["week"], {"final_page": "synthetic"}, bindings={})
+    preview = submission.make_packet("preview", "standard", raw["week"], {"final_page": {"content": "synthetic"}}, bindings={})
     accepted_preview = {"submission": preview, "decisions": accept(preview), "publication": {
         "health": "passed", "operation": "op", "package": "package", "preview_digest": preview["digest"]}}
     completed["formats"]["standard"]["preview_acceptance"] = accepted_preview
@@ -705,7 +705,7 @@ def test_real_weekly_producer_continues_across_feature_readiness_and_completion(
     _write_json(root / "stats/standard/mtgo/landing/current.json", {"week": {"id": raw["week"]}})
     _write_json(root / "stats/standard/mtgo/landing/features/2026-W38.json",
                 {"format": "standard", "week": {"id": raw["week"]}, "content_digest": "c" * 64})
-    monkeypatch.setattr(submission, "preview_packet", lambda *a: preview)
+    monkeypatch.setattr(submission, "preview_packet", lambda *a, **kw: preview)
     monkeypatch.setattr(ready, "_landing_content_digest", lambda *a: "c" * 64)
     monkeypatch.setattr(publication, "resolve_scope", lambda *a: SimpleNamespace(event_ids={"10"}, week=date(2026, 9, 14)))
     monkeypatch.setattr(publication, "inspect_publication", lambda *a: [])
@@ -719,7 +719,7 @@ def test_real_weekly_producer_continues_across_feature_readiness_and_completion(
     assert bool(web.accepted_classification(registry, current)) == (expected != "changed")
     state = ready._completion_state(root, raw["week"], format_id="standard")
     assert state["historical_state"] == "verified"
-    assert state["state"] == ("stale" if expected == "changed" else "verified")
+    assert state["state"] == ("stale" if expected == "changed" else "verified"), state["mismatches"]
     current_path, preview_path, output = (tmp_path / name for name in ("review.json", "preview.json", "completion.json"))
     _write_json(current_path, current)
     _write_json(preview_path, {"standard": accepted_preview})
@@ -1057,3 +1057,23 @@ def test_legacy_preview_continues_through_resume_archive_and_supplement(suppleme
     assert ready._completion_state(case.root, "2026-W38", format_id="standard")["state"] == "verified"
     (case.root / "assets/js/phase8/app.js").write_text("/* loaded renderer actually changed */")
     with pytest.raises(ValueError): supplement.validate_current_preview(case.root, "standard", result["effective"])
+
+
+def test_frozen_pipeline_comparison_keeps_old_results_and_checks_raw_input(tmp_path: Path) -> None:
+    from mtgmeta.classifier_impact import capture_classifier_pipeline
+    root = _synthetic_root(tmp_path, [_player(1, 'Alpha Card')])
+    snapshot = capture_classifier_pipeline(root, 'standard', 'my_archetypes/standard.yaml')
+    _write_json(root / 'before.json', snapshot)
+    _write_yaml(root / 'candidate.yaml', _rules(candidate=True))
+    result = compare_classifier_impact(root, 'standard', None, 'candidate.yaml',
+                                       accepted_snapshot_path='before.json')
+    assert result['retained_corpus']['comparison_mode'] == 'frozen_pipeline'
+    assert result['retained_corpus']['same_raw_input_used_for_both_pipelines'] is True
+    assert result['changes'][0]['before']['subtype_id'] == 'one'
+    assert result['changes'][0]['after']['subtype_id'] == 'two'
+    # Even an input-only byte change invalidates a claimed same-source replay.
+    source = root / next(iter(snapshot['sources']))
+    source.write_text(source.read_text() + '\n')
+    with pytest.raises(ValueError, match='raw source input differs'):
+        compare_classifier_impact(root, 'standard', None, 'candidate.yaml',
+                                  accepted_snapshot_path='before.json')

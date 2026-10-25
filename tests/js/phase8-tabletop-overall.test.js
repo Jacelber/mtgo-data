@@ -29,3 +29,12 @@ test("overall uses eligible participant records, including unavailable decks and
   assert.deepEqual(JSON.parse(JSON.stringify(context.tabletopOverall(scope, []).literal_record)),
     { wins: 0, losses: 0, draws: 0 });
 });
+
+test("new overview overall needs no deck list and missing overall is not fabricated as zero", () => {
+  const literal_record = { wins: 2, losses: 2, draws: 2, matches: 6, win_rate: 1 / 3 };
+  const scope = { literal_record, participant_count: 3, theoretical_rounds: 6,
+    result_counts: { played_win: 5, played_loss: 5, played_draw: 2 } };
+  assert.equal(context.tabletopOverall(scope).literal_record, literal_record);
+  delete scope.literal_record;
+  assert.throws(() => context.tabletopOverall(scope));
+});

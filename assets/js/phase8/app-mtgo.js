@@ -13,7 +13,8 @@ function manaIdentityHtml(identityId) {
 }
 
 function matchupAxisNameHtml(name, identityId, className = "axis-name") {
-  return `<span class="${className}" title="${escapeHtml(name)}">${escapeHtml(name)}${manaIdentityHtml(identityId)}</span>`;
+  const label = className === "axis-name" ? `<span class="axis-name-text">${escapeHtml(name)}</span>` : escapeHtml(name);
+  return `<span class="${className}" title="${escapeHtml(name)}">${label}${manaIdentityHtml(identityId)}</span>`;
 }
 
 function locateDeck(decksDocument, identityId) {
@@ -335,50 +336,54 @@ function landingFeaturesHtml(context) {
   )).join("")}</select><span>${t("landing.feature_week_note")}</span></div><div class="landing-feature-content">${groups || `<p class="landing-empty">${t("landing.feature_empty")}</p>`}</div></section>`;
 }
 
-async function landingView() {
-  const requestedFeatureFile = state.landingFeatureWeekFile;
+async function landingView(request) {
+  const { target } = request;
+  const requestedFeatureFile = target.landingFeatureWeekFile;
   const context = await MtgoController.loadLanding(
-    state.format,
-    productEntry().path,
-    state.landingFeatureWeekFile,
+    target.format,
+    target.path,
+    target.landingFeatureWeekFile,
     {
-      includeEnvironmentDecks: Boolean(state.detailIdentity),
-      includeFeatureDecks: Boolean(state.landingFeatureOpen.size || state.landingFeatureDestination),
+      includeEnvironmentDecks: Boolean(target.detailIdentity),
+      retain: request.retain,
+      includeFeatureDecks: Boolean(target.landingFeatureOpen.length || target.landingFeatureDestination),
     }
   );
-  state.landingFeatureWeekFile = context.featureFile;
-  if (requestedFeatureFile && requestedFeatureFile !== context.featureFile) {
-    queueUrlWrite("replace");
-  }
-  const validEnvironmentIds = new Set((context.landing.environment?.rows || []).map(row => row.archetype_id));
-  if (state.detailIdentity && !validEnvironmentIds.has(state.detailIdentity)) {
-    state.detailIdentity = null;
-    setCompositionSelection(null);
-  }
-  const featureIds = new Set(landingFeatureItems(context).map(item => item.destination_id));
-  [...state.landingFeatureOpen].forEach(id => {
-    if (!featureIds.has(id)) state.landingFeatureOpen.delete(id);
-  });
-  if (state.landingFeatureDestination) {
-    if (featureIds.has(state.landingFeatureDestination)) {
-      state.landingFeatureOpen.add(state.landingFeatureDestination);
-    } else {
-      state.landingFeatureDestination = null;
+  return request.commit(() => {
+    state.landingFeatureWeekFile = context.featureFile;
+    if (requestedFeatureFile && requestedFeatureFile !== context.featureFile) {
       queueUrlWrite("replace");
     }
-  }
-  currentContext = {
-    ...context,
-    environmentDecks: context.environmentDecks,
-    featureDecks: context.featureDecks,
-  };
-  if (context.landing.state === "no_events") {
-    return `<section class="panel landing-no-events"><h2>${t("landing.summary_title")}</h2><p>${t("landing.no_events")}</p></section>`;
-  }
-  return `<section class="panel landing-brief" id="weekly-brief"><div class="landing-panel-head"><div><h2>${t("landing.summary_title")}</h2><p>${context.landing.week.start} ～ ${context.landing.week.end} · ${formatLabel(state.format)}</p></div></div>${landingSummaryHtml(context.landing)}</section>
-    ${landingFreshness(context.landing, context.range, context.completeness)}
-    ${landingEnvironmentHtml(context.landing)}
-    ${landingFeaturesHtml(context)}`;
+    const validEnvironmentIds = new Set((context.landing.environment?.rows || []).map(row => row.archetype_id));
+    if (state.detailIdentity && !validEnvironmentIds.has(state.detailIdentity)) {
+      state.detailIdentity = null;
+      setCompositionSelection(null);
+    }
+    const featureIds = new Set(landingFeatureItems(context).map(item => item.destination_id));
+    [...state.landingFeatureOpen].forEach(id => {
+      if (!featureIds.has(id)) state.landingFeatureOpen.delete(id);
+    });
+    if (state.landingFeatureDestination) {
+      if (featureIds.has(state.landingFeatureDestination)) {
+        state.landingFeatureOpen.add(state.landingFeatureDestination);
+      } else {
+        state.landingFeatureDestination = null;
+        queueUrlWrite("replace");
+      }
+    }
+    currentContext = {
+      ...context,
+      environmentDecks: context.environmentDecks,
+      featureDecks: context.featureDecks,
+    };
+    if (context.landing.state === "no_events") {
+      return `<section class="panel landing-no-events"><h2>${t("landing.summary_title")}</h2><p>${t("landing.no_events")}</p></section>`;
+    }
+    return `<section class="panel landing-brief" id="weekly-brief"><div class="landing-panel-head"><div><h2>${t("landing.summary_title")}</h2><p>${context.landing.week.start} ～ ${context.landing.week.end} · ${formatLabel(state.format)}</p></div></div>${landingSummaryHtml(context.landing)}</section>
+      ${landingFreshness(context.landing, context.range, context.completeness)}
+      ${landingEnvironmentHtml(context.landing)}
+      ${landingFeaturesHtml(context)}`;
+  });
 }
 
 function statisticsGroups(archetypes) {
@@ -501,80 +506,86 @@ function sortedArchetypes(archetypes) {
   });
 }
 
-async function statsView() {
+async function statsView(request) {
+  const { target } = request;
   const { meta, range, decks, completeness } = await MtgoController
-    .loadStatistics(state.format, state.statsRange, {
-      includeDecks: Boolean(state.detailIdentity),
+    .loadStatistics(target.format, target.statsRange, {
+      retain: request.retain,
+      includeDecks: Boolean(target.detailIdentity),
     });
-  const archetypes = sortedArchetypes(range.archetypes);
-  const identityNames = new Map();
-  const detailIdentities = new Set();
-  range.archetypes.forEach(parent => {
-    identityNames.set(parent.id, classifierName(parent.id));
-    const subtypes = activeStatisticsSubtypes(parent);
-    subtypes.forEach(subtype => identityNames.set(
-      `${parent.id}/${subtype.id}`,
-      classifierName(parent.id, subtype.id)
-    ));
-    detailIdentities.add(parent.id);
-    if (subtypes.length === 1) detailIdentities.add(`${parent.id}/${subtypes[0].id}`);
-    else if (subtypes.length >= 2) {
-      subtypes.forEach(subtype => detailIdentities.add(`${parent.id}/${subtype.id}`));
+  return request.commit(() => {
+    const archetypes = sortedArchetypes(range.archetypes);
+    const expandableIds = new Set(range.archetypes.filter(parent => activeStatisticsSubtypes(parent).length >= 2).map(parent => parent.id));
+    state.statsExpanded = new Set([...state.statsExpanded].filter(id => expandableIds.has(id)));
+    const identityNames = new Map();
+    const detailIdentities = new Set();
+    range.archetypes.forEach(parent => {
+      identityNames.set(parent.id, classifierName(parent.id));
+      const subtypes = activeStatisticsSubtypes(parent);
+      subtypes.forEach(subtype => identityNames.set(
+        `${parent.id}/${subtype.id}`,
+        classifierName(parent.id, subtype.id)
+      ));
+      detailIdentities.add(parent.id);
+      if (subtypes.length === 1) detailIdentities.add(`${parent.id}/${subtypes[0].id}`);
+      else if (subtypes.length >= 2) {
+        subtypes.forEach(subtype => detailIdentities.add(`${parent.id}/${subtype.id}`));
+      }
+    });
+    if (state.detailIdentity && !detailIdentities.has(state.detailIdentity)) {
+      state.detailIdentity = null;
     }
+    currentContext = { meta, range, decks, completeness, identityNames };
+    const groups = statisticsGroups(archetypes);
+    const expandable = groups.filter(item => item.expandable);
+    const sortHeader = (label, key, tip) => {
+      const arrow = state.statsSort === key ? (state.statsDirection === "desc" ? "▼" : "▲") : "";
+      const accessories = `${arrow ? `<span class="sort-indicator" aria-hidden="true">${arrow}</span>` : ""}${tip ? infoTip(tip) : ""}`;
+      return `<button class="sort-button" type="button" data-stats-sort="${key}" data-responsive-key="stats-sort-field:${escapeHtml(key)}">
+        <span class="sort-label">${label}</span></button>${accessories ? `<span class="sort-accessories">${accessories}</span>` : ""}`;
+    };
+    const sortOptions = [
+      ["name", t("stats.deck")],
+      ["avg_points_per_round", t("stats.average_points")],
+      ["high_score_count", t("stats.high_count")],
+      ["high_score_share", t("stats.high_share")],
+      ["top8_count", t("stats.top8_count")],
+      ["top8_share", t("stats.top8_share")],
+      ["conversion", t("stats.conversion")],
+    ].map(([key, label]) => ({ key, label }));
+    return `<aside class="source-note" aria-label="${t("source.label")}">
+        <p>${t("source.stats")}</p>
+      </aside>
+      ${rangeButtons(state.statsRange, "data-stats-range")}
+      ${statisticsFreshness(meta, range, completeness)}
+      ${chartHtml(archetypes)}
+      <section class="panel">
+        <div class="panel-toolbar"><h2>${t("stats.title")}</h2>
+          ${expandable.length ? `<button id="stats-expand-all" class="secondary-button" type="button">${state.statsExpanded.size ? t("stats.hide_subtypes") : t("stats.show_subtypes")}</button>` : ""}
+        </div>
+        <p class="real-data-note">${t("stats.note")}</p>
+        <div class="desktop-metric-table table-scroll"><table class="data-table metric-columns" style="width:980px;min-width:100%">
+          ${fixedColumns(7)}
+          <thead><tr><th>${sortHeader(t("stats.deck"), "name")}</th>
+            <th class="number">${sortHeader(t("stats.average_points"), "avg_points_per_round", t("stats.average_points_tip"))}</th>
+            <th class="number">${sortHeader(t("stats.high_count"), "high_score_count")}</th>
+            <th class="number">${sortHeader(t("stats.high_share"), "high_score_share")}</th>
+            <th class="number">${sortHeader(t("stats.top8_count"), "top8_count")}</th>
+            <th class="number">${sortHeader(t("stats.top8_share"), "top8_share")}</th>
+            <th class="number">${sortHeader(t("stats.conversion"), "conversion", t("stats.conversion_tip"))}</th>
+          </tr></thead><tbody>${statsRows(groups)}</tbody>
+        </table></div>
+        <div class="mobile-metric-layout">
+          ${mobileSortControls({
+            kind: "stats",
+            current: state.statsSort,
+            direction: state.statsDirection,
+            options: sortOptions,
+          })}
+          ${statsCards(groups)}
+        </div>
+      </section>`;
   });
-  if (state.detailIdentity && !detailIdentities.has(state.detailIdentity)) {
-    state.detailIdentity = null;
-  }
-  currentContext = { meta, range, decks, completeness, identityNames };
-  const groups = statisticsGroups(archetypes);
-  const expandable = groups.filter(item => item.expandable);
-  const sortHeader = (label, key, tip) => {
-    const arrow = state.statsSort === key ? (state.statsDirection === "desc" ? "▼" : "▲") : "";
-    const accessories = `${arrow ? `<span class="sort-indicator" aria-hidden="true">${arrow}</span>` : ""}${tip ? infoTip(tip) : ""}`;
-    return `<button class="sort-button" type="button" data-stats-sort="${key}" data-responsive-key="stats-sort-field:${escapeHtml(key)}">
-      <span class="sort-label">${label}</span></button>${accessories ? `<span class="sort-accessories">${accessories}</span>` : ""}`;
-  };
-  const sortOptions = [
-    ["name", t("stats.deck")],
-    ["avg_points_per_round", t("stats.average_points")],
-    ["high_score_count", t("stats.high_count")],
-    ["high_score_share", t("stats.high_share")],
-    ["top8_count", t("stats.top8_count")],
-    ["top8_share", t("stats.top8_share")],
-    ["conversion", t("stats.conversion")],
-  ].map(([key, label]) => ({ key, label }));
-  return `<aside class="source-note" aria-label="${t("source.label")}">
-      <p>${t("source.stats")}</p>
-    </aside>
-    ${rangeButtons(state.statsRange, "data-stats-range")}
-    ${statisticsFreshness(meta, range, completeness)}
-    ${chartHtml(archetypes)}
-    <section class="panel">
-      <div class="panel-toolbar"><h2>${t("stats.title")}</h2>
-        ${expandable.length ? `<button id="stats-expand-all" class="secondary-button" type="button">${state.statsExpanded.size ? t("stats.hide_subtypes") : t("stats.show_subtypes")}</button>` : ""}
-      </div>
-      <p class="real-data-note">${t("stats.note")}</p>
-      <div class="desktop-metric-table table-scroll"><table class="data-table metric-columns" style="width:980px;min-width:100%">
-        ${fixedColumns(7)}
-        <thead><tr><th>${sortHeader(t("stats.deck"), "name")}</th>
-          <th class="number">${sortHeader(t("stats.average_points"), "avg_points_per_round", t("stats.average_points_tip"))}</th>
-          <th class="number">${sortHeader(t("stats.high_count"), "high_score_count")}</th>
-          <th class="number">${sortHeader(t("stats.high_share"), "high_score_share")}</th>
-          <th class="number">${sortHeader(t("stats.top8_count"), "top8_count")}</th>
-          <th class="number">${sortHeader(t("stats.top8_share"), "top8_share")}</th>
-          <th class="number">${sortHeader(t("stats.conversion"), "conversion", t("stats.conversion_tip"))}</th>
-        </tr></thead><tbody>${statsRows(groups)}</tbody>
-      </table></div>
-      <div class="mobile-metric-layout">
-        ${mobileSortControls({
-          kind: "stats",
-          current: state.statsSort,
-          direction: state.statsDirection,
-          options: sortOptions,
-        })}
-        ${statsCards(groups)}
-      </div>
-    </section>`;
 }
 
 function matchupLegend(lowSampleThreshold) {
@@ -602,16 +613,21 @@ function winRateColor(rate) {
     : mixColor(yellow, green, Math.min(1, (rate - 0.5) * 2));
 }
 
-function matrixCell(record) {
+function matrixCell(record, identity) {
   if (!record || record.win_rate === null) return `<td class="matrix-cell na" title="${t("matchup.none")}">—</td>`;
   const low = record.low_sample ? "low-sample" : "";
   const ci = record.confidence_interval_95;
   const half = ci ? ((ci.upper - ci.lower) / 2) : null;
   const recordText = `${record.wins}-${record.losses}-${record.draws}（${record.matches}）`;
+  const tooltip = t("matchup.record", { record: recordText })
+    + (record.mirror ? ` · ${t("matchup.mirror")}` : "");
+  const label = `${pct(record.win_rate)} · ${tooltip}`
+    + (ci ? ` · ${t("matchup.interval", { lower: pct(ci.lower), upper: pct(ci.upper) })}` : "");
   const foreground = record.win_rate < 0.2 || record.win_rate > 0.72 ? "#fff" : "#26313a";
   return `<td class="matrix-cell ${low}" tabindex="0"
     style="background:${winRateColor(record.win_rate)};color:${foreground}"
-    data-record="${recordText}" title="${t("matchup.record", { record: recordText })}${record.mirror ? ` · ${t("matchup.mirror")}` : ""}">
+    data-matrix-cell="${escapeHtml(identity)}" aria-describedby="matrix-keyboard-help"
+    data-record="${recordText}" data-tooltip="${escapeHtml(tooltip)}" aria-label="${escapeHtml(label)}">
     <strong>${(record.win_rate * 100).toFixed(1)}</strong><small>${half === null ? "—" : `±${(half * 100).toFixed(1)}`}</small></td>`;
 }
 
@@ -627,6 +643,9 @@ function matchupFilterCandidateIds(document) {
 }
 
 function synchronizeMatchupFilter(document) {
+  const expandable = new Set(document.hierarchy.parents.filter(parent => parent.expandable).map(parent => parent.id));
+  state.matchupRows = new Set([...state.matchupRows].filter(id => expandable.has(id)));
+  state.matchupColumns = new Set([...state.matchupColumns].filter(id => expandable.has(id)));
   if (state.matchupFilterIdentities === null) return;
   const available = new Set(matchupFilterCandidateIds(document));
   state.matchupFilterIdentities = new Set(
@@ -885,10 +904,10 @@ function matrixHtml(document) {
         return `<tr data-matchup-row-identity="${escapeHtml(row.id)}">
           <th class="row-head ${row.kind === "subtype" ? "subtype-head" : ""}">
             ${content}</th>
-          ${matrixCell(view.overall[row.id])}${view.columns.map(column => matrixCell(view.matrix[row.id][column.id])).join("")}</tr>`;
+          ${matrixCell(view.overall[row.id], `${row.id}|overall`)}${view.columns.map(column => matrixCell(view.matrix[row.id][column.id], `${row.id}|${column.id}`)).join("")}</tr>`;
       }).join("")}
     </tbody></table>`;
-  return `${horizontalScrollFrame("matchup", "table-scroll matrix-scroll", table, matrixStickyHeader(view.columns))}<div id="matrix-record" class="matrix-record" role="status" hidden></div>
+  return `<p id="matrix-keyboard-help" class="sr-only">${t("matchup.keyboard")}</p>${horizontalScrollFrame("matchup", "table-scroll matrix-scroll", table, matrixStickyHeader(view.columns))}
     <div id="matrix-hover-pop" class="matrix-hover-pop" role="tooltip" hidden></div>`;
 }
 
@@ -906,19 +925,21 @@ async function renderMatchupExpansion() {
   restoreRenderPosition(root, focus, position);
   restoreRenderFocus(root, focus);
   updateMatrixPresentation();
+  flushUrlWrite();
   const expand = document.querySelector("#matchup-expand-all");
   if (expand) expand.textContent = t(state.matchupRows.size || state.matchupColumns.size
     ? "matchup.collapse_all" : "matchup.expand_all");
 }
 
-async function mtgoMainstreamProjection() {
-  if (!state.matchupMainstreamOnly) {
+async function mtgoMainstreamProjection(target, retain) {
+  if (!target.matchupMainstreamOnly) {
     return { parentIds: null, unavailable: false };
   }
   try {
     const range = await MtgoController.loadRangeStatistics(
-      state.format,
-      state.matchupRange
+      target.format,
+      target.matchupRange,
+      { retain }
     );
     const parentIds = ReviewData.mainstreamParentIds(
       range.archetypes,
@@ -933,31 +954,34 @@ async function mtgoMainstreamProjection() {
   }
 }
 
-async function matchupView() {
+async function matchupView(request) {
+  const { target } = request;
   const [{ document, completeness }, mainstream] = await Promise.all([
-    MtgoController.loadMatchup(state.format, state.matchupRange),
-    mtgoMainstreamProjection(),
+    MtgoController.loadMatchup(target.format, target.matchupRange, { retain: request.retain }),
+    mtgoMainstreamProjection(target, request.retain),
   ]);
-  const displayDocument = localizedMatchupDocument(
-    ReviewData.activeMatchupDocument(document, LOW_SAMPLE_THRESHOLD)
-  );
-  currentContext = {
-    matchupDocument: displayDocument,
-    completeness,
-    matchupMainstreamParentIds: mainstream.parentIds,
-    matchupMainstreamUnavailable: mainstream.unavailable,
-  };
-  synchronizeMatchupFilter(displayDocument);
-  return `${rangeButtons(state.matchupRange, "data-matchup-range")}
-    <aside class="source-note" aria-label="${t("source.label")}">
-      <p>${t("source.matchups")}</p>
-      <p>${t("source.matchups_scope")}</p>
-    </aside>
-    ${matchupFreshness(completeness)}
-    <section class="panel"><div class="panel-toolbar"><div><h2>${t("matchup.title")}</h2>
-      <p class="matrix-toolbar-note">${t("matchup.note")}</p></div>
-      <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? t("matchup.collapse_all") : t("matchup.expand_all")}</button>
-    </div>${matchupViewControls(displayDocument, "mtgo", mainstream.unavailable)}${matchupLegend(displayDocument.min_sample_hint)}${matchupProjection(displayDocument)}</section>`;
+  return request.commit(() => {
+    const displayDocument = localizedMatchupDocument(
+      ReviewData.activeMatchupDocument(document, LOW_SAMPLE_THRESHOLD)
+    );
+    currentContext = {
+      matchupDocument: displayDocument,
+      completeness,
+      matchupMainstreamParentIds: mainstream.parentIds,
+      matchupMainstreamUnavailable: mainstream.unavailable,
+    };
+    synchronizeMatchupFilter(displayDocument);
+    return `${rangeButtons(state.matchupRange, "data-matchup-range")}
+      <aside class="source-note" aria-label="${t("source.label")}">
+        <p>${t("source.matchups")}</p>
+        <p>${t("source.matchups_scope")}</p>
+      </aside>
+      ${matchupFreshness(completeness)}
+      <section class="panel"><div class="panel-toolbar"><div><h2>${t("matchup.title")}</h2>
+        <p class="matrix-toolbar-note">${t("matchup.note")}</p></div>
+        <button id="matchup-expand-all" class="secondary-button" type="button">${state.matchupRows.size || state.matchupColumns.size ? t("matchup.collapse_all") : t("matchup.expand_all")}</button>
+      </div>${matchupViewControls(displayDocument, "mtgo", mainstream.unavailable)}${matchupLegend(displayDocument.min_sample_hint)}${matchupProjection(displayDocument)}</section>`;
+  });
 }
 
 function top8PlacementDetail() {
@@ -980,46 +1004,50 @@ function top8PlacementDetail() {
   });
 }
 
-async function top8View() {
-  const indexPath = productEntry().path;
+async function top8View(request) {
+  const { target } = request;
+  const indexPath = target.path;
   const { index, weekEntry, top8, bases } = await MtgoController
-    .loadTop8(indexPath, state.top8WeekFile, {
-      includeBases: Boolean(state.top8Detail),
+    .loadTop8(indexPath, target.top8WeekFile, {
+      retain: request.retain,
+      includeBases: Boolean(target.top8Detail),
     });
-  state.top8WeekFile = weekEntry.file;
-  const availableDetails = new Set(top8.events.flatMap(event => (
-    event.placements
-      .filter(placement => placement.deck_status === "available")
-      .map(placement => `${event.event_id}:${placement.rank}`)
-  )));
-  if (state.top8Detail && !availableDetails.has(state.top8Detail)) {
-    state.top8Detail = null;
-  }
-  currentContext = { top8Index: index, top8, bases };
-  const selectedEventId = state.top8Detail?.split(":")[0] || null;
-  return `<aside class="source-note" aria-label="${t("source.label")}"><p>${t("source.top8")}</p></aside>
-    <div class="select-row"><label for="top8-week">${t("top8.week")}</label>
-      <select id="top8-week">${index.weeks.map(item => (
-        `<option value="${escapeHtml(item.file)}" ${item.file === state.top8WeekFile ? "selected" : ""}>${item.start} ～ ${item.end}</option>`
-      )).join("")}</select>
-    </div>
-    ${top8Freshness(top8, weekEntry)}
-    <section class="panel"><h2 class="sr-only">${t("top8.title")}</h2>
-      ${horizontalScrollFrame("top8", "table-scroll", `<table class="top8-table top8-week-table"><thead><tr><th>${t("top8.rank")}</th>
-        ${top8.events.map(event => `<th class="${selectedEventId === event.event_id ? "is-current-event" : ""}" title="${escapeHtml(event.name)}"><strong>${escapeHtml(event.display_name)}</strong>
-          <small>${event.date} · ${t("top8.players", { count: event.player_count })}</small></th>`).join("")}
-      </tr></thead><tbody>${Array.from({ length: 8 }, (_, offset) => {
-        const rank = offset + 1;
-        return `<tr><td>${rank}</td>${top8.events.map(event => {
-          const placement = event.placements.find(item => item.rank === rank);
-          if (!placement || placement.deck_status !== "available") return `<td class="missing-deck">${t("top8.unavailable")}</td>`;
-          const detailId = `${event.event_id}:${rank}`;
-          const current = state.top8Detail === detailId;
-          return `<td class="${current ? "is-current-placement" : ""}"><button class="name-button" type="button" data-top8-detail="${escapeHtml(detailId)}"
-            aria-expanded="${current}"${current ? " aria-current=\"true\"" : ""}>${escapeHtml(classifierName(
-              placement.identity.parent_id,
-              placement.identity.subtype_id
-            ))}</button></td>`;
-        }).join("")}</tr>`;
-      }).join("")}</tbody></table>`)}${top8PlacementDetail()}</section>`;
+  return request.commit(() => {
+    state.top8WeekFile = weekEntry.file;
+    const availableDetails = new Set(top8.events.flatMap(event => (
+      event.placements
+        .filter(placement => placement.deck_status === "available")
+        .map(placement => `${event.event_id}:${placement.rank}`)
+    )));
+    if (state.top8Detail && !availableDetails.has(state.top8Detail)) {
+      state.top8Detail = null;
+    }
+    currentContext = { top8Index: index, top8, bases };
+    const selectedEventId = state.top8Detail?.split(":")[0] || null;
+    return `<aside class="source-note" aria-label="${t("source.label")}"><p>${t("source.top8")}</p></aside>
+      <div class="select-row"><label for="top8-week">${t("top8.week")}</label>
+        <select id="top8-week">${index.weeks.map(item => (
+          `<option value="${escapeHtml(item.file)}" ${item.file === state.top8WeekFile ? "selected" : ""}>${item.start} ～ ${item.end}</option>`
+        )).join("")}</select>
+      </div>
+      ${top8Freshness(top8, weekEntry)}
+      <section class="panel"><h2 class="sr-only">${t("top8.title")}</h2>
+        ${horizontalScrollFrame("top8", "table-scroll", `<table class="top8-table top8-week-table"><thead><tr><th>${t("top8.rank")}</th>
+          ${top8.events.map(event => `<th class="${selectedEventId === event.event_id ? "is-current-event" : ""}" title="${escapeHtml(event.name)}"><strong>${escapeHtml(event.display_name)}</strong>
+            <small>${event.date} · ${t("top8.players", { count: event.player_count })}</small></th>`).join("")}
+        </tr></thead><tbody>${Array.from({ length: 8 }, (_, offset) => {
+          const rank = offset + 1;
+          return `<tr><td>${rank}</td>${top8.events.map(event => {
+            const placement = event.placements.find(item => item.rank === rank);
+            if (!placement || placement.deck_status !== "available") return `<td class="missing-deck">${t("top8.unavailable")}</td>`;
+            const detailId = `${event.event_id}:${rank}`;
+            const current = state.top8Detail === detailId;
+            return `<td class="${current ? "is-current-placement" : ""}"><button class="name-button" type="button" data-top8-detail="${escapeHtml(detailId)}"
+              aria-expanded="${current}"${current ? " aria-current=\"true\"" : ""}>${escapeHtml(classifierName(
+                placement.identity.parent_id,
+                placement.identity.subtype_id
+              ))}</button></td>`;
+          }).join("")}</tr>`;
+        }).join("")}</tbody></table>`)}${top8PlacementDetail()}</section>`;
+  });
 }

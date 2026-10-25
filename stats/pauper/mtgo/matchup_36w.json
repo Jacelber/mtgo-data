@@ -2,7 +2,7 @@
   "schema_version": "1.1.0",
   "format": "pauper",
   "source": "mtgo",
-  "classifier_digest": "b1799d0561d80a53561c90f3aa49b13366d6c7cd24a3e58e5213fd59678e470d",
+  "classifier_digest": "751aeebfc17301e63bbeb51a4beedd94a97ed4f2de48078ece11e062b98c1d0a",
   "period": {
     "type": "36w",
     "start": "2026-02-09",
@@ -53,7 +53,9 @@
         "expandable": true,
         "subtype_ids": [
           "battle-screech/boros",
-          "battle-screech/mono-white"
+          "battle-screech/mono-white",
+          "battle-screech/naya",
+          "battle-screech/orzhov"
         ]
       },
       {
@@ -218,7 +220,8 @@
         "expandable": true,
         "subtype_ids": [
           "golgari-gardens/golgari",
-          "golgari-gardens/jund"
+          "golgari-gardens/jund",
+          "golgari-gardens/sultai"
         ]
       },
       {
@@ -673,6 +676,22 @@
         "subtype_id": "mono-white"
       },
       {
+        "id": "battle-screech/naya",
+        "kind": "subtype",
+        "name": "Naya",
+        "display_name": "Naya Battle Screech",
+        "parent_id": "battle-screech",
+        "subtype_id": "naya"
+      },
+      {
+        "id": "battle-screech/orzhov",
+        "kind": "subtype",
+        "name": "Orzhov",
+        "display_name": "Orzhov Battle Screech",
+        "parent_id": "battle-screech",
+        "subtype_id": "orzhov"
+      },
+      {
         "id": "bogles",
         "kind": "archetype",
         "name": "Bogles",
@@ -903,6 +922,14 @@
         "display_name": "Jund Garden",
         "parent_id": "golgari-gardens",
         "subtype_id": "jund"
+      },
+      {
+        "id": "golgari-gardens/sultai",
+        "kind": "subtype",
+        "name": "Sultai Gardens",
+        "display_name": "Sultai Gardens",
+        "parent_id": "golgari-gardens",
+        "subtype_id": "sultai"
       },
       {
         "id": "green-tron",
@@ -56653,9 +56680,9 @@
     "gruul-ponza",
     "dimir-terror",
     "ephemerate/jeskai",
-    "battle-screech/mono-white",
     "spy-combo",
     "bogles",
+    "battle-screech/mono-white",
     "mono-blue-faeries",
     "snacker-gates",
     "rakdos-madness",
@@ -56689,8 +56716,8 @@
     "dredge",
     "esper-ephemerate",
     "four-color-affinity",
-    "packbeast-swarm/mono-white",
     "eggs-tron",
+    "packbeast-swarm/mono-white",
     "gruul-hawkeye",
     "goblins",
     "azorius-familiars/jeskai",
@@ -56704,15 +56731,16 @@
     "mono-red-fiend",
     "izzet-faeries",
     "temur-control",
+    "packbeast-swarm/mardu",
     "walls-ramp",
     "mono-red-burn",
     "naya-wildfire",
+    "battle-screech/orzhov",
     "four-color-pestilence-gates",
-    "packbeast-swarm/mardu",
+    "packbeast-swarm/boros",
     "proliferate-storm",
     "izzet-control",
     "naya-ponza",
-    "packbeast-swarm/boros",
     "domain-ephemerate",
     "grixis-terror",
     "jund-snacker",
@@ -56723,6 +56751,7 @@
     "izzet-madness",
     "rakdos-affinity",
     "azorius-affinity",
+    "battle-screech/naya",
     "esper-midrange",
     "gruul-madness",
     "mono-black-devotion",
@@ -56735,8 +56764,7 @@
     "golgari-gardens/jund",
     "izzet-wildfire-control",
     "packbeast-swarm/esper",
-    "jund-ramp",
-    "packbeast-swarm/mono-white-learn"
+    "jund-ramp"
   ],
   "leaf_overall": {
     "mono-red-madness": {
@@ -57003,28 +57031,6 @@
         }
       }
     },
-    "battle-screech/mono-white": {
-      "wins": 239,
-      "losses": 253,
-      "draws": 0,
-      "matches": 492,
-      "win_rate": 0.4858,
-      "ci_half": 0.044,
-      "low_sample": false,
-      "mirror": false,
-      "literal_record": {
-        "wins": 239,
-        "losses": 253,
-        "draws": 0,
-        "matches": 492,
-        "win_rate": 0.485772,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.44189,
-          "upper": 0.529875
-        }
-      }
-    },
     "spy-combo": {
       "wins": 239,
       "losses": 250,
@@ -57066,6 +57072,28 @@
         "confidence_interval_95": {
           "lower": 0.470061,
           "upper": 0.558403
+        }
+      }
+    },
+    "battle-screech/mono-white": {
+      "wins": 229,
+      "losses": 241,
+      "draws": 0,
+      "matches": 470,
+      "win_rate": 0.4872,
+      "ci_half": 0.045,
+      "low_sample": false,
+      "mirror": false,
+      "literal_record": {
+        "wins": 229,
+        "losses": 241,
+        "draws": 0,
+        "matches": 470,
+        "win_rate": 0.487234,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.442332,
+          "upper": 0.532343
         }
       }
     },
@@ -57378,24 +57406,24 @@
       }
     },
     "battle-screech/boros": {
-      "wins": 62,
-      "losses": 82,
+      "wins": 64,
+      "losses": 84,
       "draws": 0,
-      "matches": 144,
-      "win_rate": 0.4306,
-      "ci_half": 0.0798,
+      "matches": 148,
+      "win_rate": 0.4324,
+      "ci_half": 0.0788,
       "low_sample": false,
       "mirror": false,
       "literal_record": {
-        "wins": 62,
-        "losses": 82,
+        "wins": 64,
+        "losses": 84,
         "draws": 0,
-        "matches": 144,
-        "win_rate": 0.430556,
+        "matches": 148,
+        "win_rate": 0.432432,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.352522,
-          "upper": 0.512198
+          "lower": 0.355323,
+          "upper": 0.512961
         }
       }
     },
@@ -57795,28 +57823,6 @@
         }
       }
     },
-    "packbeast-swarm/mono-white": {
-      "wins": 19,
-      "losses": 16,
-      "draws": 0,
-      "matches": 35,
-      "win_rate": 0.5429,
-      "ci_half": 0.1567,
-      "low_sample": false,
-      "mirror": false,
-      "literal_record": {
-        "wins": 19,
-        "losses": 16,
-        "draws": 0,
-        "matches": 35,
-        "win_rate": 0.542857,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.381895,
-          "upper": 0.695342
-        }
-      }
-    },
     "eggs-tron": {
       "wins": 16,
       "losses": 17,
@@ -57836,6 +57842,28 @@
         "confidence_interval_95": {
           "lower": 0.325038,
           "upper": 0.647819
+        }
+      }
+    },
+    "packbeast-swarm/mono-white": {
+      "wins": 19,
+      "losses": 13,
+      "draws": 0,
+      "matches": 32,
+      "win_rate": 0.5938,
+      "ci_half": 0.1611,
+      "low_sample": false,
+      "mirror": false,
+      "literal_record": {
+        "wins": 19,
+        "losses": 13,
+        "draws": 0,
+        "matches": 32,
+        "win_rate": 0.59375,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.422597,
+          "upper": 0.744806
         }
       }
     },
@@ -58125,6 +58153,28 @@
         }
       }
     },
+    "packbeast-swarm/mardu": {
+      "wins": 4,
+      "losses": 12,
+      "draws": 0,
+      "matches": 16,
+      "win_rate": 0.25,
+      "ci_half": 0.1966,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 4,
+        "losses": 12,
+        "draws": 0,
+        "matches": 16,
+        "win_rate": 0.25,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.101819,
+          "upper": 0.494988
+        }
+      }
+    },
     "walls-ramp": {
       "wins": 6,
       "losses": 10,
@@ -58191,6 +58241,28 @@
         }
       }
     },
+    "battle-screech/orzhov": {
+      "wins": 6,
+      "losses": 8,
+      "draws": 0,
+      "matches": 14,
+      "win_rate": 0.4286,
+      "ci_half": 0.2301,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 6,
+        "losses": 8,
+        "draws": 0,
+        "matches": 14,
+        "win_rate": 0.428571,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.213805,
+          "upper": 0.674097
+        }
+      }
+    },
     "four-color-pestilence-gates": {
       "wins": 8,
       "losses": 6,
@@ -58213,25 +58285,25 @@
         }
       }
     },
-    "packbeast-swarm/mardu": {
-      "wins": 4,
-      "losses": 9,
+    "packbeast-swarm/boros": {
+      "wins": 7,
+      "losses": 5,
       "draws": 0,
-      "matches": 13,
-      "win_rate": 0.3077,
-      "ci_half": 0.2248,
+      "matches": 12,
+      "win_rate": 0.5833,
+      "ci_half": 0.2436,
       "low_sample": true,
       "mirror": false,
       "literal_record": {
-        "wins": 4,
-        "losses": 9,
+        "wins": 7,
+        "losses": 5,
         "draws": 0,
-        "matches": 13,
-        "win_rate": 0.307692,
+        "matches": 12,
+        "win_rate": 0.583333,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.126805,
-          "upper": 0.576311
+          "lower": 0.319507,
+          "upper": 0.806743
         }
       }
     },
@@ -58298,28 +58370,6 @@
         "confidence_interval_95": {
           "lower": 0.097459,
           "upper": 0.56565
-        }
-      }
-    },
-    "packbeast-swarm/boros": {
-      "wins": 6,
-      "losses": 4,
-      "draws": 0,
-      "matches": 10,
-      "win_rate": 0.6,
-      "ci_half": 0.2596,
-      "low_sample": true,
-      "mirror": false,
-      "literal_record": {
-        "wins": 6,
-        "losses": 4,
-        "draws": 0,
-        "matches": 10,
-        "win_rate": 0.6,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.31267,
-          "upper": 0.831822
         }
       }
     },
@@ -58522,6 +58572,28 @@
       }
     },
     "azorius-affinity": {
+      "wins": 3,
+      "losses": 3,
+      "draws": 0,
+      "matches": 6,
+      "win_rate": 0.5,
+      "ci_half": 0.3124,
+      "low_sample": true,
+      "mirror": false,
+      "literal_record": {
+        "wins": 3,
+        "losses": 3,
+        "draws": 0,
+        "matches": 6,
+        "win_rate": 0.5,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.187613,
+          "upper": 0.812387
+        }
+      }
+    },
+    "battle-screech/naya": {
       "wins": 3,
       "losses": 3,
       "draws": 0,
@@ -58808,28 +58880,6 @@
       }
     },
     "jund-ramp": {
-      "wins": 1,
-      "losses": 1,
-      "draws": 0,
-      "matches": 2,
-      "win_rate": 0.5,
-      "ci_half": 0.4055,
-      "low_sample": true,
-      "mirror": false,
-      "literal_record": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.094529,
-          "upper": 0.905471
-        }
-      }
-    },
-    "packbeast-swarm/mono-white-learn": {
       "wins": 1,
       "losses": 1,
       "draws": 0,
@@ -59177,33 +59227,6 @@
       },
       "mirror_match_count": 11
     },
-    "battle-screech/mono-white": {
-      "all_matches": {
-        "wins": 244,
-        "losses": 258,
-        "draws": 0,
-        "matches": 502,
-        "win_rate": 0.486056,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.442605,
-          "upper": 0.529718
-        }
-      },
-      "non_mirror": {
-        "wins": 239,
-        "losses": 253,
-        "draws": 0,
-        "matches": 492,
-        "win_rate": 0.485772,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.44189,
-          "upper": 0.529875
-        }
-      },
-      "mirror_match_count": 5
-    },
     "spy-combo": {
       "all_matches": {
         "wins": 244,
@@ -59257,6 +59280,33 @@
         }
       },
       "mirror_match_count": 16
+    },
+    "battle-screech/mono-white": {
+      "all_matches": {
+        "wins": 233,
+        "losses": 245,
+        "draws": 0,
+        "matches": 478,
+        "win_rate": 0.487448,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.442917,
+          "upper": 0.532179
+        }
+      },
+      "non_mirror": {
+        "wins": 229,
+        "losses": 241,
+        "draws": 0,
+        "matches": 470,
+        "win_rate": 0.487234,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.442332,
+          "upper": 0.532343
+        }
+      },
+      "mirror_match_count": 4
     },
     "mono-blue-faeries": {
       "all_matches": {
@@ -59638,27 +59688,27 @@
     },
     "battle-screech/boros": {
       "all_matches": {
-        "wins": 62,
-        "losses": 82,
+        "wins": 64,
+        "losses": 84,
         "draws": 0,
-        "matches": 144,
-        "win_rate": 0.430556,
+        "matches": 148,
+        "win_rate": 0.432432,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.352522,
-          "upper": 0.512198
+          "lower": 0.355323,
+          "upper": 0.512961
         }
       },
       "non_mirror": {
-        "wins": 62,
-        "losses": 82,
+        "wins": 64,
+        "losses": 84,
         "draws": 0,
-        "matches": 144,
-        "win_rate": 0.430556,
+        "matches": 148,
+        "win_rate": 0.432432,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.352522,
-          "upper": 0.512198
+          "lower": 0.355323,
+          "upper": 0.512961
         }
       },
       "mirror_match_count": 0
@@ -60149,33 +60199,6 @@
       },
       "mirror_match_count": 0
     },
-    "packbeast-swarm/mono-white": {
-      "all_matches": {
-        "wins": 19,
-        "losses": 16,
-        "draws": 0,
-        "matches": 35,
-        "win_rate": 0.542857,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.381895,
-          "upper": 0.695342
-        }
-      },
-      "non_mirror": {
-        "wins": 19,
-        "losses": 16,
-        "draws": 0,
-        "matches": 35,
-        "win_rate": 0.542857,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.381895,
-          "upper": 0.695342
-        }
-      },
-      "mirror_match_count": 0
-    },
     "eggs-tron": {
       "all_matches": {
         "wins": 17,
@@ -60202,6 +60225,33 @@
         }
       },
       "mirror_match_count": 1
+    },
+    "packbeast-swarm/mono-white": {
+      "all_matches": {
+        "wins": 19,
+        "losses": 13,
+        "draws": 0,
+        "matches": 32,
+        "win_rate": 0.59375,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.422597,
+          "upper": 0.744806
+        }
+      },
+      "non_mirror": {
+        "wins": 19,
+        "losses": 13,
+        "draws": 0,
+        "matches": 32,
+        "win_rate": 0.59375,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.422597,
+          "upper": 0.744806
+        }
+      },
+      "mirror_match_count": 0
     },
     "gruul-hawkeye": {
       "all_matches": {
@@ -60554,6 +60604,33 @@
       },
       "mirror_match_count": 0
     },
+    "packbeast-swarm/mardu": {
+      "all_matches": {
+        "wins": 4,
+        "losses": 12,
+        "draws": 0,
+        "matches": 16,
+        "win_rate": 0.25,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.101819,
+          "upper": 0.494988
+        }
+      },
+      "non_mirror": {
+        "wins": 4,
+        "losses": 12,
+        "draws": 0,
+        "matches": 16,
+        "win_rate": 0.25,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.101819,
+          "upper": 0.494988
+        }
+      },
+      "mirror_match_count": 0
+    },
     "walls-ramp": {
       "all_matches": {
         "wins": 6,
@@ -60635,6 +60712,33 @@
       },
       "mirror_match_count": 0
     },
+    "battle-screech/orzhov": {
+      "all_matches": {
+        "wins": 6,
+        "losses": 8,
+        "draws": 0,
+        "matches": 14,
+        "win_rate": 0.428571,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.213805,
+          "upper": 0.674097
+        }
+      },
+      "non_mirror": {
+        "wins": 6,
+        "losses": 8,
+        "draws": 0,
+        "matches": 14,
+        "win_rate": 0.428571,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.213805,
+          "upper": 0.674097
+        }
+      },
+      "mirror_match_count": 0
+    },
     "four-color-pestilence-gates": {
       "all_matches": {
         "wins": 8,
@@ -60662,29 +60766,29 @@
       },
       "mirror_match_count": 0
     },
-    "packbeast-swarm/mardu": {
+    "packbeast-swarm/boros": {
       "all_matches": {
-        "wins": 4,
-        "losses": 9,
+        "wins": 7,
+        "losses": 5,
         "draws": 0,
-        "matches": 13,
-        "win_rate": 0.307692,
+        "matches": 12,
+        "win_rate": 0.583333,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.126805,
-          "upper": 0.576311
+          "lower": 0.319507,
+          "upper": 0.806743
         }
       },
       "non_mirror": {
-        "wins": 4,
-        "losses": 9,
+        "wins": 7,
+        "losses": 5,
         "draws": 0,
-        "matches": 13,
-        "win_rate": 0.307692,
+        "matches": 12,
+        "win_rate": 0.583333,
         "win_rate_method": "wins_over_valid_matches",
         "confidence_interval_95": {
-          "lower": 0.126805,
-          "upper": 0.576311
+          "lower": 0.319507,
+          "upper": 0.806743
         }
       },
       "mirror_match_count": 0
@@ -60766,33 +60870,6 @@
         "confidence_interval_95": {
           "lower": 0.097459,
           "upper": 0.56565
-        }
-      },
-      "mirror_match_count": 0
-    },
-    "packbeast-swarm/boros": {
-      "all_matches": {
-        "wins": 6,
-        "losses": 4,
-        "draws": 0,
-        "matches": 10,
-        "win_rate": 0.6,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.31267,
-          "upper": 0.831822
-        }
-      },
-      "non_mirror": {
-        "wins": 6,
-        "losses": 4,
-        "draws": 0,
-        "matches": 10,
-        "win_rate": 0.6,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.31267,
-          "upper": 0.831822
         }
       },
       "mirror_match_count": 0
@@ -61041,6 +61118,33 @@
       "mirror_match_count": 0
     },
     "azorius-affinity": {
+      "all_matches": {
+        "wins": 3,
+        "losses": 3,
+        "draws": 0,
+        "matches": 6,
+        "win_rate": 0.5,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.187613,
+          "upper": 0.812387
+        }
+      },
+      "non_mirror": {
+        "wins": 3,
+        "losses": 3,
+        "draws": 0,
+        "matches": 6,
+        "win_rate": 0.5,
+        "win_rate_method": "wins_over_valid_matches",
+        "confidence_interval_95": {
+          "lower": 0.187613,
+          "upper": 0.812387
+        }
+      },
+      "mirror_match_count": 0
+    },
+    "battle-screech/naya": {
       "all_matches": {
         "wins": 3,
         "losses": 3,
@@ -61417,33 +61521,6 @@
         }
       },
       "mirror_match_count": 0
-    },
-    "packbeast-swarm/mono-white-learn": {
-      "all_matches": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.094529,
-          "upper": 0.905471
-        }
-      },
-      "non_mirror": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "win_rate_method": "wins_over_valid_matches",
-        "confidence_interval_95": {
-          "lower": 0.094529,
-          "upper": 0.905471
-        }
-      },
-      "mirror_match_count": 0
     }
   },
   "leaf_matrix": {
@@ -61559,46 +61636,90 @@
         }
       },
       "battle-screech/boros": {
-        "wins": 15,
-        "losses": 4,
+        "wins": 14,
+        "losses": 6,
         "draws": 0,
-        "matches": 19,
-        "win_rate": 0.7895,
-        "ci_half": 0.1741,
-        "low_sample": true,
+        "matches": 20,
+        "win_rate": 0.7,
+        "ci_half": 0.1868,
+        "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 15,
-          "losses": 4,
+          "wins": 14,
+          "losses": 6,
           "draws": 0,
-          "matches": 19,
-          "win_rate": 0.789474,
+          "matches": 20,
+          "win_rate": 0.7,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.566653,
-            "upper": 0.914925
+            "lower": 0.481023,
+            "upper": 0.854525
           }
         }
       },
       "battle-screech/mono-white": {
-        "wins": 32,
-        "losses": 26,
+        "wins": 31,
+        "losses": 22,
         "draws": 0,
-        "matches": 58,
-        "win_rate": 0.5517,
-        "ci_half": 0.124,
+        "matches": 53,
+        "win_rate": 0.5849,
+        "ci_half": 0.1282,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 32,
-          "losses": 26,
+          "wins": 31,
+          "losses": 22,
           "draws": 0,
-          "matches": 58,
-          "win_rate": 0.551724,
+          "matches": 53,
+          "win_rate": 0.584906,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.424519,
-            "upper": 0.672503
+            "lower": 0.450942,
+            "upper": 0.707393
+          }
+        }
+      },
+      "battle-screech/naya": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "battle-screech/orzhov": {
+        "wins": 1,
+        "losses": 2,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.3333,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 2,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.333333,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.06149,
+            "upper": 0.792345
           }
         }
       },
@@ -63343,46 +63464,68 @@
         }
       },
       "battle-screech/boros": {
-        "wins": 7,
+        "wins": 8,
         "losses": 5,
         "draws": 0,
-        "matches": 12,
-        "win_rate": 0.5833,
-        "ci_half": 0.2436,
+        "matches": 13,
+        "win_rate": 0.6154,
+        "ci_half": 0.2338,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 7,
+          "wins": 8,
           "losses": 5,
           "draws": 0,
-          "matches": 12,
-          "win_rate": 0.583333,
+          "matches": 13,
+          "win_rate": 0.615385,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.319507,
-            "upper": 0.806743
+            "lower": 0.355225,
+            "upper": 0.822906
           }
         }
       },
       "battle-screech/mono-white": {
-        "wins": 25,
-        "losses": 21,
+        "wins": 24,
+        "losses": 20,
         "draws": 0,
-        "matches": 46,
-        "win_rate": 0.5435,
-        "ci_half": 0.1383,
+        "matches": 44,
+        "win_rate": 0.5455,
+        "ci_half": 0.1411,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 25,
-          "losses": 21,
+          "wins": 24,
+          "losses": 20,
           "draws": 0,
-          "matches": 46,
-          "win_rate": 0.543478,
+          "matches": 44,
+          "win_rate": 0.545455,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.401799,
-            "upper": 0.678455
+            "lower": 0.400659,
+            "upper": 0.68295
+          }
+        }
+      },
+      "battle-screech/orzhov": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       },
@@ -65039,46 +65182,68 @@
         }
       },
       "battle-screech/boros": {
-        "wins": 4,
-        "losses": 5,
+        "wins": 6,
+        "losses": 6,
         "draws": 0,
-        "matches": 9,
-        "win_rate": 0.4444,
-        "ci_half": 0.2723,
+        "matches": 12,
+        "win_rate": 0.5,
+        "ci_half": 0.2462,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 4,
-          "losses": 5,
+          "wins": 6,
+          "losses": 6,
           "draws": 0,
-          "matches": 9,
-          "win_rate": 0.444444,
+          "matches": 12,
+          "win_rate": 0.5,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.188775,
-            "upper": 0.733353
+            "lower": 0.253778,
+            "upper": 0.746222
           }
         }
       },
       "battle-screech/mono-white": {
-        "wins": 13,
-        "losses": 17,
+        "wins": 11,
+        "losses": 15,
         "draws": 0,
-        "matches": 30,
-        "win_rate": 0.4333,
-        "ci_half": 0.1671,
+        "matches": 26,
+        "win_rate": 0.4231,
+        "ci_half": 0.1775,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 13,
-          "losses": 17,
+          "wins": 11,
+          "losses": 15,
           "draws": 0,
-          "matches": 30,
-          "win_rate": 0.433333,
+          "matches": 26,
+          "win_rate": 0.423077,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.273772,
-            "upper": 0.60803
+            "lower": 0.255442,
+            "upper": 0.610517
+          }
+        }
+      },
+      "battle-screech/naya": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       },
@@ -66293,28 +66458,6 @@
         }
       },
       "packbeast-swarm/mardu": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "packbeast-swarm/mono-white": {
         "wins": 2,
         "losses": 0,
         "draws": 0,
@@ -66332,6 +66475,28 @@
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
             "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "packbeast-swarm/mono-white": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
             "upper": 1.0
           }
         }
@@ -66691,24 +66856,46 @@
         }
       },
       "battle-screech/mono-white": {
-        "wins": 12,
+        "wins": 11,
         "losses": 15,
         "draws": 0,
-        "matches": 27,
-        "win_rate": 0.4444,
-        "ci_half": 0.1755,
+        "matches": 26,
+        "win_rate": 0.4231,
+        "ci_half": 0.1775,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 12,
+          "wins": 11,
           "losses": 15,
           "draws": 0,
-          "matches": 27,
-          "win_rate": 0.444444,
+          "matches": 26,
+          "win_rate": 0.423077,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.275856,
-            "upper": 0.626873
+            "lower": 0.255442,
+            "upper": 0.610517
+          }
+        }
+      },
+      "battle-screech/orzhov": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -67923,46 +68110,46 @@
         }
       },
       "packbeast-swarm/mardu": {
-        "wins": 1,
+        "wins": 2,
         "losses": 0,
         "draws": 0,
-        "matches": 1,
+        "matches": 2,
         "win_rate": 1.0,
-        "ci_half": 0.3967,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 1,
+          "wins": 2,
           "losses": 0,
           "draws": 0,
-          "matches": 1,
+          "matches": 2,
           "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.206543,
+            "lower": 0.342372,
             "upper": 1.0
           }
         }
       },
       "packbeast-swarm/mono-white": {
-        "wins": 3,
+        "wins": 2,
         "losses": 1,
         "draws": 0,
-        "matches": 4,
-        "win_rate": 0.75,
-        "ci_half": 0.3269,
+        "matches": 3,
+        "win_rate": 0.6667,
+        "ci_half": 0.3654,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 3,
+          "wins": 2,
           "losses": 1,
           "draws": 0,
-          "matches": 4,
-          "win_rate": 0.75,
+          "matches": 3,
+          "win_rate": 0.666667,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.300636,
-            "upper": 0.954414
+            "lower": 0.207655,
+            "upper": 0.93851
           }
         }
       },
@@ -68300,45 +68487,67 @@
       },
       "battle-screech/boros": {
         "wins": 3,
-        "losses": 2,
+        "losses": 3,
         "draws": 0,
-        "matches": 5,
-        "win_rate": 0.6,
-        "ci_half": 0.3258,
+        "matches": 6,
+        "win_rate": 0.5,
+        "ci_half": 0.3124,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 3,
-          "losses": 2,
+          "losses": 3,
           "draws": 0,
-          "matches": 5,
-          "win_rate": 0.6,
+          "matches": 6,
+          "win_rate": 0.5,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.23072,
-            "upper": 0.882382
+            "lower": 0.187613,
+            "upper": 0.812387
           }
         }
       },
       "battle-screech/mono-white": {
-        "wins": 16,
-        "losses": 17,
+        "wins": 14,
+        "losses": 16,
         "draws": 0,
-        "matches": 33,
-        "win_rate": 0.4848,
-        "ci_half": 0.1614,
+        "matches": 30,
+        "win_rate": 0.4667,
+        "ci_half": 0.1681,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 16,
-          "losses": 17,
+          "wins": 14,
+          "losses": 16,
           "draws": 0,
-          "matches": 33,
-          "win_rate": 0.484848,
+          "matches": 30,
+          "win_rate": 0.466667,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.325038,
-            "upper": 0.647819
+            "lower": 0.302321,
+            "upper": 0.63858
+          }
+        }
+      },
+      "battle-screech/orzhov": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
           }
         }
       },
@@ -69356,23 +69565,23 @@
       },
       "packbeast-swarm/boros": {
         "wins": 0,
-        "losses": 1,
+        "losses": 2,
         "draws": 0,
-        "matches": 1,
+        "matches": 2,
         "win_rate": 0.0,
-        "ci_half": 0.3967,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 0,
-          "losses": 1,
+          "losses": 2,
           "draws": 0,
-          "matches": 1,
+          "matches": 2,
           "win_rate": 0.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
             "lower": 0.0,
-            "upper": 0.793457
+            "upper": 0.657628
           }
         }
       },
@@ -69399,28 +69608,6 @@
         }
       },
       "packbeast-swarm/mono-white": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "packbeast-swarm/mono-white-learn": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -72417,46 +72604,46 @@
         }
       },
       "packbeast-swarm/mardu": {
-        "wins": 2,
+        "wins": 3,
         "losses": 1,
         "draws": 0,
-        "matches": 3,
-        "win_rate": 0.6667,
-        "ci_half": 0.3654,
+        "matches": 4,
+        "win_rate": 0.75,
+        "ci_half": 0.3269,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 2,
+          "wins": 3,
           "losses": 1,
           "draws": 0,
-          "matches": 3,
-          "win_rate": 0.666667,
+          "matches": 4,
+          "win_rate": 0.75,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.207655,
-            "upper": 0.93851
+            "lower": 0.300636,
+            "upper": 0.954414
           }
         }
       },
       "packbeast-swarm/mono-white": {
-        "wins": 2,
+        "wins": 1,
         "losses": 1,
         "draws": 0,
-        "matches": 3,
-        "win_rate": 0.6667,
-        "ci_half": 0.3654,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 2,
+          "wins": 1,
           "losses": 1,
           "draws": 0,
-          "matches": 3,
-          "win_rate": 0.666667,
+          "matches": 2,
+          "win_rate": 0.5,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.207655,
-            "upper": 0.93851
+            "lower": 0.094529,
+            "upper": 0.905471
           }
         }
       },
@@ -72793,24 +72980,24 @@
         }
       },
       "battle-screech/boros": {
-        "wins": 4,
+        "wins": 3,
         "losses": 2,
         "draws": 0,
-        "matches": 6,
-        "win_rate": 0.6667,
-        "ci_half": 0.3016,
+        "matches": 5,
+        "win_rate": 0.6,
+        "ci_half": 0.3258,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 4,
+          "wins": 3,
           "losses": 2,
           "draws": 0,
-          "matches": 6,
-          "win_rate": 0.666667,
+          "matches": 5,
+          "win_rate": 0.6,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.299988,
-            "upper": 0.903231
+            "lower": 0.23072,
+            "upper": 0.882382
           }
         }
       },
@@ -72833,6 +73020,28 @@
           "confidence_interval_95": {
             "lower": 0.408783,
             "upper": 0.792492
+          }
+        }
+      },
+      "battle-screech/naya": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -74248,23 +74457,23 @@
       },
       "battle-screech/boros": {
         "wins": 5,
-        "losses": 4,
+        "losses": 3,
         "draws": 0,
-        "matches": 9,
-        "win_rate": 0.5556,
-        "ci_half": 0.2723,
+        "matches": 8,
+        "win_rate": 0.625,
+        "ci_half": 0.2787,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 5,
-          "losses": 4,
+          "losses": 3,
           "draws": 0,
-          "matches": 9,
-          "win_rate": 0.555556,
+          "matches": 8,
+          "win_rate": 0.625,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.266647,
-            "upper": 0.811225
+            "lower": 0.305738,
+            "upper": 0.863158
           }
         }
       },
@@ -74287,6 +74496,28 @@
           "confidence_interval_95": {
             "lower": 0.317075,
             "upper": 0.726705
+          }
+        }
+      },
+      "battle-screech/naya": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       },
@@ -76822,7 +77053,7 @@
           }
         }
       },
-      "packbeast-swarm/mono-white-learn": {
+      "packbeast-swarm/boros": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -77111,46 +77342,68 @@
         }
       },
       "battle-screech/boros": {
-        "wins": 3,
+        "wins": 4,
         "losses": 1,
         "draws": 0,
-        "matches": 4,
-        "win_rate": 0.75,
-        "ci_half": 0.3269,
+        "matches": 5,
+        "win_rate": 0.8,
+        "ci_half": 0.2941,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 3,
+          "wins": 4,
           "losses": 1,
           "draws": 0,
-          "matches": 4,
-          "win_rate": 0.75,
+          "matches": 5,
+          "win_rate": 0.8,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.300636,
-            "upper": 0.954414
+            "lower": 0.375528,
+            "upper": 0.963777
           }
         }
       },
       "battle-screech/mono-white": {
-        "wins": 17,
-        "losses": 9,
+        "wins": 15,
+        "losses": 8,
         "draws": 0,
-        "matches": 26,
-        "win_rate": 0.6538,
-        "ci_half": 0.1718,
+        "matches": 23,
+        "win_rate": 0.6522,
+        "ci_half": 0.1815,
         "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 17,
-          "losses": 9,
+          "wins": 15,
+          "losses": 8,
           "draws": 0,
-          "matches": 26,
-          "win_rate": 0.653846,
+          "matches": 23,
+          "win_rate": 0.652174,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.462202,
-            "upper": 0.80588
+            "lower": 0.4489,
+            "upper": 0.811889
+          }
+        }
+      },
+      "battle-screech/orzhov": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
           }
         }
       },
@@ -78367,24 +78620,46 @@
         }
       },
       "battle-screech/mono-white": {
-        "wins": 6,
+        "wins": 5,
         "losses": 11,
         "draws": 0,
-        "matches": 17,
-        "win_rate": 0.3529,
-        "ci_half": 0.207,
+        "matches": 16,
+        "win_rate": 0.3125,
+        "ci_half": 0.2072,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 6,
+          "wins": 5,
           "losses": 11,
           "draws": 0,
-          "matches": 17,
-          "win_rate": 0.352941,
+          "matches": 16,
+          "win_rate": 0.3125,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.173095,
-            "upper": 0.587
+            "lower": 0.141644,
+            "upper": 0.555961
+          }
+        }
+      },
+      "battle-screech/orzhov": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -79511,1196 +79786,6 @@
         }
       }
     },
-    "battle-screech/mono-white": {
-      "azorius-familiars/azorius": {
-        "wins": 3,
-        "losses": 6,
-        "draws": 0,
-        "matches": 9,
-        "win_rate": 0.3333,
-        "ci_half": 0.2626,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 3,
-          "losses": 6,
-          "draws": 0,
-          "matches": 9,
-          "win_rate": 0.333333,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.120582,
-            "upper": 0.645803
-          }
-        }
-      },
-      "azorius-familiars/jeskai": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "battle-screech/boros": {
-        "wins": 3,
-        "losses": 0,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 1.0,
-        "ci_half": 0.2808,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 3,
-          "losses": 0,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.438494,
-            "upper": 1.0
-          }
-        }
-      },
-      "battle-screech/mono-white": {
-        "wins": 5,
-        "losses": 5,
-        "draws": 0,
-        "matches": 10,
-        "win_rate": 0.5,
-        "ci_half": 0.2634,
-        "low_sample": true,
-        "mirror": true,
-        "literal_record": {
-          "wins": 5,
-          "losses": 5,
-          "draws": 0,
-          "matches": 10,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.23659,
-            "upper": 0.76341
-          }
-        }
-      },
-      "bogles": {
-        "wins": 4,
-        "losses": 8,
-        "draws": 0,
-        "matches": 12,
-        "win_rate": 0.3333,
-        "ci_half": 0.2356,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 4,
-          "losses": 8,
-          "draws": 0,
-          "matches": 12,
-          "win_rate": 0.333333,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.138118,
-            "upper": 0.609382
-          }
-        }
-      },
-      "boros-madness": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      },
-      "boros-snacker": {
-        "wins": 2,
-        "losses": 3,
-        "draws": 0,
-        "matches": 5,
-        "win_rate": 0.4,
-        "ci_half": 0.3258,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 3,
-          "draws": 0,
-          "matches": 5,
-          "win_rate": 0.4,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.117618,
-            "upper": 0.76928
-          }
-        }
-      },
-      "boros-synthesizer": {
-        "wins": 3,
-        "losses": 0,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 1.0,
-        "ci_half": 0.2808,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 3,
-          "losses": 0,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.438494,
-            "upper": 1.0
-          }
-        }
-      },
-      "dimir-affinity": {
-        "wins": 2,
-        "losses": 3,
-        "draws": 0,
-        "matches": 5,
-        "win_rate": 0.4,
-        "ci_half": 0.3258,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 3,
-          "draws": 0,
-          "matches": 5,
-          "win_rate": 0.4,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.117618,
-            "upper": 0.76928
-          }
-        }
-      },
-      "dimir-control/dimir": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      },
-      "dimir-control/red-splash": {
-        "wins": 4,
-        "losses": 0,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 1.0,
-        "ci_half": 0.245,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 4,
-          "losses": 0,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.5101,
-            "upper": 1.0
-          }
-        }
-      },
-      "dimir-faeries": {
-        "wins": 17,
-        "losses": 16,
-        "draws": 0,
-        "matches": 33,
-        "win_rate": 0.5152,
-        "ci_half": 0.1614,
-        "low_sample": false,
-        "mirror": false,
-        "literal_record": {
-          "wins": 17,
-          "losses": 16,
-          "draws": 0,
-          "matches": 33,
-          "win_rate": 0.515152,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.352181,
-            "upper": 0.674962
-          }
-        }
-      },
-      "dimir-terror": {
-        "wins": 9,
-        "losses": 17,
-        "draws": 0,
-        "matches": 26,
-        "win_rate": 0.3462,
-        "ci_half": 0.1718,
-        "low_sample": false,
-        "mirror": false,
-        "literal_record": {
-          "wins": 9,
-          "losses": 17,
-          "draws": 0,
-          "matches": 26,
-          "win_rate": 0.346154,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.19412,
-            "upper": 0.537798
-          }
-        }
-      },
-      "dredge": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 0,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.342372,
-            "upper": 1.0
-          }
-        }
-      },
-      "elves": {
-        "wins": 9,
-        "losses": 12,
-        "draws": 0,
-        "matches": 21,
-        "win_rate": 0.4286,
-        "ci_half": 0.1949,
-        "low_sample": false,
-        "mirror": false,
-        "literal_record": {
-          "wins": 9,
-          "losses": 12,
-          "draws": 0,
-          "matches": 21,
-          "win_rate": 0.428571,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.244697,
-            "upper": 0.634538
-          }
-        }
-      },
-      "ephemerate-tron": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "ephemerate/four-color": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "ephemerate/jeskai": {
-        "wins": 11,
-        "losses": 6,
-        "draws": 0,
-        "matches": 17,
-        "win_rate": 0.6471,
-        "ci_half": 0.207,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 11,
-          "losses": 6,
-          "draws": 0,
-          "matches": 17,
-          "win_rate": 0.647059,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.413,
-            "upper": 0.826905
-          }
-        }
-      },
-      "esper-affinity": {
-        "wins": 5,
-        "losses": 3,
-        "draws": 0,
-        "matches": 8,
-        "win_rate": 0.625,
-        "ci_half": 0.2787,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 5,
-          "losses": 3,
-          "draws": 0,
-          "matches": 8,
-          "win_rate": 0.625,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.305738,
-            "upper": 0.863158
-          }
-        }
-      },
-      "esper-ephemerate": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 0,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.342372,
-            "upper": 1.0
-          }
-        }
-      },
-      "food-gardens": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 2,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.657628
-          }
-        }
-      },
-      "four-color-affinity": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "goblins": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "golgari-gardens/golgari": {
-        "wins": 9,
-        "losses": 10,
-        "draws": 0,
-        "matches": 19,
-        "win_rate": 0.4737,
-        "ci_half": 0.2048,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 9,
-          "losses": 10,
-          "draws": 0,
-          "matches": 19,
-          "win_rate": 0.473684,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.273295,
-            "upper": 0.682925
-          }
-        }
-      },
-      "golgari-gardens/jund": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "green-tron": {
-        "wins": 8,
-        "losses": 13,
-        "draws": 0,
-        "matches": 21,
-        "win_rate": 0.381,
-        "ci_half": 0.1919,
-        "low_sample": false,
-        "mirror": false,
-        "literal_record": {
-          "wins": 8,
-          "losses": 13,
-          "draws": 0,
-          "matches": 21,
-          "win_rate": 0.380952,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.207508,
-            "upper": 0.591217
-          }
-        }
-      },
-      "grixis-affinity": {
-        "wins": 15,
-        "losses": 12,
-        "draws": 0,
-        "matches": 27,
-        "win_rate": 0.5556,
-        "ci_half": 0.1755,
-        "low_sample": false,
-        "mirror": false,
-        "literal_record": {
-          "wins": 15,
-          "losses": 12,
-          "draws": 0,
-          "matches": 27,
-          "win_rate": 0.555556,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.373127,
-            "upper": 0.724144
-          }
-        }
-      },
-      "gruul-ponza": {
-        "wins": 13,
-        "losses": 13,
-        "draws": 0,
-        "matches": 26,
-        "win_rate": 0.5,
-        "ci_half": 0.1794,
-        "low_sample": false,
-        "mirror": false,
-        "literal_record": {
-          "wins": 13,
-          "losses": 13,
-          "draws": 0,
-          "matches": 26,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.320603,
-            "upper": 0.679397
-          }
-        }
-      },
-      "gruul-ramp": {
-        "wins": 1,
-        "losses": 3,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.25,
-        "ci_half": 0.3269,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 3,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.25,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.045586,
-            "upper": 0.699364
-          }
-        }
-      },
-      "infect": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "inside-out": {
-        "wins": 1,
-        "losses": 3,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.25,
-        "ci_half": 0.3269,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 3,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.25,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.045586,
-            "upper": 0.699364
-          }
-        }
-      },
-      "izzet-terror": {
-        "wins": 1,
-        "losses": 1,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.5,
-        "ci_half": 0.4055,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 1,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.094529,
-            "upper": 0.905471
-          }
-        }
-      },
-      "jeskai-caw-gates": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "jund-snacker": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "jund-wildfire": {
-        "wins": 17,
-        "losses": 13,
-        "draws": 0,
-        "matches": 30,
-        "win_rate": 0.5667,
-        "ci_half": 0.1671,
-        "low_sample": false,
-        "mirror": false,
-        "literal_record": {
-          "wins": 17,
-          "losses": 13,
-          "draws": 0,
-          "matches": 30,
-          "win_rate": 0.566667,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.39197,
-            "upper": 0.726228
-          }
-        }
-      },
-      "mono-black-sacrifice": {
-        "wins": 2,
-        "losses": 1,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.6667,
-        "ci_half": 0.3654,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 1,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 0.666667,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.207655,
-            "upper": 0.93851
-          }
-        }
-      },
-      "mono-blue-faeries": {
-        "wins": 4,
-        "losses": 3,
-        "draws": 0,
-        "matches": 7,
-        "win_rate": 0.5714,
-        "ci_half": 0.2957,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 4,
-          "losses": 3,
-          "draws": 0,
-          "matches": 7,
-          "win_rate": 0.571429,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.250454,
-            "upper": 0.841783
-          }
-        }
-      },
-      "mono-blue-terror": {
-        "wins": 21,
-        "losses": 25,
-        "draws": 0,
-        "matches": 46,
-        "win_rate": 0.4565,
-        "ci_half": 0.1383,
-        "low_sample": false,
-        "mirror": false,
-        "literal_record": {
-          "wins": 21,
-          "losses": 25,
-          "draws": 0,
-          "matches": 46,
-          "win_rate": 0.456522,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.321545,
-            "upper": 0.598201
-          }
-        }
-      },
-      "mono-red-axe": {
-        "wins": 2,
-        "losses": 1,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.6667,
-        "ci_half": 0.3654,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 1,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 0.666667,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.207655,
-            "upper": 0.93851
-          }
-        }
-      },
-      "mono-red-burn": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "mono-red-madness": {
-        "wins": 26,
-        "losses": 32,
-        "draws": 0,
-        "matches": 58,
-        "win_rate": 0.4483,
-        "ci_half": 0.124,
-        "low_sample": false,
-        "mirror": false,
-        "literal_record": {
-          "wins": 26,
-          "losses": 32,
-          "draws": 0,
-          "matches": 58,
-          "win_rate": 0.448276,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.327497,
-            "upper": 0.575481
-          }
-        }
-      },
-      "mono-red-rally": {
-        "wins": 19,
-        "losses": 4,
-        "draws": 0,
-        "matches": 23,
-        "win_rate": 0.8261,
-        "ci_half": 0.1508,
-        "low_sample": false,
-        "mirror": false,
-        "literal_record": {
-          "wins": 19,
-          "losses": 4,
-          "draws": 0,
-          "matches": 23,
-          "win_rate": 0.826087,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.628619,
-            "upper": 0.930215
-          }
-        }
-      },
-      "mono-white-heroic": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "naya-gates": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "orzhov-midrange": {
-        "wins": 2,
-        "losses": 2,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.5,
-        "ci_half": 0.35,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 2,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.150036,
-            "upper": 0.849964
-          }
-        }
-      },
-      "packbeast-swarm/mardu": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "packbeast-swarm/selesnya": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 2,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.657628
-          }
-        }
-      },
-      "rakdos-madness": {
-        "wins": 5,
-        "losses": 4,
-        "draws": 0,
-        "matches": 9,
-        "win_rate": 0.5556,
-        "ci_half": 0.2723,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 5,
-          "losses": 4,
-          "draws": 0,
-          "matches": 9,
-          "win_rate": 0.555556,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.266647,
-            "upper": 0.811225
-          }
-        }
-      },
-      "ruby-storm": {
-        "wins": 1,
-        "losses": 2,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.3333,
-        "ci_half": 0.3654,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 2,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 0.333333,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.06149,
-            "upper": 0.792345
-          }
-        }
-      },
-      "selesnya-gates": {
-        "wins": 3,
-        "losses": 6,
-        "draws": 0,
-        "matches": 9,
-        "win_rate": 0.3333,
-        "ci_half": 0.2626,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 3,
-          "losses": 6,
-          "draws": 0,
-          "matches": 9,
-          "win_rate": 0.333333,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.120582,
-            "upper": 0.645803
-          }
-        }
-      },
-      "snacker-gates": {
-        "wins": 1,
-        "losses": 7,
-        "draws": 0,
-        "matches": 8,
-        "win_rate": 0.125,
-        "ci_half": 0.2242,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 7,
-          "draws": 0,
-          "matches": 8,
-          "win_rate": 0.125,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.022417,
-            "upper": 0.470895
-          }
-        }
-      },
-      "spy-combo": {
-        "wins": 5,
-        "losses": 4,
-        "draws": 0,
-        "matches": 9,
-        "win_rate": 0.5556,
-        "ci_half": 0.2723,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 5,
-          "losses": 4,
-          "draws": 0,
-          "matches": 9,
-          "win_rate": 0.555556,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.266647,
-            "upper": 0.811225
-          }
-        }
-      },
-      "turbo-fog": {
-        "wins": 1,
-        "losses": 3,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.25,
-        "ci_half": 0.3269,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 3,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.25,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.045586,
-            "upper": 0.699364
-          }
-        }
-      },
-      "walls-combo": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 2,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.657628
-          }
-        }
-      }
-    },
     "spy-combo": {
       "azorius-familiars/azorius": {
         "wins": 0,
@@ -80770,23 +79855,45 @@
       },
       "battle-screech/mono-white": {
         "wins": 4,
-        "losses": 5,
+        "losses": 4,
         "draws": 0,
-        "matches": 9,
-        "win_rate": 0.4444,
-        "ci_half": 0.2723,
+        "matches": 8,
+        "win_rate": 0.5,
+        "ci_half": 0.2848,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 4,
-          "losses": 5,
+          "losses": 4,
           "draws": 0,
-          "matches": 9,
-          "win_rate": 0.444444,
+          "matches": 8,
+          "win_rate": 0.5,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.188775,
-            "upper": 0.733353
+            "lower": 0.215213,
+            "upper": 0.784787
+          }
+        }
+      },
+      "battle-screech/orzhov": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
           }
         }
       },
@@ -83055,6 +82162,1218 @@
           "confidence_interval_95": {
             "lower": 0.486865,
             "upper": 0.974321
+          }
+        }
+      }
+    },
+    "battle-screech/mono-white": {
+      "azorius-familiars/azorius": {
+        "wins": 3,
+        "losses": 5,
+        "draws": 0,
+        "matches": 8,
+        "win_rate": 0.375,
+        "ci_half": 0.2787,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 5,
+          "draws": 0,
+          "matches": 8,
+          "win_rate": 0.375,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.136842,
+            "upper": 0.694262
+          }
+        }
+      },
+      "azorius-familiars/jeskai": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "battle-screech/boros": {
+        "wins": 3,
+        "losses": 0,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 1.0,
+        "ci_half": 0.2808,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 0,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.438494,
+            "upper": 1.0
+          }
+        }
+      },
+      "battle-screech/mono-white": {
+        "wins": 4,
+        "losses": 4,
+        "draws": 0,
+        "matches": 8,
+        "win_rate": 0.5,
+        "ci_half": 0.2848,
+        "low_sample": true,
+        "mirror": true,
+        "literal_record": {
+          "wins": 4,
+          "losses": 4,
+          "draws": 0,
+          "matches": 8,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.215213,
+            "upper": 0.784787
+          }
+        }
+      },
+      "battle-screech/orzhov": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "bogles": {
+        "wins": 4,
+        "losses": 8,
+        "draws": 0,
+        "matches": 12,
+        "win_rate": 0.3333,
+        "ci_half": 0.2356,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 4,
+          "losses": 8,
+          "draws": 0,
+          "matches": 12,
+          "win_rate": 0.333333,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.138118,
+            "upper": 0.609382
+          }
+        }
+      },
+      "boros-madness": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
+      "boros-snacker": {
+        "wins": 2,
+        "losses": 3,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.4,
+        "ci_half": 0.3258,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 3,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.4,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.117618,
+            "upper": 0.76928
+          }
+        }
+      },
+      "boros-synthesizer": {
+        "wins": 3,
+        "losses": 0,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 1.0,
+        "ci_half": 0.2808,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 0,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.438494,
+            "upper": 1.0
+          }
+        }
+      },
+      "dimir-affinity": {
+        "wins": 2,
+        "losses": 3,
+        "draws": 0,
+        "matches": 5,
+        "win_rate": 0.4,
+        "ci_half": 0.3258,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 3,
+          "draws": 0,
+          "matches": 5,
+          "win_rate": 0.4,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.117618,
+            "upper": 0.76928
+          }
+        }
+      },
+      "dimir-control/dimir": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
+      "dimir-control/red-splash": {
+        "wins": 4,
+        "losses": 0,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 1.0,
+        "ci_half": 0.245,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 4,
+          "losses": 0,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.5101,
+            "upper": 1.0
+          }
+        }
+      },
+      "dimir-faeries": {
+        "wins": 16,
+        "losses": 14,
+        "draws": 0,
+        "matches": 30,
+        "win_rate": 0.5333,
+        "ci_half": 0.1681,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 16,
+          "losses": 14,
+          "draws": 0,
+          "matches": 30,
+          "win_rate": 0.533333,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.36142,
+            "upper": 0.697679
+          }
+        }
+      },
+      "dimir-terror": {
+        "wins": 8,
+        "losses": 15,
+        "draws": 0,
+        "matches": 23,
+        "win_rate": 0.3478,
+        "ci_half": 0.1815,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 8,
+          "losses": 15,
+          "draws": 0,
+          "matches": 23,
+          "win_rate": 0.347826,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.188111,
+            "upper": 0.5511
+          }
+        }
+      },
+      "dredge": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "elves": {
+        "wins": 9,
+        "losses": 12,
+        "draws": 0,
+        "matches": 21,
+        "win_rate": 0.4286,
+        "ci_half": 0.1949,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 9,
+          "losses": 12,
+          "draws": 0,
+          "matches": 21,
+          "win_rate": 0.428571,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.244697,
+            "upper": 0.634538
+          }
+        }
+      },
+      "ephemerate-tron": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "ephemerate/four-color": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "ephemerate/jeskai": {
+        "wins": 11,
+        "losses": 5,
+        "draws": 0,
+        "matches": 16,
+        "win_rate": 0.6875,
+        "ci_half": 0.2072,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 11,
+          "losses": 5,
+          "draws": 0,
+          "matches": 16,
+          "win_rate": 0.6875,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.444039,
+            "upper": 0.858356
+          }
+        }
+      },
+      "esper-affinity": {
+        "wins": 5,
+        "losses": 3,
+        "draws": 0,
+        "matches": 8,
+        "win_rate": 0.625,
+        "ci_half": 0.2787,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 5,
+          "losses": 3,
+          "draws": 0,
+          "matches": 8,
+          "win_rate": 0.625,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.305738,
+            "upper": 0.863158
+          }
+        }
+      },
+      "esper-ephemerate": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "food-gardens": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "four-color-affinity": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "goblins": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "golgari-gardens/golgari": {
+        "wins": 9,
+        "losses": 10,
+        "draws": 0,
+        "matches": 19,
+        "win_rate": 0.4737,
+        "ci_half": 0.2048,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 9,
+          "losses": 10,
+          "draws": 0,
+          "matches": 19,
+          "win_rate": 0.473684,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.273295,
+            "upper": 0.682925
+          }
+        }
+      },
+      "golgari-gardens/jund": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "green-tron": {
+        "wins": 8,
+        "losses": 13,
+        "draws": 0,
+        "matches": 21,
+        "win_rate": 0.381,
+        "ci_half": 0.1919,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 8,
+          "losses": 13,
+          "draws": 0,
+          "matches": 21,
+          "win_rate": 0.380952,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.207508,
+            "upper": 0.591217
+          }
+        }
+      },
+      "grixis-affinity": {
+        "wins": 15,
+        "losses": 11,
+        "draws": 0,
+        "matches": 26,
+        "win_rate": 0.5769,
+        "ci_half": 0.1775,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 15,
+          "losses": 11,
+          "draws": 0,
+          "matches": 26,
+          "win_rate": 0.576923,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.389483,
+            "upper": 0.744558
+          }
+        }
+      },
+      "gruul-ponza": {
+        "wins": 13,
+        "losses": 13,
+        "draws": 0,
+        "matches": 26,
+        "win_rate": 0.5,
+        "ci_half": 0.1794,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 13,
+          "losses": 13,
+          "draws": 0,
+          "matches": 26,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.320603,
+            "upper": 0.679397
+          }
+        }
+      },
+      "gruul-ramp": {
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.25,
+        "ci_half": 0.3269,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 3,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.25,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.045586,
+            "upper": 0.699364
+          }
+        }
+      },
+      "infect": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "inside-out": {
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.25,
+        "ci_half": 0.3269,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 3,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.25,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.045586,
+            "upper": 0.699364
+          }
+        }
+      },
+      "izzet-terror": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
+      "jeskai-caw-gates": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "jund-snacker": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "jund-wildfire": {
+        "wins": 15,
+        "losses": 11,
+        "draws": 0,
+        "matches": 26,
+        "win_rate": 0.5769,
+        "ci_half": 0.1775,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 15,
+          "losses": 11,
+          "draws": 0,
+          "matches": 26,
+          "win_rate": 0.576923,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.389483,
+            "upper": 0.744558
+          }
+        }
+      },
+      "mono-black-sacrifice": {
+        "wins": 2,
+        "losses": 1,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.6667,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 1,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.666667,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.207655,
+            "upper": 0.93851
+          }
+        }
+      },
+      "mono-blue-faeries": {
+        "wins": 4,
+        "losses": 3,
+        "draws": 0,
+        "matches": 7,
+        "win_rate": 0.5714,
+        "ci_half": 0.2957,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 4,
+          "losses": 3,
+          "draws": 0,
+          "matches": 7,
+          "win_rate": 0.571429,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.250454,
+            "upper": 0.841783
+          }
+        }
+      },
+      "mono-blue-terror": {
+        "wins": 20,
+        "losses": 24,
+        "draws": 0,
+        "matches": 44,
+        "win_rate": 0.4545,
+        "ci_half": 0.1411,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 20,
+          "losses": 24,
+          "draws": 0,
+          "matches": 44,
+          "win_rate": 0.454545,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.31705,
+            "upper": 0.599341
+          }
+        }
+      },
+      "mono-red-axe": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "mono-red-burn": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "mono-red-madness": {
+        "wins": 22,
+        "losses": 31,
+        "draws": 0,
+        "matches": 53,
+        "win_rate": 0.4151,
+        "ci_half": 0.1282,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 22,
+          "losses": 31,
+          "draws": 0,
+          "matches": 53,
+          "win_rate": 0.415094,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.292607,
+            "upper": 0.549058
+          }
+        }
+      },
+      "mono-red-rally": {
+        "wins": 19,
+        "losses": 4,
+        "draws": 0,
+        "matches": 23,
+        "win_rate": 0.8261,
+        "ci_half": 0.1508,
+        "low_sample": false,
+        "mirror": false,
+        "literal_record": {
+          "wins": 19,
+          "losses": 4,
+          "draws": 0,
+          "matches": 23,
+          "win_rate": 0.826087,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.628619,
+            "upper": 0.930215
+          }
+        }
+      },
+      "mono-white-heroic": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "naya-gates": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "orzhov-midrange": {
+        "wins": 2,
+        "losses": 2,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.5,
+        "ci_half": 0.35,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 2,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.150036,
+            "upper": 0.849964
+          }
+        }
+      },
+      "packbeast-swarm/mardu": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "packbeast-swarm/selesnya": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "rakdos-madness": {
+        "wins": 5,
+        "losses": 4,
+        "draws": 0,
+        "matches": 9,
+        "win_rate": 0.5556,
+        "ci_half": 0.2723,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 5,
+          "losses": 4,
+          "draws": 0,
+          "matches": 9,
+          "win_rate": 0.555556,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.266647,
+            "upper": 0.811225
+          }
+        }
+      },
+      "ruby-storm": {
+        "wins": 1,
+        "losses": 2,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.3333,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 2,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.333333,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.06149,
+            "upper": 0.792345
+          }
+        }
+      },
+      "selesnya-gates": {
+        "wins": 3,
+        "losses": 6,
+        "draws": 0,
+        "matches": 9,
+        "win_rate": 0.3333,
+        "ci_half": 0.2626,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 6,
+          "draws": 0,
+          "matches": 9,
+          "win_rate": 0.333333,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.120582,
+            "upper": 0.645803
+          }
+        }
+      },
+      "snacker-gates": {
+        "wins": 1,
+        "losses": 7,
+        "draws": 0,
+        "matches": 8,
+        "win_rate": 0.125,
+        "ci_half": 0.2242,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 7,
+          "draws": 0,
+          "matches": 8,
+          "win_rate": 0.125,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.022417,
+            "upper": 0.470895
+          }
+        }
+      },
+      "spy-combo": {
+        "wins": 4,
+        "losses": 4,
+        "draws": 0,
+        "matches": 8,
+        "win_rate": 0.5,
+        "ci_half": 0.2848,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 4,
+          "losses": 4,
+          "draws": 0,
+          "matches": 8,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.215213,
+            "upper": 0.784787
+          }
+        }
+      },
+      "turbo-fog": {
+        "wins": 1,
+        "losses": 2,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.3333,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 2,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.333333,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.06149,
+            "upper": 0.792345
+          }
+        }
+      },
+      "walls-combo": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
           }
         }
       }
@@ -89343,24 +89662,46 @@
         }
       },
       "battle-screech/mono-white": {
-        "wins": 1,
+        "wins": 0,
         "losses": 2,
         "draws": 0,
-        "matches": 3,
-        "win_rate": 0.3333,
-        "ci_half": 0.3654,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "battle-screech/orzhov": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 1,
-          "losses": 2,
+          "losses": 0,
           "draws": 0,
-          "matches": 3,
-          "win_rate": 0.333333,
+          "matches": 1,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.06149,
-            "upper": 0.792345
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -90335,24 +90676,46 @@
         }
       },
       "battle-screech/mono-white": {
-        "wins": 6,
+        "wins": 5,
         "losses": 3,
         "draws": 0,
-        "matches": 9,
-        "win_rate": 0.6667,
-        "ci_half": 0.2626,
+        "matches": 8,
+        "win_rate": 0.625,
+        "ci_half": 0.2787,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 6,
+          "wins": 5,
           "losses": 3,
           "draws": 0,
-          "matches": 9,
-          "win_rate": 0.666667,
+          "matches": 8,
+          "win_rate": 0.625,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.354197,
-            "upper": 0.879418
+            "lower": 0.305738,
+            "upper": 0.863158
+          }
+        }
+      },
+      "battle-screech/naya": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -91305,24 +91668,46 @@
         }
       },
       "battle-screech/mono-white": {
-        "wins": 3,
+        "wins": 2,
         "losses": 1,
         "draws": 0,
-        "matches": 4,
-        "win_rate": 0.75,
-        "ci_half": 0.3269,
+        "matches": 3,
+        "win_rate": 0.6667,
+        "ci_half": 0.3654,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 3,
+          "wins": 2,
           "losses": 1,
           "draws": 0,
-          "matches": 4,
-          "win_rate": 0.75,
+          "matches": 3,
+          "win_rate": 0.666667,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.300636,
-            "upper": 0.954414
+            "lower": 0.207655,
+            "upper": 0.93851
+          }
+        }
+      },
+      "battle-screech/orzhov": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -96487,46 +96872,46 @@
         }
       },
       "dimir-faeries": {
-        "wins": 2,
+        "wins": 3,
         "losses": 3,
         "draws": 0,
-        "matches": 5,
-        "win_rate": 0.4,
-        "ci_half": 0.3258,
+        "matches": 6,
+        "win_rate": 0.5,
+        "ci_half": 0.3124,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 2,
+          "wins": 3,
           "losses": 3,
           "draws": 0,
-          "matches": 5,
-          "win_rate": 0.4,
+          "matches": 6,
+          "win_rate": 0.5,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.117618,
-            "upper": 0.76928
+            "lower": 0.187613,
+            "upper": 0.812387
           }
         }
       },
       "dimir-terror": {
         "wins": 1,
-        "losses": 3,
+        "losses": 4,
         "draws": 0,
-        "matches": 4,
-        "win_rate": 0.25,
-        "ci_half": 0.3269,
+        "matches": 5,
+        "win_rate": 0.2,
+        "ci_half": 0.2941,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 1,
-          "losses": 3,
+          "losses": 4,
           "draws": 0,
-          "matches": 4,
-          "win_rate": 0.25,
+          "matches": 5,
+          "win_rate": 0.2,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.045586,
-            "upper": 0.699364
+            "lower": 0.036223,
+            "upper": 0.624472
           }
         }
       },
@@ -96619,46 +97004,46 @@
         }
       },
       "golgari-gardens/golgari": {
-        "wins": 4,
+        "wins": 3,
         "losses": 5,
         "draws": 0,
-        "matches": 9,
-        "win_rate": 0.4444,
-        "ci_half": 0.2723,
+        "matches": 8,
+        "win_rate": 0.375,
+        "ci_half": 0.2787,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 4,
+          "wins": 3,
           "losses": 5,
           "draws": 0,
-          "matches": 9,
-          "win_rate": 0.444444,
+          "matches": 8,
+          "win_rate": 0.375,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.188775,
-            "upper": 0.733353
+            "lower": 0.136842,
+            "upper": 0.694262
           }
         }
       },
       "green-tron": {
         "wins": 2,
-        "losses": 4,
+        "losses": 3,
         "draws": 0,
-        "matches": 6,
-        "win_rate": 0.3333,
-        "ci_half": 0.3016,
+        "matches": 5,
+        "win_rate": 0.4,
+        "ci_half": 0.3258,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 2,
-          "losses": 4,
+          "losses": 3,
           "draws": 0,
-          "matches": 6,
-          "win_rate": 0.333333,
+          "matches": 5,
+          "win_rate": 0.4,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.096769,
-            "upper": 0.700012
+            "lower": 0.117618,
+            "upper": 0.76928
           }
         }
       },
@@ -96751,24 +97136,24 @@
         }
       },
       "jund-wildfire": {
-        "wins": 5,
-        "losses": 4,
+        "wins": 6,
+        "losses": 6,
         "draws": 0,
-        "matches": 9,
-        "win_rate": 0.5556,
-        "ci_half": 0.2723,
+        "matches": 12,
+        "win_rate": 0.5,
+        "ci_half": 0.2462,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 5,
-          "losses": 4,
+          "wins": 6,
+          "losses": 6,
           "draws": 0,
-          "matches": 9,
-          "win_rate": 0.555556,
+          "matches": 12,
+          "win_rate": 0.5,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.266647,
-            "upper": 0.811225
+            "lower": 0.253778,
+            "upper": 0.746222
           }
         }
       },
@@ -96796,45 +97181,45 @@
       },
       "mono-blue-terror": {
         "wins": 5,
-        "losses": 7,
+        "losses": 8,
         "draws": 0,
-        "matches": 12,
-        "win_rate": 0.4167,
-        "ci_half": 0.2436,
+        "matches": 13,
+        "win_rate": 0.3846,
+        "ci_half": 0.2338,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 5,
-          "losses": 7,
+          "losses": 8,
           "draws": 0,
-          "matches": 12,
-          "win_rate": 0.416667,
+          "matches": 13,
+          "win_rate": 0.384615,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.193257,
-            "upper": 0.680493
+            "lower": 0.177094,
+            "upper": 0.644775
           }
         }
       },
       "mono-red-madness": {
-        "wins": 4,
-        "losses": 15,
+        "wins": 6,
+        "losses": 14,
         "draws": 0,
-        "matches": 19,
-        "win_rate": 0.2105,
-        "ci_half": 0.1741,
-        "low_sample": true,
+        "matches": 20,
+        "win_rate": 0.3,
+        "ci_half": 0.1868,
+        "low_sample": false,
         "mirror": false,
         "literal_record": {
-          "wins": 4,
-          "losses": 15,
+          "wins": 6,
+          "losses": 14,
           "draws": 0,
-          "matches": 19,
-          "win_rate": 0.210526,
+          "matches": 20,
+          "win_rate": 0.3,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.085075,
-            "upper": 0.433347
+            "lower": 0.145475,
+            "upper": 0.518977
           }
         }
       },
@@ -96857,28 +97242,6 @@
           "confidence_interval_95": {
             "lower": 0.207655,
             "upper": 0.93851
-          }
-        }
-      },
-      "naya-gates": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
           }
         }
       },
@@ -102576,7 +102939,7 @@
       }
     },
     "naya-gates": {
-      "battle-screech/boros": {
+      "battle-screech/mono-white": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -102598,7 +102961,7 @@
           }
         }
       },
-      "battle-screech/mono-white": {
+      "battle-screech/naya": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -108073,316 +108436,6 @@
         }
       }
     },
-    "packbeast-swarm/mono-white": {
-      "bogles": {
-        "wins": 2,
-        "losses": 1,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.6667,
-        "ci_half": 0.3654,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 1,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 0.666667,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.207655,
-            "upper": 0.93851
-          }
-        }
-      },
-      "dimir-affinity": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "dimir-faeries": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "elves": {
-        "wins": 1,
-        "losses": 2,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.3333,
-        "ci_half": 0.3654,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 2,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 0.333333,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.06149,
-            "upper": 0.792345
-          }
-        }
-      },
-      "esper-affinity": {
-        "wins": 2,
-        "losses": 1,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.6667,
-        "ci_half": 0.3654,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 1,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 0.666667,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.207655,
-            "upper": 0.93851
-          }
-        }
-      },
-      "golgari-gardens/golgari": {
-        "wins": 2,
-        "losses": 0,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 1.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 2,
-          "losses": 0,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.342372,
-            "upper": 1.0
-          }
-        }
-      },
-      "green-tron": {
-        "wins": 1,
-        "losses": 2,
-        "draws": 0,
-        "matches": 3,
-        "win_rate": 0.3333,
-        "ci_half": 0.3654,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 2,
-          "draws": 0,
-          "matches": 3,
-          "win_rate": 0.333333,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.06149,
-            "upper": 0.792345
-          }
-        }
-      },
-      "grixis-affinity": {
-        "wins": 1,
-        "losses": 3,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.25,
-        "ci_half": 0.3269,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 3,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.25,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.045586,
-            "upper": 0.699364
-          }
-        }
-      },
-      "jeskai-affinity": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "jund-wildfire": {
-        "wins": 0,
-        "losses": 2,
-        "draws": 0,
-        "matches": 2,
-        "win_rate": 0.0,
-        "ci_half": 0.3288,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 2,
-          "draws": 0,
-          "matches": 2,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.657628
-          }
-        }
-      },
-      "mono-blue-faeries": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "mono-blue-terror": {
-        "wins": 3,
-        "losses": 3,
-        "draws": 0,
-        "matches": 6,
-        "win_rate": 0.5,
-        "ci_half": 0.3124,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 3,
-          "losses": 3,
-          "draws": 0,
-          "matches": 6,
-          "win_rate": 0.5,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.187613,
-            "upper": 0.812387
-          }
-        }
-      },
-      "mono-red-madness": {
-        "wins": 3,
-        "losses": 1,
-        "draws": 0,
-        "matches": 4,
-        "win_rate": 0.75,
-        "ci_half": 0.3269,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 3,
-          "losses": 1,
-          "draws": 0,
-          "matches": 4,
-          "win_rate": 0.75,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.300636,
-            "upper": 0.954414
-          }
-        }
-      },
-      "rakdos-madness": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      }
-    },
     "eggs-tron": {
       "azorius-familiars/azorius": {
         "wins": 1,
@@ -108821,6 +108874,316 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.793457
+          }
+        }
+      }
+    },
+    "packbeast-swarm/mono-white": {
+      "bogles": {
+        "wins": 2,
+        "losses": 1,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.6667,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 1,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.666667,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.207655,
+            "upper": 0.93851
+          }
+        }
+      },
+      "dimir-affinity": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "dimir-faeries": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "elves": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
+      "esper-affinity": {
+        "wins": 2,
+        "losses": 1,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.6667,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 1,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.666667,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.207655,
+            "upper": 0.93851
+          }
+        }
+      },
+      "golgari-gardens/golgari": {
+        "wins": 2,
+        "losses": 0,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 0,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.342372,
+            "upper": 1.0
+          }
+        }
+      },
+      "green-tron": {
+        "wins": 1,
+        "losses": 2,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.3333,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 2,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.333333,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.06149,
+            "upper": 0.792345
+          }
+        }
+      },
+      "grixis-affinity": {
+        "wins": 1,
+        "losses": 2,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.3333,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 2,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.333333,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.06149,
+            "upper": 0.792345
+          }
+        }
+      },
+      "jeskai-affinity": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "jund-wildfire": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "mono-blue-faeries": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "mono-blue-terror": {
+        "wins": 3,
+        "losses": 3,
+        "draws": 0,
+        "matches": 6,
+        "win_rate": 0.5,
+        "ci_half": 0.3124,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 3,
+          "draws": 0,
+          "matches": 6,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.187613,
+            "upper": 0.812387
+          }
+        }
+      },
+      "mono-red-madness": {
+        "wins": 3,
+        "losses": 1,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.75,
+        "ci_half": 0.3269,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 3,
+          "losses": 1,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.75,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.300636,
+            "upper": 0.954414
+          }
+        }
+      },
+      "rakdos-madness": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       }
@@ -113075,6 +113438,250 @@
         }
       }
     },
+    "packbeast-swarm/mardu": {
+      "battle-screech/mono-white": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "dimir-faeries": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "dimir-terror": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "elves": {
+        "wins": 1,
+        "losses": 3,
+        "draws": 0,
+        "matches": 4,
+        "win_rate": 0.25,
+        "ci_half": 0.3269,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 3,
+          "draws": 0,
+          "matches": 4,
+          "win_rate": 0.25,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.045586,
+            "upper": 0.699364
+          }
+        }
+      },
+      "ephemerate-tron": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "golgari-gardens/golgari": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "grixis-affinity": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "jund-wildfire": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "mono-blue-faeries": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "mono-red-madness": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "ruby-storm": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      }
+    },
     "walls-ramp": {
       "battle-screech/boros": {
         "wins": 0,
@@ -113807,6 +114414,228 @@
         }
       }
     },
+    "battle-screech/orzhov": {
+      "battle-screech/mono-white": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "dimir-faeries": {
+        "wins": 0,
+        "losses": 2,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.0,
+        "ci_half": 0.3288,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 2,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.657628
+          }
+        }
+      },
+      "dimir-terror": {
+        "wins": 1,
+        "losses": 1,
+        "draws": 0,
+        "matches": 2,
+        "win_rate": 0.5,
+        "ci_half": 0.4055,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 1,
+          "draws": 0,
+          "matches": 2,
+          "win_rate": 0.5,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.094529,
+            "upper": 0.905471
+          }
+        }
+      },
+      "ephemerate/jeskai": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "grixis-affinity": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "mono-blue-terror": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "mono-red-axe": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "mono-red-madness": {
+        "wins": 2,
+        "losses": 1,
+        "draws": 0,
+        "matches": 3,
+        "win_rate": 0.6667,
+        "ci_half": 0.3654,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 2,
+          "losses": 1,
+          "draws": 0,
+          "matches": 3,
+          "win_rate": 0.666667,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.207655,
+            "upper": 0.93851
+          }
+        }
+      },
+      "spy-combo": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "turbo-fog": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      }
+    },
     "four-color-pestilence-gates": {
       "azorius-familiars/azorius": {
         "wins": 1,
@@ -114007,48 +114836,26 @@
         }
       }
     },
-    "packbeast-swarm/mardu": {
-      "battle-screech/mono-white": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
+    "packbeast-swarm/boros": {
       "dimir-faeries": {
-        "wins": 0,
-        "losses": 1,
+        "wins": 2,
+        "losses": 0,
         "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
+        "matches": 2,
+        "win_rate": 1.0,
+        "ci_half": 0.3288,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
-          "wins": 0,
-          "losses": 1,
+          "wins": 2,
+          "losses": 0,
           "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
+          "matches": 2,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
+            "lower": 0.342372,
+            "upper": 1.0
           }
         }
       },
@@ -114076,23 +114883,23 @@
       },
       "elves": {
         "wins": 1,
-        "losses": 2,
+        "losses": 0,
         "draws": 0,
-        "matches": 3,
-        "win_rate": 0.3333,
-        "ci_half": 0.3654,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
         "low_sample": true,
         "mirror": false,
         "literal_record": {
           "wins": 1,
-          "losses": 2,
+          "losses": 0,
           "draws": 0,
-          "matches": 3,
-          "win_rate": 0.333333,
+          "matches": 1,
+          "win_rate": 1.0,
           "win_rate_method": "wins_over_valid_matches",
           "confidence_interval_95": {
-            "lower": 0.06149,
-            "upper": 0.792345
+            "lower": 0.206543,
+            "upper": 1.0
           }
         }
       },
@@ -114140,6 +114947,28 @@
           }
         }
       },
+      "green-tron": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
       "grixis-affinity": {
         "wins": 0,
         "losses": 1,
@@ -114162,7 +114991,7 @@
           }
         }
       },
-      "jund-wildfire": {
+      "gruul-ponza": {
         "wins": 0,
         "losses": 1,
         "draws": 0,
@@ -114184,7 +115013,51 @@
           }
         }
       },
-      "mono-blue-faeries": {
+      "gruul-ramp": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "inside-out": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "mono-red-rally": {
         "wins": 1,
         "losses": 0,
         "draws": 0,
@@ -114203,50 +115076,6 @@
           "confidence_interval_95": {
             "lower": 0.206543,
             "upper": 1.0
-          }
-        }
-      },
-      "mono-red-madness": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "ruby-storm": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
           }
         }
       }
@@ -114781,228 +115610,6 @@
           "confidence_interval_95": {
             "lower": 0.0,
             "upper": 0.793457
-          }
-        }
-      }
-    },
-    "packbeast-swarm/boros": {
-      "dimir-faeries": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "dimir-terror": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "elves": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "ephemerate-tron": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "golgari-gardens/golgari": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "green-tron": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "grixis-affinity": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "gruul-ramp": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "inside-out": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
-          }
-        }
-      },
-      "mono-red-rally": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
           }
         }
       }
@@ -116523,6 +117130,140 @@
         }
       }
     },
+    "battle-screech/naya": {
+      "azorius-familiars/azorius": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "golgari-gardens/golgari": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "green-tron": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "jund-wildfire": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      },
+      "mono-red-madness": {
+        "wins": 0,
+        "losses": 1,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 0.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 0,
+          "losses": 1,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 0.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.0,
+            "upper": 0.793457
+          }
+        }
+      },
+      "naya-gates": {
+        "wins": 1,
+        "losses": 0,
+        "draws": 0,
+        "matches": 1,
+        "win_rate": 1.0,
+        "ci_half": 0.3967,
+        "low_sample": true,
+        "mirror": false,
+        "literal_record": {
+          "wins": 1,
+          "losses": 0,
+          "draws": 0,
+          "matches": 1,
+          "win_rate": 1.0,
+          "win_rate_method": "wins_over_valid_matches",
+          "confidence_interval_95": {
+            "lower": 0.206543,
+            "upper": 1.0
+          }
+        }
+      }
+    },
     "esper-midrange": {
       "food-gardens": {
         "wins": 0,
@@ -117777,52 +118518,6 @@
           "confidence_interval_95": {
             "lower": 0.094529,
             "upper": 0.905471
-          }
-        }
-      }
-    },
-    "packbeast-swarm/mono-white-learn": {
-      "dimir-faeries": {
-        "wins": 1,
-        "losses": 0,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 1.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 1,
-          "losses": 0,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 1.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.206543,
-            "upper": 1.0
-          }
-        }
-      },
-      "gruul-ponza": {
-        "wins": 0,
-        "losses": 1,
-        "draws": 0,
-        "matches": 1,
-        "win_rate": 0.0,
-        "ci_half": 0.3967,
-        "low_sample": true,
-        "mirror": false,
-        "literal_record": {
-          "wins": 0,
-          "losses": 1,
-          "draws": 0,
-          "matches": 1,
-          "win_rate": 0.0,
-          "win_rate_method": "wins_over_valid_matches",
-          "confidence_interval_95": {
-            "lower": 0.0,
-            "upper": 0.793457
           }
         }
       }

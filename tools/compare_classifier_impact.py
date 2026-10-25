@@ -18,7 +18,9 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repository-root", type=Path, default=ROOT)
     parser.add_argument("--format", dest="format_id", required=True)
-    parser.add_argument("--accepted-rules", type=Path, required=True)
+    accepted = parser.add_mutually_exclusive_group(required=True)
+    accepted.add_argument("--accepted-rules", type=Path)
+    accepted.add_argument("--accepted-snapshot", type=Path)
     parser.add_argument("--candidate-rules", type=Path, required=True)
     parser.add_argument("--expected-changes", type=Path)
     parser.add_argument("--output", type=Path)
@@ -30,6 +32,7 @@ def main(argv: list[str] | None = None) -> int:
             args.accepted_rules,
             args.candidate_rules,
             expected_changes_path=args.expected_changes,
+            accepted_snapshot_path=args.accepted_snapshot,
         )
     except (OSError, UnicodeError, ValueError) as exc:
         print(f"Classifier impact ERROR: {exc}")

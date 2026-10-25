@@ -66,6 +66,9 @@ async function routeSyntheticEvents(page) {
     documents.set(`${base}/matchup.json`, input.matchup);
     documents.set(`${base}/overview.json`, overview(eventId));
     documents.set(`${base}/quality.json`, quality());
+    // Overview loads the participant/deck resource even for this legal empty
+    // event. A missing fixture used to turn view switching into an HTTP error.
+    documents.set(`${base}/decks.json`, { format: "modern", event_id: eventId, decks: [] });
   });
   await page.route("**/stats/modern/{archetype_names.json,melee/**}", async route => {
     const value = documents.get(new URL(route.request().url()).pathname);

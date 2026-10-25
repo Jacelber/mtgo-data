@@ -1,4 +1,5 @@
-schema_version: 1.1.0
+schema_version: 1.2.0
+card_facts_sha256: b342090c746ad7a3b8e7bf9a258585abb564866d654bea4f8035ab95141c0612
 format: pauper
 semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
@@ -857,15 +858,15 @@ archetypes:
     subtype_id: dimir
     conditions:
       all:
-      - card: Contaminated Aquifer
-        zone: main
-        min_count: 3
       - card: Murmuring Mystic
         zone: main
         min_count: 3
       - card: Tolarian Terror
         zone: main
         exact_count: 0
+    colors:
+    - blue
+    - black
   - id: dimir-control-strix
     priority: 9291
     subtype_id: dimir
@@ -877,32 +878,33 @@ archetypes:
       - card: Counterspell
         zone: main
         min_count: 4
-      - card: Murmuring Mystic
-        zone: main
-        min_count: 2
       - card: Snuff Out
         zone: main
         min_count: 4
+    colors:
+    - blue
+    - black
   - id: dimir-control-red-splash
     priority: 9292
     subtype_id: red-splash
     conditions:
       all:
-      - card: Contaminated Aquifer
-        zone: main
-        min_count: 3
       - card: Murmuring Mystic
         zone: main
         min_count: 3
       - card: Tolarian Terror
         zone: main
         exact_count: 0
-      - card: Vandalblast
-        zone: any
-        min_count: 1
       - card: Skred
         zone: main
         exact_count: 0
+      - card: Terminate
+        zone: main
+        exact_count: 0
+    colors:
+    - blue
+    - black
+    - red
   - id: dimir-control-strix-red-splash
     priority: 9293
     subtype_id: red-splash
@@ -914,23 +916,30 @@ archetypes:
       - card: Counterspell
         zone: main
         min_count: 4
-      - card: Murmuring Mystic
-        zone: main
-        min_count: 2
       - card: Snuff Out
         zone: main
         min_count: 4
-      - card: Vandalblast
-        zone: any
-        min_count: 1
       - card: Skred
         zone: main
         exact_count: 0
+      - card: Terminate
+        zone: main
+        exact_count: 0
+    colors:
+    - blue
+    - black
+    - red
   subtypes:
   - id: dimir
     name: Dimir Control
   - id: red-splash
     name: Dimir Splash Red Control
+  color_profile: default
+  conditions:
+    all:
+    - card: Murmuring Mystic
+      zone: main
+      min_count: 2
 - id: azorius-faeries
   name: "Azorius Faeries"
   priority: 9200
@@ -2458,237 +2467,263 @@ archetypes:
         zone: main
         min_count: 3
 - id: battle-screech
-  name: "Battle Screech"
+  name: Battle Screech
   priority: 8100
   subtypes:
   - id: boros
-    name: "Boros"
+    name: Boros
   - id: mono-white
-    name: "Mono-White"
+    name: Mono-White
+  - id: orzhov
+    name: Orzhov
+  - id: naya
+    name: Naya
   rules:
   - id: boros-battle-screech
     priority: 8090
-    subtype_id: boros
+    subtype_id: null
     conditions:
       all:
-      - card: "Battle Screech"
-        zone: main
-        min_count: 3
-      - card: "Rally the Peasants"
+      - card: Rally the Peasants
         zone: main
         min_count: 1
-      - card: "Boros Garrison"
-        zone: main
-        min_count: 2
   - id: boros-battle-screech-gates
     priority: 8085
-    subtype_id: boros
+    subtype_id: null
     conditions:
       all:
-      - card: "Battle Screech"
-        zone: main
-        min_count: 3
-      - card: "Rally the Peasants"
+      - card: Rally the Peasants
         zone: main
         min_count: 1
-      - card: "Faithless Looting"
+      - card: Faithless Looting
         zone: main
         min_count: 3
-      - card: "Cliffgate"
+      - card: Cliffgate
         zone: main
         min_count: 3
   - id: mono-white-battle-screech
     priority: 8000
-    subtype_id: mono-white
+    subtype_id: null
     conditions:
       all:
-      - card: "Battle Screech"
+      - card: Raffine's Informant
         zone: main
         min_count: 3
-      - card: "Raffine's Informant"
-        zone: main
-        min_count: 3
-      - card: "Thraben Inspector"
+      - card: Thraben Inspector
         zone: main
         min_count: 3
   - id: mono-white-battle-screech-novice
     priority: 7995
-    subtype_id: mono-white
+    subtype_id: null
     conditions:
       all:
-      - card: "Battle Screech"
+      - card: Raffine's Informant
         zone: main
         min_count: 3
-      - card: "Raffine's Informant"
+      - card: Novice Inspector
         zone: main
         min_count: 3
-      - card: "Novice Inspector"
-        zone: main
-        min_count: 3
-      - card: "Thraben Inspector"
+      - card: Thraben Inspector
         zone: main
         exact_count: 0
+  conditions:
+    all:
+    - card: Battle Screech
+      zone: main
+      min_count: 3
+  color_profile: pauper-battle-screech
+  require_color_subtype: true
+  color_subtypes:
+    boros:
+    - white
+    - red
+    mono-white:
+    - white
+    orzhov:
+    - white
+    - black
+    naya:
+    - white
+    - red
+    - green
+  card_uses:
+    Sneaky Snacker: noncast_without_support
 - id: packbeast-swarm
-  name: "Packbeast Swarm"
+  name: Packbeast Swarm
   priority: 8050
   subtypes:
   - id: boros
-    name: "Boros Packbeast Swarm"
+    name: Boros Packbeast Swarm
   - id: mardu
-    name: "Mardu Packbeast Swarm"
+    name: Mardu Packbeast Swarm
   - id: mono-white-learn
-    name: "Mono-White Learn Packbeast Swarm"
+    name: Mono-White Learn Packbeast Swarm
   - id: mono-white
-    name: "Mono-White Packbeast Swarm"
+    name: Mono-White Packbeast Swarm
   - id: esper
-    name: "Esper Packbeast Swarm"
+    name: Esper Packbeast Swarm
   - id: selesnya
-    name: "Selesnya Packbeast Swarm"
+    name: Selesnya Packbeast Swarm
   rules:
   - id: boros-packbeast-swarm
     priority: 8050
-    subtype_id: boros
+    subtype_id: null
     conditions:
       all:
-      - card: "Salt Road Packbeast"
+      - card: Leonardo, Big Brother
         zone: main
         min_count: 3
-      - card: "Leonardo, Big Brother"
+      - card: Ardent Recruit
         zone: main
         min_count: 3
-      - card: "Ardent Recruit"
+      - card: Galvanic Blast
         zone: main
         min_count: 3
-      - card: "Galvanic Blast"
+      - card: Lightning Bolt
         zone: main
         min_count: 3
-      - card: "Lightning Bolt"
-        zone: main
-        min_count: 3
-      - card: "Foul-Tongue Shriek"
+      - card: Foul-Tongue Shriek
         zone: main
         exact_count: 0
-      - card: "Guiding Voice"
+      - card: Guiding Voice
         zone: main
         exact_count: 0
   - id: mardu-packbeast-swarm
     priority: 8040
-    subtype_id: mardu
+    subtype_id: null
     conditions:
       all:
-      - card: "Salt Road Packbeast"
+      - card: Leonardo, Big Brother
         zone: main
         min_count: 3
-      - card: "Leonardo, Big Brother"
+      - card: Ardent Recruit
         zone: main
         min_count: 3
-      - card: "Ardent Recruit"
+      - card: Galvanic Blast
         zone: main
         min_count: 3
-      - card: "Galvanic Blast"
-        zone: main
-        min_count: 3
-      - card: "Foul-Tongue Shriek"
+      - card: Foul-Tongue Shriek
         zone: main
         min_count: 2
-      - card: "Lightning Bolt"
+      - card: Lightning Bolt
         zone: main
         exact_count: 0
-      - card: "Guiding Voice"
+      - card: Guiding Voice
         zone: main
         exact_count: 0
   - id: mono-white-learn-packbeast-swarm
     priority: 8030
     subtype_id: mono-white-learn
-    conditions:
+    conditions: &packbeast_learn_conditions
       all:
-      - card: "Salt Road Packbeast"
+      - card: Leonardo, Big Brother
         zone: main
         min_count: 3
-      - card: "Leonardo, Big Brother"
+      - card: Ardent Recruit
         zone: main
         min_count: 3
-      - card: "Ardent Recruit"
+      - card: Guiding Voice
         zone: main
         min_count: 3
-      - card: "Guiding Voice"
-        zone: main
-        min_count: 3
-      - card: "Galvanic Blast"
+      - card: Galvanic Blast
         zone: main
         exact_count: 0
-      - card: "Foul-Tongue Shriek"
+      - card: Foul-Tongue Shriek
         zone: main
         exact_count: 0
-      - card: "Lightning Bolt"
+      - card: Lightning Bolt
         zone: main
         exact_count: 0
+    colors:
+    - white
+  - id: boros-learn-packbeast-swarm
+    priority: 8025
+    subtype_id: boros
+    conditions: *packbeast_learn_conditions
+    colors:
+    - white
+    - red
   - id: mono-white-packbeast-swarm
     priority: 8020
-    subtype_id: mono-white
+    subtype_id: null
     conditions:
       all:
-      - card: "Salt Road Packbeast"
+      - card: Leonardo, Big Brother
         zone: main
         min_count: 3
-      - card: "Leonardo, Big Brother"
+      - card: Novice Inspector
         zone: main
         min_count: 3
-      - card: "Novice Inspector"
-        zone: main
-        min_count: 3
-      - card: "Battle Screech"
+      - card: Battle Screech
         zone: main
         exact_count: 0
-      - card: "Galvanic Blast"
+      - card: Galvanic Blast
         zone: main
         exact_count: 0
-      - card: "Foul-Tongue Shriek"
+      - card: Foul-Tongue Shriek
         zone: main
         exact_count: 0
-      - card: "Guiding Voice"
+      - card: Guiding Voice
         zone: main
         exact_count: 0
-      - card: "Lightning Bolt"
+      - card: Lightning Bolt
         zone: main
         exact_count: 0
-      - card: "Winding Way"
+      - card: Winding Way
         zone: main
         exact_count: 0
   - id: esper-packbeast-swarm
     priority: 8010
-    subtype_id: esper
+    subtype_id: null
     conditions:
       all:
-      - card: "Salt Road Packbeast"
+      - card: Moon-Circuit Hacker
         zone: main
         min_count: 3
-      - card: "Moon-Circuit Hacker"
+      - card: Refurbished Familiar
         zone: main
         min_count: 3
-      - card: "Refurbished Familiar"
+      - card: Novice Inspector
         zone: main
         min_count: 3
-      - card: "Novice Inspector"
-        zone: main
-        min_count: 3
-      - card: "Thraben Inspector"
+      - card: Thraben Inspector
         zone: main
         min_count: 3
   - id: selesnya-packbeast-swarm
     priority: 8005
-    subtype_id: selesnya
+    subtype_id: null
     conditions:
       all:
-      - card: "Salt Road Packbeast"
+      - card: Leonardo, Big Brother
         zone: main
         min_count: 3
-      - card: "Leonardo, Big Brother"
-        zone: main
-        min_count: 3
-      - card: "Winding Way"
+      - card: Winding Way
         zone: main
         min_count: 2
+  conditions:
+    all:
+    - card: Salt Road Packbeast
+      zone: main
+      min_count: 3
+  color_profile: pauper-packbeast
+  require_color_subtype: true
+  color_subtypes:
+    boros:
+    - white
+    - red
+    mardu:
+    - white
+    - black
+    - red
+    mono-white:
+    - white
+    esper:
+    - white
+    - blue
+    - black
+    selesnya:
+    - white
+    - green
 - id: food-gardens
   name: "Food Gardens"
   priority: 7900
@@ -2744,28 +2779,19 @@ archetypes:
   - id: golgari-gardens
     priority: 7800
     subtype_id: golgari
-    conditions:
+    conditions: &gardens_rats_conditions
       all:
-      - card: Khalni Garden
-        zone: main
-        min_count: 3
-      - card: Fanatical Offering
-        zone: main
-        min_count: 3
       - card: Crypt Rats
         zone: main
         min_count: 1
+    colors:
+    - black
+    - green
   - id: golgari-gardens-artifact
     priority: 7795
     subtype_id: golgari
-    conditions:
+    conditions: &gardens_artifact_conditions
       all:
-      - card: Khalni Garden
-        zone: main
-        min_count: 3
-      - card: Fanatical Offering
-        zone: main
-        min_count: 3
       - card: Tithing Blade
         zone: main
         min_count: 3
@@ -2778,54 +2804,58 @@ archetypes:
       - card: Crypt Rats
         zone: main
         exact_count: 0
+    colors:
+    - black
+    - green
   - id: golgari-gardens-red-splash
     priority: 7802
     subtype_id: jund
-    conditions:
-      all:
-      - card: Khalni Garden
-        zone: main
-        min_count: 3
-      - card: Fanatical Offering
-        zone: main
-        min_count: 3
-      - card: Crypt Rats
-        zone: main
-        min_count: 1
-      - card: Vandalblast
-        zone: any
-        min_count: 1
+    conditions: *gardens_rats_conditions
+    colors:
+    - black
+    - red
+    - green
   - id: golgari-gardens-artifact-red-splash
     priority: 7797
     subtype_id: jund
-    conditions:
-      all:
-      - card: Khalni Garden
-        zone: main
-        min_count: 3
-      - card: Fanatical Offering
-        zone: main
-        min_count: 3
-      - card: Tithing Blade
-        zone: main
-        min_count: 3
-      - card: Ichor Wellspring
-        zone: main
-        min_count: 3
-      - card: Cast Down
-        zone: main
-        min_count: 3
-      - card: Crypt Rats
-        zone: main
-        exact_count: 0
-      - card: Vandalblast
-        zone: any
-        min_count: 1
+    conditions: *gardens_artifact_conditions
+    colors:
+    - black
+    - red
+    - green
+  - id: golgari-gardens-blue-splash
+    priority: 7801
+    subtype_id: sultai
+    conditions: *gardens_rats_conditions
+    colors:
+    - blue
+    - black
+    - green
+  - id: golgari-gardens-artifact-blue-splash
+    priority: 7796
+    subtype_id: sultai
+    conditions: *gardens_artifact_conditions
+    colors:
+    - blue
+    - black
+    - green
   subtypes:
   - id: golgari
     name: Golgari Gardens
   - id: jund
     name: Jund Garden
+  - id: sultai
+    name: Sultai Gardens
+  conditions:
+    all:
+    - card: Khalni Garden
+      zone: main
+      min_count: 3
+    - card: Fanatical Offering
+      zone: main
+      min_count: 3
+  color_profile: default
+  require_color_subtype: true
 - id: gruul-initiative
   name: "Gruul Initiative"
   priority: 7705
@@ -3049,38 +3079,37 @@ archetypes:
     priority: 7300
     subtype_id: azorius
     conditions:
-      all:
-      - card: Sunscape Familiar
-        zone: main
-        min_count: 3
-      - card: Snap
-        zone: main
-        min_count: 3
-      - card: God-Pharaoh's Faithful
-        zone: main
-        min_count: 3
+      all: []
+    colors:
+    - white
+    - blue
   - id: jeskai-familiars
     priority: 7301
     subtype_id: jeskai
     conditions:
-      all:
-      - card: Sunscape Familiar
-        zone: main
-        min_count: 3
-      - card: Snap
-        zone: main
-        min_count: 3
-      - card: God-Pharaoh's Faithful
-        zone: main
-        min_count: 3
-      - card: Pyroblast
-        zone: any
-        min_count: 1
+      all: []
+    colors:
+    - white
+    - blue
+    - red
   subtypes:
   - id: azorius
     name: Azorius Familiars
   - id: jeskai
     name: Jeskai Familiars
+  conditions:
+    all:
+    - card: Sunscape Familiar
+      zone: main
+      min_count: 3
+    - card: Snap
+      zone: main
+      min_count: 3
+    - card: God-Pharaoh's Faithful
+      zone: main
+      min_count: 3
+  color_profile: default
+  require_color_subtype: true
 - id: dimir-flicker-control
   name: "Dimir Flicker Control"
   priority: 7250

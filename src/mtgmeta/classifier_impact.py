@@ -196,33 +196,85 @@ def _expected_map(path: Path | None) -> dict[str, dict[str, Any]] | None:
     return result
 
 
+def _source_digests(root: Path, records: list[dict[str, Any]]) -> dict[str, str]:
+    sources = {}
+    for row in records:
+        path = Path(row["source_locator"].split("#", 1)[0])
+        path = (root / path).resolve()
+        relative = path.relative_to(root.resolve()).as_posix()
+        if relative not in sources:
+            sources[relative] = sha256(path.read_bytes()).hexdigest()
+    return dict(sorted(sources.items()))
+
+
+def capture_classifier_pipeline(root: str | Path, format_id: str, rules_path: str | Path) -> dict[str, Any]:
+    """Capture before editing the engine/adapters; never use as a correctness oracle."""
+    root = Path(root).resolve()
+    rule_set = load_rule_set(root / rules_path)
+    if rule_set.format != format_id:
+        raise ValueError("snapshot rules must match requested format")
+    records = sorted(_mtgo_decks(root, format_id) + _melee_decks(root, format_id), key=lambda r: r["record_id"])
+    return {"schema_version": "1.0.0", "operation": "classifier_pipeline_snapshot", "format": format_id,
+            "classifier_subject": classifier_digest(rule_set), "sources": _source_digests(root, records),
+            "records": {r["record_id"]: _classify(rule_set, r["deck"]) for r in records}}
+
+
+def _validate_pipeline_snapshot(snapshot: dict[str, Any], root: Path, format_id: str,
+                                records: list[dict[str, Any]]) -> None:
+    if (snapshot.get("schema_version") != "1.0.0" or snapshot.get("operation") != "classifier_pipeline_snapshot"
+            or snapshot.get("format") != format_id or not isinstance(snapshot.get("records"), dict)
+            or not isinstance(snapshot.get("classifier_subject"), str)):
+        raise ValueError("invalid classifier pipeline snapshot")
+    if set(snapshot["records"]) != {r["record_id"] for r in records}:
+        raise ValueError("retained record population differs from accepted pipeline snapshot")
+    if snapshot.get("sources") != _source_digests(root, records):
+        raise ValueError("raw source input differs from accepted pipeline snapshot")
+    required = {"status", "parent_id", "subtype_id", "rule_id", "conflict_kind", "priority_tie",
+                "matched_rule_ids", "overridden_rule_ids", "errors"}
+    for result in snapshot["records"].values():
+        if not isinstance(result, dict) or set(result) != required:
+            raise ValueError("incomplete accepted pipeline result")
+
+
 def compare_classifier_impact(
     repository_root: str | Path,
     format_id: str,
-    accepted_rules_path: str | Path,
+    accepted_rules_path: str | Path | None,
     candidate_rules_path: str | Path,
     *,
     expected_changes_path: str | Path | None = None,
+    accepted_snapshot_path: str | Path | None = None,
 ) -> dict[str, Any]:
     """Classify one retained corpus twice and explain every changed result."""
 
     root = Path(repository_root).resolve()
-    accepted_path = Path(accepted_rules_path)
+    accepted_path = Path(accepted_rules_path) if accepted_rules_path is not None else None
     candidate_path = Path(candidate_rules_path)
-    if not accepted_path.is_absolute():
+    if accepted_path is not None and not accepted_path.is_absolute():
         accepted_path = root / accepted_path
     if not candidate_path.is_absolute():
         candidate_path = root / candidate_path
     expected_path = Path(expected_changes_path) if expected_changes_path is not None else None
     if expected_path is not None and not expected_path.is_absolute():
         expected_path = root / expected_path
-    accepted = load_rule_set(accepted_path)
+    if accepted_snapshot_path is not None:
+        if accepted_path is not None:
+            raise ValueError("choose accepted rules or an accepted pipeline snapshot")
+        snapshot = _json_object(root / accepted_snapshot_path)
+        accepted = None
+    else:
+        if accepted_path is None:
+            raise ValueError("accepted rules or a pipeline snapshot is required")
+        snapshot = None
+        accepted = load_rule_set(accepted_path)
     candidate = load_rule_set(candidate_path)
-    if accepted.format != format_id or candidate.format != format_id:
+    if (accepted is not None and accepted.format != format_id) or candidate.format != format_id:
         raise ValueError("accepted and candidate rules must match the requested format")
 
     records = _mtgo_decks(root, format_id) + _melee_decks(root, format_id)
     records.sort(key=lambda item: item["record_id"])
+    if snapshot is not None:
+        _validate_pipeline_snapshot(snapshot, root, format_id, records)
     input_subject = [
         {
             "record_id": item["record_id"],
@@ -233,7 +285,7 @@ def compare_classifier_impact(
     ]
     changes = []
     for item in records:
-        before = _classify(accepted, item["deck"])
+        before = snapshot["records"][item["record_id"]] if snapshot is not None else _classify(accepted, item["deck"])
         after = _classify(candidate, item["deck"])
         if before == after:
             continue
@@ -274,7 +326,7 @@ def compare_classifier_impact(
         "operation": "classifier_impact",
         "status": status,
         "format": format_id,
-        "accepted_classifier_subject": classifier_digest(accepted),
+        "accepted_classifier_subject": snapshot["classifier_subject"] if snapshot is not None else classifier_digest(accepted),
         "candidate_classifier_subject": classifier_digest(candidate),
         "retained_corpus": {
             "input_subject_digest": _sha256_json(input_subject),
@@ -283,7 +335,10 @@ def compare_classifier_impact(
                 source: sum(item["source"] == source for item in records)
                 for source in ("mtgo", "melee")
             },
-            "same_input_used_for_both_rules": True,
+            "same_input_used_for_both_rules": snapshot is None,
+            "comparison_mode": "frozen_pipeline" if snapshot is not None else "rules_only",
+            "same_raw_input_used_for_both_pipelines": snapshot is not None,
+            "raw_source_subject_digest": _sha256_json(_source_digests(root, records)),
         },
         "current_melee_event_ids": sorted(
             str(item["event_id"]) for item in
@@ -308,4 +363,4 @@ def compare_classifier_impact(
     }
 
 
-__all__ = ["compare_classifier_impact"]
+__all__ = ["compare_classifier_impact", "capture_classifier_pipeline"]

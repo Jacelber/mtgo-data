@@ -8,6 +8,7 @@ from hashlib import sha256
 import json
 import os
 from pathlib import Path
+import re
 import secrets
 import shutil
 import subprocess
@@ -109,17 +110,24 @@ def _direct_digest_family(
     desired: str,
 ) -> dict[str, Any]:
     issues: list[str] = []
+    construction = None
+    if name in {"mtgo_statistics", "mtgo_top8"}:
+        from .mtgo.stats import construction_digest
+        construction = construction_digest()
     for path in paths:
         if not path.is_file():
             issues.append(f"missing:{_relative(root, path)}")
             continue
         try:
-            actual = _json_object(path).get("classifier_digest")
+            document = _json_object(path)
+            actual = document.get("classifier_digest")
         except ClassifierClosureError as exc:
             issues.append(f"invalid:{_relative(root, path)}:{exc}")
             continue
         if actual != desired:
             issues.append(f"stale:{_relative(root, path)}:{actual!r}")
+        if construction is not None and document.get("construction_digest") != construction:
+            issues.append(f"stale-construction:{_relative(root, path)}")
     return _family(name, paths, root, issues)
 
 
@@ -264,6 +272,10 @@ def _inspect_landing(root: Path, format_id: str, desired: str) -> dict[str, Any]
     else:
         try:
             document = _json_object(path)
+            week = document.get("week", {}).get("id")
+            if isinstance(week, str) and re.fullmatch(r"\d{4}-W\d{2}", week):
+                artifacts.extend((path.parent / "features" / "index.json",
+                                  path.parent / "features" / f"{week}.json"))
             artifacts.extend(
                 path.parent / relative
                 for relative in document.get("data_files", {}).values()
@@ -411,6 +423,14 @@ def _inspect_melee(
                     continue
                 document = _json_object(path)
                 public_documents[field] = (path, document)
+                if field == "overview":
+                    from .melee.stats import EVENT_OVERVIEW_SCHEMA_VERSION
+                    if document.get("schema_version") != EVENT_OVERVIEW_SCHEMA_VERSION:
+                        issues.append(f"Melee event {event_id} overview contract is stale")
+                if field == "matchup":
+                    from .melee.matchup import MATCHUP_SCHEMA_VERSION
+                    if document.get("schema_version") != MATCHUP_SCHEMA_VERSION:
+                        issues.append(f"Melee event {event_id} matchup contract is stale")
                 input_document = document.get("input")
                 if (
                     not isinstance(input_document, Mapping)
@@ -735,7 +755,7 @@ def _generate_melee(stage: Path, format_id: str, *, event_ids: set[str] | None =
         classification_overlay_bytes,
         write_classification_overlay,
     )
-    from .melee.matchup import build_event_matchup_from_paths
+    from .melee.matchup import build_event_matchup_from_paths, build_event_matchup_from_statistics
     from .melee.opportunities import (
         build_opportunity_ledger_from_paths,
         opportunity_ledger_bytes,
@@ -780,13 +800,20 @@ def _generate_melee(stage: Path, format_id: str, *, event_ids: set[str] | None =
         def opportunities():
             write_opportunity_ledger(opportunity_path, opportunity_ledger_bytes(
                 build_opportunity_ledger_from_paths(event_path, classification_path, stage)))
+        generated_statistics = None
         def statistics():
-            for name, document in build_event_statistics_from_paths(
-                    event_path, classification_path, opportunity_path, taxonomy, stage).items():
+            nonlocal generated_statistics
+            generated_statistics = build_event_statistics_from_paths(
+                event_path, classification_path, opportunity_path, taxonomy, stage)
+            for name, document in generated_statistics.items():
                 write_statistics_document(event_output / f"{name}.json", statistics_document_bytes(document))
         def matchups():
-            write_statistics_document(event_output / "matchup.json", statistics_document_bytes(
-                build_event_matchup_from_paths(event_path, classification_path, opportunity_path, taxonomy, stage), compact=True))
+            document = (
+                build_event_matchup_from_statistics(generated_statistics, opportunity_path)
+                if generated_statistics is not None else
+                build_event_matchup_from_paths(event_path, classification_path, opportunity_path, taxonomy, stage)
+            )
+            write_statistics_document(event_output / "matchup.json", statistics_document_bytes(document, compact=True))
         prefix = event_output.relative_to(stage).as_posix()
         shared = implementation(stage, COMMON + ["src/mtgmeta/melee/*.py", "src/mtgmeta/classifier_closure.py"])
         for name, inputs, outputs, producer in (

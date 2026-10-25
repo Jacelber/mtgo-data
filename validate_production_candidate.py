@@ -79,7 +79,9 @@ def collect_changes(root: Path) -> list[Change]:
     return changes
 
 
-def _configured_formats(root: Path) -> tuple[tuple[str, ...], tuple[str, ...]]:
+def _configured_formats(
+    root: Path, *, require_public_products: bool = True,
+) -> tuple[tuple[str, ...], tuple[str, ...]]:
     registry_path = root / "configs" / "formats.yaml"
     # Validate lifecycle and booleans before selecting a production write scope.
     load_format_registry(registry_path)
@@ -118,10 +120,11 @@ def _configured_formats(root: Path) -> tuple[tuple[str, ...], tuple[str, ...]]:
         raise CandidateValidationError(
             f"{registry_path}: no complete MTGO products enabled"
         )
-    try:
-        build_catalog(root)
-    except ValueError as exc:
-        raise CandidateValidationError(str(exc)) from exc
+    if require_public_products:
+        try:
+            build_catalog(root)
+        except ValueError as exc:
+            raise CandidateValidationError(str(exc)) from exc
     return tuple(collection_formats), tuple(product_formats)
 
 
@@ -136,8 +139,9 @@ def _ledger_entries(root: Path) -> list[str]:
     ]
 
 
-def snapshot_state(root: Path) -> dict[str, Any]:
-    collection_formats, product_formats = _configured_formats(root)
+def snapshot_state(root: Path, *, require_public_products: bool = True) -> dict[str, Any]:
+    collection_formats, product_formats = _configured_formats(
+        root, require_public_products=require_public_products)
     return {
         "schema_version": BASELINE_SCHEMA_VERSION,
         "event_files": {
@@ -522,9 +526,12 @@ def validate_candidate(
     root: Path,
     baseline: dict[str, Any],
     changes: list[Change],
+    *,
+    require_public_products: bool = True,
 ) -> tuple[dict[str, Any], list[str]]:
-    collection_formats, product_formats = _configured_formats(root)
-    current = snapshot_state(root)
+    collection_formats, product_formats = _configured_formats(
+        root, require_public_products=require_public_products)
+    current = snapshot_state(root, require_public_products=require_public_products)
     failures = validate_retained_event_archives(root, collection_formats)
     if baseline.get("schema_version") != BASELINE_SCHEMA_VERSION:
         failures.append("baseline snapshot has an unsupported schema_version")
@@ -680,6 +687,9 @@ def main(argv: list[str] | None = None) -> int:
         "snapshot", help="record the clean production baseline"
     )
     snapshot.add_argument("--output", type=Path, required=True)
+    for command in (formats, snapshot):
+        command.add_argument("--collection-only", action="store_true",
+                             help="validate collection configuration without requiring generated public products")
     validate = commands.add_parser(
         "validate", help="validate generated candidate changes"
     )
@@ -688,7 +698,7 @@ def main(argv: list[str] | None = None) -> int:
     root = args.root.resolve()
     try:
         if args.command == "formats":
-            collection, products = _configured_formats(root)
+            collection, products = _configured_formats(root, require_public_products=not args.collection_only)
             print(" ".join(collection if args.kind == "collection" else products))
             return 0
         if args.command == "snapshot":
@@ -699,7 +709,7 @@ def main(argv: list[str] | None = None) -> int:
                 raise CandidateValidationError(
                     f"baseline snapshot requires a clean checkout; found: {paths}{suffix}"
                 )
-            state = snapshot_state(root)
+            state = snapshot_state(root, require_public_products=not args.collection_only)
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
             print(f"Production baseline snapshot PASS: {args.output}")

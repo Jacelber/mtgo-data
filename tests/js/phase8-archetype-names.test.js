@@ -126,3 +126,30 @@ test("localizes matchup hierarchy labels without changing stable IDs", () => {
   assert.equal(localized.leaves[0].id, "prowess/mono-red");
   assert.equal(localized.leaves[0].display_name, "纯红灵技");
 });
+
+test("staged names must cover identities actually displayed by all products", () => {
+  const normalized = names.normalize(contract(), "modern");
+  const valid = [
+    { archetypes: [{ id: "prowess", subtypes: [{ id: "mono-red" }] }, { id: "unknown" }] },
+    { scopes: { all_constructed: { archetypes: [{ archetype_id: "prowess", subtypes: [{ subtype_id: "mono-red" }] }] } } },
+    { features: { items: [{ archetype_id: "prowess", subtype_id: "mono-red" }] } },
+    { events: [{ placements: [{ deck_status: "available", identity: { parent_id: "prowess", subtype_id: "mono-red" } }] }] },
+  ];
+  assert.doesNotThrow(() => names.validateCoverage(normalized, valid));
+  const incomplete = contract();
+  incomplete.names.pop();
+  for (const document of valid) {
+    assert.throws(() => names.validateCoverage(names.normalize(incomplete, "modern"), [document]), /Missing approved/);
+  }
+});
+
+
+test("Tabletop explicit Unknown remains valid without a classifier name", () => {
+  const normalized = names.normalize(contract(), "modern");
+  names.validateCoverage(normalized, [{ scopes: { day1: { archetypes: [
+    { group_id: "unknown", classification_status: "unknown", archetype_id: null, subtypes: [] },
+  ] } } }]);
+  assert.throws(() => names.validateCoverage(normalized, [{ scopes: { day1: { archetypes: [
+    { group_id: "unknown", classification_status: "classified", archetype_id: null },
+  ] } } }]));
+});

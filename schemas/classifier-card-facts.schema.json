@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jacelber.github.io/mtgo-data/schemas/classifier-card-facts.schema.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "source",
+    "cards"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "provider",
+        "uri",
+        "sha256"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "provider": {
+          "const": "Scryfall Oracle Cards"
+        },
+        "uri": {
+          "type": "string",
+          "pattern": "^https://data\\.scryfall\\.io/"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "cards": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "oracle_id",
+          "layout",
+          "names",
+          "faces",
+          "produced_mana"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "oracle_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "layout": {
+            "type": "string",
+            "minLength": 1
+          },
+          "produced_mana": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "W",
+                "U",
+                "B",
+                "R",
+                "G",
+                "C"
+              ]
+            }
+          },
+          "names": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "faces": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "mana_cost",
+                "type_line",
+                "oracle_text",
+                "colors"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "mana_cost": {
+                  "type": "string"
+                },
+                "type_line": {
+                  "type": "string"
+                },
+                "oracle_text": {
+                  "type": "string"
+                },
+                "colors": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "enum": [
+                      "W",
+                      "U",
+                      "B",
+                      "R",
+                      "G"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

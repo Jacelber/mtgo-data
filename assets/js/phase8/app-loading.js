@@ -2,21 +2,60 @@
 
 const BACKGROUND_REFRESH_AGE_MS = 5 * 60 * 1000;
 
-function currentViewKey() {
-  const parts = [state.format, state.product];
-  if (state.product === "mtgo-landing") parts.push(state.landingFeatureWeekFile || "latest");
-  else if (state.product === "mtgo-statistics") parts.push(state.statsRange);
-  else if (state.product === "mtgo-matchups") parts.push(state.matchupRange);
-  else if (state.product === "mtgo-top8") parts.push(state.top8WeekFile || "latest");
-  else if (state.product === "tabletop-major-events") {
-    parts.push(state.tabletopEventId || "default", state.tabletopView);
-    if (state.tabletopView === "matchup") {
-      parts.push([...state.tabletopSelectedEvents]
+function currentViewKey(target = state) {
+  const parts = [target.format, target.product];
+  if (target.product === "mtgo-landing") parts.push(target.landingFeatureWeekFile || "latest");
+  else if (target.product === "mtgo-statistics") parts.push(target.statsRange);
+  else if (target.product === "mtgo-matchups") parts.push(target.matchupRange);
+  else if (target.product === "mtgo-top8") parts.push(target.top8WeekFile || "latest");
+  else if (target.product === "tabletop-major-events") {
+    parts.push(target.tabletopEventId || "default", target.tabletopView, target.tabletopScope);
+    if (target.tabletopView === "matchup") {
+      parts.push([...target.tabletopSelectedEvents]
         .sort((left, right) => left.length - right.length || left.localeCompare(right))
         .join(","));
     }
   }
   return parts.join(":");
+}
+
+function renderedViewKey(target = state) {
+  const presentation = target.product === "mtgo-statistics"
+    ? [target.statsSort, target.statsDirection]
+    : target.product === "tabletop-major-events" && target.tabletopView === "overview"
+      ? [target.tabletopSort, target.tabletopDirection]
+      : [target.matchupMainstreamOnly, [...(target.matchupFilterIdentities || [])].sort()];
+  return JSON.stringify([currentViewKey(target), target.language || I18n.language(), presentation]);
+}
+
+function captureRenderTarget() {
+  // Only request inputs belong here. All arrays are copied and frozen so a
+  // navigation cannot change the meaning of an in-flight load.
+  const keys = [
+    "format", "product", "statsRange", "matchupRange", "matchupMainstreamOnly",
+    "detailIdentity", "top8WeekFile", "top8Detail", "landingFeatureWeekFile",
+    "landingFeatureDestination", "tabletopView", "tabletopEventId",
+    "tabletopDetailIdentity", "tabletopScope", "statsSort", "statsDirection",
+    "tabletopSort", "tabletopDirection",
+  ];
+  return Object.freeze({
+    ...Object.fromEntries(keys.map(key => [key, state[key]])),
+    path: productEntry()?.path,
+    language: I18n.language(),
+    landingFeatureOpen: Object.freeze([...state.landingFeatureOpen]),
+    tabletopSelectedEvents: Object.freeze([...state.tabletopSelectedEvents]),
+    matchupFilterIdentities: state.matchupFilterIdentities === null
+      ? null : Object.freeze([...state.matchupFilterIdentities]),
+  });
+}
+
+function needsCardLocalization(target) {
+  if (target.language !== "zh") return false;
+  if (target.product === "mtgo-landing") return true;
+  if (target.product === "mtgo-statistics") return Boolean(target.detailIdentity);
+  if (target.product === "mtgo-top8") return Boolean(target.top8Detail);
+  return target.product === "tabletop-major-events"
+    && target.tabletopView === "overview" && Boolean(target.tabletopDetailIdentity);
 }
 
 function loadingSkeleton() {
@@ -107,49 +146,73 @@ function clearRefreshStatus() {
 }
 
 async function stageCurrentRefresh() {
-  if (state.product === "mtgo-landing") {
+  const target = captureRenderTarget();
+  const context = currentContext;
+  const namesPath = `stats/${target.format}/archetype_names.json`;
+  const names = await classifierNameClient.stage([namesPath]);
+  const contract = ArchetypeNames.normalize(names.get(namesPath), target.format);
+  const data = await stageViewRefresh(target, context, contract);
+  if (!data) return null;
+  ArchetypeNames.validateCoverage(contract, Object.values(data.values));
+  return Object.freeze({
+    changed: names.changed || data.changed,
+    commit() {
+      // Both groups have passed validation. The caller guards view identity
+      // and render token before this synchronous commit.
+      data.commit();
+      names.commit();
+      state.classifierNameContracts.set(target.format, contract);
+      state.classifierNameContract = contract;
+    },
+  });
+}
+
+async function stageViewRefresh(target, context, contract) {
+  if (target.product === "mtgo-landing") {
     return MtgoController.stageLanding(
-      state.format,
-      productEntry().path,
-      state.landingFeatureWeekFile,
+      target.format,
+      target.path,
+      target.landingFeatureWeekFile,
       {
-        includeEnvironmentDecks: Boolean(state.detailIdentity),
+        includeEnvironmentDecks: Boolean(target.detailIdentity),
         includeFeatureDecks: Boolean(
-          state.landingFeatureOpen.size || state.landingFeatureDestination
+          target.landingFeatureOpen.length || target.landingFeatureDestination
         ),
       }
     );
   }
-  if (state.product === "mtgo-statistics") {
-    return MtgoController.stageStatistics(state.format, state.statsRange, {
-      includeDecks: Boolean(state.detailIdentity),
+  if (target.product === "mtgo-statistics") {
+    return MtgoController.stageStatistics(target.format, target.statsRange, {
+      includeDecks: Boolean(target.detailIdentity),
     });
   }
-  if (state.product === "mtgo-matchups") {
-    return MtgoController.stageMatchup(state.format, state.matchupRange);
+  if (target.product === "mtgo-matchups") {
+    return MtgoController.stageMatchup(target.format, target.matchupRange, {
+      includeRange: target.matchupMainstreamOnly,
+    });
   }
-  if (state.product === "mtgo-top8" && state.top8WeekFile) {
-    const week = currentContext.top8Index?.weeks?.find(
-      item => item.file === state.top8WeekFile
+  if (target.product === "mtgo-top8" && target.top8WeekFile) {
+    const week = context.top8Index?.weeks?.find(
+      item => item.file === target.top8WeekFile
     );
-    return MtgoController.stageTop8(productEntry().path, state.top8WeekFile, {
-      comparisonBasesFile: state.top8Detail
+    return MtgoController.stageTop8(target.path, target.top8WeekFile, {
+      comparisonBasesFile: target.top8Detail
         ? week?.comparison_bases_file
         : null,
     });
   }
-  if (state.product === "tabletop-major-events" && currentContext.eventEntry) {
+  if (target.product === "tabletop-major-events" && context.eventEntry) {
     return TabletopController.stageEvent(
-      productEntry().path,
-      currentContext.eventEntry,
-      state.format,
+      target.path,
+      context.eventEntry,
+      target.format,
       MtgoController,
       {
-        includeMatchup: state.tabletopView === "matchup",
-        includeDecks: state.tabletopView === "overview"
-          && Boolean(state.tabletopDetailIdentity),
-        selectedEventEntries: currentContext.selectedEventEntries,
-        canonicalIdentityOrder: currentContext.canonicalIdentityOrder,
+        includeMatchup: target.tabletopView === "matchup",
+        includeDecks: target.tabletopView === "overview"
+          && Boolean(target.tabletopDetailIdentity),
+        selectedEventEntries: context.selectedEventEntries,
+        canonicalIdentityOrder: [...contract.names.keys(), "unknown"],
       }
     );
   }
@@ -157,18 +220,23 @@ async function stageCurrentRefresh() {
 }
 
 async function checkForUpdates() {
-  if (state.refreshInProgress || state.pendingRefresh) return;
+  if (state.refreshInProgress || state.pendingRefresh
+      || state.renderedViewKey !== renderedViewKey()
+      || document.querySelector("#view").getAttribute("aria-busy") === "true") return;
   state.refreshInProgress = true;
   showRefreshStatus("loading", t("loading.checking"));
   const key = currentViewKey();
+  const token = state.renderToken;
+  const isCurrent = () => token === state.renderToken && key === currentViewKey();
   try {
     const staged = await stageCurrentRefresh();
+    if (!isCurrent()) return;
     if (!staged) {
       clearRefreshStatus();
       return;
     }
     if (staged.changed) {
-      state.pendingRefresh = { key, staged };
+      state.pendingRefresh = { key, token, staged };
       showRefreshStatus("available", t("loading.update_available"), {
         attribute: "data-apply-refresh",
         label: t("loading.apply_update"),
@@ -179,6 +247,7 @@ async function checkForUpdates() {
       clearRefreshStatus();
     }
   } catch (error) {
+    if (!isCurrent()) return;
     showRefreshStatus("error", t("loading.refresh_failed"), {
       attribute: "data-retry-refresh",
       label: t("loading.retry"),
@@ -191,6 +260,11 @@ async function checkForUpdates() {
 
 function commitPendingRefresh() {
   if (!state.pendingRefresh) return;
+  if (state.pendingRefresh.key !== currentViewKey()
+      || state.pendingRefresh.token !== state.renderToken) {
+    discardPendingRefresh();
+    return;
+  }
   state.pendingRefresh.staged.commit();
   state.viewCheckedAt.set(state.pendingRefresh.key, Date.now());
   state.pendingRefresh = null;
@@ -198,7 +272,6 @@ function commitPendingRefresh() {
 }
 
 function discardPendingRefresh() {
-  if (!state.pendingRefresh) return;
   state.pendingRefresh = null;
   clearRefreshStatus();
 }
