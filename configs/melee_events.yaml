@@ -1,6 +1,144 @@
 schema_version: "3.1.0"
 
 events:
+  - id: '480317'
+    url: https://melee.gg/Tournament/View/480317
+    name: South America Regional Championship Buenos Aires 2026
+    date:
+      start: '2026-10-24'
+      end: '2026-10-25'
+    format: modern
+    series: regional_championship
+    structure: constructed_single_stage
+    enabled: true
+    review_status: verified
+    tabletop: true
+    team_event: false
+    mixed_format: false
+    raw_requests:
+    - id: tournament
+      resource_type: tournament
+      url: https://melee.gg/Tournament/View/480317
+      content_type: html
+    include:
+      swiss: true
+      playoffs: true
+    phases:
+    - id: day1_modern
+      stage: day1
+      round_phase: constructed
+      game_format: modern
+      swiss: true
+      rounds:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+    - id: top8_modern
+      stage: playoff
+      round_phase: playoff
+      game_format: modern
+      swiss: false
+      source_labels:
+      - Quarterfinals
+      - Semifinals
+      - Finals
+    reviewed_overrides: []
+    statistics:
+      default_match_scope: all_constructed_swiss
+      constructed_game_format: modern
+      include_playoffs: false
+    source_evidence:
+    - https://melee.gg/Tournament/View/480317
+    - https://melee.gg/Tournament/View/480317#tournament-schedule-tab
+    special_handling:
+    - The organizer schedule on the official Melee page places all nine Modern Swiss rounds on Saturday and only Top 8
+      single-elimination on Sunday; there is no Day 2 Swiss stage.
+    - All nine Swiss rounds, Quarterfinals, Semifinals and Finals are marked completed. Retain playoffs as context only,
+      excluded from primary Modern Swiss statistics.
+    - 'Owner explicitly approved this event: if official final standings have not been updated, use complete official Semifinals
+      standings as the base, set first and second from the retained decisive Finals result, and preserve places 3 onward.
+      Verify participant coverage and the full Top 8 bracket before applying the supplement.'
+    - The enrollment headline shows 404 players; reconcile the retained standings, participants and decklists rather than
+      treating that headline as the statistical denominator.
+    notes: Completed individual Modern Regional Championship organized by Devir Brasil. Official identity, local October
+      24-25 dates, organizer schedule and completed-round labels verified from the Melee page on 2026-10-26. Owner requested
+      whitelist admission, collection and publication for both 480317 and 414849. Final standings and result coverage remain
+      subject to collection audit; registration alone does not make the event public.
+  - id: '414849'
+    url: https://melee.gg/Tournament/View/414849
+    name: ANZ Super Series Cycle 13 Regional Championships - Sydney
+    date:
+      start: '2026-10-24'
+      end: '2026-10-25'
+    format: modern
+    series: regional_championship
+    structure: constructed_single_stage
+    enabled: true
+    review_status: verified
+    tabletop: true
+    team_event: false
+    mixed_format: false
+    raw_requests:
+    - id: tournament
+      resource_type: tournament
+      url: https://melee.gg/Tournament/View/414849
+      content_type: html
+    include:
+      swiss: true
+      playoffs: true
+    phases:
+    - id: day1_modern
+      stage: day1
+      round_phase: constructed
+      game_format: modern
+      swiss: true
+      rounds:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+    - id: top8_modern
+      stage: playoff
+      round_phase: playoff
+      game_format: modern
+      swiss: false
+      source_labels:
+      - Quarterfinals
+      - Semifinals
+      - Finals
+    reviewed_overrides: []
+    statistics:
+      default_match_scope: all_constructed_swiss
+      constructed_game_format: modern
+      include_playoffs: false
+    source_evidence:
+    - https://melee.gg/Tournament/View/414849
+    - https://melee.gg/Tournament/View/414849#tournament-schedule-tab
+    special_handling:
+    - The organizer schedule on the official Melee page places all nine Modern Swiss rounds on Saturday and only Top 8
+      single-elimination on Sunday; there is no Day 2 Swiss stage.
+    - All nine Swiss rounds, Quarterfinals, Semifinals and Finals are marked completed. Retain playoffs as context only,
+      excluded from primary Modern Swiss statistics.
+    - 'Owner explicitly approved this event: if official final standings have not been updated, use complete official Semifinals
+      standings as the base, set first and second from the retained decisive Finals result, and preserve places 3 onward.
+      Verify participant coverage and the full Top 8 bracket before applying the supplement.'
+    - The enrollment headline shows 233 players; reconcile the retained standings, participants and decklists rather than
+      treating that headline as the statistical denominator.
+    notes: Completed individual Modern Regional Championship organized by ANZMTG Super Series. Official identity, local
+      October 24-25 dates, organizer schedule and completed-round labels verified from the Melee page on 2026-10-26. Owner
+      requested whitelist admission, collection and publication for both 480317 and 414849. Final standings and result
+      coverage remain subject to collection audit; registration alone does not make the event public.
   - id: '482105'
     url: https://melee.gg/Tournament/View/482105
     name: MTG SEA Championship Final 2026-27 Round 1
