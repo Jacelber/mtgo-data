@@ -201,6 +201,11 @@ def build_scope(args):
         raise ValueError('已提交材料使用新目录保存下一版本，不能覆盖 W38 起的审阅快照。')
     if bootstrap and output.is_relative_to(ROOT):
         raise ValueError('name review bootstrap output must be outside the repository')
+    if bootstrap:
+        from mtgmeta.mtgo.review_scope import parse_review_scopes
+        parse_review_scopes(ROOT, [f'{args.format}={args.week}'], capability='classification', private=True)
+    from mtgmeta.classifier_preparation import prepare_repository_facts
+    prepare_repository_facts(ROOT, [args.format])
     review = build_mtgo_weekly_review(ROOT, args.format, args.week, name_review_bootstrap=bootstrap)
     source_review = deepcopy(review) if bootstrap else review
     registry = yaml.safe_load((ROOT / 'configs/mtgo_weekly_review_completions.yaml').read_text(encoding='utf-8'))

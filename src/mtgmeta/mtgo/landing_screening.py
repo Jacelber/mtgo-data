@@ -11,6 +11,7 @@ from typing import Any, Mapping
 import yaml
 
 from mtgmeta.classifier import classify_deck
+from mtgmeta.classifier_cards import with_repository_facts
 from mtgmeta.card_names import front_face_card_name
 
 from . import load_mtgo_context
@@ -554,6 +555,7 @@ def _prefer_build_shift_record(
 
 
 
+@with_repository_facts
 def prepare_candidates(
     repository_root: str | Path,
     format_id: str,

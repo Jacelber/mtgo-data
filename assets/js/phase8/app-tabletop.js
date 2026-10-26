@@ -31,6 +31,7 @@ function qualityStatusLabel(value) {
 function issueMessage(issue, formatId) {
   const key = {
     unknown_classifications: "tabletop.issue.unknown",
+    no_sideboard_unknown: "tabletop.issue.no_sideboard",
     missing_or_unavailable_decklists: "tabletop.issue.unavailable_decklists",
     disqualified_participant_matches_excluded: "tabletop.issue.disqualified",
     mixed_event_day2_selection_bias: "tabletop.day2_bias",
@@ -572,6 +573,7 @@ async function tabletopView(request) {
       "disqualified_participant_matches_excluded",
       "missing_or_unavailable_decklists",
       "unknown_classifications",
+      "no_sideboard_unknown",
     ]);
     if (presentation.show_mixed_selection_bias) {
       retainedQualityCodes.add("mixed_event_day2_selection_bias");

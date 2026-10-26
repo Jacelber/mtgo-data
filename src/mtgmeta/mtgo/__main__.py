@@ -239,6 +239,8 @@ def _run_fetch_matches(args: argparse.Namespace, root: Path, registry: Path) -> 
 
 
 def _run_statistics(args: argparse.Namespace, root: Path, registry: Path) -> int:
+    from ..classifier_preparation import prepare_repository_facts
+    prepare_repository_facts(root, [args.format_id])
     written = stats.build_all_stats(
         root, args.format_id, registry_path=registry,
         output_directory=args.output_directory,
@@ -251,6 +253,8 @@ def _run_statistics(args: argparse.Namespace, root: Path, registry: Path) -> int
 
 
 def _run_matchups(args: argparse.Namespace, root: Path, registry: Path) -> int:
+    from ..classifier_preparation import prepare_repository_facts
+    prepare_repository_facts(root, [args.format_id])
     written, statistics = matchup.build_all_matchups(
         root, args.format_id, registry_path=registry,
         output_directory=args.output_directory,
@@ -264,6 +268,8 @@ def _run_matchups(args: argparse.Namespace, root: Path, registry: Path) -> int:
 
 
 def _run_top8(args: argparse.Namespace, root: Path, registry: Path) -> int:
+    from ..classifier_preparation import prepare_repository_facts
+    prepare_repository_facts(root, [args.format_id])
     written = top8.build_all_top8(
         root, args.format_id, registry_path=registry,
         output_directory=args.output_directory,
@@ -472,6 +478,8 @@ def _run_publication(args: argparse.Namespace, root: Path, registry: Path) -> in
         )
         print(json.dumps(result, indent=2))
     elif args.publication_command == "prepare-review":
+        from ..classifier_preparation import prepare_repository_facts
+        prepare_repository_facts(root, [args.format_id])
         print(publication.prepare_review(root, args.format_id, args.week, args.output))
     else:
         publication.require_private_output(root, args.output)

@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "751aeebfc17301e63bbeb51a4beedd94a97ed4f2de48078ece11e062b98c1d0a"
+    "digest": "aa90a0cf9d0b6ab77a9cad03a6a539e60c096a7546505ca7450dafa3a4c56c24"
   },
   "input": {
     "event_path": "data/pauper/melee/events/438329.json",
@@ -18,7 +18,7 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/pauper.yaml",
-    "rule_sha256": "01d283056072c171e350b45ff004560786c3349e2d468faef9b7850bdf99f303",
+    "rule_sha256": "3b261c33af717969da6859897305e0934fb595ac67e8f1a7e398ad608f3e2bd1",
     "rule_schema_version": "1.2.0",
     "archetype_count": 95,
     "rule_count": 162,
@@ -26,19 +26,19 @@
   },
   "summary": {
     "total_records": 1070,
-    "classified": 1069,
-    "unknown": 1,
+    "classified": 1068,
+    "unknown": 2,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 393,
-    "overridden_matches": 393,
+    "multiple_matches": 392,
+    "overridden_matches": 392,
     "selected_subtypes": 113,
-    "parent_only": 956,
+    "parent_only": 955,
     "same_parent_multiple_subtype_matches": 0,
     "residual_subtype_violations": 0,
     "selected_by_parent": {
       "affinity-combo": 4,
-      "altar-tron": 17,
+      "altar-tron": 16,
       "azorius-familiars": 23,
       "battle-screech": 32,
       "bogles": 7,
@@ -99047,162 +99047,106 @@
     },
     {
       "participant_id": "participant-b0f2c1efd83bc63822fdeaafe6bf44fcea6c53684115f2db2d4dea6e8c2a2cf9",
-      "classification_status": "classified",
-      "selected": {
-        "archetype_id": "altar-tron",
-        "archetype_name": "Altar Tron",
-        "subtype_id": null,
-        "subtype_name": null,
-        "rule_id": "altar-tron",
-        "priority": 10000
-      },
-      "matched_rules": [
-        {
-          "archetype_id": "altar-tron",
-          "archetype_name": "Altar Tron",
-          "subtype_id": null,
-          "subtype_name": null,
-          "rule_id": "altar-tron",
-          "priority": 10000,
-          "evidence": [
-            {
-              "card": "Ashnod's Altar",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Myr Retriever",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            }
-          ]
-        },
-        {
-          "archetype_id": "eggs-tron",
-          "archetype_name": "Eggs Tron",
-          "subtype_id": null,
-          "subtype_name": null,
-          "rule_id": "eggs-tron",
-          "priority": 9990,
-          "evidence": [
-            {
-              "card": "Chromatic Star",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Candy Trail",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            }
-          ]
-        }
-      ],
-      "top_priority_matches": [
-        {
-          "archetype_id": "altar-tron",
-          "archetype_name": "Altar Tron",
-          "subtype_id": null,
-          "subtype_name": null,
-          "rule_id": "altar-tron",
-          "priority": 10000,
-          "evidence": [
-            {
-              "card": "Ashnod's Altar",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Myr Retriever",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
-          "archetype_id": "eggs-tron",
-          "archetype_name": "Eggs Tron",
-          "subtype_id": null,
-          "subtype_name": null,
-          "rule_id": "eggs-tron",
-          "priority": 9990,
-          "evidence": [
-            {
-              "card": "Chromatic Star",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Candy Trail",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Urza's Mine",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            }
-          ]
-        }
-      ],
+      "classification_status": "unknown",
+      "selected": null,
+      "matched_rules": [],
+      "top_priority_matches": [],
+      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
-      "errors": [],
-      "unknown_deck": null
+      "errors": [
+        "deck_data:60_main_without_sideboard"
+      ],
+      "unknown_deck": {
+        "main_deck": [
+          {
+            "name": "Ashnod's Altar",
+            "quantity": 3
+          },
+          {
+            "name": "Bonder's Ornament",
+            "quantity": 1
+          },
+          {
+            "name": "Candy Trail",
+            "quantity": 4
+          },
+          {
+            "name": "Chromatic Star",
+            "quantity": 3
+          },
+          {
+            "name": "Conduit Pylons",
+            "quantity": 2
+          },
+          {
+            "name": "Eviscerator's Insight",
+            "quantity": 4
+          },
+          {
+            "name": "Expedition Map",
+            "quantity": 4
+          },
+          {
+            "name": "Fangren Marauder",
+            "quantity": 2
+          },
+          {
+            "name": "Forest",
+            "quantity": 1
+          },
+          {
+            "name": "Golem Foundry",
+            "quantity": 2
+          },
+          {
+            "name": "Ichor Wellspring",
+            "quantity": 2
+          },
+          {
+            "name": "Malevolent Rumble",
+            "quantity": 4
+          },
+          {
+            "name": "Myr Kinsmith",
+            "quantity": 1
+          },
+          {
+            "name": "Myr Retriever",
+            "quantity": 4
+          },
+          {
+            "name": "Pactdoll Terror",
+            "quantity": 2
+          },
+          {
+            "name": "Prophetic Prism",
+            "quantity": 3
+          },
+          {
+            "name": "Swamp",
+            "quantity": 2
+          },
+          {
+            "name": "Urza's Mine",
+            "quantity": 4
+          },
+          {
+            "name": "Urza's Power Plant",
+            "quantity": 4
+          },
+          {
+            "name": "Urza's Tower",
+            "quantity": 4
+          },
+          {
+            "name": "Weather the Storm",
+            "quantity": 4
+          }
+        ],
+        "sideboard": []
+      }
     },
     {
       "participant_id": "participant-b10ecc311e30db0578222172310b74a58e3fa3e75121b166a09875eabb9b3189",

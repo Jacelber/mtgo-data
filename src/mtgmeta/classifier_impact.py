@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from .classifier import ClassificationResult, classifier_digest, classify_deck
+from .classifier_cards import with_repository_facts
 from .config import load_rule_set
 from .melee.classification import _adapt_decklist
 from .mtgo import load_mtgo_event_collection_context
@@ -100,6 +101,7 @@ def _mtgo_decks(root: Path, format_id: str) -> list[dict[str, Any]]:
     return rows
 
 
+@with_repository_facts
 def _melee_decks(root: Path, format_id: str) -> list[dict[str, Any]]:
     base = root / "data" / format_id / "melee" / "events"
     rows = []

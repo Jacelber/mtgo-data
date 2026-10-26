@@ -27,7 +27,7 @@ from ..classifier import (
     color_diagnostics_payload,
     classify_deck,
 )
-from ..classifier_cards import classifier_card_name
+from ..classifier_cards import classifier_card_name, with_rule_facts
 from ..config import load_rule_set
 from ..deck import deck_to_counts
 from ..rules import RuleSet
@@ -221,6 +221,7 @@ def _rule_counts(rule_set: RuleSet) -> tuple[int, int, int]:
     )
 
 
+@with_rule_facts
 def build_classification_overlay(
     event: Mapping[str, Any],
     rule_set: RuleSet,
@@ -496,6 +497,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         f"{args.event_id}.json"
     )
     try:
+        if args.execute:
+            from ..classifier_preparation import prepare_repository_facts
+            prepare_repository_facts(root, [args.format_id], input_paths=[event_path])
         document = build_classification_overlay_from_paths(
             event_path,
             rule_path,

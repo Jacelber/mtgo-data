@@ -24,7 +24,7 @@ def files(root: Path, patterns):
 # by the caller; Landing rendering is deliberately not a statistics dependency.
 COMMON = ["src/mtgmeta/" + name + ".py" for name in (
     "classifier", "rules", "legacy_rules", "config", "consumer", "public_contract",
-    "classifier_features", "classifier_cards", "deck", "reports", "card_names", "mtgo/__init__",
+    "classifier_features", "classifier_cards", "classifier_preparation", "deck", "reports", "card_names", "mtgo/__init__",
     "mtgo/classification", "mtgo/normalize")]
 COMMON += ["src/mtgmeta/data/*.json", "requirements.txt"]
 

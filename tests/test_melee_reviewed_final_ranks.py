@@ -51,6 +51,49 @@ def test_reviewed_exception_rejects_unapproved_event_before_reading_or_fetching(
         module.refresh(tmp_path, "459699", reviewed_semifinals=True)
 
 
+def owner_final_bracket():
+    result, event = bracket()
+    event["metadata"] = {"event_id": "440878"}
+    event["participants"] = [{"id": p, "display_name": "Alexander von Stange" if p == "b" else p}
+                             for p in "abcdefgh"]
+    event["matches"] = [m for m in event["matches"] if m["round_id"] != "Finals"]
+    return result, event
+
+
+def test_owner_final_fills_ranks_without_inventing_a_source_match():
+    result, event = owner_final_bracket()
+    original = deepcopy(event)
+    module.supplement_from_semifinals(result, event, owner_final_440878=True)
+    assert event == original
+    assert result["ranks"] == dict(a=2, b=1, c=3, d=4, e=5, f=6, g=7, h=8)
+    assert result["base_ranks"] == {p: i for i, p in enumerate("abcdefgh", 1)}
+    assert result["decisive_match_id"] is None
+    assert result["reviewed_final_result"]["score"] == "2-0"
+    assert result["reviewed_final_result"]["winner_participant_id"] == "b"
+    assert "用户确认" in result["note"]["zh"]
+
+
+def test_owner_final_cannot_apply_to_another_event_or_nonfinalist():
+    result, event = owner_final_bracket()
+    event["metadata"]["event_id"] = "414849"
+    with pytest.raises(ValueError, match="only for event 440878"):
+        module.supplement_from_semifinals(result, event, owner_final_440878=True)
+    event["metadata"]["event_id"] = "440878"
+    event["participants"][1]["display_name"] = "b"
+    event["participants"][2]["display_name"] = "Alex von Stange"
+    with pytest.raises(ValueError, match="semifinal winner"):
+        module.supplement_from_semifinals(result, event, owner_final_440878=True)
+
+
+def test_owner_final_does_not_suppress_an_inconsistent_official_final():
+    result, event = owner_final_bracket()
+    event["matches"].append({"id": "official-final", "round_id": "Finals", "competitors": [
+        {"participant_id": "a", "result_type": "played_win"},
+        {"participant_id": "b", "result_type": "played_loss"}]})
+    with pytest.raises(ValueError, match="contradicts"):
+        module.supplement_from_semifinals(result, event, owner_final_440878=True)
+
+
 def test_no_show_opponent_administrative_result_uses_statistics_vocabulary():
     from mtgmeta.melee.opportunities import _source_opportunity
     competitor = {"participant_id": "a", "result_type": "administrative", "match_points": 3}

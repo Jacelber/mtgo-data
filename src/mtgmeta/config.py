@@ -158,6 +158,18 @@ def parse_rule_text(text: str) -> RuleSet:
 
 
 def load_rule_set(path: str | Path) -> RuleSet:
+    from .classifier_cards import card_facts, repository_card_facts, use_card_facts
+    source = Path(path).resolve()
+    candidate = source.parent.parent if source.parent.name == "my_archetypes" else None
+    root = candidate if candidate is not None and (candidate / "src/mtgmeta/data/classifier_card_facts.json").is_file() else None
+    if root is not None and (root / ".classifier-facts/pending.json").exists():
+        raise RuleConfigError([RuleValidationFailure("card_facts_sha256", "resume interrupted fact preparation before loading rules")])
+    facts = repository_card_facts(root) if root is not None else card_facts()
+    with use_card_facts(facts):
+        return replace(_load_rule_set(source), facts=facts)
+
+
+def _load_rule_set(path: str | Path) -> RuleSet:
     source = Path(path)
     try:
         text = source.read_text(encoding="utf-8")

@@ -35,6 +35,9 @@ def scope(tmp_path, monkeypatch):
     args = argparse.Namespace(format='pauper', week='2026-W37', output=tmp_path / 'output',
                               localization=cards, include_feature=False)
     monkeypatch.setattr(web, 'ROOT', root)
+    # This fixture supplies synthetic review facts rather than a repository;
+    # preparation itself and its entrypoint routing have separate coverage.
+    monkeypatch.setattr('mtgmeta.classifier_preparation.prepare_repository_facts', lambda *a: None)
     monkeypatch.setattr(web, 'build_mtgo_weekly_review', lambda *a, **kw: deepcopy(review))
     candidate_path = root / 'statistics/landing/review/candidates_2026-W37.yaml'
     candidate_path.parent.mkdir(parents=True)

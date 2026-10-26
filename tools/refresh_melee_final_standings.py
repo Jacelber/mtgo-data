@@ -17,8 +17,10 @@ from mtgmeta.melee.stats import apply_final_standings, statistics_document_bytes
 from mtgmeta.melee.publish import _descriptor
 
 
-def refresh(root, event_id, *, reviewed_semifinals=False):
-    if reviewed_semifinals and event_id not in {"405588", "471573", "470109", "405591", "480317", "414849"}:
+def refresh(root, event_id, *, reviewed_semifinals=False, owner_final_440878=False):
+    if owner_final_440878 and (event_id != "440878" or not reviewed_semifinals):
+        raise ValueError("The Owner final result requires event 440878 and reviewed Semifinals")
+    if reviewed_semifinals and event_id not in {"405588", "471573", "470109", "405591", "480317", "414849", "440878"}:
         raise ValueError("The reviewed Semifinals supplement is not approved for this event")
     definition = load_melee_event_registry(root / "configs/melee_events.yaml").require_fetchable(event_id)
     event_path = root / "data" / definition.format / "melee/events" / f"{event_id}.json"
@@ -73,14 +75,14 @@ def refresh(root, event_id, *, reviewed_semifinals=False):
         "fetched_at": datetime.now(timezone.utc).isoformat(),
         "event_sha256": hashlib.sha256(event_bytes).hexdigest(), "ranks": selected}
     if reviewed_semifinals:
-        supplement_from_semifinals(result, event)
+        supplement_from_semifinals(result, event, owner_final_440878=owner_final_440878)
     destination = event_path.parent.parent / "final_standings" / f"{event_id}.json"
     destination.parent.mkdir(exist_ok=True)
     destination.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return {"event_id": event_id, "participants": len(selected), "path": str(destination)}
 
 
-def supplement_from_semifinals(result, event):
+def supplement_from_semifinals(result, event, *, owner_final_440878=False):
     """Apply the reviewed event exception using identities and retained playoff results."""
     ranks = result["ranks"]
     if set(ranks.values()) != set(range(1, len(event["participants"]) + 1)):
@@ -88,6 +90,32 @@ def supplement_from_semifinals(result, event):
     rounds = {r["source_label"]: r["id"] for r in event["rounds"] if r["stage"] == "playoff"}
     matches = {label: [m for m in event["matches"] if m["round_id"] == rounds.get(label)]
                for label in ("Quarterfinals", "Semifinals", "Finals")}
+    owner_result = None
+    if owner_final_440878:
+        if event.get("metadata", {}).get("event_id") != "440878":
+            raise ValueError("The Owner final result is approved only for event 440878")
+        winners = {c["participant_id"] for m in matches["Semifinals"] for c in m["competitors"]
+                   if c["result_type"] == "played_win"}
+        alex = [p["id"] for p in event["participants"]
+                if p["display_name"].strip().casefold() in {"alex von stange", "alexander von stange"}]
+        if len(alex) != 1 or len(winners) != 2 or alex[0] not in winners:
+            raise ValueError("Owner final winner must be a unique retained semifinal winner")
+        loser = next(p for p in winners if p != alex[0])
+        if matches["Finals"]:
+            if (len(matches["Finals"]) != 1
+                    or {c["participant_id"] for c in matches["Finals"][0]["competitors"]
+                        if c["result_type"] == "played_win"} != {alex[0]}):
+                raise ValueError("Retained Finals result contradicts the Owner-reviewed winner")
+        else:
+            # A review object for rank resolution, never a fabricated source match.
+            matches["Finals"] = [{"id": None, "competitors": [
+                {"participant_id": alex[0], "result_type": "played_win"},
+                {"participant_id": loser, "result_type": "played_loss"},
+            ]}]
+        owner_result = {"winner_participant_id": alex[0], "loser_participant_id": loser,
+                        "score": "2-0", "source": "owner_review",
+                        "reviewed_on": "2026-10-26",
+                        "reason": "Owner confirmed Alex von Stange won the completed final 2-0 while the official pairing was not updated."}
     for label, count in (("Quarterfinals", 4), ("Semifinals", 2), ("Finals", 1)):
         if len(matches[label]) != count or any(
                 sorted(c["result_type"] for c in m["competitors"]) != ["played_loss", "played_win"]
@@ -111,12 +139,20 @@ def supplement_from_semifinals(result, event):
         "zh": "最终排名根据官方半决赛排名及决赛结果补齐；冠亚军按决赛结果确定，第 3 名起沿用半决赛排名。",
         "en": "Final standings supplemented from official semifinal standings and the final result. First and second follow the final result; places 3 onward retain the semifinal standings.",
     }
+    if owner_result:
+        result["method"] = "reviewed_semifinals_with_owner_final_result"
+        result["reviewed_final_result"] = owner_result
+        result["note"] = {
+            "zh": "最终排名根据官方半决赛排名及用户确认的决赛结果补齐：Alex von Stange 以 2–0 获胜并夺冠；亚军为另一位决赛选手，第 3 名起沿用半决赛排名。官方决赛对阵尚未更新。",
+            "en": "Final standings supplemented from official semifinal standings and the Owner-confirmed final: Alex von Stange won 2–0. The other finalist is second; places 3 onward retain the semifinal standings. The official final pairing has not been updated.",
+        }
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--event-id", required=True)
     parser.add_argument("--reviewed-semifinals", action="store_true", help="Apply the event-specific Owner-approved semifinal ranking supplement")
+    parser.add_argument("--owner-final-440878", action="store_true", help="Use the explicitly reviewed Alex von Stange 2-0 final for event 440878")
     parser.add_argument("--materialize", action="store_true", help="Use the saved official source; perform no network requests")
     args = parser.parse_args()
     if args.materialize:
@@ -134,4 +170,5 @@ if __name__ == "__main__":
         (directory / "meta.json").write_bytes(statistics_document_bytes(meta))
         print(json.dumps({"event_id": args.event_id, "state": "materialized"}))
     else:
-        print(json.dumps(refresh(ROOT, args.event_id, reviewed_semifinals=args.reviewed_semifinals)))
+        print(json.dumps(refresh(ROOT, args.event_id, reviewed_semifinals=args.reviewed_semifinals,
+                                 owner_final_440878=args.owner_final_440878)))

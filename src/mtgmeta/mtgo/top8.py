@@ -9,6 +9,7 @@ import re
 from typing import Any
 
 from mtgmeta.classifier import classifier_digest
+from mtgmeta.classifier_cards import with_repository_facts, with_rule_facts
 from mtgmeta.consumer import identity_display_name
 from mtgmeta.rules import ArchetypeDefinition
 
@@ -603,6 +604,7 @@ def _entry_lifecycle(
     }
 
 
+@with_rule_facts
 def write_latest_week(
     events,
     rules,
@@ -750,6 +752,7 @@ def write_latest_week(
     return written
 
 
+@with_repository_facts
 def build_all_top8(
     repository_root: str | Path,
     format_id: str,

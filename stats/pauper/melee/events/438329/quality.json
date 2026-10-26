@@ -10,13 +10,13 @@
     "event_sha256": "9c4c5f344144773cd60595590bb5e70b3b3dd9b7655beaa0bca90b26d4ac2343",
     "event_schema_version": "2.2.0",
     "classification_path": "data/pauper/melee/classifications/438329.json",
-    "classification_sha256": "467004caba90b0da0ff13a7b8f1d52a9bd5fc3a20e7a6fabe119ea8c04d3f73c",
+    "classification_sha256": "14a580bc3d489a2d77a9f19fd2c2edd0c82dece5924d931d1b4ad4310e663e53",
     "classification_schema_version": "1.1.0",
     "opportunity_path": "data/pauper/melee/opportunities/438329.json",
-    "opportunity_sha256": "4cd775529e4101adf349fa5f0b82372adc4e67caa39452c3444c6bde05601cdf",
+    "opportunity_sha256": "6c774b2a0856855c02758c0984fd7e362a6001b31a9fcfb7f0fef68f0facfa52",
     "opportunity_schema_version": "1.1.0",
     "taxonomy_path": "my_archetypes/pauper.yaml",
-    "taxonomy_sha256": "01d283056072c171e350b45ff004560786c3349e2d468faef9b7850bdf99f303",
+    "taxonomy_sha256": "3b261c33af717969da6859897305e0934fb595ac67e8f1a7e398ad608f3e2bd1",
     "taxonomy_schema_version": "1.2.0"
   },
   "status": "warning",
@@ -26,8 +26,8 @@
     "standings": 1086,
     "submitted_decklists": 1070,
     "missing_or_unavailable_decklists": 16,
-    "classified_decks": 1069,
-    "unknown_decks": 1,
+    "classified_decks": 1068,
+    "unknown_decks": 2,
     "classification_conflicts": 0,
     "invalid_decks": 0,
     "rounds": 17,
@@ -81,10 +81,16 @@
   ],
   "issues": [
     {
-      "code": "unknown_classifications",
+      "code": "no_sideboard_unknown",
       "severity": "warning",
       "count": 1,
-      "message": "Valid submitted decks remain explicitly Unknown."
+      "message": "Submitted lists with 60 main-deck cards and no sideboard are retained as Unknown under the project data policy; source cards and match results remain unchanged."
+    },
+    {
+      "code": "unknown_classifications",
+      "severity": "warning",
+      "count": 2,
+      "message": "Submitted decks remain explicitly Unknown, including lists covered by the project's data-validity policy."
     },
     {
       "code": "missing_or_unavailable_decklists",

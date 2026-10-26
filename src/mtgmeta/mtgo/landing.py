@@ -13,6 +13,7 @@ from typing import Any
 import yaml
 
 from mtgmeta.public_contract import versioned
+from mtgmeta.classifier_cards import with_repository_facts
 
 from . import load_mtgo_context
 from . import landing_editorial as editorial
@@ -751,6 +752,7 @@ def _feature_archive_documents(
     return index, week_documents
 
 
+@with_repository_facts
 def build_document(
     repository_root: str | Path,
     format_id: str,

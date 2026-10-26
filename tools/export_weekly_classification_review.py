@@ -139,6 +139,12 @@ def main(argv: list[str] | None = None) -> int:
             from mtgmeta.mtgo.publication import require_private_output
             require_private_output(root, args.output)
         if args.command == "mtgo":
+            if args.name_review_bootstrap:
+                from mtgmeta.mtgo.review_scope import parse_review_scopes
+                parse_review_scopes(root, [f"{args.format_id}={args.week}"],
+                                    capability="classification", private=True)
+            from mtgmeta.classifier_preparation import prepare_repository_facts
+            prepare_repository_facts(root, [args.format_id])
             value = build_mtgo_weekly_review(
                 root,
                 args.format_id,
@@ -146,6 +152,8 @@ def main(argv: list[str] | None = None) -> int:
                 name_review_bootstrap=args.name_review_bootstrap,
             )
         elif args.command == "melee":
+            from mtgmeta.classifier_preparation import prepare_repository_facts
+            prepare_repository_facts(root, [args.format_id])
             value = build_melee_review(root, args.format_id, args.event_id)
         elif args.command == "mtgo-detail":
             value = mtgo_record_detail(root, args.format_id, args.event_id, args.rank)
