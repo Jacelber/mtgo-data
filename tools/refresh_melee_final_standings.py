@@ -18,7 +18,7 @@ from mtgmeta.melee.publish import _descriptor
 
 
 def refresh(root, event_id, *, reviewed_semifinals=False):
-    if reviewed_semifinals and event_id not in {"405588", "471573", "470109", "405591"}:
+    if reviewed_semifinals and event_id not in {"405588", "471573", "470109", "405591", "480317", "414849"}:
         raise ValueError("The reviewed Semifinals supplement is not approved for this event")
     definition = load_melee_event_registry(root / "configs/melee_events.yaml").require_fetchable(event_id)
     event_path = root / "data" / definition.format / "melee/events" / f"{event_id}.json"
@@ -116,7 +116,7 @@ def supplement_from_semifinals(result, event):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--event-id", required=True)
-    parser.add_argument("--reviewed-semifinals", action="store_true", help="Apply the Owner-approved 405588, 471573, 470109 or 405591 ranking exception")
+    parser.add_argument("--reviewed-semifinals", action="store_true", help="Apply the event-specific Owner-approved semifinal ranking supplement")
     parser.add_argument("--materialize", action="store_true", help="Use the saved official source; perform no network requests")
     args = parser.parse_args()
     if args.materialize:
