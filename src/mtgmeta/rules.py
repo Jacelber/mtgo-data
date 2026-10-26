@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, TypeGuard
 
 if TYPE_CHECKING:
+    from .classifier_cards import CardFacts
     from .classifier_features import SemanticFeatureManifest
 
 
@@ -76,6 +77,7 @@ class RuleSet:
     semantic_feature_sha256: str | None = None
     semantic_features: SemanticFeatureManifest | None = None
     card_facts_sha256: str | None = None
+    facts: CardFacts | None = field(default=None, compare=False, repr=False)
 
 
 def _is_nonempty_string(value: object) -> TypeGuard[str]:

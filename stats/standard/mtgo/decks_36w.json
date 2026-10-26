@@ -2,8 +2,8 @@
   "schema_version": "1.2.0",
   "format": "standard",
   "source": "mtgo",
-  "classifier_digest": "77aa77d0fdbc62064681155494279247e37fa8f8de789f5f187595e4fcdc9248",
-  "construction_digest": "e7a28724a8a543f6788ab42cf9929bd8b7fcd2b17e7639f03fa136070a3f11ca",
+  "classifier_digest": "470f1319a939c34da990e7623e017703ab4c16054a36be02bd3b74eef37848dc",
+  "construction_digest": "82acc1e92701b4d0af46392945d2a96e29666c1f07fc4b607e2fca016620cf47",
   "period": {
     "type": "36w",
     "start": "2026-02-09",
@@ -5602,6 +5602,21 @@
       },
       "subtypes": [
         {
+          "id": "esper",
+          "parent_id": "lifegain",
+          "name": "Esper Lifegain",
+          "display_name": "Esper Lifegain",
+          "best_deck": null,
+          "average_deck": {
+            "sample_size": 0,
+            "medoid": null,
+            "core": [],
+            "flex": [],
+            "recent_change": null,
+            "recent_change_reason": "nobase"
+          }
+        },
+        {
           "id": "orzhov",
           "parent_id": "lifegain",
           "name": "Orzhov Lifegain",
@@ -10179,7 +10194,7 @@
             "qty": 2
           }
         ],
-        "deviation": 35,
+        "deviation": 36,
         "deviation_diff": {
           "fewer": [
             {
@@ -10200,7 +10215,7 @@
             {
               "name": "Bounce Off",
               "deck_qty": 0,
-              "typical_qty": 1.6
+              "typical_qty": 1.5
             },
             {
               "name": "Impractical Joke",
@@ -10268,7 +10283,7 @@
         }
       },
       "average_deck": {
-        "sample_size": 40,
+        "sample_size": 39,
         "medoid": {
           "player": "medvedev",
           "event_id": "12855458",
@@ -10458,27 +10473,27 @@
           {
             "name": "Elusive Otter",
             "mean_qty": 3.9,
-            "rate": 0.975
+            "rate": 0.974
           },
           {
             "name": "Flow State",
             "mean_qty": 3.9,
-            "rate": 0.975
+            "rate": 0.974
           },
           {
             "name": "Pompous Battlemage",
             "mean_qty": 3.8,
-            "rate": 0.95
+            "rate": 0.949
           },
           {
             "name": "Secret Identity",
             "mean_qty": 1.9,
-            "rate": 0.95
+            "rate": 0.949
           },
           {
             "name": "Eddymurk Crab",
             "mean_qty": 1.8,
-            "rate": 0.9
+            "rate": 0.923
           },
           {
             "name": "Multiversal Passage",
@@ -10488,79 +10503,79 @@
           {
             "name": "Impractical Joke",
             "mean_qty": 1.5,
-            "rate": 0.825
+            "rate": 0.821
           },
           {
             "name": "Wild Ride",
             "mean_qty": 1.2,
-            "rate": 0.9
-          },
-          {
-            "name": "Mountain",
-            "mean_qty": 0.8,
-            "rate": 0.8
-          },
-          {
-            "name": "Vibrant Outburst",
-            "mean_qty": 0.8,
-            "rate": 0.8
+            "rate": 0.897
           }
         ],
         "flex": [
           {
             "name": "Bounce Off",
-            "mean_qty": 1.6,
-            "rate": 0.775
+            "mean_qty": 1.5,
+            "rate": 0.769
+          },
+          {
+            "name": "Mountain",
+            "mean_qty": 0.8,
+            "rate": 0.795
+          },
+          {
+            "name": "Vibrant Outburst",
+            "mean_qty": 0.8,
+            "rate": 0.795
           },
           {
             "name": "Spell Snare",
             "mean_qty": 0.7,
-            "rate": 0.675
+            "rate": 0.692
           },
           {
             "name": "Starting Town",
             "mean_qty": 0.7,
-            "rate": 0.675
+            "rate": 0.692
           },
           {
             "name": "Stock Up",
             "mean_qty": 0.7,
-            "rate": 0.65
+            "rate": 0.667
           },
           {
             "name": "Great Hall of the Biblioplex",
             "mean_qty": 0.5,
-            "rate": 0.25
+            "rate": 0.256
           },
           {
             "name": "Hearth Elemental",
             "mean_qty": 0.5,
-            "rate": 0.2
+            "rate": 0.205
           },
           {
             "name": "Drake Hatcher",
-            "mean_qty": 0.2,
-            "rate": 0.075
+            "mean_qty": 0.3,
+            "rate": 0.077
+          },
+          {
+            "name": "Unsummon",
+            "mean_qty": 0.3,
+            "rate": 0.128
           },
           {
             "name": "Gandalf, Goblins' Bane",
             "mean_qty": 0.2,
-            "rate": 0.05
+            "rate": 0.051
           },
           {
             "name": "Prismari Charm",
             "mean_qty": 0.2,
-            "rate": 0.15
-          },
-          {
-            "name": "Unsummon",
-            "mean_qty": 0.2,
-            "rate": 0.125
+            "rate": 0.154
           },
           {
             "name": "Wizard's Staff",
-            "mean_qty": 0.1,
-            "rate": 0.05
+            "mean_qty": 0.2,
+            "rate": 0.051
           }
         ],
         "recent_change": 10,
@@ -22705,7 +22720,7 @@
         "recent_change_reason": "nobase"
       }
     },
-    "Dark Jeskai Control": {
+    "Four-Color Control": {
       "archetype_id": "dark-jeskai-control",
       "best_deck": {
         "player": "kasa",
@@ -24924,129 +24939,100 @@
     "Unknown": {
       "archetype_id": "unknown",
       "best_deck": {
-        "player": "NJDragon",
-        "event_id": "12841353",
+        "player": "GTX120",
+        "event_id": "12855466",
         "event_name": "Standard Challenge 32",
-        "final_rank": 32,
-        "swiss_score": 0,
-        "player_count": 32,
-        "starttime": "2026-05-02 02:00:00.0",
+        "final_rank": 27,
+        "swiss_score": 6,
+        "player_count": 45,
+        "starttime": "2026-10-02 00:00:00.0",
         "main_deck": [
           {
-            "name": "Ahriman",
+            "name": "Bounce Off",
             "qty": 2
           },
           {
-            "name": "Annul",
-            "qty": 2
-          },
-          {
-            "name": "Bloodfell Caves",
+            "name": "Burst Lightning",
             "qty": 4
           },
           {
-            "name": "Cancel",
+            "name": "Elusive Otter",
             "qty": 2
           },
           {
-            "name": "Daggerfang Duo",
-            "qty": 2
-          },
-          {
-            "name": "Dismal Backwater",
+            "name": "Flow State",
             "qty": 4
           },
           {
-            "name": "Drix Interception",
-            "qty": 3
-          },
-          {
-            "name": "Engine Rat",
-            "qty": 2
-          },
-          {
-            "name": "Hero's Downfall",
-            "qty": 3
-          },
-          {
-            "name": "Island",
-            "qty": 5
-          },
-          {
-            "name": "Jidoor, Aristocratic Capital",
-            "qty": 4
-          },
-          {
-            "name": "Negate",
-            "qty": 2
-          },
-          {
-            "name": "Offer Immortality",
-            "qty": 2
-          },
-          {
-            "name": "Refute",
-            "qty": 2
-          },
-          {
-            "name": "Riverchurn Monument",
-            "qty": 3
-          },
-          {
-            "name": "Singularity Rupture",
-            "qty": 3
-          },
-          {
-            "name": "Splinter's Technique",
-            "qty": 3
-          },
-          {
-            "name": "Swamp",
-            "qty": 4
-          },
-          {
-            "name": "Swiftwater Cliffs",
-            "qty": 4
-          },
-          {
-            "name": "Syncopate",
-            "qty": 2
-          },
-          {
-            "name": "Vampire Nighthawk",
-            "qty": 2
-          }
-        ],
-        "side_deck": [
-          {
-            "name": "Dragon Fodder",
-            "qty": 2
-          },
-          {
-            "name": "Fleeting Effigy",
-            "qty": 2
-          },
-          {
-            "name": "Goblin Surprise",
-            "qty": 2
-          },
-          {
-            "name": "Impact Tremors",
-            "qty": 4
-          },
-          {
-            "name": "Krenko, Mob Boss",
-            "qty": 2
-          },
-          {
-            "name": "Swiftfoot Boots",
+            "name": "Impractical Joke",
             "qty": 1
           },
           {
-            "name": "Underfoot Underdogs",
+            "name": "Into the Flood Maw",
+            "qty": 1
+          },
+          {
+            "name": "Island",
+            "qty": 6
+          },
+          {
+            "name": "Molten-Core Maestro",
+            "qty": 4
+          },
+          {
+            "name": "Mountain",
+            "qty": 1
+          },
+          {
+            "name": "Multiversal Passage",
+            "qty": 2
+          },
+          {
+            "name": "Opt",
+            "qty": 4
+          },
+          {
+            "name": "Pompous Battlemage",
+            "qty": 4
+          },
+          {
+            "name": "Riverpyre Verge",
+            "qty": 4
+          },
+          {
+            "name": "Secret Identity",
+            "qty": 1
+          },
+          {
+            "name": "Shore Up",
+            "qty": 1
+          },
+          {
+            "name": "Sleight of Hand",
+            "qty": 4
+          },
+          {
+            "name": "Slickshot Show-Off",
+            "qty": 4
+          },
+          {
+            "name": "Spirebluff Canal",
+            "qty": 4
+          },
+          {
+            "name": "Steam Vents",
+            "qty": 4
+          },
+          {
+            "name": "Vibrant Outburst",
+            "qty": 1
+          },
+          {
+            "name": "Wild Ride",
             "qty": 2
           }
-        ]
+        ],
+        "side_deck": []
       },
       "average_deck": {
         "sample_size": 0,

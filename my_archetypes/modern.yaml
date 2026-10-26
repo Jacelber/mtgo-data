@@ -1,5 +1,5 @@
 schema_version: 1.2.0
-card_facts_sha256: b342090c746ad7a3b8e7bf9a258585abb564866d654bea4f8035ab95141c0612
+card_facts_sha256: b7280d8b01e69dc2b0ba8e252ed1635c3f7a1a017f1747c5e35ce2a48bf73181
 format: modern
 semantic_features:
   manifest_path: configs/classifier_semantic_features_modern.yaml
@@ -1442,6 +1442,17 @@ archetypes:
       - card: Kappa Cannoneer
         zone: main
         exact_count: 0
+  - id: sewer-combo-emry-amber
+    priority: 99980
+    subtype_id: null
+    conditions:
+      all:
+      - card: Emry, Lurker of the Loch
+        zone: main
+        min_count: 3
+      - card: Mox Amber
+        zone: main
+        min_count: 3
   - id: sewer-combo-mono-blue-rona
     priority: 689926
     subtype_id: null
@@ -8400,7 +8411,7 @@ archetypes:
         min_count: 3
       - card: Inkmoth Nexus
         zone: main
-        min_count: 3
+        min_count: 2
       - card: Scale Up
         zone: main
         min_count: 3
@@ -10446,3 +10457,25 @@ archetypes:
       - card: __classifier-semantic-any-red-spell__
         zone: main
         exact_count: 0
+
+- id: rakdos-vampires
+  name: Rakdos Vampires
+  priority: 689775
+  rules:
+  - id: rakdos-vampires-sorin-ripper
+    priority: 689775
+    subtype_id: null
+    conditions:
+      all:
+      - card: Sorin, Imperious Bloodlord
+        zone: main
+        min_count: 3
+      - card: Vein Ripper
+        zone: main
+        min_count: 3
+      - card: __classifier-semantic-main-red-source__
+        zone: main
+        min_count: 1
+      - card: __classifier-semantic-main-black-source__
+        zone: main
+        min_count: 1

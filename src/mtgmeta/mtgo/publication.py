@@ -500,6 +500,9 @@ def stage_publications(
     if not formats or len(formats) != len(set(formats)):
         raise PublicationError("publication staging requires unique formats")
     root = root.resolve()
+    if resume_stage is None:
+        from ..classifier_preparation import prepare_repository_facts
+        prepare_repository_facts(root, formats)
     subjects = {format_id: resolve_scope(root, format_id) for format_id in formats}
     protected = {
         format_id: _protected_input_fingerprints(root, format_id)

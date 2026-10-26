@@ -25,6 +25,7 @@ from mtgmeta.mtgo import landing
 from mtgmeta.mtgo import landing_screening as screening, stats
 from mtgmeta.mtgo.normalize import load_rules_for_format
 from mtgmeta.mtgo import review_submission as submissions
+from mtgmeta.classifier_preparation import facts_preparation_batch
 from mtgmeta.mtgo.landing_bundle import digest
 from mtgmeta.mtgo.publication import require_private_output
 
@@ -528,6 +529,7 @@ def classification_material(root, format_id, week, melee_ids, output, localizati
             "scope": {"mtgo": mtgo["event_ids"], "melee": melee_ids}, "fetched": 0}
 
 
+@facts_preparation_batch
 def stage_data(root, plan, resume_stage=None, previous=None):
     """Finite existing producer order, in an already isolated preparation tree."""
     from mtgmeta.mtgo.publication import stage_publications, resolve_scope
@@ -560,6 +562,9 @@ def stage_data(root, plan, resume_stage=None, previous=None):
     from mtgmeta.classifier_closure import current_melee_sync, validate_current_melee, _protected_input_fingerprints, _generate_melee
     members = deepcopy(plan.get("melee", []))
     sync_formats = sorted(set(formats) | {item["format"] for item in members})
+    if sync_formats and (root / "src/mtgmeta/data/classifier_card_facts.json").is_file():
+        from mtgmeta.classifier_preparation import prepare_repository_facts
+        prepare_repository_facts(root, sync_formats, refresh=resume_stage is None)
     before_inputs = {f: _protected_input_fingerprints(root, f) for f in sync_formats}
     generation_subject = digest({p.relative_to(root).as_posix(): p.read_text(encoding="utf-8")
         for p in (root / "src/mtgmeta").rglob("*.py")})
@@ -1241,6 +1246,9 @@ def main(argv=None):
             print(json.dumps({"material": str(output / "index.html")}, ensure_ascii=False))
             return 0
         if args.command in {"facts", "classification"}:
+            if args.command == "classification":
+                from mtgmeta.classifier_preparation import prepare_repository_facts
+                write(output / "facts-preparation.json", prepare_repository_facts(root, [args.format]))
             summary = (prepare_facts(root, args.format, args.week, output) if args.command == "facts"
                        else classification_material(root, args.format, args.week, args.melee, output, args.localization))
             summary["timing"] = {"started_at": started_at, "seconds": round(perf_counter() - started, 4)}

@@ -113,7 +113,10 @@ def _direct_digest_family(
     construction = None
     if name in {"mtgo_statistics", "mtgo_top8"}:
         from .mtgo.stats import construction_digest
-        construction = construction_digest()
+        from .classifier_cards import repository_card_facts, use_card_facts
+        path = root / "src/mtgmeta/data/classifier_card_facts.json"
+        with use_card_facts(repository_card_facts(root) if path.is_file() else None):
+            construction = construction_digest()
     for path in paths:
         if not path.is_file():
             issues.append(f"missing:{_relative(root, path)}")

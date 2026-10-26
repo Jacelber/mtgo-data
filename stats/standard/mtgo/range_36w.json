@@ -2,8 +2,8 @@
   "schema_version": "1.1.0",
   "format": "standard",
   "source": "mtgo",
-  "classifier_digest": "77aa77d0fdbc62064681155494279247e37fa8f8de789f5f187595e4fcdc9248",
-  "construction_digest": "e7a28724a8a543f6788ab42cf9929bd8b7fcd2b17e7639f03fa136070a3f11ca",
+  "classifier_digest": "470f1319a939c34da990e7623e017703ab4c16054a36be02bd3b74eef37848dc",
+  "construction_digest": "82acc1e92701b4d0af46392945d2a96e29666c1f07fc4b607e2fca016620cf47",
   "period": {
     "type": "36w",
     "start": "2026-02-09",
@@ -13,12 +13,12 @@
   "total_decks": 7052,
   "total_high_score": 3768,
   "total_top8": 1784,
-  "unknown_count": 1,
+  "unknown_count": 2,
   "archetypes": [
     {
       "id": "izzet-prowess",
       "name": "Izzet Prowess",
-      "count": 1066,
+      "count": 1065,
       "high_score_count": 614,
       "high_score_share": 0.163,
       "top8_count": 304,
@@ -218,6 +218,21 @@
       "avg_points_per_round": 1.74,
       "subtypes": [
         {
+          "id": "esper",
+          "name": "Esper Lifegain",
+          "parent_id": "lifegain",
+          "display_name": "Esper Lifegain",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
           "id": "orzhov",
           "name": "Orzhov Lifegain",
           "parent_id": "lifegain",
@@ -382,6 +397,18 @@
       "avg_deviation": 38
     },
     {
+      "id": "jeskai-artifacts",
+      "name": "Jeskai Artifacts",
+      "count": 74,
+      "high_score_count": 46,
+      "high_score_share": 0.0122,
+      "top8_count": 24,
+      "top8_share": 0.0135,
+      "conversion": 0.5217,
+      "avg_points_per_round": 1.83,
+      "avg_deviation": 32
+    },
+    {
       "id": "izzet-lessons",
       "name": "Izzet Lessons",
       "count": 74,
@@ -392,18 +419,6 @@
       "conversion": 0.5,
       "avg_points_per_round": 1.62,
       "avg_deviation": null
-    },
-    {
-      "id": "jeskai-artifacts",
-      "name": "Jeskai Artifacts",
-      "count": 70,
-      "high_score_count": 44,
-      "high_score_share": 0.0117,
-      "top8_count": 22,
-      "top8_share": 0.0123,
-      "conversion": 0.5,
-      "avg_points_per_round": 1.84,
-      "avg_deviation": 30
     },
     {
       "id": "sultai-reanimator",
@@ -626,14 +641,26 @@
       "avg_deviation": null
     },
     {
+      "id": "mono-black-aggro",
+      "name": "Mono-Black Aggro",
+      "count": 35,
+      "high_score_count": 23,
+      "high_score_share": 0.0061,
+      "top8_count": 11,
+      "top8_share": 0.0062,
+      "conversion": 0.4783,
+      "avg_points_per_round": 1.76,
+      "avg_deviation": null
+    },
+    {
       "id": "boros-manufacturing",
       "name": "Boros Manufacturing",
-      "count": 39,
-      "high_score_count": 22,
-      "high_score_share": 0.0058,
-      "top8_count": 12,
-      "top8_share": 0.0067,
-      "conversion": 0.5455,
+      "count": 35,
+      "high_score_count": 20,
+      "high_score_share": 0.0053,
+      "top8_count": 10,
+      "top8_share": 0.0056,
+      "conversion": 0.5,
       "avg_points_per_round": 1.57,
       "subtypes": [
         {
@@ -641,14 +668,14 @@
           "name": "Jeskai",
           "parent_id": "boros-manufacturing",
           "display_name": "Jeskai Manufacturing",
-          "count": 13,
-          "high_score_count": 8,
-          "high_score_share": 0.0021,
-          "top8_count": 4,
-          "top8_share": 0.0022,
-          "conversion": 0.5,
-          "avg_points_per_round": 1.6,
-          "parent_share": 0.3333,
+          "count": 9,
+          "high_score_count": 6,
+          "high_score_share": 0.0016,
+          "top8_count": 2,
+          "top8_share": 0.0011,
+          "conversion": 0.3333,
+          "avg_points_per_round": 1.59,
+          "parent_share": 0.2571,
           "avg_deviation": null
         },
         {
@@ -663,7 +690,7 @@
           "top8_share": 0.0011,
           "conversion": 0.6667,
           "avg_points_per_round": 1.64,
-          "parent_share": 0.1795,
+          "parent_share": 0.2,
           "avg_deviation": null
         },
         {
@@ -678,7 +705,7 @@
           "top8_share": 0.0034,
           "conversion": 0.5455,
           "avg_points_per_round": 1.69,
-          "parent_share": 0.4103,
+          "parent_share": 0.4571,
           "avg_deviation": null
         },
         {
@@ -693,22 +720,10 @@
           "top8_share": 0.0,
           "conversion": null,
           "avg_points_per_round": 0.67,
-          "parent_share": 0.0769,
+          "parent_share": 0.0857,
           "avg_deviation": null
         }
       ],
-      "avg_deviation": null
-    },
-    {
-      "id": "mono-black-aggro",
-      "name": "Mono-Black Aggro",
-      "count": 35,
-      "high_score_count": 23,
-      "high_score_share": 0.0061,
-      "top8_count": 11,
-      "top8_share": 0.0062,
-      "conversion": 0.4783,
-      "avg_points_per_round": 1.76,
       "avg_deviation": null
     },
     {
@@ -958,7 +973,7 @@
     },
     {
       "id": "dark-jeskai-control",
-      "name": "Dark Jeskai Control",
+      "name": "Four-Color Control",
       "count": 11,
       "high_score_count": 5,
       "high_score_share": 0.0013,
@@ -1449,6 +1464,18 @@
       "avg_deviation": null
     },
     {
+      "id": "unknown",
+      "name": "Unknown",
+      "count": 2,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 0.55,
+      "avg_deviation": null
+    },
+    {
       "id": "temur-otters",
       "name": "Temur Otters",
       "count": 2,
@@ -1806,18 +1833,6 @@
       "top8_share": 0.0,
       "conversion": null,
       "avg_points_per_round": 1.5,
-      "avg_deviation": null
-    },
-    {
-      "id": "unknown",
-      "name": "Unknown",
-      "count": 1,
-      "high_score_count": 0,
-      "high_score_share": 0.0,
-      "top8_count": 0,
-      "top8_share": 0.0,
-      "conversion": null,
-      "avg_points_per_round": 0.0,
       "avg_deviation": null
     },
     {

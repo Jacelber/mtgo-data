@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass
 from functools import lru_cache
 from hashlib import sha256
@@ -10,7 +12,7 @@ import json
 from pathlib import Path
 import re
 from types import MappingProxyType
-from typing import Any
+from typing import Any, Callable, Iterator, ParamSpec, TypeVar, cast
 
 from .card_names import normalize_card_name
 
@@ -49,7 +51,7 @@ class CardFact:
         return tuple(f for f in faces if "Land" not in f.type_line)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, eq=False)
 class CardFacts:
     cards: Mapping[str, CardFact]
     names: Mapping[str, str]
@@ -109,14 +111,87 @@ def read_card_facts(path: Path) -> CardFacts:
     )
 
 
-@lru_cache(maxsize=1)
+_active_facts: ContextVar[CardFacts | None] = ContextVar("classifier_facts", default=None)
+P = ParamSpec("P")
+R = TypeVar("R")
+
+
+@lru_cache(maxsize=8)
+def _snapshot(path: str, digest: str) -> CardFacts:
+    facts = read_card_facts(Path(path))
+    if facts.digest != digest:
+        raise ValueError("card facts changed while loading the fixed snapshot")
+    return facts
+
+
+def facts_at(path: Path) -> CardFacts:
+    path = path.resolve()
+    return _snapshot(str(path), sha256(path.read_bytes()).hexdigest())
+
+
+def repository_card_facts(root: Path) -> CardFacts:
+    return facts_at(root / "src/mtgmeta/data/classifier_card_facts.json")
+
+
+@contextmanager
+def use_card_facts(facts: CardFacts | None) -> Iterator[None]:
+    """Scope an immutable snapshot to one operation, including its helpers."""
+    token = _active_facts.set(facts or card_facts())
+    try:
+        yield
+    finally:
+        _active_facts.reset(token)
+
+
+def with_rule_facts(function: Callable[P, R]) -> Callable[P, R]:
+    from functools import wraps
+    from inspect import signature
+    parameters = signature(function)
+
+    @wraps(function)
+    def bound(*args: P.args, **kwargs: P.kwargs) -> R:
+        values = parameters.bind(*args, **kwargs).arguments
+        rules = values.get("rule_set", values.get("rules"))
+        with use_card_facts(getattr(rules, "facts", None)):
+            return function(*args, **kwargs)
+    return bound
+
+
+def with_repository_facts(function: Callable[P, R]) -> Callable[P, R]:
+    from functools import wraps
+    from inspect import signature
+    parameters = signature(function)
+
+    @wraps(function)
+    def bound(*args: P.args, **kwargs: P.kwargs) -> R:
+        values = parameters.bind(*args, **kwargs).arguments
+        root = Path(cast(str | Path, values.get("repository_root", values.get("root"))))
+        path = root / "src/mtgmeta/data/classifier_card_facts.json"
+        with use_card_facts(facts_at(path) if path.is_file() else None):
+            return function(*args, **kwargs)
+    return bound
+
+
+@lru_cache(maxsize=2)
+def _default_snapshot(path: str, modified: int, size: int) -> CardFacts:
+    return facts_at(Path(path))
+
+
 def card_facts() -> CardFacts:
-    return read_card_facts(FACTS_PATH)
+    active = _active_facts.get()
+    if active is not None:
+        return active
+    stat = FACTS_PATH.stat()
+    return _default_snapshot(str(FACTS_PATH), stat.st_mtime_ns, stat.st_size)
+
+
+def classifier_card_name(name: str) -> str:
+    return _resolved_card_name(name, card_facts())
 
 
 @lru_cache(maxsize=32768)
-def classifier_card_name(name: str) -> str:
-    return resolve_card_name(name, card_facts())
+def _resolved_card_name(name: str, facts: CardFacts) -> str:
+    return resolve_card_name(name, facts)
 
 
 def resolve_card_name(name: str, facts: CardFacts) -> str:

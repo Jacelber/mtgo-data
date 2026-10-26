@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from mtgmeta.classifier import classify_counts, classify_deck
+from mtgmeta.classifier import NO_SIDEBOARD_REASON, classify_counts, classify_deck
 from mtgmeta.config import load_rule_set
 from mtgmeta.deck import deck_to_counts
 
@@ -21,6 +21,11 @@ def rules():
 @pytest.mark.parametrize("case", CASES, ids=lambda c: c["record_id"])
 def test_real_sources_follow_existing_archetype_meanings(rules, case):
     result = classify_deck(rules[case["format"]], case)
+    if case.get("expected_policy_unknown"):
+        assert result.status == "unknown"
+        assert result.archetype_id is None
+        assert result.errors == (NO_SIDEBOARD_REASON,)
+        return
     assert result.status == "classified"
     assert (result.archetype_id, result.subtype_id) == tuple(case["expected"])
 

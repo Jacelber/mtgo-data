@@ -14,7 +14,7 @@ function ref(r){return r.reference||`mtgo:${r.event_id}:${r.final_rank??r.rank}`
 function status(r){return r.classification?.status||r.classification_status}
 function rank(r){return r.final_rank??r.rank??'—'}
 function searchText(r){return [ref(r),rank(r),r.alias,name(r),r.display_name,r.player,r.date,r.event_name,r.identity?.parent_english,r.identity?.subtype_english].join(' ').toLowerCase()}
-function sourceMeta(r){return r.source==='melee'?`<small>实体大赛 · ${esc(r.event_name)} · 瑞士轮 ${r.swiss_record.wins}-${r.swiss_record.losses}-${r.swiss_record.draws}</small>`:''}
+function sourceMeta(r){return r.source==='melee'?`<small>实体大赛 · ${esc(r.event_name)}${r.swiss_record?` · 瑞士轮 ${r.swiss_record.wins}-${r.swiss_record.losses}-${r.swiss_record.draws}`:''}${r.source_url?.startsWith('https://melee.gg/')?` · <a href="${esc(r.source_url)}" target="_blank" rel="noopener noreferrer">Melee 原始牌表</a>`:''}</small>`:''}
 function button(r,text){return `<button data-deck="${esc(ref(r))}">${text||`${r.alias?`<b>${esc(r.alias)}</b> · `:''}${esc(name(r))} · ${esc(r.event_id)} 第${esc(rank(r))}名 · ${esc(r.player||'—')}`}</button>`}
 function zone(r,k){return k==='sideboard'?(r.sideboard===undefined?r.side_deck:r.sideboard):r[k]}
 function total(cards){return Array.isArray(cards)?cards.reduce((n,c)=>n+c.qty,0):'不可用'}
@@ -32,6 +32,9 @@ nav{position:sticky;top:0;z-index:4;background:#f3f5f0;padding:10px 0;margin:10p
 dialog .close{position:sticky;top:0;background:white;z-index:1}.zones h3{background:#edf3ed;padding:8px;border-radius:5px}.reason p{overflow-wrap:anywhere}
 #matrix td button b{display:block}#matrix td{min-width:215px}.env-cards{min-width:170px}.representative+.representative{margin-top:6px}.catalog-row{align-items:start}#environment-detail .toolbar{margin-top:20px}
 .empty{padding:20px;color:#5d706b}.counts{font-variant-numeric:tabular-nums}button:focus-visible,a:focus-visible{outline:3px solid #bb8022;outline-offset:2px}
+.panel[id^="melee-"]{display:flex;flex-direction:column;height:calc(100vh - 96px);height:calc(100dvh - 96px);scroll-margin-top:80px}
+.panel[id^="melee-"]>[id$="-list"]{display:flex;flex:1;min-height:0;flex-direction:column}
+.panel[id^="melee-"]>[id$="-list"]>.scroll{flex:1;min-height:0;max-height:none}
 @media(max-width:600px){nav{gap:5px;font-size:13px}.zones{grid-template-columns:1fr}.content-table{min-width:670px}}`;
 document.head.appendChild(style);
 document.title=`${formats[M.format]||M.format} · ${M.week} · ${content?'内容':'分类'}审阅`;
@@ -45,6 +48,7 @@ $('#example').textContent=content?`${formats[M.format]} F3 或 mtgo:赛事编号
 $('#provenance').textContent=JSON.stringify(content?{source_digest:M.source_digest,displayed_page_digest:M.displayed_page_digest}:{packets:M.members.map(m=>({source:m.source,events:m.events,digest:m.packet?.digest}))},null,2);
 const stats=content?[[M.all_top8.length,'MTGO 完整八强牌表'],...((M.tabletop_decks||[]).length?[[M.tabletop_decks.length,'实体大赛可选牌表']]:[]),[M.candidate_evidence.length,'程序筛选候选'],[M.environment.filter(e=>!['displayed_configuration_reused','confirmed_configuration_reused'].includes(e.status)).length,'待定环境配置']]:M.members.map(m=>[m.records.length,`${m.source.toUpperCase()}${m.source==='melee'?' '+m.events.join('、'):''} 牌表`]);
 $('#stats').innerHTML=stats.map(([n,t])=>`<div class="stat"><b>${n}</b>${esc(t)}</div>`).join('');
+if(M.review_notes?.length)$('#stats').insertAdjacentHTML('afterend',`<div class="note"><ul>${M.review_notes.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>`);
 const notices=content?M.errors:M.blocked.map(b=>`${b.source} ${b.event_id}：${b.error}`);
 if(notices.length)$('#stats').insertAdjacentHTML('afterend',`<div class="note"><b>材料缺口</b><ul>${notices.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>`);
 function card(c){const l=D.localization[c.name]||{}, url=l.mtgch_url;return `<div class="card"><span class="qty">${esc(c.qty)}</span><span>${url?.startsWith('https://mtgch.com/')?`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${cardLabel(c.name)}</a>`:cardLabel(c.name)}</span></div>`}
@@ -92,7 +96,7 @@ if(content){
  $('#priority').parentElement.insertAdjacentHTML('afterend','<label><input type="checkbox" id="unknown-only"> 仅突出 Unknown</label>');
  function filter(){const q=$('#search').value.trim().toLowerCase();let n=0;for(const r of records){const match=searchText(r).includes(q)&&(!$('#priority').checked||r.priority_reasons?.length)&&(!$('#unknown-only').checked||status(r)==='unknown');document.querySelector(`[data-cell="${ref(r)}"]`).classList.toggle('dim',!match);if(match)n++}$('#matches').textContent=`突出 ${n} / ${records.length} 份（完整表仍保留）`}
  $('#search').oninput=$('#priority').onchange=$('#unknown-only').onchange=filter;$('#reset').onclick=()=>{$('#search').value='';$('#priority').checked=$('#unknown-only').checked=false;filter()};filter();
- }else $('#classification').hidden=true;
+ }else {$('#classification').hidden=true;document.querySelector('nav a[href="#classification"]').hidden=true;}
  function quality(member){const q=member.known_input_quality;if(!q)return '';return `<details><summary>保留输入的质量信息</summary><p>状态：${esc(({valid:'有效',partial:'部分',invalid:'无效'})[q.status]||q.status||'未提供')}；交接时可发布：${q.publishable===true?'是':q.publishable===false?'否':'未提供'}。此信息不代替本次发布确认。</p>${q.issues?.length?`<ul>${q.issues.map(x=>`<li>${esc(typeof x==='string'?x:x.message||x.reason||x.code||'输入问题，待核对')}</li>`).join('')}</ul>`:''}</details>`}
  for(const member of M.members.filter(m=>m.source==='melee')){const id='melee-'+member.events[0];$('nav').insertAdjacentHTML('beforeend',`<a href="#${id}">Melee ${esc(member.events[0])}</a>`);$('main').insertAdjacentHTML('beforeend',`<section class="panel" id="${id}"><h2>Melee ${esc(member.events[0])} · ${member.records.length} 份可用牌表</h2><p>独立来源与确认范围；${member.unavailable.length} 份不可用牌表另列。</p>${quality(member)}<div id="${id}-list"></div>${member.unavailable.length?`<details><summary>不可用牌表 ${member.unavailable.length} 份</summary><ul>${member.unavailable.map(r=>`<li>${esc(r.reference||r.participant_id)} · ${esc(r.player||'')} · ${esc(r.status||'unavailable')}</li>`).join('')}</ul></details>`:''}</section>`);catalog($(`#${id}-list`),member.records,{id,mode:true})}
 }

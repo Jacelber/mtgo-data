@@ -362,6 +362,38 @@ Responsibilities:
 
 The classifier must not contain source-specific Melee or MTGO parsing.
 
+#### Card facts prepared before classification
+
+`classifier_fact_builder.py` imports the complete constructed-card library from
+a fixed Oracle source, including banned/historical and future cards and every
+previously retained entity. Initial expansion preserves existing reviewed fact
+objects. Names, complete face pairs and explicit aliases retain their existing
+identity rules; ambiguous names are never resolved by choosing an arbitrary row.
+
+`classifier_preparation.py` is the common mutable-batch preparation step. It
+collects all main/sideboard names from selected retained MTGO/Melee inputs and
+explicit rule references, reuses complete local facts, checks the source once
+per new batch, and supplements missing names through exact source lookups.
+Unavailable sources may reuse a locally complete snapshot; missing input facts
+stop preparation rather than becoming a business Unknown. Source responses and
+bulk bytes remain local/private preparation evidence, not public site assets.
+
+After coverage and parsing succeed, `.classifier-facts/<digest>/` retains the
+immutable facts, bound rules, semantic dependencies and input hashes. The
+mutable preparation root receives the same facts and rule SHA metadata; rule
+conditions, priorities and taxonomy do not change. A pending installation blocks
+rule loading. After its original process stops, `python -m
+mtgmeta.classifier_preparation --root ROOT --resume` completes the retained
+installation without fetching or reclassifying. Ordinary exceptions restore the
+prior files. Concurrent preparations on one root are rejected.
+
+Loaded rules carry their immutable fact object. Classification, normalization,
+color helpers and construction statistics scope that object to the operation;
+name caches cannot mix snapshots. Read-only builders do not fetch. New review
+and publication-generation preparation use the common step before freezing;
+collection, rendering fixed materials, packaging and deployment do not refresh
+facts. Legacy fact-independent rule schemas retain their existing behavior.
+
 ### 4.6 `metrics.py`
 
 Responsibilities:

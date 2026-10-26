@@ -14,6 +14,7 @@ import sys
 import tempfile
 from typing import Any, Mapping, Sequence
 
+from ..classifier import NO_SIDEBOARD_REASON
 from ..config import RuleConfigError, load_rule_set
 from ..consumer import identity_display_name, literal_match_record
 from ..rules import RuleSet
@@ -1040,13 +1041,24 @@ def _quality_document(
             "quality reconciliation failed: " + ", ".join(failed)
         )
     issues = []
+    no_sideboard = sum(
+        NO_SIDEBOARD_REASON in row.get("errors", [])
+        for row in classification["records"]
+    )
+    if no_sideboard:
+        issues.append({
+            "code": "no_sideboard_unknown",
+            "severity": "warning",
+            "count": no_sideboard,
+            "message": "Submitted lists with 60 main-deck cards and no sideboard are retained as Unknown under the project data policy; source cards and match results remain unchanged.",
+        })
     if classification["summary"]["unknown"]:
         issues.append(
             {
                 "code": "unknown_classifications",
                 "severity": "warning",
                 "count": classification["summary"]["unknown"],
-                "message": "Valid submitted decks remain explicitly Unknown.",
+                "message": "Submitted decks remain explicitly Unknown, including lists covered by the project's data-validity policy.",
             }
         )
     unavailable_decklists = sum(

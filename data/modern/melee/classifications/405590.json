@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "70b64c2a7e7976ef589d21b1363808f46f0430c01d9ec6147a147b67e78a98cd"
+    "digest": "9efbc98cb9bfce9d339d003d17aacff4e0ad13463f6f944c0ac9ff7286b26b3d"
   },
   "input": {
     "event_path": "data/modern/melee/events/405590.json",
@@ -18,22 +18,22 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "216b29f54617b30246c6bb65b2989cef2f8ed93f806c3575dbcd6f812ca7f5f4",
+    "rule_sha256": "adb8d49a6a4904b97c7978c32c35746e871cacbcab4c46806a87685d1009e8b3",
     "rule_schema_version": "1.2.0",
-    "archetype_count": 230,
-    "rule_count": 421,
+    "archetype_count": 231,
+    "rule_count": 423,
     "subtype_count": 119
   },
   "summary": {
     "total_records": 928,
-    "classified": 924,
-    "unknown": 4,
+    "classified": 923,
+    "unknown": 5,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 224,
-    "overridden_matches": 224,
+    "multiple_matches": 228,
+    "overridden_matches": 228,
     "selected_subtypes": 524,
-    "parent_only": 400,
+    "parent_only": 399,
     "same_parent_multiple_subtype_matches": 4,
     "residual_subtype_violations": 0,
     "selected_by_parent": {
@@ -56,7 +56,7 @@
       "deaths-shadow": 4,
       "devoted-druid-combo": 41,
       "dimir-goryos": 1,
-      "dimir-mill": 14,
+      "dimir-mill": 13,
       "dimir-tempo": 27,
       "domain-zoo": 23,
       "dredge": 3,
@@ -24238,6 +24238,59 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "mono-blue",
+          "subtype_name": "Mono-Blue",
+          "rule_id": "sewer-combo-emry-amber",
+          "priority": 99980,
+          "evidence": [
+            {
+              "card": "Sewer-veillance Cam",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -24359,7 +24412,61 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "mono-blue",
+          "subtype_name": "Mono-Blue",
+          "rule_id": "sewer-combo-emry-amber",
+          "priority": 99980,
+          "evidence": [
+            {
+              "card": "Sewer-veillance Cam",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -67716,6 +67823,59 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius",
+          "rule_id": "sewer-combo-emry-amber",
+          "priority": 99980,
+          "evidence": [
+            {
+              "card": "Sewer-veillance Cam",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -67885,6 +68045,59 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            }
+          ]
+        },
+        {
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius",
+          "rule_id": "sewer-combo-emry-amber",
+          "priority": 99980,
+          "evidence": [
+            {
+              "card": "Sewer-veillance Cam",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -72872,93 +73085,86 @@
     },
     {
       "participant_id": "participant-823863d4f23c7f8efeea62123f9bee2356e550e2a1a8d54808ea7086357369b2",
-      "classification_status": "classified",
-      "selected": {
-        "archetype_id": "dimir-mill",
-        "archetype_name": "Dimir Mill",
-        "subtype_id": null,
-        "subtype_name": null,
-        "rule_id": "dimir-mill-primary",
-        "priority": 211000
-      },
-      "matched_rules": [
-        {
-          "archetype_id": "dimir-mill",
-          "archetype_name": "Dimir Mill",
-          "subtype_id": null,
-          "subtype_name": null,
-          "rule_id": "dimir-mill-primary",
-          "priority": 211000,
-          "evidence": [
-            {
-              "card": "Hedron Crab",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 2,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Fractured Sanity",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Glimpse the Unthinkable",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            }
-          ]
-        }
-      ],
-      "top_priority_matches": [
-        {
-          "archetype_id": "dimir-mill",
-          "archetype_name": "Dimir Mill",
-          "subtype_id": null,
-          "subtype_name": null,
-          "rule_id": "dimir-mill-primary",
-          "priority": 211000,
-          "evidence": [
-            {
-              "card": "Hedron Crab",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 2,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Fractured Sanity",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Glimpse the Unthinkable",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            }
-          ]
-        }
-      ],
+      "classification_status": "unknown",
+      "selected": null,
+      "matched_rules": [],
+      "top_priority_matches": [],
       "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
-      "errors": [],
-      "unknown_deck": null
+      "errors": [
+        "deck_data:60_main_without_sideboard"
+      ],
+      "unknown_deck": {
+        "main_deck": [
+          {
+            "name": "Archive Trap",
+            "quantity": 2
+          },
+          {
+            "name": "Cruel Somnophage",
+            "quantity": 4
+          },
+          {
+            "name": "Desperate Bloodseeker",
+            "quantity": 2
+          },
+          {
+            "name": "Duress",
+            "quantity": 2
+          },
+          {
+            "name": "Exhibition Tidecaller",
+            "quantity": 4
+          },
+          {
+            "name": "Fractured Sanity",
+            "quantity": 4
+          },
+          {
+            "name": "Glimpse the Unthinkable",
+            "quantity": 4
+          },
+          {
+            "name": "Hedron Crab",
+            "quantity": 3
+          },
+          {
+            "name": "Into the Roil",
+            "quantity": 2
+          },
+          {
+            "name": "Island",
+            "quantity": 9
+          },
+          {
+            "name": "Kitsune's Technique",
+            "quantity": 2
+          },
+          {
+            "name": "Restless Reef",
+            "quantity": 4
+          },
+          {
+            "name": "Ruin Crab",
+            "quantity": 3
+          },
+          {
+            "name": "Stock Up",
+            "quantity": 4
+          },
+          {
+            "name": "Swamp",
+            "quantity": 7
+          },
+          {
+            "name": "Unsummon",
+            "quantity": 4
+          }
+        ],
+        "sideboard": []
+      }
     },
     {
       "participant_id": "participant-826fa640e01012a12e312bd5c82567b4686ad79e29137a4b6724fe3aa6f1f80e",
@@ -82863,6 +83069,59 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "simic",
+          "subtype_name": "Simic",
+          "rule_id": "sewer-combo-emry-amber",
+          "priority": 99980,
+          "evidence": [
+            {
+              "card": "Sewer-veillance Cam",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -82960,7 +83219,61 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "simic",
+          "subtype_name": "Simic",
+          "rule_id": "sewer-combo-emry-amber",
+          "priority": 99980,
+          "evidence": [
+            {
+              "card": "Sewer-veillance Cam",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,green",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -97663,6 +97976,59 @@
               "exact_count": 0
             }
           ]
+        },
+        {
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius",
+          "rule_id": "sewer-combo-emry-amber",
+          "priority": 99980,
+          "evidence": [
+            {
+              "card": "Sewer-veillance Cam",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -97832,6 +98198,59 @@
               "min_count": null,
               "max_count": null,
               "exact_count": 0
+            }
+          ]
+        },
+        {
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "azorius",
+          "subtype_name": "Azorius",
+          "rule_id": "sewer-combo-emry-amber",
+          "priority": 99980,
+          "evidence": [
+            {
+              "card": "Sewer-veillance Cam",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
             }
           ]
         }
@@ -106428,7 +106847,9 @@
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
-      "errors": [],
+      "errors": [
+        "deck_data:60_main_without_sideboard"
+      ],
       "unknown_deck": {
         "main_deck": [
           {
@@ -110778,6 +111199,59 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "izzet",
+          "subtype_name": "Izzet",
+          "rule_id": "sewer-combo-emry-amber",
+          "priority": 99980,
+          "evidence": [
+            {
+              "card": "Sewer-veillance Cam",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -110851,7 +111325,61 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "izzet",
+          "subtype_name": "Izzet",
+          "rule_id": "sewer-combo-emry-amber",
+          "priority": 99980,
+          "evidence": [
+            {
+              "card": "Sewer-veillance Cam",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -115481,6 +116009,59 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "bant",
+          "subtype_name": "Bant Sewer Combo",
+          "rule_id": "sewer-combo-emry-amber",
+          "priority": 99980,
+          "evidence": [
+            {
+              "card": "Sewer-veillance Cam",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,green,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -115527,7 +116108,61 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "sewer-combo",
+          "archetype_name": "Sewer Combo",
+          "subtype_id": "bant",
+          "subtype_name": "Bant Sewer Combo",
+          "rule_id": "sewer-combo-emry-amber",
+          "priority": 99980,
+          "evidence": [
+            {
+              "card": "Sewer-veillance Cam",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Grinding Station",
+              "scope": "parent",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Emry, Lurker of the Loch",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mox Amber",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 3,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,green,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,

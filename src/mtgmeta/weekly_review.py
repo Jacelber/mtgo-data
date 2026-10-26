@@ -10,7 +10,7 @@ from typing import Any
 
 import yaml  # type: ignore[import-untyped]
 
-from .classifier import ClassificationResult, classifier_digest, classify_deck
+from .classifier import NO_SIDEBOARD_REASON, ClassificationResult, classifier_digest, classify_deck
 from .config import load_rule_set
 from .mtgo import load_mtgo_event_collection_context
 from .mtgo.classification import load_mtgo_events_for_format
@@ -137,6 +137,8 @@ def _localized_identity(
 
 def _priority_reasons(result: ClassificationResult) -> list[str]:
     reasons = []
+    if NO_SIDEBOARD_REASON in result.errors:
+        reasons.append("60张主牌、0张备牌：按项目数据有效性口径保留 Unknown")
     if result.status == "unknown":
         reasons.append("unknown")
     elif result.status == "conflict":
@@ -460,6 +462,8 @@ def build_melee_review(
         reasons = []
         if status == "unknown":
             reasons.append("unknown")
+            if NO_SIDEBOARD_REASON in record.get("errors", []):
+                reasons.append("60张主牌、0张备牌：按项目数据有效性口径保留 Unknown")
         elif status == "conflict":
             reasons.append("classification_conflict")
         elif status == "invalid_deck":

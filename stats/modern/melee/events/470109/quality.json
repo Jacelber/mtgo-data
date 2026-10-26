@@ -10,13 +10,13 @@
     "event_sha256": "8ed8781399cfaefcfe794d983538e76d0f16381286c34c5a9a4a4534497be753",
     "event_schema_version": "2.2.0",
     "classification_path": "data/modern/melee/classifications/470109.json",
-    "classification_sha256": "ee548762415ca24ab9594a3e2d101ebfa4d8303d592f4c95200d032920322d78",
+    "classification_sha256": "89b37fd41127d175a83f6be0183049d7113f89932dbed8d12cabbf9e23e2bdea",
     "classification_schema_version": "1.1.0",
     "opportunity_path": "data/modern/melee/opportunities/470109.json",
-    "opportunity_sha256": "62da34ad7804fef4900f7e8757e891bf64d322764bcf940bfdcac33377c89e1f",
+    "opportunity_sha256": "1c5587568db1975a7fdb4f96e4782d1647e70883a8ddf0ef979b9bc963d1b19f",
     "opportunity_schema_version": "1.1.0",
     "taxonomy_path": "my_archetypes/modern.yaml",
-    "taxonomy_sha256": "216b29f54617b30246c6bb65b2989cef2f8ed93f806c3575dbcd6f812ca7f5f4",
+    "taxonomy_sha256": "adb8d49a6a4904b97c7978c32c35746e871cacbcab4c46806a87685d1009e8b3",
     "taxonomy_schema_version": "1.2.0"
   },
   "status": "warning",
@@ -81,10 +81,16 @@
   ],
   "issues": [
     {
+      "code": "no_sideboard_unknown",
+      "severity": "warning",
+      "count": 1,
+      "message": "Submitted lists with 60 main-deck cards and no sideboard are retained as Unknown under the project data policy; source cards and match results remain unchanged."
+    },
+    {
       "code": "unknown_classifications",
       "severity": "warning",
       "count": 2,
-      "message": "Valid submitted decks remain explicitly Unknown."
+      "message": "Submitted decks remain explicitly Unknown, including lists covered by the project's data-validity policy."
     },
     {
       "code": "missing_or_unavailable_decklists",

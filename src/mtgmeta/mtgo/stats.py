@@ -11,7 +11,10 @@ from pathlib import Path
 from typing import Any
 
 from mtgmeta.card_names import BASIC_LAND_PRINTING_PAIRS, CARD_ALIASES, canonical_basic_land_name
-from mtgmeta.classifier_cards import IDENTITY_CONTRACT_VERSION, card_facts, classifier_card_name
+from mtgmeta.classifier_cards import (
+    IDENTITY_CONTRACT_VERSION, card_facts, classifier_card_name,
+    with_repository_facts, with_rule_facts,
+)
 from mtgmeta.classifier import classifier_digest, classify_deck
 from mtgmeta.legacy_rules import LegacyArchetypeRules
 from mtgmeta.rules import RuleSet
@@ -803,6 +806,7 @@ def _build_base_pack(
     return base_pack, d99
 
 
+@with_rule_facts
 def build_base_pack(
     events,
     archetypes,
@@ -820,6 +824,7 @@ def build_base_pack(
     )
 
 
+@with_rule_facts
 def build_subtype_base_pack(
     events,
     archetypes,
@@ -953,6 +958,7 @@ def attach_subtype_decks(
     return parent_decks
 
 
+@with_rule_facts
 def build_range(
     events,
     rules,
@@ -1081,6 +1087,7 @@ def build_range(
     return stats_data, decks_data
 
 
+@with_repository_facts
 def build_all_stats(
     repository_root: str | Path,
     format_id: str,

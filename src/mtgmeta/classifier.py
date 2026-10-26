@@ -19,6 +19,7 @@ from .classifier_cards import (
     DeckColors,
     IDENTITY_CONTRACT_VERSION,
     color_policy_subject,
+    with_rule_facts,
 )
 from .card_names import CARD_ALIASES, equivalent_basic_land_names
 
@@ -28,9 +29,11 @@ ConflictKind = Literal["parent_archetype", "subtype"]
 
 # Bump this only when classifier evaluation semantics change.  Rule and
 # semantic-feature changes are independently included in each rule digest.
-CLASSIFIER_ENGINE_VERSION = "1.2.2"
+CLASSIFIER_ENGINE_VERSION = "1.2.4"
+NO_SIDEBOARD_REASON = "deck_data:60_main_without_sideboard"
 
 
+@with_rule_facts
 def classifier_digest(rules: RuleSet) -> str:
     """Hash every rule input plus the explicit classifier engine contract."""
 
@@ -305,6 +308,7 @@ def _evaluate(
     )
 
 
+@with_rule_facts
 def evaluate_matches(
     rule_set: RuleSet, main_counts: Mapping[str, int], side_counts: Mapping[str, int]
 ) -> tuple[RuleMatch, ...]:
@@ -343,6 +347,7 @@ def _count_errors(zone: str, counts: object) -> list[str]:
     return errors
 
 
+@with_rule_facts
 def classify_counts(
     rule_set: RuleSet,
     main_counts: Mapping[str, int],
@@ -356,6 +361,11 @@ def classify_counts(
 
     main_counts = normalize_counts(main_counts)
     side_counts = normalize_counts(side_counts)
+
+    # Owner's project data policy, not a claim about tournament legality.
+    # Retain the submitted cards and results, but do not assign an archetype.
+    if sum(main_counts.values()) == 60 and sum(side_counts.values()) == 0:
+        return replace(_invalid_result(NO_SIDEBOARD_REASON), status="unknown")
 
     if rule_set.semantic_feature_path is not None:
         if rule_set.semantic_features is None:
@@ -460,6 +470,7 @@ def classify_counts(
     )
 
 
+@with_rule_facts
 def classify_deck(rule_set: RuleSet, deck: Mapping[str, Any]) -> ClassificationResult:
     """Normalize and classify one deck, returning a sanitized invalid result."""
 
@@ -469,6 +480,9 @@ def classify_deck(rule_set: RuleSet, deck: Mapping[str, Any]) -> ClassificationR
         main_counts, side_counts = deck_to_counts(deck)
     except (KeyError, TypeError, ValueError) as exc:
         return _invalid_result(f"deck: cannot normalize input ({type(exc).__name__})")
+    if rule_set.facts is not None and rule_set.schema_version == "1.2.0":
+        from .classifier_preparation import require_facts
+        require_facts((*main_counts, *side_counts), rule_set.facts)
     return classify_counts(rule_set, main_counts, side_counts)
 
 

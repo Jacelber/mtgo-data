@@ -26,6 +26,16 @@ defines statistical meaning, not a separate authorization or test schedule.
 
 ### 2.1 Constructed focus
 
+Owner decision 2026-10-26: a submitted list containing exactly 60 main-deck cards
+and zero sideboard cards is classified as `Unknown` for project data validity,
+even when it matches an archetype rule. This applies uniformly to retained MTGO
+and Melee lists, including lists not individually named during review. It does
+not change the source deck, participant status or match results, and does not
+declare the submitted list illegal under tournament rules. Quality disclosures
+identify these lists separately from other Unknown classifications. A missing
+or unavailable deck remains a separate source state. Main decks above 60 cards
+and nonempty sideboards below 15 cards are not rejected by this decision alone.
+
 The project measures Constructed deck performance.
 
 For mixed Draft and Constructed events:

@@ -14,6 +14,7 @@ import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
 from mtgmeta.public_contract import versioned
+from mtgmeta.classifier_cards import with_rule_facts, with_repository_facts
 from mtgmeta.review_workbook import ReviewWorkbookError, read_workbook_rows
 
 from . import landing_screening as screening, stats
@@ -92,6 +93,7 @@ def file_sha256(path: str | Path) -> str:
     return digest.hexdigest()
 
 
+@with_rule_facts
 def build_candidate_documents(
     events,
     rules,
@@ -849,6 +851,7 @@ def _week_monday(week: str) -> date:
         raise MTGOLandingEditorialError(f"invalid ISO review week: {week}") from exc
 
 
+@with_repository_facts
 def build_admitted_content_facts(root: Path, format_id: str, week: str, *, require_delivered_classifier=False,
                                  admitted_scope: dict | None = None) -> dict:
     """Build new delivered facts or re-read an exact retained content scope.
