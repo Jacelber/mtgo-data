@@ -2,12 +2,12 @@
   "schema_version": "1.1.0",
   "format": "pioneer",
   "source": "mtgo",
-  "classifier_digest": "ee0c920b54f6060961b3115ad70c27180235cd1e52f423d122a2414317e330f7",
-  "rules_updated": "2026-10-26T22:32:17+09:00",
+  "classifier_digest": "24ef7681ae7aeddcdd78fba76834cc32eef3a68e8340d752bba2ded583829f61",
+  "rules_updated": "2026-10-27T20:46:44+09:00",
   "summary": {
-    "parents": 132,
-    "leaves": 135,
-    "expandable_parents": 2
+    "parents": 133,
+    "leaves": 138,
+    "expandable_parents": 3
   },
   "parents": [
     {
@@ -440,6 +440,12 @@
       "subtype_ids": []
     },
     {
+      "id": "jeskai-cauldron",
+      "name": "Jeskai Cauldron",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "jeskai-control",
       "name": "Jeskai Control",
       "expandable": false,
@@ -472,6 +478,12 @@
     {
       "id": "jund-citadel",
       "name": "Jund Citadel",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "jund-delirium",
+      "name": "Jund Delirium",
       "expandable": false,
       "subtype_ids": []
     },
@@ -542,8 +554,12 @@
     {
       "id": "mono-green-devotion",
       "name": "Mono-Green Devotion",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "mono-green-devotion/gruul",
+        "mono-green-devotion/mono-green",
+        "mono-green-devotion/selesnya"
+      ]
     },
     {
       "id": "mono-green-landfall",
@@ -698,12 +714,6 @@
     {
       "id": "selesnya-company",
       "name": "Selesnya Company",
-      "expandable": false,
-      "subtype_ids": []
-    },
-    {
-      "id": "selesnya-devotion",
-      "name": "Selesnya Devotion",
       "expandable": false,
       "subtype_ids": []
     },
@@ -1388,6 +1398,14 @@
       "subtype_id": null
     },
     {
+      "id": "jeskai-cauldron",
+      "kind": "archetype",
+      "name": "Jeskai Cauldron",
+      "display_name": "Jeskai Cauldron",
+      "parent_id": "jeskai-cauldron",
+      "subtype_id": null
+    },
+    {
       "id": "jeskai-control",
       "kind": "archetype",
       "name": "Jeskai Control",
@@ -1433,6 +1451,14 @@
       "name": "Jund Citadel",
       "display_name": "Jund Citadel",
       "parent_id": "jund-citadel",
+      "subtype_id": null
+    },
+    {
+      "id": "jund-delirium",
+      "kind": "archetype",
+      "name": "Jund Delirium",
+      "display_name": "Jund Delirium",
+      "parent_id": "jund-delirium",
       "subtype_id": null
     },
     {
@@ -1532,12 +1558,28 @@
       "subtype_id": null
     },
     {
-      "id": "mono-green-devotion",
-      "kind": "archetype",
+      "id": "mono-green-devotion/gruul",
+      "kind": "subtype",
+      "name": "Gruul Devotion",
+      "display_name": "Gruul Devotion",
+      "parent_id": "mono-green-devotion",
+      "subtype_id": "gruul"
+    },
+    {
+      "id": "mono-green-devotion/mono-green",
+      "kind": "subtype",
       "name": "Mono-Green Devotion",
       "display_name": "Mono-Green Devotion",
       "parent_id": "mono-green-devotion",
-      "subtype_id": null
+      "subtype_id": "mono-green"
+    },
+    {
+      "id": "mono-green-devotion/selesnya",
+      "kind": "subtype",
+      "name": "Selesnya Devotion",
+      "display_name": "Selesnya Devotion",
+      "parent_id": "mono-green-devotion",
+      "subtype_id": "selesnya"
     },
     {
       "id": "mono-green-landfall",
@@ -1745,14 +1787,6 @@
       "name": "Selesnya Company",
       "display_name": "Selesnya Company",
       "parent_id": "selesnya-company",
-      "subtype_id": null
-    },
-    {
-      "id": "selesnya-devotion",
-      "kind": "archetype",
-      "name": "Selesnya Devotion",
-      "display_name": "Selesnya Devotion",
-      "parent_id": "selesnya-devotion",
       "subtype_id": null
     },
     {
