@@ -1171,6 +1171,14 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Moment's Peace", "image": "../images/representative-cards/pauper/moments-peace.jpg"}),
       Object.freeze({"name": "Stream of Thought", "image": "../images/representative-cards/pauper/stream-of-thought.jpg"}),
     ]),
+    "azorius-familiars": Object.freeze([
+      Object.freeze({"name": "Sunscape Familiar", "image": "../images/representative-cards/pauper/sunscape-familiar.jpg"}),
+      Object.freeze({"name": "Archaeomancer", "image": "../images/representative-cards/pauper/archaeomancer.jpg"}),
+    ]),
+    "boros-snacker": Object.freeze([
+      Object.freeze({"name": "Sneaky Snacker", "image": "../images/representative-cards/pauper/sneaky-snacker.jpg"}),
+      Object.freeze({"name": "Pursue the Past", "image": "../images/representative-cards/pauper/pursue-the-past.jpg"}),
+    ]),
   }),
   pioneer: Object.freeze({
     "izzet-prowess": Object.freeze([
