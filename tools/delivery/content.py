@@ -26,8 +26,8 @@ def retain_reviewed_entry(preview, stage):
         return False
     approved = {name: sha256(preview / name) for name in select(preview)}
     current = {name: sha256(stage / name) for name in select(stage)}
-    proof = {'before_html': before.read_text(encoding='utf-8'),
-             'after_html': after.read_text(encoding='utf-8')}
+    proof = {'before_html': before.read_bytes().decode('utf-8'),
+             'after_html': after.read_bytes().decode('utf-8')}
     if (set(approved) != set(current)
             or any(approved[name] != current[name] for name in approved if name != ENTRY)
             or not versioned_entry_equivalent(proof, approved, current)):

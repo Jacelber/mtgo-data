@@ -11,7 +11,7 @@ from mtgmeta.generation_progress import files
 from mtgmeta.mtgo import review_submission as review
 
 
-@pytest.mark.parametrize('difference', ['versions', 'markup', 'renderer', 'invalid_version'])
+@pytest.mark.parametrize('difference', ['versions', 'crlf', 'markup', 'renderer', 'invalid_version'])
 def test_reviewed_entry_preserves_only_cache_versions(tmp_path, difference):
     from hashlib import sha256
     preview, stage = tmp_path / 'preview', tmp_path / 'stage'
@@ -20,16 +20,19 @@ def test_reviewed_entry_preserves_only_cache_versions(tmp_path, difference):
     for directory in (preview, stage):
         (directory / 'assets').mkdir(parents=True)
         (directory / 'assets/app.js').write_bytes(script)
-    html = '<h1>Approved page</h1><script src="assets/app.js{}"></script>'
+    html = '<h1>Approved page</h1>\n<script src="assets/app.js{}"></script>'
     (preview / 'index.html').write_text(html.format('?v=' + version), encoding='utf-8')
     (stage / 'index.html').write_text(html.format(''), encoding='utf-8')
-    if difference == 'markup':
+    if difference == 'crlf':
+        (preview / 'index.html').write_bytes(html.format('?v=' + version).replace('\n', '\r\n').encode())
+        (stage / 'index.html').write_bytes(html.format('').encode())
+    elif difference == 'markup':
         (stage / 'index.html').write_text(html.replace('Approved page', 'Changed page').format(''), encoding='utf-8')
     elif difference == 'renderer':
         (stage / 'assets/app.js').write_bytes(b'window.unapprovedRenderer = true;')
     elif difference == 'invalid_version':
         (preview / 'index.html').write_text(html.format('?v=' + '0' * 12), encoding='utf-8')
-    if difference == 'versions':
+    if difference in {'versions', 'crlf'}:
         assert content.retain_reviewed_entry(preview, stage)
         assert (stage / 'index.html').read_bytes() == (preview / 'index.html').read_bytes()
         assert (stage / 'assets/app.js').read_bytes() == script
