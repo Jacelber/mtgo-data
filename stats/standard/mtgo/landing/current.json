@@ -1,4 +1,24 @@
 {
+  "schema_version": "1.2.0",
+  "product": "mtgo-landing",
+  "format": "standard",
+  "source": "mtgo",
+  "week": {
+    "id": "2026-W43",
+    "start": "2026-10-19",
+    "end": "2026-10-25"
+  },
+  "state": "ready",
+  "source_event_ids": [
+    "12856618",
+    "12856627",
+    "12856631",
+    "12856957",
+    "12856965",
+    "12856970",
+    "12856977",
+    "12856995"
+  ],
   "classifier": {
     "digest": "470f1319a939c34da990e7623e017703ab4c16054a36be02bd3b74eef37848dc"
   },
@@ -6,641 +26,34 @@
     "available": true,
     "unavailable_reason": null
   },
-  "data_files": {
-    "completeness": "weeks/2026-W42/completeness.json",
-    "environment_decks": "weeks/2026-W42/environment_decks.json",
-    "feature_decks": "weeks/2026-W42/feature_decks.json",
-    "range": "weeks/2026-W42/range.json"
+  "thresholds": {
+    "environment_share": 0.03,
+    "share_move_pp": 5.0,
+    "exit_reference_share": 0.05,
+    "build_shift": 20,
+    "build_reference_minimum": 8
   },
-  "environment": {
-    "other_classified": {
-      "current": {
-        "count": 13,
-        "denominator": 132,
-        "share": 0.0985
-      },
-      "current_top8": {
-        "count": 6,
-        "denominator": 64,
-        "share": 0.0938
-      },
-      "previous_four_weeks": {
-        "count": 101,
-        "denominator": 472,
-        "share": 0.214
-      },
-      "previous_week": {
-        "count": 32,
-        "denominator": 174,
-        "share": 0.1839
-      }
-    },
-    "rows": [
-      {
-        "archetype_id": "dimir-midrange",
-        "current": {
-          "count": 22,
-          "denominator": 132,
-          "share": 0.1667
-        },
-        "current_top8": {
-          "count": 10,
-          "denominator": 64,
-          "share": 0.1562
-        },
-        "display_name": "Dimir Midrange",
-        "key_cards": [
-          {
-            "name": "Kaito, Bane of Nightmares"
-          },
-          {
-            "name": "Enduring Curiosity"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 46,
-          "denominator": 472,
-          "share": 0.0975
-        },
-        "previous_week": {
-          "count": 21,
-          "denominator": 174,
-          "share": 0.1207
-        }
-      },
-      {
-        "archetype_id": "dimir-spider-man",
-        "current": {
-          "count": 21,
-          "denominator": 132,
-          "share": 0.1591
-        },
-        "current_top8": {
-          "count": 10,
-          "denominator": 64,
-          "share": 0.1562
-        },
-        "display_name": "Dimir Spider-Man",
-        "key_cards": [
-          {
-            "name": "Superior Spider-Man"
-          },
-          {
-            "name": "Deceit"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 21,
-          "denominator": 472,
-          "share": 0.0445
-        },
-        "previous_week": {
-          "count": 10,
-          "denominator": 174,
-          "share": 0.0575
-        }
-      },
-      {
-        "archetype_id": "lifegain",
-        "current": {
-          "count": 16,
-          "denominator": 132,
-          "share": 0.1212
-        },
-        "current_top8": {
-          "count": 5,
-          "denominator": 64,
-          "share": 0.0781
-        },
-        "display_name": "Lifegain",
-        "key_cards": [
-          {
-            "name": "Liliana the Faultless"
-          },
-          {
-            "name": "Ajani Resolute"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 24,
-          "denominator": 472,
-          "share": 0.0508
-        },
-        "previous_week": {
-          "count": 11,
-          "denominator": 174,
-          "share": 0.0632
-        }
-      },
-      {
-        "archetype_id": "4-color-tablet",
-        "current": {
-          "count": 11,
-          "denominator": 132,
-          "share": 0.0833
-        },
-        "current_top8": {
-          "count": 5,
-          "denominator": 64,
-          "share": 0.0781
-        },
-        "display_name": "4-Color Tablet",
-        "key_cards": [
-          {
-            "name": "Inevitable Defeat"
-          },
-          {
-            "name": "Tablet of Discovery"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 15,
-          "denominator": 472,
-          "share": 0.0318
-        },
-        "previous_week": {
-          "count": 9,
-          "denominator": 174,
-          "share": 0.0517
-        }
-      },
-      {
-        "archetype_id": "mono-green-landfall",
-        "current": {
-          "count": 11,
-          "denominator": 132,
-          "share": 0.0833
-        },
-        "current_top8": {
-          "count": 7,
-          "denominator": 64,
-          "share": 0.1094
-        },
-        "display_name": "Mono-Green Landfall",
-        "key_cards": [
-          {
-            "name": "Earthbender Ascension"
-          },
-          {
-            "name": "Icetill Explorer"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 41,
-          "denominator": 472,
-          "share": 0.0869
-        },
-        "previous_week": {
-          "count": 12,
-          "denominator": 174,
-          "share": 0.069
-        }
-      },
-      {
-        "archetype_id": "izzet-prowess",
-        "current": {
-          "count": 8,
-          "denominator": 132,
-          "share": 0.0606
-        },
-        "current_top8": {
-          "count": 5,
-          "denominator": 64,
-          "share": 0.0781
-        },
-        "display_name": "Izzet Prowess",
-        "key_cards": [
-          {
-            "name": "Slickshot Show-Off"
-          },
-          {
-            "name": "Elusive Otter"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 11,
-          "denominator": 472,
-          "share": 0.0233
-        },
-        "previous_week": {
-          "count": 4,
-          "denominator": 174,
-          "share": 0.023
-        }
-      },
-      {
-        "archetype_id": "azorius-control",
-        "current": {
-          "count": 6,
-          "denominator": 132,
-          "share": 0.0455
-        },
-        "current_top8": {
-          "count": 1,
-          "denominator": 64,
-          "share": 0.0156
-        },
-        "display_name": "Azorius Control",
-        "key_cards": [
-          {
-            "name": "The Theorist, Jace Beleren"
-          },
-          {
-            "name": "Countersculpt"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 30,
-          "denominator": 472,
-          "share": 0.0636
-        },
-        "previous_week": {
-          "count": 14,
-          "denominator": 174,
-          "share": 0.0805
-        }
-      },
-      {
-        "archetype_id": "jeskai-artifacts",
-        "current": {
-          "count": 6,
-          "denominator": 132,
-          "share": 0.0455
-        },
-        "current_top8": {
-          "count": 4,
-          "denominator": 64,
-          "share": 0.0625
-        },
-        "display_name": "Jeskai Artifacts",
-        "key_cards": [
-          {
-            "name": "Simulacrum Synthesizer"
-          },
-          {
-            "name": "Repurposing Bay"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 18,
-          "denominator": 472,
-          "share": 0.0381
-        },
-        "previous_week": {
-          "count": 14,
-          "denominator": 174,
-          "share": 0.0805
-        }
-      },
-      {
-        "archetype_id": "azorius-momo",
-        "current": {
-          "count": 5,
-          "denominator": 132,
-          "share": 0.0379
-        },
-        "current_top8": {
-          "count": 3,
-          "denominator": 64,
-          "share": 0.0469
-        },
-        "display_name": "Azorius Momo",
-        "key_cards": [
-          {
-            "name": "Momo, Friendly Flier"
-          },
-          {
-            "name": "Quantum Riddler"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 10,
-          "denominator": 472,
-          "share": 0.0212
-        },
-        "previous_week": {
-          "count": 5,
-          "denominator": 174,
-          "share": 0.0287
-        }
-      },
-      {
-        "archetype_id": "izzet-spellementals",
-        "current": {
-          "count": 5,
-          "denominator": 132,
-          "share": 0.0379
-        },
-        "current_top8": {
-          "count": 4,
-          "denominator": 64,
-          "share": 0.0625
-        },
-        "display_name": "Izzet Spellementals",
-        "key_cards": [
-          {
-            "name": "Sunderflock"
-          },
-          {
-            "name": "Hearth Elemental"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 62,
-          "denominator": 472,
-          "share": 0.1314
-        },
-        "previous_week": {
-          "count": 25,
-          "denominator": 174,
-          "share": 0.1437
-        }
-      },
-      {
-        "archetype_id": "boros-dragons",
-        "current": {
-          "count": 4,
-          "denominator": 132,
-          "share": 0.0303
-        },
-        "current_top8": {
-          "count": 2,
-          "denominator": 64,
-          "share": 0.0312
-        },
-        "display_name": "Boros Dragons",
-        "key_cards": [
-          {
-            "name": "Sarkhan, Dragon Ascendant"
-          },
-          {
-            "name": "Nova Hellkite"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 38,
-          "denominator": 472,
-          "share": 0.0805
-        },
-        "previous_week": {
-          "count": 8,
-          "denominator": 174,
-          "share": 0.046
-        }
-      },
-      {
-        "archetype_id": "jund-artifact-sacrifice",
-        "current": {
-          "count": 4,
-          "denominator": 132,
-          "share": 0.0303
-        },
-        "current_top8": {
-          "count": 2,
-          "denominator": 64,
-          "share": 0.0312
-        },
-        "display_name": "Jund Artifact Sacrifice",
-        "key_cards": [
-          {
-            "name": "Biotech Specialist"
-          },
-          {
-            "name": "The Sackville-Bagginses"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 55,
-          "denominator": 472,
-          "share": 0.1165
-        },
-        "previous_week": {
-          "count": 9,
-          "denominator": 174,
-          "share": 0.0517
-        }
-      }
-    ],
-    "threshold": 0.03,
-    "unknown": {
-      "current": {
-        "count": 0,
-        "denominator": 132,
-        "share": 0.0
-      },
-      "current_top8": {
-        "count": 0,
-        "denominator": 64,
-        "share": 0.0
-      },
-      "previous_four_weeks": {
-        "count": 0,
-        "denominator": 472,
-        "share": 0.0
-      },
-      "previous_week": {
-        "count": 0,
-        "denominator": 174,
-        "share": 0.0
-      }
-    }
-  },
-  "features": {
-    "items": [
-      {
-        "archetype_id": "mono-black-aggro",
-        "category": "new_technology",
-        "deck": {
-          "deck_fingerprint_sha256": "531a531baf7ef2f8e80dd8443311499eff00ff7391094b81e01884845af3d055",
-          "deck_id": "369ac5463f7f6787f020",
-          "event_id": "12856204",
-          "final_rank": 8,
-          "main_deck": [
-            {
-              "name": "Bitter Triumph",
-              "qty": 2
-            },
-            {
-              "name": "Case of the Stashed Skeleton",
-              "qty": 3
-            },
-            {
-              "name": "Corpses of the Lost",
-              "qty": 4
-            },
-            {
-              "name": "Dissection Practice",
-              "qty": 2
-            },
-            {
-              "name": "Forsaken Miner",
-              "qty": 4
-            },
-            {
-              "name": "Gollum the Abandoned",
-              "qty": 1
-            },
-            {
-              "name": "Gollum, Riddle Master",
-              "qty": 2
-            },
-            {
-              "name": "Iridescent Vinelasher",
-              "qty": 2
-            },
-            {
-              "name": "Lich's Relic",
-              "qty": 1
-            },
-            {
-              "name": "Luis, Pompous Pillager",
-              "qty": 2
-            },
-            {
-              "name": "Mai, Scornful Striker",
-              "qty": 1
-            },
-            {
-              "name": "Realm of Koh",
-              "qty": 2
-            },
-            {
-              "name": "Requiting Hex",
-              "qty": 2
-            },
-            {
-              "name": "Sephiroth, Fabled SOLDIER",
-              "qty": 2
-            },
-            {
-              "name": "Soulstone Sanctuary",
-              "qty": 2
-            },
-            {
-              "name": "Strategic Betrayal",
-              "qty": 1
-            },
-            {
-              "name": "Swamp",
-              "qty": 18
-            },
-            {
-              "name": "Timeline Culler",
-              "qty": 2
-            },
-            {
-              "name": "Tinybones Joins Up",
-              "qty": 2
-            },
-            {
-              "name": "Tinybones, the Pickpocket",
-              "qty": 4
-            },
-            {
-              "name": "Vraska's Final Mercy",
-              "qty": 1
-            }
-          ],
-          "player": "Kerci",
-          "player_count": 26,
-          "side_deck": [
-            {
-              "name": "Ancient Vendetta",
-              "qty": 1
-            },
-            {
-              "name": "Duress",
-              "qty": 2
-            },
-            {
-              "name": "Elegy Acolyte",
-              "qty": 1
-            },
-            {
-              "name": "Gollum the Abandoned",
-              "qty": 1
-            },
-            {
-              "name": "Intimidation Tactics",
-              "qty": 2
-            },
-            {
-              "name": "Karn, Argent Defender",
-              "qty": 2
-            },
-            {
-              "name": "Lord Skitter, Sewer King",
-              "qty": 1
-            },
-            {
-              "name": "Mai, Scornful Striker",
-              "qty": 1
-            },
-            {
-              "name": "Nowhere to Run",
-              "qty": 1
-            },
-            {
-              "name": "Requiting Hex",
-              "qty": 1
-            },
-            {
-              "name": "Strategic Betrayal",
-              "qty": 1
-            },
-            {
-              "name": "The Ooze",
-              "qty": 1
-            }
-          ],
-          "starttime": "2026-10-14 07:00:00.0"
-        },
-        "destination_id": "deck:369ac5463f7f6787f020",
-        "display_name": "Mono-Black Aggro",
-        "featured_cards": [
-          {
-            "name": "Forsaken Miner"
-          },
-          {
-            "name": "Corpses of the Lost"
-          },
-          {
-            "name": "Tinybones, the Pickpocket"
-          },
-          {
-            "name": "Case of the Stashed Skeleton"
-          }
-        ],
-        "headline": {
-          "en": "Mono-Black Aggro",
-          "zh": "纯黑快攻"
-        },
-        "order": 1,
-        "positioning": {
-          "en": "Mono-Black Aggro built around Skeleton synergies.",
-          "zh": "骷髅妖亲缘主题的纯黑快攻"
-        },
-        "subtype_id": null,
-        "supporting_facts": [
-          {
-            "type": "build_shift",
-            "values": {
-              "identity_id": "mono-black-aggro",
-              "identity_level": "parent",
-              "reference_sample_size": 8,
-              "score": 31
-            }
-          }
-        ]
-      }
-    ],
-    "week": "2026-W42"
-  },
-  "format": "standard",
   "populations": {
     "current": {
-      "end": "2026-10-18",
+      "start": "2026-10-19",
+      "end": "2026-10-25",
+      "event_ids": [
+        "12856618",
+        "12856627",
+        "12856631",
+        "12856957",
+        "12856965",
+        "12856970",
+        "12856977",
+        "12856995"
+      ],
       "event_count": 8,
+      "high_score_count": 121,
+      "top8_count": 64
+    },
+    "previous_week": {
+      "start": "2026-10-12",
+      "end": "2026-10-18",
       "event_ids": [
         "12856191",
         "12856199",
@@ -651,22 +64,14 @@
         "12856586",
         "12856610"
       ],
+      "event_count": 8,
       "high_score_count": 132,
-      "start": "2026-10-12",
       "top8_count": 64
     },
     "previous_four_weeks": {
-      "end": "2026-10-11",
-      "event_count": 31,
+      "start": "2026-09-21",
+      "end": "2026-10-18",
       "event_ids": [
-        "12854105",
-        "12854114",
-        "12854118",
-        "12854483",
-        "12854491",
-        "12854496",
-        "12854503",
-        "12854521",
         "12854529",
         "12854538",
         "12854542",
@@ -689,122 +94,909 @@
         "12856152",
         "12856154",
         "12856158",
-        "12856183"
+        "12856183",
+        "12856191",
+        "12856199",
+        "12856204",
+        "12856571",
+        "12856572",
+        "12856581",
+        "12856586",
+        "12856610"
       ],
-      "high_score_count": 472,
-      "start": "2026-09-14",
+      "event_count": 31,
+      "high_score_count": 477,
       "top8_count": 248
-    },
-    "previous_week": {
-      "end": "2026-10-11",
-      "event_count": 11,
-      "event_ids": [
-        "12855542",
-        "12855544",
-        "12856121",
-        "12856130",
-        "12856137",
-        "12856141",
-        "12856143",
-        "12856152",
-        "12856154",
-        "12856158",
-        "12856183"
-      ],
-      "high_score_count": 174,
-      "start": "2026-10-05",
-      "top8_count": 88
     }
   },
-  "product": "mtgo-landing",
-  "review_binding": {
-    "classifier_digest": "470f1319a939c34da990e7623e017703ab4c16054a36be02bd3b74eef37848dc",
-    "machine_fact_digest": "a297d4e5f8ddd4c288f31d828804b5c2a3affab4669ce360430c39b8f89c00b3",
-    "pickup_document_digest": "b8cec2ac32750d87239083f3ea95b2e3654e59704e4d586a4e3ae68118d3dd1c",
-    "source_event_ids": [
-      "12856191",
-      "12856199",
-      "12856204",
-      "12856571",
-      "12856572",
-      "12856581",
-      "12856586",
-      "12856610"
-    ],
-    "summary_fact_digest": "1473c5e5aab0bd53e4a98907b62c6ffa736cacd3d9ce3b3fe47450321d1cabba",
-    "visual_metadata_digest": "81a83348ad55a4cda3b65c328a4146cc2cb387fc3295e76e06b5ba9fab76bfe5"
-  },
-  "schema_version": "1.2.0",
-  "source": "mtgo",
-  "source_event_ids": [
-    "12856191",
-    "12856199",
-    "12856204",
-    "12856571",
-    "12856572",
-    "12856581",
-    "12856586",
-    "12856610"
-  ],
-  "state": "ready",
-  "thresholds": {
-    "build_reference_minimum": 8,
-    "build_shift": 20,
-    "environment_share": 0.03,
-    "exit_reference_share": 0.05,
-    "share_move_pp": 5.0
-  },
-  "week": {
-    "end": "2026-10-18",
-    "id": "2026-W42",
-    "start": "2026-10-12"
-  },
-  "weekly_summary": {
-    "items": [
+  "environment": {
+    "threshold": 0.03,
+    "rows": [
       {
-        "deck_links": [],
-        "order": 1,
-        "text": {
-          "en": "Starting last week, Excruciator decks found a new target for [[card:Superior Spider-Man|Superior Spider-Man]] to copy: [[card:Uldaros Theorix|Uldaros Theorix]]. Many lists have moved [[card:Doomsday Excruciator|Doomsday Excruciator]] to the sideboard, or cut it altogether. Since last week's report, all of these lists, including variants that already ran no Excruciator, have been grouped under the single Dimir Spider-Man archetype and counted together.",
-          "zh": "上周开始拷打魔系套牌找到了新的蜘蛛侠复制目标：[[card:Uldaros Theorix|乌达洛论析]]。很多套牌都开始把拷打魔放进备牌，甚至备牌都不带了。包括以前就不带拷打魔的版本在内，上周周报开始把所有这些套牌都整合成了【蓝黑蜘蛛侠】一个大类，不再分开统计。"
-        }
-      },
-      {
-        "deck_links": [],
-        "order": 2,
-        "text": {
-          "en": "This week, Dimir Midrange and Dimir Spider-Man are running neck and neck at the top of the metagame. Both mostly retain the builds established last week, while the rest of the field has largely settled into stable configurations.",
-          "zh": "本周两套蓝黑，蓝黑中速和蓝黑蜘蛛侠并驾齐驱领跑环境，基本都还是上周确立下来的构筑。其他套牌基本也进入构筑稳定期。"
-        }
-      },
-      {
-        "deck_links": [
+        "archetype_id": "dimir-midrange",
+        "display_name": "Dimir Midrange",
+        "key_cards": [
           {
-            "deck": {
-              "archetype_id": "mono-black-aggro",
-              "deck_fingerprint_sha256": "531a531baf7ef2f8e80dd8443311499eff00ff7391094b81e01884845af3d055",
-              "deck_id": "369ac5463f7f6787f020",
-              "display_name": "Mono-Black Aggro",
-              "event_id": "12856204",
-              "final_rank": 8,
-              "player": "Kerci",
-              "starttime": "2026-10-14 07:00:00.0"
-            },
-            "label": {
-              "en": "Mono-Black Aggro · Kerci · Rank 8",
-              "zh": "纯黑快攻 · Kerci · 第8名"
-            },
-            "order": 1,
-            "token": "deck:369ac5463f7f6787f020"
+            "name": "Kaito, Bane of Nightmares"
+          },
+          {
+            "name": "Enduring Curiosity"
           }
         ],
-        "order": 3,
-        "text": {
-          "en": "A Skeleton-focused Mono-Black Aggro list made one Top 8 this week, running the full four copies of [[card:Tinybones, the Pickpocket|Tinybones, the Pickpocket]] and [[card:Corpses of the Lost|Corpses of the Lost]]. The event itself was small, however: it made Top 8 at 3-2 and lost in the quarterfinals, so the result is not especially convincing: deck:369ac5463f7f6787f020",
-          "zh": "一套骷髅妖思路的纯黑快攻本周拿下一个8强，满编[[card:Tinybones, the Pickpocket|扒手细骨]]和[[card:Corpses of the Lost|失落者之骸]]。不过比赛本身人数较少，3-2进八强然后一轮游，并不算是有说服力的成绩：deck:369ac5463f7f6787f020"
+        "current": {
+          "count": 19,
+          "denominator": 121,
+          "share": 0.157
+        },
+        "previous_week": {
+          "count": 22,
+          "denominator": 132,
+          "share": 0.1667
+        },
+        "previous_four_weeks": {
+          "count": 59,
+          "denominator": 477,
+          "share": 0.1237
+        },
+        "current_top8": {
+          "count": 8,
+          "denominator": 64,
+          "share": 0.125
+        }
+      },
+      {
+        "archetype_id": "jund-artifact-sacrifice",
+        "display_name": "Jund Artifact Sacrifice",
+        "key_cards": [
+          {
+            "name": "Biotech Specialist"
+          },
+          {
+            "name": "The Sackville-Bagginses"
+          }
+        ],
+        "current": {
+          "count": 18,
+          "denominator": 121,
+          "share": 0.1488
+        },
+        "previous_week": {
+          "count": 4,
+          "denominator": 132,
+          "share": 0.0303
+        },
+        "previous_four_weeks": {
+          "count": 37,
+          "denominator": 477,
+          "share": 0.0776
+        },
+        "current_top8": {
+          "count": 13,
+          "denominator": 64,
+          "share": 0.2031
+        }
+      },
+      {
+        "archetype_id": "mono-green-landfall",
+        "display_name": "Mono-Green Landfall",
+        "key_cards": [
+          {
+            "name": "Earthbender Ascension"
+          },
+          {
+            "name": "Icetill Explorer"
+          }
+        ],
+        "current": {
+          "count": 16,
+          "denominator": 121,
+          "share": 0.1322
+        },
+        "previous_week": {
+          "count": 11,
+          "denominator": 132,
+          "share": 0.0833
+        },
+        "previous_four_weeks": {
+          "count": 36,
+          "denominator": 477,
+          "share": 0.0755
+        },
+        "current_top8": {
+          "count": 6,
+          "denominator": 64,
+          "share": 0.0938
+        }
+      },
+      {
+        "archetype_id": "lifegain",
+        "display_name": "Lifegain",
+        "key_cards": [
+          {
+            "name": "Liliana the Faultless"
+          },
+          {
+            "name": "Ajani Resolute"
+          }
+        ],
+        "current": {
+          "count": 13,
+          "denominator": 121,
+          "share": 0.1074
+        },
+        "previous_week": {
+          "count": 16,
+          "denominator": 132,
+          "share": 0.1212
+        },
+        "previous_four_weeks": {
+          "count": 38,
+          "denominator": 477,
+          "share": 0.0797
+        },
+        "current_top8": {
+          "count": 10,
+          "denominator": 64,
+          "share": 0.1562
+        }
+      },
+      {
+        "archetype_id": "selesnya-landfall",
+        "display_name": "Selesnya Landfall",
+        "key_cards": [
+          {
+            "name": "Erode"
+          },
+          {
+            "name": "Earthbender Ascension"
+          }
+        ],
+        "current": {
+          "count": 7,
+          "denominator": 121,
+          "share": 0.0579
+        },
+        "previous_week": {
+          "count": 2,
+          "denominator": 132,
+          "share": 0.0152
+        },
+        "previous_four_weeks": {
+          "count": 8,
+          "denominator": 477,
+          "share": 0.0168
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 64,
+          "share": 0.0469
+        }
+      },
+      {
+        "archetype_id": "4-color-tablet",
+        "display_name": "4-Color Tablet",
+        "key_cards": [
+          {
+            "name": "Inevitable Defeat"
+          },
+          {
+            "name": "Tablet of Discovery"
+          }
+        ],
+        "current": {
+          "count": 6,
+          "denominator": 121,
+          "share": 0.0496
+        },
+        "previous_week": {
+          "count": 11,
+          "denominator": 132,
+          "share": 0.0833
+        },
+        "previous_four_weeks": {
+          "count": 26,
+          "denominator": 477,
+          "share": 0.0545
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 64,
+          "share": 0.0469
+        }
+      },
+      {
+        "archetype_id": "dimir-spider-man",
+        "display_name": "Dimir Spider-Man",
+        "key_cards": [
+          {
+            "name": "Superior Spider-Man"
+          },
+          {
+            "name": "Deceit"
+          }
+        ],
+        "current": {
+          "count": 6,
+          "denominator": 121,
+          "share": 0.0496
+        },
+        "previous_week": {
+          "count": 21,
+          "denominator": 132,
+          "share": 0.1591
+        },
+        "previous_four_weeks": {
+          "count": 37,
+          "denominator": 477,
+          "share": 0.0776
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 64,
+          "share": 0.0469
+        }
+      },
+      {
+        "archetype_id": "jeskai-artifacts",
+        "display_name": "Jeskai Artifacts",
+        "key_cards": [
+          {
+            "name": "Simulacrum Synthesizer"
+          },
+          {
+            "name": "Repurposing Bay"
+          }
+        ],
+        "current": {
+          "count": 6,
+          "denominator": 121,
+          "share": 0.0496
+        },
+        "previous_week": {
+          "count": 6,
+          "denominator": 132,
+          "share": 0.0455
+        },
+        "previous_four_weeks": {
+          "count": 22,
+          "denominator": 477,
+          "share": 0.0461
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 64,
+          "share": 0.0625
+        }
+      },
+      {
+        "archetype_id": "azorius-control",
+        "display_name": "Azorius Control",
+        "key_cards": [
+          {
+            "name": "The Theorist, Jace Beleren"
+          },
+          {
+            "name": "Countersculpt"
+          }
+        ],
+        "current": {
+          "count": 5,
+          "denominator": 121,
+          "share": 0.0413
+        },
+        "previous_week": {
+          "count": 6,
+          "denominator": 132,
+          "share": 0.0455
+        },
+        "previous_four_weeks": {
+          "count": 29,
+          "denominator": 477,
+          "share": 0.0608
+        },
+        "current_top8": {
+          "count": 5,
+          "denominator": 64,
+          "share": 0.0781
+        }
+      },
+      {
+        "archetype_id": "azorius-momo",
+        "display_name": "Azorius Momo",
+        "key_cards": [
+          {
+            "name": "Momo, Friendly Flier"
+          },
+          {
+            "name": "Quantum Riddler"
+          }
+        ],
+        "current": {
+          "count": 5,
+          "denominator": 121,
+          "share": 0.0413
+        },
+        "previous_week": {
+          "count": 5,
+          "denominator": 132,
+          "share": 0.0379
+        },
+        "previous_four_weeks": {
+          "count": 13,
+          "denominator": 477,
+          "share": 0.0273
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 64,
+          "share": 0.0469
+        }
+      },
+      {
+        "archetype_id": "izzet-fling",
+        "display_name": "Izzet Fling",
+        "key_cards": [
+          {
+            "name": "Callous Sell-Sword"
+          },
+          {
+            "name": "Wild Ride"
+          }
+        ],
+        "current": {
+          "count": 4,
+          "denominator": 121,
+          "share": 0.0331
+        },
+        "previous_week": {
+          "count": 1,
+          "denominator": 132,
+          "share": 0.0076
+        },
+        "previous_four_weeks": {
+          "count": 2,
+          "denominator": 477,
+          "share": 0.0042
+        },
+        "current_top8": {
+          "count": 1,
+          "denominator": 64,
+          "share": 0.0156
         }
       }
     ],
-    "week": "2026-W42"
+    "other_classified": {
+      "current": {
+        "count": 16,
+        "denominator": 121,
+        "share": 0.1322
+      },
+      "previous_week": {
+        "count": 27,
+        "denominator": 132,
+        "share": 0.2045
+      },
+      "previous_four_weeks": {
+        "count": 170,
+        "denominator": 477,
+        "share": 0.3564
+      },
+      "current_top8": {
+        "count": 5,
+        "denominator": 64,
+        "share": 0.0781
+      }
+    },
+    "unknown": {
+      "current": {
+        "count": 0,
+        "denominator": 121,
+        "share": 0.0
+      },
+      "previous_week": {
+        "count": 0,
+        "denominator": 132,
+        "share": 0.0
+      },
+      "previous_four_weeks": {
+        "count": 0,
+        "denominator": 477,
+        "share": 0.0
+      },
+      "current_top8": {
+        "count": 0,
+        "denominator": 64,
+        "share": 0.0
+      }
+    }
+  },
+  "weekly_summary": {
+    "week": "2026-W43",
+    "items": [
+      {
+        "order": 1,
+        "text": {
+          "zh": "本周有一场实体Magic Spotlight在美国哈特福德举办，吸引775人参加，最终由勇德神器牺牲席卷。洁斯凯神器虽然屈居亚军，但胜率大幅度领跑，达到了59.9%，所有主流对局中唯一数据劣势的是内战，因为平局太多。而亚军的牌表和一般轻混红，只带一张[[card:The Fire Crystal|火之水晶]]的不同，进红更深，还带了[[card:Solitary Cell|独囚牢房]]作为短解，还可以弃掉满编的[[card:The Mind Stone|心灵宝石]]：deck:5b41170c6e29924821b7",
+          "en": "This week, a tabletop Magic Spotlight took place in Hartford, USA, drawing 775 players, with Jund Artifact Sacrifice ultimately sweeping the event. Jeskai Artifacts finished second but led the field by a wide margin with a 59.9% win rate. Its only unfavorable matchup among the major archetypes was the mirror, owing to the large number of draws. Unlike the usual light red splash with just one [[card:The Fire Crystal|The Fire Crystal]], the runner-up’s list goes deeper into red and includes [[card:Solitary Cell|Solitary Cell]] as cheap removal, which can also discard copies of its full playset of [[card:The Mind Stone|The Mind Stone]]: deck:5b41170c6e29924821b7"
+        },
+        "deck_links": [
+          {
+            "order": 1,
+            "token": "deck:5b41170c6e29924821b7",
+            "label": {
+              "zh": "洁斯凯神器 · Talonflame23185 · 第2名",
+              "en": "Jeskai Artifacts · Talonflame23185 · Rank 2"
+            },
+            "deck": {
+              "archetype_id": "jeskai-artifacts",
+              "display_name": "Jeskai Artifacts",
+              "event_id": "440878",
+              "deck_id": "5b41170c6e29924821b7",
+              "deck_fingerprint_sha256": "6710bd899069c686a0a2418cbbd00e321843ffc0b7efc09b402617c37dca6daa",
+              "player": "Talonflame23185",
+              "final_rank": 2,
+              "starttime": "2026-10-24",
+              "source": "melee",
+              "event_name": "Magic Spotlight: Fracture - SCG CON Hartford - Saturday - 9:00 am",
+              "swiss_record": {
+                "wins": 12,
+                "losses": 1,
+                "draws": 2
+              }
+            }
+          }
+        ]
+      },
+      {
+        "order": 2,
+        "text": {
+          "zh": "另外一套胜率明显领先的就是蓝黑中速了，也达到56.5%。其他主流套牌中纯绿地落的表现也相对不错，meta占比最高，还能拿下53.0%胜率。详细数据统计和胜率矩阵可以在上方实体大赛标签中查看。",
+          "en": "Dimir Midrange was another clear leader in win rate, reaching 56.5%. Among the other major archetypes, Mono-Green Landfall also performed relatively well: it had the largest metagame share while still posting a 53.0% win rate. Detailed statistics and the matchup matrix are available in the Tabletop tab above."
+        },
+        "deck_links": []
+      },
+      {
+        "order": 3,
+        "text": {
+          "zh": "新科技方面，国人大师王昊天使用自己调整的铁木尔战呼人拿下12-3：deck:0c20228077791108a8ca。上一场奥兰多Spotlight他也操控战呼人获得非常好的成绩。整场比赛中两人使用战呼人，合计17-7，是使用人数超过1人的套牌中胜率最高的。只有1人使用的红白Token控，同样也是12-3,80%胜率。另外本周AC上也有人使用的格利极掘坟，还有更新构筑的蓝黑大眼，胜率也都不错。",
+          "en": "For new technology, Chinese standout Haotian Wang went 12–3 with his own take on Temur Battlecrier: deck:0c20228077791108a8ca. He also achieved an excellent result with Battlecrier at the previous Spotlight in Orlando. The two Battlecrier players at this event finished a combined 17–7, the highest win rate among archetypes played by more than one person. Boros Token Control, played by just one person, likewise finished 12–3 for an 80% win rate. Grixis Reanimator, which also appeared in this week’s AC, and an updated Dimir Oculus build both posted solid win rates as well."
+        },
+        "deck_links": [
+          {
+            "order": 1,
+            "token": "deck:0c20228077791108a8ca",
+            "label": {
+              "zh": "铁木尔战呼人 · Haotian Wang · 第12名",
+              "en": "Temur Battlecrier · Haotian Wang · Rank 12"
+            },
+            "deck": {
+              "archetype_id": "temur-battlecrier",
+              "display_name": "Temur Battlecrier",
+              "event_id": "440878",
+              "deck_id": "0c20228077791108a8ca",
+              "deck_fingerprint_sha256": "d46544fb135aa1474edd909075b015cc1c2baea39cd11219246f1be5faa92c32",
+              "player": "Haotian Wang",
+              "final_rank": 12,
+              "starttime": "2026-10-24",
+              "source": "melee",
+              "event_name": "Magic Spotlight: Fracture - SCG CON Hartford - Saturday - 9:00 am",
+              "swiss_record": {
+                "wins": 12,
+                "losses": 3,
+                "draws": 0
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "features": {
+    "week": "2026-W43",
+    "items": [
+      {
+        "category": "new_technology",
+        "order": 1,
+        "destination_id": "deck:5b41170c6e29924821b7",
+        "archetype_id": "jeskai-artifacts",
+        "subtype_id": null,
+        "display_name": "Jeskai Artifacts",
+        "deck": {
+          "event_id": "440878",
+          "deck_id": "5b41170c6e29924821b7",
+          "deck_fingerprint_sha256": "6710bd899069c686a0a2418cbbd00e321843ffc0b7efc09b402617c37dca6daa",
+          "player": "Talonflame23185",
+          "final_rank": 2,
+          "player_count": 781,
+          "starttime": "2026-10-24",
+          "main_deck": [
+            {
+              "name": "Braided Net // Braided Quipu",
+              "qty": 1
+            },
+            {
+              "name": "Castle Doom",
+              "qty": 4
+            },
+            {
+              "name": "Cryogen Relic",
+              "qty": 4
+            },
+            {
+              "name": "Deserted Beach",
+              "qty": 1
+            },
+            {
+              "name": "Floodfarm Verge",
+              "qty": 3
+            },
+            {
+              "name": "Fomori Vault",
+              "qty": 1
+            },
+            {
+              "name": "Hallowed Fountain",
+              "qty": 3
+            },
+            {
+              "name": "Island",
+              "qty": 1
+            },
+            {
+              "name": "Meticulous Archive",
+              "qty": 2
+            },
+            {
+              "name": "Perilous Snare",
+              "qty": 4
+            },
+            {
+              "name": "Pinnacle Starcage",
+              "qty": 3
+            },
+            {
+              "name": "Plains",
+              "qty": 1
+            },
+            {
+              "name": "Repurposing Bay",
+              "qty": 3
+            },
+            {
+              "name": "Sacred Foundry",
+              "qty": 2
+            },
+            {
+              "name": "Simulacrum Synthesizer",
+              "qty": 4
+            },
+            {
+              "name": "Solitary Cell",
+              "qty": 2
+            },
+            {
+              "name": "Spring-Loaded Sawblades // Bladewheel Chariot",
+              "qty": 1
+            },
+            {
+              "name": "Starting Town",
+              "qty": 3
+            },
+            {
+              "name": "Steam Vents",
+              "qty": 2
+            },
+            {
+              "name": "Sundown Pass",
+              "qty": 1
+            },
+            {
+              "name": "The Enigma Jewel // Locus of Enlightenment",
+              "qty": 2
+            },
+            {
+              "name": "The Fire Crystal",
+              "qty": 1
+            },
+            {
+              "name": "The Mind Stone",
+              "qty": 4
+            },
+            {
+              "name": "Torpor Orb",
+              "qty": 1
+            },
+            {
+              "name": "United Battlefront",
+              "qty": 4
+            },
+            {
+              "name": "Warmaker Gunship",
+              "qty": 1
+            },
+            {
+              "name": "White Auracite",
+              "qty": 1
+            }
+          ],
+          "side_deck": [
+            {
+              "name": "Braided Net // Braided Quipu",
+              "qty": 1
+            },
+            {
+              "name": "Chandra, Chill of Compliance",
+              "qty": 1
+            },
+            {
+              "name": "Day of Judgment",
+              "qty": 1
+            },
+            {
+              "name": "Erode",
+              "qty": 2
+            },
+            {
+              "name": "Negate",
+              "qty": 2
+            },
+            {
+              "name": "Rest in Peace",
+              "qty": 1
+            },
+            {
+              "name": "Seam Rip",
+              "qty": 2
+            },
+            {
+              "name": "Tony Stark // The Invincible Iron Man",
+              "qty": 1
+            },
+            {
+              "name": "Torpor Orb",
+              "qty": 2
+            },
+            {
+              "name": "Voice of Victory",
+              "qty": 2
+            }
+          ],
+          "source": "melee",
+          "event_name": "Magic Spotlight: Fracture - SCG CON Hartford - Saturday - 9:00 am",
+          "swiss_record": {
+            "wins": 12,
+            "losses": 1,
+            "draws": 2
+          }
+        },
+        "headline": {
+          "en": "Jeskai Artifacts",
+          "zh": "洁斯凯神器"
+        },
+        "positioning": {
+          "zh": "Spotlight亚军的版本",
+          "en": "The Spotlight runner-up’s version"
+        },
+        "featured_cards": [
+          {
+            "name": "Solitary Cell"
+          },
+          {
+            "name": "United Battlefront"
+          },
+          {
+            "name": "Simulacrum Synthesizer"
+          },
+          {
+            "name": "The Mind Stone"
+          }
+        ],
+        "supporting_facts": []
+      },
+      {
+        "category": "new_technology",
+        "order": 2,
+        "destination_id": "deck:0c20228077791108a8ca",
+        "archetype_id": "temur-battlecrier",
+        "subtype_id": null,
+        "display_name": "Temur Battlecrier",
+        "deck": {
+          "event_id": "440878",
+          "deck_id": "0c20228077791108a8ca",
+          "deck_fingerprint_sha256": "d46544fb135aa1474edd909075b015cc1c2baea39cd11219246f1be5faa92c32",
+          "player": "Haotian Wang",
+          "final_rank": 12,
+          "player_count": 781,
+          "starttime": "2026-10-24",
+          "main_deck": [
+            {
+              "name": "Botanical Sanctum",
+              "qty": 4
+            },
+            {
+              "name": "Breeding Pool",
+              "qty": 4
+            },
+            {
+              "name": "Devastating Onslaught",
+              "qty": 4
+            },
+            {
+              "name": "Forest",
+              "qty": 1
+            },
+            {
+              "name": "Heartwood Crafter // Soul Tether",
+              "qty": 2
+            },
+            {
+              "name": "Interdimensional Web Watch",
+              "qty": 4
+            },
+            {
+              "name": "Into the Flood Maw",
+              "qty": 1
+            },
+            {
+              "name": "Island",
+              "qty": 1
+            },
+            {
+              "name": "Llanowar Elves",
+              "qty": 4
+            },
+            {
+              "name": "Michelangelo's Technique",
+              "qty": 4
+            },
+            {
+              "name": "Multiversal Passage",
+              "qty": 1
+            },
+            {
+              "name": "Outcaster Trailblazer",
+              "qty": 4
+            },
+            {
+              "name": "Quantum Riddler",
+              "qty": 3
+            },
+            {
+              "name": "Smuggler's Surprise",
+              "qty": 1
+            },
+            {
+              "name": "Spell Snare",
+              "qty": 1
+            },
+            {
+              "name": "Spider Manifestation",
+              "qty": 4
+            },
+            {
+              "name": "Starting Town",
+              "qty": 4
+            },
+            {
+              "name": "Stomping Ground",
+              "qty": 4
+            },
+            {
+              "name": "Temur Battlecrier",
+              "qty": 4
+            },
+            {
+              "name": "Thor, God of Thunder",
+              "qty": 2
+            },
+            {
+              "name": "Thornspire Verge",
+              "qty": 2
+            },
+            {
+              "name": "Willowrush Verge",
+              "qty": 1
+            }
+          ],
+          "side_deck": [
+            {
+              "name": "Abrade",
+              "qty": 2
+            },
+            {
+              "name": "Disdainful Stroke",
+              "qty": 2
+            },
+            {
+              "name": "Enduring Curiosity",
+              "qty": 2
+            },
+            {
+              "name": "Fire Magic",
+              "qty": 1
+            },
+            {
+              "name": "Ghost Vacuum",
+              "qty": 1
+            },
+            {
+              "name": "Guerrilla Gorilla",
+              "qty": 1
+            },
+            {
+              "name": "Into the Flood Maw",
+              "qty": 1
+            },
+            {
+              "name": "Origin of Metalbending",
+              "qty": 1
+            },
+            {
+              "name": "Pawpatch Formation",
+              "qty": 1
+            },
+            {
+              "name": "Soul-Guide Lantern",
+              "qty": 1
+            },
+            {
+              "name": "Spell Snare",
+              "qty": 1
+            },
+            {
+              "name": "Surrak, Elusive Hunter",
+              "qty": 1
+            }
+          ],
+          "source": "melee",
+          "event_name": "Magic Spotlight: Fracture - SCG CON Hartford - Saturday - 9:00 am",
+          "swiss_record": {
+            "wins": 12,
+            "losses": 3,
+            "draws": 0
+          }
+        },
+        "headline": {
+          "en": "Temur Battlecrier",
+          "zh": "铁木尔战呼人"
+        },
+        "positioning": {
+          "zh": "加入FRA铁牌心材雕塑师",
+          "en": "Adds Heartwood Crafter, a common from FRA."
+        },
+        "featured_cards": [
+          {
+            "name": "Heartwood Crafter // Soul Tether"
+          },
+          {
+            "name": "Temur Battlecrier"
+          },
+          {
+            "name": "Interdimensional Web Watch"
+          },
+          {
+            "name": "Michelangelo's Technique"
+          }
+        ],
+        "supporting_facts": []
+      }
+    ]
+  },
+  "review_binding": {
+    "source_event_ids": [
+      "12856618",
+      "12856627",
+      "12856631",
+      "12856957",
+      "12856965",
+      "12856970",
+      "12856977",
+      "12856995"
+    ],
+    "classifier_digest": "470f1319a939c34da990e7623e017703ab4c16054a36be02bd3b74eef37848dc",
+    "visual_metadata_digest": "2caff2509cbe0cca27b98259db839c48ac4b4f82b08fb9c0878722b749db0709",
+    "machine_fact_digest": "c66aa107334ad7003c495a926a26e9d38222c40ff004d8f1d1ec5d7d54959997",
+    "pickup_document_digest": "de0eeae121a16c31f67180fee1272b89f99cef414662e79272617143b7c375ff",
+    "summary_fact_digest": "3955df6c3639c3d4c41fd233cd0f14db46958c6937210dcd55b9c09fa5eb28e4"
   }
 }

@@ -1,531 +1,67 @@
 {
+  "schema_version": "1.2.0",
+  "product": "mtgo-landing",
+  "format": "modern",
+  "source": "mtgo",
+  "week": {
+    "id": "2026-W43",
+    "start": "2026-10-19",
+    "end": "2026-10-25"
+  },
+  "state": "ready",
+  "source_event_ids": [
+    "12856621",
+    "12856622",
+    "12856628",
+    "12856630",
+    "12856886",
+    "12856958",
+    "12856968",
+    "12856973",
+    "12856974",
+    "12856979",
+    "12856984",
+    "12857053"
+  ],
   "classifier": {
-    "digest": "9efbc98cb9bfce9d339d003d17aacff4e0ad13463f6f944c0ac9ff7286b26b3d"
+    "digest": "96f52183dc96d5609a148c400e29264972176ef2448f210625f91abfb9200b84"
   },
   "comparison": {
     "available": true,
     "unavailable_reason": null
   },
-  "data_files": {
-    "completeness": "weeks/2026-W42/completeness.json",
-    "environment_decks": "weeks/2026-W42/environment_decks.json",
-    "feature_decks": "weeks/2026-W42/feature_decks.json",
-    "range": "weeks/2026-W42/range.json"
+  "thresholds": {
+    "environment_share": 0.03,
+    "share_move_pp": 5.0,
+    "exit_reference_share": 0.05,
+    "build_shift": 20,
+    "build_reference_minimum": 8
   },
-  "environment": {
-    "other_classified": {
-      "current": {
-        "count": 75,
-        "denominator": 232,
-        "share": 0.3233
-      },
-      "current_top8": {
-        "count": 35,
-        "denominator": 104,
-        "share": 0.3365
-      },
-      "previous_four_weeks": {
-        "count": 655,
-        "denominator": 1385,
-        "share": 0.4729
-      },
-      "previous_week": {
-        "count": 117,
-        "denominator": 259,
-        "share": 0.4517
-      }
-    },
-    "rows": [
-      {
-        "archetype_id": "rakdos-delirium",
-        "current": {
-          "count": 37,
-          "denominator": 232,
-          "share": 0.1595
-        },
-        "current_top8": {
-          "count": 19,
-          "denominator": 104,
-          "share": 0.1827
-        },
-        "display_name": "Rakdos Delirium",
-        "key_cards": [
-          {
-            "name": "Dark Matter Manipulator"
-          },
-          {
-            "name": "Detective's Phoenix"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 33,
-          "denominator": 1385,
-          "share": 0.0238
-        },
-        "previous_week": {
-          "count": 24,
-          "denominator": 259,
-          "share": 0.0927
-        }
-      },
-      {
-        "archetype_id": "broodscale-combo",
-        "current": {
-          "count": 28,
-          "denominator": 232,
-          "share": 0.1207
-        },
-        "current_top8": {
-          "count": 12,
-          "denominator": 104,
-          "share": 0.1154
-        },
-        "display_name": "Broodscale Combo",
-        "key_cards": [
-          {
-            "name": "Basking Broodscale"
-          },
-          {
-            "name": "Blade of the Bloodchief"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 262,
-          "denominator": 1385,
-          "share": 0.1892
-        },
-        "previous_week": {
-          "count": 35,
-          "denominator": 259,
-          "share": 0.1351
-        }
-      },
-      {
-        "archetype_id": "affinity",
-        "current": {
-          "count": 17,
-          "denominator": 232,
-          "share": 0.0733
-        },
-        "current_top8": {
-          "count": 7,
-          "denominator": 104,
-          "share": 0.0673
-        },
-        "display_name": "Affinity",
-        "key_cards": [
-          {
-            "name": "Mox Opal"
-          },
-          {
-            "name": "Kappa Cannoneer"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 83,
-          "denominator": 1385,
-          "share": 0.0599
-        },
-        "previous_week": {
-          "count": 16,
-          "denominator": 259,
-          "share": 0.0618
-        }
-      },
-      {
-        "archetype_id": "prowess",
-        "current": {
-          "count": 16,
-          "denominator": 232,
-          "share": 0.069
-        },
-        "current_top8": {
-          "count": 8,
-          "denominator": 104,
-          "share": 0.0769
-        },
-        "display_name": "Prowess",
-        "key_cards": [
-          {
-            "name": "Cori-Steel Cutter"
-          },
-          {
-            "name": "Dragon's Rage Channeler"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 143,
-          "denominator": 1385,
-          "share": 0.1032
-        },
-        "previous_week": {
-          "count": 24,
-          "denominator": 259,
-          "share": 0.0927
-        }
-      },
-      {
-        "archetype_id": "boros-energy",
-        "current": {
-          "count": 15,
-          "denominator": 232,
-          "share": 0.0647
-        },
-        "current_top8": {
-          "count": 5,
-          "denominator": 104,
-          "share": 0.0481
-        },
-        "display_name": "Boros Energy",
-        "key_cards": [
-          {
-            "name": "Guide of Souls"
-          },
-          {
-            "name": "Ocelot Pride"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 51,
-          "denominator": 1385,
-          "share": 0.0368
-        },
-        "previous_week": {
-          "count": 8,
-          "denominator": 259,
-          "share": 0.0309
-        }
-      },
-      {
-        "archetype_id": "chant-control",
-        "current": {
-          "count": 13,
-          "denominator": 232,
-          "share": 0.056
-        },
-        "current_top8": {
-          "count": 5,
-          "denominator": 104,
-          "share": 0.0481
-        },
-        "display_name": "Chant Control",
-        "key_cards": [
-          {
-            "name": "Orim's Chant"
-          },
-          {
-            "name": "Isochron Scepter"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 40,
-          "denominator": 1385,
-          "share": 0.0289
-        },
-        "previous_week": {
-          "count": 8,
-          "denominator": 259,
-          "share": 0.0309
-        }
-      },
-      {
-        "archetype_id": "domain-zoo",
-        "current": {
-          "count": 12,
-          "denominator": 232,
-          "share": 0.0517
-        },
-        "current_top8": {
-          "count": 5,
-          "denominator": 104,
-          "share": 0.0481
-        },
-        "display_name": "Domain Zoo",
-        "key_cards": [
-          {
-            "name": "Scion of Draco"
-          },
-          {
-            "name": "Leyline of the Guildpact"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 48,
-          "denominator": 1385,
-          "share": 0.0347
-        },
-        "previous_week": {
-          "count": 13,
-          "denominator": 259,
-          "share": 0.0502
-        }
-      },
-      {
-        "archetype_id": "eldrazi-tron",
-        "current": {
-          "count": 12,
-          "denominator": 232,
-          "share": 0.0517
-        },
-        "current_top8": {
-          "count": 5,
-          "denominator": 104,
-          "share": 0.0481
-        },
-        "display_name": "Eldrazi Tron",
-        "key_cards": [
-          {
-            "name": "Urza's Tower"
-          },
-          {
-            "name": "Karn, the Great Creator"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 61,
-          "denominator": 1385,
-          "share": 0.044
-        },
-        "previous_week": {
-          "count": 14,
-          "denominator": 259,
-          "share": 0.0541
-        }
-      },
-      {
-        "archetype_id": "burn",
-        "current": {
-          "count": 7,
-          "denominator": 232,
-          "share": 0.0302
-        },
-        "current_top8": {
-          "count": 3,
-          "denominator": 104,
-          "share": 0.0288
-        },
-        "display_name": "Burn",
-        "key_cards": [
-          {
-            "name": "Lava Spike"
-          },
-          {
-            "name": "Boltwave"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 9,
-          "denominator": 1385,
-          "share": 0.0065
-        },
-        "previous_week": {
-          "count": 0,
-          "denominator": 259,
-          "share": 0.0
-        }
-      }
-    ],
-    "threshold": 0.03,
-    "unknown": {
-      "current": {
-        "count": 0,
-        "denominator": 232,
-        "share": 0.0
-      },
-      "current_top8": {
-        "count": 0,
-        "denominator": 104,
-        "share": 0.0
-      },
-      "previous_four_weeks": {
-        "count": 0,
-        "denominator": 1385,
-        "share": 0.0
-      },
-      "previous_week": {
-        "count": 0,
-        "denominator": 259,
-        "share": 0.0
-      }
-    }
-  },
-  "features": {
-    "items": [
-      {
-        "archetype_id": "darklight-phoenix",
-        "category": "new_deck",
-        "deck": {
-          "deck_fingerprint_sha256": "8f0ee9788d6c0d26948a50709e47baa5327e564b98768d2bf854c2d20c503ae1",
-          "deck_id": "dbd7ca0c81139b07666e",
-          "event_id": "12856761",
-          "final_rank": 5,
-          "main_deck": [
-            {
-              "name": "Accursed Marauder",
-              "qty": 1
-            },
-            {
-              "name": "Bloodghast",
-              "qty": 3
-            },
-            {
-              "name": "Bone Shards",
-              "qty": 1
-            },
-            {
-              "name": "Buried Alive",
-              "qty": 4
-            },
-            {
-              "name": "Darklight Phoenix",
-              "qty": 4
-            },
-            {
-              "name": "Eyetwitch",
-              "qty": 4
-            },
-            {
-              "name": "Flare of Malice",
-              "qty": 4
-            },
-            {
-              "name": "Greedy Freebooter",
-              "qty": 4
-            },
-            {
-              "name": "Malevolent Rumble",
-              "qty": 4
-            },
-            {
-              "name": "Overgrown Tomb",
-              "qty": 3
-            },
-            {
-              "name": "Phyrexian Tower",
-              "qty": 4
-            },
-            {
-              "name": "Polluted Delta",
-              "qty": 4
-            },
-            {
-              "name": "Shambling Ghast",
-              "qty": 2
-            },
-            {
-              "name": "Spymaster's Vault",
-              "qty": 3
-            },
-            {
-              "name": "Stitcher's Supplier",
-              "qty": 4
-            },
-            {
-              "name": "Swamp",
-              "qty": 2
-            },
-            {
-              "name": "Thoughtseize",
-              "qty": 4
-            },
-            {
-              "name": "Underground Mortuary",
-              "qty": 1
-            },
-            {
-              "name": "Verdant Catacombs",
-              "qty": 4
-            }
-          ],
-          "player": "Wiltron92",
-          "player_count": 51,
-          "side_deck": [
-            {
-              "name": "Break the Ice",
-              "qty": 2
-            },
-            {
-              "name": "Culling Ritual",
-              "qty": 3
-            },
-            {
-              "name": "Decorum Dissertation",
-              "qty": 1
-            },
-            {
-              "name": "Origin of Metalbending",
-              "qty": 1
-            },
-            {
-              "name": "Ozai's Cruelty",
-              "qty": 1
-            },
-            {
-              "name": "Phoenix Fleet Airship",
-              "qty": 3
-            },
-            {
-              "name": "Ruinous Waterbending",
-              "qty": 1
-            },
-            {
-              "name": "Surgical Extraction",
-              "qty": 1
-            },
-            {
-              "name": "Tormod's Crypt",
-              "qty": 1
-            },
-            {
-              "name": "Witherbloom Charm",
-              "qty": 1
-            }
-          ],
-          "starttime": "2026-10-16 16:15:00.0"
-        },
-        "destination_id": "deck:dbd7ca0c81139b07666e",
-        "display_name": "Golgari Darklight Phoenix",
-        "featured_cards": [
-          {
-            "name": "Darklight Phoenix"
-          },
-          {
-            "name": "Buried Alive"
-          },
-          {
-            "name": "Phyrexian Tower"
-          },
-          {
-            "name": "Stitcher's Supplier"
-          }
-        ],
-        "headline": {
-          "en": "Golgari Darklight Phoenix",
-          "zh": "黑绿暗光凤凰"
-        },
-        "order": 1,
-        "positioning": {
-          "en": "A Buried Alive build of Darklight Phoenix.",
-          "zh": "活埋版本的暗光凤凰套牌"
-        },
-        "subtype_id": "golgari",
-        "supporting_facts": [
-          {
-            "type": "new_archetype",
-            "values": {
-              "prior_record_count_under_current_classifier": 1
-            }
-          }
-        ]
-      }
-    ],
-    "week": "2026-W42"
-  },
-  "format": "modern",
   "populations": {
     "current": {
+      "start": "2026-10-19",
+      "end": "2026-10-25",
+      "event_ids": [
+        "12856621",
+        "12856622",
+        "12856628",
+        "12856630",
+        "12856886",
+        "12856958",
+        "12856968",
+        "12856973",
+        "12856974",
+        "12856979",
+        "12856984",
+        "12857053"
+      ],
+      "event_count": 12,
+      "high_score_count": 237,
+      "top8_count": 96
+    },
+    "previous_week": {
+      "start": "2026-10-12",
       "end": "2026-10-18",
-      "event_count": 13,
       "event_ids": [
         "12856194",
         "12856195",
@@ -541,28 +77,14 @@
         "12856761",
         "12856762"
       ],
+      "event_count": 13,
       "high_score_count": 232,
-      "start": "2026-10-12",
       "top8_count": 104
     },
     "previous_four_weeks": {
-      "end": "2026-10-11",
-      "event_count": 53,
+      "start": "2026-09-21",
+      "end": "2026-10-18",
       "event_ids": [
-        "12854101",
-        "12854108",
-        "12854109",
-        "12854115",
-        "12854117",
-        "12854120",
-        "12854476",
-        "12854484",
-        "12854494",
-        "12854499",
-        "12854500",
-        "12854505",
-        "12854510",
-        "12854515",
         "12854523",
         "12854525",
         "12854532",
@@ -599,135 +121,746 @@
         "12855518",
         "12856163",
         "12856172",
+        "12856194",
+        "12856195",
+        "12856203",
         "12856334",
         "12856335",
-        "12856339"
+        "12856339",
+        "12856487",
+        "12856566",
+        "12856574",
+        "12856590",
+        "12856594",
+        "12856599",
+        "12856647",
+        "12856678",
+        "12856761",
+        "12856762"
       ],
-      "high_score_count": 1385,
-      "start": "2026-09-14",
-      "top8_count": 424
-    },
-    "previous_week": {
-      "end": "2026-10-11",
-      "event_count": 12,
-      "event_ids": [
-        "12855498",
-        "12855500",
-        "12855507",
-        "12855508",
-        "12855513",
-        "12855515",
-        "12855518",
-        "12856163",
-        "12856172",
-        "12856334",
-        "12856335",
-        "12856339"
-      ],
-      "high_score_count": 259,
-      "start": "2026-10-05",
-      "top8_count": 96
+      "event_count": 52,
+      "high_score_count": 1229,
+      "top8_count": 416
     }
   },
-  "product": "mtgo-landing",
-  "review_binding": {
-    "classifier_digest": "9efbc98cb9bfce9d339d003d17aacff4e0ad13463f6f944c0ac9ff7286b26b3d",
-    "machine_fact_digest": "67e7e94bcdc870ab4a7c12631926ea6827ef1017c92dcefc5b3e2f106948cde0",
-    "pickup_document_digest": "2186196aea477db9208f8d3b37c68c1aff5a2dc8d905778f9a8b4016aed2840e",
-    "source_event_ids": [
-      "12856194",
-      "12856195",
-      "12856203",
-      "12856487",
-      "12856566",
-      "12856574",
-      "12856590",
-      "12856594",
-      "12856599",
-      "12856647",
-      "12856678",
-      "12856761",
-      "12856762"
-    ],
-    "summary_fact_digest": "3ca3a83d593f5d93451309114611a1bbc06086e7c37ad673d1fda8a2534841ce",
-    "visual_metadata_digest": "51bcf48175871e0e6cb76f18104151a4b7987650e517a009d3ca6c775fb68288"
-  },
-  "schema_version": "1.2.0",
-  "source": "mtgo",
-  "source_event_ids": [
-    "12856194",
-    "12856195",
-    "12856203",
-    "12856487",
-    "12856566",
-    "12856574",
-    "12856590",
-    "12856594",
-    "12856599",
-    "12856647",
-    "12856678",
-    "12856761",
-    "12856762"
-  ],
-  "state": "ready",
-  "thresholds": {
-    "build_reference_minimum": 8,
-    "build_shift": 20,
-    "environment_share": 0.03,
-    "exit_reference_share": 0.05,
-    "share_move_pp": 5.0
-  },
-  "week": {
-    "end": "2026-10-18",
-    "id": "2026-W42",
-    "start": "2026-10-12"
-  },
-  "weekly_summary": {
-    "items": [
+  "environment": {
+    "threshold": 0.03,
+    "rows": [
       {
-        "deck_links": [],
-        "order": 1,
-        "text": {
-          "en": "Rakdos Delirium continued its strong performance this week, leading MTGO in both high-score and Top 8 shares and posting a win rate of nearly 60% at the Southeast Asia Regional Championship.",
-          "zh": "本周红黑躁狂继续出色表现，MO高分、八强占比双双登顶，在东南亚RC上更是拿下接近60%的胜率。"
-        }
-      },
-      {
-        "deck_links": [],
-        "order": 2,
-        "text": {
-          "en": "MTGO also hosted a major event this week. With 286 players, the Showcase Challenge drew an even larger field than the Southeast Asia Regional Championship, and Jeskai Energy swept the event. The other three semifinal slots all went to Prowess, with each list splashing for artifact and enchantment removal.",
-          "zh": "MO上本周也有一场大赛，比东南亚RC人数还多，Showcase挑战赛吸引了286人参加，最终由洁斯凯能量席卷。但四强另外三个席位都是灵技，还都是混色带神器结界解的版本。"
-        }
-      },
-      {
-        "deck_links": [
+        "archetype_id": "broodscale-combo",
+        "display_name": "Broodscale Combo",
+        "key_cards": [
           {
-            "deck": {
-              "archetype_id": "darklight-phoenix",
-              "deck_fingerprint_sha256": "8f0ee9788d6c0d26948a50709e47baa5327e564b98768d2bf854c2d20c503ae1",
-              "deck_id": "dbd7ca0c81139b07666e",
-              "display_name": "Golgari Darklight Phoenix",
-              "event_id": "12856761",
-              "final_rank": 5,
-              "player": "Wiltron92",
-              "starttime": "2026-10-16 16:15:00.0"
-            },
-            "label": {
-              "en": "Golgari Darklight Phoenix · Wiltron92 · Rank 5",
-              "zh": "黑绿暗光凤凰 · Wiltron92 · 第5名"
-            },
-            "order": 1,
-            "token": "deck:dbd7ca0c81139b07666e"
+            "name": "Basking Broodscale"
+          },
+          {
+            "name": "Blade of the Bloodchief"
           }
         ],
-        "order": 3,
-        "text": {
-          "en": "Darklight Vengevine, which performed well at last week's Regional Championships, barely registered on MTGO this week. This Golgari Darklight Phoenix list, however, finally earned the archetype its first MTGO Challenge Top 8. It uses the [[card:Buried Alive|Buried Alive]] approach that was developed when the archetype first emerged: deck:dbd7ca0c81139b07666e",
-          "zh": "上周RC上表现出色的暗光藤蔓套牌本周在MO上基本没有存在感，而这套黑绿暗光凤凰终于是为暗光凤凰套牌拿下了MO第一个挑战赛八强。思路是最开始就被开发出来的[[card:Buried Alive|活埋]]版本：deck:dbd7ca0c81139b07666e"
+        "current": {
+          "count": 37,
+          "denominator": 237,
+          "share": 0.1561
+        },
+        "previous_week": {
+          "count": 28,
+          "denominator": 232,
+          "share": 0.1207
+        },
+        "previous_four_weeks": {
+          "count": 222,
+          "denominator": 1229,
+          "share": 0.1806
+        },
+        "current_top8": {
+          "count": 23,
+          "denominator": 96,
+          "share": 0.2396
+        }
+      },
+      {
+        "archetype_id": "rakdos-delirium",
+        "display_name": "Rakdos Delirium",
+        "key_cards": [
+          {
+            "name": "Dark Matter Manipulator"
+          },
+          {
+            "name": "Detective's Phoenix"
+          }
+        ],
+        "current": {
+          "count": 37,
+          "denominator": 237,
+          "share": 0.1561
+        },
+        "previous_week": {
+          "count": 37,
+          "denominator": 232,
+          "share": 0.1595
+        },
+        "previous_four_weeks": {
+          "count": 69,
+          "denominator": 1229,
+          "share": 0.0561
+        },
+        "current_top8": {
+          "count": 15,
+          "denominator": 96,
+          "share": 0.1562
+        }
+      },
+      {
+        "archetype_id": "affinity",
+        "display_name": "Affinity",
+        "key_cards": [
+          {
+            "name": "Mox Opal"
+          },
+          {
+            "name": "Kappa Cannoneer"
+          }
+        ],
+        "current": {
+          "count": 24,
+          "denominator": 237,
+          "share": 0.1013
+        },
+        "previous_week": {
+          "count": 17,
+          "denominator": 232,
+          "share": 0.0733
+        },
+        "previous_four_weeks": {
+          "count": 78,
+          "denominator": 1229,
+          "share": 0.0635
+        },
+        "current_top8": {
+          "count": 9,
+          "denominator": 96,
+          "share": 0.0938
+        }
+      },
+      {
+        "archetype_id": "chant-control",
+        "display_name": "Chant Control",
+        "key_cards": [
+          {
+            "name": "Orim's Chant"
+          },
+          {
+            "name": "Isochron Scepter"
+          }
+        ],
+        "current": {
+          "count": 15,
+          "denominator": 237,
+          "share": 0.0633
+        },
+        "previous_week": {
+          "count": 13,
+          "denominator": 232,
+          "share": 0.056
+        },
+        "previous_four_weeks": {
+          "count": 49,
+          "denominator": 1229,
+          "share": 0.0399
+        },
+        "current_top8": {
+          "count": 9,
+          "denominator": 96,
+          "share": 0.0938
+        }
+      },
+      {
+        "archetype_id": "domain-zoo",
+        "display_name": "Domain Zoo",
+        "key_cards": [
+          {
+            "name": "Scion of Draco"
+          },
+          {
+            "name": "Leyline of the Guildpact"
+          }
+        ],
+        "current": {
+          "count": 15,
+          "denominator": 237,
+          "share": 0.0633
+        },
+        "previous_week": {
+          "count": 12,
+          "denominator": 232,
+          "share": 0.0517
+        },
+        "previous_four_weeks": {
+          "count": 57,
+          "denominator": 1229,
+          "share": 0.0464
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 96,
+          "share": 0.0417
+        }
+      },
+      {
+        "archetype_id": "boros-energy",
+        "display_name": "Boros Energy",
+        "key_cards": [
+          {
+            "name": "Guide of Souls"
+          },
+          {
+            "name": "Ocelot Pride"
+          }
+        ],
+        "current": {
+          "count": 11,
+          "denominator": 237,
+          "share": 0.0464
+        },
+        "previous_week": {
+          "count": 15,
+          "denominator": 232,
+          "share": 0.0647
+        },
+        "previous_four_weeks": {
+          "count": 53,
+          "denominator": 1229,
+          "share": 0.0431
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 96,
+          "share": 0.0417
+        }
+      },
+      {
+        "archetype_id": "dimir-tempo",
+        "display_name": "Dimir Tempo",
+        "key_cards": [
+          {
+            "name": "Psychic Frog"
+          },
+          {
+            "name": "Counterspell"
+          }
+        ],
+        "current": {
+          "count": 9,
+          "denominator": 237,
+          "share": 0.038
+        },
+        "previous_week": {
+          "count": 2,
+          "denominator": 232,
+          "share": 0.0086
+        },
+        "previous_four_weeks": {
+          "count": 21,
+          "denominator": 1229,
+          "share": 0.0171
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 96,
+          "share": 0.0312
         }
       }
     ],
-    "week": "2026-W42"
+    "other_classified": {
+      "current": {
+        "count": 89,
+        "denominator": 237,
+        "share": 0.3755
+      },
+      "previous_week": {
+        "count": 108,
+        "denominator": 232,
+        "share": 0.4655
+      },
+      "previous_four_weeks": {
+        "count": 680,
+        "denominator": 1229,
+        "share": 0.5533
+      },
+      "current_top8": {
+        "count": 29,
+        "denominator": 96,
+        "share": 0.3021
+      }
+    },
+    "unknown": {
+      "current": {
+        "count": 0,
+        "denominator": 237,
+        "share": 0.0
+      },
+      "previous_week": {
+        "count": 0,
+        "denominator": 232,
+        "share": 0.0
+      },
+      "previous_four_weeks": {
+        "count": 0,
+        "denominator": 1229,
+        "share": 0.0
+      },
+      "current_top8": {
+        "count": 0,
+        "denominator": 96,
+        "share": 0.0
+      }
+    }
+  },
+  "weekly_summary": {
+    "week": "2026-W43",
+    "items": [
+      {
+        "order": 1,
+        "text": {
+          "zh": "本周最后两场RC落下帷幕。南美404人参加由红白能量席卷，澳新233人由蓝白吟颂席卷。之前成为禁牌众矢之的的孳巢蜥表现相对一般，而前两周开始一直表现坚挺的红黑躁狂持续发挥。详细数据统计和胜率矩阵可以在上方实体大赛标签中查看。",
+          "en": "The final two Regional Championships concluded this week. In South America, Boros Energy swept a 404-player event, while Azorius Chant took the title in the 233-player Australia and New Zealand event. [[card:Basking Broodscale|Basking Broodscale]], previously the focus of calls for a ban, had a relatively modest showing. Rakdos Delirium, which has remained strong over the past two weeks, continued to perform well. Detailed statistics and the matchup matrix are available in the Tabletop tab above."
+        },
+        "deck_links": []
+      },
+      {
+        "order": 2,
+        "text": {
+          "zh": "MO上有一些新科技，都是绿Ramp牌：一套泰坦树冠Ramp本周拿下四强：deck:6251f171c1c49cd8a83e。结合了Ramp出泰坦和奥札奇体系，满编[[card:Kozilek's Command|寇基雷的指命]]。",
+          "en": "There is some new technology on Magic Online, all in green ramp decks. A Titan Canopy Ramp list reached the Top 4 this week: deck:6251f171c1c49cd8a83e. It combines ramping into Titan with the Eldrazi package and runs a full playset of [[card:Kozilek's Command|Kozilek's Command]]."
+        },
+        "deck_links": [
+          {
+            "order": 1,
+            "token": "deck:6251f171c1c49cd8a83e",
+            "label": {
+              "zh": "泰坦树冠Ramp · Zoza · 第4名",
+              "en": "Titan Canopy Ramp · Zoza · Rank 4"
+            },
+            "deck": {
+              "archetype_id": "titan-canopy-ramp",
+              "display_name": "Titan Canopy Ramp",
+              "event_id": "12856973",
+              "deck_id": "6251f171c1c49cd8a83e",
+              "deck_fingerprint_sha256": "38e9f9567d468622dcbd5b6d985616f7ff511d2eabd6cafce532465cc742b58d",
+              "player": "Zoza",
+              "final_rank": 4,
+              "starttime": "2026-10-24 01:00:00.0"
+            }
+          }
+        ]
+      },
+      {
+        "order": 3,
+        "text": {
+          "zh": "另外用[[card:Mine Collapse|矿井塌方]]配合[[card:Hexhaven Invigorator|赫克海文茁茂兽]]的[[card:Valakut, the Molten Pinnacle|熔天顶瓦拉库]]套牌，本周也终于拿下挑战赛八强：deck:fcd13e84caf0c7af79a9",
+          "en": "A [[card:Valakut, the Molten Pinnacle|Valakut, the Molten Pinnacle]] deck pairing [[card:Mine Collapse|Mine Collapse]] with [[card:Hexhaven Invigorator|Hexhaven Invigorator]] also finally made a Challenge Top 8 this week: deck:fcd13e84caf0c7af79a9"
+        },
+        "deck_links": [
+          {
+            "order": 1,
+            "token": "deck:fcd13e84caf0c7af79a9",
+            "label": {
+              "zh": "茁茂兽瓦拉库 · kanister · 第5名",
+              "en": "Invigorator Valakut · kanister · Rank 5"
+            },
+            "deck": {
+              "archetype_id": "invigorator-scapeshift",
+              "display_name": "Invigorator Valakut",
+              "event_id": "12856622",
+              "deck_id": "fcd13e84caf0c7af79a9",
+              "deck_fingerprint_sha256": "227c8b3e459f04e739ec6ffa5adb4d3d367d9e26d18fe065f22a4f9059a3c847",
+              "player": "kanister",
+              "final_rank": 5,
+              "starttime": "2026-10-20 08:00:00.0"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "features": {
+    "week": "2026-W43",
+    "items": [
+      {
+        "category": "new_deck",
+        "order": 1,
+        "destination_id": "deck:6251f171c1c49cd8a83e",
+        "archetype_id": "titan-canopy-ramp",
+        "subtype_id": null,
+        "display_name": "Titan Canopy Ramp",
+        "deck": {
+          "event_id": "12856973",
+          "deck_id": "6251f171c1c49cd8a83e",
+          "deck_fingerprint_sha256": "38e9f9567d468622dcbd5b6d985616f7ff511d2eabd6cafce532465cc742b58d",
+          "player": "Zoza",
+          "final_rank": 4,
+          "player_count": 44,
+          "starttime": "2026-10-24 01:00:00.0",
+          "main_deck": [
+            {
+              "name": "Arid Archway",
+              "qty": 1
+            },
+            {
+              "name": "Badgermole Cub",
+              "qty": 4
+            },
+            {
+              "name": "Boseiju, Who Endures",
+              "qty": 1
+            },
+            {
+              "name": "Castle Garenbrig",
+              "qty": 1
+            },
+            {
+              "name": "Delighted Halfling",
+              "qty": 4
+            },
+            {
+              "name": "Dryad Arbor",
+              "qty": 2
+            },
+            {
+              "name": "Eldrazi Temple",
+              "qty": 4
+            },
+            {
+              "name": "Endurance",
+              "qty": 1
+            },
+            {
+              "name": "Forest",
+              "qty": 4
+            },
+            {
+              "name": "Green Sun's Zenith",
+              "qty": 4
+            },
+            {
+              "name": "Hall of the Bandit Lord",
+              "qty": 1
+            },
+            {
+              "name": "Icetill Explorer",
+              "qty": 1
+            },
+            {
+              "name": "Kozilek's Command",
+              "qty": 4
+            },
+            {
+              "name": "Malevolent Rumble",
+              "qty": 4
+            },
+            {
+              "name": "Misty Rainforest",
+              "qty": 3
+            },
+            {
+              "name": "Ouroboroid",
+              "qty": 1
+            },
+            {
+              "name": "Primeval Titan",
+              "qty": 4
+            },
+            {
+              "name": "Roiling Canopy",
+              "qty": 4
+            },
+            {
+              "name": "Shifting Woodland",
+              "qty": 1
+            },
+            {
+              "name": "Sowing Mycospawn",
+              "qty": 4
+            },
+            {
+              "name": "Summoner's Pact",
+              "qty": 3
+            },
+            {
+              "name": "Treetop Village",
+              "qty": 1
+            },
+            {
+              "name": "Yavimaya, Cradle of Growth",
+              "qty": 3
+            }
+          ],
+          "side_deck": [
+            {
+              "name": "Bojuka Bog",
+              "qty": 1
+            },
+            {
+              "name": "Chalice of the Void",
+              "qty": 3
+            },
+            {
+              "name": "Choke",
+              "qty": 1
+            },
+            {
+              "name": "Chomping Changeling",
+              "qty": 1
+            },
+            {
+              "name": "Collector Ouphe",
+              "qty": 1
+            },
+            {
+              "name": "Disruptor Flute",
+              "qty": 2
+            },
+            {
+              "name": "Endurance",
+              "qty": 3
+            },
+            {
+              "name": "Fade from History",
+              "qty": 2
+            },
+            {
+              "name": "Trinisphere",
+              "qty": 1
+            }
+          ]
+        },
+        "headline": {
+          "en": "Titan Canopy Ramp",
+          "zh": "泰坦树冠Ramp"
+        },
+        "positioning": {
+          "zh": "奥札奇寇基雷的指命体系结合Ramp泰坦+树冠",
+          "en": "An Eldrazi shell built around Kozilek's Command meets Titan-plus-Canopy ramp."
+        },
+        "featured_cards": [
+          {
+            "name": "Roiling Canopy"
+          },
+          {
+            "name": "Primeval Titan"
+          },
+          {
+            "name": "Kozilek's Command"
+          },
+          {
+            "name": "Sowing Mycospawn"
+          }
+        ],
+        "supporting_facts": [
+          {
+            "type": "new_archetype",
+            "values": {
+              "prior_record_count_under_current_classifier": 0
+            }
+          }
+        ]
+      },
+      {
+        "category": "new_deck",
+        "order": 2,
+        "destination_id": "deck:fcd13e84caf0c7af79a9",
+        "archetype_id": "invigorator-scapeshift",
+        "subtype_id": null,
+        "display_name": "Invigorator Valakut",
+        "deck": {
+          "event_id": "12856622",
+          "deck_id": "fcd13e84caf0c7af79a9",
+          "deck_fingerprint_sha256": "227c8b3e459f04e739ec6ffa5adb4d3d367d9e26d18fe065f22a4f9059a3c847",
+          "player": "kanister",
+          "final_rank": 5,
+          "player_count": 27,
+          "starttime": "2026-10-20 08:00:00.0",
+          "main_deck": [
+            {
+              "name": "Arboreal Grazer",
+              "qty": 4
+            },
+            {
+              "name": "Boseiju, Who Endures",
+              "qty": 1
+            },
+            {
+              "name": "Commercial District",
+              "qty": 4
+            },
+            {
+              "name": "Dryad Arbor",
+              "qty": 1
+            },
+            {
+              "name": "Dryad of the Ilysian Grove",
+              "qty": 1
+            },
+            {
+              "name": "Explore",
+              "qty": 4
+            },
+            {
+              "name": "Forest",
+              "qty": 2
+            },
+            {
+              "name": "Green Sun's Zenith",
+              "qty": 4
+            },
+            {
+              "name": "Hexhaven Invigorator",
+              "qty": 4
+            },
+            {
+              "name": "Icetill Explorer",
+              "qty": 1
+            },
+            {
+              "name": "Lightning Bolt",
+              "qty": 4
+            },
+            {
+              "name": "Mine Collapse",
+              "qty": 4
+            },
+            {
+              "name": "Misty Rainforest",
+              "qty": 4
+            },
+            {
+              "name": "Mountain",
+              "qty": 2
+            },
+            {
+              "name": "Primeval Titan",
+              "qty": 1
+            },
+            {
+              "name": "Sakura-Tribe Elder",
+              "qty": 1
+            },
+            {
+              "name": "Scalding Tarn",
+              "qty": 2
+            },
+            {
+              "name": "Sheltered Thicket",
+              "qty": 1
+            },
+            {
+              "name": "Stomping Ground",
+              "qty": 4
+            },
+            {
+              "name": "Valakut, the Molten Pinnacle",
+              "qty": 3
+            },
+            {
+              "name": "Wooded Foothills",
+              "qty": 4
+            },
+            {
+              "name": "Wrenn and Six",
+              "qty": 4
+            }
+          ],
+          "side_deck": [
+            {
+              "name": "Boseiju, Who Endures",
+              "qty": 1
+            },
+            {
+              "name": "Disruptor Flute",
+              "qty": 2
+            },
+            {
+              "name": "Endurance",
+              "qty": 2
+            },
+            {
+              "name": "Force of Vigor",
+              "qty": 2
+            },
+            {
+              "name": "Guerrilla Gorilla",
+              "qty": 1
+            },
+            {
+              "name": "Tireless Tracker",
+              "qty": 1
+            },
+            {
+              "name": "Torpor Orb",
+              "qty": 2
+            },
+            {
+              "name": "Trinisphere",
+              "qty": 2
+            },
+            {
+              "name": "Vexing Bauble",
+              "qty": 2
+            }
+          ]
+        },
+        "headline": {
+          "en": "Invigorator Valakut",
+          "zh": "茁茂兽瓦拉库"
+        },
+        "positioning": {
+          "zh": "茁茂兽配合矿井塌方",
+          "en": "Hexhaven Invigorator paired with Mine Collapse."
+        },
+        "featured_cards": [
+          {
+            "name": "Hexhaven Invigorator"
+          },
+          {
+            "name": "Mine Collapse"
+          },
+          {
+            "name": "Valakut, the Molten Pinnacle"
+          },
+          {
+            "name": "Wrenn and Six"
+          }
+        ],
+        "supporting_facts": [
+          {
+            "type": "new_archetype",
+            "values": {
+              "prior_record_count_under_current_classifier": 7
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "review_binding": {
+    "source_event_ids": [
+      "12856621",
+      "12856622",
+      "12856628",
+      "12856630",
+      "12856886",
+      "12856958",
+      "12856968",
+      "12856973",
+      "12856974",
+      "12856979",
+      "12856984",
+      "12857053"
+    ],
+    "classifier_digest": "96f52183dc96d5609a148c400e29264972176ef2448f210625f91abfb9200b84",
+    "visual_metadata_digest": "2caff2509cbe0cca27b98259db839c48ac4b4f82b08fb9c0878722b749db0709",
+    "machine_fact_digest": "29dd4df0693fab189d8c842400522f54bd8d613a832b5087c2e38e7ddf58383c",
+    "pickup_document_digest": "ea58f637b0b8910ead743ef86190a08dac49719cb421d5905e41d081fe3042ee",
+    "summary_fact_digest": "2062d4829e72a9e8bd7d3d78ef080acd03235ae4ca8d4476d79044f8c5fbe464"
   }
 }
