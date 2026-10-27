@@ -877,7 +877,7 @@ const representativeCards = Object.freeze({
     ]),
     "izzet-fling": Object.freeze([
       Object.freeze({"name": "Callous Sell-Sword", "image": "../images/representative-cards/standard/callous-sell-sword.jpg"}),
-      Object.freeze({"name": "Slickshot Show-Off", "image": "../images/representative-cards/standard/slickshot-show-off.jpg"}),
+      Object.freeze({"name": "Wild Ride", "image": "../images/representative-cards/standard/wild-ride.jpg"}),
     ]),
     "izzet-prowess": Object.freeze([
       Object.freeze({"name": "Slickshot Show-Off", "image": "../images/representative-cards/standard/slickshot-show-off.jpg"}),
@@ -1283,7 +1283,7 @@ const representativeCards = Object.freeze({
     ]),
     "mono-green-devotion": Object.freeze([
       Object.freeze({"name": "Nykthos, Shrine to Nyx", "image": "../images/representative-cards/pioneer/nykthos-shrine-to-nyx.jpg"}),
-      Object.freeze({"name": "Badgermole Cub", "image": "../images/representative-cards/pioneer/badgermole-cub.jpg"}),
+      Object.freeze({"name": "Llanowar Elves", "image": "../images/representative-cards/pioneer/llanowar-elves.jpg"}),
     ]),
   }),
 });
