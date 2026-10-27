@@ -17,6 +17,25 @@ def editorial_paths(formats, week):
     return result
 
 
+def retain_reviewed_entry(preview, stage):
+    """Keep approved cache versions only when every renderer byte is identical."""
+    from tools.delivery.packages import sha256
+    from mtgmeta.mtgo.preview_resources import ENTRY, select, versioned_entry_equivalent
+    before, after = preview / ENTRY, stage / ENTRY
+    if before.read_bytes() == after.read_bytes():
+        return False
+    approved = {name: sha256(preview / name) for name in select(preview)}
+    current = {name: sha256(stage / name) for name in select(stage)}
+    proof = {'before_html': before.read_bytes().decode('utf-8'),
+             'after_html': after.read_bytes().decode('utf-8')}
+    if (set(approved) != set(current)
+            or any(approved[name] != current[name] for name in approved if name != ENTRY)
+            or not versioned_entry_equivalent(proof, approved, current)):
+        raise ValueError('Accepted entry differs beyond identical-renderer cache versions')
+    shutil.copyfile(before, after)
+    return True
+
+
 def compose(root, preview, scope, envelopes, work):
     """Private, local-only composition. Missing resources fail without network."""
     import json
@@ -74,6 +93,7 @@ def compose(root, preview, scope, envelopes, work):
                 copy_file(preview / relative, stage / relative)
             elif '/weeks/' not in relative or json.loads((preview / relative.split('/weeks/')[0] / 'current.json').read_text(encoding='utf-8')).get('data_files'):
                 raise ValueError('Accepted Landing dependency is missing: ' + relative)
+        entry_retained = retain_reviewed_entry(preview, stage)
         for fmt in scope['mtgo_formats']:
             old = json.loads((root / f'stats/{fmt}/mtgo/meta.json').read_text(encoding='utf-8'))
             # Existing metadata generator binds the new editorial bytes only;
@@ -82,13 +102,16 @@ def compose(root, preview, scope, envelopes, work):
             if publication.inspect_publication(stage, fmt):
                 raise ValueError('Composed data binding is stale: ' + fmt)
         allowed = editorial | {f'stats/{fmt}/mtgo/meta.json' for fmt in scope['mtgo_formats']}
+        if entry_retained:
+            allowed.add('index.html')
         if any((stage / p).read_bytes() != (root / p).read_bytes() for p in paths - allowed):
             raise ValueError('Composition changed material outside accepted content')
     import inspect
     def basis(producer, dependencies, **inputs):
         return {'inputs': identity, 'producer': inspect.getsource(producer), 'copy': inspect.getsource(copy_file),
                 'implementation': implementation(root, dependencies), **inputs}
-    progress.run('source', basis(source, ['src/mtgmeta/mtgo/metadata.py', 'src/mtgmeta/mtgo/publication.py']),
+    progress.run('source', basis(source, ['src/mtgmeta/mtgo/metadata.py', 'src/mtgmeta/mtgo/publication.py'],
+                 reviewed_entry=inspect.getsource(retain_reviewed_entry)),
                  work, ['source/**/*'], source)
 
     def local_resources():
