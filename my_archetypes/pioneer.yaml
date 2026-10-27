@@ -457,6 +457,7 @@ archetypes:
 - id: izzet-cauldron
   name: Izzet Cauldron
   priority: 100
+  color_profile: default
   rules:
   - id: izzet-cauldron-primary
     priority: 100
@@ -469,6 +470,24 @@ archetypes:
       - card: Vivi Ornitier
         zone: main
         min_count: 1
+    colors: [blue, red]
+- id: jeskai-cauldron
+  name: Jeskai Cauldron
+  priority: 100
+  color_profile: default
+  rules:
+  - id: jeskai-cauldron-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Agatha's Soul Cauldron
+        zone: main
+        min_count: 1
+      - card: Vivi Ornitier
+        zone: main
+        min_count: 1
+    colors: [white, blue, red]
 - id: dimir-bounce
   name: Dimir Bounce
   priority: 100
@@ -553,30 +572,67 @@ archetypes:
 - id: mono-green-devotion
   name: Mono-Green Devotion
   priority: 100
+  color_profile: default
+  conditions:
+    all:
+    - card: Nykthos, Shrine to Nyx
+      zone: main
+      min_count: 1
+  subtypes:
+  - id: mono-green
+    name: Mono-Green Devotion
+  - id: selesnya
+    name: Selesnya Devotion
+  - id: gruul
+    name: Gruul Devotion
   rules:
   - id: mono-green-devotion-primary
     priority: 100
-    subtype_id: null
+    subtype_id: mono-green
     conditions:
       all:
-      - card: Nykthos, Shrine to Nyx
-        zone: main
-        min_count: 1
-      - card: Overgrown Tomb
-        zone: main
-        max_count: 0
-      - card: Breeding Pool
-        zone: main
-        max_count: 0
-      - card: Temple Garden
-        zone: main
-        max_count: 0
       - card: Collected Company
         zone: main
         max_count: 0
       - card: Forest
         zone: main
         min_count: 1
+    colors: [green]
+  - id: mono-green-devotion-gruul
+    priority: 100
+    subtype_id: gruul
+    conditions:
+      all:
+      - card: Llanowar Elves
+        zone: main
+        min_count: 1
+      - card: Collected Company
+        zone: main
+        max_count: 0
+    colors: [red, green]
+  - id: mono-green-devotion-selesnya
+    priority: 100
+    subtype_id: selesnya
+    conditions:
+      all:
+      - card: Llanowar Elves
+        zone: main
+        min_count: 1
+      - card: Righteous Valkyrie
+        zone: main
+        max_count: 0
+      # Preserve the separately approved Company family; merge its existing
+      # Selesnya members and the newly reviewed non-Company white splash.
+      - any:
+        - all:
+          - card: Temple Garden
+            zone: main
+            min_count: 1
+        - all:
+          - card: Collected Company
+            zone: main
+            max_count: 0
+    colors: [white, green]
 - id: jeskai-lessons
   name: Jeskai Lessons
   priority: 100
@@ -616,6 +672,7 @@ archetypes:
 - id: jund-artifact-sacrifice
   name: Jund Artifact Sacrifice
   priority: 100
+  color_profile: default
   rules:
   - id: jund-artifact-sacrifice-primary
     priority: 100
@@ -635,6 +692,21 @@ archetypes:
       - card: Mayhem Devil
         zone: main
         min_count: 3
+  - id: jund-artifact-sacrifice-pursuit
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Biotech Specialist
+        zone: main
+        min_count: 1
+      - card: The Sackville-Bagginses
+        zone: main
+        min_count: 1
+      - card: Obsessive Pursuit
+        zone: main
+        min_count: 1
+    colors: [black, red, green]
   - id: jund-artifact-sacrifice-biotech-anvil
     priority: 101
     subtype_id: null
@@ -655,6 +727,23 @@ archetypes:
       - card: Stomping Ground
         zone: main
         min_count: 1
+- id: jund-delirium
+  name: Jund Delirium
+  priority: 100
+  color_profile: default
+  rules:
+  - id: jund-delirium-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Grim Flayer
+        zone: main
+        min_count: 1
+      - card: Wildfire Wickerfolk
+        zone: main
+        min_count: 1
+    colors: [black, red, green]
 - id: jund-sacrifice
   name: Jund Sacrifice
   priority: 100
@@ -1559,27 +1648,6 @@ archetypes:
         zone: main
         min_count: 1
       - card: Nykthos, Shrine to Nyx
-        zone: main
-        max_count: 0
-- id: selesnya-devotion
-  name: Selesnya Devotion
-  priority: 100
-  rules:
-  - id: selesnya-devotion-primary
-    priority: 100
-    subtype_id: null
-    conditions:
-      all:
-      - card: Nykthos, Shrine to Nyx
-        zone: main
-        min_count: 1
-      - card: Llanowar Elves
-        zone: main
-        min_count: 1
-      - card: Temple Garden
-        zone: main
-        min_count: 1
-      - card: Righteous Valkyrie
         zone: main
         max_count: 0
 - id: rakdos-goblins
@@ -2835,7 +2903,23 @@ archetypes:
 - id: orzhov-midrange
   name: Orzhov Midrange
   priority: 90
+  color_profile: default
   rules:
+  - id: orzhov-midrange-exile
+    priority: 90
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ketramose, the New Dawn
+        zone: main
+        min_count: 1
+      - card: Rest in Peace
+        zone: main
+        min_count: 1
+      - card: Eldrazi Displacer
+        zone: main
+        min_count: 1
+    colors: [white, black]
   - id: orzhov-midrange-primary
     priority: 90
     subtype_id: null

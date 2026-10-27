@@ -210,6 +210,8 @@ const manaIdentities = Object.freeze({
     "mono-white-tokens": Object.freeze(["w"]),
   }),
   modern: Object.freeze({
+    "titan-canopy-ramp": Object.freeze(["g"]),
+    "gruul-prowess": Object.freeze(["r", "g"]),
     "rakdos-vampires": Object.freeze(["b", "r"]),
     "burn/mono-red-cutter": Object.freeze(["r"]),
     "hammer-time/esper": Object.freeze(["w", "u", "b"]),
@@ -565,6 +567,7 @@ const manaIdentities = Object.freeze({
     "shifting-omni": Object.freeze(["u", "g"]),
   }),
   pauper: Object.freeze({
+    "dimir-self-bounce": Object.freeze(["u", "b"]),
     "sultai-control": Object.freeze(["u", "b", "g"]),
     "affinity-combo": Object.freeze(["u"]),
     "altar-tron": Object.freeze(["b", "g"]),
@@ -681,6 +684,11 @@ const manaIdentities = Object.freeze({
     "golgari-gardens/sultai": Object.freeze(["u", "b", "g"]),
   }),
   pioneer: Object.freeze({
+    "jeskai-cauldron": Object.freeze(["w", "u", "r"]),
+    "jund-delirium": Object.freeze(["b", "r", "g"]),
+    "mono-green-devotion/mono-green": Object.freeze(["g"]),
+    "mono-green-devotion/selesnya": Object.freeze(["w", "g"]),
+    "mono-green-devotion/gruul": Object.freeze(["r", "g"]),
     "esper-control": Object.freeze(["w", "u", "b"]),
     "dimir-spider-man": Object.freeze(["u", "b"]),
     "bring-to-light-midrange": Object.freeze(["w", "u", "b", "r", "g"]),
@@ -1162,6 +1170,14 @@ const representativeCards = Object.freeze({
     "turbo-fog": Object.freeze([
       Object.freeze({"name": "Moment's Peace", "image": "../images/representative-cards/pauper/moments-peace.jpg"}),
       Object.freeze({"name": "Stream of Thought", "image": "../images/representative-cards/pauper/stream-of-thought.jpg"}),
+    ]),
+    "azorius-familiars": Object.freeze([
+      Object.freeze({"name": "Sunscape Familiar", "image": "../images/representative-cards/pauper/sunscape-familiar.jpg"}),
+      Object.freeze({"name": "Archaeomancer", "image": "../images/representative-cards/pauper/archaeomancer.jpg"}),
+    ]),
+    "boros-snacker": Object.freeze([
+      Object.freeze({"name": "Sneaky Snacker", "image": "../images/representative-cards/pauper/sneaky-snacker.jpg"}),
+      Object.freeze({"name": "Pursue the Past", "image": "../images/representative-cards/pauper/pursue-the-past.jpg"}),
     ]),
   }),
   pioneer: Object.freeze({

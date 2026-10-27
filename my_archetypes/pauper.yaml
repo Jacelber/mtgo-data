@@ -3367,3 +3367,26 @@ archetypes:
       - card: Utrom Monitor
         zone: main
         exact_count: 0
+
+- id: dimir-self-bounce
+  name: Dimir Self-Bounce
+  priority: 9305
+  color_profile: default
+  rules:
+  - id: dimir-self-bounce-nightmare
+    priority: 9305
+    subtype_id: null
+    conditions:
+      all:
+      - card: Dream Stalker
+        zone: main
+        min_count: 1
+      - card: Geistwave
+        zone: main
+        min_count: 1
+      - card: Hopeless Nightmare
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+    - black

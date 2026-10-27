@@ -1182,6 +1182,7 @@ archetypes:
 - id: selesnya-energy
   name: Selesnya Energy
   priority: 685000
+  color_profile: default
   rules:
   - id: selesnya-energy-primary
     priority: 685000
@@ -1214,6 +1215,27 @@ archetypes:
       - card: Temple Garden
         zone: main
         min_count: 1
+  - id: selesnya-energy-ephemerate
+    priority: 684980
+    subtype_id: null
+    conditions:
+      all:
+      - card: Guide of Souls
+        zone: main
+        min_count: 1
+      - card: Ocelot Pride
+        zone: main
+        min_count: 1
+      - card: Enlightened Confidant
+        zone: main
+        min_count: 1
+      - card: Ephemerate
+        zone: main
+        min_count: 1
+    colors:
+    - white
+    - green
+
 - id: esper-energy
   name: Esper Energy
   priority: 688000
@@ -3926,6 +3948,7 @@ archetypes:
 - id: izzet-storm
   name: Izzet Storm
   priority: 214100
+  color_profile: default
   rules:
   - id: izzet-storm-primary
     priority: 214100
@@ -3944,6 +3967,29 @@ archetypes:
       - card: Ruby Medallion
         zone: main
         exact_count: 0
+  - id: izzet-storm-gifts
+    priority: 214110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Gifts Ungiven
+        zone: main
+        min_count: 1
+      - card: Past in Flames
+        zone: main
+        min_count: 1
+      - total_count:
+        - Desperate Ritual
+        - Pyretic Ritual
+        zone: main
+        min_count: 4
+      - card: Ruby Medallion
+        zone: main
+        exact_count: 0
+    colors:
+    - blue
+    - red
+
 - id: ruby-storm
   name: Ruby Storm
   priority: 306010
@@ -8507,10 +8553,14 @@ archetypes:
 - id: azorius-land-denial
   name: Azorius Land Denial
   priority: 689850
+  color_profile: default
   rules:
   - id: azorius-land-denial-primary
     priority: 689850
     subtype_id: null
+    colors:
+    - white
+    - blue
     conditions:
       all:
       - card: Demolition Field
@@ -9779,6 +9829,7 @@ archetypes:
 - id: mono-white-ponza
   name: Mono-White Ponza
   priority: 660970
+  color_profile: default
   rules:
   - id: mono-white-ponza-primary
     priority: 660970
@@ -9809,6 +9860,28 @@ archetypes:
       - card: __classifier-semantic-main-green-source__
         zone: main
         exact_count: 0
+  - id: mono-white-ponza-field-control
+    priority: 660960
+    subtype_id: null
+    colors:
+    - white
+    conditions:
+      all:
+      - card: Demolition Field
+        zone: main
+        min_count: 3
+      - card: Field of Ruin
+        zone: main
+        min_count: 3
+      - card: Erode
+        zone: main
+        min_count: 3
+      - card: Solitude
+        zone: main
+        min_count: 3
+      - card: Wrath of God
+        zone: main
+        min_count: 3
 - id: four-color-goryos
   name: WUBR Goryo's
   priority: 641180
@@ -9960,9 +10033,6 @@ archetypes:
       zone: main
       min_count: 2
     - card: Dragon's Rage Channeler
-      zone: main
-      exact_count: 0
-    - card: Ragavan, Nimble Pilferer
       zone: main
       exact_count: 0
     - card: Persist
@@ -10479,3 +10549,50 @@ archetypes:
       - card: __classifier-semantic-main-black-source__
         zone: main
         min_count: 1
+
+- id: titan-canopy-ramp
+  name: Titan Canopy Ramp
+  priority: 690870
+  color_profile: default
+  rules:
+  - id: titan-canopy-ramp-primary
+    priority: 690870
+    subtype_id: null
+    conditions:
+      all:
+      - card: Primeval Titan
+        zone: main
+        min_count: 2
+      - card: Roiling Canopy
+        zone: main
+        min_count: 2
+      - card: Amulet of Vigor
+        zone: main
+        exact_count: 0
+    colors:
+    - green
+- id: gruul-prowess
+  name: Gruul Prowess
+  priority: 690860
+  color_profile: default
+  rules:
+  - id: gruul-prowess-primary
+    priority: 690860
+    subtype_id: null
+    conditions:
+      all:
+      - card: Slickshot Show-Off
+        zone: main
+        min_count: 1
+      - card: Scale Up
+        zone: main
+        min_count: 1
+      - total_count:
+        - Assault Strobe
+        - Monstrous Rage
+        - Mutagenic Growth
+        zone: main
+        min_count: 2
+    colors:
+    - red
+    - green

@@ -1,5 +1,5 @@
 {
-  "purpose": "Execution coverage of rules added after the frozen synthetic contract; sources selected from the frozen replay, not candidate output. Does not claim independent classification accuracy.",
+  "purpose": "Execution coverage of later rules using retained sources, including explicitly Owner-confirmed later lists; sources are not selected from candidate output. Does not claim independent classification accuracy.",
   "cases": [
     {
       "rule_id": "azorius-affinity",
@@ -3101,6 +3101,123 @@
         },
         {
           "name": "Tamiyo's Safekeeping",
+          "qty": 2
+        }
+      ]
+    },
+    {
+      "rule_id": "dimir-self-bounce-nightmare",
+      "source_locator": "data/pauper/Pauper_Challenge_32_12856992.json#players/22",
+      "decision_evidence": "Owner 2026-10-27: event12856992 rank23, new parent Dimir Self-Bounce / 蓝黑回手",
+      "main_deck": [
+        {
+          "name": "Island",
+          "qty": 2
+        },
+        {
+          "name": "Swamp",
+          "qty": 4
+        },
+        {
+          "name": "Seat of the Synod",
+          "qty": 4
+        },
+        {
+          "name": "Vault of Whispers",
+          "qty": 4
+        },
+        {
+          "name": "Dream Stalker",
+          "qty": 4
+        },
+        {
+          "name": "Bojuka Bog",
+          "qty": 2
+        },
+        {
+          "name": "Baleful Strix",
+          "qty": 4
+        },
+        {
+          "name": "Cast Down",
+          "qty": 3
+        },
+        {
+          "name": "Omen of the Dead",
+          "qty": 1
+        },
+        {
+          "name": "Suffocating Fumes",
+          "qty": 1
+        },
+        {
+          "name": "Mistvault Bridge",
+          "qty": 4
+        },
+        {
+          "name": "Geistwave",
+          "qty": 4
+        },
+        {
+          "name": "Lembas",
+          "qty": 2
+        },
+        {
+          "name": "Hopeless Nightmare",
+          "qty": 4
+        },
+        {
+          "name": "Candy Trail",
+          "qty": 4
+        },
+        {
+          "name": "Tithing Blade",
+          "qty": 3
+        },
+        {
+          "name": "Refurbished Familiar",
+          "qty": 4
+        },
+        {
+          "name": "Grim Bauble",
+          "qty": 2
+        },
+        {
+          "name": "Black Mage's Rod",
+          "qty": 2
+        },
+        {
+          "name": "Cryogen Relic",
+          "qty": 2
+        }
+      ],
+      "sideboard": [
+        {
+          "name": "Faerie Macabre",
+          "qty": 2
+        },
+        {
+          "name": "Duress",
+          "qty": 4
+        },
+        {
+          "name": "Drown in Sorrow",
+          "qty": 1
+        },
+        {
+          "name": "Navigator's Compass",
+          "qty": 2
+        },
+        {
+          "name": "Soul-Guide Lantern",
+          "qty": 2
+        },
+        {
+          "name": "Arms of Hadar",
+          "qty": 2
+        },
+        {
+          "name": "Cut Down",
           "qty": 2
         }
       ]

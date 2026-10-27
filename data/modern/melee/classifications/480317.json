@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "9efbc98cb9bfce9d339d003d17aacff4e0ad13463f6f944c0ac9ff7286b26b3d"
+    "digest": "96f52183dc96d5609a148c400e29264972176ef2448f210625f91abfb9200b84"
   },
   "input": {
     "event_path": "data/modern/melee/events/480317.json",
@@ -18,10 +18,10 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "adb8d49a6a4904b97c7978c32c35746e871cacbcab4c46806a87685d1009e8b3",
+    "rule_sha256": "b5fa96967de01341afb8183c5033ede3f44dc3c67818df380d78f3601359e799",
     "rule_schema_version": "1.2.0",
-    "archetype_count": 231,
-    "rule_count": 423,
+    "archetype_count": 233,
+    "rule_count": 428,
     "subtype_count": 119
   },
   "summary": {
@@ -41,9 +41,8 @@
       "amulet-titan": 13,
       "azorius-control": 1,
       "azorius-energy": 1,
-      "azorius-land-denial": 1,
       "boros-energy": 23,
-      "boros-land-destruction": 8,
+      "boros-land-destruction": 9,
       "broodscale-combo": 58,
       "burn": 3,
       "chant-control": 31,
@@ -43703,64 +43702,14 @@
       "participant_id": "participant-8b039ed2e6c642cc2a3e3899df6063e816a33ac1708f94d0ecf030319a75cf8d",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "azorius-land-denial",
-        "archetype_name": "Azorius Land Denial",
+        "archetype_id": "boros-land-destruction",
+        "archetype_name": "Boros Ponza",
         "subtype_id": null,
         "subtype_name": null,
-        "rule_id": "azorius-land-denial-primary",
-        "priority": 689850
+        "rule_id": "boros-land-destruction-primary",
+        "priority": 661000
       },
       "matched_rules": [
-        {
-          "archetype_id": "azorius-land-denial",
-          "archetype_name": "Azorius Land Denial",
-          "subtype_id": null,
-          "subtype_name": null,
-          "rule_id": "azorius-land-denial-primary",
-          "priority": 689850,
-          "evidence": [
-            {
-              "card": "Demolition Field",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Field of Ruin",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Erode",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Solitude",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Wrath of God",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            }
-          ]
-        },
         {
           "archetype_id": "boros-land-destruction",
           "archetype_name": "Boros Ponza",
@@ -43832,58 +43781,6 @@
       ],
       "top_priority_matches": [
         {
-          "archetype_id": "azorius-land-denial",
-          "archetype_name": "Azorius Land Denial",
-          "subtype_id": null,
-          "subtype_name": null,
-          "rule_id": "azorius-land-denial-primary",
-          "priority": 689850,
-          "evidence": [
-            {
-              "card": "Demolition Field",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Field of Ruin",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Erode",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Solitude",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Wrath of God",
-              "zone": "main",
-              "actual_count": 3,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            }
-          ]
-        }
-      ],
-      "overridden_matches": [
-        {
           "archetype_id": "boros-land-destruction",
           "archetype_name": "Boros Ponza",
           "subtype_id": null,
@@ -43916,7 +43813,9 @@
               "exact_count": null
             }
           ]
-        },
+        }
+      ],
+      "overridden_matches": [
         {
           "archetype_id": "boros-land-destruction",
           "archetype_name": "Boros Ponza",
