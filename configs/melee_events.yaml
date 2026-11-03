@@ -1,6 +1,62 @@
 schema_version: "3.1.0"
 
 events:
+  - id: '457663'
+    url: https://melee.gg/Tournament/View/457663
+    name: '聚光灯系列赛：现实裂界 Magic Spotlight: Fracture'
+    date:
+      start: '2026-10-31'
+      end: '2026-11-01'
+    format: standard
+    series: spotlight_series
+    structure: constructed_day2
+    enabled: true
+    review_status: verified
+    tabletop: true
+    team_event: false
+    mixed_format: false
+    raw_requests:
+    - id: tournament
+      resource_type: tournament
+      url: https://melee.gg/Tournament/View/457663
+      content_type: html
+    include:
+      swiss: true
+      playoffs: true
+    phases:
+    - id: day1_standard
+      stage: day1
+      round_phase: constructed
+      game_format: standard
+      swiss: true
+      rounds: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    - id: day2_standard
+      stage: day2
+      round_phase: constructed
+      game_format: standard
+      swiss: true
+      rounds: [10, 11, 12, 13, 14, 15]
+    - id: top8_standard
+      stage: playoff
+      round_phase: playoff
+      game_format: standard
+      swiss: false
+      source_labels: [Quarterfinals, Semifinals, Finals]
+    advancement:
+      day2_after_round: 9
+      day2_minimum_match_points: 18
+    reviewed_overrides: []
+    statistics:
+      default_match_scope: all_constructed_swiss
+      constructed_game_format: standard
+      include_playoffs: false
+    source_evidence:
+    - https://melee.gg/Tournament/View/457663
+    - https://melee.gg/Tournament/View/457663#tournament-schedule-tab
+    special_handling:
+    - The organizer's schedule cuts to players on 18 or more points after round nine. The Top 8 playoff follows the sixth Day 2 Swiss round.
+    - The official Finals standings are populated and the top two agree with the posted final result. The registration headline and standings table have different counts.
+    notes: Completed individual Standard Magic Spotlight main event organized by Kadou Event in Beijing. Event identity, schedule, final standings and final pairing checked on 2026-11-03.
   - id: '440878'
     url: https://melee.gg/Tournament/View/440878
     name: 'Magic Spotlight: Fracture - SCG CON Hartford - Saturday - 9:00 am'
