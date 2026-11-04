@@ -1,119 +1,53 @@
 {
-  "schema_version": "1.2.0",
-  "product": "mtgo-landing",
-  "format": "standard",
-  "source": "mtgo",
-  "week": {
-    "id": "2026-W43",
-    "start": "2026-10-19",
-    "end": "2026-10-25"
-  },
-  "state": "ready",
-  "source_event_ids": [
-    "12856618",
-    "12856627",
-    "12856631",
-    "12856957",
-    "12856965",
-    "12856970",
-    "12856977",
-    "12856995"
-  ],
   "classifier": {
-    "digest": "470f1319a939c34da990e7623e017703ab4c16054a36be02bd3b74eef37848dc"
+    "digest": "aa66363788d12e54f369447ba21b0375c95975054111355c68856801c111b58e"
   },
   "comparison": {
     "available": true,
     "unavailable_reason": null
   },
-  "thresholds": {
-    "environment_share": 0.03,
-    "share_move_pp": 5.0,
-    "exit_reference_share": 0.05,
-    "build_shift": 20,
-    "build_reference_minimum": 8
-  },
-  "populations": {
-    "current": {
-      "start": "2026-10-19",
-      "end": "2026-10-25",
-      "event_ids": [
-        "12856618",
-        "12856627",
-        "12856631",
-        "12856957",
-        "12856965",
-        "12856970",
-        "12856977",
-        "12856995"
-      ],
-      "event_count": 8,
-      "high_score_count": 121,
-      "top8_count": 64
-    },
-    "previous_week": {
-      "start": "2026-10-12",
-      "end": "2026-10-18",
-      "event_ids": [
-        "12856191",
-        "12856199",
-        "12856204",
-        "12856571",
-        "12856572",
-        "12856581",
-        "12856586",
-        "12856610"
-      ],
-      "event_count": 8,
-      "high_score_count": 132,
-      "top8_count": 64
-    },
-    "previous_four_weeks": {
-      "start": "2026-09-21",
-      "end": "2026-10-18",
-      "event_ids": [
-        "12854529",
-        "12854538",
-        "12854542",
-        "12854913",
-        "12854920",
-        "12854938",
-        "12854946",
-        "12855458",
-        "12855466",
-        "12855471",
-        "12855496",
-        "12855524",
-        "12855542",
-        "12855544",
-        "12856121",
-        "12856130",
-        "12856137",
-        "12856141",
-        "12856143",
-        "12856152",
-        "12856154",
-        "12856158",
-        "12856183",
-        "12856191",
-        "12856199",
-        "12856204",
-        "12856571",
-        "12856572",
-        "12856581",
-        "12856586",
-        "12856610"
-      ],
-      "event_count": 31,
-      "high_score_count": 477,
-      "top8_count": 248
-    }
+  "data_files": {
+    "completeness": "weeks/2026-W43/completeness.json",
+    "environment_decks": "weeks/2026-W43/environment_decks.json",
+    "feature_decks": "weeks/2026-W43/feature_decks.json",
+    "range": "weeks/2026-W43/range.json"
   },
   "environment": {
-    "threshold": 0.03,
+    "other_classified": {
+      "current": {
+        "count": 16,
+        "denominator": 121,
+        "share": 0.1322
+      },
+      "current_top8": {
+        "count": 5,
+        "denominator": 64,
+        "share": 0.0781
+      },
+      "previous_four_weeks": {
+        "count": 170,
+        "denominator": 477,
+        "share": 0.3564
+      },
+      "previous_week": {
+        "count": 27,
+        "denominator": 132,
+        "share": 0.2045
+      }
+    },
     "rows": [
       {
         "archetype_id": "dimir-midrange",
+        "current": {
+          "count": 19,
+          "denominator": 121,
+          "share": 0.157
+        },
+        "current_top8": {
+          "count": 8,
+          "denominator": 64,
+          "share": 0.125
+        },
         "display_name": "Dimir Midrange",
         "key_cards": [
           {
@@ -123,29 +57,29 @@
             "name": "Enduring Curiosity"
           }
         ],
-        "current": {
-          "count": 19,
-          "denominator": 121,
-          "share": 0.157
-        },
-        "previous_week": {
-          "count": 22,
-          "denominator": 132,
-          "share": 0.1667
-        },
         "previous_four_weeks": {
           "count": 59,
           "denominator": 477,
           "share": 0.1237
         },
-        "current_top8": {
-          "count": 8,
-          "denominator": 64,
-          "share": 0.125
+        "previous_week": {
+          "count": 22,
+          "denominator": 132,
+          "share": 0.1667
         }
       },
       {
         "archetype_id": "jund-artifact-sacrifice",
+        "current": {
+          "count": 18,
+          "denominator": 121,
+          "share": 0.1488
+        },
+        "current_top8": {
+          "count": 13,
+          "denominator": 64,
+          "share": 0.2031
+        },
         "display_name": "Jund Artifact Sacrifice",
         "key_cards": [
           {
@@ -155,29 +89,29 @@
             "name": "The Sackville-Bagginses"
           }
         ],
-        "current": {
-          "count": 18,
-          "denominator": 121,
-          "share": 0.1488
-        },
-        "previous_week": {
-          "count": 4,
-          "denominator": 132,
-          "share": 0.0303
-        },
         "previous_four_weeks": {
           "count": 37,
           "denominator": 477,
           "share": 0.0776
         },
-        "current_top8": {
-          "count": 13,
-          "denominator": 64,
-          "share": 0.2031
+        "previous_week": {
+          "count": 4,
+          "denominator": 132,
+          "share": 0.0303
         }
       },
       {
         "archetype_id": "mono-green-landfall",
+        "current": {
+          "count": 16,
+          "denominator": 121,
+          "share": 0.1322
+        },
+        "current_top8": {
+          "count": 6,
+          "denominator": 64,
+          "share": 0.0938
+        },
         "display_name": "Mono-Green Landfall",
         "key_cards": [
           {
@@ -187,29 +121,29 @@
             "name": "Icetill Explorer"
           }
         ],
-        "current": {
-          "count": 16,
-          "denominator": 121,
-          "share": 0.1322
-        },
-        "previous_week": {
-          "count": 11,
-          "denominator": 132,
-          "share": 0.0833
-        },
         "previous_four_weeks": {
           "count": 36,
           "denominator": 477,
           "share": 0.0755
         },
-        "current_top8": {
-          "count": 6,
-          "denominator": 64,
-          "share": 0.0938
+        "previous_week": {
+          "count": 11,
+          "denominator": 132,
+          "share": 0.0833
         }
       },
       {
         "archetype_id": "lifegain",
+        "current": {
+          "count": 13,
+          "denominator": 121,
+          "share": 0.1074
+        },
+        "current_top8": {
+          "count": 10,
+          "denominator": 64,
+          "share": 0.1562
+        },
         "display_name": "Lifegain",
         "key_cards": [
           {
@@ -219,29 +153,29 @@
             "name": "Ajani Resolute"
           }
         ],
-        "current": {
-          "count": 13,
-          "denominator": 121,
-          "share": 0.1074
-        },
-        "previous_week": {
-          "count": 16,
-          "denominator": 132,
-          "share": 0.1212
-        },
         "previous_four_weeks": {
           "count": 38,
           "denominator": 477,
           "share": 0.0797
         },
-        "current_top8": {
-          "count": 10,
-          "denominator": 64,
-          "share": 0.1562
+        "previous_week": {
+          "count": 16,
+          "denominator": 132,
+          "share": 0.1212
         }
       },
       {
         "archetype_id": "selesnya-landfall",
+        "current": {
+          "count": 7,
+          "denominator": 121,
+          "share": 0.0579
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 64,
+          "share": 0.0469
+        },
         "display_name": "Selesnya Landfall",
         "key_cards": [
           {
@@ -251,29 +185,29 @@
             "name": "Earthbender Ascension"
           }
         ],
-        "current": {
-          "count": 7,
-          "denominator": 121,
-          "share": 0.0579
-        },
-        "previous_week": {
-          "count": 2,
-          "denominator": 132,
-          "share": 0.0152
-        },
         "previous_four_weeks": {
           "count": 8,
           "denominator": 477,
           "share": 0.0168
         },
-        "current_top8": {
-          "count": 3,
-          "denominator": 64,
-          "share": 0.0469
+        "previous_week": {
+          "count": 2,
+          "denominator": 132,
+          "share": 0.0152
         }
       },
       {
         "archetype_id": "4-color-tablet",
+        "current": {
+          "count": 6,
+          "denominator": 121,
+          "share": 0.0496
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 64,
+          "share": 0.0469
+        },
         "display_name": "4-Color Tablet",
         "key_cards": [
           {
@@ -283,29 +217,29 @@
             "name": "Tablet of Discovery"
           }
         ],
-        "current": {
-          "count": 6,
-          "denominator": 121,
-          "share": 0.0496
-        },
-        "previous_week": {
-          "count": 11,
-          "denominator": 132,
-          "share": 0.0833
-        },
         "previous_four_weeks": {
           "count": 26,
           "denominator": 477,
           "share": 0.0545
         },
-        "current_top8": {
-          "count": 3,
-          "denominator": 64,
-          "share": 0.0469
+        "previous_week": {
+          "count": 11,
+          "denominator": 132,
+          "share": 0.0833
         }
       },
       {
         "archetype_id": "dimir-spider-man",
+        "current": {
+          "count": 6,
+          "denominator": 121,
+          "share": 0.0496
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 64,
+          "share": 0.0469
+        },
         "display_name": "Dimir Spider-Man",
         "key_cards": [
           {
@@ -315,29 +249,29 @@
             "name": "Deceit"
           }
         ],
-        "current": {
-          "count": 6,
-          "denominator": 121,
-          "share": 0.0496
-        },
-        "previous_week": {
-          "count": 21,
-          "denominator": 132,
-          "share": 0.1591
-        },
         "previous_four_weeks": {
           "count": 37,
           "denominator": 477,
           "share": 0.0776
         },
-        "current_top8": {
-          "count": 3,
-          "denominator": 64,
-          "share": 0.0469
+        "previous_week": {
+          "count": 21,
+          "denominator": 132,
+          "share": 0.1591
         }
       },
       {
         "archetype_id": "jeskai-artifacts",
+        "current": {
+          "count": 6,
+          "denominator": 121,
+          "share": 0.0496
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 64,
+          "share": 0.0625
+        },
         "display_name": "Jeskai Artifacts",
         "key_cards": [
           {
@@ -347,29 +281,29 @@
             "name": "Repurposing Bay"
           }
         ],
-        "current": {
-          "count": 6,
-          "denominator": 121,
-          "share": 0.0496
-        },
-        "previous_week": {
-          "count": 6,
-          "denominator": 132,
-          "share": 0.0455
-        },
         "previous_four_weeks": {
           "count": 22,
           "denominator": 477,
           "share": 0.0461
         },
-        "current_top8": {
-          "count": 4,
-          "denominator": 64,
-          "share": 0.0625
+        "previous_week": {
+          "count": 6,
+          "denominator": 132,
+          "share": 0.0455
         }
       },
       {
         "archetype_id": "azorius-control",
+        "current": {
+          "count": 5,
+          "denominator": 121,
+          "share": 0.0413
+        },
+        "current_top8": {
+          "count": 5,
+          "denominator": 64,
+          "share": 0.0781
+        },
         "display_name": "Azorius Control",
         "key_cards": [
           {
@@ -379,29 +313,29 @@
             "name": "Countersculpt"
           }
         ],
-        "current": {
-          "count": 5,
-          "denominator": 121,
-          "share": 0.0413
-        },
-        "previous_week": {
-          "count": 6,
-          "denominator": 132,
-          "share": 0.0455
-        },
         "previous_four_weeks": {
           "count": 29,
           "denominator": 477,
           "share": 0.0608
         },
-        "current_top8": {
-          "count": 5,
-          "denominator": 64,
-          "share": 0.0781
+        "previous_week": {
+          "count": 6,
+          "denominator": 132,
+          "share": 0.0455
         }
       },
       {
         "archetype_id": "azorius-momo",
+        "current": {
+          "count": 5,
+          "denominator": 121,
+          "share": 0.0413
+        },
+        "current_top8": {
+          "count": 3,
+          "denominator": 64,
+          "share": 0.0469
+        },
         "display_name": "Azorius Momo",
         "key_cards": [
           {
@@ -411,29 +345,29 @@
             "name": "Quantum Riddler"
           }
         ],
-        "current": {
-          "count": 5,
-          "denominator": 121,
-          "share": 0.0413
-        },
-        "previous_week": {
-          "count": 5,
-          "denominator": 132,
-          "share": 0.0379
-        },
         "previous_four_weeks": {
           "count": 13,
           "denominator": 477,
           "share": 0.0273
         },
-        "current_top8": {
-          "count": 3,
-          "denominator": 64,
-          "share": 0.0469
+        "previous_week": {
+          "count": 5,
+          "denominator": 132,
+          "share": 0.0379
         }
       },
       {
         "archetype_id": "izzet-fling",
+        "current": {
+          "count": 4,
+          "denominator": 121,
+          "share": 0.0331
+        },
+        "current_top8": {
+          "count": 1,
+          "denominator": 64,
+          "share": 0.0156
+        },
         "display_name": "Izzet Fling",
         "key_cards": [
           {
@@ -443,59 +377,28 @@
             "name": "Wild Ride"
           }
         ],
-        "current": {
-          "count": 4,
-          "denominator": 121,
-          "share": 0.0331
-        },
-        "previous_week": {
-          "count": 1,
-          "denominator": 132,
-          "share": 0.0076
-        },
         "previous_four_weeks": {
           "count": 2,
           "denominator": 477,
           "share": 0.0042
         },
-        "current_top8": {
+        "previous_week": {
           "count": 1,
-          "denominator": 64,
-          "share": 0.0156
+          "denominator": 132,
+          "share": 0.0076
         }
       }
     ],
-    "other_classified": {
-      "current": {
-        "count": 16,
-        "denominator": 121,
-        "share": 0.1322
-      },
-      "previous_week": {
-        "count": 27,
-        "denominator": 132,
-        "share": 0.2045
-      },
-      "previous_four_weeks": {
-        "count": 170,
-        "denominator": 477,
-        "share": 0.3564
-      },
-      "current_top8": {
-        "count": 5,
-        "denominator": 64,
-        "share": 0.0781
-      }
-    },
+    "threshold": 0.03,
     "unknown": {
       "current": {
         "count": 0,
         "denominator": 121,
         "share": 0.0
       },
-      "previous_week": {
+      "current_top8": {
         "count": 0,
-        "denominator": 132,
+        "denominator": 64,
         "share": 0.0
       },
       "previous_four_weeks": {
@@ -503,112 +406,24 @@
         "denominator": 477,
         "share": 0.0
       },
-      "current_top8": {
+      "previous_week": {
         "count": 0,
-        "denominator": 64,
+        "denominator": 132,
         "share": 0.0
       }
     }
   },
-  "weekly_summary": {
-    "week": "2026-W43",
-    "items": [
-      {
-        "order": 1,
-        "text": {
-          "zh": "本周有一场实体Magic Spotlight在美国哈特福德举办，吸引775人参加，最终由勇德神器牺牲席卷。洁斯凯神器虽然屈居亚军，但胜率大幅度领跑，达到了59.9%，所有主流对局中唯一数据劣势的是内战，因为平局太多。而亚军的牌表和一般轻混红，只带一张[[card:The Fire Crystal|火之水晶]]的不同，进红更深，还带了[[card:Solitary Cell|独囚牢房]]作为短解，还可以弃掉满编的[[card:The Mind Stone|心灵宝石]]：deck:5b41170c6e29924821b7",
-          "en": "This week, a tabletop Magic Spotlight took place in Hartford, USA, drawing 775 players, with Jund Artifact Sacrifice ultimately sweeping the event. Jeskai Artifacts finished second but led the field by a wide margin with a 59.9% win rate. Its only unfavorable matchup among the major archetypes was the mirror, owing to the large number of draws. Unlike the usual light red splash with just one [[card:The Fire Crystal|The Fire Crystal]], the runner-up’s list goes deeper into red and includes [[card:Solitary Cell|Solitary Cell]] as cheap removal, which can also discard copies of its full playset of [[card:The Mind Stone|The Mind Stone]]: deck:5b41170c6e29924821b7"
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:5b41170c6e29924821b7",
-            "label": {
-              "zh": "洁斯凯神器 · Talonflame23185 · 第2名",
-              "en": "Jeskai Artifacts · Talonflame23185 · Rank 2"
-            },
-            "deck": {
-              "archetype_id": "jeskai-artifacts",
-              "display_name": "Jeskai Artifacts",
-              "event_id": "440878",
-              "deck_id": "5b41170c6e29924821b7",
-              "deck_fingerprint_sha256": "6710bd899069c686a0a2418cbbd00e321843ffc0b7efc09b402617c37dca6daa",
-              "player": "Talonflame23185",
-              "final_rank": 2,
-              "starttime": "2026-10-24",
-              "source": "melee",
-              "event_name": "Magic Spotlight: Fracture - SCG CON Hartford - Saturday - 9:00 am",
-              "swiss_record": {
-                "wins": 12,
-                "losses": 1,
-                "draws": 2
-              }
-            }
-          }
-        ]
-      },
-      {
-        "order": 2,
-        "text": {
-          "zh": "另外一套胜率明显领先的就是蓝黑中速了，也达到56.5%。其他主流套牌中纯绿地落的表现也相对不错，meta占比最高，还能拿下53.0%胜率。详细数据统计和胜率矩阵可以在上方实体大赛标签中查看。",
-          "en": "Dimir Midrange was another clear leader in win rate, reaching 56.5%. Among the other major archetypes, Mono-Green Landfall also performed relatively well: it had the largest metagame share while still posting a 53.0% win rate. Detailed statistics and the matchup matrix are available in the Tabletop tab above."
-        },
-        "deck_links": []
-      },
-      {
-        "order": 3,
-        "text": {
-          "zh": "新科技方面，国人大师王昊天使用自己调整的铁木尔战呼人拿下12-3：deck:0c20228077791108a8ca。上一场奥兰多Spotlight他也操控战呼人获得非常好的成绩。整场比赛中两人使用战呼人，合计17-7，是使用人数超过1人的套牌中胜率最高的。只有1人使用的红白Token控，同样也是12-3,80%胜率。另外本周AC上也有人使用的格利极掘坟，还有更新构筑的蓝黑大眼，胜率也都不错。",
-          "en": "For new technology, Chinese standout Haotian Wang went 12–3 with his own take on Temur Battlecrier: deck:0c20228077791108a8ca. He also achieved an excellent result with Battlecrier at the previous Spotlight in Orlando. The two Battlecrier players at this event finished a combined 17–7, the highest win rate among archetypes played by more than one person. Boros Token Control, played by just one person, likewise finished 12–3 for an 80% win rate. Grixis Reanimator, which also appeared in this week’s AC, and an updated Dimir Oculus build both posted solid win rates as well."
-        },
-        "deck_links": [
-          {
-            "order": 1,
-            "token": "deck:0c20228077791108a8ca",
-            "label": {
-              "zh": "铁木尔战呼人 · Haotian Wang · 第12名",
-              "en": "Temur Battlecrier · Haotian Wang · Rank 12"
-            },
-            "deck": {
-              "archetype_id": "temur-battlecrier",
-              "display_name": "Temur Battlecrier",
-              "event_id": "440878",
-              "deck_id": "0c20228077791108a8ca",
-              "deck_fingerprint_sha256": "d46544fb135aa1474edd909075b015cc1c2baea39cd11219246f1be5faa92c32",
-              "player": "Haotian Wang",
-              "final_rank": 12,
-              "starttime": "2026-10-24",
-              "source": "melee",
-              "event_name": "Magic Spotlight: Fracture - SCG CON Hartford - Saturday - 9:00 am",
-              "swiss_record": {
-                "wins": 12,
-                "losses": 3,
-                "draws": 0
-              }
-            }
-          }
-        ]
-      }
-    ]
-  },
   "features": {
-    "week": "2026-W43",
     "items": [
       {
-        "category": "new_technology",
-        "order": 1,
-        "destination_id": "deck:5b41170c6e29924821b7",
         "archetype_id": "jeskai-artifacts",
-        "subtype_id": null,
-        "display_name": "Jeskai Artifacts",
+        "category": "new_technology",
         "deck": {
-          "event_id": "440878",
-          "deck_id": "5b41170c6e29924821b7",
           "deck_fingerprint_sha256": "6710bd899069c686a0a2418cbbd00e321843ffc0b7efc09b402617c37dca6daa",
-          "player": "Talonflame23185",
+          "deck_id": "5b41170c6e29924821b7",
+          "event_id": "440878",
+          "event_name": "Magic Spotlight: Fracture - SCG CON Hartford - Saturday - 9:00 am",
           "final_rank": 2,
-          "player_count": 781,
-          "starttime": "2026-10-24",
           "main_deck": [
             {
               "name": "Braided Net // Braided Quipu",
@@ -719,6 +534,8 @@
               "qty": 1
             }
           ],
+          "player": "Talonflame23185",
+          "player_count": 781,
           "side_deck": [
             {
               "name": "Braided Net // Braided Quipu",
@@ -762,21 +579,15 @@
             }
           ],
           "source": "melee",
-          "event_name": "Magic Spotlight: Fracture - SCG CON Hartford - Saturday - 9:00 am",
+          "starttime": "2026-10-24",
           "swiss_record": {
-            "wins": 12,
+            "draws": 2,
             "losses": 1,
-            "draws": 2
+            "wins": 12
           }
         },
-        "headline": {
-          "en": "Jeskai Artifacts",
-          "zh": "洁斯凯神器"
-        },
-        "positioning": {
-          "zh": "Spotlight亚军的版本",
-          "en": "The Spotlight runner-up’s version"
-        },
+        "destination_id": "deck:5b41170c6e29924821b7",
+        "display_name": "Jeskai Artifacts",
         "featured_cards": [
           {
             "name": "Solitary Cell"
@@ -791,23 +602,27 @@
             "name": "The Mind Stone"
           }
         ],
+        "headline": {
+          "en": "Jeskai Artifacts",
+          "zh": "洁斯凯神器"
+        },
+        "order": 1,
+        "positioning": {
+          "en": "The Spotlight runner-up’s version",
+          "zh": "Spotlight亚军的版本"
+        },
+        "subtype_id": null,
         "supporting_facts": []
       },
       {
-        "category": "new_technology",
-        "order": 2,
-        "destination_id": "deck:0c20228077791108a8ca",
         "archetype_id": "temur-battlecrier",
-        "subtype_id": null,
-        "display_name": "Temur Battlecrier",
+        "category": "new_technology",
         "deck": {
-          "event_id": "440878",
-          "deck_id": "0c20228077791108a8ca",
           "deck_fingerprint_sha256": "d46544fb135aa1474edd909075b015cc1c2baea39cd11219246f1be5faa92c32",
-          "player": "Haotian Wang",
+          "deck_id": "0c20228077791108a8ca",
+          "event_id": "440878",
+          "event_name": "Magic Spotlight: Fracture - SCG CON Hartford - Saturday - 9:00 am",
           "final_rank": 12,
-          "player_count": 781,
-          "starttime": "2026-10-24",
           "main_deck": [
             {
               "name": "Botanical Sanctum",
@@ -898,6 +713,8 @@
               "qty": 1
             }
           ],
+          "player": "Haotian Wang",
+          "player_count": 781,
           "side_deck": [
             {
               "name": "Abrade",
@@ -949,21 +766,15 @@
             }
           ],
           "source": "melee",
-          "event_name": "Magic Spotlight: Fracture - SCG CON Hartford - Saturday - 9:00 am",
+          "starttime": "2026-10-24",
           "swiss_record": {
-            "wins": 12,
+            "draws": 0,
             "losses": 3,
-            "draws": 0
+            "wins": 12
           }
         },
-        "headline": {
-          "en": "Temur Battlecrier",
-          "zh": "铁木尔战呼人"
-        },
-        "positioning": {
-          "zh": "加入FRA铁牌心材雕塑师",
-          "en": "Adds Heartwood Crafter, a common from FRA."
-        },
+        "destination_id": "deck:0c20228077791108a8ca",
+        "display_name": "Temur Battlecrier",
         "featured_cards": [
           {
             "name": "Heartwood Crafter // Soul Tether"
@@ -978,11 +789,103 @@
             "name": "Michelangelo's Technique"
           }
         ],
+        "headline": {
+          "en": "Temur Battlecrier",
+          "zh": "铁木尔战呼人"
+        },
+        "order": 2,
+        "positioning": {
+          "en": "Adds Heartwood Crafter, a common from FRA.",
+          "zh": "加入FRA铁牌心材雕塑师"
+        },
+        "subtype_id": null,
         "supporting_facts": []
       }
-    ]
+    ],
+    "week": "2026-W43"
   },
+  "format": "standard",
+  "populations": {
+    "current": {
+      "end": "2026-10-25",
+      "event_count": 8,
+      "event_ids": [
+        "12856618",
+        "12856627",
+        "12856631",
+        "12856957",
+        "12856965",
+        "12856970",
+        "12856977",
+        "12856995"
+      ],
+      "high_score_count": 121,
+      "start": "2026-10-19",
+      "top8_count": 64
+    },
+    "previous_four_weeks": {
+      "end": "2026-10-18",
+      "event_count": 31,
+      "event_ids": [
+        "12854529",
+        "12854538",
+        "12854542",
+        "12854913",
+        "12854920",
+        "12854938",
+        "12854946",
+        "12855458",
+        "12855466",
+        "12855471",
+        "12855496",
+        "12855524",
+        "12855542",
+        "12855544",
+        "12856121",
+        "12856130",
+        "12856137",
+        "12856141",
+        "12856143",
+        "12856152",
+        "12856154",
+        "12856158",
+        "12856183",
+        "12856191",
+        "12856199",
+        "12856204",
+        "12856571",
+        "12856572",
+        "12856581",
+        "12856586",
+        "12856610"
+      ],
+      "high_score_count": 477,
+      "start": "2026-09-21",
+      "top8_count": 248
+    },
+    "previous_week": {
+      "end": "2026-10-18",
+      "event_count": 8,
+      "event_ids": [
+        "12856191",
+        "12856199",
+        "12856204",
+        "12856571",
+        "12856572",
+        "12856581",
+        "12856586",
+        "12856610"
+      ],
+      "high_score_count": 132,
+      "start": "2026-10-12",
+      "top8_count": 64
+    }
+  },
+  "product": "mtgo-landing",
   "review_binding": {
+    "classifier_digest": "aa66363788d12e54f369447ba21b0375c95975054111355c68856801c111b58e",
+    "machine_fact_digest": "3faa53133e131d7cfbb8a93df100e145730d878416c462497a9f80ed6adc18be",
+    "pickup_document_digest": "c8b1b4e27f17bf5d53150a78cd2751bbcc3bfa7187c7096959b6121219e64328",
     "source_event_ids": [
       "12856618",
       "12856627",
@@ -993,10 +896,113 @@
       "12856977",
       "12856995"
     ],
-    "classifier_digest": "470f1319a939c34da990e7623e017703ab4c16054a36be02bd3b74eef37848dc",
-    "visual_metadata_digest": "2caff2509cbe0cca27b98259db839c48ac4b4f82b08fb9c0878722b749db0709",
-    "machine_fact_digest": "c66aa107334ad7003c495a926a26e9d38222c40ff004d8f1d1ec5d7d54959997",
-    "pickup_document_digest": "de0eeae121a16c31f67180fee1272b89f99cef414662e79272617143b7c375ff",
-    "summary_fact_digest": "3955df6c3639c3d4c41fd233cd0f14db46958c6937210dcd55b9c09fa5eb28e4"
+    "summary_fact_digest": "a0bed8fd3f7a6b42df1cceca097233ce2a2250f065fa764bcf9f20d5dfe040f9",
+    "visual_metadata_digest": "b1c2daba3e87ac2e76a17d003f5f821047465145ef1c8cf6e6bd72dc8e7e9a0b"
+  },
+  "schema_version": "1.2.0",
+  "source": "mtgo",
+  "source_event_ids": [
+    "12856618",
+    "12856627",
+    "12856631",
+    "12856957",
+    "12856965",
+    "12856970",
+    "12856977",
+    "12856995"
+  ],
+  "state": "ready",
+  "thresholds": {
+    "build_reference_minimum": 8,
+    "build_shift": 20,
+    "environment_share": 0.03,
+    "exit_reference_share": 0.05,
+    "share_move_pp": 5.0
+  },
+  "week": {
+    "end": "2026-10-25",
+    "id": "2026-W43",
+    "start": "2026-10-19"
+  },
+  "weekly_summary": {
+    "items": [
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "jeskai-artifacts",
+              "deck_fingerprint_sha256": "6710bd899069c686a0a2418cbbd00e321843ffc0b7efc09b402617c37dca6daa",
+              "deck_id": "5b41170c6e29924821b7",
+              "display_name": "Jeskai Artifacts",
+              "event_id": "440878",
+              "event_name": "Magic Spotlight: Fracture - SCG CON Hartford - Saturday - 9:00 am",
+              "final_rank": 2,
+              "player": "Talonflame23185",
+              "source": "melee",
+              "starttime": "2026-10-24",
+              "swiss_record": {
+                "draws": 2,
+                "losses": 1,
+                "wins": 12
+              }
+            },
+            "label": {
+              "en": "Jeskai Artifacts · Talonflame23185 · Rank 2",
+              "zh": "洁斯凯神器 · Talonflame23185 · 第2名"
+            },
+            "order": 1,
+            "token": "deck:5b41170c6e29924821b7"
+          }
+        ],
+        "order": 1,
+        "text": {
+          "en": "This week, a tabletop Magic Spotlight took place in Hartford, USA, drawing 775 players, with Jund Artifact Sacrifice ultimately sweeping the event. Jeskai Artifacts finished second but led the field by a wide margin with a 59.9% win rate. Its only unfavorable matchup among the major archetypes was the mirror, owing to the large number of draws. Unlike the usual light red splash with just one [[card:The Fire Crystal|The Fire Crystal]], the runner-up’s list goes deeper into red and includes [[card:Solitary Cell|Solitary Cell]] as cheap removal, which can also discard copies of its full playset of [[card:The Mind Stone|The Mind Stone]]: deck:5b41170c6e29924821b7",
+          "zh": "本周有一场实体Magic Spotlight在美国哈特福德举办，吸引775人参加，最终由勇德神器牺牲席卷。洁斯凯神器虽然屈居亚军，但胜率大幅度领跑，达到了59.9%，所有主流对局中唯一数据劣势的是内战，因为平局太多。而亚军的牌表和一般轻混红，只带一张[[card:The Fire Crystal|火之水晶]]的不同，进红更深，还带了[[card:Solitary Cell|独囚牢房]]作为短解，还可以弃掉满编的[[card:The Mind Stone|心灵宝石]]：deck:5b41170c6e29924821b7"
+        }
+      },
+      {
+        "deck_links": [],
+        "order": 2,
+        "text": {
+          "en": "Dimir Midrange was another clear leader in win rate, reaching 56.5%. Among the other major archetypes, Mono-Green Landfall also performed relatively well: it had the largest metagame share while still posting a 53.0% win rate. Detailed statistics and the matchup matrix are available in the Tabletop tab above.",
+          "zh": "另外一套胜率明显领先的就是蓝黑中速了，也达到56.5%。其他主流套牌中纯绿地落的表现也相对不错，meta占比最高，还能拿下53.0%胜率。详细数据统计和胜率矩阵可以在上方实体大赛标签中查看。"
+        }
+      },
+      {
+        "deck_links": [
+          {
+            "deck": {
+              "archetype_id": "temur-battlecrier",
+              "deck_fingerprint_sha256": "d46544fb135aa1474edd909075b015cc1c2baea39cd11219246f1be5faa92c32",
+              "deck_id": "0c20228077791108a8ca",
+              "display_name": "Temur Battlecrier",
+              "event_id": "440878",
+              "event_name": "Magic Spotlight: Fracture - SCG CON Hartford - Saturday - 9:00 am",
+              "final_rank": 12,
+              "player": "Haotian Wang",
+              "source": "melee",
+              "starttime": "2026-10-24",
+              "swiss_record": {
+                "draws": 0,
+                "losses": 3,
+                "wins": 12
+              }
+            },
+            "label": {
+              "en": "Temur Battlecrier · Haotian Wang · Rank 12",
+              "zh": "铁木尔战呼人 · Haotian Wang · 第12名"
+            },
+            "order": 1,
+            "token": "deck:0c20228077791108a8ca"
+          }
+        ],
+        "order": 3,
+        "text": {
+          "en": "For new technology, Chinese standout Haotian Wang went 12–3 with his own take on Temur Battlecrier: deck:0c20228077791108a8ca. He also achieved an excellent result with Battlecrier at the previous Spotlight in Orlando. The two Battlecrier players at this event finished a combined 17–7, the highest win rate among archetypes played by more than one person. Boros Token Control, played by just one person, likewise finished 12–3 for an 80% win rate. Grixis Reanimator, which also appeared in this week’s AC, and an updated Dimir Oculus build both posted solid win rates as well.",
+          "zh": "新科技方面，国人大师王昊天使用自己调整的铁木尔战呼人拿下12-3：deck:0c20228077791108a8ca。上一场奥兰多Spotlight他也操控战呼人获得非常好的成绩。整场比赛中两人使用战呼人，合计17-7，是使用人数超过1人的套牌中胜率最高的。只有1人使用的红白Token控，同样也是12-3,80%胜率。另外本周AC上也有人使用的格利极掘坟，还有更新构筑的蓝黑大眼，胜率也都不错。"
+        }
+      }
+    ],
+    "week": "2026-W43"
   }
 }
