@@ -1,6 +1,8 @@
 """Transport an existing private package in parts; never generate or execute it."""
 from __future__ import annotations
 
+import base64
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -11,6 +13,70 @@ from tools.delivery import packages
 from tools.delivery.github import APIError, GitHub
 
 PART_BYTES = 4 * 1024 * 1024
+
+
+def archive_git_parts(client: GitHub, identifier: str, commit: str, *, target: str) -> dict:
+    """Read a private, immutable data-only handoff through the GitHub API.
+
+    This transport is useful when a managed executor can use api.github.com but
+    cannot authenticate asset uploads. The trusted runner still uses archive()
+    to create and verify the same two Release assets. No handoff code executes.
+    """
+    if not re.fullmatch(r"[0-9a-f]{40}", commit):
+        raise ValueError("Use an immutable private handoff commit")
+    if not re.fullmatch(r"pages-[0-9a-f]{64}", identifier):
+        raise ValueError("Invalid fixed package identity")
+    client.private()
+    prefix = f"repos/{client.repository}/git/"
+    revision = client.api(prefix + "commits/" + commit)
+    if revision.get("sha") != commit or not re.fullmatch(r"[0-9a-f]{40}", revision.get("tree", {}).get("sha", "")):
+        raise APIError("Private handoff commit identity differs")
+    tree = client.api(prefix + "trees/" + revision["tree"]["sha"])
+    entries = tree.get("tree")
+    if tree.get("truncated") is not False or not isinstance(entries, list):
+        raise APIError("Private handoff tree is incomplete")
+    known = {}
+    for entry in entries:
+        name = entry.get("path")
+        if (not isinstance(name, str) or name in known or entry.get("mode") != "100644"
+                or entry.get("type") != "blob" or type(entry.get("size")) is not int
+                or not re.fullmatch(r"[0-9a-f]{40}", entry.get("sha", ""))):
+            raise APIError("Private handoff contains invalid or duplicate files")
+        known[name] = entry
+    manifest_entry = known.get("manifest.json", {})
+    if not 0 < manifest_entry.get("size", 0) <= 1024 * 1024:
+        raise APIError("Private handoff manifest is missing or oversized")
+
+    def read_blob(entry):
+        blob = client.api(prefix + "blobs/" + entry["sha"])
+        if (blob.get("sha") != entry["sha"] or blob.get("encoding") != "base64"
+                or blob.get("size") != entry["size"] or not isinstance(blob.get("content"), str)
+                or len(blob["content"]) > 2 * entry["size"] + 1024):
+            raise APIError("Private handoff blob differs from its tree")
+        try:
+            data = base64.b64decode("".join(blob["content"].splitlines()), validate=True)
+        except ValueError as error:
+            raise APIError("Invalid private handoff encoding") from error
+        digest = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
+        if len(data) != entry["size"] or digest != entry["sha"]:
+            raise APIError("Private handoff blob identity differs")
+        return data
+
+    manifest_bytes = read_blob(manifest_entry)
+    manifest = json.loads(manifest_bytes)
+    if not isinstance(manifest, dict):
+        raise ValueError("Private handoff manifest must be an object")
+    sizes = part_sizes(manifest, identifier, target)
+    if set(known) != {"manifest.json", *sizes} or any(known[name]["size"] != size for name, size in sizes.items()):
+        raise APIError("Private handoff file membership or sizes differ")
+    with tempfile.TemporaryDirectory(prefix="trusted-git-package-parts-") as temporary:
+        root = Path(temporary)
+        (root / "manifest.json").write_bytes(manifest_bytes)
+        with (root / "product.tar.gz").open("xb") as output:
+            for name in sizes:
+                output.write(read_blob(known[name]))
+        packages.verify(root / "product.tar.gz", manifest, target=target)
+        return client.archive(root, target=target)
 
 
 def part_sizes(manifest: dict, identifier: str, target: str) -> dict[str, int]:
