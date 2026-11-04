@@ -659,7 +659,7 @@ archetypes:
       - card: Jeskai Revelation
         min_count: 2
       - card: Inevitable Defeat
-        min_count: 2
+        min_count: 1
 - id: jeskai-tablet
   name: Jeskai Tablet
   priority: 58000
@@ -814,6 +814,30 @@ archetypes:
       - card: The Theorist, Jace Beleren
         zone: main
         min_count: 1
+    colors:
+    - white
+    - blue
+    - red
+  - id: jeskai-control-ajani-theorist-torch
+    priority: 57000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ajani Unrelenting
+        zone: main
+        min_count: 2
+      - card: The Theorist, Jace Beleren
+        zone: main
+        min_count: 2
+      - card: No More Lies
+        zone: main
+        min_count: 2
+      - card: Stock Up
+        zone: main
+        min_count: 3
+      - card: Torch the Tower
+        zone: main
+        min_count: 2
     colors:
     - white
     - blue
@@ -1080,6 +1104,54 @@ archetypes:
     colors:
     - blue
     - red
+  - id: izzet-prowess-battlemage-sleight-flow
+    priority: 51008
+    subtype_id: null
+    conditions:
+      all:
+      - card: Slickshot Show-Off
+        zone: main
+        min_count: 3
+      - card: Pompous Battlemage
+        zone: main
+        min_count: 3
+      - card: Sleight of Hand
+        zone: main
+        min_count: 3
+      - card: Flow State
+        zone: main
+        min_count: 3
+    colors:
+    - blue
+    - red
+  # A dense main-deck attack core that grows from casting spells establishes
+  # prowess without requiring a particular cantrip or a printed Prowess keyword.
+  # Eight copies represent multiple playsets; one incidental payoff playset is
+  # insufficient. Dedicated Fling, Leyline, Burn and Opus routes retain precedence.
+  - id: izzet-prowess-spell-payoff-core
+    priority: 17000
+    subtype_id: null
+    conditions:
+      all:
+      - total_count: &standard-prowess-attack-payoffs
+        - Gandalf, Goblins' Bane
+        - Pompous Battlemage
+        - Slickshot Show-Off
+        - Drake Hatcher
+        - Firebending Student
+        - Tomik, Izzet Sparkmage
+        - Colorstorm Stallion
+        - Molten-Core Maestro
+        - Elusive Otter
+        - Emberheart Challenger
+        - Kitsa, Otterball Elite
+        - Pyre Rhymer
+        - Monica Rambeau
+        zone: main
+        min_count: 8
+    colors:
+    - blue
+    - red
   card_uses: &standard-prowess-006
     Callous Sell-Sword: fling_secondary
     Elusive Otter: fling_secondary
@@ -1208,6 +1280,20 @@ archetypes:
       - card: Quantum Riddler
         zone: any
         exact_count: 0
+  - id: rakdos-discard-mako-carnage-goblin
+    priority: 46000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Marauding Mako
+        zone: main
+        min_count: 3
+      - card: Carnage, Crimson Chaos
+        zone: main
+        min_count: 3
+      - card: Shadow of the Goblin
+        zone: main
+        min_count: 3
 - id: grixis-discard
   name: Grixis Discard
   priority: 45000
@@ -1665,6 +1751,26 @@ archetypes:
     colors:
     - white
     - blue
+  - id: azorius-control-countersculpt-chart-no-sweeper
+    priority: 38987
+    subtype_id: traditional
+    conditions:
+      all:
+      - card: Countersculpt
+        zone: main
+        min_count: 3
+      - card: Consult the Star Charts
+        zone: main
+        min_count: 3
+      - card: No More Lies
+        zone: main
+        min_count: 2
+      - card: Get Lost
+        zone: main
+        min_count: 3
+    colors:
+    - white
+    - blue
   color_profile: default
 - id: mono-white-momo
   name: Mono-White Momo
@@ -2082,7 +2188,7 @@ archetypes:
     conditions:
       all:
       - card: Earth King's Lieutenant
-        min_count: 4
+        min_count: 3
       - card: Cavern of Souls
         min_count: 4
       - card: Jasmine Dragon Tea Shop
@@ -2149,6 +2255,13 @@ archetypes:
 - id: izzet-aggro
   name: Izzet Aggro
   priority: 22000
+  # Generic aggro is the non-prowess fallback, including lists with only an
+  # incidental spell-payoff creature set. Use the same pool as the positive rule.
+  conditions:
+    all:
+    - total_count: *standard-prowess-attack-payoffs
+      zone: main
+      max_count: 7
   rules:
   - id: izzet-aggro-primary
     priority: 22000
@@ -2243,6 +2356,20 @@ archetypes:
         min_count: 3
       - card: Spirebluff Canal
         min_count: 1
+  - id: izzet-opus-command-maestro
+    priority: 18000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ashling's Command
+        zone: main
+        min_count: 3
+      - card: Colorstorm Stallion
+        zone: main
+        min_count: 3
+      - card: Molten-Core Maestro
+        zone: main
+        min_count: 3
 - id: boros-manufacturing
   name: Boros Manufacturing
   priority: 16000
@@ -2389,6 +2516,23 @@ archetypes:
       - card: Unholy Annex // Ritual Chamber
         zone: main
         max_count: 2
+  - id: sultai-control-cornucopia-bargain-coverup
+    priority: 40010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ancient Cornucopia
+        zone: main
+        min_count: 2
+      - card: Rakshasa's Bargain
+        zone: main
+        min_count: 3
+      - card: Deadly Cover-Up
+        zone: main
+        min_count: 3
+      - card: Stock Up
+        zone: main
+        min_count: 3
 - id: orzhov-repartee
   name: Orzhov Repartee
   priority: 11000
@@ -2453,6 +2597,23 @@ archetypes:
       - card: Nighthowl Pursuer
         zone: main
         min_count: 4
+  - id: mono-black-aggro-shredder-pursuer-saboteur
+    priority: 10000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Swamp
+        zone: main
+        min_count: 14
+      - card: Oroku Saki, Shredder Rising
+        zone: main
+        min_count: 3
+      - card: Nighthowl Pursuer
+        zone: main
+        min_count: 3
+      - card: Sunset Saboteur
+        zone: main
+        min_count: 3
 - id: golgari-crime
   name: Golgari Crime
   priority: 9000
@@ -2847,6 +3008,26 @@ archetypes:
       - card: Tablet of Discovery
         zone: main
         max_count: 1
+  - id: dark-jeskai-control-defeat-chart-counters
+    priority: 56000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Inevitable Defeat
+        zone: main
+        min_count: 2
+      - card: Consult the Star Charts
+        zone: main
+        min_count: 3
+      - card: No More Lies
+        zone: main
+        min_count: 2
+      - card: Three Steps Ahead
+        zone: main
+        min_count: 2
+      - card: Tablet of Discovery
+        zone: main
+        max_count: 1
 - id: white-sultai-control
   name: White Sultai Control
   priority: 13010
@@ -3152,6 +3333,33 @@ archetypes:
     - white
     - blue
     - black
+  - id: esper-control-theorist-black-removal
+    priority: 39010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Day of Judgment
+        zone: main
+        min_count: 3
+      - card: The Theorist, Jace Beleren
+        zone: main
+        min_count: 3
+      - card: Bitter Triumph
+        zone: main
+        min_count: 2
+      - any:
+        - all:
+          - card: Long Goodbye
+            zone: main
+            min_count: 2
+        - all:
+          - card: Strategic Betrayal
+            zone: main
+            min_count: 2
+    colors:
+    - white
+    - blue
+    - black
   color_profile: default
 - id: azorius-prowess
   name: Azorius Prowess
@@ -3299,6 +3507,29 @@ archetypes:
       - card: Steam Vents
         zone: main
         min_count: 2
+  - id: izzet-burn-hellkite-viper
+    priority: 63991
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nova Hellkite
+        zone: main
+        min_count: 3
+      - card: Scalding Viper
+        zone: main
+        min_count: 3
+      - card: Burst Lightning
+        zone: main
+        min_count: 3
+      - card: Boltwave
+        zone: main
+        min_count: 2
+      - card: Riverpyre Verge
+        zone: main
+        min_count: 2
+      - card: Steam Vents
+        zone: main
+        min_count: 1
 - id: mono-green-squirrel-combo
   name: Mono-Green Squirrel Combo
   priority: 68020
@@ -3524,6 +3755,23 @@ archetypes:
       - card: Oblivious Bookworm
         zone: any
         exact_count: 0
+  - id: dimir-oculus-bloodghast-manipulator
+    priority: 76840
+    subtype_id: null
+    conditions:
+      all:
+      - card: Abhorrent Oculus
+        zone: main
+        min_count: 3
+      - card: Dark Matter Manipulator
+        zone: main
+        min_count: 3
+      - card: Bloodghast
+        zone: main
+        min_count: 3
+      - card: Ral Zarek, Guest Lecturer
+        zone: main
+        min_count: 1
 - id: sultai-oculus
   name: Sultai Oculus
   priority: 76830
@@ -3781,6 +4029,26 @@ archetypes:
       - card: Chandra, Torch of Defiance
         zone: main
         min_count: 1
+    colors:
+    - red
+    - green
+  - id: gruul-ramp-heartwood-fulcrum
+    priority: 67880
+    subtype_id: null
+    conditions:
+      all:
+      - card: Heartwood Crafter
+        zone: main
+        min_count: 3
+      - card: Interdimensional Web Watch
+        zone: main
+        min_count: 3
+      - card: The Echoverse Fulcrum
+        zone: main
+        min_count: 3
+      - card: Ugin, Eye of the Storms
+        zone: main
+        min_count: 3
     colors:
     - red
     - green
@@ -4520,6 +4788,38 @@ archetypes:
       - card: Gideon's Memorial
         zone: main
         min_count: 1
+    colors:
+    - white
+    - red
+  - id: boros-superfriends-ajani-elspeth-memorial
+    priority: 78010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Elspeth, Storm Slayer
+        zone: main
+        min_count: 3
+      - card: Ajani Unrelenting
+        zone: main
+        min_count: 3
+      - card: Gideon's Memorial
+        zone: main
+        min_count: 1
+      - any:
+        - all:
+          - card: Chandra, Torch of Defiance
+            zone: main
+            min_count: 1
+        - all:
+          - card: Ajani, Outland Chaperone
+            zone: main
+            min_count: 3
+      - card: Stadium Headliner
+        zone: main
+        max_count: 2
+      - card: Voice of Victory
+        zone: main
+        max_count: 2
     colors:
     - white
     - red
@@ -5347,4 +5647,451 @@ archetypes:
         min_count: 1
     colors:
     - white
+  color_profile: default
+
+- id: mono-red-superfriends
+  name: Mono-Red Superfriends
+  priority: 78130
+  rules:
+  - id: mono-red-superfriends-core
+    priority: 78130
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ajani Unrelenting
+        zone: main
+        min_count: 3
+      - card: Chandra, Torch of Defiance
+        zone: main
+        min_count: 3
+      - card: Way of the Pyromancer
+        zone: main
+        min_count: 3
+      - card: Twinned Vision
+        zone: main
+        min_count: 3
+    colors:
+    - red
+  color_profile: default
+- id: mardu-donation
+  name: Mardu Donation
+  priority: 78131
+  rules:
+  - id: mardu-donation-core
+    priority: 78131
+    subtype_id: null
+    conditions:
+      all:
+      - card: Greed's Gambit
+        zone: main
+        min_count: 3
+      - card: Iroh, Tea Master
+        zone: main
+        min_count: 3
+      - card: Beseech the Mirror
+        zone: main
+        min_count: 3
+    colors:
+    - white
+    - black
+    - red
+  color_profile: default
+- id: rakdos-midrange
+  name: Rakdos
+  priority: 78132
+  rules:
+  - id: rakdos-midrange-core
+    priority: 78132
+    subtype_id: null
+    conditions:
+      all:
+      - card: Preacher of the Schism
+        zone: main
+        min_count: 3
+      - card: The Sackville-Bagginses
+        zone: main
+        min_count: 3
+      - card: Callous Inspector
+        zone: main
+        min_count: 3
+    colors:
+    - black
+    - red
+  color_profile: default
+- id: jund-delirium
+  name: Jund Delirium
+  priority: 78133
+  rules:
+  - id: jund-delirium-core
+    priority: 78133
+    subtype_id: null
+    conditions:
+      all:
+      - card: Tarmogoyf
+        zone: main
+        min_count: 3
+      - card: Wildfire Wickerfolk
+        zone: main
+        min_count: 3
+      - card: Fear of Missing Out
+        zone: main
+        min_count: 3
+    colors:
+    - black
+    - red
+    - green
+  color_profile: default
+- id: mardu-token-control
+  name: Mardu Token Control
+  priority: 78135
+  rules:
+  - id: mardu-token-control-core
+    priority: 78135
+    subtype_id: null
+    conditions:
+      all:
+      - card: Elspeth, Storm Slayer
+        zone: main
+        min_count: 3
+      - card: Day of Judgment
+        zone: main
+        min_count: 3
+      - card: Enduring Innocence
+        zone: main
+        min_count: 3
+      - card: Overlord of the Mistmoors
+        zone: main
+        min_count: 3
+    colors:
+    - white
+    - black
+    - red
+  color_profile: default
+- id: dimir-sphinxes
+  name: Dimir Sphinxes
+  priority: 78136
+  rules:
+  - id: dimir-sphinxes-core
+    priority: 78136
+    subtype_id: null
+    conditions:
+      all:
+      - card: Sphinx of False Conclusions
+        zone: main
+        min_count: 3
+      - card: Consult the Star Charts
+        zone: main
+        min_count: 3
+      - any:
+        - all:
+          - card: Sphinx of Forgotten Lore
+            zone: main
+            min_count: 1
+        - all:
+          - card: Stoic Sphinx
+            zone: main
+            min_count: 1
+    colors:
+    - blue
+    - black
+  color_profile: default
+- id: rakdos-prowess
+  name: Rakdos Prowess
+  priority: 78137
+  rules:
+  - id: rakdos-prowess-core
+    priority: 78137
+    subtype_id: null
+    conditions:
+      all:
+      - card: Slickshot Show-Off
+        zone: main
+        min_count: 3
+      - card: Pompous Battlemage
+        zone: main
+        min_count: 3
+      - card: Stingerquill Charm
+        zone: main
+        min_count: 3
+    colors:
+    - black
+    - red
+  color_profile: default
+- id: temur-fling
+  name: Temur Fling
+  priority: 53000
+  rules:
+  - id: temur-fling-core
+    priority: 53000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Callous Sell-Sword
+        zone: main
+        min_count: 2
+      - card: Slickshot Show-Off
+        zone: main
+        min_count: 3
+      - card: Full Bore
+        zone: main
+        min_count: 2
+      - card: Leyline of Resonance
+        zone: main
+        max_count: 1
+    colors:
+    - blue
+    - red
+    - green
+  color_profile: standard-fling
+  card_uses:
+    Callous Sell-Sword: fling_secondary
+    Elusive Otter: fling_secondary
+- id: mardu-token
+  name: Mardu Token
+  priority: 78138
+  rules:
+  - id: mardu-token-core
+    priority: 78138
+    subtype_id: null
+    conditions:
+      all:
+      - card: Arabella, Abandoned Doll
+        zone: main
+        min_count: 2
+      - card: Delney, Streetwise Lookout
+        zone: main
+        min_count: 2
+      - card: Stadium Headliner
+        zone: main
+        min_count: 3
+      - card: Voice of Victory
+        zone: main
+        min_count: 3
+    colors:
+    - white
+    - black
+    - red
+  color_profile: default
+- id: orzhov-darklight-phoenix
+  name: Orzhov Darklight Phoenix
+  priority: 78139
+  rules:
+  - id: orzhov-darklight-phoenix-core
+    priority: 78139
+    subtype_id: null
+    conditions:
+      all:
+      - card: Darklight Phoenix
+        zone: main
+        min_count: 3
+      - card: Dark Matter Manipulator
+        zone: main
+        min_count: 3
+      - card: Abhorrent Oculus
+        zone: main
+        max_count: 2
+    colors:
+    - white
+    - black
+  color_profile: default
+- id: mardu-reanimator
+  name: Mardu Reanimator
+  priority: 78140
+  rules:
+  - id: mardu-reanimator-core
+    priority: 78140
+    subtype_id: null
+    conditions:
+      all:
+      - card: Rewrite Regrets
+        zone: main
+        min_count: 3
+      - card: Dark Matter Manipulator
+        zone: main
+        min_count: 3
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 3
+    colors:
+    - white
+    - black
+    - red
+  color_profile: default
+- id: esper-helping-hand
+  name: Esper Helping Hand
+  priority: 78141
+  rules:
+  - id: esper-helping-hand-core
+    priority: 78141
+    subtype_id: null
+    conditions:
+      all:
+      - card: Helping Hand
+        zone: main
+        min_count: 3
+      - card: Abhorrent Oculus
+        zone: main
+        min_count: 3
+      - card: Bitter Triumph
+        zone: main
+        min_count: 2
+      - card: Moonshadow
+        zone: main
+        min_count: 3
+    colors:
+    - white
+    - blue
+    - black
+  color_profile: default
+- id: rakdos-reanimator
+  name: Rakdos Reanimator
+  priority: 78142
+  rules:
+  - id: rakdos-reanimator-core
+    priority: 78142
+    subtype_id: null
+    conditions:
+      all:
+      - card: Zombify
+        zone: main
+        min_count: 3
+      - card: Valgavoth's Faithful
+        zone: main
+        min_count: 2
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 2
+    colors:
+    - black
+    - red
+  - id: rakdos-reanimator-rewrite-carnage
+    priority: 78142
+    subtype_id: null
+    conditions:
+      all:
+      - card: Rewrite Regrets
+        zone: main
+        min_count: 3
+      - card: Carnage, Crimson Chaos
+        zone: main
+        min_count: 3
+      - card: Bloodghast
+        zone: main
+        min_count: 2
+      - card: Overlord of the Balemurk
+        zone: main
+        min_count: 2
+    colors:
+    - black
+    - red
+  color_profile: default
+- id: dimir-darklight-phoenix
+  name: Dimir Darklight Phoenix
+  priority: 78143
+  rules:
+  - id: dimir-darklight-phoenix-core
+    priority: 78143
+    subtype_id: null
+    conditions:
+      all:
+      - card: Darklight Phoenix
+        zone: main
+        min_count: 3
+      - card: Dark Matter Manipulator
+        zone: main
+        min_count: 3
+      - card: Abhorrent Oculus
+        zone: main
+        max_count: 2
+    colors:
+    - blue
+    - black
+  color_profile: default
+- id: sphinx-approach
+  name: Sphinx's Approach
+  priority: 78144
+  rules:
+  - id: sphinx-approach-core
+    priority: 78144
+    subtype_id: null
+    conditions:
+      all:
+      - card: Sphinx's Approach
+        zone: main
+        min_count: 10
+      - card: Omniscience
+        zone: main
+        min_count: 3
+      - card: Conspiracy Unraveler
+        zone: main
+        min_count: 2
+- id: azorius-eirdu
+  name: Azorius Eirdu
+  priority: 78145
+  rules:
+  - id: azorius-eirdu-core
+    priority: 78145
+    subtype_id: null
+    conditions:
+      all:
+      - card: Eirdu, Carrier of Dawn
+        zone: main
+        min_count: 3
+      - card: Dour Port-Mage
+        zone: main
+        min_count: 3
+      - card: Springleaf Drum
+        zone: main
+        min_count: 3
+      - card: Starfield Shepherd
+        zone: main
+        min_count: 3
+    colors:
+    - white
+    - blue
+  color_profile: default
+- id: rakdos-black-mages
+  name: Rakdos Black Mages
+  priority: 78146
+  rules:
+  - id: rakdos-black-mages-core
+    priority: 78146
+    subtype_id: null
+    conditions:
+      all:
+      - card: Black Mage's Rod
+        zone: main
+        min_count: 3
+      - card: Cornered by Black Mages
+        zone: main
+        min_count: 3
+      - card: Kuja, Genome Sorcerer
+        zone: main
+        min_count: 3
+    colors:
+    - black
+    - red
+  color_profile: default
+- id: sultai-darklight-phoenix
+  name: Sultai Darklight Phoenix
+  priority: 78147
+  rules:
+  - id: sultai-darklight-phoenix-core
+    priority: 78147
+    subtype_id: null
+    conditions:
+      all:
+      - card: Darklight Phoenix
+        zone: main
+        min_count: 3
+      - card: Dream Beavers
+        zone: main
+        min_count: 3
+      - card: Oroku Saki, Shredder Rising
+        zone: main
+        min_count: 3
+    colors:
+    - blue
+    - black
+    - green
   color_profile: default
