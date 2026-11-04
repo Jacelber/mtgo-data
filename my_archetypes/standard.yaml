@@ -1124,6 +1124,34 @@ archetypes:
     colors:
     - blue
     - red
+  # A dense main-deck attack core that grows from casting spells establishes
+  # prowess without requiring a particular cantrip or a printed Prowess keyword.
+  # Eight copies represent multiple playsets; one incidental payoff playset is
+  # insufficient. Dedicated Fling, Leyline, Burn and Opus routes retain precedence.
+  - id: izzet-prowess-spell-payoff-core
+    priority: 17000
+    subtype_id: null
+    conditions:
+      all:
+      - total_count: &standard-prowess-attack-payoffs
+        - Gandalf, Goblins' Bane
+        - Pompous Battlemage
+        - Slickshot Show-Off
+        - Drake Hatcher
+        - Firebending Student
+        - Tomik, Izzet Sparkmage
+        - Colorstorm Stallion
+        - Molten-Core Maestro
+        - Elusive Otter
+        - Emberheart Challenger
+        - Kitsa, Otterball Elite
+        - Pyre Rhymer
+        - Monica Rambeau
+        zone: main
+        min_count: 8
+    colors:
+    - blue
+    - red
   card_uses: &standard-prowess-006
     Callous Sell-Sword: fling_secondary
     Elusive Otter: fling_secondary
@@ -2227,6 +2255,13 @@ archetypes:
 - id: izzet-aggro
   name: Izzet Aggro
   priority: 22000
+  # Generic aggro is the non-prowess fallback, including lists with only an
+  # incidental spell-payoff creature set. Use the same pool as the positive rule.
+  conditions:
+    all:
+    - total_count: *standard-prowess-attack-payoffs
+      zone: main
+      max_count: 7
   rules:
   - id: izzet-aggro-primary
     priority: 22000

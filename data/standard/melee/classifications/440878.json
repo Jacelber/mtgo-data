@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "95fae9a4ebb7fae26797bc36b71a7ba66f61b249f93e97d97e7926dc356744de"
+    "digest": "aa66363788d12e54f369447ba21b0375c95975054111355c68856801c111b58e"
   },
   "input": {
     "event_path": "data/standard/melee/events/440878.json",
@@ -18,10 +18,10 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/standard.yaml",
-    "rule_sha256": "dd3c328d0f30845575ae75d314e6be520a1516d4a0de54889adf9c481402b24b",
+    "rule_sha256": "8e50a112e7877c3eff8277dc84c90e0a29363369f0c72f4cc24a6c0a7d799ac1",
     "rule_schema_version": "1.2.0",
     "archetype_count": 194,
-    "rule_count": 312,
+    "rule_count": 313,
     "subtype_count": 26
   },
   "summary": {
@@ -30,8 +30,8 @@
     "unknown": 6,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 428,
-    "overridden_matches": 200,
+    "multiple_matches": 434,
+    "overridden_matches": 225,
     "selected_subtypes": 190,
     "parent_only": 580,
     "same_parent_multiple_subtype_matches": 0,
@@ -78,12 +78,11 @@
       "gruul-delirium": 1,
       "gruul-hulk-ramp": 1,
       "gruul-ramp": 1,
-      "izzet-aggro": 2,
       "izzet-artifacts": 1,
       "izzet-fling": 9,
       "izzet-lessons": 1,
       "izzet-otters": 1,
-      "izzet-prowess": 15,
+      "izzet-prowess": 17,
       "izzet-spellementals": 61,
       "izzet-superfriends": 1,
       "jeskai-artifacts": 25,
@@ -10052,6 +10051,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -10158,7 +10184,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -10563,6 +10617,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 15,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -10669,7 +10750,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 15,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -16123,6 +16232,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -16237,7 +16373,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -18518,6 +18682,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -18624,7 +18815,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -32943,6 +33162,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -33057,7 +33303,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -35855,6 +36129,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 16,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -35961,7 +36262,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 16,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -38816,6 +39145,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 13,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -38930,7 +39286,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 13,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -40791,6 +41175,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -40905,7 +41316,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -56363,6 +56802,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -56410,7 +56876,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -67545,6 +68039,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 10,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -67592,7 +68113,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 10,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -76929,43 +77478,27 @@
       "participant_id": "participant-99627e341422b5bf1566de4c240cb07830faf79fdf550b3a42219fd88153edce",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "izzet-aggro",
-        "archetype_name": "Izzet Aggro",
+        "archetype_id": "izzet-prowess",
+        "archetype_name": "Izzet Prowess",
         "subtype_id": null,
         "subtype_name": null,
-        "rule_id": "izzet-aggro-stingcaster-creatures",
-        "priority": 22000
+        "rule_id": "izzet-prowess-spell-payoff-core",
+        "priority": 17000
       },
       "matched_rules": [
         {
-          "archetype_id": "izzet-aggro",
-          "archetype_name": "Izzet Aggro",
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
           "subtype_id": null,
           "subtype_name": null,
-          "rule_id": "izzet-aggro-stingcaster-creatures",
-          "priority": 22000,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
           "evidence": [
             {
-              "card": "Hired Claw",
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Stingcaster Mage",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Gandalf, Goblins' Bane",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 14,
+              "min_count": 8,
               "max_count": null,
               "exact_count": null
             },
@@ -76983,34 +77516,18 @@
       ],
       "top_priority_matches": [
         {
-          "archetype_id": "izzet-aggro",
-          "archetype_name": "Izzet Aggro",
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
           "subtype_id": null,
           "subtype_name": null,
-          "rule_id": "izzet-aggro-stingcaster-creatures",
-          "priority": 22000,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
           "evidence": [
             {
-              "card": "Hired Claw",
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Stingcaster Mage",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Gandalf, Goblins' Bane",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 1,
+              "actual_count": 14,
+              "min_count": 8,
               "max_count": null,
               "exact_count": null
             },
@@ -77103,6 +77620,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 16,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -77166,7 +77710,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 16,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -81616,6 +82188,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -81722,7 +82321,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -83470,6 +84097,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -83584,7 +84238,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -92940,6 +93622,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 15,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -93046,7 +93755,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 15,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -94851,6 +95588,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -94965,7 +95729,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -99178,6 +99970,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -99292,7 +100111,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -107758,6 +108605,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -107872,7 +108746,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -108000,6 +108902,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -108114,7 +109043,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -118292,6 +119249,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -118406,7 +119390,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -119236,6 +120248,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -119350,7 +120389,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 12,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -123329,6 +124396,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -123370,7 +124464,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -124626,6 +125748,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 11,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -124681,7 +125830,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 11,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -127530,42 +128707,35 @@
       "participant_id": "participant-eb9ebfbce922d10783ce5700957a1964ac18ef76e3df8ff5e9eecfa458420c94",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "izzet-aggro",
-        "archetype_name": "Izzet Aggro",
+        "archetype_id": "izzet-prowess",
+        "archetype_name": "Izzet Prowess",
         "subtype_id": null,
         "subtype_name": null,
-        "rule_id": "izzet-aggro-primary",
-        "priority": 22000
+        "rule_id": "izzet-prowess-spell-payoff-core",
+        "priority": 17000
       },
       "matched_rules": [
         {
-          "archetype_id": "izzet-aggro",
-          "archetype_name": "Izzet Aggro",
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
           "subtype_id": null,
           "subtype_name": null,
-          "rule_id": "izzet-aggro-primary",
-          "priority": 22000,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
           "evidence": [
             {
-              "card": "Scalding Viper",
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
+              "actual_count": 8,
+              "min_count": 8,
               "max_count": null,
               "exact_count": null
             },
             {
-              "card": "Hired Claw",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Spirebluff Canal",
-              "zone": "main",
-              "actual_count": 4,
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -127575,33 +128745,26 @@
       ],
       "top_priority_matches": [
         {
-          "archetype_id": "izzet-aggro",
-          "archetype_name": "Izzet Aggro",
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
           "subtype_id": null,
           "subtype_name": null,
-          "rule_id": "izzet-aggro-primary",
-          "priority": 22000,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
           "evidence": [
             {
-              "card": "Scalding Viper",
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
               "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
+              "actual_count": 8,
+              "min_count": 8,
               "max_count": null,
               "exact_count": null
             },
             {
-              "card": "Hired Claw",
-              "zone": "main",
-              "actual_count": 4,
-              "min_count": 3,
-              "max_count": null,
-              "exact_count": null
-            },
-            {
-              "card": "Spirebluff Canal",
-              "zone": "main",
-              "actual_count": 4,
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
               "min_count": 1,
               "max_count": null,
               "exact_count": null
@@ -128896,6 +130059,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -129002,7 +130192,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
@@ -130004,6 +131222,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -130059,7 +131304,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 14,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -138302,6 +139575,33 @@
               "exact_count": null
             }
           ]
+        },
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 13,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
         }
       ],
       "top_priority_matches": [
@@ -138416,7 +139716,35 @@
           ]
         }
       ],
-      "overridden_matches": [],
+      "overridden_matches": [
+        {
+          "archetype_id": "izzet-prowess",
+          "archetype_name": "Izzet Prowess",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "izzet-prowess-spell-payoff-core",
+          "priority": 17000,
+          "evidence": [
+            {
+              "card": "total_count:Gandalf, Goblins' Bane|Pompous Battlemage|Slickshot Show-Off|Drake Hatcher|Firebending Student|Tomik, Izzet Sparkmage|Colorstorm Stallion|Molten-Core Maestro|Elusive Otter|Emberheart Challenger|Kitsa, Otterball Elite|Pyre Rhymer|Monica Rambeau",
+              "zone": "main",
+              "actual_count": 13,
+              "min_count": 8,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": true,
