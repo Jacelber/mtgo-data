@@ -8,7 +8,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from tools.delivery.github import APIError, GitHub  # noqa: E402
-from tools.delivery.parts import archive_parts, split  # noqa: E402
+from tools.delivery.parts import archive_git_parts, archive_parts, split  # noqa: E402
 
 
 def main() -> int:
@@ -20,6 +20,7 @@ def main() -> int:
     upload = sub.add_parser("upload")
     upload.add_argument("identifier")
     upload.add_argument("--token-env", required=True)
+    upload.add_argument("--handoff-commit", help="Immutable data-only commit in the private archive repository")
     args = parser.parse_args()
     try:
         target = "Jacelber/mtgo-data"
@@ -27,7 +28,8 @@ def main() -> int:
             result = split(args.candidate, args.destination, target=target)
         else:
             client = GitHub("Jacelber/mtgo-data-releases", token_env=args.token_env)
-            result = archive_parts(client, args.identifier, target=target)
+            result = (archive_git_parts(client, args.identifier, args.handoff_commit, target=target)
+                      if args.handoff_commit else archive_parts(client, args.identifier, target=target))
         print(json.dumps(result, indent=2))
         return 0
     except (APIError, OSError, ValueError) as error:

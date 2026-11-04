@@ -6,6 +6,10 @@ on:
         description: Exact pages-SHA256 identifier of the private fixed candidate
         type: string
         required: true
+      handoff_commit:
+        description: Optional immutable data-only handoff commit in the private archive repository
+        type: string
+        default: ''
 permissions:
   contents: read
 concurrency:
@@ -29,4 +33,10 @@ jobs:
         env:
           ARCHIVE_TOKEN: ${{ secrets.ARCHIVE_TOKEN }}
           PACKAGE: ${{ inputs.package }}
-        run: python tools/archive_product_parts.py upload "$PACKAGE" --token-env ARCHIVE_TOKEN
+          HANDOFF_COMMIT: ${{ inputs.handoff_commit }}
+        run: |
+          args=(upload "$PACKAGE" --token-env ARCHIVE_TOKEN)
+          if [[ -n "$HANDOFF_COMMIT" ]]; then
+            args+=(--handoff-commit "$HANDOFF_COMMIT")
+          fi
+          python tools/archive_product_parts.py "${args[@]}"
