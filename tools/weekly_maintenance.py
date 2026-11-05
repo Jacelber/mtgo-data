@@ -167,8 +167,9 @@ def inventory(root, source, displayed=None, previous=None, facts=None, confirmed
         aliases[deck["token"]] = alias
     required, machine, errors = [], [], []
     review = source.get("review", {})
-    copy = review.get("top_copy", {}).get("items", [])
-    if not copy or any(not str(item.get("text", {}).get("zh", "")).strip() for item in copy):
+    top_copy = review.get("top_copy", {})
+    copy = top_copy.get("items", [])
+    if (not copy and top_copy.get("reviewed") is not True) or any(not str(item.get("text", {}).get("zh", "")).strip() for item in copy):
         required.append("Landing 中文正文")
     if copy and any(not str(item.get("text", {}).get("en", "")).strip() for item in copy):
         machine.append("Landing 英文草稿")

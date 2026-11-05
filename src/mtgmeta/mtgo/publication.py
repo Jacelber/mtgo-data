@@ -436,6 +436,40 @@ def _validation_snapshot(stage: Path) -> dict[str, str]:
             if p.is_file() and not {".git", "__pycache__"}.intersection(p.relative_to(stage).parts)}
 
 
+def _pin_published_landing_data(root: Path, stage: Path, format_id: str,
+                                document: Mapping[str, Any]) -> dict[str, str]:
+    """Preserve a legacy page's already-published dependencies byte for byte."""
+    import shutil
+    base = Path("stats") / format_id / "mtgo"
+    binding = json.loads((root / base / "meta.json").read_text(encoding="utf-8"))["publication"]["artifacts"]
+    monday = week_monday(document["week"]["id"])
+    sources = {"range": "range_1w.json", "environment_decks": "decks_1w.json",
+               "feature_decks": "decks_4w.json", "completeness": "completeness/1w.json"}
+    pending = []
+    for key, relative in sources.items():
+        source = root / base / relative
+        payload = source.read_bytes()
+        value = json.loads(payload)
+        weeks = 4 if key == "feature_decks" else 1
+        period = value["period"]
+        if (binding.get((base / relative).as_posix()) != hashlib.sha256(payload).hexdigest()
+                or value.get("format") != format_id or value.get("source") != "mtgo"
+                or period.get("start") != (monday - timedelta(weeks=weeks - 1)).isoformat()
+                or period.get("end") != (monday + timedelta(days=6)).isoformat()
+                or period.get("weeks") != weeks
+                or (key != "completeness" and
+                    value.get("classifier_digest") != document["classifier"]["digest"])):
+            raise PublicationError(f"Retained Landing dependency is not the published page's subject: {source}")
+        target = f"weeks/{document['week']['id']}/{key}.json"
+        pending.append((key, source, target))
+    # Check every source before writing; never substitute newly generated rolling data.
+    for _key, source, target in pending:
+        destination = stage / base / "landing" / target
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, destination)
+    return {key: target for key, _source, target in pending}
+
+
 def _restate_retained_landing(root: Path, stage: Path, format_id: str, week: str) -> None:
     """Rebind this same week's classifier without changing accepted content."""
     import shutil
@@ -450,6 +484,10 @@ def _restate_retained_landing(root: Path, stage: Path, format_id: str, week: str
     path = stage / relative / "current.json"
     before = json.loads(path.read_text(encoding="utf-8"))
     if before.get("week", {}).get("id") != week:
+        if week_monday(before["week"]["id"]) < week_monday(week) and not before.get("data_files"):
+            before["data_files"] = _pin_published_landing_data(root, stage, format_id, before)
+            path.write_text(json.dumps(before, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8", newline="\n")
         return  # Older admitted weeks retain their original pinned resources.
     desired = classifier_digest(load_rules_for_format(stage, format_id))
     if before.get("classifier", {}).get("digest") in {None, desired}:

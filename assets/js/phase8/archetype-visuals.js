@@ -226,6 +226,9 @@ const manaIdentities = Object.freeze({
     "azorius-eirdu": Object.freeze(["w", "u"]),
     "rakdos-black-mages": Object.freeze(["b", "r"]),
     "sultai-darklight-phoenix": Object.freeze(["u", "b", "g"]),
+    "rakdos-darklight-phoenix": Object.freeze(["b", "r"]),
+    "ceremony-phoenix": Object.freeze(["u", "b"]),
+    "mono-red-midrange": Object.freeze(["r"]),
   }),
   modern: Object.freeze({
     "titan-canopy-ramp": Object.freeze(["g"]),
@@ -583,6 +586,9 @@ const manaIdentities = Object.freeze({
     "sewer-combo/temur": Object.freeze(["u", "r", "g"]),
     "sewer-combo/bant": Object.freeze(["w", "u", "g"]),
     "shifting-omni": Object.freeze(["u", "g"]),
+    "gruul-ponza": Object.freeze(["r", "g"]),
+    "mono-black-aggro": Object.freeze(["b"]),
+    "mardu-learn": Object.freeze(["w", "b", "r"]),
   }),
   pauper: Object.freeze({
     "dimir-self-bounce": Object.freeze(["u", "b"]),
@@ -844,6 +850,9 @@ const manaIdentities = Object.freeze({
     "waste-not": Object.freeze(["b"]),
     "zur-overlords": Object.freeze(["w", "u", "b", "g"]),
     "rakdos-phoenix": Object.freeze(["b", "r"]),
+    "mono-green-rhythm": Object.freeze(["g"]),
+    "affinity": Object.freeze(["u", "r"]),
+    "bant-beanstalk-control": Object.freeze(["w", "u", "g"]),
   }),
 });
 
@@ -976,6 +985,10 @@ const representativeCards = Object.freeze({
     "dimir-spider-man": Object.freeze([
       Object.freeze({"name": "Superior Spider-Man", "image": "../images/representative-cards/standard/superior-spider-man.jpg"}),
       Object.freeze({"name": "Deceit", "image": "../images/representative-cards/standard/deceit.jpg"}),
+    ]),
+    "dimir-control": Object.freeze([
+      Object.freeze({"name": "The Theorist, Jace Beleren", "image": "../images/representative-cards/standard/the-theorist-jace-beleren.jpg"}),
+      Object.freeze({"name": "Deadly Cover-Up", "image": "../images/representative-cards/standard/deadly-cover-up.jpg"}),
     ]),
   }),
   modern: Object.freeze({

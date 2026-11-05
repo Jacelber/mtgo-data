@@ -1,5 +1,5 @@
 schema_version: 1.2.0
-card_facts_sha256: b7280d8b01e69dc2b0ba8e252ed1635c3f7a1a017f1747c5e35ce2a48bf73181
+card_facts_sha256: dd413068e3a2427f99c5e75ab11a2e0ed597327358ef874bb6f02af9dd258f0e
 format: standard
 semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
@@ -310,9 +310,15 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: Mightform Harmonizer
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Mightform Harmonizer
+            zone: main
+            min_count: 1
+        - all:
+          - card: Mossborn Hydra
+            zone: main
+            min_count: 1
       - card: Sazh's Chocobo
         zone: main
         min_count: 1
@@ -6094,4 +6100,60 @@ archetypes:
     - blue
     - black
     - green
+  color_profile: default
+- id: rakdos-darklight-phoenix
+  name: Rakdos Darklight Phoenix
+  priority: 78148
+  rules:
+  - id: rakdos-darklight-phoenix-core
+    priority: 78148
+    subtype_id: null
+    conditions:
+      all:
+      - card: Darklight Phoenix
+        zone: main
+        min_count: 1
+      - card: Dark Matter Manipulator
+        zone: main
+        min_count: 1
+    colors:
+    - black
+    - red
+  color_profile: default
+- id: ceremony-phoenix
+  name: Ceremony Phoenix
+  priority: 78149
+  rules:
+  - id: ceremony-phoenix-core
+    priority: 78149
+    subtype_id: null
+    conditions:
+      all:
+      - card: The Sibsig Ceremony
+        zone: main
+        min_count: 1
+      - card: Darklight Phoenix
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+    - black
+  color_profile: default
+- id: mono-red-midrange
+  name: Mono-Red Midrange
+  priority: 78150
+  rules:
+  - id: mono-red-midrange-core
+    priority: 78150
+    subtype_id: null
+    conditions:
+      all:
+      - card: Way of the Pyromancer
+        zone: main
+        min_count: 1
+      - card: Magmatic Hellkite
+        zone: main
+        min_count: 1
+    colors:
+    - red
   color_profile: default

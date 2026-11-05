@@ -1,6 +1,6 @@
 # Owner-reviewed Pioneer classification, including remainder decisions.
 schema_version: 1.2.0
-card_facts_sha256: b7280d8b01e69dc2b0ba8e252ed1635c3f7a1a017f1747c5e35ce2a48bf73181
+card_facts_sha256: dd413068e3a2427f99c5e75ab11a2e0ed597327358ef874bb6f02af9dd258f0e
 format: pioneer
 semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
@@ -312,9 +312,15 @@ archetypes:
       - card: Monastery Swiftspear
         zone: main
         min_count: 1
-      - card: Ramunap Ruins
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Ramunap Ruins
+            zone: main
+            min_count: 1
+        - all:
+          - card: Kumano Faces Kakkazan
+            zone: main
+            min_count: 1
       - card: Steam Vents
         zone: main
         max_count: 0
@@ -707,6 +713,33 @@ archetypes:
         zone: main
         min_count: 1
     colors: [black, red, green]
+  - id: jund-artifact-sacrifice-dirge
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Biotech Specialist
+        zone: main
+        min_count: 1
+      - card: The Sackville-Bagginses
+        zone: main
+        min_count: 1
+      - card: Fable of the Mirror-Breaker
+        zone: main
+        min_count: 1
+      - card: Lively Dirge
+        zone: main
+        min_count: 1
+      - card: Oni-Cult Anvil
+        zone: main
+        max_count: 0
+      - card: Cauldron Familiar
+        zone: main
+        max_count: 0
+    colors:
+    - black
+    - red
+    - green
   - id: jund-artifact-sacrifice-biotech-anvil
     priority: 101
     subtype_id: null
@@ -1892,9 +1925,18 @@ archetypes:
       - card: Watery Grave
         zone: main
         min_count: 1
-      - card: Narset, Parter of Veils
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Narset, Parter of Veils
+            zone: main
+            min_count: 1
+        - all:
+          - card: Theorix Charm
+            zone: main
+            min_count: 1
+          - card: Dig Through Time
+            zone: main
+            min_count: 1
       - card: Doomsday Excruciator
         zone: main
         max_count: 0
@@ -2183,12 +2225,21 @@ archetypes:
       - card: Soulflayer
         zone: main
         min_count: 1
-      - card: Grisly Salvage
-        zone: main
-        min_count: 1
-      - card: Zetalpa, Primal Dawn
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Grisly Salvage
+            zone: main
+            min_count: 1
+          - card: Zetalpa, Primal Dawn
+            zone: main
+            min_count: 1
+        - all:
+          - card: Otherworldly Gaze
+            zone: main
+            min_count: 1
+          - card: Bringer of the Last Gift
+            zone: main
+            min_count: 1
 - id: four-color-legends
   name: Four-Color Legends
   priority: 100
@@ -3162,3 +3213,72 @@ archetypes:
     - red
     - green
   color_profile: default
+- id: mono-green-rhythm
+  name: Mono-Green Rhythm
+  priority: 110
+  rules:
+  - id: mono-green-rhythm-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nature's Rhythm
+        zone: main
+        min_count: 1
+      - card: Llanowar Elves
+        zone: main
+        min_count: 1
+      - card: Gnarled Professor
+        zone: main
+        min_count: 1
+      - card: Nykthos, Shrine to Nyx
+        zone: any
+        max_count: 0
+    colors:
+    - green
+  color_profile: default
+- id: affinity
+  name: Affinity
+  priority: 110
+  rules:
+  - id: affinity-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Springleaf Drum
+        zone: main
+        min_count: 1
+      - card: Ornithopter
+        zone: main
+        min_count: 1
+      - card: Simulacrum Synthesizer
+        zone: main
+        min_count: 1
+- id: bant-beanstalk-control
+  name: Bant Bealstalk Control
+  priority: 110
+  rules:
+  - id: bant-beanstalk-control-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Up the Beanstalk
+        zone: main
+        min_count: 1
+      - card: Leyline Binding
+        zone: main
+        min_count: 1
+      - card: Supreme Verdict
+        zone: main
+        min_count: 1
+      - card: Spara's Headquarters
+        zone: main
+        min_count: 1
+      - card: Omnath, Locus of Creation
+        zone: main
+        max_count: 0
+      - card: Enigmatic Incarnation
+        zone: main
+        max_count: 0
