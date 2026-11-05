@@ -13696,6 +13696,75 @@ data_admissions:
                 entrypoint: http://127.0.0.1:8774/standard/index.html
                 submitted_digest: c324e4244bb101f87cf3ed5505b2cb7f050b721a9f3af8dcb8ddd54646bc8483
 
+      - week: 2026-W44
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857003'
+        - '12857012'
+        - '12857016'
+        - '12857371'
+        - '12857373'
+        - '12857386'
+        - '12857409'
+        - '12857432'
+        source_manifest_digest: f42a4dcb5c41be2d7d8623f792be433339cc4494c8e550fb6004db919432b8cd
+        accepted_classifier_subject: 8536cd42f99a515b2021be23788fefc1a45d9fccf6699f666d2da5eb67bd3caf
+        classification_review_digest: 390a82d7668d3e91f0f13ed99992c61f38ef5471d3cdcc412e30ffc12f0905a2
+        accepted_on: '2026-11-04'
+        evidence: 'Owner 2026-11-04 on submitted review-v2 Standard W44: 12857003 rank20 Mono-Green Landfall alternative build; 12857012 rank22 红黑暗光凤凰/Rakdos
+          Darklight Phoenix; 12857371 rank28 仪式凤凰/Ceremony Phoenix; 12857409 rank31 纯红中速/Mono-Red Midrange; all other Standard classifications accepted.
+          Final material matches exactly those four explicit assignments; other 250 weekly records unchanged. Retained-corpus comparison covers 9195
+          MTGO/Melee records with exactly four expected changes and no unexpected diagnostic or identity drift.'
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: standard
+            week: 2026-W44
+            bindings:
+              event_ids:
+              - '12857003'
+              - '12857012'
+              - '12857016'
+              - '12857371'
+              - '12857373'
+              - '12857386'
+              - '12857409'
+              - '12857432'
+              record_count: 254
+              classifier: 8536cd42f99a515b2021be23788fefc1a45d9fccf6699f666d2da5eb67bd3caf
+              classification_review_digest: 390a82d7668d3e91f0f13ed99992c61f38ef5471d3cdcc412e30ffc12f0905a2
+              material_digest: b26b27ea22a51506b63c99d18a614ac75da2d39a8d8a3eb04e2ed852dc093e53
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857003'
+                - '12857012'
+                - '12857016'
+                - '12857371'
+                - '12857373'
+                - '12857386'
+                - '12857409'
+                - '12857432'
+                record_count: 254
+                classifier: 8536cd42f99a515b2021be23788fefc1a45d9fccf6699f666d2da5eb67bd3caf
+                classification_review_digest: 390a82d7668d3e91f0f13ed99992c61f38ef5471d3cdcc412e30ffc12f0905a2
+            digest: 25ff4b59b33bec432eed46a303c467ab944906bcf6842115f3e929d5c2699dca
+          decisions:
+            format: standard
+            week: 2026-W44
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: 0ce6a0c720162f659ab032ff22db49ccb27a70a7531b68403685e08a1fa4ba7e
+                evidence: 'Owner 2026-11-04 on submitted review-v2 Standard W44: 12857003 rank20 Mono-Green Landfall alternative build; 12857012 rank22
+                  红黑暗光凤凰/Rakdos Darklight Phoenix; 12857371 rank28 仪式凤凰/Ceremony Phoenix; 12857409 rank31 纯红中速/Mono-Red Midrange; all other Standard
+                  classifications accepted. Final material matches exactly those four explicit assignments; other 250 weekly records unchanged. Retained-corpus
+                  comparison covers 9195 MTGO/Melee records with exactly four expected changes and no unexpected diagnostic or identity drift.'
+                accepted_on: '2026-11-04'
+                entrypoint: http://127.0.0.1:8776/review-v2/standard/2026-W44/index.html
+                submitted_digest: 25ff4b59b33bec432eed46a303c467ab944906bcf6842115f3e929d5c2699dca
     pauper:
       initial:
         kind: owner_accepted_initial_public_scope
@@ -14204,6 +14273,71 @@ data_admissions:
                 entrypoint: http://127.0.0.1:8774/pauper/index.html
                 submitted_digest: cf088f255f38e438e7aeedcae69df067883dcfb2022d7940efa1ca596fcc9a42
 
+      - week: 2026-W44
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857001'
+        - '12857008'
+        - '12857017'
+        - '12857378'
+        - '12857383'
+        - '12857391'
+        - '12857406'
+        source_manifest_digest: 0beea75cd1cef98afc09e50e8a91b8f2a6d5ac4186140e3b1b9adcf6337db4b7
+        accepted_classifier_subject: 4d9cbaeb3d3e9da6cba7ee8ffe31f4a5bc79eb854e7395e7bcf4eabcb3459901
+        classification_review_digest: 7c4400088600760369e45bc3202716b8a4c6a5286d7a8799358fba080ddc7796
+        accepted_on: '2026-11-05'
+        evidence: Owner 2026-11-05 assigned Pauper W44 12857391 rank13 Grixis Control and explicitly approved all other216 classifications. Final217
+          records independently verified:one assignment,other216 unchanged,all main/side material preserved,Unknown=0. Compared all6242 MTGO/Melee retained
+          records;exactly one expected change and no other identity,rule-match,conflict or status drift. Existing Mystic control branches preserved.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pauper
+            week: 2026-W44
+            bindings:
+              event_ids:
+              - '12857001'
+              - '12857008'
+              - '12857017'
+              - '12857378'
+              - '12857383'
+              - '12857391'
+              - '12857406'
+              record_count: 217
+              classifier: 4d9cbaeb3d3e9da6cba7ee8ffe31f4a5bc79eb854e7395e7bcf4eabcb3459901
+              classification_review_digest: 7c4400088600760369e45bc3202716b8a4c6a5286d7a8799358fba080ddc7796
+              material_digest: 241e5b89eb1432c152ba475ba1cebfcf0d752d37c8b6f13c9b0b421ec02f5eec
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857001'
+                - '12857008'
+                - '12857017'
+                - '12857378'
+                - '12857383'
+                - '12857391'
+                - '12857406'
+                record_count: 217
+                classifier: 4d9cbaeb3d3e9da6cba7ee8ffe31f4a5bc79eb854e7395e7bcf4eabcb3459901
+                classification_review_digest: 7c4400088600760369e45bc3202716b8a4c6a5286d7a8799358fba080ddc7796
+            digest: 638f8cb2837d82af6932bbf2bd8eefa220f49a53fbfff256f9f4e06c338585d7
+          decisions:
+            format: pauper
+            week: 2026-W44
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: 7a5dc62e6ab3abe9ca9e07e9a157b6abac9f7b72cc58d9f1e0e44f883408f822
+                evidence: Owner 2026-11-05 assigned Pauper W44 12857391 rank13 Grixis Control and explicitly approved all other216 classifications.
+                  Final217 records independently verified:one assignment,other216 unchanged,all main/side material preserved,Unknown=0. Compared all6242
+                  MTGO/Melee retained records;exactly one expected change and no other identity,rule-match,conflict or status drift. Existing Mystic
+                  control branches preserved.
+                accepted_on: '2026-11-05'
+                entrypoint: http://127.0.0.1:8776/review-v2/pauper/2026-W44/index.html
+                submitted_digest: 638f8cb2837d82af6932bbf2bd8eefa220f49a53fbfff256f9f4e06c338585d7
     modern:
       initial:
         kind: grandfathered_existing_public_scope
@@ -15003,6 +15137,93 @@ data_admissions:
                 entrypoint: http://127.0.0.1:8774/modern/index.html
                 submitted_digest: 9589ff2d5b3e2bfdf9251eae3a11b01e9196dcb86e54b5dd52d762b55cd23714
 
+      - week: 2026-W44
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12856997'
+        - '12857006'
+        - '12857007'
+        - '12857013'
+        - '12857015'
+        - '12857018'
+        - '12857259'
+        - '12857374'
+        - '12857384'
+        - '12857389'
+        - '12857390'
+        - '12857394'
+        - '12857398'
+        - '12857403'
+        source_manifest_digest: c6e279289f9d01bef7de78915f0a46b382fbe4fa391cd174e89c5197ede64a55
+        accepted_classifier_subject: 37c1cf1db20bc90bc2fd45d5ac042110edc387c10572f9f57e0f34fadf56d4e7
+        classification_review_digest: 2aee7d1eaef18c125a3cdd3c86e775abfc3b634ab45abd673b869c4ac6ff0ef7
+        accepted_on: '2026-11-05'
+        evidence: Owner 2026-11-05 accepted all unmentioned Modern W44 classifications and assigned 12856997 rank28 Izzet Tempo Murktide-only build,12857007
+          rank15 红绿炸地/Gruul Ponza,12857013 rank31 纯黑快攻/Mono-Black Aggro,12857389 rank11 玛尔都温习/Mardu Learn;12857390 rank22 explicitly remains Unknown
+          and Owner separately confirmed random card pile. Final material has exactly four assignments;other432 unchanged including accepted Unknown.
+          Compared all20115 retained MTGO/Melee records;no unexpected identity,rule-match,conflict or status drift.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: modern
+            week: 2026-W44
+            bindings:
+              event_ids:
+              - '12856997'
+              - '12857006'
+              - '12857007'
+              - '12857013'
+              - '12857015'
+              - '12857018'
+              - '12857259'
+              - '12857374'
+              - '12857384'
+              - '12857389'
+              - '12857390'
+              - '12857394'
+              - '12857398'
+              - '12857403'
+              record_count: 436
+              classifier: 37c1cf1db20bc90bc2fd45d5ac042110edc387c10572f9f57e0f34fadf56d4e7
+              classification_review_digest: 2aee7d1eaef18c125a3cdd3c86e775abfc3b634ab45abd673b869c4ac6ff0ef7
+              material_digest: 57505ae360cede22d6af184469d37e727bb4770ca686d385545b7f0fbd370b13
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12856997'
+                - '12857006'
+                - '12857007'
+                - '12857013'
+                - '12857015'
+                - '12857018'
+                - '12857259'
+                - '12857374'
+                - '12857384'
+                - '12857389'
+                - '12857390'
+                - '12857394'
+                - '12857398'
+                - '12857403'
+                record_count: 436
+                classifier: 37c1cf1db20bc90bc2fd45d5ac042110edc387c10572f9f57e0f34fadf56d4e7
+                classification_review_digest: 2aee7d1eaef18c125a3cdd3c86e775abfc3b634ab45abd673b869c4ac6ff0ef7
+            digest: ec833fe0646d0ee443a047d5db12bb7cbc3f83ad49a272a263bfe2beea2a3e92
+          decisions:
+            format: modern
+            week: 2026-W44
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: d45ecd4eeb46263edb576217013b402e50163584c31fb2c0c367314727c58793
+                evidence: Owner 2026-11-05 accepted all unmentioned Modern W44 classifications and assigned 12856997 rank28 Izzet Tempo Murktide-only
+                  build,12857007 rank15 红绿炸地/Gruul Ponza,12857013 rank31 纯黑快攻/Mono-Black Aggro,12857389 rank11 玛尔都温习/Mardu Learn;12857390 rank22 explicitly
+                  remains Unknown and Owner separately confirmed random card pile. Final material has exactly four assignments;other432 unchanged including
+                  accepted Unknown. Compared all20115 retained MTGO/Melee records;no unexpected identity,rule-match,conflict or status drift.
+                accepted_on: '2026-11-05'
+                entrypoint: http://127.0.0.1:8776/review-v2/modern/2026-W44/index.html
+                submitted_digest: ec833fe0646d0ee443a047d5db12bb7cbc3f83ad49a272a263bfe2beea2a3e92
     pioneer:
       initial:
         kind: owner_accepted_initial_public_scope
@@ -15483,3 +15704,70 @@ data_admissions:
                 accepted_on: '2026-10-27'
                 entrypoint: http://127.0.0.1:8774/pioneer/index.html
                 submitted_digest: 748698b63fabc9ed9a2e92fc3879ae7c93ed3cea872f17aee9f6301f0fa51356
+      - week: 2026-W44
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857004'
+        - '12857379'
+        - '12857397'
+        - '12857407'
+        - '12857431'
+        - '12857433'
+        source_manifest_digest: fe4c4d99005f993ad910a25952cd33d1962c0b51a74c70a83c8c55d0e3451333
+        accepted_classifier_subject: e3def237b5ba7188967a3764c00d12196895b844c870bd1d11af76eb49ffff97
+        classification_review_digest: db3dbeaca749fa991af258083b019480a816cee307a9f5149a5a17ba200fdc23
+        accepted_on: '2026-11-05'
+        evidence: 'Owner 2026-11-05 accepted all unmentioned Pioneer W44 classifications and eight assignments: 12857004 rank25 Dimir Control; 12857431
+          rank3 Mono-Red Aggro; 12857397 rank26 Dimir Control,rank28 纯绿韵律/Mono-Green Rhythm restricted to mono-green ramp without Nykthos; 12857433
+          rank10 Jund Artifact Sacrifice without Anvil,rank29 共鸣/Affinity; 12857407 rank8 班特豆茎控/Bant Bealstalk Control,rank14 掠魂魔/Soulflayer. Revised
+          material independently verified as exactly these eight assignments, other177 weekly records unchanged; all5846 retained MTGO records compared
+          with no unexpected identity,matched-rule,conflict or status drift. Nykthos additions to main or side prevent Mono-Green Rhythm match. Original
+          submitted material review-v2; no claim of separate Owner review of revision.'
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pioneer
+            week: 2026-W44
+            bindings:
+              event_ids:
+              - '12857004'
+              - '12857379'
+              - '12857397'
+              - '12857407'
+              - '12857431'
+              - '12857433'
+              record_count: 185
+              classifier: e3def237b5ba7188967a3764c00d12196895b844c870bd1d11af76eb49ffff97
+              classification_review_digest: db3dbeaca749fa991af258083b019480a816cee307a9f5149a5a17ba200fdc23
+              material_digest: f9e2df98406c62b511ae493852e5f287c1d48500778eb19021ec5660f205ad46
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857004'
+                - '12857379'
+                - '12857397'
+                - '12857407'
+                - '12857431'
+                - '12857433'
+                record_count: 185
+                classifier: e3def237b5ba7188967a3764c00d12196895b844c870bd1d11af76eb49ffff97
+                classification_review_digest: db3dbeaca749fa991af258083b019480a816cee307a9f5149a5a17ba200fdc23
+            digest: 263fb3802faee48afc3267f80919f4fcfef39cdb0d7833c5c6cf529bb83f2a68
+          decisions:
+            format: pioneer
+            week: 2026-W44
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: ae9ee461087850f4b4914d22cf7a5efb5d13a483f0acc41ce7cbdefbda3c55a0
+                evidence: 'Owner 2026-11-05 accepted all unmentioned Pioneer W44 classifications and eight assignments: 12857004 rank25 Dimir Control;
+                  12857431 rank3 Mono-Red Aggro; 12857397 rank26 Dimir Control,rank28 纯绿韵律/Mono-Green Rhythm restricted to mono-green ramp without Nykthos;
+                  12857433 rank10 Jund Artifact Sacrifice without Anvil,rank29 共鸣/Affinity; 12857407 rank8 班特豆茎控/Bant Bealstalk Control,rank14 掠魂魔/Soulflayer.
+                  Revised material independently verified as exactly these eight assignments, other177 weekly records unchanged; all5846 retained MTGO
+                  records compared with no unexpected identity,matched-rule,conflict or status drift. Nykthos additions to main or side prevent Mono-Green
+                  Rhythm match. Original submitted material review-v2; no claim of separate Owner review of revision.'
+                accepted_on: '2026-11-05'
+                entrypoint: http://127.0.0.1:8776/review-v2/pioneer/2026-W44/index.html
+                submitted_digest: 263fb3802faee48afc3267f80919f4fcfef39cdb0d7833c5c6cf529bb83f2a68

@@ -41,6 +41,14 @@ def test_no_feature_does_not_waive_chinese(inputs):
     assert "Feature 有无及选择" in workflow.inventory(root, source, page)["required_user"]
 
 
+def test_owner_reviewed_empty_copy_is_complete_but_blank_paragraph_is_not(inputs):
+    root, source, page = inputs
+    source["review"]["top_copy"] = {"reviewed": True, "items": []}
+    assert workflow.inventory(root, source, page)["required_user"] == []
+    source["review"]["top_copy"]["items"] = [{"order": 1, "text": {"zh": "", "en": ""}}]
+    assert workflow.inventory(root, source, page)["required_user"] == ["Landing 中文正文"]
+
+
 def test_explicit_representatives_reused_without_claiming_historical_display(inputs):
     root, source, page = inputs
     confirmed = {"format": "pioneer", "week": "2026-W39", "entries": [{

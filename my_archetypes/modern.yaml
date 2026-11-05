@@ -1,5 +1,5 @@
 schema_version: 1.2.0
-card_facts_sha256: b7280d8b01e69dc2b0ba8e252ed1635c3f7a1a017f1747c5e35ce2a48bf73181
+card_facts_sha256: dd413068e3a2427f99c5e75ab11a2e0ed597327358ef874bb6f02af9dd258f0e
 format: modern
 semantic_features:
   manifest_path: configs/classifier_semantic_features_modern.yaml
@@ -536,6 +536,7 @@ archetypes:
 - id: izzet-tempo
   name: Izzet Tempo
   priority: 638075
+  color_profile: default
   rules:
   - id: izzet-tempo-primary
     priority: 638075
@@ -633,6 +634,35 @@ archetypes:
       - card: __classifier-semantic-any-green-spell__
         zone: any
         exact_count: 0
+  - id: izzet-tempo-murktide-only
+    priority: 638073
+    subtype_id: null
+    conditions:
+      all:
+      - card: Murktide Regent
+        zone: main
+        min_count: 1
+      - card: Counterspell
+        zone: main
+        min_count: 1
+      - card: Steam Vents
+        zone: main
+        min_count: 1
+      - card: Ragavan, Nimble Pilferer
+        zone: main
+        max_count: 0
+      - card: Dragon's Rage Channeler
+        zone: main
+        max_count: 0
+      - card: Tamiyo, Inquisitive Student
+        zone: main
+        max_count: 0
+      - card: Cori-Steel Cutter
+        zone: main
+        max_count: 0
+    colors:
+    - blue
+    - red
 - id: sultai-tempo
   name: Sultai Tempo
   priority: 638025
@@ -10596,3 +10626,67 @@ archetypes:
     colors:
     - red
     - green
+- id: gruul-ponza
+  name: Gruul Ponza
+  priority: 661020
+  color_profile: default
+  rules:
+  - id: gruul-ponza-primary
+    priority: 661020
+    subtype_id: null
+    conditions:
+      all:
+      - card: Utopia Sprawl
+        zone: main
+        min_count: 1
+      - card: Pillage
+        zone: main
+        min_count: 1
+      - card: Price of Freedom
+        zone: main
+        min_count: 1
+    colors:
+    - red
+    - green
+- id: mono-black-aggro
+  name: Mono-Black Aggro
+  priority: 620110
+  color_profile: default
+  rules:
+  - id: mono-black-aggro-primary
+    priority: 620110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Moonshadow
+        zone: main
+        min_count: 1
+      - card: Nethergoyf
+        zone: main
+        min_count: 1
+      - card: Dark Matter Manipulator
+        zone: main
+        min_count: 1
+    colors:
+    - black
+- id: mardu-learn
+  name: Mardu Learn
+  priority: 632410
+  rules:
+  - id: mardu-learn-primary
+    priority: 632410
+    subtype_id: null
+    conditions:
+      all:
+      - card: Eyetwitch
+        zone: main
+        min_count: 1
+      - card: Academic Dispute
+        zone: main
+        min_count: 1
+      - card: Volcano Hellion
+        zone: main
+        min_count: 1
+      - card: Godless Shrine
+        zone: main
+        min_count: 1

@@ -1,5 +1,5 @@
 schema_version: 1.2.0
-card_facts_sha256: b7280d8b01e69dc2b0ba8e252ed1635c3f7a1a017f1747c5e35ce2a48bf73181
+card_facts_sha256: dd413068e3a2427f99c5e75ab11a2e0ed597327358ef874bb6f02af9dd258f0e
 format: pauper
 semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
@@ -1140,7 +1140,41 @@ archetypes:
 - id: grixis-control
   name: Grixis Control
   priority: 9160
+  color_profile: default
   rules:
+  - id: grixis-control-strix-angler
+    priority: 9294
+    subtype_id: null
+    conditions:
+      all:
+      - card: Baleful Strix
+        zone: main
+        min_count: 1
+      - card: Gurmag Angler
+        zone: main
+        min_count: 1
+      - card: Counterspell
+        zone: main
+        min_count: 1
+      - card: Snuff Out
+        zone: main
+        min_count: 1
+      - card: Vandalblast
+        zone: side
+        min_count: 1
+      - card: Murmuring Mystic
+        zone: main
+        max_count: 0
+      - card: Tolarian Terror
+        zone: main
+        max_count: 0
+      - card: Spellstutter Sprite
+        zone: main
+        max_count: 0
+    colors:
+    - blue
+    - black
+    - red
   - id: grixis-control
     priority: 9160
     subtype_id: null
