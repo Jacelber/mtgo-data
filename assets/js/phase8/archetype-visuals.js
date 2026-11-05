@@ -986,6 +986,10 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Superior Spider-Man", "image": "../images/representative-cards/standard/superior-spider-man.jpg"}),
       Object.freeze({"name": "Deceit", "image": "../images/representative-cards/standard/deceit.jpg"}),
     ]),
+    "dimir-control": Object.freeze([
+      Object.freeze({"name": "The Theorist, Jace Beleren", "image": "../images/representative-cards/standard/the-theorist-jace-beleren.jpg"}),
+      Object.freeze({"name": "Deadly Cover-Up", "image": "../images/representative-cards/standard/deadly-cover-up.jpg"}),
+    ]),
   }),
   modern: Object.freeze({
     "affinity": Object.freeze([
