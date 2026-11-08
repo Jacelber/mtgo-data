@@ -69,6 +69,17 @@ def classifier_digest(rules: RuleSet) -> str:
             "archetypes": parents,
         }
     )
+    if rules.identity_policy:
+        from .legacy_policy import policy_subject
+        subject['identity_policy'] = rules.identity_policy
+        subject['policy_subject'] = policy_subject()
+        source_parents = []
+        for parent in sorted(rules.recognition_archetypes or (), key=lambda p: p.id):
+            item = asdict(parent)
+            item['rules'] = [asdict(r) for r in sorted(parent.rules, key=lambda r: r.id)]
+            item['subtypes'] = [asdict(s) for s in sorted(parent.subtypes, key=lambda s: s.id)]
+            source_parents.append(item)
+        subject['recognition_archetypes'] = canonical(source_parents)
     encoded = json.dumps(
         subject,
         ensure_ascii=False,
@@ -313,6 +324,8 @@ def evaluate_matches(
     rule_set: RuleSet, main_counts: Mapping[str, int], side_counts: Mapping[str, int]
 ) -> tuple[RuleMatch, ...]:
     """Return every successful inherited rule in deterministic priority order."""
+    if rule_set.identity_policy:
+        return classify_counts(rule_set, main_counts, side_counts).matched_rules
     return _evaluate(rule_set, main_counts, side_counts)[0]
 
 
@@ -349,6 +362,22 @@ def _count_errors(zone: str, counts: object) -> list[str]:
 
 @with_rule_facts
 def classify_counts(
+    rule_set: RuleSet,
+    main_counts: Mapping[str, int],
+    side_counts: Mapping[str, int],
+) -> ClassificationResult:
+    """Classify through the explicitly configured family identity policy."""
+    if rule_set.identity_policy:
+        from .legacy_policy import classify
+        errors = _count_errors('main', main_counts) + _count_errors('side', side_counts)
+        if errors:
+            return _invalid_result(*dict.fromkeys(errors))
+        return classify(rule_set, main_counts, side_counts)
+    return _classify_counts(rule_set, main_counts, side_counts)
+
+
+@with_rule_facts
+def _classify_counts(
     rule_set: RuleSet,
     main_counts: Mapping[str, int],
     side_counts: Mapping[str, int],

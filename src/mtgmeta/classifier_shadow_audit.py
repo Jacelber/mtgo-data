@@ -70,7 +70,10 @@ def reordered_rule_set(rule_set: RuleSet) -> RuleSet:
     archetypes: list[ArchetypeDefinition] = []
     for archetype in reversed(rule_set.archetypes):
         archetypes.append(replace(archetype, rules=tuple(reversed(archetype.rules))))
-    return replace(rule_set, archetypes=tuple(archetypes))
+    source = rule_set.recognition_archetypes
+    if source is not None:
+        source = tuple(replace(a, rules=tuple(reversed(a.rules))) for a in reversed(source))
+    return replace(rule_set, archetypes=tuple(archetypes), recognition_archetypes=source)
 
 
 def diagnostic_flags(result: ClassificationResult, rule_set: RuleSet) -> dict[str, bool]:
@@ -161,7 +164,7 @@ def rule_inventory(rule_set: RuleSet) -> dict[str, Any]:
             "rule_id": item.id,
             "priority": item.priority,
         }
-        for archetype in rule_set.archetypes
+        for archetype in (rule_set.recognition_archetypes or rule_set.archetypes)
         for item in archetype.rules
     ]
     priority_counts = Counter(item["priority"] for item in entries)

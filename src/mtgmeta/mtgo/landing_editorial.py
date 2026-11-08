@@ -468,6 +468,9 @@ def _identity_key(format_id: str, parent_id: str, subtype_id: str | None) -> str
 def _display_english(parent_name: str, subtype_name: str | None) -> str:
     if subtype_name is None:
         return parent_name
+    from ..legacy_policy import is_full_subtype_name
+    if is_full_subtype_name(parent_name, subtype_name):
+        return subtype_name
     if parent_name in subtype_name:
         return subtype_name
     parent_words = parent_name.split()

@@ -2,7 +2,7 @@
 const D=JSON.parse(document.querySelector('#review-data').textContent), M=D.material;
 const content=D.kind==='content', $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const formats={standard:'标准',modern:'摩登',pauper:'纯铁',pioneer:'先驱'};
+const formats={standard:'标准',modern:'摩登',pauper:'纯铁',pioneer:'先驱',legacy:'薪传'};
 const nameMap=new Map(D.names.map(n=>[n.identity_id,n.display]));
 const flags={multiple_matches:'命中多个规则',overridden_matches:'存在被覆盖规则',unknown:'未知分类',conflict:'规则冲突',errors:'分类错误',classification_conflict:'分类冲突',subtype_conflict:'子类冲突',invalid_deck:'无效牌表'};
 const stateNames={confirmed_configuration_reused:'沿用已确认配置',displayed_configuration_reused:'沿用已展示配置',changed:'配置已改变，待确认',not_previously_displayed:'代表牌待确认'};

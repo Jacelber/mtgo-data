@@ -20,6 +20,9 @@
     "format": {
       "$ref": "#/$defs/id"
     },
+    "identity_policy": {
+      "const": "legacy-reviewed-v1"
+    },
     "semantic_features": {
       "$ref": "#/$defs/semantic_features"
     },
@@ -35,6 +38,10 @@
   },
   "additionalProperties": false,
   "allOf": [
+    {
+      "if": {"required": ["identity_policy"]},
+      "then": {"properties": {"format": {"const": "legacy"}, "schema_version": {"enum": ["1.1.0", "1.2.0"]}}}
+    },
     {
       "if": {
         "properties": {

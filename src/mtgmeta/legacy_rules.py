@@ -46,7 +46,7 @@ def to_legacy_archetypes(rule_set: RuleSet) -> LegacyArchetypeRules:
                 ],
             },
         )
-        for archetype in rule_set.archetypes
+        for archetype in (rule_set.recognition_archetypes or rule_set.archetypes)
         for rule in archetype.rules
     ]
     items = [item[2] for item in sorted(flattened, key=lambda item: (-item[0], item[1]))]

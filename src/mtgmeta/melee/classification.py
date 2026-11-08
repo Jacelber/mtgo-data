@@ -216,7 +216,7 @@ def _classification_record(
 def _rule_counts(rule_set: RuleSet) -> tuple[int, int, int]:
     return (
         len(rule_set.archetypes),
-        sum(len(archetype.rules) for archetype in rule_set.archetypes),
+        sum(len(archetype.rules) for archetype in (rule_set.recognition_archetypes or rule_set.archetypes)),
         sum(len(archetype.subtypes) for archetype in rule_set.archetypes),
     )
 
