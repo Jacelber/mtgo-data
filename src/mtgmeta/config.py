@@ -235,7 +235,7 @@ def _load_rule_set(path: str | Path) -> RuleSet:
     from .rules import leaf_conditions
     used_markers = {
         name
-        for archetype in rule_set.archetypes
+        for archetype in (rule_set.recognition_archetypes or rule_set.archetypes)
         for rule in archetype.rules
         for condition in leaf_conditions(archetype.conditions + rule.conditions)
         for name in condition.cards or (condition.card,)

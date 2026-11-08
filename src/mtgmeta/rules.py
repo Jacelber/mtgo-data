@@ -78,6 +78,8 @@ class RuleSet:
     semantic_features: SemanticFeatureManifest | None = None
     card_facts_sha256: str | None = None
     facts: CardFacts | None = field(default=None, compare=False, repr=False)
+    identity_policy: str | None = None
+    recognition_archetypes: tuple[ArchetypeDefinition, ...] | None = None
 
 
 def _is_nonempty_string(value: object) -> TypeGuard[str]:
@@ -102,7 +104,12 @@ def validate_rule_data(data: Any) -> list[RuleValidationFailure]:
     if not isinstance(data, dict):
         return [RuleValidationFailure("root", "must be a mapping")]
     schema_version = str(data.get("schema_version", ""))
-    allowed_root = {"schema_version", "format", "archetypes"}
+    allowed_root = {"schema_version", "format", "archetypes", "identity_policy"}
+    if "identity_policy" in data and (
+        data["identity_policy"] != "legacy-reviewed-v1" or data.get("format") != "legacy"
+        or schema_version not in {"1.1.0", RULE_SCHEMA_VERSION}
+    ):
+        failures.append(RuleValidationFailure("identity_policy", "requires legacy-reviewed-v1 on semantic Legacy rules"))
     if schema_version in {"1.1.0", RULE_SCHEMA_VERSION}:
         allowed_root.add("semantic_features")
     if schema_version == RULE_SCHEMA_VERSION:
@@ -650,11 +657,16 @@ def build_rule_set(data: dict[str, Any]) -> RuleSet:
             )
         )
     semantic = data.get("semantic_features", {})
-    return RuleSet(
+    result = RuleSet(
         data["schema_version"],
         data["format"],
         tuple(archetypes),
         semantic.get("manifest_path"),
         semantic.get("manifest_sha256", "").lower() or None,
         card_facts_sha256=data.get("card_facts_sha256"),
+        identity_policy=data.get("identity_policy"),
     )
+    if result.identity_policy:
+        from .legacy_policy import register_outputs
+        return register_outputs(result)
+    return result

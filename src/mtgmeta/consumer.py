@@ -19,6 +19,9 @@ def identity_display_name(
 
     if subtype_name is None:
         return parent_name
+    from .legacy_policy import is_full_subtype_name
+    if is_full_subtype_name(parent_name, subtype_name):
+        return subtype_name
     if parent_name.casefold() in subtype_name.casefold():
         return subtype_name
     parent_folded = parent_name.casefold()
