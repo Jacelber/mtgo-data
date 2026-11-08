@@ -248,7 +248,10 @@ def classify_with_review(rules, main, side):
         in {"bant-beanstalk", "multicolor-control", "domain-control", "sultai-midrange"}
         and main.get("Up the Beanstalk", 0) >= 3
         and main.get("Force of Will", 0) >= 2
-        and main.get("Brainstorm", 0) >= 2
+        # An existing Beanstalk recognition already establishes its engine.
+        # Enchantment-heavy lists need not use Brainstorm; keep that extra
+        # signature when considering the broader control/midrange families.
+        and (pid == "bant-beanstalk" or main.get("Brainstorm", 0) >= 2)
     )
     sewers = pid == "blue-artifacts"
     # Full known UW families and actual colored subtype paths are the accepted

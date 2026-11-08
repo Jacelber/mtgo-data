@@ -924,7 +924,7 @@ const manaIdentities = Object.freeze({
     "azorius-tempo": Object.freeze(["w", "u"]),
     "azorius-vial/azorius": Object.freeze(["w", "u"]),
     "azorius-vial": Object.freeze(["w", "u"]),
-    "bant-beanstalk": Object.freeze(["w", "u", "b", "g"]),
+    "multicolor-beanstalk-control/wubg-yorion": Object.freeze(["w", "u", "b", "g"]),
     "bant-control": Object.freeze(["w", "u", "g"]),
     "bant-post": Object.freeze(["w", "u", "g"]),
     "blue-post/mono-blue": Object.freeze(["u"]),

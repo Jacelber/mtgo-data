@@ -118,6 +118,24 @@ def test_output_names_are_complete_for_statistics_and_landing():
     assert identity_display_name("Burn", "Mono-Red") == "Mono-Red Burn"
 
 
+def test_beanstalk_merge_keeps_the_same_colors_without_yorion(rules):
+    case = next(
+        c for c in CASES
+        if c["case"] == "yorion-beanstalk-enchantment-engine-without-brainstorm"
+    )
+    result = classify_counts(
+        rules,
+        case["main"],
+        {n: q for n, q in case["side"].items() if n != "Yorion, Sky Nomad"},
+    )
+    assert (result.status, result.archetype_id, result.subtype_id) == (
+        "classified",
+        "multicolor-beanstalk-control",
+        "wubg",
+    )
+    assert not any(pid == "bant-beanstalk" for pid, _ in identities())
+
+
 def test_policy_does_not_resolve_real_parent_conflicts(rules):
     def parent(pid):
         return ArchetypeDefinition(
