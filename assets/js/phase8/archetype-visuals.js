@@ -1044,6 +1044,21 @@ const manaIdentities = Object.freeze({
     "non-green-tron": Object.freeze(["w", "u", "b", "r"]),
     "non-white-tron": Object.freeze(["u", "b", "r", "g"]),
     "white-helm": Object.freeze(["w"]),
+    "amulet-titan": Object.freeze(["u", "r", "g"]),
+    "azorius-tron": Object.freeze(["w", "u"]),
+    "bant-depths": Object.freeze(["w", "u", "g"]),
+    "jeskai-land-destruction": Object.freeze(["w", "u", "r"]),
+    "jund-vengevine": Object.freeze(["b", "r", "g"]),
+    "mono-green-tron": Object.freeze(["g"]),
+    "mono-red-tron": Object.freeze(["r"]),
+    "mono-white-artifacts": Object.freeze(["w"]),
+    "monolith-orb-combo": Object.freeze(["g"]),
+    "non-black-tron": Object.freeze(["w", "u", "r", "g"]),
+    "non-red-post": Object.freeze(["w", "u", "b", "g"]),
+    "selesnya-tron": Object.freeze(["w", "g"]),
+    "sewers/ubr": Object.freeze(["u", "b", "r"]),
+    "simic-post": Object.freeze(["u", "g"]),
+    "temur-tron": Object.freeze(["u", "r", "g"]),
   }),
 });
 
@@ -1548,6 +1563,22 @@ const representativeCards = Object.freeze({
     "sultai-doomsday": Object.freeze([
       Object.freeze({"name": "Doomsday", "image": "../images/representative-cards/legacy/doomsday.jpg"}),
       Object.freeze({"name": "Thassa's Oracle", "image": "../images/representative-cards/legacy/thassas-oracle.jpg"}),
+    ]),
+    "death-and-taxes-yorion-black-white": Object.freeze([
+      Object.freeze({"name": "Aether Vial", "image": "../images/representative-cards/legacy/aether-vial.jpg"}),
+      Object.freeze({"name": "Stoneforge Mystic", "image": "../images/representative-cards/legacy/stoneforge-mystic.jpg"}),
+    ]),
+    "grixis-reanimator": Object.freeze([
+      Object.freeze({"name": "Reanimate", "image": "../images/representative-cards/legacy/reanimate.jpg"}),
+      Object.freeze({"name": "Faithless Looting", "image": "../images/representative-cards/legacy/faithless-looting.jpg"}),
+    ]),
+    "jeskai-energy": Object.freeze([
+      Object.freeze({"name": "Guide of Souls", "image": "../images/representative-cards/legacy/guide-of-souls.jpg"}),
+      Object.freeze({"name": "Ocelot Pride", "image": "../images/representative-cards/legacy/ocelot-pride.jpg"}),
+    ]),
+    "mystic-forge-combo": Object.freeze([
+      Object.freeze({"name": "Mystic Forge", "image": "../images/representative-cards/legacy/mystic-forge.jpg"}),
+      Object.freeze({"name": "Karn, the Great Creator", "image": "../images/representative-cards/legacy/karn-the-great-creator.jpg"}),
     ]),
   }),
 });
