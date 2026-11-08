@@ -149,6 +149,9 @@ def _classify_registered(rules, main, side):
             top_priority_matches=tuple(fill(m) for m in result.top_priority_matches),
             overridden_matches=tuple(fill(m) for m in result.overridden_matches),
         )
+    from .tron import remap_result
+
+    result = remap_result(result, main)
     identity = identities().get((result.archetype_id, result.subtype_id))
     issues = info.get("issues", [])
     if identity is None or issues:

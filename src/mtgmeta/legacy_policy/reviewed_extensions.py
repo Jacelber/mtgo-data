@@ -70,13 +70,16 @@ def resolve_unclassified(main, side, result):
                 cs.add("R")
             if color["issues"] or cs != set(rule["colors"]):
                 continue
-        identity = identities()[(rule["parent"], rule.get("subtype"))]
+        from .tron import output_identity
+
+        parent, subtype = output_identity(rule["parent"], rule.get("subtype"), main)
+        identity = identities()[(parent, subtype)]
         matches.append(
             RuleMatch(
-                rule["parent"],
+                parent,
                 identity["parent_name"],
-                rule.get("subtype"),
-                identity["english"] if rule.get("subtype") else None,
+                subtype,
+                identity["english"] if subtype else None,
                 rule["id"],
                 0,
                 tuple(evidence),
