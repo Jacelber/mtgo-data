@@ -97,6 +97,14 @@ def policy_subject() -> dict[str, str]:
 def classify(
     rules: RuleSet, main: Mapping[str, int], side: Mapping[str, int]
 ) -> "ClassificationResult":
+    from .reviewed_extensions import resolve_unclassified
+
+    main, side = policy_counts(main), policy_counts(side)
+    result = _classify_registered(rules, main, side)
+    return resolve_unclassified(main, side, result)
+
+
+def _classify_registered(rules, main, side):
     from .families import classify_with_review
 
     main, side = policy_counts(main), policy_counts(side)
