@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "document_type": "consumer_catalog",
-  "generated": "2026-11-05T13:14:28+00:00",
+  "generated": "2026-11-08T14:33:16+00:00",
   "formats": [
     {
       "id": "standard",
@@ -138,28 +138,28 @@
     {
       "id": "legacy",
       "display_name": "Legacy",
-      "state": "planned",
-      "default_product_id": null,
+      "state": "executable",
+      "default_product_id": "mtgo-landing",
       "products": [
         {
           "id": "mtgo-statistics",
-          "available": false,
-          "path": null
+          "available": true,
+          "path": "stats/legacy/mtgo/meta.json"
         },
         {
           "id": "mtgo-matchups",
-          "available": false,
-          "path": null
+          "available": true,
+          "path": "stats/legacy/mtgo/matchup_index.json"
         },
         {
           "id": "mtgo-top8",
-          "available": false,
-          "path": null
+          "available": true,
+          "path": "stats/legacy/mtgo/top8/index.json"
         },
         {
           "id": "mtgo-landing",
-          "available": false,
-          "path": null
+          "available": true,
+          "path": "stats/legacy/mtgo/landing/current.json"
         },
         {
           "id": "tabletop-major-events",

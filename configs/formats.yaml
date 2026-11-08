@@ -102,12 +102,21 @@ formats:
 
   - id: "legacy"
     display_name: "Legacy"
-    state: "planned"
-    public: false
+    state: "executable"
+    public: true
     mtgo:
-      enabled: false
+      enabled: true
       event_collection_enabled: true
-      capabilities: []
+      capabilities:
+        - "catalog_generation"
+        - "classification"
+        - "completeness_reporting"
+        - "event_statistics"
+        - "landing_generation"
+        - "matchup_statistics"
+        - "metadata_generation"
+        - "range_statistics"
+        - "weekly_top8"
       paths:
         events: "data/legacy"
         matches: "data/legacy/mtgo/matches"
