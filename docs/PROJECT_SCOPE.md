@@ -58,11 +58,14 @@ It is intended to show:
 
 ### 3.2 Supported formats
 
-As checked against the public catalog on 2026-09-12, Standard, Modern and Pauper
-are public MTGO products, each with Landing, statistics, matchups and weekly
-Top 8 entries. Official event collection also retains archives for Pioneer,
-Legacy and Vintage; archive collection alone does not make them public products.
-Pioneer and Legacy remain planned; Vintage requires a product-scope decision.
+As checked against the public catalog on 2026-11-09, Standard, Modern, Pauper,
+Pioneer and Legacy are public MTGO products, each with Landing, statistics,
+matchups and weekly Top 8 entries. Legacy launched with the accepted 2026-W44
+content and reviewed 12-week window; its Landing editorial text and Feature
+remain empty, and two unavailable Videre events remain explicitly missing.
+Legacy Tabletop events are not included in this MTGO launch. Official event
+collection also retains Vintage archives; archive collection alone does not
+make a format public. Vintage requires a product-scope decision.
 Catalog availability is not a claim that every current UI behavior is defect-free.
 
 The scoped formats are:

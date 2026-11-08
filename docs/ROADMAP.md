@@ -29,7 +29,7 @@ Completed and superseded roadmap detail is non-authoritative history:
 | Pre-14 | Establish provenance-safe Chinese card names and complete card images. | Owner accepted on 2026-08-29; completion authorized |
 | 14 | Add Pauper MTGO and approved Paupergeddon support. | Complete on 2026-09-10 |
 | 15 | Add Pioneer through the established dual-product process. | Planned; not authorized |
-| 16 | Add Legacy and approved Eternal Weekend Legacy support. | Planned; not authorized |
+| 16 | Add Legacy and approved Eternal Weekend Legacy support. | MTGO launched with accepted W44 content on 2026-11-09; Eternal Weekend integration remains outside this delivery |
 | 17 | Add qualifying Standard Tabletop events. | Planned; not authorized |
 | 18 | Decide whether Vintage should be implemented. | Decision gate; not authorized |
 | 19 | Complete release and long-term maintenance readiness. | Planned; not authorized |
@@ -141,6 +141,11 @@ Phase 15 is complete when:
 ---
 
 # Phase 16 — Legacy and Eternal Weekend
+
+The accepted Legacy MTGO product set is public as of 2026-11-09, covering
+2026-W44 and its reviewed 12-week window. The launch preserves explicit source
+gaps and empty editorial content. This completes the MTGO launch portion;
+Legacy Tabletop / Eternal Weekend admission is not part of that delivery.
 
 ## Objective
 
