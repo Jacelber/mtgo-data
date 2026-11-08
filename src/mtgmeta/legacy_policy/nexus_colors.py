@@ -1,28 +1,12 @@
 """Private, role-aware color audit. Unresolved uses retain a null subtype."""
 
-import json
-from pathlib import Path
 from .nexus_structures import matches
+from .card_data import printed_spell_colors
 
-LOCAL = json.loads(
-    Path(__file__)
-    .with_name("nexus-local-card-evidence.json")
-    .read_text(encoding="utf8")
-)
 ORDER = ["white", "blue", "black", "red", "green"]
 LETTERS = dict(zip("WUBRG", ORDER))
-# Basic mana-cost facts supplement the existing manifest; detailed uncertain
-# MDFC/free-cast uses below are intentionally not guessed from color identity.
-EXTRA = {
-    "blue": "Agent of Treachery|Archive Trap|Cyclonic Rift|Hydroelectric Specimen|Impulse|Invasion Submersible|Marang River Regent|Moonsnare Prototype|Omniscience|Portent of Calamity|Repeal|Sea Gate Restoration|Shark Typhoon|Show and Tell|Sphinx of the Final Word|Transmute Artifact",
-    "white": "Ethersworn Canonist|Perilous Snare|Seasoned Dungeoneer",
-    "green": "Crop Rotation|Once Upon a Time|Primeval Titan",
-}
-NEUTRAL = set(
-    (
-        "All Is Dust|Ancient Tomb|Argentum Masticore|Basalt Monolith|Blast Zone|Bojuka Bog|Candelabra of Tawnos|Canoptek Scarab Swarm|Chalice of the Void|Chrome Mox|City of Traitors|Cityscape Leveler|Cloudpost|Coveted Jewel|Crucible of Worlds|Cursed Totem|Defense Grid|Disruptor Flute|Eldrazi Confluence|Emrakul, the Aeons Torn|Engineered Explosives|Ensnaring Bridge|Expedition Map|Extinguisher Battleship|Eye of Ugin|Forest|Ghost Quarter|Glimmerpost|Grafdigger's Cage|Grim Monolith|Grindstone|Helm of Obedience|Inventors' Fair|Island|Karakas|Karn's Sylex|Liquimetal Coating|Lotus Petal|Manifold Key|Meekstone|Meteor Golem|Mishra's Bauble|Mishra's Research Desk|Mistrise Village|Mox Diamond|Mox Opal|Mycosynth Lattice|Mystic Forge|Otawara, Soaring City|Painter's Servant|Paradox Engine|Petrified Hamlet|Plains|Planar Nexus|Powder Keg|Ratchet Bomb|Relic of Progenitus|Relic of Sauron|Skysovereign, Consul Flagship|Sorcerous Spyglass|Soul-Guide Lantern|Spatial Contortion|Sphere of Resistance|Summon: Bahamut|Sundering Titan|Swamp|Syr Ginger, the Meal Ender|Talon Gates of Madara|The Fantasticar|The Filigree Sylex|The One Ring|The Stone Brain|The Tabernacle at Pendrell Vale|The Ten Rings|Thorn of Amethyst|Tormod's Crypt|Torpor Orb|Ugin, Eye of the Storms|Ugin, the Spirit Dragon|Ulamog, the Ceaseless Hunger|Underground Sea|Urza's Mine|Urza's Power Plant|Urza's Saga|Urza's Workshop|Volcanic Island|Voltaic Key|Wasteland"
-    ).split("|")
-)
+# Only use decisions live here; ordinary printed costs come from shared facts.
+DIRECT_TARGETS = {"Summon: Bahamut"}
 IGNORED = {
     "Faerie Macabre",
     "Surgical Extraction",
@@ -141,17 +125,15 @@ def audit_color(rules, parent, main, side):
             cs = {"blue"}
         elif card in tool_colors:
             cs = tool_colors[card]
-        elif card in LOCAL:
-            cs = {LETTERS[c] for c in LOCAL[card].get("colors", [])}
-        elif card in NEUTRAL:
+        elif card in DIRECT_TARGETS:
             cs = set()
         else:
-            cs = {color for color, names in EXTRA.items() if card in names.split("|")}
-            feature = rules.semantic_features.cards.get(card)
-            if not cs and feature is not None:
-                cs = set(feature.spell_colors)
-            elif not cs:
-                issues.append(card + ": missing local color/use evidence")
+            printed = printed_spell_colors(card)
+            if printed is None:
+                cs = set()
+                issues.append(card + ": missing or ambiguous shared payment evidence")
+            else:
+                cs = {LETTERS[c] for c in printed}
         if cs:
             evidence[card] = sorted(cs)
             colors.update(cs)

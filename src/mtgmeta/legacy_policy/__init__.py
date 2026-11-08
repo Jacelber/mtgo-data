@@ -181,20 +181,7 @@ def classify(
 
 
 def policy_counts(counts):
-    """Resolve shared aliases to the retained card-role vocabulary, not new cards."""
-    from ..classifier_cards import classifier_card_name
-    from .colors import facts
+    """Use the shared identity vocabulary, including aliases and split faces."""
+    from ..classifier_cards import normalize_counts
 
-    aliases = {}
-    for name in facts:
-        key = classifier_card_name(name)
-        if key not in aliases or key == name:
-            aliases[key] = name
-    output = {}
-    for name, quantity in counts.items():
-        if not quantity:
-            continue
-        canonical = classifier_card_name(name)
-        key = aliases.get(canonical, canonical)
-        output[key] = output.get(key, 0) + quantity
-    return output
+    return normalize_counts({n: q for n, q in counts.items() if q})

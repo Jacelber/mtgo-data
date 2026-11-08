@@ -1,15 +1,8 @@
 """Role-based color evidence for the accepted Legacy identity policy."""
 
-import json, re, collections
-from pathlib import Path
-
-facts = json.loads(
-    Path(__file__)
-    .with_name("accepted-review-card-facts.json")
-    .read_text(encoding="utf8")
-)
+import re, collections
+from .card_data import shared_fact
 ORDER = "WUBRG"
-word = {"white": "W", "blue": "U", "black": "B", "red": "R", "green": "G"}
 letterzh = dict(zip(ORDER, "白蓝黑红绿"))
 guild = {
     "W": "纯白",
@@ -56,8 +49,12 @@ def colorname(cs):
     )
 
 
+def card_fact(n):
+    return shared_fact(n)
+
+
 def front(n):
-    f = facts.get(n, {})
+    f = card_fact(n)
     return (
         {**f, **f.get("card_faces", [{}])[0]}
         if f.get("card_faces") and n != "Wear/Tear"
@@ -86,9 +83,7 @@ def spellreq(n):
         return set(), []
     if "mana_cost" in f:
         return requirements(f["mana_cost"])
-    return set(
-        word.get(c, c) for c in f.get("semantic", {}).get("spell_colors", [])
-    ), []
+    return set(), []
 
 
 FREE = {
@@ -120,6 +115,7 @@ TARGETS = {
 }
 TARGETS.add("Worldgorger Dragon")  # Reanimation-loop target, not a red casting plan.
 ABILITIES = {
+    "Ancestral Vision": ("U", "无普通法术力费用，使用蓝色延缓费用"),
     "Boseiju, Who Endures": ("G", "已确认魂力用途"),
     "Mishra's Research Desk": ("R", "已确认返场资源用途"),
     "Aether Spellbomb": ("U", "回手工具的启动费用"),
@@ -136,12 +132,10 @@ def audit(r):
     ignored = {}
     issues = []
     evidence = []
-    # Printed mana production, actual retained semantic source facts, MDFC lands.
+    # Printed production and MDFC sources come from the shared snapshot.
     for n in allcards:
-        f = facts.get(n, {})
-        produced = set(f.get("produced_mana", []) or []) | set(
-            word.get(c, c) for c in f.get("semantic", {}).get("mana_sources", [])
-        )
+        f = card_fact(n)
+        produced = set(f.get("produced_mana", []) or [])
         if n in [
             "Lotus Petal",
             "Mox Opal",
@@ -206,7 +200,7 @@ def audit(r):
                 ignored[n] = "沿用已确认免费备牌工具用途"
                 continue
             f = front(n)
-            if not f or not any(k in f for k in ["mana_cost", "semantic", "mtgo"]):
+            if not f or "mana_cost" not in f:
                 issues.append(n + "：牌面缺失")
                 continue
             cs, hy = spellreq(n)

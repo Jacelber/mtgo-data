@@ -1,12 +1,8 @@
 """Role-based colors for the reviewed Hogaak branch, never a pure-UB default."""
 
-import json
-from pathlib import Path
-
 from .branch_colors import GREEN, RED, WHITE
+from .card_data import printed_spell_colors, known_neutral_payment
 
-EVIDENCE_PATH = Path(__file__).with_name("hogaak-color-evidence.json")
-ROLES = json.loads(EVIDENCE_PATH.read_text(encoding="utf-8"))["roles"]
 BRANCH = "w44-dimir-hogaak"
 
 
@@ -35,8 +31,8 @@ def audit_color(rules, main, side):
     ):
         if card == "Reverent Silence":
             cs = set() if free_silence else {"green"}
-        elif card in ROLES:
-            cs = set(ROLES[card])
+        elif card == "Hogaak, Arisen Necropolis":
+            cs = {"black"}  # Accepted convoke/delve use, never mandatory green.
         elif card in {
             "Faerie Macabre",
             "Surgical Extraction",
@@ -52,12 +48,10 @@ def audit_color(rules, main, side):
                 for color, names in [("green", GREEN), ("red", RED), ("white", WHITE)]
                 if card in names
             }
-            feature = rules.semantic_features.cards.get(card)
-            if feature is not None:
-                cs.update(feature.spell_colors)
-            if not cs:
-                # An unseen card/land or colorless artifact may have a colored
-                # ability. Lack of evidence must not silently mean pure UB.
+            printed = printed_spell_colors(card)
+            if printed is not None:
+                cs.update({"W": "white", "U": "blue", "B": "black", "R": "red", "G": "green"}[c] for c in printed)
+            if not cs and not known_neutral_payment(card):
                 issues.append(card + ": unreviewed payment role")
         colors.update(cs)
         evidence[card] = sorted(cs)
