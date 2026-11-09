@@ -56,15 +56,17 @@ def audit_color(rules, parent, main, side):
         ]
     ) and not any(main.get(card, 0) for card in [
         "Force of Will", "Force of Negation", "Stock Up", "Transmute Artifact",
-        "Mystic Forge", "Painter's Servant", "The Fantasticar", "Show and Tell",
-    ]) and not any(
+        "Painter's Servant", "The Fantasticar", "Show and Tell",
+    ]) and main.get("Mystic Forge", 0) <= 1 and not any(
         printed_spell_colors(card) or card == "Boseiju, Who Endures"
         for card in cards - IGNORED - set(CONDITIONAL) - {
             "Portable Hole", "Perilous Snare", "Lich's Relic", "Mishra's Research Desk",
-        }
+        } - ({"Barrowgoyf"} if not main.get("Barrowgoyf", 0) else set())
     )
     if artifact_tool_shell:
         free_tools.update({"Portable Hole", "Perilous Snare", "Lich's Relic", "Mishra's Research Desk"} & cards)
+        if not main.get("Barrowgoyf", 0):
+            free_tools.update({"Barrowgoyf"} & set(side))
     if nexus_tools or transmute_tron:
         free_tools.update({
             card

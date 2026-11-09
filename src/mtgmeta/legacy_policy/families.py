@@ -272,6 +272,7 @@ def classify_with_review(rules, main, side):
         or sewers
         or pid
         in {
+            "dimir-tempo",
             "azorius-control",
             "azorius-tempo",
             "azorius-stoneblade",
@@ -308,6 +309,8 @@ def classify_with_review(rules, main, side):
     if pid not in SUFFIX:
         return base, info
     if cs == BASE_COLORS.get(pid):
+        if pid == "dimir-tempo" and base.subtype_id is None:
+            return remap(base, pid, "Dimir Tempo", "dimir", "普通蓝黑节奏"), info
         return base, info
     zh_suffix, en_suffix, id_suffix = SUFFIX[pid]
     # Three explicitly accepted former UW-control builds have UBW tempo engines.

@@ -222,6 +222,23 @@ archetypes:
   name: Dimir Tempo
   priority: 100
   rules:
+  - id: ew-dimir-bilbo-flow-state
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - {card: 'Bilbo, Thief in the Night', zone: main, min_count: 3}
+      - {card: Flow State, zone: main, min_count: 3}
+      - {card: Brainstorm, zone: main, min_count: 3}
+      - {card: Force of Will, zone: main, min_count: 3}
+      - {card: Daze, zone: main, min_count: 3}
+      - {card: Wasteland, zone: main, min_count: 3}
+      - {card: Fatal Push, zone: main, min_count: 3}
+      - {card: Thoughtseize, zone: main, min_count: 3}
+      - {card: 'Hogaak, Arisen Necropolis', zone: main, max_count: 0}
+      - {card: Entomb, zone: main, max_count: 0}
+      - {card: Doomsday, zone: main, max_count: 0}
+      - {card: The Fantasticar, zone: main, max_count: 0}
   - id: dimir-tempo-builtin
     priority: 100
     subtype_id: null
@@ -3591,6 +3608,29 @@ archetypes:
         zone: main
         min_count: 1
       - card: Thoughtseize
+        zone: main
+        min_count: 1
+  - id: ew-mardu-energy-bombardment
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Ocelot Pride
+        zone: main
+        min_count: 3
+      - card: Amped Raptor
+        zone: main
+        min_count: 3
+      - card: Orcish Bowmasters
+        zone: main
+        min_count: 1
+      - card: Guide of Souls
+        zone: main
+        min_count: 3
+      - card: Ajani, Nacatl Pariah
+        zone: main
+        min_count: 3
+      - card: Goblin Bombardment
         zone: main
         min_count: 1
 - id: boros-energy
@@ -11986,6 +12026,21 @@ archetypes:
   name: Mystic Forge Combo
   priority: 100
   rules:
+  - id: ew-forge-fleshraker-monolith-keys
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - {card: Mystic Forge, zone: main, min_count: 3}
+      - {card: Glaring Fleshraker, zone: main, min_count: 3}
+      - {card: Grim Monolith, zone: main, min_count: 3}
+      - {card: Manifold Key, zone: main, min_count: 3}
+      - {card: Voltaic Key, zone: main, min_count: 3}
+      - {card: The One Ring, zone: main, min_count: 3}
+      - {card: 'Karn, the Great Creator', zone: main, min_count: 3}
+      - {card: Kozilek's Command, zone: main, min_count: 3}
+      - {card: The Fantasticar, zone: main, max_count: 0}
+      - {card: Painter's Servant, zone: main, max_count: 0}
   - id: b05-mystic-forge-combo-outcome-keys
     priority: 110
     subtype_id: null
@@ -12158,6 +12213,28 @@ archetypes:
   name: Tron
   priority: 100
   rules:
+  - id: ew-tron-saga-fleshraker-single-forge
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - {card: Planar Nexus, zone: main, min_count: 3}
+      - {card: Urza's Tower, zone: main, min_count: 3}
+      - {card: Urza's Saga, zone: main, min_count: 3}
+      - {card: Grim Monolith, zone: main, min_count: 3}
+      - {card: 'Karn, the Great Creator', zone: main, min_count: 3}
+      - {card: The One Ring, zone: main, min_count: 3}
+      - {card: Kozilek's Command, zone: main, min_count: 3}
+      - {card: Manifold Key, zone: main, min_count: 3}
+      - {card: 'Tezzeret, Cruel Captain', zone: main, min_count: 2}
+      - {card: Glaring Fleshraker, zone: main, min_count: 3}
+      - {card: Lotus Petal, zone: main, min_count: 3}
+      - {card: 'Ugin, Eye of the Storms', zone: main, min_count: 2}
+      - {card: Mystic Forge, zone: main, max_count: 1}
+      - {card: Force of Will, zone: main, max_count: 0}
+      - {card: Transmute Artifact, zone: main, max_count: 0}
+      - {card: Painter's Servant, zone: main, max_count: 0}
+      - {card: The Fantasticar, zone: main, max_count: 0}
   - id: ew-tron-monolith-karn-toolbox
     priority: 100
     subtype_id: null
@@ -12170,6 +12247,32 @@ archetypes:
       - {card: 'Karn, the Great Creator', zone: main, min_count: 3}
       - {card: Grim Monolith, zone: main, min_count: 3}
       - {card: Manifold Key, zone: main, min_count: 2}
+      - {card: The One Ring, zone: main, min_count: 3}
+      - {card: Kozilek's Command, zone: main, min_count: 3}
+      - {card: 'Ugin, Eye of the Storms', zone: main, min_count: 2}
+      - {card: Trinisphere, zone: main, min_count: 1}
+      - {card: Cloudpost, zone: main, max_count: 0}
+      - {card: Glimmerpost, zone: main, max_count: 0}
+      - {card: Mystic Forge, zone: main, max_count: 0}
+      - {card: Painter's Servant, zone: main, max_count: 0}
+      - {card: The Fantasticar, zone: main, max_count: 0}
+      - {card: Helm of Obedience, zone: main, max_count: 0}
+      - {card: Transmute Artifact, zone: main, max_count: 0}
+      - {card: Show and Tell, zone: main, max_count: 0}
+      - {card: Force of Will, zone: main, max_count: 0}
+      - {card: Stock Up, zone: main, max_count: 0}
+  - id: ew-tron-monolith-karn-voltaic-toolbox
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - {card: Planar Nexus, zone: main, min_count: 3}
+      - {card: Urza's Tower, zone: main, min_count: 3}
+      - {card: Urza's Mine, zone: main, min_count: 1}
+      - {card: Urza's Power Plant, zone: main, min_count: 1}
+      - {card: 'Karn, the Great Creator', zone: main, min_count: 3}
+      - {card: Grim Monolith, zone: main, min_count: 3}
+      - {card: Voltaic Key, zone: main, min_count: 2}
       - {card: The One Ring, zone: main, min_count: 3}
       - {card: Kozilek's Command, zone: main, min_count: 3}
       - {card: 'Ugin, Eye of the Storms', zone: main, min_count: 2}
@@ -20559,6 +20662,22 @@ archetypes:
   name: Bant Control
   priority: 100
   rules:
+  - id: ew-bant-mentor-paradox-control
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - {card: Brainstorm, zone: main, min_count: 3}
+      - {card: Ponder, zone: main, min_count: 3}
+      - {card: Force of Will, zone: main, min_count: 3}
+      - {card: Swords to Plowshares, zone: main, min_count: 3}
+      - {card: "Uro, Titan of Nature's Wrath", zone: main, min_count: 2}
+      - {card: Way of the Mentor, zone: main, min_count: 3}
+      - {card: Way of the Paradox, zone: main, min_count: 3}
+      - {card: Up the Beanstalk, zone: main, max_count: 0}
+      - {card: Daze, zone: main, max_count: 0}
+      - {card: Aether Vial, zone: main, max_count: 0}
+      - {card: Show and Tell, zone: main, max_count: 0}
   - id: edge-22
     priority: 110
     subtype_id: null
