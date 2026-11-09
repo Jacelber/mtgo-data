@@ -594,6 +594,10 @@ const manaIdentities = Object.freeze({
     "gruul-ponza": Object.freeze(["r", "g"]),
     "mono-black-aggro": Object.freeze(["b"]),
     "mardu-learn": Object.freeze(["w", "b", "r"]),
+    "grixis-twin": Object.freeze(["u", "b", "r"]),
+    "jund-midrange": Object.freeze(["b", "r", "g"]),
+    "kiki-chord": Object.freeze(["w", "r", "g"]),
+    "infect/mono-green": Object.freeze(["g"]),
   }),
   pauper: Object.freeze({
     "dimir-self-bounce": Object.freeze(["u", "b"]),
