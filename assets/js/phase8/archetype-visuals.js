@@ -229,6 +229,11 @@ const manaIdentities = Object.freeze({
     "rakdos-darklight-phoenix": Object.freeze(["b", "r"]),
     "ceremony-phoenix": Object.freeze(["u", "b"]),
     "mono-red-midrange": Object.freeze(["r"]),
+    "selesnya-kona": Object.freeze(["w", "g"]),
+    "orzhov-self-mill": Object.freeze(["w", "b"]),
+    "esper-midrange": Object.freeze(["w", "u", "b"]),
+    "sultai-spider-man": Object.freeze(["u", "b", "g"]),
+    "esper-toughness": Object.freeze(["w", "u", "b"]),
   }),
   modern: Object.freeze({
     "titan-canopy-ramp": Object.freeze(["g"]),

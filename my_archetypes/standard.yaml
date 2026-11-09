@@ -1459,9 +1459,21 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: Deadly Cover-Up
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Deadly Cover-Up
+            zone: main
+            min_count: 1
+        - all:
+          - card: Jace's Machinations
+            zone: main
+            min_count: 1
+          - card: Theorix Charm
+            zone: main
+            min_count: 1
+          - card: Spectral Interference
+            zone: main
+            min_count: 1
       - card: Countersculpt
         zone: main
         min_count: 1
@@ -3326,9 +3338,18 @@ archetypes:
       - card: Jace's Machinations
         zone: main
         min_count: 1
-      - card: Jace, Reality Sculptor
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Jace, Reality Sculptor
+            zone: main
+            min_count: 1
+        - all:
+          - card: The Theorist, Jace Beleren
+            zone: main
+            min_count: 1
+          - card: Pest Control
+            zone: main
+            min_count: 1
       - card: Deadly Cover-Up
         zone: main
         min_count: 1
@@ -6156,4 +6177,136 @@ archetypes:
         min_count: 1
     colors:
     - red
+  color_profile: default
+- id: selesnya-kona
+  name: Selesnya Kona
+  priority: 78151
+  rules:
+  - id: selesnya-kona-station
+    priority: 78151
+    subtype_id: null
+    conditions:
+      all:
+      - card: Kona, Rescue Beastie
+        zone: main
+        min_count: 2
+      - card: Adagia, Windswept Bastion
+        zone: main
+        min_count: 1
+      - card: 'Summon: Bahamut'
+        zone: main
+        min_count: 1
+      - card: Omniscience
+        zone: main
+        exact_count: 0
+    colors:
+    - white
+    - green
+  color_profile: default
+- id: orzhov-self-mill
+  name: Orzhov Self-Mill
+  priority: 78152
+  rules:
+  - id: orzhov-self-mill-scout
+    priority: 78152
+    subtype_id: null
+    conditions:
+      all:
+      - card: Snarling Gorehound
+        zone: main
+        min_count: 1
+      - card: Paramecia Coloniex
+        zone: main
+        min_count: 1
+      - card: Scout for Survivors
+        zone: main
+        min_count: 1
+    colors:
+    - white
+    - black
+  color_profile: default
+- id: esper-midrange
+  name: Esper Midrange
+  priority: 41990
+  rules:
+  - id: esper-midrange-pixie-kaito
+    priority: 41990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nurturing Pixie
+        zone: main
+        min_count: 1
+      - card: Kaito, Bane of Nightmares
+        zone: main
+        min_count: 1
+      - card: Dark Matter Manipulator
+        zone: main
+        min_count: 1
+    colors:
+    - white
+    - blue
+    - black
+  color_profile: default
+- id: sultai-spider-man
+  name: Sultai Spider-Man
+  priority: 78153
+  rules:
+  - id: sultai-spider-man-awaken-theorix
+    priority: 78153
+    subtype_id: null
+    conditions:
+      all:
+      - card: Superior Spider-Man
+        zone: main
+        min_count: 2
+      - card: Awaken the Honored Dead
+        zone: main
+        min_count: 2
+      - card: Uldaros Theorix
+        zone: main
+        min_count: 1
+      - card: Vicious Rivalry
+        zone: main
+        min_count: 2
+    colors:
+    - blue
+    - black
+    - green
+  color_profile: default
+- id: esper-toughness
+  name: Esper Toughness
+  priority: 78154
+  rules:
+  - id: esper-toughness-combat
+    priority: 78154
+    subtype_id: null
+    conditions:
+      all:
+      - any:
+        - all:
+          - card: The Kingpin of Crime
+            zone: main
+            min_count: 2
+        - all:
+          - card: Ghalta the Immovable
+            zone: main
+            min_count: 2
+      - any:
+        - all:
+          - card: Aegis Turtle
+            zone: main
+            min_count: 2
+        - all:
+          - card: Caelorna, Coral Tyrant
+            zone: main
+            min_count: 2
+        - all:
+          - card: Armored Armadillo
+            zone: main
+            min_count: 2
+    colors:
+    - white
+    - blue
+    - black
   color_profile: default
