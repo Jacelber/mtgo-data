@@ -2,7 +2,7 @@
   "schema_version": "1.1.0",
   "format": "legacy",
   "source": "mtgo",
-  "classifier_digest": "921755458c24840d54472227a796a4d76b0e1b3d8a64f14eb6d9960bd1880ddf",
+  "classifier_digest": "4631d79149650c9b76647323553a0f7eaf75aa5054c30f81df94e66a477cce3c",
   "construction_digest": "3b1a4ff37af53956957edf02ce318c0c3ad1062713c5b56d5da6ad8b5cc5e5a9",
   "period": {
     "type": "4w",
@@ -18,12 +18,12 @@
     {
       "id": "dimir-tempo",
       "name": "Dimir Tempo",
-      "count": 106,
-      "high_score_count": 60,
-      "high_score_share": 0.1392,
+      "count": 110,
+      "high_score_count": 62,
+      "high_score_share": 0.1439,
       "top8_count": 27,
       "top8_share": 0.1406,
-      "conversion": 0.45,
+      "conversion": 0.4355,
       "avg_points_per_round": 1.82,
       "subtypes": [
         {
@@ -38,7 +38,7 @@
           "top8_share": 0.0677,
           "conversion": 0.3611,
           "avg_points_per_round": 1.81,
-          "parent_share": 0.5943,
+          "parent_share": 0.5727,
           "avg_deviation": 22
         },
         {
@@ -46,15 +46,15 @@
           "name": "Dimir Hogaak",
           "parent_id": "dimir-tempo",
           "display_name": "Dimir Hogaak",
-          "count": 40,
-          "high_score_count": 21,
-          "high_score_share": 0.0487,
+          "count": 44,
+          "high_score_count": 23,
+          "high_score_share": 0.0534,
           "top8_count": 13,
           "top8_share": 0.0677,
-          "conversion": 0.619,
+          "conversion": 0.5652,
           "avg_points_per_round": 1.81,
-          "parent_share": 0.3774,
-          "avg_deviation": 10
+          "parent_share": 0.4,
+          "avg_deviation": 12
         },
         {
           "id": "hogaak-g",
@@ -68,11 +68,11 @@
           "top8_share": 0.0052,
           "conversion": 0.3333,
           "avg_points_per_round": 2.17,
-          "parent_share": 0.0283,
+          "parent_share": 0.0273,
           "avg_deviation": null
         }
       ],
-      "avg_deviation": 37
+      "avg_deviation": 38
     },
     {
       "id": "izzet-tempo",
@@ -113,6 +113,68 @@
       "top8_share": 0.0469,
       "conversion": 0.375,
       "avg_points_per_round": 1.79,
+      "subtypes": [
+        {
+          "id": "colorless",
+          "name": "Colorless Mystic Forge Combo",
+          "parent_id": "mystic-forge-combo",
+          "display_name": "Colorless Mystic Forge Combo",
+          "count": 38,
+          "high_score_count": 24,
+          "high_score_share": 0.0557,
+          "top8_count": 9,
+          "top8_share": 0.0469,
+          "conversion": 0.375,
+          "avg_points_per_round": 1.81,
+          "parent_share": 0.9744,
+          "avg_deviation": 11
+        },
+        {
+          "id": "mono-blue",
+          "name": "Mono-Blue Mystic Forge Combo",
+          "parent_id": "mystic-forge-combo",
+          "display_name": "Mono-Blue Mystic Forge Combo",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "mono-red",
+          "name": "Mono-Red Mystic Forge Combo",
+          "parent_id": "mystic-forge-combo",
+          "display_name": "Mono-Red Mystic Forge Combo",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "mono-white",
+          "name": "Mono-White Mystic Forge Combo",
+          "parent_id": "mystic-forge-combo",
+          "display_name": "Mono-White Mystic Forge Combo",
+          "count": 1,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": 1.0,
+          "parent_share": 0.0256,
+          "avg_deviation": null
+        }
+      ],
       "avg_deviation": 11
     },
     {
@@ -461,18 +523,6 @@
       "avg_deviation": 6
     },
     {
-      "id": "hogaak",
-      "name": "Hogaak",
-      "count": 15,
-      "high_score_count": 7,
-      "high_score_share": 0.0162,
-      "top8_count": 3,
-      "top8_share": 0.0156,
-      "conversion": 0.4286,
-      "avg_points_per_round": 1.74,
-      "avg_deviation": 36
-    },
-    {
       "id": "blue-tron",
       "name": "Blue Tron",
       "count": 14,
@@ -499,36 +549,6 @@
           "avg_deviation": null
         },
         {
-          "id": "non-white",
-          "name": "Tron (Non-White)",
-          "parent_id": "blue-tron",
-          "display_name": "Tron (Non-White)",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
-          "id": "non-green",
-          "name": "Tron (Non-Green)",
-          "parent_id": "blue-tron",
-          "display_name": "Tron (Non-Green)",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
           "id": "simic",
           "name": "Simic Tron",
           "parent_id": "blue-tron",
@@ -548,21 +568,21 @@
           "name": "Dimir Tron",
           "parent_id": "blue-tron",
           "display_name": "Dimir Tron",
-          "count": 7,
-          "high_score_count": 2,
-          "high_score_share": 0.0046,
-          "top8_count": 2,
-          "top8_share": 0.0104,
-          "conversion": 1.0,
-          "avg_points_per_round": 1.68,
-          "parent_share": 0.5,
+          "count": 2,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": 1.36,
+          "parent_share": 0.1429,
           "avg_deviation": null
         },
         {
-          "id": "sultai",
-          "name": "Sultai Tron",
+          "id": "izzet",
+          "name": "Izzet Tron",
           "parent_id": "blue-tron",
-          "display_name": "Sultai Tron",
+          "display_name": "Izzet Tron",
           "count": 0,
           "high_score_count": 0,
           "high_score_share": 0.0,
@@ -574,33 +594,33 @@
           "avg_deviation": null
         },
         {
-          "id": "izzet",
-          "name": "Izzet Tron",
+          "id": "multicolor",
+          "name": "Mixed Blue Tron",
           "parent_id": "blue-tron",
-          "display_name": "Izzet Tron",
-          "count": 1,
+          "display_name": "Mixed Blue Tron",
+          "count": 7,
+          "high_score_count": 3,
+          "high_score_share": 0.007,
+          "top8_count": 2,
+          "top8_share": 0.0104,
+          "conversion": 0.6667,
+          "avg_points_per_round": 1.81,
+          "parent_share": 0.5,
+          "avg_deviation": null
+        },
+        {
+          "id": "azorius",
+          "name": "Azorius Blue Tron",
+          "parent_id": "blue-tron",
+          "display_name": "Azorius Blue Tron",
+          "count": 0,
           "high_score_count": 0,
           "high_score_share": 0.0,
           "top8_count": 0,
           "top8_share": 0.0,
           "conversion": null,
-          "avg_points_per_round": 1.5,
-          "parent_share": 0.0714,
-          "avg_deviation": null
-        },
-        {
-          "id": "temur",
-          "name": "Temur Tron",
-          "parent_id": "blue-tron",
-          "display_name": "Temur Tron",
-          "count": 1,
-          "high_score_count": 1,
-          "high_score_share": 0.0023,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": 0.0,
-          "avg_points_per_round": 2.14,
-          "parent_share": 0.0714,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
           "avg_deviation": null
         }
       ],
@@ -629,6 +649,18 @@
       "conversion": 0.375,
       "avg_points_per_round": 1.89,
       "avg_deviation": 30
+    },
+    {
+      "id": "hogaak",
+      "name": "Hogaak",
+      "count": 11,
+      "high_score_count": 5,
+      "high_score_share": 0.0116,
+      "top8_count": 3,
+      "top8_share": 0.0156,
+      "conversion": 0.6,
+      "avg_points_per_round": 1.68,
+      "avg_deviation": 27
     },
     {
       "id": "mardu-energy",
@@ -691,18 +723,6 @@
       "avg_deviation": 23
     },
     {
-      "id": "bant-depths",
-      "name": "Bant Depths",
-      "count": 8,
-      "high_score_count": 5,
-      "high_score_share": 0.0116,
-      "top8_count": 0,
-      "top8_share": 0.0,
-      "conversion": 0.0,
-      "avg_points_per_round": 1.65,
-      "avg_deviation": 16
-    },
-    {
       "id": "naya-energy",
       "name": "Naya Energy",
       "count": 8,
@@ -754,21 +774,6 @@
           "name": "Colorless Tron",
           "parent_id": "tron",
           "display_name": "Colorless Tron",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
-          "id": "boros",
-          "name": "Boros Tron",
-          "parent_id": "tron",
-          "display_name": "Boros Tron",
           "count": 1,
           "high_score_count": 1,
           "high_score_share": 0.0023,
@@ -777,6 +782,21 @@
           "conversion": 0.0,
           "avg_points_per_round": 1.71,
           "parent_share": 0.125,
+          "avg_deviation": null
+        },
+        {
+          "id": "boros",
+          "name": "Boros Tron",
+          "parent_id": "tron",
+          "display_name": "Boros Tron",
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
           "avg_deviation": null
         },
         {
@@ -810,21 +830,6 @@
           "avg_deviation": null
         },
         {
-          "id": "grixis",
-          "name": "Grixis Tron",
-          "parent_id": "tron",
-          "display_name": "Grixis Tron",
-          "count": 0,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": null,
-          "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
           "id": "mono-white",
           "name": "Mono-White Tron",
           "parent_id": "tron",
@@ -840,25 +845,10 @@
           "avg_deviation": null
         },
         {
-          "id": "sultai",
-          "name": "Sultai Tron",
+          "id": "azorius",
+          "name": "Azorius Tron",
           "parent_id": "tron",
-          "display_name": "Sultai Tron",
-          "count": 1,
-          "high_score_count": 1,
-          "high_score_share": 0.0023,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": 0.0,
-          "avg_points_per_round": 2.0,
-          "parent_share": 0.125,
-          "avg_deviation": null
-        },
-        {
-          "id": "esper",
-          "name": "Esper Tron",
-          "parent_id": "tron",
-          "display_name": "Esper Tron",
+          "display_name": "Azorius Tron",
           "count": 0,
           "high_score_count": 0,
           "high_score_share": 0.0,
@@ -867,36 +857,6 @@
           "conversion": null,
           "avg_points_per_round": null,
           "parent_share": 0.0,
-          "avg_deviation": null
-        },
-        {
-          "id": "non-black",
-          "name": "Tron (Non-Black)",
-          "parent_id": "tron",
-          "display_name": "Tron (Non-Black)",
-          "count": 4,
-          "high_score_count": 2,
-          "high_score_share": 0.0046,
-          "top8_count": 1,
-          "top8_share": 0.0052,
-          "conversion": 0.5,
-          "avg_points_per_round": 2.0,
-          "parent_share": 0.5,
-          "avg_deviation": null
-        },
-        {
-          "id": "azorius",
-          "name": "Azorius Tron",
-          "parent_id": "tron",
-          "display_name": "Azorius Tron",
-          "count": 1,
-          "high_score_count": 0,
-          "high_score_share": 0.0,
-          "top8_count": 0,
-          "top8_share": 0.0,
-          "conversion": null,
-          "avg_points_per_round": 1.5,
-          "parent_share": 0.125,
           "avg_deviation": null
         },
         {
@@ -934,18 +894,45 @@
           "name": "Selesnya Tron",
           "parent_id": "tron",
           "display_name": "Selesnya Tron",
-          "count": 1,
-          "high_score_count": 1,
-          "high_score_share": 0.0023,
+          "count": 0,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
           "top8_count": 0,
           "top8_share": 0.0,
-          "conversion": 0.0,
-          "avg_points_per_round": 1.71,
-          "parent_share": 0.125,
+          "conversion": null,
+          "avg_points_per_round": null,
+          "parent_share": 0.0,
+          "avg_deviation": null
+        },
+        {
+          "id": "multicolor",
+          "name": "Mixed Tron",
+          "parent_id": "tron",
+          "display_name": "Mixed Tron",
+          "count": 7,
+          "high_score_count": 4,
+          "high_score_share": 0.0093,
+          "top8_count": 1,
+          "top8_share": 0.0052,
+          "conversion": 0.25,
+          "avg_points_per_round": 1.88,
+          "parent_share": 0.875,
           "avg_deviation": null
         }
       ],
       "avg_deviation": 28
+    },
+    {
+      "id": "bant-depths",
+      "name": "Bant Depths",
+      "count": 7,
+      "high_score_count": 4,
+      "high_score_share": 0.0093,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": 0.0,
+      "avg_points_per_round": 1.6,
+      "avg_deviation": null
     },
     {
       "id": "mono-red-prison",
@@ -1092,18 +1079,6 @@
       "avg_deviation": null
     },
     {
-      "id": "izzet-painter",
-      "name": "Izzet Painter",
-      "count": 2,
-      "high_score_count": 0,
-      "high_score_share": 0.0,
-      "top8_count": 0,
-      "top8_share": 0.0,
-      "conversion": null,
-      "avg_points_per_round": 0.55,
-      "avg_deviation": null
-    },
-    {
       "id": "golgari-depths",
       "name": "Golgari Depths",
       "count": 2,
@@ -1113,6 +1088,35 @@
       "top8_share": 0.0,
       "conversion": null,
       "avg_points_per_round": 0.3,
+      "avg_deviation": null
+    },
+    {
+      "id": "gwx-depths",
+      "name": "Selesnya Depths",
+      "count": 2,
+      "high_score_count": 2,
+      "high_score_share": 0.0046,
+      "top8_count": 1,
+      "top8_share": 0.0052,
+      "conversion": 0.5,
+      "avg_points_per_round": 2.45,
+      "subtypes": [
+        {
+          "id": "selesnya",
+          "name": "Selesnya Depths",
+          "parent_id": "gwx-depths",
+          "display_name": "Selesnya Depths",
+          "count": 2,
+          "high_score_count": 2,
+          "high_score_share": 0.0046,
+          "top8_count": 1,
+          "top8_share": 0.0052,
+          "conversion": 0.5,
+          "avg_points_per_round": 2.45,
+          "parent_share": 1.0,
+          "avg_deviation": null
+        }
+      ],
       "avg_deviation": null
     },
     {
@@ -1318,32 +1322,15 @@
       "avg_deviation": null
     },
     {
-      "id": "gwx-depths",
-      "name": "Selesnya Depths",
+      "id": "painter-combo",
+      "name": "Painter Combo",
       "count": 1,
-      "high_score_count": 1,
-      "high_score_share": 0.0023,
-      "top8_count": 1,
-      "top8_share": 0.0052,
-      "conversion": 1.0,
-      "avg_points_per_round": 3.0,
-      "subtypes": [
-        {
-          "id": "selesnya",
-          "name": "Selesnya Depths",
-          "parent_id": "gwx-depths",
-          "display_name": "Selesnya Depths",
-          "count": 1,
-          "high_score_count": 1,
-          "high_score_share": 0.0023,
-          "top8_count": 1,
-          "top8_share": 0.0052,
-          "conversion": 1.0,
-          "avg_points_per_round": 3.0,
-          "parent_share": 1.0,
-          "avg_deviation": null
-        }
-      ],
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 0.0,
       "avg_deviation": null
     },
     {
@@ -1383,8 +1370,20 @@
       "avg_deviation": null
     },
     {
-      "id": "dimir-post",
-      "name": "Dimir Post",
+      "id": "izzet-painter",
+      "name": "Izzet Painter",
+      "count": 1,
+      "high_score_count": 0,
+      "high_score_share": 0.0,
+      "top8_count": 0,
+      "top8_share": 0.0,
+      "conversion": null,
+      "avg_points_per_round": 1.0,
+      "avg_deviation": null
+    },
+    {
+      "id": "blue-post",
+      "name": "Blue Post",
       "count": 1,
       "high_score_count": 0,
       "high_score_share": 0.0,
@@ -1392,6 +1391,23 @@
       "top8_share": 0.0,
       "conversion": null,
       "avg_points_per_round": 1.5,
+      "subtypes": [
+        {
+          "id": "mono-blue",
+          "name": "Blue Post",
+          "parent_id": "blue-post",
+          "display_name": "Blue Post",
+          "count": 1,
+          "high_score_count": 0,
+          "high_score_share": 0.0,
+          "top8_count": 0,
+          "top8_share": 0.0,
+          "conversion": null,
+          "avg_points_per_round": 1.5,
+          "parent_share": 1.0,
+          "avg_deviation": null
+        }
+      ],
       "avg_deviation": null
     },
     {
