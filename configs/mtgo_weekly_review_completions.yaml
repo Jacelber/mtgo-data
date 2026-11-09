@@ -16167,6 +16167,74 @@ data_admissions:
                 accepted_on: '2026-11-04'
                 entrypoint: http://127.0.0.1:8776/review-v2/standard/2026-W44/index.html
                 submitted_digest: 25ff4b59b33bec432eed46a303c467ab944906bcf6842115f3e929d5c2699dca
+      - week: 2026-W45
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857416'
+        - '12857425'
+        - '12857429'
+        - '12857664'
+        - '12857666'
+        - '12857674'
+        - '12857679'
+        - '12857686'
+        - '12857702'
+        source_manifest_digest: 047a89d307b2602d88fbbf1a8bc44bfdc845766af9a122dc94be4071fb383ef5
+        accepted_classifier_subject: c4231f049aeb7ae7c1aa601d717a8399ee9efff4361497a972f99252d3c70b4a
+        classification_review_digest: b79db9a749b9c2caf5780969ba7072911fbbf86efe89f94ed7564bed8ad4a1c0
+        accepted_on: '2026-11-09'
+        evidence: Owner 在本次 W45 标准审阅对话中明确同意所有未点名牌表的现有分类，逐条指定 8 份归类，并确认 12857702 第 4 名独立父类为「艾斯波高防
+          / Esper Toughness」。同一批固定输入回放只改变这 9 份。
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: standard
+            week: 2026-W45
+            bindings:
+              event_ids:
+              - '12857416'
+              - '12857425'
+              - '12857429'
+              - '12857664'
+              - '12857666'
+              - '12857674'
+              - '12857679'
+              - '12857686'
+              - '12857702'
+              record_count: 284
+              classifier: c4231f049aeb7ae7c1aa601d717a8399ee9efff4361497a972f99252d3c70b4a
+              classification_review_digest: b79db9a749b9c2caf5780969ba7072911fbbf86efe89f94ed7564bed8ad4a1c0
+              material_digest: 23c58fd5aa0ec983753b0f9f41aa579474cab9e0b706410d104bcb4f150f6918
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857416'
+                - '12857425'
+                - '12857429'
+                - '12857664'
+                - '12857666'
+                - '12857674'
+                - '12857679'
+                - '12857686'
+                - '12857702'
+                record_count: 284
+                classifier: c4231f049aeb7ae7c1aa601d717a8399ee9efff4361497a972f99252d3c70b4a
+                classification_review_digest: b79db9a749b9c2caf5780969ba7072911fbbf86efe89f94ed7564bed8ad4a1c0
+            digest: 85030310b91e795033da743ecf715c242252f5c647265fc54068a0c83216e797
+          decisions:
+            format: standard
+            week: 2026-W45
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: 7b71044d1b3ea088887c80ff604d75097d9ecdec1fa6191fd3b31db8c3a4eb4d
+                evidence: Owner 在本次 W45 标准审阅对话中明确同意所有未点名牌表的现有分类，逐条指定 8 份归类，并确认 12857702
+                  第 4 名独立父类为「艾斯波高防 / Esper Toughness」。同一批固定输入回放只改变这 9 份。
+                accepted_on: '2026-11-09'
+                entrypoint: file:outputs/W45-%E5%88%86%E7%B1%BB%E5%AE%A1%E9%98%85/standard/index.html
+                submitted_digest: 85030310b91e795033da743ecf715c242252f5c647265fc54068a0c83216e797
     pauper:
       initial:
         kind: owner_accepted_initial_public_scope
@@ -16740,6 +16808,66 @@ data_admissions:
                 accepted_on: '2026-11-05'
                 entrypoint: http://127.0.0.1:8776/review-v2/pauper/2026-W44/index.html
                 submitted_digest: 638f8cb2837d82af6932bbf2bd8eefa220f49a53fbfff256f9f4e06c338585d7
+      - week: 2026-W45
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857414'
+        - '12857421'
+        - '12857671'
+        - '12857676'
+        - '12857684'
+        - '12857699'
+        - '12857717'
+        source_manifest_digest: 5c4c5e626807c3898d0addbd4ba1e28b5a63f05badd21790fb7e260665a9ba2c
+        accepted_classifier_subject: 7efd18d52604214bcab6594c5060e15a3af369b8fef140f0fb00192abfb3d4f8
+        classification_review_digest: 7dc4cf948cdc27ef0c379e47483c7450fed060d2c8f5cb25797758442628229f
+        accepted_on: '2026-11-09'
+        evidence: 用户确认纯铁全表同意现有分类。
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pauper
+            week: 2026-W45
+            bindings:
+              event_ids:
+              - '12857414'
+              - '12857421'
+              - '12857671'
+              - '12857676'
+              - '12857684'
+              - '12857699'
+              - '12857717'
+              record_count: 213
+              classifier: 7efd18d52604214bcab6594c5060e15a3af369b8fef140f0fb00192abfb3d4f8
+              classification_review_digest: 7dc4cf948cdc27ef0c379e47483c7450fed060d2c8f5cb25797758442628229f
+              material_digest: ca198e2cec2c0942c8cbf6c658010afff5f65863053c473b665f0b164bb6ae03
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857414'
+                - '12857421'
+                - '12857671'
+                - '12857676'
+                - '12857684'
+                - '12857699'
+                - '12857717'
+                record_count: 213
+                classifier: 7efd18d52604214bcab6594c5060e15a3af369b8fef140f0fb00192abfb3d4f8
+                classification_review_digest: 7dc4cf948cdc27ef0c379e47483c7450fed060d2c8f5cb25797758442628229f
+            digest: cbcbe230188c7d07042af32b492977ab03c54636c67c72f0725adfbcac81d21c
+          decisions:
+            format: pauper
+            week: 2026-W45
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: de110fcbbebddeeda1415e6c5bcd2ae59482f95a61ca7a45dc99733ec13b9f8a
+                evidence: 用户确认纯铁全表同意现有分类。
+                accepted_on: '2026-11-09'
+                entrypoint: file:outputs/W45-%E5%88%86%E7%B1%BB%E5%AE%A1%E9%98%85/pauper/index.html
+                submitted_digest: cbcbe230188c7d07042af32b492977ab03c54636c67c72f0725adfbcac81d21c
     modern:
       initial:
         kind: grandfathered_existing_public_scope
@@ -17626,6 +17754,88 @@ data_admissions:
                 accepted_on: '2026-11-05'
                 entrypoint: http://127.0.0.1:8776/review-v2/modern/2026-W44/index.html
                 submitted_digest: ec833fe0646d0ee443a047d5db12bb7cbc3f83ad49a272a263bfe2beea2a3e92
+      - week: 2026-W45
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857411'
+        - '12857413'
+        - '12857419'
+        - '12857420'
+        - '12857426'
+        - '12857428'
+        - '12857667'
+        - '12857677'
+        - '12857682'
+        - '12857683'
+        - '12857687'
+        - '12857691'
+        - '12857696'
+        - '12857725'
+        source_manifest_digest: 602ae017419e504eca053e058f9e0695ce0ffd5d9c5bc80ed2693873c2d1b498
+        accepted_classifier_subject: 3b6d077f90cfd1a662ce70f636c00ede8ea06d118a89bb7da5833df0742f3bd2
+        classification_review_digest: 124c3665bb7da60758ebb7b440291702791b1443655e15ae06ecfb1b8b087799
+        accepted_on: '2026-11-09'
+        evidence: Owner 在 W45 摩登审阅对话中确认全部未点名的现有分类，并逐条指定 11 份归类，其中两份明确侵染子类。全量回放仅改变这 11 份。
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: modern
+            week: 2026-W45
+            bindings:
+              event_ids:
+              - '12857411'
+              - '12857413'
+              - '12857419'
+              - '12857420'
+              - '12857426'
+              - '12857428'
+              - '12857667'
+              - '12857677'
+              - '12857682'
+              - '12857683'
+              - '12857687'
+              - '12857691'
+              - '12857696'
+              - '12857725'
+              record_count: 443
+              classifier: 3b6d077f90cfd1a662ce70f636c00ede8ea06d118a89bb7da5833df0742f3bd2
+              classification_review_digest: 124c3665bb7da60758ebb7b440291702791b1443655e15ae06ecfb1b8b087799
+              material_digest: 831bdf4c62e966ef18a25e1ab84b7d4ce3f21e3b2604deeb260b645be8a26ee4
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857411'
+                - '12857413'
+                - '12857419'
+                - '12857420'
+                - '12857426'
+                - '12857428'
+                - '12857667'
+                - '12857677'
+                - '12857682'
+                - '12857683'
+                - '12857687'
+                - '12857691'
+                - '12857696'
+                - '12857725'
+                record_count: 443
+                classifier: 3b6d077f90cfd1a662ce70f636c00ede8ea06d118a89bb7da5833df0742f3bd2
+                classification_review_digest: 124c3665bb7da60758ebb7b440291702791b1443655e15ae06ecfb1b8b087799
+            digest: 90c9bd5e261ce180fa95895c7e46a2ea0526c2d09880d7a483806eddc35b8217
+          decisions:
+            format: modern
+            week: 2026-W45
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: 51c87aa6807920030c7efefd1b543830f5623d5f3134188905be9ea94c175826
+                evidence: Owner 在 W45 摩登审阅对话中确认全部未点名的现有分类，并逐条指定 11 份归类，其中两份明确侵染子类。全量回放仅改变这
+                  11 份。
+                accepted_on: '2026-11-09'
+                entrypoint: file:outputs/W45-%E5%88%86%E7%B1%BB%E5%AE%A1%E9%98%85/modern/index.html
+                submitted_digest: 90c9bd5e261ce180fa95895c7e46a2ea0526c2d09880d7a483806eddc35b8217
     pioneer:
       initial:
         kind: owner_accepted_initial_public_scope
@@ -18173,6 +18383,58 @@ data_admissions:
                 accepted_on: '2026-11-05'
                 entrypoint: http://127.0.0.1:8776/review-v2/pioneer/2026-W44/index.html
                 submitted_digest: 263fb3802faee48afc3267f80919f4fcfef39cdb0d7833c5c6cf529bb83f2a68
+      - week: 2026-W45
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857417'
+        - '12857672'
+        - '12857690'
+        - '12857700'
+        source_manifest_digest: a2af874ca22674789218854c30491633b1a98faf3a994e45140d5be95f35e9fc
+        accepted_classifier_subject: dff4e5b64955cd1b174d658a90168f971d3843fe9219bcee4a3ef21d696a31c9
+        classification_review_digest: 3c110fe9abf3ba13bf446e2f07d418fd4122a3a6ca5799af144dc16f7401d6c8
+        accepted_on: '2026-11-09'
+        evidence: Owner 在 W45 先驱审阅对话中明确同意全部未点名的现有分类，并逐条指定 8 份牌表的分类。保留全量回放仅改变这 8 份。
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pioneer
+            week: 2026-W45
+            bindings:
+              event_ids:
+              - '12857417'
+              - '12857672'
+              - '12857690'
+              - '12857700'
+              record_count: 127
+              classifier: dff4e5b64955cd1b174d658a90168f971d3843fe9219bcee4a3ef21d696a31c9
+              classification_review_digest: 3c110fe9abf3ba13bf446e2f07d418fd4122a3a6ca5799af144dc16f7401d6c8
+              material_digest: 1865f980a5e9b2e44a58bf7f6a45b92ec9f4a95a70dc3d36e488c34b96ba698c
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857417'
+                - '12857672'
+                - '12857690'
+                - '12857700'
+                record_count: 127
+                classifier: dff4e5b64955cd1b174d658a90168f971d3843fe9219bcee4a3ef21d696a31c9
+                classification_review_digest: 3c110fe9abf3ba13bf446e2f07d418fd4122a3a6ca5799af144dc16f7401d6c8
+            digest: fb0f1338c7664ec10c303621cefef005e575d5ef625b29eea3126df22ebbee03
+          decisions:
+            format: pioneer
+            week: 2026-W45
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: eb70127853860896b637ddf77830b9f2b8a460d00ff0a0b0613650a4b5e2ea90
+                evidence: Owner 在 W45 先驱审阅对话中明确同意全部未点名的现有分类，并逐条指定 8 份牌表的分类。保留全量回放仅改变这 8
+                  份。
+                accepted_on: '2026-11-09'
+                entrypoint: file:outputs/W45-%E5%88%86%E7%B1%BB%E5%AE%A1%E9%98%85/pioneer/index.html
+                submitted_digest: fb0f1338c7664ec10c303621cefef005e575d5ef625b29eea3126df22ebbee03
     legacy:
       initial:
         kind: owner_accepted_initial_public_scope
@@ -18476,3 +18738,65 @@ data_admissions:
                 accepted_on: '2026-11-08'
                 entrypoint: http://127.0.0.1:8768/index.html?format=legacy&product=mtgo-landing
                 submitted_digest: de59534284b93e37f553650eab6dfc46d04874a83455dddb56c20b2acd73fabd
+      - week: 2026-W45
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857422'
+        - '12857661'
+        - '12857681'
+        - '12857685'
+        - '12857693'
+        - '12857698'
+        - '12857730'
+        source_manifest_digest: 6fb71bd190d2562db076a69b13c08368b20152f0b33a829f63925b43b3c1ecfa
+        accepted_classifier_subject: 88891842f5ed823af7ad750d5d34c6f24a8905ecbd6fd4cbb6b27dd405f94aa1
+        classification_review_digest: 7a2492e9d3de90fe1c5d576862c1b807f360f5f511f5dc112d02f7c0ba41f367
+        accepted_on: '2026-11-09'
+        evidence: 用户同意薪传其余分类，指定纯红烧、蓝黑节奏、纯黑头盔、纯黑中速、苏勒台NO和蓝黑霍佳葛，并确认第14名归入现有TEG。蓝黑节奏名称删除“普通”，范围含Eternal
+          Weekend。
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: legacy
+            week: 2026-W45
+            bindings:
+              event_ids:
+              - '12857422'
+              - '12857661'
+              - '12857681'
+              - '12857685'
+              - '12857693'
+              - '12857698'
+              - '12857730'
+              record_count: 217
+              classifier: 88891842f5ed823af7ad750d5d34c6f24a8905ecbd6fd4cbb6b27dd405f94aa1
+              classification_review_digest: 7a2492e9d3de90fe1c5d576862c1b807f360f5f511f5dc112d02f7c0ba41f367
+              material_digest: 4c42dcc294d0bcb05817da911d6e8ea813285375449fbf1fec04aa84dae25433
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857422'
+                - '12857661'
+                - '12857681'
+                - '12857685'
+                - '12857693'
+                - '12857698'
+                - '12857730'
+                record_count: 217
+                classifier: 88891842f5ed823af7ad750d5d34c6f24a8905ecbd6fd4cbb6b27dd405f94aa1
+                classification_review_digest: 7a2492e9d3de90fe1c5d576862c1b807f360f5f511f5dc112d02f7c0ba41f367
+            digest: 3960f6d563c7416e83045b687b6991f7ddfe0857a9841379be852f85cfd456da
+          decisions:
+            format: legacy
+            week: 2026-W45
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: fd8bb63ab549338d9a46e3c532a80ef5bd09957ea68701e8f6d4226b6d8ddf4a
+                evidence: 用户同意薪传其余分类，指定纯红烧、蓝黑节奏、纯黑头盔、纯黑中速、苏勒台NO和蓝黑霍佳葛，并确认第14名归入现有TEG。蓝黑节奏名称删除“普通”，范围含Eternal
+                  Weekend。
+                accepted_on: '2026-11-09'
+                entrypoint: file:outputs/W45-%E8%96%AA%E4%BC%A0%E5%88%86%E7%B1%BB%E5%A4%8D%E6%A0%B8/index.html
+                submitted_digest: 3960f6d563c7416e83045b687b6991f7ddfe0857a9841379be852f85cfd456da

@@ -157,7 +157,12 @@ def prepare_repository_facts(root: Path, formats, *, input_paths=None,
             raise FactsPreparationError("Classification input escapes the preparation root")
         payload = path.read_bytes()
         inputs[path.relative_to(root).as_posix()] = sha256(payload).hexdigest()
-        names.update(_names(yaml.safe_load(payload) if path.suffix == ".yaml" else json.loads(payload)))
+        if path.suffix == ".yaml":
+            rule = yaml.safe_load(payload)
+            if rule.get("schema_version") not in {"1.0.0", "1.1.0"}:
+                names.update(_names(rule))
+        else:
+            names.update(_names(json.loads(payload)))
     missing = {n for n in names if not n.startswith("__classifier-semantic-")
                and resolve_card_name(n, facts) not in facts.cards}
     transport = download or _download

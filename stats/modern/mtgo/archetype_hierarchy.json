@@ -2,11 +2,11 @@
   "schema_version": "1.1.0",
   "format": "modern",
   "source": "mtgo",
-  "classifier_digest": "37c1cf1db20bc90bc2fd45d5ac042110edc387c10572f9f57e0f34fadf56d4e7",
-  "rules_updated": "2026-10-27T20:46:44+09:00",
+  "classifier_digest": "3b6d077f90cfd1a662ce70f636c00ede8ea06d118a89bb7da5833df0742f3bd2",
+  "rules_updated": "2026-11-09T22:45:07+09:00",
   "summary": {
-    "parents": 236,
-    "leaves": 325,
+    "parents": 239,
+    "leaves": 329,
     "expandable_parents": 29
   },
   "parents": [
@@ -721,6 +721,12 @@
       "subtype_ids": []
     },
     {
+      "id": "grixis-twin",
+      "name": "Grixis Twin",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "grixis-unearth",
       "name": "Grixis Unearth",
       "expandable": false,
@@ -810,6 +816,7 @@
       "expandable": true,
       "subtype_ids": [
         "infect/bant",
+        "infect/mono-green",
         "infect/simic",
         "infect/sultai"
       ]
@@ -965,6 +972,12 @@
       "subtype_ids": []
     },
     {
+      "id": "jund-midrange",
+      "name": "Jund Midrange",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "jund-sagavan",
       "name": "Jund Sagavan",
       "expandable": false,
@@ -973,6 +986,12 @@
     {
       "id": "kethis-combo",
       "name": "Kethis Combo",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "kiki-chord",
+      "name": "Kiki Chord",
       "expandable": false,
       "subtype_ids": []
     },
@@ -2730,6 +2749,14 @@
       "subtype_id": null
     },
     {
+      "id": "grixis-twin",
+      "kind": "archetype",
+      "name": "Grixis Twin",
+      "display_name": "Grixis Twin",
+      "parent_id": "grixis-twin",
+      "subtype_id": null
+    },
+    {
       "id": "grixis-unearth",
       "kind": "archetype",
       "name": "Grixis Unearth",
@@ -2896,6 +2923,14 @@
       "display_name": "Bant Infect",
       "parent_id": "infect",
       "subtype_id": "bant"
+    },
+    {
+      "id": "infect/mono-green",
+      "kind": "subtype",
+      "name": "Mono-Green",
+      "display_name": "Mono-Green Infect",
+      "parent_id": "infect",
+      "subtype_id": "mono-green"
     },
     {
       "id": "infect/simic",
@@ -3122,6 +3157,14 @@
       "subtype_id": null
     },
     {
+      "id": "jund-midrange",
+      "kind": "archetype",
+      "name": "Jund Midrange",
+      "display_name": "Jund Midrange",
+      "parent_id": "jund-midrange",
+      "subtype_id": null
+    },
+    {
       "id": "jund-sagavan",
       "kind": "archetype",
       "name": "Jund Sagavan",
@@ -3135,6 +3178,14 @@
       "name": "Kethis Combo",
       "display_name": "Kethis Combo",
       "parent_id": "kethis-combo",
+      "subtype_id": null
+    },
+    {
+      "id": "kiki-chord",
+      "kind": "archetype",
+      "name": "Kiki Chord",
+      "display_name": "Kiki Chord",
+      "parent_id": "kiki-chord",
       "subtype_id": null
     },
     {

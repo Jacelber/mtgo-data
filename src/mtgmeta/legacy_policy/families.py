@@ -228,9 +228,9 @@ def classify_with_review(rules, main, side):
         return remap(base, "dimir-tempo", "Dimir Tempo", sid, label), info
     if pid == "dimir-tempo" and base.subtype_id == "dimir":
         info.update(
-            path="ordinary-dimir-tempo", nameZh="普通蓝黑节奏", nameEn="Dimir Tempo"
+            path="ordinary-dimir-tempo", nameZh="蓝黑节奏", nameEn="Dimir Tempo"
         )
-        return remap(base, pid, "Dimir Tempo", "dimir", "普通蓝黑节奏"), info
+        return remap(base, pid, "Dimir Tempo", "dimir", "蓝黑节奏"), info
     if pid in {
         "dimir-erayo",
         "mono-black-saga-storm",
@@ -325,7 +325,7 @@ def classify_with_review(rules, main, side):
         if pid in pure_subtypes:
             return remap(base, pid, base.archetype_name, pure_subtypes[pid]), info
         if pid == "dimir-tempo" and base.subtype_id is None:
-            return remap(base, pid, "Dimir Tempo", "dimir", "普通蓝黑节奏"), info
+            return remap(base, pid, "Dimir Tempo", "dimir", "蓝黑节奏"), info
         return base, info
     zh_suffix, en_suffix, id_suffix = SUFFIX[pid]
     # Three explicitly accepted former UW-control builds have UBW tempo engines.

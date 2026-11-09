@@ -1760,9 +1760,15 @@ archetypes:
       - card: Nykthos, Shrine to Nyx
         zone: main
         min_count: 1
-      - card: Gray Merchant of Asphodel
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Gray Merchant of Asphodel
+            zone: main
+            min_count: 1
+        - all:
+          - card: Baron Helmut Zemo
+            zone: main
+            min_count: 1
 - id: golgari-company
   name: Golgari Company
   priority: 100
@@ -3282,3 +3288,125 @@ archetypes:
       - card: Enigmatic Incarnation
         zone: main
         max_count: 0
+- id: boros-aggro
+  name: Boros Aggro
+  priority: 100
+  rules:
+  - id: boros-aggro-kumano-nemesis
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Kumano Faces Kakkazan
+        zone: main
+        min_count: 1
+      - card: Screaming Nemesis
+        zone: main
+        min_count: 1
+      - card: Emberheart Challenger
+        zone: main
+        min_count: 1
+      - card: Boros Charm
+        zone: main
+        min_count: 1
+      - card: Soul-Scar Mage
+        zone: main
+        exact_count: 0
+    colors:
+    - white
+    - red
+  color_profile: default
+- id: orzhov-self-mill
+  name: Orzhov Self-Mill
+  priority: 110
+  rules:
+  - id: orzhov-self-mill-scout
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Stitcher's Supplier
+        zone: main
+        min_count: 1
+      - card: Scout for Survivors
+        zone: main
+        min_count: 1
+      - card: Archfiend's Vessel
+        zone: main
+        min_count: 1
+    colors:
+    - white
+    - black
+  color_profile: default
+- id: bant-rhythm
+  name: Bant Rhythm
+  priority: 110
+  rules:
+  - id: bant-rhythm-riddler
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nature's Rhythm
+        zone: main
+        min_count: 1
+      - card: Badgermole Cub
+        zone: main
+        min_count: 1
+      - card: Quantum Riddler
+        zone: main
+        min_count: 1
+      - card: Seam Rip
+        zone: main
+        min_count: 1
+      - card: Nykthos, Shrine to Nyx
+        zone: main
+        max_count: 0
+    colors:
+    - white
+    - blue
+    - green
+  color_profile: default
+- id: mono-blue-spirits
+  name: Mono-Blue Spirits
+  priority: 100
+  rules:
+  - id: mono-blue-spirits-obsession
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Supreme Phantom
+        zone: main
+        min_count: 1
+      - card: Mausoleum Wanderer
+        zone: main
+        min_count: 1
+      - card: Curious Obsession
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+  color_profile: default
+- id: rakdos-madness
+  name: Rakdos Madness
+  priority: 110
+  rules:
+  - id: rakdos-madness-alms-temper
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Alms of the Vein
+        zone: main
+        min_count: 1
+      - card: Fiery Temper
+        zone: main
+        min_count: 1
+      - card: Lightning Axe
+        zone: main
+        min_count: 1
+    colors:
+    - black
+    - red
+  color_profile: default

@@ -2,6 +2,7 @@
 
 from .branch_colors import GREEN, RED, WHITE
 from .card_data import printed_spell_colors, known_neutral_payment
+from .colors import card_fact
 
 BRANCH = "w44-dimir-hogaak"
 BRANCHES = {BRANCH, "ew-dimir-hogaak-mockingbird"}
@@ -25,6 +26,14 @@ def audit_color(rules, main, side):
         and main.get("Dryad Arbor", 0) >= 1
         and main.get("Misty Rainforest", 0) + main.get("Verdant Catacombs", 0) >= 8
     )
+    free_once = (
+        main.get("Once Upon a Time", 0) == 1
+        and not side.get("Once Upon a Time", 0)
+        and not any(
+            "G" in (card_fact(card).get("produced_mana") or ())
+            for card in set(main) | set(side)
+        )
+    )
     colors = {"blue", "black"}
     evidence, issues = {}, []
     for card in sorted(
@@ -32,6 +41,8 @@ def audit_color(rules, main, side):
     ):
         if card == "Reverent Silence":
             cs = set() if free_silence else {"green"}
+        elif card == "Once Upon a Time" and free_once:
+            cs = set()
         elif card == "Hogaak, Arisen Necropolis":
             cs = {"black"}  # Accepted convoke/delve use, never mandatory green.
         elif card in {

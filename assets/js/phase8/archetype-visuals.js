@@ -229,6 +229,11 @@ const manaIdentities = Object.freeze({
     "rakdos-darklight-phoenix": Object.freeze(["b", "r"]),
     "ceremony-phoenix": Object.freeze(["u", "b"]),
     "mono-red-midrange": Object.freeze(["r"]),
+    "selesnya-kona": Object.freeze(["w", "g"]),
+    "orzhov-self-mill": Object.freeze(["w", "b"]),
+    "esper-midrange": Object.freeze(["w", "u", "b"]),
+    "sultai-spider-man": Object.freeze(["u", "b", "g"]),
+    "esper-toughness": Object.freeze(["w", "u", "b"]),
   }),
   modern: Object.freeze({
     "titan-canopy-ramp": Object.freeze(["g"]),
@@ -589,6 +594,10 @@ const manaIdentities = Object.freeze({
     "gruul-ponza": Object.freeze(["r", "g"]),
     "mono-black-aggro": Object.freeze(["b"]),
     "mardu-learn": Object.freeze(["w", "b", "r"]),
+    "grixis-twin": Object.freeze(["u", "b", "r"]),
+    "jund-midrange": Object.freeze(["b", "r", "g"]),
+    "kiki-chord": Object.freeze(["w", "r", "g"]),
+    "infect/mono-green": Object.freeze(["g"]),
   }),
   pauper: Object.freeze({
     "dimir-self-bounce": Object.freeze(["u", "b"]),
@@ -853,6 +862,11 @@ const manaIdentities = Object.freeze({
     "mono-green-rhythm": Object.freeze(["g"]),
     "affinity": Object.freeze(["u", "r"]),
     "bant-beanstalk-control": Object.freeze(["w", "u", "g"]),
+    "boros-aggro": Object.freeze(["w", "r"]),
+    "orzhov-self-mill": Object.freeze(["w", "b"]),
+    "bant-rhythm": Object.freeze(["w", "u", "g"]),
+    "mono-blue-spirits": Object.freeze(["u"]),
+    "rakdos-madness": Object.freeze(["b", "r"]),
   }),
   legacy: Object.freeze({
     "tron/multicolor": Object.freeze(["w", "u", "b", "r", "g"]),
@@ -1562,6 +1576,18 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Nykthos, Shrine to Nyx", "image": "../images/representative-cards/pioneer/nykthos-shrine-to-nyx.jpg"}),
       Object.freeze({"name": "Llanowar Elves", "image": "../images/representative-cards/pioneer/llanowar-elves.jpg"}),
     ]),
+    "boros-aggro": Object.freeze([
+      Object.freeze({"name": "Boros Charm", "image": "../images/representative-cards/pioneer/boros-charm.jpg"}),
+      Object.freeze({"name": "Screaming Nemesis", "image": "../images/representative-cards/pioneer/screaming-nemesis.jpg"}),
+    ]),
+    "boros-convoke": Object.freeze([
+      Object.freeze({"name": "Knight-Errant of Eos", "image": "../images/representative-cards/pioneer/knight-errant-of-eos.jpg"}),
+      Object.freeze({"name": "Venerated Loxodon", "image": "../images/representative-cards/pioneer/venerated-loxodon.jpg"}),
+    ]),
+    "mono-black-devotion": Object.freeze([
+      Object.freeze({"name": "Baron Helmut Zemo", "image": "../images/representative-cards/pioneer/baron-helmut-zemo.jpg"}),
+      Object.freeze({"name": "Nykthos, Shrine to Nyx", "image": "../images/representative-cards/pioneer/nykthos-shrine-to-nyx.jpg"}),
+    ]),
   }),
   legacy: Object.freeze({
     "dimir-tempo": Object.freeze([
@@ -1623,6 +1649,22 @@ const representativeCards = Object.freeze({
     "blue-tron": Object.freeze([
       Object.freeze({"name": "Urza's Tower", "image": "../images/representative-cards/legacy/urzas-tower.jpg"}),
       Object.freeze({"name": "Force of Will", "image": "../images/representative-cards/legacy/force-of-will.jpg"}),
+    ]),
+    "aluren-tell": Object.freeze([
+      Object.freeze({"name": "Aluren", "image": "../images/representative-cards/legacy/aluren.jpg"}),
+      Object.freeze({"name": "Show and Tell", "image": "../images/representative-cards/legacy/show-and-tell.jpg"}),
+    ]),
+    "jeskai-control": Object.freeze([
+      Object.freeze({"name": "Swords to Plowshares", "image": "../images/representative-cards/legacy/swords-to-plowshares.jpg"}),
+      Object.freeze({"name": "Force of Will", "image": "../images/representative-cards/legacy/force-of-will.jpg"}),
+    ]),
+    "jeskai-tempo": Object.freeze([
+      Object.freeze({"name": "Phelia, Exuberant Shepherd", "image": "../images/representative-cards/legacy/phelia-exuberant-shepherd.jpg"}),
+      Object.freeze({"name": "Quantum Riddler", "image": "../images/representative-cards/legacy/quantum-riddler.jpg"}),
+    ]),
+    "sewers": Object.freeze([
+      Object.freeze({"name": "Sewer-veillance Cam", "image": "../images/representative-cards/legacy/sewer-veillance-cam.jpg"}),
+      Object.freeze({"name": "Goblin Welder", "image": "../images/representative-cards/legacy/goblin-welder.jpg"}),
     ]),
   }),
 });

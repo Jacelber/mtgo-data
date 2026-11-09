@@ -681,9 +681,18 @@ archetypes:
       - card: Fatal Push
         zone: main
         min_count: 3
-      - card: Breeding Pool
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Breeding Pool
+            zone: main
+            min_count: 1
+        - all:
+          - card: Hedge Maze
+            zone: main
+            min_count: 1
+          - card: Witherbloom Charm
+            zone: main
+            min_count: 1
       - card: Watery Grave
         zone: main
         min_count: 1
@@ -6207,12 +6216,24 @@ archetypes:
       - card: Song of Creation
         zone: main
         min_count: 3
-      - card: Emry, Lurker of the Loch
-        zone: main
-        min_count: 3
-      - card: Mox Amber
-        zone: main
-        min_count: 3
+      - any:
+        - all:
+          - card: Emry, Lurker of the Loch
+            zone: main
+            min_count: 3
+          - card: Mox Amber
+            zone: main
+            min_count: 3
+        - all:
+          - card: Mox Opal
+            zone: main
+            min_count: 1
+          - card: Mishra's Bauble
+            zone: main
+            min_count: 1
+          - card: Grapeshot
+            zone: main
+            min_count: 1
 - id: pensive-combo
   name: Pensive Combo
   priority: 617000
@@ -8429,7 +8450,10 @@ archetypes:
 - id: infect
   name: Infect
   priority: 689890
+  color_profile: default
   subtypes:
+  - id: mono-green
+    name: Mono-Green
   - id: simic
     name: Simic
   - id: sultai
@@ -8437,6 +8461,22 @@ archetypes:
   - id: bant
     name: Bant
   rules:
+  - id: infect-mono-green
+    priority: 689890
+    subtype_id: mono-green
+    conditions:
+      all:
+      - card: Glistener Elf
+        zone: main
+        min_count: 1
+      - card: Blight Mamba
+        zone: main
+        min_count: 1
+      - card: Scale Up
+        zone: main
+        min_count: 1
+    colors:
+    - green
   - id: infect-simic
     priority: 689890
     subtype_id: simic
@@ -8450,7 +8490,7 @@ archetypes:
         min_count: 3
       - card: Groundswell
         zone: main
-        min_count: 3
+        min_count: 2
       - card: Breeding Pool
         zone: main
         min_count: 2
@@ -10688,5 +10728,69 @@ archetypes:
         zone: main
         min_count: 1
       - card: Godless Shrine
+        zone: main
+        min_count: 1
+- id: grixis-twin
+  name: Grixis Twin
+  priority: 622300
+  color_profile: default
+  rules:
+  - id: grixis-twin-duelist
+    priority: 622300
+    subtype_id: null
+    conditions:
+      all:
+      - card: Splinter Twin
+        zone: main
+        min_count: 2
+      - card: Divining Duelist
+        zone: main
+        min_count: 2
+    colors:
+    - blue
+    - black
+    - red
+- id: jund-midrange
+  name: Jund Midrange
+  priority: 300900
+  color_profile: default
+  rules:
+  - id: jund-midrange-goyf-wrenn
+    priority: 300900
+    subtype_id: null
+    conditions:
+      all:
+      - card: Tarmogoyf
+        zone: main
+        min_count: 1
+      - card: Wrenn and Six
+        zone: main
+        min_count: 1
+      - card: Thoughtseize
+        zone: main
+        min_count: 1
+      - card: Urza's Saga
+        zone: main
+        exact_count: 0
+    colors:
+    - black
+    - red
+    - green
+- id: kiki-chord
+  name: Kiki Chord
+  priority: 681010
+  rules:
+  - id: kiki-chord-bell-ringer
+    priority: 681010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Kiki-Jiki, Mirror Breaker
+        zone: main
+        min_count: 1
+      - card: Village Bell-Ringer
+        zone: main
+        min_count: 1
+      - card: Chord of Calling
         zone: main
         min_count: 1

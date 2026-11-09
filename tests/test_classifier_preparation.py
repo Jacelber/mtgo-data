@@ -145,6 +145,29 @@ def test_complete_local_input_can_continue_when_remote_is_offline(tmp_path):
     assert not result["changed"] and (root / FACTS).read_bytes() == before
 
 
+def test_unbound_rule_spelling_does_not_block_fact_preparation(tmp_path):
+    root, _ = setup_root(tmp_path)
+    legacy = root / "my_archetypes/legacy.yaml"
+    legacy_rules = {
+        "schema_version": "1.1.0",
+        "archetypes": [{"conditions": {"all": [{"card": "Unbound Rule Spelling"}]}}],
+    }
+    legacy.write_bytes(yaml.safe_dump(legacy_rules).encode("utf-8"))
+    before = legacy.read_bytes()
+
+    def unexpected_download(url):
+        pytest.fail(f"Unexpected card lookup: {url}")
+
+    result = prepare_repository_facts(
+        root, ["standard"], oracle_gzip=source_file(tmp_path, [new_card()]),
+        refresh=False, download=unexpected_download,
+    )
+
+    assert result["requests"] == 0
+    assert legacy.read_bytes() == before
+    assert (Path(result["snapshot"]) / "my_archetypes/legacy.yaml").read_bytes() == before
+
+
 def test_snapshot_name_resolution_does_not_leak_between_two_loaded_versions(tmp_path):
     root, _ = setup_root(tmp_path)
     first = load_rule_set(root / "my_archetypes/standard.yaml")
