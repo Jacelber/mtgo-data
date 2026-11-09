@@ -1145,7 +1145,7 @@ def build_all_matchups(
     for filename, document in documents.items():
         destination = output / filename
         destination.write_text(
-            json.dumps(document, ensure_ascii=False, indent=2),
+            json.dumps(document, ensure_ascii=False, separators=(",", ":")),
             encoding="utf-8",
             newline="\n",
         )

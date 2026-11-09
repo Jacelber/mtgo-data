@@ -1470,6 +1470,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--format", required=True, dest="format_id")
     parser.add_argument("--event-id", required=True)
+    encoding = parser.add_mutually_exclusive_group()
+    encoding.add_argument("--compact", dest="compact", action="store_true", default=True,
+                          help="omit insignificant JSON whitespace (default)")
+    encoding.add_argument("--pretty", dest="compact", action="store_false",
+                          help="indent local statistics for inspection")
     parser.add_argument(
         "--execute",
         action="store_true",
@@ -1528,7 +1533,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             for name, document in documents.items():
                 reused[name] = write_statistics_document(
                     output_dir / f"{name}.json",
-                    statistics_document_bytes(document),
+                    statistics_document_bytes(document, compact=args.compact),
                 )
         overview = documents["overview"]
         scope_order = overview["scope_order"]

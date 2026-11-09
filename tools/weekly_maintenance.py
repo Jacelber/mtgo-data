@@ -613,7 +613,7 @@ def stage_data(root, plan, resume_stage=None, previous=None):
                        "matchup": [event_prefix + "/matchup.json"], "publish": [event_prefix + "/meta.json"]}[name]
             def generate():
                 arguments = ["--root", str(root), "--format", fmt, "--event-id", event, "--execute"]
-                if name == "matchup":
+                if name in {"stats", "matchup"}:
                     arguments.append("--compact")
                 code = producer(arguments)
                 if code:
