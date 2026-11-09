@@ -134,9 +134,11 @@ function tabletopOverall(scope, playedRecords) {
     return total;
   }, { wins: 0, losses: 0, draws: 0 });
   const record = scope.literal_record || ReviewData.literalRecord(counts);
-  const dropRounds = scope.result_counts.drop_unplayed || 0;
+  const completedRounds = [
+    "played_win", "played_loss", "played_draw", "intentional_draw", "bye", "awarded_win_top8_lock",
+  ].reduce((total, result) => total + (scope.result_counts[result] || 0), 0);
   const completion = scope.theoretical_rounds
-    ? (scope.theoretical_rounds - dropRounds) / scope.theoretical_rounds
+    ? completedRounds / scope.theoretical_rounds
     : null;
   return {
     name: t("tabletop.overall"),

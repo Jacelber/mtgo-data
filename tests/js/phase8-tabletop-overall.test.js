@@ -38,3 +38,19 @@ test("new overview overall needs no deck list and missing overall is not fabrica
   delete scope.literal_record;
   assert.throws(() => context.tabletopOverall(scope));
 });
+
+test("overall completion excludes reviewed absences, no-shows and administrative results", () => {
+  const scope = {
+    participant_count: 1,
+    theoretical_rounds: 10,
+    literal_record: { wins: 1, losses: 1, draws: 1, matches: 3 },
+    result_counts: {
+      played_win: 1, played_loss: 1, played_draw: 1, intentional_draw: 1,
+      bye: 1, awarded_win_top8_lock: 1,
+      reviewed_unplayed: 1, administrative_result: 1, no_show: 1, drop_unplayed: 1,
+    },
+  };
+  const row = context.tabletopOverall(scope);
+  assert.equal(row.completion_rate, 0.6);
+  assert.equal(row.literal_record, scope.literal_record);
+});
