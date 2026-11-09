@@ -880,6 +880,15 @@ def build_document(
     landing_schema_version = (
         PRIVATE_LANDING_SCHEMA_VERSION if private else LANDING_SCHEMA_VERSION
     )
+    if allow_classifier_restatement:
+        retained_path = context.paths["statistics"] / "landing" / "current.json"
+        if retained_path.is_file():
+            retained = json.loads(retained_path.read_text(encoding="utf-8"))
+            if (retained.get("week", {}).get("id") == screening.iso_week_label(target_monday)
+                    and retained.get("schema_version") in {LANDING_SCHEMA_VERSION, PRIVATE_LANDING_SCHEMA_VERSION}):
+                # Restating provenance must preserve the existing page contract,
+                # including a published 1.3 page whose feature list is empty.
+                landing_schema_version = retained["schema_version"]
     visual_metadata_digest = visual_metadata_binding_digest(
         visual_metadata,
         landing_schema_version=landing_schema_version,
