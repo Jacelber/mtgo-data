@@ -4,13 +4,14 @@ from .branch_colors import GREEN, RED, WHITE
 from .card_data import printed_spell_colors, known_neutral_payment
 
 BRANCH = "w44-dimir-hogaak"
+BRANCHES = {BRANCH, "ew-dimir-hogaak-mockingbird"}
 
 
 def applies(result):
     return (
         result.status == "classified"
         and result.archetype_id == "dimir-tempo"
-        and any(m.rule_id == BRANCH for m in result.top_priority_matches)
+        and any(m.rule_id in BRANCHES for m in result.top_priority_matches)
     )
 
 

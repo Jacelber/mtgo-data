@@ -157,6 +157,17 @@ def classify_with_review(rules, main, side):
     if base.status != "classified":
         return base, info
     pid = base.archetype_id
+    if (
+        pid == "colorless-tron"
+        and base.subtype_id == "colorless"
+        and any(main.get(card, 0) + side.get(card, 0) for card in (
+            "Portable Hole", "Perilous Snare", "Lich's Relic", "Mishra's Research Desk",
+        ))
+    ):
+        # The Nexus audit has already proved the reviewed artifact-tool roles.
+        # A second generic payment audit would count those same tools again.
+        info.update(path="reviewed-colorless-tron-toolbox")
+        return base, info
     if is_hogaak_tempo(base):
         # Mite is neutral even when another retained color table contains it.
         m = {n: q for n, q in main.items() if n != "Haywire Mite"}

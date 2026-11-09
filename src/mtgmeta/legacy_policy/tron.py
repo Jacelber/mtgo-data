@@ -4,7 +4,7 @@ COLORS = frozenset({
     "colorless", "mono-blue", "mono-white", "mono-green", "mono-red",
     "dimir", "izzet", "temur", "sultai", "azorius", "boros", "esper",
     "selesnya", "grixis", "rakdos", "simic", "non-black", "non-white",
-    "non-green",
+    "non-green", "non-red", "non-blue",
 })
 
 
