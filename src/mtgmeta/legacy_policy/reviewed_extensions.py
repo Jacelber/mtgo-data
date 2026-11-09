@@ -18,7 +18,7 @@ def definitions():
     return json.loads(Path(__file__).with_suffix(".json").read_text(encoding="utf8"))
 
 
-def resolve_unclassified(main, side, result):
+def resolve_unclassified(main, side, result, rules=None):
     from mtgmeta.classifier import ConditionEvidence, RuleMatch
     from mtgmeta.classifier_cards import classifier_card_name
     from . import identities
@@ -55,7 +55,7 @@ def resolve_unclassified(main, side, result):
                     valid = False
         if not valid:
             continue
-        if rule.get("colors"):
+        if rule.get("colors") and not rule["parent"].endswith("-tron"):
             color = audit(
                 {"main": main, "side": side, "candidate": {"parent": rule["parent"]}}
             )
@@ -70,10 +70,16 @@ def resolve_unclassified(main, side, result):
                 cs.add("R")
             if color["issues"] or cs != set(rule["colors"]):
                 continue
-        from .tron import output_identity
+        from .tron import route_identity
 
-        parent, subtype = output_identity(rule["parent"], rule.get("subtype"), main)
-        identity = identities()[(parent, subtype)]
+        parent, subtype, tron_info = route_identity(
+            rules, rule["parent"], rule.get("subtype"), main, side
+        )
+        if tron_info.get("issues"):
+            continue
+        identity = identities().get((parent, subtype))
+        if identity is None:
+            continue
         matches.append(
             RuleMatch(
                 parent,

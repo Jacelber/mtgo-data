@@ -45,8 +45,30 @@ def audit_color(rules, parent, main, side):
         and main.get("Karn, the Great Creator", 0) >= 3
     )
     free_tools = set()
+    # Reviewed colorless Monolith/Karn shells use these colored artifacts as
+    # toolbox cards; their presence does not establish a colored engine.
+    artifact_tool_shell = parent == "colorless-tron" and all(
+        main.get(card, 0) >= minimum
+        for card, minimum in [
+            ("Planar Nexus", 3), ("Urza's Tower", 3),
+            ("Karn, the Great Creator", 3), ("Grim Monolith", 3),
+            ("The One Ring", 3), ("Kozilek's Command", 3),
+        ]
+    ) and not any(main.get(card, 0) for card in [
+        "Force of Will", "Force of Negation", "Stock Up", "Transmute Artifact",
+        "Painter's Servant", "The Fantasticar", "Show and Tell",
+    ]) and main.get("Mystic Forge", 0) <= 1 and not any(
+        printed_spell_colors(card) or card == "Boseiju, Who Endures"
+        for card in cards - IGNORED - set(CONDITIONAL) - {
+            "Portable Hole", "Perilous Snare", "Lich's Relic", "Mishra's Research Desk",
+        } - ({"Barrowgoyf"} if not main.get("Barrowgoyf", 0) else set())
+    )
+    if artifact_tool_shell:
+        free_tools.update({"Portable Hole", "Perilous Snare", "Lich's Relic", "Mishra's Research Desk"} & cards)
+        if not main.get("Barrowgoyf", 0):
+            free_tools.update({"Barrowgoyf"} & set(side))
     if nexus_tools or transmute_tron:
-        free_tools = {
+        free_tools.update({
             card
             for card in [
                 "Leyline of the Void",
@@ -56,7 +78,7 @@ def audit_color(rules, parent, main, side):
                 "Phyrexian Metamorph",
             ]
             if side.get(card, 0) and not main.get(card, 0)
-        }
+        })
         if parent == "colorless-tron" and (
             main.get("Trinisphere", 0) + main.get("Sphere of Resistance", 0) >= 3
         ):

@@ -101,7 +101,48 @@ def classify(
 
     main, side = policy_counts(main), policy_counts(side)
     result = _classify_registered(rules, main, side)
-    return resolve_unclassified(main, side, result)
+    result = resolve_unclassified(main, side, result, rules)
+    if result.status == "classified" and result.archetype_id in {
+        "mystic-forge-combo",
+        "goblins",
+    }:
+        from .colors import audit
+        from .families import remap
+
+        color = audit(
+            {"main": main, "side": side, "candidate": {"parent": result.archetype_id}}
+        )
+        if result.archetype_id == "mystic-forge-combo":
+            sid = {
+                "": "colorless",
+                "U": "mono-blue",
+                "R": "mono-red",
+                "W": "mono-white",
+            }.get(color["colors"], "multicolor")
+        else:
+            sid = {"R": "mono-red", "BR": "rakdos", "RG": "gruul"}.get(color["colors"])
+        identity = identities().get((result.archetype_id, sid)) if sid else None
+        if color["issues"] or identity is None:
+            return replace(
+                result,
+                status="unknown",
+                archetype_id=None,
+                archetype_name=None,
+                subtype_id=None,
+                subtype_name=None,
+                selected_rule_id=None,
+                selected_priority=None,
+                errors=tuple(color["issues"])
+                or ("legacy_identity: maintained subtype requires review",),
+            )
+        result = remap(
+            result,
+            result.archetype_id,
+            identity["parent_name"],
+            sid,
+            identity["english"],
+        )
+    return result
 
 
 def _classify_registered(rules, main, side):

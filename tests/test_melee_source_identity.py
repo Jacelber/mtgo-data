@@ -236,15 +236,12 @@ def test_registry_31_can_distinguish_qualified_bye_from_legacy_top8_lock():
 
 
 def test_registry_30_rejects_new_qualified_result_interpretation():
-    registry_text = (ROOT / "configs" / "melee_events.yaml").read_text(
-        encoding="utf-8"
-    ).replace(
-        'schema_version: "3.1.0"', 'schema_version: "3.0.0"', 1
-    ).replace(
-        "      top8_lock_supported: true",
-        "      top8_lock_supported: true\n      qualified_result_type: bye",
-        1,
-    )
+    import yaml
+    # Isolate the existing Qualified rule from newer unrelated registry fields.
+    document = yaml.safe_load((ROOT / "configs/melee_events.yaml").read_text())
+    event = next(e for e in document["events"] if e["id"] == "434455")
+    event["advancement"]["qualified_result_type"] = "bye"
+    registry_text = yaml.safe_dump({"schema_version": "3.0.0", "events": [event]})
 
     with pytest.raises(MeleeConfigError, match="unsupported"):
         parse_melee_event_text(registry_text)
@@ -254,7 +251,7 @@ def test_paupergeddon_registry_admission_is_exact_and_fetchable():
     registry = load_melee_event_registry(ROOT / "configs" / "melee_events.yaml")
     event = registry.require_fetchable("438329")
 
-    assert registry.schema_version == "3.1.0"
+    assert registry.schema_version == "3.2.0"
     assert (
         event.url,
         event.name,

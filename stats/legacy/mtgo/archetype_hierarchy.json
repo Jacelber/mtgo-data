@@ -2,12 +2,12 @@
   "schema_version": "1.1.0",
   "format": "legacy",
   "source": "mtgo",
-  "classifier_digest": "921755458c24840d54472227a796a4d76b0e1b3d8a64f14eb6d9960bd1880ddf",
-  "rules_updated": "2026-11-08T16:47:56+09:00",
+  "classifier_digest": "4631d79149650c9b76647323553a0f7eaf75aa5054c30f81df94e66a477cce3c",
+  "rules_updated": "2026-11-09T02:48:23Z",
   "summary": {
-    "parents": 160,
-    "leaves": 191,
-    "expandable_parents": 5
+    "parents": 186,
+    "leaves": 217,
+    "expandable_parents": 7
   },
   "parents": [
     {
@@ -71,6 +71,12 @@
       "subtype_ids": []
     },
     {
+      "id": "azorius-blink",
+      "name": "Azorius Blink",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "azorius-control",
       "name": "Azorius Control",
       "expandable": false,
@@ -91,6 +97,12 @@
       "subtype_ids": [
         "azorius-fantasticar/azorius"
       ]
+    },
+    {
+      "id": "azorius-mill",
+      "name": "Azorius Mill",
+      "expandable": false,
+      "subtype_ids": []
     },
     {
       "id": "azorius-standstill",
@@ -133,8 +145,26 @@
       "subtype_ids": []
     },
     {
+      "id": "bant-midrange",
+      "name": "Bant Midrange",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "bant-natural-order",
+      "name": "Bant Natural Order",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "bant-post",
       "name": "Bant Post",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "bant-tempo",
+      "name": "Bant Tempo",
       "expandable": false,
       "subtype_ids": []
     },
@@ -151,14 +181,12 @@
       "name": "Blue Tron",
       "expandable": true,
       "subtype_ids": [
+        "blue-tron/azorius",
         "blue-tron/dimir",
         "blue-tron/izzet",
         "blue-tron/mono-blue",
-        "blue-tron/non-green",
-        "blue-tron/non-white",
-        "blue-tron/simic",
-        "blue-tron/sultai",
-        "blue-tron/temur"
+        "blue-tron/multicolor",
+        "blue-tron/simic"
       ]
     },
     {
@@ -248,6 +276,12 @@
     {
       "id": "depths-reanimator",
       "name": "Depths Reanimator",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "devoted-reconfiguration",
+      "name": "Devoted Reconfiguration",
       "expandable": false,
       "subtype_ids": []
     },
@@ -348,6 +382,12 @@
       "subtype_ids": []
     },
     {
+      "id": "esper-death-and-taxes",
+      "name": "Esper Death and Taxes",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "esper-energy",
       "name": "Esper Energy",
       "expandable": false,
@@ -360,8 +400,20 @@
       "subtype_ids": []
     },
     {
+      "id": "esper-midrange",
+      "name": "Esper Midrange",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "esper-ninjas",
       "name": "Esper Ninjas",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "esper-stoneblade",
+      "name": "Esper Stoneblade",
       "expandable": false,
       "subtype_ids": []
     },
@@ -390,6 +442,12 @@
       "subtype_ids": []
     },
     {
+      "id": "food-chain",
+      "name": "Food Chain",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "forge-fantasticar",
       "name": "Forge Fantasticar",
       "expandable": false,
@@ -398,12 +456,22 @@
     {
       "id": "goblins",
       "name": "Goblins",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "goblins/gruul",
+        "goblins/mono-red",
+        "goblins/rakdos"
+      ]
     },
     {
       "id": "golgari-depths",
       "name": "Golgari Depths",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "golgari-midrange",
+      "name": "Golgari Midrange",
       "expandable": false,
       "subtype_ids": []
     },
@@ -446,6 +514,12 @@
       "subtype_ids": []
     },
     {
+      "id": "gruul-depths",
+      "name": "Gruul Depths",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "gruul-initiative",
       "name": "Gruul Initiative",
       "expandable": false,
@@ -480,6 +554,12 @@
     {
       "id": "humans",
       "name": "Humans",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "infect",
+      "name": "Infect",
       "expandable": false,
       "subtype_ids": []
     },
@@ -600,8 +680,20 @@
       "subtype_ids": []
     },
     {
+      "id": "mono-black-control",
+      "name": "Mono-Black Control",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "mono-black-fantasticar",
       "name": "Mono-Black Fantasticar",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-black-helm",
+      "name": "Mono-Black Helm",
       "expandable": false,
       "subtype_ids": []
     },
@@ -666,6 +758,12 @@
       "subtype_ids": []
     },
     {
+      "id": "mono-red-artifacts",
+      "name": "Mono-Red Artifacts",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "mono-red-prison",
       "name": "Mono-Red Prison",
       "expandable": false,
@@ -724,8 +822,13 @@
     {
       "id": "mystic-forge-combo",
       "name": "Mystic Forge Combo",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "mystic-forge-combo/colorless",
+        "mystic-forge-combo/mono-blue",
+        "mystic-forge-combo/mono-red",
+        "mystic-forge-combo/mono-white"
+      ]
     },
     {
       "id": "naya-depths",
@@ -778,6 +881,12 @@
       "subtype_ids": []
     },
     {
+      "id": "non-green-control",
+      "name": "Control (Non-Green)",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "non-green-reanimator",
       "name": "Reanimator (Non-Green)",
       "expandable": false,
@@ -804,6 +913,24 @@
     {
       "id": "oops-all-spells",
       "name": "Oops! All Spells",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "opalescence",
+      "name": "Opalescence",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "orzhov-aggro",
+      "name": "Orzhov Aggro",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "orzhov-curses",
+      "name": "Orzhov Curses",
       "expandable": false,
       "subtype_ids": []
     },
@@ -928,6 +1055,18 @@
       ]
     },
     {
+      "id": "shared-fate",
+      "name": "Shared Fate",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "simic-beanstalk",
+      "name": "Simic Beanstalk",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "simic-post",
       "name": "Simic Post",
       "expandable": false,
@@ -964,6 +1103,12 @@
       "subtype_ids": []
     },
     {
+      "id": "sultai-control",
+      "name": "Sultai Control",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "sultai-doomsday",
       "name": "Doomsday",
       "expandable": false,
@@ -976,8 +1121,20 @@
       "subtype_ids": []
     },
     {
+      "id": "sultai-natural-order",
+      "name": "Sultai Natural Order",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "sultai-reanimator",
       "name": "Sultai Reanimator",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "sultai-tempo",
+      "name": "Sultai Tempo",
       "expandable": false,
       "subtype_ids": []
     },
@@ -1013,21 +1170,24 @@
         "tron/azorius",
         "tron/boros",
         "tron/colorless",
-        "tron/esper",
-        "tron/grixis",
         "tron/mono-blue",
         "tron/mono-green",
         "tron/mono-red",
         "tron/mono-white",
-        "tron/non-black",
+        "tron/multicolor",
         "tron/rakdos",
-        "tron/selesnya",
-        "tron/sultai"
+        "tron/selesnya"
       ]
     },
     {
       "id": "white-helm",
       "name": "White Helm",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "worldgorger-combo",
+      "name": "Worldgorger Combo",
       "expandable": false,
       "subtype_ids": []
     }
@@ -1114,6 +1274,14 @@
       "subtype_id": null
     },
     {
+      "id": "azorius-blink",
+      "kind": "archetype",
+      "name": "Azorius Blink",
+      "display_name": "Azorius Blink",
+      "parent_id": "azorius-blink",
+      "subtype_id": null
+    },
+    {
       "id": "azorius-control/azorius",
       "kind": "subtype",
       "name": "Azorius Control",
@@ -1136,6 +1304,14 @@
       "display_name": "Azorius Fantasticar",
       "parent_id": "azorius-fantasticar",
       "subtype_id": "azorius"
+    },
+    {
+      "id": "azorius-mill",
+      "kind": "archetype",
+      "name": "Azorius Mill",
+      "display_name": "Azorius Mill",
+      "parent_id": "azorius-mill",
+      "subtype_id": null
     },
     {
       "id": "azorius-standstill",
@@ -1186,11 +1362,35 @@
       "subtype_id": null
     },
     {
+      "id": "bant-midrange",
+      "kind": "archetype",
+      "name": "Bant Midrange",
+      "display_name": "Bant Midrange",
+      "parent_id": "bant-midrange",
+      "subtype_id": null
+    },
+    {
+      "id": "bant-natural-order",
+      "kind": "archetype",
+      "name": "Bant Natural Order",
+      "display_name": "Bant Natural Order",
+      "parent_id": "bant-natural-order",
+      "subtype_id": null
+    },
+    {
       "id": "bant-post",
       "kind": "archetype",
       "name": "Bant Post",
       "display_name": "Bant Post",
       "parent_id": "bant-post",
+      "subtype_id": null
+    },
+    {
+      "id": "bant-tempo",
+      "kind": "archetype",
+      "name": "Bant Tempo",
+      "display_name": "Bant Tempo",
+      "parent_id": "bant-tempo",
       "subtype_id": null
     },
     {
@@ -1200,6 +1400,14 @@
       "display_name": "Blue Post",
       "parent_id": "blue-post",
       "subtype_id": "mono-blue"
+    },
+    {
+      "id": "blue-tron/azorius",
+      "kind": "subtype",
+      "name": "Azorius Blue Tron",
+      "display_name": "Azorius Blue Tron",
+      "parent_id": "blue-tron",
+      "subtype_id": "azorius"
     },
     {
       "id": "blue-tron/dimir",
@@ -1226,20 +1434,12 @@
       "subtype_id": "mono-blue"
     },
     {
-      "id": "blue-tron/non-green",
+      "id": "blue-tron/multicolor",
       "kind": "subtype",
-      "name": "Tron (Non-Green)",
-      "display_name": "Tron (Non-Green)",
+      "name": "Mixed Blue Tron",
+      "display_name": "Mixed Blue Tron",
       "parent_id": "blue-tron",
-      "subtype_id": "non-green"
-    },
-    {
-      "id": "blue-tron/non-white",
-      "kind": "subtype",
-      "name": "Tron (Non-White)",
-      "display_name": "Tron (Non-White)",
-      "parent_id": "blue-tron",
-      "subtype_id": "non-white"
+      "subtype_id": "multicolor"
     },
     {
       "id": "blue-tron/simic",
@@ -1248,22 +1448,6 @@
       "display_name": "Simic Tron",
       "parent_id": "blue-tron",
       "subtype_id": "simic"
-    },
-    {
-      "id": "blue-tron/sultai",
-      "kind": "subtype",
-      "name": "Sultai Tron",
-      "display_name": "Sultai Tron",
-      "parent_id": "blue-tron",
-      "subtype_id": "sultai"
-    },
-    {
-      "id": "blue-tron/temur",
-      "kind": "subtype",
-      "name": "Temur Tron",
-      "display_name": "Temur Tron",
-      "parent_id": "blue-tron",
-      "subtype_id": "temur"
     },
     {
       "id": "bomberman",
@@ -1383,6 +1567,14 @@
       "name": "Depths Reanimator",
       "display_name": "Depths Reanimator",
       "parent_id": "depths-reanimator",
+      "subtype_id": null
+    },
+    {
+      "id": "devoted-reconfiguration",
+      "kind": "archetype",
+      "name": "Devoted Reconfiguration",
+      "display_name": "Devoted Reconfiguration",
+      "parent_id": "devoted-reconfiguration",
       "subtype_id": null
     },
     {
@@ -1522,6 +1714,14 @@
       "subtype_id": null
     },
     {
+      "id": "esper-death-and-taxes",
+      "kind": "archetype",
+      "name": "Esper Death and Taxes",
+      "display_name": "Esper Death and Taxes",
+      "parent_id": "esper-death-and-taxes",
+      "subtype_id": null
+    },
+    {
       "id": "esper-energy",
       "kind": "archetype",
       "name": "Esper Energy",
@@ -1538,11 +1738,27 @@
       "subtype_id": null
     },
     {
+      "id": "esper-midrange",
+      "kind": "archetype",
+      "name": "Esper Midrange",
+      "display_name": "Esper Midrange",
+      "parent_id": "esper-midrange",
+      "subtype_id": null
+    },
+    {
       "id": "esper-ninjas",
       "kind": "archetype",
       "name": "Esper Ninjas",
       "display_name": "Esper Ninjas",
       "parent_id": "esper-ninjas",
+      "subtype_id": null
+    },
+    {
+      "id": "esper-stoneblade",
+      "kind": "archetype",
+      "name": "Esper Stoneblade",
+      "display_name": "Esper Stoneblade",
+      "parent_id": "esper-stoneblade",
       "subtype_id": null
     },
     {
@@ -1578,6 +1794,14 @@
       "subtype_id": null
     },
     {
+      "id": "food-chain",
+      "kind": "archetype",
+      "name": "Food Chain",
+      "display_name": "Food Chain",
+      "parent_id": "food-chain",
+      "subtype_id": null
+    },
+    {
       "id": "forge-fantasticar",
       "kind": "archetype",
       "name": "Forge Fantasticar",
@@ -1586,12 +1810,28 @@
       "subtype_id": null
     },
     {
-      "id": "goblins",
-      "kind": "archetype",
-      "name": "Goblins",
-      "display_name": "Goblins",
+      "id": "goblins/gruul",
+      "kind": "subtype",
+      "name": "Gruul Goblins",
+      "display_name": "Gruul Goblins",
       "parent_id": "goblins",
-      "subtype_id": null
+      "subtype_id": "gruul"
+    },
+    {
+      "id": "goblins/mono-red",
+      "kind": "subtype",
+      "name": "Mono-Red Goblins",
+      "display_name": "Mono-Red Goblins",
+      "parent_id": "goblins",
+      "subtype_id": "mono-red"
+    },
+    {
+      "id": "goblins/rakdos",
+      "kind": "subtype",
+      "name": "Rakdos Goblins",
+      "display_name": "Rakdos Goblins",
+      "parent_id": "goblins",
+      "subtype_id": "rakdos"
     },
     {
       "id": "golgari-depths",
@@ -1599,6 +1839,14 @@
       "name": "Golgari Depths",
       "display_name": "Golgari Depths",
       "parent_id": "golgari-depths",
+      "subtype_id": null
+    },
+    {
+      "id": "golgari-midrange",
+      "kind": "archetype",
+      "name": "Golgari Midrange",
+      "display_name": "Golgari Midrange",
+      "parent_id": "golgari-midrange",
       "subtype_id": null
     },
     {
@@ -1650,6 +1898,14 @@
       "subtype_id": null
     },
     {
+      "id": "gruul-depths",
+      "kind": "archetype",
+      "name": "Gruul Depths",
+      "display_name": "Gruul Depths",
+      "parent_id": "gruul-depths",
+      "subtype_id": null
+    },
+    {
       "id": "gruul-initiative",
       "kind": "archetype",
       "name": "Gruul Initiative",
@@ -1695,6 +1951,14 @@
       "name": "Humans",
       "display_name": "Humans",
       "parent_id": "humans",
+      "subtype_id": null
+    },
+    {
+      "id": "infect",
+      "kind": "archetype",
+      "name": "Infect",
+      "display_name": "Infect",
+      "parent_id": "infect",
       "subtype_id": null
     },
     {
@@ -1850,11 +2114,27 @@
       "subtype_id": null
     },
     {
+      "id": "mono-black-control",
+      "kind": "archetype",
+      "name": "Mono-Black Control",
+      "display_name": "Mono-Black Control",
+      "parent_id": "mono-black-control",
+      "subtype_id": null
+    },
+    {
       "id": "mono-black-fantasticar",
       "kind": "archetype",
       "name": "Mono-Black Fantasticar",
       "display_name": "Mono-Black Fantasticar",
       "parent_id": "mono-black-fantasticar",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-black-helm",
+      "kind": "archetype",
+      "name": "Mono-Black Helm",
+      "display_name": "Mono-Black Helm",
+      "parent_id": "mono-black-helm",
       "subtype_id": null
     },
     {
@@ -1935,6 +2215,14 @@
       "name": "Mono-Green Prison",
       "display_name": "Mono-Green Prison",
       "parent_id": "mono-green-prison",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-red-artifacts",
+      "kind": "archetype",
+      "name": "Mono-Red Artifacts",
+      "display_name": "Mono-Red Artifacts",
+      "parent_id": "mono-red-artifacts",
       "subtype_id": null
     },
     {
@@ -2050,12 +2338,36 @@
       "subtype_id": "wurg-yorion"
     },
     {
-      "id": "mystic-forge-combo",
-      "kind": "archetype",
-      "name": "Mystic Forge Combo",
-      "display_name": "Mystic Forge Combo",
+      "id": "mystic-forge-combo/colorless",
+      "kind": "subtype",
+      "name": "Colorless Mystic Forge Combo",
+      "display_name": "Colorless Mystic Forge Combo",
       "parent_id": "mystic-forge-combo",
-      "subtype_id": null
+      "subtype_id": "colorless"
+    },
+    {
+      "id": "mystic-forge-combo/mono-blue",
+      "kind": "subtype",
+      "name": "Mono-Blue Mystic Forge Combo",
+      "display_name": "Mono-Blue Mystic Forge Combo",
+      "parent_id": "mystic-forge-combo",
+      "subtype_id": "mono-blue"
+    },
+    {
+      "id": "mystic-forge-combo/mono-red",
+      "kind": "subtype",
+      "name": "Mono-Red Mystic Forge Combo",
+      "display_name": "Mono-Red Mystic Forge Combo",
+      "parent_id": "mystic-forge-combo",
+      "subtype_id": "mono-red"
+    },
+    {
+      "id": "mystic-forge-combo/mono-white",
+      "kind": "subtype",
+      "name": "Mono-White Mystic Forge Combo",
+      "display_name": "Mono-White Mystic Forge Combo",
+      "parent_id": "mystic-forge-combo",
+      "subtype_id": "mono-white"
     },
     {
       "id": "naya-depths",
@@ -2122,6 +2434,14 @@
       "subtype_id": null
     },
     {
+      "id": "non-green-control",
+      "kind": "archetype",
+      "name": "Control (Non-Green)",
+      "display_name": "Control (Non-Green)",
+      "parent_id": "non-green-control",
+      "subtype_id": null
+    },
+    {
       "id": "non-green-reanimator",
       "kind": "archetype",
       "name": "Reanimator (Non-Green)",
@@ -2159,6 +2479,30 @@
       "name": "Oops! All Spells",
       "display_name": "Oops! All Spells",
       "parent_id": "oops-all-spells",
+      "subtype_id": null
+    },
+    {
+      "id": "opalescence",
+      "kind": "archetype",
+      "name": "Opalescence",
+      "display_name": "Opalescence",
+      "parent_id": "opalescence",
+      "subtype_id": null
+    },
+    {
+      "id": "orzhov-aggro",
+      "kind": "archetype",
+      "name": "Orzhov Aggro",
+      "display_name": "Orzhov Aggro",
+      "parent_id": "orzhov-aggro",
+      "subtype_id": null
+    },
+    {
+      "id": "orzhov-curses",
+      "kind": "archetype",
+      "name": "Orzhov Curses",
+      "display_name": "Orzhov Curses",
+      "parent_id": "orzhov-curses",
       "subtype_id": null
     },
     {
@@ -2346,6 +2690,22 @@
       "subtype_id": "wurg"
     },
     {
+      "id": "shared-fate",
+      "kind": "archetype",
+      "name": "Shared Fate",
+      "display_name": "Shared Fate",
+      "parent_id": "shared-fate",
+      "subtype_id": null
+    },
+    {
+      "id": "simic-beanstalk",
+      "kind": "archetype",
+      "name": "Simic Beanstalk",
+      "display_name": "Simic Beanstalk",
+      "parent_id": "simic-beanstalk",
+      "subtype_id": null
+    },
+    {
       "id": "simic-post",
       "kind": "archetype",
       "name": "Simic Post",
@@ -2394,6 +2754,14 @@
       "subtype_id": null
     },
     {
+      "id": "sultai-control",
+      "kind": "archetype",
+      "name": "Sultai Control",
+      "display_name": "Sultai Control",
+      "parent_id": "sultai-control",
+      "subtype_id": null
+    },
+    {
       "id": "sultai-doomsday",
       "kind": "archetype",
       "name": "Doomsday",
@@ -2410,11 +2778,27 @@
       "subtype_id": null
     },
     {
+      "id": "sultai-natural-order",
+      "kind": "archetype",
+      "name": "Sultai Natural Order",
+      "display_name": "Sultai Natural Order",
+      "parent_id": "sultai-natural-order",
+      "subtype_id": null
+    },
+    {
       "id": "sultai-reanimator",
       "kind": "archetype",
       "name": "Sultai Reanimator",
       "display_name": "Sultai Reanimator",
       "parent_id": "sultai-reanimator",
+      "subtype_id": null
+    },
+    {
+      "id": "sultai-tempo",
+      "kind": "archetype",
+      "name": "Sultai Tempo",
+      "display_name": "Sultai Tempo",
+      "parent_id": "sultai-tempo",
       "subtype_id": null
     },
     {
@@ -2474,22 +2858,6 @@
       "subtype_id": "colorless"
     },
     {
-      "id": "tron/esper",
-      "kind": "subtype",
-      "name": "Esper Tron",
-      "display_name": "Esper Tron",
-      "parent_id": "tron",
-      "subtype_id": "esper"
-    },
-    {
-      "id": "tron/grixis",
-      "kind": "subtype",
-      "name": "Grixis Tron",
-      "display_name": "Grixis Tron",
-      "parent_id": "tron",
-      "subtype_id": "grixis"
-    },
-    {
       "id": "tron/mono-blue",
       "kind": "subtype",
       "name": "Blue Tron",
@@ -2522,12 +2890,12 @@
       "subtype_id": "mono-white"
     },
     {
-      "id": "tron/non-black",
+      "id": "tron/multicolor",
       "kind": "subtype",
-      "name": "Tron (Non-Black)",
-      "display_name": "Tron (Non-Black)",
+      "name": "Mixed Tron",
+      "display_name": "Mixed Tron",
       "parent_id": "tron",
-      "subtype_id": "non-black"
+      "subtype_id": "multicolor"
     },
     {
       "id": "tron/rakdos",
@@ -2546,19 +2914,19 @@
       "subtype_id": "selesnya"
     },
     {
-      "id": "tron/sultai",
-      "kind": "subtype",
-      "name": "Sultai Tron",
-      "display_name": "Sultai Tron",
-      "parent_id": "tron",
-      "subtype_id": "sultai"
-    },
-    {
       "id": "white-helm",
       "kind": "archetype",
       "name": "White Helm",
       "display_name": "White Helm",
       "parent_id": "white-helm",
+      "subtype_id": null
+    },
+    {
+      "id": "worldgorger-combo",
+      "kind": "archetype",
+      "name": "Worldgorger Combo",
+      "display_name": "Worldgorger Combo",
+      "parent_id": "worldgorger-combo",
       "subtype_id": null
     }
   ]

@@ -574,9 +574,13 @@ def _optional_text(value: Any) -> str | None:
     return text or None
 
 
-def _real_matches(payload: Mapping[str, Any], artifact: SourceArtifact) -> ParsedSourcePage:
+def _real_matches(
+    payload: Mapping[str, Any], artifact: SourceArtifact
+) -> ParsedSourcePage:
     if artifact.source_round_id is None:
-        raise MeleeSourceParseError(f"{artifact.path}: match response lacks source_round_id context")
+        raise MeleeSourceParseError(
+            f"{artifact.path}: match response lacks source_round_id context"
+        )
     matches: list[SourceMatch] = []
     for index, value in enumerate(_list(payload.get("data"), f"{artifact.path}.data")):
         path = f"{artifact.path}.data[{index}]"
@@ -584,7 +588,9 @@ def _real_matches(payload: Mapping[str, Any], artifact: SourceArtifact) -> Parse
         match_id = str(row.get("Guid") or "")
         row_round_id = str(row.get("RoundId") or "")
         if not match_id or row_round_id != artifact.source_round_id:
-            raise MeleeSourceParseError(f"{path}: match or round identity is inconsistent")
+            raise MeleeSourceParseError(
+                f"{path}: match or round identity is inconsistent"
+            )
         competitors_raw = _list(row.get("Competitors") or [], f"{path}.Competitors")
         competitors: list[tuple[str, int, int]] = []
         for position, raw in enumerate(competitors_raw):
@@ -594,19 +600,36 @@ def _real_matches(payload: Mapping[str, Any], artifact: SourceArtifact) -> Parse
             )
             wins = competitor.get("GameWins")
             byes = competitor.get("GameByes")
-            competitors.append((
-                participant_id,
-                wins if isinstance(wins, int) and wins >= 0 else 0,
-                byes if isinstance(byes, int) and byes >= 0 else 0,
-            ))
-        if not 1 <= len(competitors) <= 2 or len({item[0] for item in competitors}) != len(competitors):
-            raise MeleeSourceParseError(f"{path}.Competitors: expected one or two distinct participants")
+            competitors.append(
+                (
+                    participant_id,
+                    wins if isinstance(wins, int) and wins >= 0 else 0,
+                    byes if isinstance(byes, int) and byes >= 0 else 0,
+                )
+            )
+        if not 1 <= len(competitors) <= 2 or len(
+            {item[0] for item in competitors}
+        ) != len(competitors):
+            raise MeleeSourceParseError(
+                f"{path}.Competitors: expected one or two distinct participants"
+            )
         has_result = row.get("HasResult") is True
         bye_reason = _optional_text(row.get("ByeReasonDescription"))
         loss_reason = _optional_text(row.get("LossReasonDescription"))
         status = bye_reason or loss_reason
         results: list[SourceCompetitor] = []
-        if len(competitors) == 1 and (has_result or bye_reason or competitors[0][2] > 0):
+        if len(competitors) == 1 and loss_reason:
+            if (
+                loss_reason.casefold() == "forfeited"
+                and not bye_reason
+                and competitors[0][2] == 0
+            ):
+                results.append(SourceCompetitor(competitors[0][0], "Administrative", 0))
+            else:
+                results.append(SourceCompetitor(competitors[0][0], None, None))
+        elif len(competitors) == 1 and (
+            has_result or bye_reason or competitors[0][2] > 0
+        ):
             qualified = (bye_reason or "").casefold() == "qualified"
             outcome = "Qualified" if qualified else "Bye"
             results.append(SourceCompetitor(competitors[0][0], outcome, 3))
@@ -626,23 +649,33 @@ def _real_matches(payload: Mapping[str, Any], artifact: SourceArtifact) -> Parse
                 points = (0, 3)
             results.extend(
                 SourceCompetitor(competitor[0], outcome, point)
-                for competitor, outcome, point in zip(competitors, outcomes, points, strict=True)
+                for competitor, outcome, point in zip(
+                    competitors, outcomes, points, strict=True
+                )
             )
             if intentional_draw:
                 status = "Intentional Draw"
         else:
-            results.extend(SourceCompetitor(item[0], None, None) for item in competitors)
+            results.extend(
+                SourceCompetitor(item[0], None, None) for item in competitors
+            )
         table = row.get("TableNumber")
-        matches.append(SourceMatch(
-            source_match_id=match_id,
-            source_round_id=row_round_id,
-            competitor_source_ids=tuple(item.source_participant_id for item in results),
-            competitor_results=tuple(results),
-            result_text=_optional_text(row.get("ResultString")),
-            status_text=status,
-            table_number=table if isinstance(table, int) and table >= 1 else None,
-        ))
-    return ParsedSourcePage(artifact=artifact, matches=_unique(matches, "source_match_id", artifact.path))
+        matches.append(
+            SourceMatch(
+                source_match_id=match_id,
+                source_round_id=row_round_id,
+                competitor_source_ids=tuple(
+                    item.source_participant_id for item in results
+                ),
+                competitor_results=tuple(results),
+                result_text=_optional_text(row.get("ResultString")),
+                status_text=status,
+                table_number=table if isinstance(table, int) and table >= 1 else None,
+            )
+        )
+    return ParsedSourcePage(
+        artifact=artifact, matches=_unique(matches, "source_match_id", artifact.path)
+    )
 
 
 def _real_decklist(payload: Mapping[str, Any], artifact: SourceArtifact) -> ParsedSourcePage:

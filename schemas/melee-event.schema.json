@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-event.schema.json",
-  "x-schema-version": "2.2.0",
+  "x-schema-version": "2.3.0",
   "title": "Normalized Melee tournament event",
   "type": "object",
   "additionalProperties": false,
@@ -10,7 +10,7 @@
     "rounds", "participants", "standings", "decklists", "matches", "quality"
   ],
   "properties": {
-    "schema_version": {"enum": ["2.1.0", "2.2.0"]},
+    "schema_version": {"enum": ["2.1.0", "2.2.0", "2.3.0"]},
     "metadata": {"$ref": "#/$defs/metadata"},
     "provenance": {"$ref": "#/$defs/provenance"},
     "event_structure": {"enum": ["constructed_day2", "constructed_single_stage", "mixed"]},
@@ -20,7 +20,53 @@
     "standings": {"type": "array", "items": {"$ref": "#/$defs/standing"}},
     "decklists": {"type": "array", "items": {"$ref": "#/$defs/decklist"}},
     "matches": {"type": "array", "items": {"$ref": "#/$defs/match"}},
-    "quality": {"$ref": "#/$defs/quality"}
+    "quality": {"$ref": "#/$defs/quality"},
+    "reviewed_unplayed_rounds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "participant_id",
+          "round_id",
+          "match_points",
+          "reason",
+          "source_evidence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "participant_id": {
+            "type": "string",
+            "pattern": "^participant-[a-f0-9]{64}$"
+          },
+          "round_id": {
+            "type": "string",
+            "pattern": "^round-[a-f0-9]{64}$"
+          },
+          "match_points": {
+            "const": 0
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            }
+          }
+        }
+      }
+    }
   },
   "allOf": [
     {

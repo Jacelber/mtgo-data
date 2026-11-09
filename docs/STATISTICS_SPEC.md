@@ -543,7 +543,8 @@ no Day 2 Constructed theoretical rounds.
 For every member of a scope, create one opportunity for every scheduled
 Constructed Swiss round in that scope. A source match supplies its explicit
 per-competitor result and points. A missing round may be synthesized only when
-the participant has a reviewed terminal status:
+the participant has a reviewed terminal status, or a verified participant-round
+configuration explicitly accepts an unplayed zero-point opportunity:
 
 - `dropped` becomes a zero-point `drop_unplayed` opportunity;
 - `no_show` becomes a zero-point `no_show` opportunity because Melee treats
@@ -552,6 +553,12 @@ the participant has a reviewed terminal status:
   every round;
 - `disqualified` remains an administrative unplayed opportunity and must not
   be relabeled as an ordinary drop;
+- an explicitly reviewed participant-round becomes `reviewed_unplayed`: zero
+  points within the scheduled theoretical/effective rounds, no source match,
+  no opponent, no completed/played match, win-rate result or matchup result.
+  This does not change participant status or assert why the round was missed.
+  The configuration must name the participant and rounds, explain the decision
+  and retain evidence; it cannot replace an existing source match;
 - any other missing state fails review rather than being silently counted.
 
 Synthesized `no_show` opportunities remain theoretical zero-point rounds but

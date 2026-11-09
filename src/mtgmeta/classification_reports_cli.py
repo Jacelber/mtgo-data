@@ -67,7 +67,7 @@ def generate_reports(
     identity_fields = find_identity_fields(reports)
     if identity_fields:
         raise ValueError("forbidden identity fields found: " + ", ".join(identity_fields))
-    write_classification_reports(reports, output_dir)
+    write_classification_reports(reports, output_dir, compact=context.definition.public)
     return reports
 
 

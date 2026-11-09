@@ -36,7 +36,7 @@ DEFAULT_VISUALS_PATH = Path("configs/mtgo_landing_visuals.yaml")
 HISTORICAL_LANDING_FORMATS = frozenset({"standard", "modern"})
 DECK_LINK_TOKEN_PATTERN = re.compile(r"deck:[0-9a-f]{20}")
 CLASSIFIER_RESTATEMENT_BINDINGS = frozenset(
-    {"classifier_digest", "machine_fact_digest", "bilingual_catalog_digest"}
+    {"classifier_digest", "machine_fact_digest", "bilingual_catalog_digest", "link_catalog_digest"}
 )
 CLASSIFIER_RESTATEMENT_MATERIAL_FIELDS = (
     "week",
@@ -53,6 +53,30 @@ class MTGOLandingError(RuntimeError):
     """Raised when Landing facts or reviewed features cannot be admitted."""
 
 
+def _classifier_restatement_preserves_environment(before, after, *, has_editorial):
+    """Recompute historical references on a page with no editorial claims.
+
+    An explicitly requested classifier restatement can change reference counts
+    while keeping the current environment, ordering, labels and denominators.
+    Pages with selected prose/features retain the stricter equality boundary.
+    """
+    if before == after:
+        return True
+    if has_editorial or not isinstance(before, Mapping) or not isinstance(after, Mapping):
+        return False
+    if "rows" not in before or "other_classified" not in before:
+        return False
+    def stable(value):
+        if isinstance(value, Mapping):
+            return {k: ({field: v for field, v in item.items() if field not in {"count", "share"}}
+                        if k in {"previous_week", "previous_four_weeks"} and isinstance(item, Mapping)
+                        else stable(item)) for k, item in value.items()}
+        if isinstance(value, list):
+            return [stable(item) for item in value]
+        return value
+    return stable(before) == stable(after)
+
+
 def _classifier_restatement_preserves_accepted_material(
     binding_mismatches: set[str],
     prior_document: Mapping[str, Any],
@@ -65,13 +89,32 @@ def _classifier_restatement_preserves_accepted_material(
     return (
         binding_mismatches <= CLASSIFIER_RESTATEMENT_BINDINGS
         and all(
-            prior_document.get(field) == fact_payload.get(field)
+            (_classifier_restatement_preserves_environment(
+                prior_document.get(field), fact_payload.get(field),
+                has_editorial=bool(current_summary_items or current_features))
+             if field == "environment" else prior_document.get(field) == fact_payload.get(field))
             for field in CLASSIFIER_RESTATEMENT_MATERIAL_FIELDS
         )
         and isinstance(prior_summary, Mapping)
         and prior_summary.get("items") == current_summary_items
         and isinstance(prior_features, Mapping)
         and prior_features.get("items") == current_features
+    )
+
+
+def _classifier_restatement_preserves_content_packet(before, after):
+    """Only provenance of identical selected content may be rebound.
+
+    The caller separately proves that the complete public page facts, summary,
+    feature choices/copy/cards and source event membership are unchanged.
+    Unselected catalog classifications may change with a reviewed classifier.
+    """
+    ignored = CLASSIFIER_RESTATEMENT_BINDINGS | {"material_digest", "established_names"}
+    return (
+        before.get("kind") == after.get("kind") == "content"
+        and all(before.get(k) == after.get(k) for k in ("format", "week", "dimensions"))
+        and {k: v for k, v in before["bindings"].items() if k not in ignored}
+        == {k: v for k, v in after["bindings"].items() if k not in ignored}
     )
 
 
@@ -837,6 +880,15 @@ def build_document(
     landing_schema_version = (
         PRIVATE_LANDING_SCHEMA_VERSION if private else LANDING_SCHEMA_VERSION
     )
+    if allow_classifier_restatement:
+        retained_path = context.paths["statistics"] / "landing" / "current.json"
+        if retained_path.is_file():
+            retained = json.loads(retained_path.read_text(encoding="utf-8"))
+            if (retained.get("week", {}).get("id") == screening.iso_week_label(target_monday)
+                    and retained.get("schema_version") in {LANDING_SCHEMA_VERSION, PRIVATE_LANDING_SCHEMA_VERSION}):
+                # Restating provenance must preserve the existing page contract,
+                # including a published 1.3 page whose feature list is empty.
+                landing_schema_version = retained["schema_version"]
     visual_metadata_digest = visual_metadata_binding_digest(
         visual_metadata,
         landing_schema_version=landing_schema_version,
@@ -1045,7 +1097,9 @@ def build_document(
             shared_equivalent = (content_validity is not None and
                 content_validity["state"] in {"current", "equivalent"})
             restatement_safe = shared_equivalent or (
-                review["schema_version"] != "1.3.0" and allow_classifier_restatement
+                allow_classifier_restatement
+                and (review["schema_version"] != "1.3.0" or
+                     _classifier_restatement_preserves_content_packet(submitted, packet))
                 and prior_document is not None
                 and _classifier_restatement_preserves_accepted_material(
                     binding_mismatches,
@@ -1055,7 +1109,7 @@ def build_document(
                     current_features,
                 )
             )
-            if (content_validity is not None and not shared_equivalent) or (binding_mismatches and not restatement_safe):
+            if (content_validity is not None and not restatement_safe) or (binding_mismatches and not restatement_safe):
                 review_status = "stale_review_required"
             else:
                 summary_items = current_summary_items

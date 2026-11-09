@@ -243,7 +243,7 @@ def _verified_outputs(
         document, payload = _read_object(path)
         expected = statistics_document_bytes(rebuilt[name])
         if payload != expected and not (
-            name == "matchup" and payload == statistics_document_bytes(rebuilt[name], compact=True)
+            payload == statistics_document_bytes(rebuilt[name], compact=True)
         ):
             raise MeleePublicationError(
                 f"{path}: does not match deterministic rebuild"

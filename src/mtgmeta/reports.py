@@ -302,11 +302,12 @@ def load_events(paths: Iterable[Path], repository_root: Path) -> list[tuple[str,
     return events
 
 
-def write_classification_reports(reports: Mapping[str, Mapping[str, Any]], output_dir: Path) -> None:
+def write_classification_reports(reports: Mapping[str, Mapping[str, Any]], output_dir: Path, *, compact: bool = False) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     filenames = {**REPORT_FILENAMES, "index": "index.json"}
     for name, filename in filenames.items():
-        content = json.dumps(reports[name], ensure_ascii=False, indent=2, sort_keys=False) + "\n"
+        content = json.dumps(reports[name], ensure_ascii=False, indent=None if compact else 2,
+                             separators=(",", ":") if compact else None, sort_keys=False) + "\n"
         (output_dir / filename).write_text(content, encoding="utf-8", newline="\n")
 
 
