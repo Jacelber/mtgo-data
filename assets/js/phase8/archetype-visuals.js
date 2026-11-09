@@ -1572,6 +1572,18 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Nykthos, Shrine to Nyx", "image": "../images/representative-cards/pioneer/nykthos-shrine-to-nyx.jpg"}),
       Object.freeze({"name": "Llanowar Elves", "image": "../images/representative-cards/pioneer/llanowar-elves.jpg"}),
     ]),
+    "boros-aggro": Object.freeze([
+      Object.freeze({"name": "Boros Charm", "image": "../images/representative-cards/pioneer/boros-charm.jpg"}),
+      Object.freeze({"name": "Screaming Nemesis", "image": "../images/representative-cards/pioneer/screaming-nemesis.jpg"}),
+    ]),
+    "boros-convoke": Object.freeze([
+      Object.freeze({"name": "Knight-Errant of Eos", "image": "../images/representative-cards/pioneer/knight-errant-of-eos.jpg"}),
+      Object.freeze({"name": "Venerated Loxodon", "image": "../images/representative-cards/pioneer/venerated-loxodon.jpg"}),
+    ]),
+    "mono-black-devotion": Object.freeze([
+      Object.freeze({"name": "Baron Helmut Zemo", "image": "../images/representative-cards/pioneer/baron-helmut-zemo.jpg"}),
+      Object.freeze({"name": "Nykthos, Shrine to Nyx", "image": "../images/representative-cards/pioneer/nykthos-shrine-to-nyx.jpg"}),
+    ]),
   }),
   legacy: Object.freeze({
     "dimir-tempo": Object.freeze([
