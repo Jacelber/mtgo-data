@@ -21661,6 +21661,25 @@ archetypes:
       - {card: Inkmoth Nexus, zone: main, min_count: 3}
       - {card: Invigorate, zone: main, min_count: 3}
       - {card: Berserk, zone: main, min_count: 2}
+- id: azorius-mill
+  name: Azorius Mill
+  priority: 120
+  rules:
+  - id: azorius-crabs-archive-trap
+    priority: 120
+    subtype_id: null
+    conditions:
+      all:
+      - {card: Hedron Crab, zone: main, min_count: 3}
+      - {card: Ruin Crab, zone: main, min_count: 3}
+      - {card: Archive Trap, zone: main, min_count: 3}
+      - {card: Fractured Sanity, zone: main, min_count: 2}
+      - {card: Visions of Beyond, zone: main, min_count: 3}
+      - {card: Brainstorm, zone: main, min_count: 3}
+      - {card: Swords to Plowshares, zone: main, min_count: 3}
+      - {card: __classifier-semantic-any-black-spell__, zone: any, exact_count: 0}
+      - {card: __classifier-semantic-any-red-spell__, zone: any, exact_count: 0}
+      - {card: __classifier-semantic-any-green-spell__, zone: any, exact_count: 0}
 semantic_features:
   manifest_path: configs/legacy_semantic_features.yaml
   manifest_sha256: b7c4d899a40d80d8fa704aecd5f5d258c7ef6f2c1d0f882ca0480430f47bb069

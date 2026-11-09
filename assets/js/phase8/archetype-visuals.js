@@ -855,6 +855,9 @@ const manaIdentities = Object.freeze({
     "bant-beanstalk-control": Object.freeze(["w", "u", "g"]),
   }),
   legacy: Object.freeze({
+    "azorius-mill": Object.freeze(["w", "u"]),
+    "infect": Object.freeze(["u", "g"]),
+    "blue-tron/non-red": Object.freeze(["w", "u", "b", "g"]),
     "dimir-tempo": Object.freeze(["u", "b"]),
     "multicolor-beanstalk-control": Object.freeze(["w", "u", "b", "r", "g"]),
     "dimir-tempo/hogaak": Object.freeze(["u", "b"]),
