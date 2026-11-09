@@ -1650,6 +1650,22 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Urza's Tower", "image": "../images/representative-cards/legacy/urzas-tower.jpg"}),
       Object.freeze({"name": "Force of Will", "image": "../images/representative-cards/legacy/force-of-will.jpg"}),
     ]),
+    "aluren-tell": Object.freeze([
+      Object.freeze({"name": "Aluren", "image": "../images/representative-cards/legacy/aluren.jpg"}),
+      Object.freeze({"name": "Show and Tell", "image": "../images/representative-cards/legacy/show-and-tell.jpg"}),
+    ]),
+    "jeskai-control": Object.freeze([
+      Object.freeze({"name": "Swords to Plowshares", "image": "../images/representative-cards/legacy/swords-to-plowshares.jpg"}),
+      Object.freeze({"name": "Force of Will", "image": "../images/representative-cards/legacy/force-of-will.jpg"}),
+    ]),
+    "jeskai-tempo": Object.freeze([
+      Object.freeze({"name": "Phelia, Exuberant Shepherd", "image": "../images/representative-cards/legacy/phelia-exuberant-shepherd.jpg"}),
+      Object.freeze({"name": "Quantum Riddler", "image": "../images/representative-cards/legacy/quantum-riddler.jpg"}),
+    ]),
+    "sewers": Object.freeze([
+      Object.freeze({"name": "Sewer-veillance Cam", "image": "../images/representative-cards/legacy/sewer-veillance-cam.jpg"}),
+      Object.freeze({"name": "Goblin Welder", "image": "../images/representative-cards/legacy/goblin-welder.jpg"}),
+    ]),
   }),
 });
 
