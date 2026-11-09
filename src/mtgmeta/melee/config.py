@@ -14,8 +14,10 @@ import yaml
 from ..config import DuplicateKeyLoader
 
 
-MELEE_EVENT_SCHEMA_VERSION = "3.1.0"
-SUPPORTED_MELEE_EVENT_SCHEMA_VERSIONS = frozenset({"3.0.0", MELEE_EVENT_SCHEMA_VERSION})
+MELEE_EVENT_SCHEMA_VERSION = "3.2.0"
+SUPPORTED_MELEE_EVENT_SCHEMA_VERSIONS = frozenset(
+    {"3.0.0", "3.1.0", MELEE_EVENT_SCHEMA_VERSION}
+)
 EVENT_ID_PATTERN = re.compile(r"^[1-9][0-9]*$")
 PHASE_ID_PATTERN = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*$")
 MELEE_EVENT_URL_PATTERN = re.compile(r"^https://melee\.gg/Tournament/View/([1-9][0-9]*)$")
@@ -109,6 +111,15 @@ class MeleeMatchOverride:
 
 
 @dataclass(frozen=True)
+class MeleeUnplayedRounds:
+    id: str
+    source_participant_id: str
+    rounds: tuple[int, ...]
+    reason: str
+    source_evidence: tuple[str, ...]
+
+
+@dataclass(frozen=True)
 class MeleeEventDefinition:
     id: str
     url: str
@@ -130,6 +141,7 @@ class MeleeEventDefinition:
     source_evidence: tuple[str, ...]
     special_handling: tuple[str, ...]
     notes: str
+    reviewed_unplayed_rounds: tuple[MeleeUnplayedRounds, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -333,7 +345,7 @@ def _parse_advancement(
         "day2_minimum_match_points",
         "top8_lock_supported",
     }
-    if registry_schema_version == "3.1.0":
+    if registry_schema_version != "3.0.0":
         optional.add("qualified_result_type")
     data = _require_mapping(value, path, set(), optional)
     after_round = data.get("day2_after_round")
@@ -343,10 +355,14 @@ def _parse_advancement(
             raise _error(f"{path}.day2_after_round", "must be positive")
     match_points = data.get("day2_minimum_match_points")
     if match_points is not None:
-        match_points = _require_non_negative_int(match_points, f"{path}.day2_minimum_match_points")
+        match_points = _require_non_negative_int(
+            match_points, f"{path}.day2_minimum_match_points"
+        )
     top8_lock_supported = data.get("top8_lock_supported")
     if top8_lock_supported is not None:
-        top8_lock_supported = _require_bool(top8_lock_supported, f"{path}.top8_lock_supported")
+        top8_lock_supported = _require_bool(
+            top8_lock_supported, f"{path}.top8_lock_supported"
+        )
     qualified_result_type = data.get("qualified_result_type")
     if qualified_result_type is not None:
         qualified_result_type = _require_string(
@@ -457,17 +473,97 @@ def _parse_reviewed_overrides(value: Any, path: str) -> tuple[MeleeMatchOverride
     return tuple(overrides)
 
 
+def _parse_unplayed_rounds(value, path, phases):
+    if not isinstance(value, list):
+        raise _error(path, "must be a list")
+    allowed = {
+        n
+        for phase in phases
+        if phase.swiss and phase.round_phase == "constructed"
+        for n in phase.rounds
+    }
+    rows, seen, ids = [], set(), set()
+    for index, item in enumerate(value):
+        loc = f"{path}[{index}]"
+        d = _require_mapping(
+            item,
+            loc,
+            {
+                "id",
+                "source_participant_id",
+                "rounds",
+                "review_status",
+                "match_points",
+                "reason",
+                "source_evidence",
+            },
+        )
+        rid = _require_string(d["id"], loc + ".id")
+        if not PHASE_ID_PATTERN.fullmatch(rid) or rid in ids:
+            raise _error(loc, "requires a unique lowercase identifier")
+        ids.add(rid)
+        pid = _require_string(
+            d["source_participant_id"], loc + ".source_participant_id"
+        )
+        if (
+            d["review_status"] != "verified"
+            or type(d["match_points"]) is not int
+            or d["match_points"] != 0
+        ):
+            raise _error(loc, "requires verified review and exactly zero points")
+        rounds = d["rounds"]
+        if (
+            not isinstance(rounds, list)
+            or not rounds
+            or any(type(n) is not int or n not in allowed for n in rounds)
+        ):
+            raise _error(loc, "rounds must be scheduled Constructed Swiss rounds")
+        for n in rounds:
+            if (pid, n) in seen:
+                raise _error(loc, "participant-round overrides must be unique")
+            seen.add((pid, n))
+        reason = _require_string(d["reason"], loc + ".reason")
+        evidence = _parse_string_list(d["source_evidence"], loc + ".source_evidence")
+        for url in evidence:
+            _require_https_url(url, loc + ".source_evidence")
+        rows.append(
+            MeleeUnplayedRounds(rid, pid, tuple(sorted(rounds)), reason, evidence)
+        )
+    return tuple(rows)
+
+
 def _parse_event(
     value: Any,
     path: str,
     registry_schema_version: str,
 ) -> MeleeEventDefinition:
     required = {
-        "id", "url", "name", "date", "format", "series", "structure", "enabled", "review_status",
-        "tabletop", "team_event", "mixed_format", "raw_requests", "include", "phases", "statistics", "source_evidence",
-        "special_handling", "notes",
+        "id",
+        "url",
+        "name",
+        "date",
+        "format",
+        "series",
+        "structure",
+        "enabled",
+        "review_status",
+        "tabletop",
+        "team_event",
+        "mixed_format",
+        "raw_requests",
+        "include",
+        "phases",
+        "statistics",
+        "source_evidence",
+        "special_handling",
+        "notes",
     }
-    data = _require_mapping(value, path, required, {"advancement", "reviewed_overrides"})
+    data = _require_mapping(
+        value,
+        path,
+        required,
+        {"advancement", "reviewed_overrides", "reviewed_unplayed_rounds"},
+    )
     event_id = _require_string(data["id"], f"{path}.id")
     if not EVENT_ID_PATTERN.fullmatch(event_id):
         raise _error(f"{path}.id", "must be a non-empty decimal string")
@@ -493,7 +589,9 @@ def _parse_event(
     if review_status not in REVIEW_STATUSES:
         raise _error(f"{path}.review_status", "is not a supported review status")
     if enabled and review_status != "verified":
-        raise _error(f"{path}.review_status", "must be verified when the event is enabled")
+        raise _error(
+            f"{path}.review_status", "must be verified when the event is enabled"
+        )
     if data["tabletop"] is not True:
         raise _error(f"{path}.tabletop", "must be true")
     if data["team_event"] is not False:
@@ -501,9 +599,13 @@ def _parse_event(
     mixed_format = _require_bool(data["mixed_format"], f"{path}.mixed_format")
     if mixed_format != (structure == "mixed"):
         raise _error(f"{path}.mixed_format", "must match the event structure")
-    raw_requests = _parse_raw_requests(data["raw_requests"], f"{path}.raw_requests", event_id)
+    raw_requests = _parse_raw_requests(
+        data["raw_requests"], f"{path}.raw_requests", event_id
+    )
 
-    include = _require_mapping(data["include"], f"{path}.include", {"swiss", "playoffs"})
+    include = _require_mapping(
+        data["include"], f"{path}.include", {"swiss", "playoffs"}
+    )
     if include["swiss"] is not True:
         raise _error(f"{path}.include.swiss", "must be true")
     include_playoffs = _require_bool(include["playoffs"], f"{path}.include.playoffs")
@@ -523,9 +625,14 @@ def _parse_event(
         raise _error(f"{path}.phases", "must not assign one round to multiple phases")
     source_labels = [label for phase in phases for label in phase.source_labels]
     if len(source_labels) != len(set(source_labels)):
-        raise _error(f"{path}.phases", "must not assign one source label to multiple phases")
+        raise _error(
+            f"{path}.phases", "must not assign one source label to multiple phases"
+        )
     if enabled and not any(phase.round_phase == "constructed" for phase in phases):
-        raise _error(f"{path}.phases", "enabled events must identify at least one Constructed phase")
+        raise _error(
+            f"{path}.phases",
+            "enabled events must identify at least one Constructed phase",
+        )
 
     statistics = _require_mapping(
         data["statistics"],
@@ -533,17 +640,26 @@ def _parse_event(
         {"default_match_scope", "constructed_game_format", "include_playoffs"},
     )
     if statistics["default_match_scope"] != "all_constructed_swiss":
-        raise _error(f"{path}.statistics.default_match_scope", "must be all_constructed_swiss")
-    statistics_format = _require_string(statistics["constructed_game_format"], f"{path}.statistics.constructed_game_format")
+        raise _error(
+            f"{path}.statistics.default_match_scope", "must be all_constructed_swiss"
+        )
+    statistics_format = _require_string(
+        statistics["constructed_game_format"],
+        f"{path}.statistics.constructed_game_format",
+    )
     if statistics_format != constructed_format:
-        raise _error(f"{path}.statistics.constructed_game_format", "must match the event format")
+        raise _error(
+            f"{path}.statistics.constructed_game_format", "must match the event format"
+        )
     if statistics["include_playoffs"] is not False:
         raise _error(f"{path}.statistics.include_playoffs", "must be false")
 
     evidence = _parse_string_list(data["source_evidence"], f"{path}.source_evidence")
     for index, source_url in enumerate(evidence):
         _require_https_url(source_url, f"{path}.source_evidence[{index}]")
-    special_handling = _parse_string_list(data["special_handling"], f"{path}.special_handling", required=False)
+    special_handling = _parse_string_list(
+        data["special_handling"], f"{path}.special_handling", required=False
+    )
     notes = _require_string(data["notes"], f"{path}.notes")
     advancement = (
         _parse_advancement(
@@ -562,11 +678,39 @@ def _parse_event(
         for override in reviewed_overrides
         for competitor in override.competitors
     ) and (advancement is None or advancement.top8_lock_supported is not True):
-        raise _error(f"{path}.reviewed_overrides", "Top 8 lock awards require explicit advancement support")
+        raise _error(
+            f"{path}.reviewed_overrides",
+            "Top 8 lock awards require explicit advancement support",
+        )
+    if "reviewed_unplayed_rounds" in data and registry_schema_version != "3.2.0":
+        raise _error(path + ".reviewed_unplayed_rounds", "requires schema 3.2.0")
+    unplayed = _parse_unplayed_rounds(
+        data.get("reviewed_unplayed_rounds", []),
+        path + ".reviewed_unplayed_rounds",
+        phases,
+    )
     return MeleeEventDefinition(
-        event_id, url, name, start_date, end_date, constructed_format, series, structure, enabled,
-        review_status, mixed_format, raw_requests, include_playoffs, phases, advancement, reviewed_overrides, statistics_format,
-        evidence, special_handling, notes,
+        event_id,
+        url,
+        name,
+        start_date,
+        end_date,
+        constructed_format,
+        series,
+        structure,
+        enabled,
+        review_status,
+        mixed_format,
+        raw_requests,
+        include_playoffs,
+        phases,
+        advancement,
+        reviewed_overrides,
+        statistics_format,
+        evidence,
+        special_handling,
+        notes,
+        unplayed,
     )
 
 

@@ -36,7 +36,7 @@ DEFAULT_VISUALS_PATH = Path("configs/mtgo_landing_visuals.yaml")
 HISTORICAL_LANDING_FORMATS = frozenset({"standard", "modern"})
 DECK_LINK_TOKEN_PATTERN = re.compile(r"deck:[0-9a-f]{20}")
 CLASSIFIER_RESTATEMENT_BINDINGS = frozenset(
-    {"classifier_digest", "machine_fact_digest", "bilingual_catalog_digest"}
+    {"classifier_digest", "machine_fact_digest", "bilingual_catalog_digest", "link_catalog_digest"}
 )
 CLASSIFIER_RESTATEMENT_MATERIAL_FIELDS = (
     "week",
@@ -72,6 +72,22 @@ def _classifier_restatement_preserves_accepted_material(
         and prior_summary.get("items") == current_summary_items
         and isinstance(prior_features, Mapping)
         and prior_features.get("items") == current_features
+    )
+
+
+def _classifier_restatement_preserves_content_packet(before, after):
+    """Only provenance of identical selected content may be rebound.
+
+    The caller separately proves that the complete public page facts, summary,
+    feature choices/copy/cards and source event membership are unchanged.
+    Unselected catalog classifications may change with a reviewed classifier.
+    """
+    ignored = CLASSIFIER_RESTATEMENT_BINDINGS | {"material_digest", "established_names"}
+    return (
+        before.get("kind") == after.get("kind") == "content"
+        and all(before.get(k) == after.get(k) for k in ("format", "week", "dimensions"))
+        and {k: v for k, v in before["bindings"].items() if k not in ignored}
+        == {k: v for k, v in after["bindings"].items() if k not in ignored}
     )
 
 
@@ -1045,7 +1061,9 @@ def build_document(
             shared_equivalent = (content_validity is not None and
                 content_validity["state"] in {"current", "equivalent"})
             restatement_safe = shared_equivalent or (
-                review["schema_version"] != "1.3.0" and allow_classifier_restatement
+                allow_classifier_restatement
+                and (review["schema_version"] != "1.3.0" or
+                     _classifier_restatement_preserves_content_packet(submitted, packet))
                 and prior_document is not None
                 and _classifier_restatement_preserves_accepted_material(
                     binding_mismatches,
@@ -1055,7 +1073,7 @@ def build_document(
                     current_features,
                 )
             )
-            if (content_validity is not None and not shared_equivalent) or (binding_mismatches and not restatement_safe):
+            if (content_validity is not None and not restatement_safe) or (binding_mismatches and not restatement_safe):
                 review_status = "stale_review_required"
             else:
                 summary_items = current_summary_items

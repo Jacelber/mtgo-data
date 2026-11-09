@@ -1,4 +1,4 @@
-schema_version: "3.1.0"
+schema_version: "3.2.0"
 
 events:
   - id: '491103'
@@ -45,7 +45,77 @@ events:
     advancement:
       day2_after_round: 8
       day2_minimum_match_points: 18
-    reviewed_overrides: []
+    reviewed_overrides:
+    - id: verified_forfeit_4559503
+      source_match_id: 115272be-8c4f-4069-abd0-b4f400fad143
+      review_status: verified
+      played: false
+      competitors:
+      - source_participant_id: '4559503'
+        result_type: administrative
+        match_points: 0
+      reason: Official result explicitly says forfeited, not a bye. The retained adapter wrongly assigned
+        three points to every single-competitor result. Treat this as an unplayed administrative loss with
+        zero points; do not change participant status. Final standings confirm the zero-point result.
+      source_evidence:
+      - https://melee.gg/Tournament/View/491103
+      - https://melee.gg/Player/GetPlayerDetails?id=4559503
+    - id: verified_forfeit_4559165
+      source_match_id: 252825a4-22dc-49f8-adc1-b4f4011221a8
+      review_status: verified
+      played: false
+      competitors:
+      - source_participant_id: '4559165'
+        result_type: administrative
+        match_points: 0
+      reason: Official result explicitly says forfeited, not a bye. The retained adapter wrongly assigned
+        three points to every single-competitor result. Treat this as an unplayed administrative loss with
+        zero points; do not change participant status. Final standings confirm the zero-point result.
+      source_evidence:
+      - https://melee.gg/Tournament/View/491103
+      - https://melee.gg/Player/GetPlayerDetails?id=4559165
+    - id: verified_forfeit_4564857
+      source_match_id: 2adf72f0-eb08-4a33-ab3b-b4f400ed07d0
+      review_status: verified
+      played: false
+      competitors:
+      - source_participant_id: '4564857'
+        result_type: administrative
+        match_points: 0
+      reason: Official result explicitly says forfeited, not a bye. The retained adapter wrongly assigned
+        three points to every single-competitor result. Treat this as an unplayed administrative loss with
+        zero points; do not change participant status. Final standings confirm the zero-point result.
+      source_evidence:
+      - https://melee.gg/Tournament/View/491103
+      - https://melee.gg/Player/GetPlayerDetails?id=4564857
+    - id: verified_forfeit_4542326
+      source_match_id: bc5bfd0a-90f8-4c30-a9b6-b4f400fad147
+      review_status: verified
+      played: false
+      competitors:
+      - source_participant_id: '4542326'
+        result_type: administrative
+        match_points: 0
+      reason: Official result explicitly says forfeited, not a bye. The retained adapter wrongly assigned
+        three points to every single-competitor result. Treat this as an unplayed administrative loss with
+        zero points; do not change participant status. Final standings confirm the zero-point result.
+      source_evidence:
+      - https://melee.gg/Tournament/View/491103
+      - https://melee.gg/Player/GetPlayerDetails?id=4542326
+    reviewed_unplayed_rounds:
+    - id: reviewed_zero_rounds_4559165
+      source_participant_id: '4559165'
+      rounds:
+      - 1
+      - 2
+      review_status: verified
+      match_points: 0
+      reason: 'Owner confirmed on 2026-11-09: count the first two unplayed rounds as zero-point Day 1 opportunities.
+        Official round standings show 0 matches, 0-0-0 and zero points in both rounds. The cause is unverified;
+        do not infer a bye, played loss, no-show, drop or late entry.'
+      source_evidence:
+      - https://melee.gg/Tournament/View/491103
+      - https://melee.gg/Player/GetPlayerDetails?id=4559165
     statistics:
       default_match_scope: all_constructed_swiss
       constructed_game_format: legacy

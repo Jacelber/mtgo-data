@@ -212,16 +212,17 @@ def test_weekly_summary_link_without_exact_feature_fails_closed():
             encoding="utf-8"
         )
     )
-    linked = next(
-        item["deck_links"][0]["token"]
-        for item in document["weekly_summary"]["items"]
-        if item["deck_links"]
-    )
-    document["features"]["items"] = [
-        item
-        for item in document["features"]["items"]
-        if item["destination_id"] != linked
-    ]
+    # A valid published week may contain no links; construct the broken link
+    # explicitly so the test exercises validation rather than editorial choices.
+    deck_id = "a" * 20
+    token = "deck:" + deck_id
+    deck = {"archetype_id": "test-deck", "display_name": "Test Deck",
+            "event_id": document["source_event_ids"][0], "deck_id": deck_id,
+            "deck_fingerprint_sha256": DIGEST, "player": "Player", "final_rank": 1,
+            "starttime": document["week"]["start"]}
+    document["weekly_summary"]["items"] = [{"order": 1, "text": {"zh": token, "en": token},
+        "deck_links": [{"order": 1, "token": token, "label": landing._summary_deck_labels(deck), "deck": deck}]}]
+    document["features"]["items"] = []
 
     with pytest.raises(landing.MTGOLandingError, match="no exact reviewed feature"):
         landing.validate_document(document)
@@ -488,3 +489,26 @@ def test_existing_frontend_keeps_landing_in_the_accepted_product_order():
     assert "item.available && PRODUCT_ORDER.includes(item.id)" in source
     product_order = source.split("const PRODUCT_ORDER = [", 1)[1].split("];", 1)[0]
     assert '"mtgo-landing"' in product_order
+
+
+def test_classifier_restatement_packet_preserves_selected_content_and_scope():
+    from copy import deepcopy
+    from mtgmeta.mtgo import landing
+
+    before = {"kind": "content", "format": "legacy", "week": "2026-W44",
+              "dimensions": {"copy.zh": "保留正文", "copy.en": "Retained copy", "features": ["deck:abc"],
+                             "visual.cards": ["Existing Card"]},
+              "bindings": {"source_event_ids": ["one"], "selection_policy_digest": "same", "classifier_digest": "old",
+                           "machine_fact_digest": "old", "link_catalog_digest": "old", "material_digest": "old"}}
+    after = deepcopy(before)
+    for key in ("classifier_digest", "machine_fact_digest", "link_catalog_digest", "material_digest"):
+        after["bindings"][key] = "new"
+    assert landing._classifier_restatement_preserves_content_packet(before, after)
+    for field, value in [("copy.zh", "新正文"), ("features", ["deck:def"]), ("visual.cards", ["Changed Card"])]:
+        changed = deepcopy(after)
+        changed["dimensions"][field] = value
+        assert not landing._classifier_restatement_preserves_content_packet(before, changed)
+    for field, value in [("source_event_ids", ["one", "two"]), ("selection_policy_digest", "changed")]:
+        changed = deepcopy(after)
+        changed["bindings"][field] = value
+        assert not landing._classifier_restatement_preserves_content_packet(before, changed)

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Jacelber/mtgo-data/schemas/melee-opportunity-ledger.schema.json",
-  "x-schema-version": "1.1.0",
+  "x-schema-version": "1.2.0",
   "title": "Melee Constructed opportunity ledger",
   "type": "object",
   "additionalProperties": false,
@@ -10,7 +10,7 @@
     "input", "rounds", "scope_summaries", "participants", "opportunities"
   ],
   "properties": {
-    "schema_version": {"enum": ["1.0.0", "1.1.0"]},
+    "schema_version": {"enum": ["1.0.0", "1.1.0", "1.2.0"]},
     "source": {"const": "melee"},
     "event_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
     "format": {"$ref": "#/$defs/id"},
@@ -169,7 +169,8 @@
             "enum": [
               "played_win", "played_loss", "played_draw", "intentional_draw",
               "bye", "no_show", "drop_unplayed", "awarded_win_top8_lock",
-              "administrative_result", "unknown"
+              "administrative_result", "unknown",
+              "reviewed_unplayed"
             ]
           },
           "additionalProperties": {"type": "integer", "minimum": 1}
@@ -273,7 +274,8 @@
           "enum": [
             "played_win", "played_loss", "played_draw", "intentional_draw",
             "bye", "no_show", "drop_unplayed", "awarded_win_top8_lock",
-            "administrative_result", "unknown"
+            "administrative_result", "unknown",
+            "reviewed_unplayed"
           ]
         },
         "source_played": {"type": "boolean"},
@@ -295,7 +297,8 @@
               "disqualified_participant", "intentional_draw", "bye",
               "top8_lock_exemption", "no_show", "administrative_result",
               "unknown", "source_match_ineligible", "unplayed_after_drop",
-              "unplayed_after_disqualification"
+              "unplayed_after_disqualification",
+              "reviewed_unplayed"
             ]
           }
         }

@@ -243,8 +243,13 @@ def _unplayed_opportunity(
     participant_status: str,
     round_: Mapping[str, Any],
     event_structure: str,
+    reviewed: bool = False,
 ) -> dict[str, Any]:
-    if participant_status == "dropped":
+    if reviewed:
+        result_type = "reviewed_unplayed"
+        reason = "reviewed_unplayed"
+        points_included = True
+    elif participant_status == "dropped":
         result_type = "drop_unplayed"
         reason = "unplayed_after_drop"
         points_included = True
@@ -345,9 +350,7 @@ def build_opportunity_ledger(
     if metadata.get("source") != "melee":
         raise MeleeOpportunityError("event.metadata.source must be 'melee'")
     if event_structure not in EVENT_STRUCTURES:
-        raise MeleeOpportunityError(
-            f"unsupported event structure {event_structure!r}"
-        )
+        raise MeleeOpportunityError(f"unsupported event structure {event_structure!r}")
     if not isinstance(event_id, str) or not EVENT_ID_PATTERN.fullmatch(event_id):
         raise MeleeOpportunityError("event.metadata.event_id must be numeric")
     if not isinstance(format_id, str) or not FORMAT_PATTERN.fullmatch(format_id):
@@ -424,9 +427,7 @@ def build_opportunity_ledger(
     if event_structure != "mixed" and any(
         item.get("round_phase") == "draft" for item in rounds.values()
     ):
-        raise MeleeOpportunityError(
-            f"{event_structure} contains a Draft round"
-        )
+        raise MeleeOpportunityError(f"{event_structure} contains a Draft round")
     day1_rounds = [item for item in constructed_rounds if item.get("stage") == "day1"]
     day2_rounds = [item for item in constructed_rounds if item.get("stage") == "day2"]
     if event_structure == "constructed_single_stage":
@@ -435,8 +436,7 @@ def build_opportunity_ledger(
                 "constructed_single_stage does not support Day 2 rounds"
             )
         if any(
-            item.get("stage") not in {"day1", "other"}
-            for item in constructed_rounds
+            item.get("stage") not in {"day1", "other"} for item in constructed_rounds
         ):
             raise MeleeOpportunityError(
                 "constructed_single_stage has an unsupported Constructed stage"
@@ -503,11 +503,24 @@ def build_opportunity_ledger(
                 )
             matches_by_participant_round[key] = (match, competitors, competitor)
 
+    reviewed_unplayed = set()
+    for item in event.get("reviewed_unplayed_rounds", []):
+        key = (item.get("participant_id"), item.get("round_id"))
+        if (
+            key in reviewed_unplayed
+            or key[0] not in participants
+            or key[1] not in constructed_round_ids
+            or key in matches_by_participant_round
+            or type(item.get("match_points")) is not int
+            or item["match_points"] != 0
+            or not item.get("reason")
+            or not item.get("source_evidence")
+        ):
+            raise MeleeOpportunityError("invalid reviewed unplayed participant-round")
+        reviewed_unplayed.add(key)
+
     day1_participants = set(participants)
-    if (
-        event_structure != "constructed_single_stage"
-        and not day2_participants
-    ):
+    if event_structure != "constructed_single_stage" and not day2_participants:
         raise MeleeOpportunityError("Day 2 population cannot be established")
     if not day2_participants <= day1_participants:
         raise MeleeOpportunityError("Day 2 population is not a subset of Day 1")
@@ -525,9 +538,7 @@ def build_opportunity_ledger(
             {
                 "participant_id": participant_id,
                 "participant_status": participant_status,
-                "day1_participant": (
-                    event_structure != "constructed_single_stage"
-                ),
+                "day1_participant": (event_structure != "constructed_single_stage"),
                 "day2_participant": participant_id in day2_participants,
                 "classification": (
                     _classification_summary(classification_records[participant_id])
@@ -552,6 +563,7 @@ def build_opportunity_ledger(
                     participant_status=str(participant_status),
                     round_=round_,
                     event_structure=str(event_structure),
+                    reviewed=(participant_id, str(round_["id"])) in reviewed_unplayed,
                 )
             else:
                 match, competitors, competitor = match_data
@@ -567,6 +579,15 @@ def build_opportunity_ledger(
                 )
             opportunities.append(opportunity)
 
+    used = {
+        (item["participant_id"], item["round_id"])
+        for item in opportunities
+        if item["result_type"] == "reviewed_unplayed"
+    }
+    if used != reviewed_unplayed:
+        raise MeleeOpportunityError(
+            "reviewed unplayed round falls outside participant scope"
+        )
     if event_structure == "constructed_single_stage":
         scope_summaries = {
             "all_constructed": _scope_summary(
@@ -576,12 +597,8 @@ def build_opportunity_ledger(
             )
         }
     else:
-        day1_opportunities = [
-            item for item in opportunities if item["scope"] == "day1"
-        ]
-        day2_opportunities = [
-            item for item in opportunities if item["scope"] == "day2"
-        ]
+        day1_opportunities = [item for item in opportunities if item["scope"] == "day1"]
+        day2_opportunities = [item for item in opportunities if item["scope"] == "day2"]
         scope_summaries = {
             "day1": _scope_summary(
                 day1_opportunities,
@@ -600,7 +617,9 @@ def build_opportunity_ledger(
             ),
         }
     return {
-        "schema_version": OPPORTUNITY_LEDGER_SCHEMA_VERSION,
+        "schema_version": "1.2.0"
+        if reviewed_unplayed
+        else OPPORTUNITY_LEDGER_SCHEMA_VERSION,
         "source": "melee",
         "event_id": event_id,
         "format": format_id,

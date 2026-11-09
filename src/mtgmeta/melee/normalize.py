@@ -281,8 +281,12 @@ def normalize_parsed_snapshot(
         normalized_at=normalized_at,
         raw_artifact_prefix=raw_artifact_prefix,
     )
-    source_rounds = {item.source_round_id: item for item in _records(snapshot, "rounds")}
-    source_matches = {item.source_match_id: item for item in _records(snapshot, "matches")}
+    source_rounds = {
+        item.source_round_id: item for item in _records(snapshot, "rounds")
+    }
+    source_matches = {
+        item.source_match_id: item for item in _records(snapshot, "matches")
+    }
     source_standings = {
         item.source_participant_id: item for item in _records(snapshot, "standings")
     }
@@ -291,8 +295,12 @@ def normalize_parsed_snapshot(
         competitor.result_type == "awarded_win_top8_lock"
         for override in overrides.values()
         for competitor in override.competitors
-    ) and (event.advancement is None or event.advancement.top8_lock_supported is not True):
-        raise MeleeNormalizationError("Top 8 lock override lacks explicit event support")
+    ) and (
+        event.advancement is None or event.advancement.top8_lock_supported is not True
+    ):
+        raise MeleeNormalizationError(
+            "Top 8 lock override lacks explicit event support"
+        )
     missing_override_targets = sorted(set(overrides) - set(source_matches))
     if missing_override_targets:
         raise MeleeNormalizationError(
@@ -325,13 +333,19 @@ def normalize_parsed_snapshot(
         )
         resolved_rounds[source_id] = phase
 
-    participant_documents = {item["source_id"]: item for item in document["participants"]}
-    reviewed_absent = {competitor.source_participant_id
-                       for override in event.reviewed_overrides
-                       for competitor in override.competitors
-                       if competitor.participant_status == "no_show"}
+    participant_documents = {
+        item["source_id"]: item for item in document["participants"]
+    }
+    reviewed_absent = {
+        competitor.source_participant_id
+        for override in event.reviewed_overrides
+        for competitor in override.competitors
+        if competitor.participant_status == "no_show"
+    }
     for source_id, source in sorted(source_standings.items()):
-        status = "no_show" if source_id in reviewed_absent else _participant_status(source)
+        status = (
+            "no_show" if source_id in reviewed_absent else _participant_status(source)
+        )
         participant_documents[source_id]["status"] = status
         if status == "unknown":
             issues.append(
@@ -340,9 +354,56 @@ def normalize_parsed_snapshot(
                     "participant",
                     participant_documents[source_id]["id"],
                     "Participant status is not covered by the reviewed status mapping.",
-                    [f"source_participant_id={source_id}", f"status_text={source.status_text}"],
+                    [
+                        f"source_participant_id={source_id}",
+                        f"status_text={source.status_text}",
+                    ],
                 )
             )
+
+    if event.reviewed_unplayed_rounds:
+        reviewed = []
+        occupied = {
+            (pid, match.source_round_id)
+            for match in source_matches.values()
+            for pid in match.competitor_source_ids
+        }
+        by_number = {
+            r["number"]: r
+            for r in document["rounds"]
+            if r["swiss"] and r["game_format"] == event.format
+        }
+        source_by_id = {
+            stable_record_id("round", event.id, sid): sid for sid in source_rounds
+        }
+        for item in event.reviewed_unplayed_rounds:
+            participant = participant_documents.get(item.source_participant_id)
+            if participant is None:
+                raise MeleeNormalizationError(
+                    "reviewed unplayed rounds reference an unknown participant"
+                )
+            for number in item.rounds:
+                round_ = by_number.get(number)
+                if (
+                    round_ is None
+                    or (item.source_participant_id, source_by_id[round_["id"]])
+                    in occupied
+                ):
+                    raise MeleeNormalizationError(
+                        "reviewed unplayed round is missing or has a source match"
+                    )
+                reviewed.append(
+                    {
+                        "id": item.id,
+                        "participant_id": participant["id"],
+                        "round_id": round_["id"],
+                        "match_points": 0,
+                        "reason": item.reason,
+                        "source_evidence": list(item.source_evidence),
+                    }
+                )
+        document["schema_version"] = "2.3.0"
+        document["reviewed_unplayed_rounds"] = reviewed
 
     disqualified_source_ids = {
         source_id
@@ -360,7 +421,11 @@ def normalize_parsed_snapshot(
     for source_id, source in sorted(source_matches.items()):
         target = match_documents[source_id]
         override = overrides.get(source_id)
-        resolved = _override_result(source, override) if override else _source_result(source, event)
+        resolved = (
+            _override_result(source, override)
+            if override
+            else _source_result(source, event)
+        )
         if resolved is None:
             issues.append(
                 _issue(
@@ -388,9 +453,14 @@ def normalize_parsed_snapshot(
         ]
         if override:
             target["evidence"].extend(
-                [f"reviewed_override={override.id}", f"override_reason={override.reason}"]
+                [
+                    f"reviewed_override={override.id}",
+                    f"override_reason={override.reason}",
+                ]
             )
-            target["evidence"].extend(f"override_source={url}" for url in override.source_evidence)
+            target["evidence"].extend(
+                f"override_source={url}" for url in override.source_evidence
+            )
         phase = resolved_rounds.get(source.source_round_id)
         eligible = bool(
             played
@@ -407,13 +477,14 @@ def normalize_parsed_snapshot(
         target["constructed_statistics_eligible"] = eligible
         target["matchup_eligible"] = eligible
         if any(
-            item["source_participant_id"] in disqualified_source_ids
-            for item in results
+            item["source_participant_id"] in disqualified_source_ids for item in results
         ):
             target["evidence"].append("statistical_exclusion=disqualified_participant")
 
     if not any(round_["phase_id"] == "unresolved" for round_ in document["rounds"]):
-        document["phases"] = [phase for phase in document["phases"] if phase["id"] != "unresolved"]
+        document["phases"] = [
+            phase for phase in document["phases"] if phase["id"] != "unresolved"
+        ]
     document["quality"] = {
         "status": "blocked" if issues else "valid",
         "publishable": False,
