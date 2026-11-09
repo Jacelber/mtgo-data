@@ -858,6 +858,11 @@ const manaIdentities = Object.freeze({
     "mono-green-rhythm": Object.freeze(["g"]),
     "affinity": Object.freeze(["u", "r"]),
     "bant-beanstalk-control": Object.freeze(["w", "u", "g"]),
+    "boros-aggro": Object.freeze(["w", "r"]),
+    "orzhov-self-mill": Object.freeze(["w", "b"]),
+    "bant-rhythm": Object.freeze(["w", "u", "g"]),
+    "mono-blue-spirits": Object.freeze(["u"]),
+    "rakdos-madness": Object.freeze(["b", "r"]),
   }),
   legacy: Object.freeze({
     "tron/multicolor": Object.freeze(["w", "u", "b", "r", "g"]),
