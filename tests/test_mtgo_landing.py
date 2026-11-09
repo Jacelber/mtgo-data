@@ -512,3 +512,23 @@ def test_classifier_restatement_packet_preserves_selected_content_and_scope():
         changed = deepcopy(after)
         changed["bindings"][field] = value
         assert not landing._classifier_restatement_preserves_content_packet(before, changed)
+
+
+def test_empty_page_restatement_can_recompute_only_historical_reference_counts():
+    from copy import deepcopy
+    from mtgmeta.mtgo.landing import _classifier_restatement_preserves_environment
+
+    before = {"rows": [{"archetype_id": "alpha", "current": {"count": 10, "share": .5},
+                        "previous_week": {"count": 8, "share": .4}}],
+              "other_classified": {"current": {"count": 10, "share": .5},
+                                   "previous_week": {"count": 12, "share": .6}}}
+    after = deepcopy(before)
+    after["rows"][0]["previous_week"] = {"count": 9, "share": .45}
+    after["other_classified"]["previous_week"] = {"count": 11, "share": .55}
+    assert _classifier_restatement_preserves_environment(before, after, has_editorial=False)
+    assert not _classifier_restatement_preserves_environment(before, after, has_editorial=True)
+    after["rows"][0]["current"]["count"] = 11
+    assert not _classifier_restatement_preserves_environment(before, after, has_editorial=False)
+    after = deepcopy(before)
+    after["rows"][0]["archetype_id"] = "beta"
+    assert not _classifier_restatement_preserves_environment(before, after, has_editorial=False)

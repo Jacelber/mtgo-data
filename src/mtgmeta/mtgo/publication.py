@@ -500,9 +500,12 @@ def _restate_retained_landing(root: Path, stage: Path, format_id: str, week: str
     if result["status"] in {"stale_review_required", "summary_review_required"}:
         raise PublicationError(f"BLOCKED_OWNER_REVIEW: retained {format_id} Landing material changed")
     after = json.loads(path.read_text(encoding="utf-8"))
-    technical = {"classifier", "review_binding", "data_files"}
+    technical = {"classifier", "review_binding", "data_files", "environment"}
     if ({k: v for k, v in before.items() if k not in technical}
-            != {k: v for k, v in after.items() if k not in technical}):
+            != {k: v for k, v in after.items() if k not in technical}
+            or not landing._classifier_restatement_preserves_environment(
+                before.get("environment"), after.get("environment"),
+                has_editorial=bool(after.get("weekly_summary", {}).get("items") or after.get("features", {}).get("items")))):
         raise PublicationError(f"BLOCKED_OWNER_REVIEW: retained {format_id} Landing content changed")
     for archived, original in history.items():
         current = json.loads(archived.read_text(encoding="utf-8"))

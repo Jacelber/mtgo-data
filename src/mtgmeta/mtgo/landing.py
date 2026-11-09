@@ -53,6 +53,30 @@ class MTGOLandingError(RuntimeError):
     """Raised when Landing facts or reviewed features cannot be admitted."""
 
 
+def _classifier_restatement_preserves_environment(before, after, *, has_editorial):
+    """Recompute historical references on a page with no editorial claims.
+
+    An explicitly requested classifier restatement can change reference counts
+    while keeping the current environment, ordering, labels and denominators.
+    Pages with selected prose/features retain the stricter equality boundary.
+    """
+    if before == after:
+        return True
+    if has_editorial or not isinstance(before, Mapping) or not isinstance(after, Mapping):
+        return False
+    if "rows" not in before or "other_classified" not in before:
+        return False
+    def stable(value):
+        if isinstance(value, Mapping):
+            return {k: ({field: v for field, v in item.items() if field not in {"count", "share"}}
+                        if k in {"previous_week", "previous_four_weeks"} and isinstance(item, Mapping)
+                        else stable(item)) for k, item in value.items()}
+        if isinstance(value, list):
+            return [stable(item) for item in value]
+        return value
+    return stable(before) == stable(after)
+
+
 def _classifier_restatement_preserves_accepted_material(
     binding_mismatches: set[str],
     prior_document: Mapping[str, Any],
@@ -65,7 +89,10 @@ def _classifier_restatement_preserves_accepted_material(
     return (
         binding_mismatches <= CLASSIFIER_RESTATEMENT_BINDINGS
         and all(
-            prior_document.get(field) == fact_payload.get(field)
+            (_classifier_restatement_preserves_environment(
+                prior_document.get(field), fact_payload.get(field),
+                has_editorial=bool(current_summary_items or current_features))
+             if field == "environment" else prior_document.get(field) == fact_payload.get(field))
             for field in CLASSIFIER_RESTATEMENT_MATERIAL_FIELDS
         )
         and isinstance(prior_summary, Mapping)
