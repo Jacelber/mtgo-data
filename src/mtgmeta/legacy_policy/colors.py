@@ -1,7 +1,9 @@
 """Role-based color evidence for the accepted Legacy identity policy."""
 
 import re, collections
-from .card_data import shared_fact
+from .card_data import shared_fact, shared_card
+from ..classifier_cards import _mana_support
+
 ORDER = "WUBRG"
 letterzh = dict(zip(ORDER, "白蓝黑红绿"))
 guild = {
@@ -162,6 +164,26 @@ def audit(r):
             produced = {c for c, q in counter.items() if q >= 2}
         for c in produced & set(ORDER):
             sources[c].append(n)
+    capacity = sources
+    sources = {c: [] for c in ORDER}
+    for n in sorted(allcards):
+        fact = shared_card(n)
+        if fact:
+            for c in _mana_support([(fact, main.get(n, 0) + side.get(n, 0))]) & set(
+                ORDER
+            ):
+                sources[c].append(n)
+    # Post's reviewed Portent engine is an explicit family use, not a rule
+    # allowing arbitrary rainbow-supported splashes elsewhere.
+    if (
+        r["candidate"]["parent"] in {"blue-post", "green-post", "simic-post"}
+        and main.get("Portent of Calamity", 0) >= 3
+    ):
+        sources["U"] = capacity["U"]
+    if r["candidate"]["parent"] in {"tron", "blue-tron"} or r["candidate"][
+        "parent"
+    ].endswith("-tron"):
+        sources = capacity  # Owner's explicit Tron rainbow-source exception.
     req = []
     hybrid = []
     knowncore = set()
@@ -170,7 +192,11 @@ def audit(r):
             if n in FREE:
                 ignored[n] = FREE[n]
                 continue
-            if n == "Chaos Defiler" and r["candidate"]["parent"] == "painter-combo":
+            if n == "Chaos Defiler" and r["candidate"]["parent"] in {
+                "painter-combo",
+                "blue-artifacts",
+                "sewers",
+            }:
                 ignored[n] = (
                     "Owner P4：画家焊接用途不计色；不扩展到塔脉炉等已确认双用途家族"
                 )
@@ -206,7 +232,10 @@ def audit(r):
             cs, hy = spellreq(n)
             if n in ABILITIES:
                 ac, why = ABILITIES[n]
-                cs |= set(ac)
+                if n != "Boseiju, Who Endures" or any(x != n for x in sources["G"]):
+                    cs |= set(ac)
+                else:
+                    ignored[n] = "无其他非五色绿色源，Boseiju 魂力不单独计绿"
             if n == "Force of Vigor":
                 # Do not infer paid green from a free sideboard card alone.
                 independent = any(
@@ -229,6 +258,8 @@ def audit(r):
                         }
                     )
                     knowncore.add(c)
+                elif capacity[c]:
+                    ignored[n] = "仅由五色源或通用工具支付，不据此扩色"
                 else:
                     issues.append(n + "：" + c + "费用但未找到法术力支持")
             for options in hy:
@@ -252,6 +283,9 @@ def audit(r):
                 else:
                     issues.append(n + "：混血支付色需核实")
                     continue
+            elif any(capacity[c] for c in options):
+                ignored[n] = "混血费用仅由五色源或通用工具支付，不据此扩色"
+                continue
             else:
                 issues.append(n + "：混血费用无支付支持")
                 continue

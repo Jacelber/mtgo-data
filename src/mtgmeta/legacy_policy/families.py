@@ -157,17 +157,20 @@ def classify_with_review(rules, main, side):
     if base.status != "classified":
         return base, info
     pid = base.archetype_id
-    if (
-        pid == "colorless-tron"
-        and base.subtype_id == "colorless"
-        and any(main.get(card, 0) + side.get(card, 0) for card in (
-            "Portable Hole", "Perilous Snare", "Lich's Relic", "Mishra's Research Desk",
-        ))
-    ):
-        # The Nexus audit has already proved the reviewed artifact-tool roles.
-        # A second generic payment audit would count those same tools again.
-        info.update(path="reviewed-colorless-tron-toolbox")
-        return base, info
+    from .tron import route_identity
+
+    tron_pid, tron_sid, tron_info = route_identity(
+        rules, pid, base.subtype_id, main, side
+    )
+    if tron_info:
+        info.update(
+            path="source-supported-tron",
+            issues=tron_info["issues"],
+            colorAudit=tron_info,
+        )
+        return remap(
+            base, tron_pid, "Blue Tron" if tron_pid == "blue-tron" else "Tron", tron_sid
+        ), info
     if is_hogaak_tempo(base):
         # Mite is neutral even when another retained color table contains it.
         m = {n: q for n, q in main.items() if n != "Haywire Mite"}
@@ -289,6 +292,11 @@ def classify_with_review(rules, main, side):
         info.update(path="held-color-evidence", issues=a["issues"])
         return base, info
     cs = a["colors"]
+    if bean and cs == "UG":
+        info.update(
+            path="simic-beanstalk-engine", nameZh="蓝绿豆茎", nameEn="Simic Beanstalk"
+        )
+        return remap(base, "simic-beanstalk", "Simic Beanstalk"), info
     if bean or sewers:
         zh, en = full_name(
             cs,
@@ -309,6 +317,13 @@ def classify_with_review(rules, main, side):
     if pid not in SUFFIX:
         return base, info
     if cs == BASE_COLORS.get(pid):
+        pure_subtypes = {
+            "blue-post": "mono-blue",
+            "green-post": "mono-green",
+            "gwx-depths": "selesnya",
+        }
+        if pid in pure_subtypes:
+            return remap(base, pid, base.archetype_name, pure_subtypes[pid]), info
         if pid == "dimir-tempo" and base.subtype_id is None:
             return remap(base, pid, "Dimir Tempo", "dimir", "普通蓝黑节奏"), info
         return base, info
