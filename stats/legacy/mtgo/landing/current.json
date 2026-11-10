@@ -1,427 +1,57 @@
 {
+  "schema_version": "1.2.0",
+  "product": "mtgo-landing",
+  "format": "legacy",
+  "source": "mtgo",
+  "week": {
+    "id": "2026-W45",
+    "start": "2026-11-02",
+    "end": "2026-11-08"
+  },
+  "state": "ready",
+  "source_event_ids": [
+    "12857422",
+    "12857661",
+    "12857681",
+    "12857685",
+    "12857693",
+    "12857698",
+    "12857730"
+  ],
   "classifier": {
-    "digest": "4631d79149650c9b76647323553a0f7eaf75aa5054c30f81df94e66a477cce3c"
+    "digest": "88891842f5ed823af7ad750d5d34c6f24a8905ecbd6fd4cbb6b27dd405f94aa1"
   },
   "comparison": {
     "available": true,
     "unavailable_reason": null
   },
-  "data_files": {
-    "completeness": "weeks/2026-W44/completeness.json",
-    "environment_decks": "weeks/2026-W44/environment_decks.json",
-    "feature_decks": "weeks/2026-W44/feature_decks.json",
-    "range": "weeks/2026-W44/range.json"
+  "thresholds": {
+    "environment_share": 0.03,
+    "share_move_pp": 5.0,
+    "exit_reference_share": 0.05,
+    "build_shift": 20,
+    "build_reference_minimum": 8
   },
-  "environment": {
-    "other_classified": {
-      "current": {
-        "count": 22,
-        "denominator": 77,
-        "share": 0.2857
-      },
-      "current_top8": {
-        "count": 13,
-        "denominator": 40,
-        "share": 0.325
-      },
-      "previous_four_weeks": {
-        "count": 232,
-        "denominator": 457,
-        "share": 0.5077
-      },
-      "previous_week": {
-        "count": 66,
-        "denominator": 131,
-        "share": 0.5038
-      }
-    },
-    "rows": [
-      {
-        "archetype_id": "dimir-tempo",
-        "current": {
-          "count": 11,
-          "denominator": 77,
-          "share": 0.1429
-        },
-        "current_top8": {
-          "count": 4,
-          "denominator": 40,
-          "share": 0.1
-        },
-        "display_name": "Dimir Tempo",
-        "key_cards": [
-          {
-            "name": "Force of Will"
-          },
-          {
-            "name": "Orcish Bowmasters"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 58,
-          "denominator": 457,
-          "share": 0.1269
-        },
-        "previous_week": {
-          "count": 24,
-          "denominator": 131,
-          "share": 0.1832
-        }
-      },
-      {
-        "archetype_id": "sneak-and-show",
-        "current": {
-          "count": 9,
-          "denominator": 77,
-          "share": 0.1169
-        },
-        "current_top8": {
-          "count": 5,
-          "denominator": 40,
-          "share": 0.125
-        },
-        "display_name": "Sneak and Show",
-        "key_cards": [
-          {
-            "name": "Sneak Attack"
-          },
-          {
-            "name": "Show and Tell"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 20,
-          "denominator": 457,
-          "share": 0.0438
-        },
-        "previous_week": {
-          "count": 6,
-          "denominator": 131,
-          "share": 0.0458
-        }
-      },
-      {
-        "archetype_id": "eldrazi",
-        "current": {
-          "count": 6,
-          "denominator": 77,
-          "share": 0.0779
-        },
-        "current_top8": {
-          "count": 2,
-          "denominator": 40,
-          "share": 0.05
-        },
-        "display_name": "Eldrazi",
-        "key_cards": [
-          {
-            "name": "Eye of Ugin"
-          },
-          {
-            "name": "Eldrazi Linebreaker"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 21,
-          "denominator": 457,
-          "share": 0.046
-        },
-        "previous_week": {
-          "count": 4,
-          "denominator": 131,
-          "share": 0.0305
-        }
-      },
-      {
-        "archetype_id": "lands",
-        "current": {
-          "count": 6,
-          "denominator": 77,
-          "share": 0.0779
-        },
-        "current_top8": {
-          "count": 4,
-          "denominator": 40,
-          "share": 0.1
-        },
-        "display_name": "Lands",
-        "key_cards": [
-          {
-            "name": "Mox Diamond"
-          },
-          {
-            "name": "Life from the Loam"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 19,
-          "denominator": 457,
-          "share": 0.0416
-        },
-        "previous_week": {
-          "count": 5,
-          "denominator": 131,
-          "share": 0.0382
-        }
-      },
-      {
-        "archetype_id": "multicolor-beanstalk-control",
-        "current": {
-          "count": 5,
-          "denominator": 77,
-          "share": 0.0649
-        },
-        "current_top8": {
-          "count": 3,
-          "denominator": 40,
-          "share": 0.075
-        },
-        "display_name": "Multi-Color Beanstalk Control",
-        "key_cards": [
-          {
-            "name": "Up the Beanstalk"
-          },
-          {
-            "name": "Leyline Binding"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 17,
-          "denominator": 457,
-          "share": 0.0372
-        },
-        "previous_week": {
-          "count": 4,
-          "denominator": 131,
-          "share": 0.0305
-        }
-      },
-      {
-        "archetype_id": "blue-tron",
-        "current": {
-          "count": 3,
-          "denominator": 77,
-          "share": 0.039
-        },
-        "current_top8": {
-          "count": 3,
-          "denominator": 40,
-          "share": 0.075
-        },
-        "display_name": "Blue Tron",
-        "key_cards": [
-          {
-            "name": "Urza's Tower"
-          },
-          {
-            "name": "Force of Will"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 5,
-          "denominator": 457,
-          "share": 0.0109
-        },
-        "previous_week": {
-          "count": 0,
-          "denominator": 131,
-          "share": 0.0
-        }
-      },
-      {
-        "archetype_id": "boros-energy",
-        "current": {
-          "count": 3,
-          "denominator": 77,
-          "share": 0.039
-        },
-        "current_top8": {
-          "count": 1,
-          "denominator": 40,
-          "share": 0.025
-        },
-        "display_name": "Boros Energy",
-        "key_cards": [
-          {
-            "name": "Guide of Souls"
-          },
-          {
-            "name": "Amped Raptor"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 19,
-          "denominator": 457,
-          "share": 0.0416
-        },
-        "previous_week": {
-          "count": 3,
-          "denominator": 131,
-          "share": 0.0229
-        }
-      },
-      {
-        "archetype_id": "elves",
-        "current": {
-          "count": 3,
-          "denominator": 77,
-          "share": 0.039
-        },
-        "current_top8": {
-          "count": 2,
-          "denominator": 40,
-          "share": 0.05
-        },
-        "display_name": "Elves",
-        "key_cards": [
-          {
-            "name": "Gaea's Cradle"
-          },
-          {
-            "name": "Allosaurus Shepherd"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 4,
-          "denominator": 457,
-          "share": 0.0088
-        },
-        "previous_week": {
-          "count": 0,
-          "denominator": 131,
-          "share": 0.0
-        }
-      },
-      {
-        "archetype_id": "izzet-tempo",
-        "current": {
-          "count": 3,
-          "denominator": 77,
-          "share": 0.039
-        },
-        "current_top8": {
-          "count": 0,
-          "denominator": 40,
-          "share": 0.0
-        },
-        "display_name": "Izzet Tempo",
-        "key_cards": [
-          {
-            "name": "Dragon's Rage Channeler"
-          },
-          {
-            "name": "Force of Will"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 32,
-          "denominator": 457,
-          "share": 0.07
-        },
-        "previous_week": {
-          "count": 9,
-          "denominator": 131,
-          "share": 0.0687
-        }
-      },
-      {
-        "archetype_id": "oops-all-spells",
-        "current": {
-          "count": 3,
-          "denominator": 77,
-          "share": 0.039
-        },
-        "current_top8": {
-          "count": 2,
-          "denominator": 40,
-          "share": 0.05
-        },
-        "display_name": "Oops! All Spells",
-        "key_cards": [
-          {
-            "name": "Balustrade Spy"
-          },
-          {
-            "name": "Lively Dirge"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 0,
-          "denominator": 457,
-          "share": 0.0
-        },
-        "previous_week": {
-          "count": 0,
-          "denominator": 131,
-          "share": 0.0
-        }
-      },
-      {
-        "archetype_id": "sultai-doomsday",
-        "current": {
-          "count": 3,
-          "denominator": 77,
-          "share": 0.039
-        },
-        "current_top8": {
-          "count": 1,
-          "denominator": 40,
-          "share": 0.025
-        },
-        "display_name": "Doomsday",
-        "key_cards": [
-          {
-            "name": "Doomsday"
-          },
-          {
-            "name": "Thassa's Oracle"
-          }
-        ],
-        "previous_four_weeks": {
-          "count": 30,
-          "denominator": 457,
-          "share": 0.0656
-        },
-        "previous_week": {
-          "count": 10,
-          "denominator": 131,
-          "share": 0.0763
-        }
-      }
-    ],
-    "threshold": 0.03,
-    "unknown": {
-      "current": {
-        "count": 0,
-        "denominator": 77,
-        "share": 0.0
-      },
-      "current_top8": {
-        "count": 0,
-        "denominator": 40,
-        "share": 0.0
-      },
-      "previous_four_weeks": {
-        "count": 0,
-        "denominator": 457,
-        "share": 0.0
-      },
-      "previous_week": {
-        "count": 0,
-        "denominator": 131,
-        "share": 0.0
-      }
-    }
-  },
-  "features": {
-    "items": [],
-    "week": "2026-W44"
-  },
-  "format": "legacy",
   "populations": {
     "current": {
+      "start": "2026-11-02",
+      "end": "2026-11-08",
+      "event_ids": [
+        "12857422",
+        "12857661",
+        "12857681",
+        "12857685",
+        "12857693",
+        "12857698",
+        "12857730"
+      ],
+      "event_count": 7,
+      "high_score_count": 128,
+      "top8_count": 56
+    },
+    "previous_week": {
+      "start": "2026-10-26",
       "end": "2026-11-01",
-      "event_count": 5,
       "event_ids": [
         "12857009",
         "12857370",
@@ -429,20 +59,14 @@
         "12857400",
         "12857405"
       ],
+      "event_count": 5,
       "high_score_count": 77,
-      "start": "2026-10-26",
       "top8_count": 40
     },
     "previous_four_weeks": {
-      "end": "2026-10-25",
-      "event_count": 25,
+      "start": "2026-10-05",
+      "end": "2026-11-01",
       "event_ids": [
-        "12854952",
-        "12855455",
-        "12855473",
-        "12855477",
-        "12855487",
-        "12855492",
         "12855510",
         "12856140",
         "12856161",
@@ -461,68 +85,694 @@
         "12856972",
         "12856976",
         "12856986",
-        "12856991"
+        "12856991",
+        "12857009",
+        "12857370",
+        "12857388",
+        "12857400",
+        "12857405"
       ],
-      "high_score_count": 457,
-      "start": "2026-09-28",
-      "top8_count": 200
-    },
-    "previous_week": {
-      "end": "2026-10-25",
-      "event_count": 7,
-      "event_ids": [
-        "12856624",
-        "12856952",
-        "12856954",
-        "12856972",
-        "12856976",
-        "12856986",
-        "12856991"
-      ],
-      "high_score_count": 131,
-      "start": "2026-10-19",
-      "top8_count": 56
+      "event_count": 24,
+      "high_score_count": 431,
+      "top8_count": 192
     }
   },
-  "product": "mtgo-landing",
-  "review_binding": {
-    "classifier_digest": "4631d79149650c9b76647323553a0f7eaf75aa5054c30f81df94e66a477cce3c",
-    "machine_fact_digest": "406b6de077da6c3583ad25a670c9e4602d3edc4df32228016d69a72bc90c2b27",
-    "pickup_document_digest": "0d420e5acf8c5790a4bfdd75f33aade98ec9a4f48f022321bf53e3fffc940ded",
-    "source_event_ids": [
-      "12857009",
-      "12857370",
-      "12857388",
-      "12857400",
-      "12857405"
+  "environment": {
+    "threshold": 0.03,
+    "rows": [
+      {
+        "archetype_id": "dimir-tempo",
+        "display_name": "Dimir Tempo",
+        "key_cards": [
+          {
+            "name": "Force of Will"
+          },
+          {
+            "name": "Orcish Bowmasters"
+          }
+        ],
+        "current": {
+          "count": 19,
+          "denominator": 128,
+          "share": 0.1484
+        },
+        "previous_week": {
+          "count": 11,
+          "denominator": 77,
+          "share": 0.1429
+        },
+        "previous_four_weeks": {
+          "count": 62,
+          "denominator": 431,
+          "share": 0.1439
+        },
+        "current_top8": {
+          "count": 10,
+          "denominator": 56,
+          "share": 0.1786
+        }
+      },
+      {
+        "archetype_id": "sneak-and-show",
+        "display_name": "Sneak and Show",
+        "key_cards": [
+          {
+            "name": "Sneak Attack"
+          },
+          {
+            "name": "Show and Tell"
+          }
+        ],
+        "current": {
+          "count": 11,
+          "denominator": 128,
+          "share": 0.0859
+        },
+        "previous_week": {
+          "count": 9,
+          "denominator": 77,
+          "share": 0.1169
+        },
+        "previous_four_weeks": {
+          "count": 25,
+          "denominator": 431,
+          "share": 0.058
+        },
+        "current_top8": {
+          "count": 6,
+          "denominator": 56,
+          "share": 0.1071
+        }
+      },
+      {
+        "archetype_id": "eldrazi",
+        "display_name": "Eldrazi",
+        "key_cards": [
+          {
+            "name": "Eye of Ugin"
+          },
+          {
+            "name": "Eldrazi Linebreaker"
+          }
+        ],
+        "current": {
+          "count": 9,
+          "denominator": 128,
+          "share": 0.0703
+        },
+        "previous_week": {
+          "count": 6,
+          "denominator": 77,
+          "share": 0.0779
+        },
+        "previous_four_weeks": {
+          "count": 22,
+          "denominator": 431,
+          "share": 0.051
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 56,
+          "share": 0.0357
+        }
+      },
+      {
+        "archetype_id": "grixis-reanimator",
+        "display_name": "Grixis Reanimator",
+        "key_cards": [
+          {
+            "name": "Reanimate"
+          },
+          {
+            "name": "Faithless Looting"
+          }
+        ],
+        "current": {
+          "count": 9,
+          "denominator": 128,
+          "share": 0.0703
+        },
+        "previous_week": {
+          "count": 2,
+          "denominator": 77,
+          "share": 0.026
+        },
+        "previous_four_weeks": {
+          "count": 9,
+          "denominator": 431,
+          "share": 0.0209
+        },
+        "current_top8": {
+          "count": 5,
+          "denominator": 56,
+          "share": 0.0893
+        }
+      },
+      {
+        "archetype_id": "multicolor-beanstalk-control",
+        "display_name": "Multi-Color Beanstalk Control",
+        "key_cards": [
+          {
+            "name": "Up the Beanstalk"
+          },
+          {
+            "name": "Leyline Binding"
+          }
+        ],
+        "current": {
+          "count": 7,
+          "denominator": 128,
+          "share": 0.0547
+        },
+        "previous_week": {
+          "count": 5,
+          "denominator": 77,
+          "share": 0.0649
+        },
+        "previous_four_weeks": {
+          "count": 18,
+          "denominator": 431,
+          "share": 0.0418
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 56,
+          "share": 0.0714
+        }
+      },
+      {
+        "archetype_id": "sewers",
+        "display_name": "Sewers",
+        "key_cards": [
+          {
+            "name": "Sewer-veillance Cam"
+          },
+          {
+            "name": "Goblin Welder"
+          }
+        ],
+        "current": {
+          "count": 6,
+          "denominator": 128,
+          "share": 0.0469
+        },
+        "previous_week": {
+          "count": 1,
+          "denominator": 77,
+          "share": 0.013
+        },
+        "previous_four_weeks": {
+          "count": 9,
+          "denominator": 431,
+          "share": 0.0209
+        },
+        "current_top8": {
+          "count": 4,
+          "denominator": 56,
+          "share": 0.0714
+        }
+      },
+      {
+        "archetype_id": "aluren-tell",
+        "display_name": "Aluren Tell",
+        "key_cards": [
+          {
+            "name": "Aluren"
+          },
+          {
+            "name": "Show and Tell"
+          }
+        ],
+        "current": {
+          "count": 5,
+          "denominator": 128,
+          "share": 0.0391
+        },
+        "previous_week": {
+          "count": 2,
+          "denominator": 77,
+          "share": 0.026
+        },
+        "previous_four_weeks": {
+          "count": 11,
+          "denominator": 431,
+          "share": 0.0255
+        },
+        "current_top8": {
+          "count": 0,
+          "denominator": 56,
+          "share": 0.0
+        }
+      },
+      {
+        "archetype_id": "izzet-tempo",
+        "display_name": "Izzet Tempo",
+        "key_cards": [
+          {
+            "name": "Dragon's Rage Channeler"
+          },
+          {
+            "name": "Force of Will"
+          }
+        ],
+        "current": {
+          "count": 5,
+          "denominator": 128,
+          "share": 0.0391
+        },
+        "previous_week": {
+          "count": 3,
+          "denominator": 77,
+          "share": 0.039
+        },
+        "previous_four_weeks": {
+          "count": 28,
+          "denominator": 431,
+          "share": 0.065
+        },
+        "current_top8": {
+          "count": 1,
+          "denominator": 56,
+          "share": 0.0179
+        }
+      },
+      {
+        "archetype_id": "jeskai-control",
+        "display_name": "Jeskai Control",
+        "key_cards": [
+          {
+            "name": "Swords to Plowshares"
+          },
+          {
+            "name": "Force of Will"
+          }
+        ],
+        "current": {
+          "count": 5,
+          "denominator": 128,
+          "share": 0.0391
+        },
+        "previous_week": {
+          "count": 1,
+          "denominator": 77,
+          "share": 0.013
+        },
+        "previous_four_weeks": {
+          "count": 8,
+          "denominator": 431,
+          "share": 0.0186
+        },
+        "current_top8": {
+          "count": 1,
+          "denominator": 56,
+          "share": 0.0179
+        }
+      },
+      {
+        "archetype_id": "death-and-taxes-yorion-black-white",
+        "display_name": "Orzhov Death and Taxes",
+        "key_cards": [
+          {
+            "name": "Aether Vial"
+          },
+          {
+            "name": "Stoneforge Mystic"
+          }
+        ],
+        "current": {
+          "count": 4,
+          "denominator": 128,
+          "share": 0.0312
+        },
+        "previous_week": {
+          "count": 1,
+          "denominator": 77,
+          "share": 0.013
+        },
+        "previous_four_weeks": {
+          "count": 14,
+          "denominator": 431,
+          "share": 0.0325
+        },
+        "current_top8": {
+          "count": 1,
+          "denominator": 56,
+          "share": 0.0179
+        }
+      },
+      {
+        "archetype_id": "elves",
+        "display_name": "Elves",
+        "key_cards": [
+          {
+            "name": "Gaea's Cradle"
+          },
+          {
+            "name": "Allosaurus Shepherd"
+          }
+        ],
+        "current": {
+          "count": 4,
+          "denominator": 128,
+          "share": 0.0312
+        },
+        "previous_week": {
+          "count": 3,
+          "denominator": 77,
+          "share": 0.039
+        },
+        "previous_four_weeks": {
+          "count": 7,
+          "denominator": 431,
+          "share": 0.0162
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 56,
+          "share": 0.0357
+        }
+      },
+      {
+        "archetype_id": "jeskai-tempo",
+        "display_name": "Jeskai Tempo",
+        "key_cards": [
+          {
+            "name": "Phelia, Exuberant Shepherd"
+          },
+          {
+            "name": "Quantum Riddler"
+          }
+        ],
+        "current": {
+          "count": 4,
+          "denominator": 128,
+          "share": 0.0312
+        },
+        "previous_week": {
+          "count": 0,
+          "denominator": 77,
+          "share": 0.0
+        },
+        "previous_four_weeks": {
+          "count": 3,
+          "denominator": 431,
+          "share": 0.007
+        },
+        "current_top8": {
+          "count": 2,
+          "denominator": 56,
+          "share": 0.0357
+        }
+      },
+      {
+        "archetype_id": "lands",
+        "display_name": "Lands",
+        "key_cards": [
+          {
+            "name": "Mox Diamond"
+          },
+          {
+            "name": "Life from the Loam"
+          }
+        ],
+        "current": {
+          "count": 4,
+          "denominator": 128,
+          "share": 0.0312
+        },
+        "previous_week": {
+          "count": 6,
+          "denominator": 77,
+          "share": 0.0779
+        },
+        "previous_four_weeks": {
+          "count": 21,
+          "denominator": 431,
+          "share": 0.0487
+        },
+        "current_top8": {
+          "count": 1,
+          "denominator": 56,
+          "share": 0.0179
+        }
+      }
     ],
-    "summary_fact_digest": "d79ac27211aeecd088f5411ea3e9b1f7b0077099233c2f4742e39eadd809bcba",
-    "visual_metadata_digest": "290b5ef6d9ca68d689cde56cc9d3cf5db0b255772ca7772938ca11b1f00978ff"
-  },
-  "schema_version": "1.3.0",
-  "source": "mtgo",
-  "source_event_ids": [
-    "12857009",
-    "12857370",
-    "12857388",
-    "12857400",
-    "12857405"
-  ],
-  "state": "ready",
-  "thresholds": {
-    "build_reference_minimum": 8,
-    "build_shift": 20,
-    "environment_share": 0.03,
-    "exit_reference_share": 0.05,
-    "share_move_pp": 5.0
-  },
-  "week": {
-    "end": "2026-11-01",
-    "id": "2026-W44",
-    "start": "2026-10-26"
+    "other_classified": {
+      "current": {
+        "count": 36,
+        "denominator": 128,
+        "share": 0.2812
+      },
+      "previous_week": {
+        "count": 27,
+        "denominator": 77,
+        "share": 0.3506
+      },
+      "previous_four_weeks": {
+        "count": 194,
+        "denominator": 431,
+        "share": 0.4501
+      },
+      "current_top8": {
+        "count": 17,
+        "denominator": 56,
+        "share": 0.3036
+      }
+    },
+    "unknown": {
+      "current": {
+        "count": 0,
+        "denominator": 128,
+        "share": 0.0
+      },
+      "previous_week": {
+        "count": 0,
+        "denominator": 77,
+        "share": 0.0
+      },
+      "previous_four_weeks": {
+        "count": 0,
+        "denominator": 431,
+        "share": 0.0
+      },
+      "current_top8": {
+        "count": 0,
+        "denominator": 56,
+        "share": 0.0
+      }
+    }
   },
   "weekly_summary": {
-    "items": [],
-    "week": "2026-W44"
+    "week": "2026-W45",
+    "items": [
+      {
+        "order": 1,
+        "text": {
+          "zh": "本周薪传有一场281人参加的超级RCQ，最终由黑掘坟（备牌带[[card:Chain of Smog|连锁烟雾]]组合技）席卷。",
+          "en": "The 281-player Legacy RC Super Qualifier went to Mono-Black Reanimator with the [[card:Chain of Smog|Chain of Smog]] combo in the sideboard."
+        },
+        "deck_links": []
+      },
+      {
+        "order": 2,
+        "text": {
+          "zh": "本周蓝黑霍佳葛继续优异表现：deck:94571ee332a1443ca413。这套牌现在和传统蓝黑节奏一起放在蓝黑节奏大类中，在详细统计页面可以看到小类别的详细数据。如果之后持续分庭抗礼会考虑将大类分开统计。这套牌在上周的北美EW上就已经打出了超过60%的胜率（EW的详细数据可以在“实体大赛”标签页中查看）。[[card:Dark Matter Manipulator|暗物质操弄师]]和[[card:Stitcher's Supplier|拼接师备尸]]给霍佳葛填坟，[[card:Moonshadow|蔽月影]]也能从同一套自磨组件中受益，同时保留了[[card:Force of Will|意志之力]]、[[card:Daze|目眩]]等蓝色节奏组件。",
+          "en": "Dimir Hogaak kept putting up results this week, winning a Challenge with deck:94571ee332a1443ca413. It is grouped with traditional Dimir Tempo under the same parent archetype, and the detailed statistics show the two builds separately. If both continue to post comparable results, we may give them separate categories. Dimir Hogaak already won more than 60% of its matches at last week’s North American Eternal Weekend. Those results are in the Tabletop Major Events tab. [[card:Dark Matter Manipulator|Dark Matter Manipulator]] and [[card:Stitcher's Supplier|Stitcher's Supplier]] fill the graveyard for Hogaak, Arisen Necropolis. [[card:Moonshadow|Moonshadow]] benefits from the same self-mill package, and the deck keeps blue tempo staples such as [[card:Force of Will|Force of Will]] and [[card:Daze|Daze]]."
+        },
+        "deck_links": [
+          {
+            "order": 1,
+            "token": "deck:94571ee332a1443ca413",
+            "label": {
+              "zh": "蓝黑霍佳葛 · TheWitchKling · 第1名",
+              "en": "Dimir Hogaak · TheWitchKling · Rank 1"
+            },
+            "deck": {
+              "archetype_id": "dimir-tempo",
+              "display_name": "Dimir Hogaak",
+              "event_id": "12857730",
+              "deck_id": "94571ee332a1443ca413",
+              "deck_fingerprint_sha256": "91a693b36a45afccc3b502e959272090851f67d29ecd60af0b4f8890c96c50db",
+              "player": "TheWitchKling",
+              "final_rank": 1,
+              "starttime": "2026-11-04 22:30:00.0"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "features": {
+    "week": "2026-W45",
+    "items": [
+      {
+        "category": "new_technology",
+        "order": 1,
+        "destination_id": "deck:94571ee332a1443ca413",
+        "archetype_id": "dimir-tempo",
+        "subtype_id": "hogaak",
+        "display_name": "Dimir Hogaak",
+        "deck": {
+          "event_id": "12857730",
+          "deck_id": "94571ee332a1443ca413",
+          "deck_fingerprint_sha256": "91a693b36a45afccc3b502e959272090851f67d29ecd60af0b4f8890c96c50db",
+          "player": "TheWitchKling",
+          "final_rank": 1,
+          "player_count": 31,
+          "starttime": "2026-11-04 22:30:00.0",
+          "main_deck": [
+            {
+              "name": "Brainstorm",
+              "qty": 4
+            },
+            {
+              "name": "Brazen Borrower",
+              "qty": 1
+            },
+            {
+              "name": "Dark Matter Manipulator",
+              "qty": 4
+            },
+            {
+              "name": "Daze",
+              "qty": 3
+            },
+            {
+              "name": "Dryad Arbor",
+              "qty": 1
+            },
+            {
+              "name": "Force of Will",
+              "qty": 4
+            },
+            {
+              "name": "Hogaak, Arisen Necropolis",
+              "qty": 4
+            },
+            {
+              "name": "Kaito, Bane of Nightmares",
+              "qty": 2
+            },
+            {
+              "name": "Misty Rainforest",
+              "qty": 4
+            },
+            {
+              "name": "Mockingbird",
+              "qty": 3
+            },
+            {
+              "name": "Moonshadow",
+              "qty": 4
+            },
+            {
+              "name": "Orcish Bowmasters",
+              "qty": 3
+            },
+            {
+              "name": "Ponder",
+              "qty": 3
+            },
+            {
+              "name": "Stitcher's Supplier",
+              "qty": 4
+            },
+            {
+              "name": "Swamp",
+              "qty": 1
+            },
+            {
+              "name": "Thoughtseize",
+              "qty": 2
+            },
+            {
+              "name": "Undercity Sewers",
+              "qty": 1
+            },
+            {
+              "name": "Underground Sea",
+              "qty": 4
+            },
+            {
+              "name": "Verdant Catacombs",
+              "qty": 4
+            },
+            {
+              "name": "Wasteland",
+              "qty": 4
+            }
+          ],
+          "side_deck": [
+            {
+              "name": "Brazen Borrower",
+              "qty": 1
+            },
+            {
+              "name": "Consign to Memory",
+              "qty": 2
+            },
+            {
+              "name": "Dauthi Voidwalker",
+              "qty": 2
+            },
+            {
+              "name": "Fatal Push",
+              "qty": 4
+            },
+            {
+              "name": "Force of Negation",
+              "qty": 2
+            },
+            {
+              "name": "Karakas",
+              "qty": 2
+            },
+            {
+              "name": "Massacre",
+              "qty": 2
+            }
+          ]
+        },
+        "headline": {
+          "en": "Dimir Hogaak",
+          "zh": "蓝黑霍佳葛"
+        },
+        "positioning": {
+          "zh": "满编暗物质操弄师、拼接师备尸和蔽月影的蓝黑霍佳葛。",
+          "en": "Dimir Hogaak with four each of Dark Matter Manipulator, Stitcher’s Supplier, and Moonshadow."
+        },
+        "featured_cards": [
+          {
+            "name": "Hogaak, Arisen Necropolis"
+          },
+          {
+            "name": "Dark Matter Manipulator"
+          },
+          {
+            "name": "Stitcher's Supplier"
+          },
+          {
+            "name": "Moonshadow"
+          }
+        ],
+        "supporting_facts": []
+      }
+    ]
+  },
+  "review_binding": {
+    "source_event_ids": [
+      "12857422",
+      "12857661",
+      "12857681",
+      "12857685",
+      "12857693",
+      "12857698",
+      "12857730"
+    ],
+    "classifier_digest": "88891842f5ed823af7ad750d5d34c6f24a8905ecbd6fd4cbb6b27dd405f94aa1",
+    "visual_metadata_digest": "b8f4401b950f929b18502a7e6934da5f45ebfef25e18d0ff0293241b2b4fc3db",
+    "machine_fact_digest": "85ee6f66a44cfc96d5f4ba9220acb2537989293ee17af2d592a534dd941b2e15",
+    "pickup_document_digest": "da3ad0cac5dbcda9730c5259848e420caff1d206872572dd9e8254abf67b0576",
+    "summary_fact_digest": "8e70b7aa603ea2ff1af8e503bfedb4f767795565b2078e98f0aece046b48cacb"
   }
 }
