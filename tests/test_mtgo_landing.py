@@ -157,19 +157,21 @@ def test_public_landing_schema_admits_maintained_formats_without_opening_format_
     schema = json.loads(
         (ROOT / "schemas" / "mtgo-landing.schema.json").read_text(encoding="utf-8")
     )
-    public_format_rule = schema["allOf"][0]
+    historical_format_rule, current_format_rule = schema["allOf"][:2]
 
-    assert public_format_rule["if"]["properties"]["schema_version"]["enum"] == [
+    assert historical_format_rule["if"]["properties"]["schema_version"]["enum"] == [
         "1.0.0",
         "1.1.0",
-        "1.2.0",
     ]
-    assert public_format_rule["then"]["properties"]["format"]["enum"] == [
+    historical_formats = historical_format_rule["then"]["properties"]["format"]["enum"]
+    assert historical_formats == [
         "standard",
         "modern",
         "pauper",
         "pioneer",
     ]
+    assert current_format_rule["if"]["properties"]["schema_version"]["const"] == "1.2.0"
+    assert current_format_rule["then"]["properties"]["format"]["enum"] == [*historical_formats, "legacy"]
 
 
 def test_cross_field_population_mismatch_fails_closed():
