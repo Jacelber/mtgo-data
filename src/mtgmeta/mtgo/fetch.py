@@ -368,9 +368,10 @@ def save_event(event: dict[str, Any], output_directory: str | Path) -> Path:
     directory = Path(output_directory)
     directory.mkdir(parents=True, exist_ok=True)
     destination = directory / event_filename(event)
-    destination.write_text(
-        json.dumps(event, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
+    content = json.dumps(event, ensure_ascii=False, indent=2)
+    if destination.is_file() and destination.read_bytes().replace(b"\r\n", b"\n") == content.encode("utf-8"):
+        return destination
+    destination.write_text(content, encoding="utf-8")
     return destination
 
 

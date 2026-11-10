@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from pathlib import Path
 from types import SimpleNamespace
@@ -197,3 +198,15 @@ def test_fetch_events_exit_code_distinguishes_transient_failures(
     args = SimpleNamespace(format_id="standard", months=None)
 
     assert mtgo_cli._run_fetch_events(args, tmp_path, tmp_path / "formats.yaml") == expected
+
+
+def test_save_event_preserves_retained_bytes_for_line_endings_only(tmp_path):
+    event = {"description": "Modern Challenge 32", "event_id": "1", "players": []}
+    destination = tmp_path / fetch.event_filename(event)
+    original = json.dumps(event, ensure_ascii=False, indent=2).replace("\n", "\r\n").encode()
+    destination.write_bytes(original)
+
+    assert fetch.save_event(event, tmp_path).read_bytes() == original
+
+    changed = {**event, "players": [{"player": "a"}]}
+    assert json.loads(fetch.save_event(changed, tmp_path).read_bytes()) == changed
