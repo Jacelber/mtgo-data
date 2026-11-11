@@ -1,0 +1,350 @@
+.....F.................................................................. [ 50%]
+..........................F..........FFF...F........................... [100%]
+=================================== FAILURES ===================================
+_______ test_hand_counted_cases_detect_production_semantic_faults[draft] _______
+
+tmp_path = PosixPath('/tmp/mtgo-slim-integration/test_hand_counted_cases_detect0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f84a17b6090>
+fault = 'draft'
+
+    @pytest.mark.parametrize("fault", ["draft", "lock", "dq"])
+    def test_hand_counted_cases_detect_production_semantic_faults(tmp_path, monkeypatch, fault):
+        from dataclasses import replace
+        from mtgmeta.melee import normalize
+        if fault == "draft":
+            original = normalize._phase_for_round
+            def phase(source, event):
+                result = original(source, event)
+                return replace(result, round_phase="constructed", game_format="modern") if result.round_phase == "draft" else result
+            monkeypatch.setattr(normalize, "_phase_for_round", phase)
+        elif fault == "lock":
+            original = normalize._source_result
+            def result(source, event):
+                played, rows = original(source, event)
+                for row in rows:
+                    if row["result_type"] == "awarded_win_top8_lock":
+                        row["result_type"] = "bye"
+                return played, rows
+            monkeypatch.setattr(normalize, "_source_result", result)
+        else:
+            original = normalize._participant_status
+            monkeypatch.setattr(normalize, "_participant_status", lambda row: "active" if row.status_text == "Disqualified" else original(row))
+        with pytest.raises(AssertionError):
+            if fault == "dq":
+                test_raw_disqualification_excludes_whole_match_without_deleting_source(tmp_path)
+            else:
+>               test_raw_mixed_rounds_and_opportunity_denominators(tmp_path, 2, "limited")
+
+tests/test_melee_independent_statistics.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_melee_independent_statistics.py:11: in test_raw_mixed_rounds_and_opportunity_denominators
+    classification, ledger, statistics, matchup = derived(tmp_path, event, path)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/melee_synthetic.py:151: in derived
+    ledger = build_opportunity_ledger(document, classification, **inputs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/mtgmeta/melee/opportunities.py:561: in build_opportunity_ledger
+    opportunity = _unplayed_opportunity(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+participant_id = 'participant-71ed2ddbcd37aaec8bd4107bd412519a3b48b8b310467e6f7abde4f6cb14d3eb'
+participant_status = 'active'
+round_ = {'id': 'round-22b4a909e7702ac42af461410934fe24f8ad4a6a1774bcd5c5a9a1dace40e2fd', 'source_label': 'Round 1', 'number': 1, 'phase_id': 'draft1', ...}
+event_structure = 'mixed', reviewed = False
+
+    def _unplayed_opportunity(
+        *,
+        participant_id: str,
+        participant_status: str,
+        round_: Mapping[str, Any],
+        event_structure: str,
+        reviewed: bool = False,
+    ) -> dict[str, Any]:
+        if reviewed:
+            result_type = "reviewed_unplayed"
+            reason = "reviewed_unplayed"
+            points_included = True
+        elif participant_status == "dropped":
+            result_type = "drop_unplayed"
+            reason = "unplayed_after_drop"
+            points_included = True
+        elif participant_status == "no_show":
+            result_type = "no_show"
+            reason = "no_show"
+            points_included = True
+        elif participant_status == "disqualified":
+            result_type = "administrative_result"
+            reason = "unplayed_after_disqualification"
+            points_included = False
+        else:
+>           raise MeleeOpportunityError(
+                f"{participant_id} is missing round {round_['number']} "
+                f"with non-terminal status {participant_status!r}"
+            )
+E           mtgmeta.melee.opportunities.MeleeOpportunityError: participant-71ed2ddbcd37aaec8bd4107bd412519a3b48b8b310467e6f7abde4f6cb14d3eb is missing round 1 with non-terminal status 'active'
+
+src/mtgmeta/melee/opportunities.py:265: MeleeOpportunityError
+_____ test_shared_pair_passes_real_packager_and_preserves_existing_landing _____
+
+tmp_path = PosixPath('/tmp/mtgo-slim-integration/test_shared_pair_passes_real_p0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f849c12ade0>
+
+    def test_shared_pair_passes_real_packager_and_preserves_existing_landing(tmp_path, monkeypatch):
+        import build_pages_artifact as builder
+        root = tmp_path / "root"
+        selected = _shared_fixture(root)
+        build_archetype_visuals.generate(root, "fixture")
+        landing = "stats/fixture/mtgo/landing/current.json"
+        (root / landing).parent.mkdir()
+        (root / landing).write_text('{"week":"previous","features":{"items":[]}}')
+        selected.add(landing)
+        monkeypatch.setattr(builder, "load_config", lambda *a: {"maximum_artifact_bytes": 1000000, "generated_overlays": []})
+        monkeypatch.setattr(builder, "publication_paths", lambda *a: selected)
+        monkeypatch.setattr(builder, "validate_publication", lambda *a: [])
+        monkeypatch.setattr(builder, "_copy_generated_overlays", lambda *a: set())
+        monkeypatch.setattr(builder, "_tracked_files", lambda *a: list(selected))
+        monkeypatch.setattr(builder, "_git_storage_bytes", lambda *a: 0)
+        site = tmp_path / "site"
+>       builder.build_artifact(root, root / "config.json", site, tmp_path / "report.json")
+
+tests/test_archetype_visuals.py:205: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+build_pages_artifact.py:438: in build_artifact
+    before = _manifest_digest(root, inputs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_pages_artifact.py:306: in _manifest_digest
+    digest.update(_sha256(root / relative).encode("ascii"))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+build_pages_artifact.py:181: in _sha256
+    with path.open("rb") as handle:
+         ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/mtgo-slim-integration/test_shared_pair_passes_real_p0/root/configs/pages_publication.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/mtgo-slim-integration/test_shared_pair_passes_real_p0/root/configs/pages_publication.json'
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:1013: FileNotFoundError
+_ test_melee_only_release_preserves_fixed_inputs_without_mtgo_regeneration[None] _
+
+material = (PosixPath('/tmp/mtgo-slim-integration/test_melee_only_release_preser0/root'), PosixPath('/tmp/mtgo-slim-integration/t...im-integration/test_melee_only_release_preser0/accepted.json'), <function material.<locals>.prepare at 0x7f849e878fe0>)
+tmp_path = PosixPath('/tmp/mtgo-slim-integration/test_melee_only_release_preser0')
+change = None
+
+    @pytest.mark.parametrize("change", [None, "missing_event", "source"])
+    def test_melee_only_release_preserves_fixed_inputs_without_mtgo_regeneration(material, tmp_path, change):
+        import build_pages_artifact as builder
+        root, site, accepted, _ = material
+        relative = "stats/standard/melee/index.json"
+        for base in (root, site):
+            path = base / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps({"events": [{"event_id": "123"}]}))
+        builder.publication_paths(root, {}).add(relative)
+>       record = weekly.create_record(tmp_path / "melee.delivery.json", kind="reviewed_data", root=root, site=site,
+            scope={"week": "2025-W02", "mtgo_formats": [], "melee": [{"format": "standard", "event_id": "123"}]},
+            references=[accepted], source="a" * 40, target="Jacelber/mtgo-data-governance-verification")
+
+tests/delivery/test_weekly_material.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/delivery/weekly.py:29: in create_record
+    identity["material"] = material_snapshot(root, scope)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/delivery/verification.py:58: in material_snapshot
+    paths = publication_inputs(root, publication_paths(root, config))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_pages_artifact.py:193: in publication_inputs
+    paths.update(_protected_input_fingerprints(root, format_id))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/mtgmeta/classifier_closure.py:667: in _protected_input_fingerprints
+    paths.update(retained_source_paths(root, format_id, str(entry["event_id"])))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/mtgmeta/melee/integrity.py:44: in retained_source_paths
+    event_path = _file(root, f"data/{format_id}/melee/events/{event_id}.json")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+root = PosixPath('/tmp/mtgo-slim-integration/test_melee_only_release_preser0/root')
+relative = 'data/standard/melee/events/123.json'
+
+    def _file(root: Path, relative: str) -> Path:
+        if not isinstance(relative, str) or not relative or "\\" in relative:
+            raise MeleeSourceIntegrityError("invalid retained source path")
+        child = Path(relative)
+        if child.is_absolute() or ".." in child.parts or child.as_posix() != relative:
+            raise MeleeSourceIntegrityError(f"unsafe retained source path: {relative}")
+        path = root / child
+        if any(part.is_symlink() for part in (path, *path.parents) if part != root):
+            raise MeleeSourceIntegrityError(f"symlink in retained source path: {relative}")
+        if not path.is_file():
+>           raise MeleeSourceIntegrityError(f"missing retained source file: {relative}")
+E           mtgmeta.melee.integrity.MeleeSourceIntegrityError: missing retained source file: data/standard/melee/events/123.json
+
+src/mtgmeta/melee/integrity.py:34: MeleeSourceIntegrityError
+_ test_melee_only_release_preserves_fixed_inputs_without_mtgo_regeneration[missing_event] _
+
+material = (PosixPath('/tmp/mtgo-slim-integration/test_melee_only_release_preser1/root'), PosixPath('/tmp/mtgo-slim-integration/t...im-integration/test_melee_only_release_preser1/accepted.json'), <function material.<locals>.prepare at 0x7f849e87a020>)
+tmp_path = PosixPath('/tmp/mtgo-slim-integration/test_melee_only_release_preser1')
+change = 'missing_event'
+
+    @pytest.mark.parametrize("change", [None, "missing_event", "source"])
+    def test_melee_only_release_preserves_fixed_inputs_without_mtgo_regeneration(material, tmp_path, change):
+        import build_pages_artifact as builder
+        root, site, accepted, _ = material
+        relative = "stats/standard/melee/index.json"
+        for base in (root, site):
+            path = base / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps({"events": [{"event_id": "123"}]}))
+        builder.publication_paths(root, {}).add(relative)
+>       record = weekly.create_record(tmp_path / "melee.delivery.json", kind="reviewed_data", root=root, site=site,
+            scope={"week": "2025-W02", "mtgo_formats": [], "melee": [{"format": "standard", "event_id": "123"}]},
+            references=[accepted], source="a" * 40, target="Jacelber/mtgo-data-governance-verification")
+
+tests/delivery/test_weekly_material.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/delivery/weekly.py:29: in create_record
+    identity["material"] = material_snapshot(root, scope)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/delivery/verification.py:58: in material_snapshot
+    paths = publication_inputs(root, publication_paths(root, config))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_pages_artifact.py:193: in publication_inputs
+    paths.update(_protected_input_fingerprints(root, format_id))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/mtgmeta/classifier_closure.py:667: in _protected_input_fingerprints
+    paths.update(retained_source_paths(root, format_id, str(entry["event_id"])))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/mtgmeta/melee/integrity.py:44: in retained_source_paths
+    event_path = _file(root, f"data/{format_id}/melee/events/{event_id}.json")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+root = PosixPath('/tmp/mtgo-slim-integration/test_melee_only_release_preser1/root')
+relative = 'data/standard/melee/events/123.json'
+
+    def _file(root: Path, relative: str) -> Path:
+        if not isinstance(relative, str) or not relative or "\\" in relative:
+            raise MeleeSourceIntegrityError("invalid retained source path")
+        child = Path(relative)
+        if child.is_absolute() or ".." in child.parts or child.as_posix() != relative:
+            raise MeleeSourceIntegrityError(f"unsafe retained source path: {relative}")
+        path = root / child
+        if any(part.is_symlink() for part in (path, *path.parents) if part != root):
+            raise MeleeSourceIntegrityError(f"symlink in retained source path: {relative}")
+        if not path.is_file():
+>           raise MeleeSourceIntegrityError(f"missing retained source file: {relative}")
+E           mtgmeta.melee.integrity.MeleeSourceIntegrityError: missing retained source file: data/standard/melee/events/123.json
+
+src/mtgmeta/melee/integrity.py:34: MeleeSourceIntegrityError
+_ test_melee_only_release_preserves_fixed_inputs_without_mtgo_regeneration[source] _
+
+material = (PosixPath('/tmp/mtgo-slim-integration/test_melee_only_release_preser2/root'), PosixPath('/tmp/mtgo-slim-integration/t...im-integration/test_melee_only_release_preser2/accepted.json'), <function material.<locals>.prepare at 0x7f849e87b380>)
+tmp_path = PosixPath('/tmp/mtgo-slim-integration/test_melee_only_release_preser2')
+change = 'source'
+
+    @pytest.mark.parametrize("change", [None, "missing_event", "source"])
+    def test_melee_only_release_preserves_fixed_inputs_without_mtgo_regeneration(material, tmp_path, change):
+        import build_pages_artifact as builder
+        root, site, accepted, _ = material
+        relative = "stats/standard/melee/index.json"
+        for base in (root, site):
+            path = base / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps({"events": [{"event_id": "123"}]}))
+        builder.publication_paths(root, {}).add(relative)
+>       record = weekly.create_record(tmp_path / "melee.delivery.json", kind="reviewed_data", root=root, site=site,
+            scope={"week": "2025-W02", "mtgo_formats": [], "melee": [{"format": "standard", "event_id": "123"}]},
+            references=[accepted], source="a" * 40, target="Jacelber/mtgo-data-governance-verification")
+
+tests/delivery/test_weekly_material.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/delivery/weekly.py:29: in create_record
+    identity["material"] = material_snapshot(root, scope)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/delivery/verification.py:58: in material_snapshot
+    paths = publication_inputs(root, publication_paths(root, config))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_pages_artifact.py:193: in publication_inputs
+    paths.update(_protected_input_fingerprints(root, format_id))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/mtgmeta/classifier_closure.py:667: in _protected_input_fingerprints
+    paths.update(retained_source_paths(root, format_id, str(entry["event_id"])))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/mtgmeta/melee/integrity.py:44: in retained_source_paths
+    event_path = _file(root, f"data/{format_id}/melee/events/{event_id}.json")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+root = PosixPath('/tmp/mtgo-slim-integration/test_melee_only_release_preser2/root')
+relative = 'data/standard/melee/events/123.json'
+
+    def _file(root: Path, relative: str) -> Path:
+        if not isinstance(relative, str) or not relative or "\\" in relative:
+            raise MeleeSourceIntegrityError("invalid retained source path")
+        child = Path(relative)
+        if child.is_absolute() or ".." in child.parts or child.as_posix() != relative:
+            raise MeleeSourceIntegrityError(f"unsafe retained source path: {relative}")
+        path = root / child
+        if any(part.is_symlink() for part in (path, *path.parents) if part != root):
+            raise MeleeSourceIntegrityError(f"symlink in retained source path: {relative}")
+        if not path.is_file():
+>           raise MeleeSourceIntegrityError(f"missing retained source file: {relative}")
+E           mtgmeta.melee.integrity.MeleeSourceIntegrityError: missing retained source file: data/standard/melee/events/123.json
+
+src/mtgmeta/melee/integrity.py:34: MeleeSourceIntegrityError
+_______________ test_success_reuse_still_rejects_changes[policy] _______________
+
+material = (PosixPath('/tmp/mtgo-slim-integration/test_success_reuse_still_rejec3/root'), PosixPath('/tmp/mtgo-slim-integration/t...im-integration/test_success_reuse_still_rejec3/accepted.json'), <function material.<locals>.prepare at 0x7f849e87ac00>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f849fe82f30>
+change = 'policy'
+
+    @pytest.mark.parametrize('change', ['package', 'site', 'reference', 'policy', 'implementation'])
+    def test_success_reuse_still_rejects_changes(material, monkeypatch, change):
+        root, site, accepted, prepare = material
+        record, candidate = prepare()
+        checks = []
+        def verify(*args):
+            checks.append('checked')
+            verification.verify_material(*args)
+        assert verification.verify_once(record, candidate, lambda: None, verifier=verify) == 'executed'
+        assert verification.verify_once(record, candidate, lambda: None, verifier=verify) == 'reused'
+        assert checks == ['checked']
+        if change == 'package':
+            with (candidate / 'product.tar.gz').open('ab') as handle: handle.write(b'changed')
+        elif change == 'site':
+            (site / 'index.html').write_text('changed')
+        elif change == 'reference':
+            accepted.write_text('changed')
+        elif change == 'policy':
+            (root / 'configs/protection.json').write_text('changed')
+        else:
+            original = verification.verification_basis
+            monkeypatch.setattr(verification, 'verification_basis', lambda *a: original(*a) + '-new-verifier')
+            assert verification.verify_once(record, candidate, lambda: None, verifier=verify) == 'executed'
+            assert checks == ['checked', 'checked']
+            return
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/delivery/test_weekly_material.py:109: Failed
+=========================== short test summary info ============================
+FAILED tests/test_melee_independent_statistics.py::test_hand_counted_cases_detect_production_semantic_faults[draft]
+FAILED tests/test_archetype_visuals.py::test_shared_pair_passes_real_packager_and_preserves_existing_landing
+FAILED tests/delivery/test_weekly_material.py::test_melee_only_release_preserves_fixed_inputs_without_mtgo_regeneration[None]
+FAILED tests/delivery/test_weekly_material.py::test_melee_only_release_preserves_fixed_inputs_without_mtgo_regeneration[missing_event]
+FAILED tests/delivery/test_weekly_material.py::test_melee_only_release_preserves_fixed_inputs_without_mtgo_regeneration[source]
+FAILED tests/delivery/test_weekly_material.py::test_success_reuse_still_rejects_changes[policy]
+6 failed, 137 passed, 6 subtests passed in 8.76s
