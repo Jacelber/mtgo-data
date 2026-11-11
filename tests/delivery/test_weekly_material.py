@@ -20,22 +20,24 @@ def material(tmp_path, monkeypatch):
         "stats/standard/mtgo/landing/features/index.json",
         "stats/standard/mtgo/landing/features/2024-W52.json",
     }
-    for relative in selected | {"configs/pages_publication.json", "configs/protection.json", "data/standard/100.json"}:
+    for relative in selected | {"configs/pages_publication.json", "data/standard/100.json"}:
         path = root / relative
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps({"weeks": [{"week": "2024-W52", "file": "2024-W52.json"}]}))
     shutil.copytree(root, site)
     shutil.rmtree(site / "configs")
     shutil.rmtree(site / "data")
-    config = {"compatibility_manifests": ["configs/protection.json"], "generated_overlays": []}
+    config = {"generated_overlays": []}
     # Isolate product registry/platform; snapshot, source hashing, package, scope
     # and existing acceptance comparisons below use their real implementations.
     monkeypatch.setattr(builder, "load_config", lambda *a: config)
     monkeypatch.setattr(builder, "publication_paths", lambda *a: selected)
-    monkeypatch.setattr(builder, "validate_compatibility", lambda *a: None)
+    monkeypatch.setattr(builder, "validate_publication", lambda *a: None)
     monkeypatch.setattr(publication, "resolve_scope", lambda *a: SimpleNamespace(week=date(2025, 1, 6)))
     monkeypatch.setattr(publication, "inspect_publication", lambda *a: [])
     monkeypatch.setattr(classifier_closure, "validate_current_melee", lambda *a: None)
+    monkeypatch.setattr(classifier_closure, "_protected_input_fingerprints", lambda root, fmt: {
+        f"data/{fmt}/100.json": packages.sha256(root / f"data/{fmt}/100.json")})
     accepted = tmp_path / "accepted.json"
     accepted.write_text('{}')
 
@@ -64,6 +66,10 @@ def test_melee_only_release_preserves_fixed_inputs_without_mtgo_regeneration(mat
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps({"events": [{"event_id": "123"}]}))
     builder.publication_paths(root, {}).add(relative)
+    for kind in ("classifications", "opportunities"):
+        path = root / f"data/standard/melee/{kind}/123.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text('{}')
     record = weekly.create_record(tmp_path / "melee.delivery.json", kind="reviewed_data", root=root, site=site,
         scope={"week": "2025-W02", "mtgo_formats": [], "melee": [{"format": "standard", "event_id": "123"}]},
         references=[accepted], source="a" * 40, target="Jacelber/mtgo-data-governance-verification")
@@ -99,7 +105,7 @@ def test_success_reuse_still_rejects_changes(material, monkeypatch, change):
     elif change == 'reference':
         accepted.write_text('changed')
     elif change == 'policy':
-        (root / 'configs/protection.json').write_text('changed')
+        (root / 'configs/pages_publication.json').write_text('changed')
     else:
         original = verification.verification_basis
         monkeypatch.setattr(verification, 'verification_basis', lambda *a: original(*a) + '-new-verifier')
@@ -139,7 +145,7 @@ def test_prebuilt_package_does_not_bypass_shared_representative_check(material, 
         verification.verify_material(*prepare())
 
 
-@pytest.mark.parametrize("relative", ["configs/protection.json", "data/standard/100.json", "stats/catalog.json"])
+@pytest.mark.parametrize("relative", ["data/standard/100.json", "stats/catalog.json"])
 def test_source_standard_or_public_material_change_invalidates_fixed_candidate(material, relative):
     root, _, _, prepare = material
     record, candidate = prepare()

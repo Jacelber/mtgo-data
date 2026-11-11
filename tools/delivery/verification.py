@@ -48,23 +48,22 @@ def verify_once(record, candidate, save_record, *, verifier=None):
 
 
 def material_snapshot(root, scope):
-    from build_pages_artifact import load_config, publication_paths
+    from build_pages_artifact import load_config, publication_paths, publication_inputs
     from mtgmeta.classifier_closure import _protected_input_fingerprints
     root = Path(root)
     config_path = root / "configs/pages_publication.json"
     if not config_path.is_file():
         return None  # Synthetic adapter tests; the real verifier rejects this.
     config = load_config(root, config_path)
-    paths = publication_paths(root, config) | {"configs/pages_publication.json"} | set(config["compatibility_manifests"])
+    paths = publication_inputs(root, publication_paths(root, config))
     formats = set(scope.get("mtgo_formats", [])) | {item["format"] for item in scope.get("melee", [])}
     inputs = {fmt: _protected_input_fingerprints(root, fmt) for fmt in sorted(formats)}
     return {"files": files(root, sorted(paths)), "inputs": inputs}
 
 
 def verify_material(record, candidate):
-    from build_pages_artifact import load_config, publication_paths, validate_compatibility
-    from mtgmeta.classifier_closure import validate_current_melee
-    from mtgmeta.mtgo.publication import resolve_scope, inspect_publication
+    from build_pages_artifact import load_config, publication_paths, validate_publication
+    from mtgmeta.mtgo.publication import resolve_scope
     identity = record["identity"]
     root = Path(identity["root"])
     fixed = identity.get("material")
@@ -79,7 +78,7 @@ def verify_material(record, candidate):
     selected = publication_paths(root, config)
     from tools.build_archetype_visuals import require_public_representatives
     require_public_representatives(root, selected)
-    validate_compatibility(root, config, selected)
+    validate_publication(root, config, selected)
     formats = identity["scope"].get("mtgo_formats", [])
     melee = identity["scope"].get("melee", [])
     if (len(formats) != len(set(formats)) or (not formats and not melee)
@@ -89,15 +88,6 @@ def verify_material(record, candidate):
         approved = resolve_scope(root, fmt)
         if approved.week.strftime("%G-W%V") != identity["scope"]["week"]:
             raise ValueError("Delivery differs from admitted data week")
-        if inspect_publication(root, fmt):
-            raise ValueError("Data consumer binding is stale")
-        validate_current_melee(root, fmt)
-    for fmt in {item["format"] for item in melee} - set(formats):
-        # A single-event release without rule changes need not regenerate MTGO,
-        # but its existing consumers and selected Melee event must remain valid.
-        if inspect_publication(root, fmt):
-            raise ValueError("Retained MTGO consumer binding is stale")
-        validate_current_melee(root, fmt)
     for item in melee:
         catalog = json.loads((root / f"stats/{item['format']}/melee/index.json").read_text(encoding="utf-8"))
         if sum(str(entry["event_id"]) == item["event_id"] for entry in catalog["events"]) != 1:

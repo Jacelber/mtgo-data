@@ -111,7 +111,7 @@ W37 及更早已接纳分类、名称、Landing 和完成记录沿用原合同�
 续作分别列出分类、数据发布、Feature、正文、视觉、最终预览和完成状态。
 这些维度可独立推进或保留旧成果，不压成一个会跳过步骤的线性进度值。
 
-当前分类同步覆盖同赛制所有已纳入当前产品的赛事（含434455），不新增逐场迁移审批。固定测试基准与线上派生结果分开；保护边界和完整同步检查见[数据架构§11.12](DATA_ARCHITECTURE.md#1112-current-classification-and-fixed-reference-event)。
+当前分类同步覆盖同赛制所有已纳入当前产品的赛事（含434455），不新增逐场迁移审批。独立小样本验证统计规则，通用来源与派生链检查覆盖所有已纳入赛事，不冻结某一真实赛事；保护边界见[数据架构§11.12](DATA_ARCHITECTURE.md#1112-current-classification-and-independent-source-validation)。
 
 ## 数据输入
 

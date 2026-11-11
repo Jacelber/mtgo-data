@@ -90,16 +90,17 @@ def test_byte_measurement_labels_lower_bound_and_rejects_combined_overflow(tmp_p
     root.mkdir(); overlay.mkdir()
     (root / "index.html").write_bytes(b"123456")
     (overlay / "image").write_bytes(b"12345")
-    config = {"maximum_artifact_bytes": 10,
+    from tools.delivery.packages import VERSION_MARKER_BYTES
+    config = {"maximum_artifact_bytes": 10 + VERSION_MARKER_BYTES,
               "generated_overlays": [{"id": "images", "maximum_bytes": 20}]}
     result = measure_artifact(root, config, selected={"index.html"})
     assert result["bytes"] == 6 and result["complete"] is False
     with pytest.raises(PublicationError, match="maximum_artifact_bytes: 11"):
         measure_artifact(root, config, selected={"index.html"}, overlays={"images": overlay})
-    config["maximum_artifact_bytes"] = 11
+    config["maximum_artifact_bytes"] = 11 + VERSION_MARKER_BYTES
     assert measure_artifact(root, config, selected={"index.html"}, overlays={"images": overlay})["complete"] is True
     with pytest.raises(PublicationError, match="maximum_artifact_bytes: 11"):
-        measure_artifact(root, config, selected={"index.html"}, overlays={"images": overlay}, maximum_bytes=10)
+        measure_artifact(root, config, selected={"index.html"}, overlays={"images": overlay}, maximum_bytes=10 + VERSION_MARKER_BYTES)
 
 
 def test_offline_preview_cannot_query_missing_resources(tmp_path, monkeypatch):

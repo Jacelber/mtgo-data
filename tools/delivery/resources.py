@@ -162,7 +162,7 @@ def prepare_images(root, work, repository):
 
 
 def prepare_site(record, work):
-    from build_pages_artifact import build_artifact, load_config, publication_paths, measure_artifact
+    from build_pages_artifact import build_artifact, load_config, publication_paths, publication_inputs, measure_artifact
     from tools.delivery.packages import MAX_BYTES
     from tools.build_archetype_visuals import require_public_representatives
     root = Path(record["identity"]["root"])
@@ -184,8 +184,7 @@ def prepare_site(record, work):
         overlays[identifier] = source
     measure_artifact(root, config, selected=selected, overlays=overlays, maximum_bytes=MAX_BYTES)
     site = work / "site"
-    signature = {"source": files(root, sorted(selected | {"configs/pages_publication.json"}
-                                  | set(config["compatibility_manifests"]))),
+    signature = {"source": files(root, sorted(publication_inputs(root, selected))),
                  "overlays": {name: files(path, ["**/*"]) for name, path in overlays.items()}}
     # The source candidate is already fixed by the handoff. A completed build
     # receipt plus exact bytes is required; a half-written directory is not one.

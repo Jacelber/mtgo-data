@@ -190,6 +190,7 @@ def test_shared_pair_passes_real_packager_and_preserves_existing_landing(tmp_pat
     import build_pages_artifact as builder
     root = tmp_path / "root"
     selected = _shared_fixture(root)
+    (root / "configs/pages_publication.json").write_text('{}')
     build_archetype_visuals.generate(root, "fixture")
     landing = "stats/fixture/mtgo/landing/current.json"
     (root / landing).parent.mkdir()
@@ -197,7 +198,7 @@ def test_shared_pair_passes_real_packager_and_preserves_existing_landing(tmp_pat
     selected.add(landing)
     monkeypatch.setattr(builder, "load_config", lambda *a: {"maximum_artifact_bytes": 1000000, "generated_overlays": []})
     monkeypatch.setattr(builder, "publication_paths", lambda *a: selected)
-    monkeypatch.setattr(builder, "validate_compatibility", lambda *a: [])
+    monkeypatch.setattr(builder, "validate_publication", lambda *a: [])
     monkeypatch.setattr(builder, "_copy_generated_overlays", lambda *a: set())
     monkeypatch.setattr(builder, "_tracked_files", lambda *a: list(selected))
     monkeypatch.setattr(builder, "_git_storage_bytes", lambda *a: 0)

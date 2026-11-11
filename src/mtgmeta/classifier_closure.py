@@ -316,32 +316,6 @@ def _enabled_melee_ids(root: Path, format_id: str) -> set[str]:
     }
 
 
-def _inspect_protected_melee_compatibility(root, format_id, event_id):
-    """Protect retained source facts, independently of current classification."""
-    from build_pages_artifact import PublicationError, validate_compatibility
-    config = _json_object(root / "configs/pages_publication.json")
-    paths = []
-    invalid = []
-    manifests = config.get("compatibility_manifests")
-    if not isinstance(manifests, list):
-        raise ClassifierClosureError("Pages publication config has no compatibility manifest list")
-    for relative in manifests:
-        path = _safe_relative(root, relative, label="compatibility manifest")
-        manifest = _json_object(path)
-        event = manifest.get("event", {})
-        if event.get("format") != format_id or str(event.get("event_id")) != event_id:
-            continue
-        paths.append(path)
-        # Source checks run before expensive generation. Catalog/consumer checks
-        # run after generation, when their current derived inputs are complete.
-        try:
-            validate_compatibility(root, {"compatibility_manifests": [relative]},
-                                   None, sources_only=True)
-        except (PublicationError, OSError, ValueError) as exc:
-            invalid.append(str(exc))
-    return paths, [], invalid
-
-
 def _inspect_melee(
     root: Path,
     format_id: str,
@@ -353,7 +327,6 @@ def _inspect_melee(
         return _family("melee", [], root)
     artifacts: list[Path] = [catalog_path]
     issues: list[str] = []
-    owner_blockers: list[str] = []
     invalid_issues: list[str] = []
     if not catalog_path.is_file():
         return _family("melee", artifacts, root, ["missing Melee format catalog"])
@@ -363,6 +336,11 @@ def _inspect_melee(
         if not isinstance(catalog_events, list) or not catalog_events:
             raise ClassifierClosureError("Melee catalog has no active events")
         enabled = _enabled_melee_ids(root, format_id)
+        from .melee.config import load_melee_event_registry
+        from .melee.integrity import validate_retained_source, validate_derived_inputs
+        from .config import load_rule_set
+        registry = load_melee_event_registry(root / "configs/melee_events.yaml")
+        taxonomy = load_rule_set(root / "my_archetypes" / f"{format_id}.yaml")
         rules_path = root / "my_archetypes" / f"{format_id}.yaml"
         active_taxonomy = catalog.get("active_taxonomy")
         if (
@@ -389,11 +367,28 @@ def _inspect_melee(
             opportunity_path = (
                 root / "data" / format_id / "melee" / "opportunities" / f"{event_id}.json"
             )
+            # Retained corruption cannot be repaired by regenerating products.
+            try:
+                validate_retained_source(root, registry.get(event_id))
+            except ValueError as exc:
+                invalid_issues.append(str(exc))
+                continue
+            event = _json_object(event_path)
+            for key in ("name", "series", "date"):
+                if entry.get(key) != event["metadata"][key]:
+                    issues.append(f"Melee event {event_id} catalog {key} differs from source")
+            if entry.get("event_structure") != event["event_structure"] or entry.get("source_url") != registry.get(event_id).url:
+                issues.append(f"Melee event {event_id} catalog scope or URL differs from source")
             artifacts.extend([classification_path, opportunity_path])
             if not all(path.is_file() for path in (event_path, classification_path, opportunity_path)):
                 issues.append(f"Melee event {event_id} is missing retained or derived input")
                 continue
-            classification = _json_object(classification_path)
+            try:
+                classification = _json_object(classification_path)
+                opportunity = _json_object(opportunity_path)
+            except ClassifierClosureError as exc:
+                issues.append(f"Melee event {event_id} unreadable derived input: {exc}")
+                continue
             classifier = classification.get("classifier")
             if not isinstance(classifier, Mapping) or classifier.get("digest") != desired:
                 issues.append(f"Melee event {event_id} classifier subject is stale")
@@ -404,7 +399,6 @@ def _inspect_melee(
             ):
                 issues.append(f"Melee event {event_id} classification input hash is stale")
             classification_sha = _sha256(classification_path)
-            opportunity = _json_object(opportunity_path)
             opportunity_input = opportunity.get("input")
             if (
                 not isinstance(opportunity_input, Mapping)
@@ -413,8 +407,15 @@ def _inspect_melee(
             ):
                 issues.append(f"Melee event {event_id} opportunity chain is stale")
             opportunity_sha = _sha256(opportunity_path)
+            try:
+                validate_derived_inputs(root, event, classification, opportunity, taxonomy)
+            except (ValueError, KeyError, TypeError) as exc:
+                issues.append(f"Melee event {event_id} derived inputs: {exc}")
             public_documents: dict[str, tuple[Path, dict[str, Any]]] = {}
             for field in ("meta", "overview", "decks", "matchup", "quality"):
+                if entry.get(field) != f"events/{event_id}/{field}.json":
+                    issues.append(f"Melee event {event_id} {field} catalog route differs")
+                    continue
                 path = _safe_relative(
                     catalog_path.parent,
                     entry.get(field),
@@ -424,8 +425,15 @@ def _inspect_melee(
                 if not path.is_file():
                     issues.append(f"Melee event {event_id} is missing {field}")
                     continue
-                document = _json_object(path)
+                try:
+                    document = _json_object(path)
+                except ClassifierClosureError as exc:
+                    issues.append(f"Melee event {event_id} unreadable {field}: {exc}")
+                    continue
                 public_documents[field] = (path, document)
+                if any(document.get(k) != v for k, v in
+                       (("source", "melee"), ("event_id", event_id), ("format", format_id))):
+                    issues.append(f"Melee event {event_id} {field} identity differs")
                 if field == "overview":
                     from .melee.stats import EVENT_OVERVIEW_SCHEMA_VERSION
                     if document.get("schema_version") != EVENT_OVERVIEW_SCHEMA_VERSION:
@@ -440,6 +448,10 @@ def _inspect_melee(
                     or input_document.get("classification_sha256") != classification_sha
                     or input_document.get("opportunity_sha256") != opportunity_sha
                     or input_document.get("event_sha256") != _sha256(event_path)
+                    or input_document.get("taxonomy_sha256") != _sha256(rules_path)
+                    or any(input_document.get(k) != _relative(root, p) for k, p in (
+                        ("event_path", event_path), ("classification_path", classification_path),
+                        ("opportunity_path", opportunity_path), ("taxonomy_path", rules_path)))
                 ):
                     issues.append(f"Melee event {event_id} {field} upstream chain is stale")
             meta_pair = public_documents.get("meta")
@@ -455,6 +467,9 @@ def _inspect_melee(
                             pair is None
                             or not isinstance(descriptor, Mapping)
                             or descriptor.get("sha256") != _sha256(pair[0])
+                            or descriptor.get("bytes") != pair[0].stat().st_size
+                            or descriptor.get("path") != pair[0].name
+                            or descriptor.get("schema_version") != pair[1].get("schema_version")
                         ):
                             issues.append(
                                 f"Melee event {event_id} {field} descriptor is stale"
@@ -467,29 +482,15 @@ def _inspect_melee(
                 or compatibility.get("matchup_sha256") != _sha256(matchup_pair[0])
             ):
                 issues.append(f"Melee event {event_id} catalog matchup evidence is stale")
-            protected, blockers, invalid = _inspect_protected_melee_compatibility(
-                root, format_id, event_id
-            )
-            artifacts.extend(protected)
-            owner_blockers.extend(blockers)
-            invalid_issues.extend(invalid)
-    except ClassifierClosureError as exc:
+    except (ClassifierClosureError, ValueError, OSError) as exc:
         return _family("melee", artifacts, root, [str(exc)], state=INVALID)
     if invalid_issues:
         return _family(
             "melee",
             artifacts,
             root,
-            [*invalid_issues, *owner_blockers, *issues],
+            [*invalid_issues, *issues],
             state=INVALID,
-        )
-    if owner_blockers:
-        return _family(
-            "melee",
-            artifacts,
-            root,
-            [*owner_blockers, *issues],
-            state=BLOCKED_OWNER_REVIEW,
         )
     return _family("melee", artifacts, root, issues)
 
@@ -667,6 +668,11 @@ def _protected_input_fingerprints(root: Path, format_id: str) -> dict[str, str]:
     paths.update((root / "data" / format_id).glob("*.json"))
     paths.update((root / "data" / format_id / "mtgo" / "matches").glob("*.json"))
     paths.update((root / "data" / format_id / "melee" / "events").glob("*.json"))
+    catalog = root / "stats" / format_id / "melee/index.json"
+    if catalog.is_file():
+        from .melee.integrity import retained_source_paths
+        for entry in _json_object(catalog)["events"]:
+            paths.update(retained_source_paths(root, format_id, str(entry["event_id"])))
     review = root / "stats" / format_id / "mtgo" / "landing" / "review"
     if review.is_dir():
         paths.update(path for path in review.rglob("*") if path.is_file())
