@@ -1,5 +1,4 @@
 """Exercise the real combine/resume entry with small isolated product inputs."""
-import json
 from pathlib import Path
 import shutil
 
@@ -68,10 +67,10 @@ def test_current_data_and_four_acceptances_survive_interrupted_composition(tmp_p
         workflow.write(preview / f'stats/{fmt}/mtgo/landing/current.json', {'copy': fmt + ' accepted'})
         workflow.write(preview / f'stats/{fmt}/mtgo/landing/features/index.json', {'weeks': [
             {'week':week}, {'week':'2026-W40'}]})
-    config = {'generated_overlays': [{'public_prefix':'assets/card-cache/v1'}], 'compatibility_manifests': []}
+    config = {'generated_overlays': [{'public_prefix':'assets/card-cache/v1'}]}
     monkeypatch.setattr(builder, 'load_config', lambda *a: config)
     monkeypatch.setattr(builder, 'publication_paths', lambda r, *a: {p for p in selected if (r / p).is_file()})
-    monkeypatch.setattr(builder, 'validate_compatibility', lambda *a: None)
+    monkeypatch.setattr(builder, 'validate_publication', lambda *a: None)
     monkeypatch.setattr(visuals, 'require_public_representatives', lambda *a: None)
     monkeypatch.setattr(verification, 'material_snapshot', lambda r, s: {'files': files(r, sorted(selected | {'configs/pages_publication.json'})), 'inputs': {}})
     monkeypatch.setattr(publication, 'inspect_publication', lambda *a: [])

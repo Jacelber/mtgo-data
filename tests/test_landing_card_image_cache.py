@@ -520,11 +520,10 @@ def test_pages_builder_admits_only_verified_configured_overlay(tmp_path, monkeyp
     _write_json(
         config_path,
         {
-            "schema_version": "1.3.0",
+            "schema_version": "1.4.0",
             "site_files": ["index.html"],
             "site_directories": ["assets"],
             "excluded_patterns": ["assets/private/*"],
-            "compatibility_manifests": ["compatibility.json"],
             "generated_overlays": [
                 {
                     "id": "landing_card_images",
@@ -553,7 +552,7 @@ def test_pages_builder_admits_only_verified_configured_overlay(tmp_path, monkeyp
     )
     localization = tmp_path / "localization"
     _write_json(localization / "cards.json", {})
-    monkeypatch.setattr(build_pages_artifact, "validate_compatibility", lambda *_args: set())
+    monkeypatch.setattr(build_pages_artifact, "validate_publication", lambda *_args: set())
     monkeypatch.setattr(
         build_pages_artifact,
         "_tracked_files",

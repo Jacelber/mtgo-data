@@ -21,7 +21,7 @@ PAYLOAD_FILE = "pages-candidate.tar.gz"
 MANIFEST_FILE = "pages-candidate-manifest.json"
 EVIDENCE_FILE = "pages-candidate-evidence.json"
 MANIFEST_SCHEMA_VERSION = "1.0.0"
-EVIDENCE_SCHEMA_VERSION = "1.0.0"
+EVIDENCE_SCHEMA_VERSION = "1.1.0"
 PAGES_WORKFLOW_PATH = ".github/workflows/pages.yml"
 TRUST_INPUT_PATHS = (
     ".github/workflows/pages.yml",
@@ -34,7 +34,9 @@ TRUST_INPUT_PATHS = (
     "src/mtgmeta/catalog.py",
     "src/mtgmeta/config.py",
     "src/mtgmeta/data/om1_spm_aliases.json",
-    "tests/fixtures/melee/434455_compatibility_manifest.json",
+    "src/mtgmeta/melee/integrity.py",
+    "src/mtgmeta/classifier_closure.py",
+    "tools/delivery/packages.py",
     "tools/build_landing_card_image_cache.py",
     "tools/build_pages_candidate_measurement.py",
     "tools/build_simple_card_localization.py",
@@ -299,7 +301,7 @@ def package_candidate(
         "publication_selection": {
             "pages_report_schema_version": report.get("schema_version"),
             "artifact_manifest_sha256": report_digest,
-            "compatibility_verified": True,
+            "publication_verified": True,
         },
         "localization_subject_sha256": localization_digest,
         "landing_cache_subject_sha256": landing_digest,
@@ -445,7 +447,7 @@ def verify_candidate(input_directory: Path, extract: Path | None = None) -> dict
     publication = evidence.get("publication_selection")
     if (
         not isinstance(publication, dict)
-        or publication.get("compatibility_verified") is not True
+        or publication.get("publication_verified") is not True
         or not _is_hex_digest(publication.get("artifact_manifest_sha256"), 64)
         or any(
             not _is_hex_digest(evidence.get(key), 64)

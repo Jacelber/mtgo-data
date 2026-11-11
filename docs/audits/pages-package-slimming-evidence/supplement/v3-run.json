@@ -1,0 +1,23 @@
+{
+  "base_commit": "be9e648ba6802ff4a2673b2c3a7107cd92f78b8c",
+  "new_test_path": "tests/test_melee_v3_integrity.py",
+  "new_test_sha256": "bf13fdc6f32f2a50aef273eb588009cafed9ce826c1f3dff6736f9561fc55f24",
+  "command": [
+    "/workspace/mtgo-data/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-v",
+    "tests/test_melee_v3_integrity.py",
+    "tests/test_melee_source_identity.py::test_raw_v4_direct_identity_and_historical_v3_identity_are_both_readable",
+    "--basetemp=/tmp/mtgo-v3-review-final",
+    "--junitxml=/workspace/scratch/pages-slimming-review/v3-tests.xml"
+  ],
+  "cwd": "/workspace/mtgo-data",
+  "environment": {
+    "PYTHONPATH": "src:.",
+    "MTGO_ARCHIVE_UPLOAD_TOKEN": "unset"
+  },
+  "started_at": "2026-11-11T05:10:27.666005+00:00",
+  "exit_code": 0,
+  "finished_at": "2026-11-11T05:10:28.414175+00:00"
+}

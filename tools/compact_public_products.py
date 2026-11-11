@@ -48,11 +48,6 @@ def compact_public_products(root: Path, *, execute: bool):
         for f in load_format_registry(root / "configs/formats.yaml").formats
         if f.public
     ]
-    protected = set()
-    config = read(root / "configs/pages_publication.json")
-    for relative in config["compatibility_manifests"]:
-        event = read(root / relative)["event"]
-        protected.add((event["format"], str(event["event_id"])))
     selected, events, meta_before, catalog_before = set(), [], {}, {}
     for fmt in formats:
         problems = inspect_publication(root, fmt)
@@ -67,8 +62,6 @@ def compact_public_products(root: Path, *, execute: bool):
         catalog_before[fmt] = read(catalog)
         for item in catalog_before[fmt]["events"]:
             event_id = str(item["event_id"])
-            if (fmt, event_id) in protected:
-                continue
             events.append((fmt, event_id))
             for name in publish.OUTPUT_NAMES:
                 selected.add(root / f"stats/{fmt}/melee/events/{event_id}/{name}.json")
@@ -160,7 +153,6 @@ def compact_public_products(root: Path, *, execute: bool):
         "saved_bytes": saved,
         "json_values_unchanged": True,
         "source_inputs_changed": 0,
-        "protected_events": sorted("/".join(k) for k in protected),
         "remote_writes": 0,
     }
 

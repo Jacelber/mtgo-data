@@ -151,7 +151,7 @@ Each event should be independently inspectable.
 ### 4.2 Supported formats
 
 As checked against the public event catalogs on 2026-09-12, Tabletop supports
-Modern events `405590`, `441441` and the protected reference event `434455`
+Modern events `405590`, `441441` and mixed event `434455`
 (default `405590`), plus Paupergeddon `438329` for Pauper. Other scoped tabletop
 formats have no public event entry. New events must satisfy the approved event
 policy and belong to the current authorized delivery; registration is not proof
@@ -393,7 +393,7 @@ The first tabletop implementation target is:
 - Date range: 2026-07-17 through 2026-07-19
 - Source URL: `https://melee.gg/Tournament/View/434455`
 
-This event is used to implement and validate:
+This event originally supported implementation and validation of:
 
 - whitelist-based collection;
 - Melee raw-data preservation;
@@ -411,8 +411,9 @@ This event is used to implement and validate:
 The reference event has three Draft Swiss rounds followed by five Modern Swiss rounds on each of Day 1 and Day 2, then a Draft Top 8 playoff. The normalized model must therefore represent event stage, round phase, and game format independently. The implementation must still verify source records during collection rather than assuming that all Pro Tours follow this structure.
 
 Pauper MTGO and Paupergeddon `438329` were publicly admitted in Phase 14. The
-Modern reference event remains a compatibility subject, not the only public
-Tabletop event or a prerequisite phase to repeat for later work.
+Modern event remains an ordinary public Tabletop event. Independent synthetic
+rule tests and generic source/derived checks replace its former special test
+baseline; later events do not repeat a reference-event phase.
 
 ---
 

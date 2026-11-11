@@ -12,6 +12,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from tools.delivery.packages import MAX_BYTES, VERSION_MARKER_BYTES
 from mtgmeta.catalog import build_catalog
 from mtgmeta.config import load_format_registry
 from tools.build_landing_card_image_cache import verify_cache_bundle
@@ -23,7 +24,6 @@ CONFIG_KEYS = {
     "site_files",
     "site_directories",
     "excluded_patterns",
-    "compatibility_manifests",
     "generated_overlays",
     "maximum_artifact_bytes",
 }
@@ -59,13 +59,12 @@ def load_config(root: Path, config_path: Path) -> dict[str, Any]:
         raise PublicationError(
             "publication config keys must be exactly " + ", ".join(sorted(CONFIG_KEYS))
         )
-    if config["schema_version"] != "1.3.0":
+    if config["schema_version"] != "1.4.0":
         raise PublicationError("unsupported publication config schema_version")
     for key in (
         "site_files",
         "site_directories",
         "excluded_patterns",
-        "compatibility_manifests",
     ):
         values = config[key]
         if not isinstance(values, list) or not values:
@@ -115,6 +114,11 @@ def load_config(root: Path, config_path: Path) -> dict[str, Any]:
         config_path.resolve().relative_to(root)
     except ValueError as exc:
         raise PublicationError("publication config must be inside the repository") from exc
+    if maximum > MAX_BYTES:
+        raise PublicationError(f"maximum_artifact_bytes cannot exceed package limit {MAX_BYTES}")
+    if any(Path(p).parts[0] in {"data", "data_raw", "reports", "fetched.txt"}
+           for p in config["site_files"] + config["site_directories"]):
+        raise PublicationError("retained sources and maintenance files cannot be published")
     return config
 
 
@@ -180,121 +184,83 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _verify_record(
-    root: Path,
-    selected: set[str] | None,
-    record: dict[str, Any],
-    label: str,
-) -> str:
-    relative = _safe_relative(record.get("path"), f"{label} path")
-    if selected is not None and relative not in selected:
-        raise PublicationError(f"protected path is absent from the artifact: {relative}")
-    path = _source_file(root, relative)
-    expected_bytes = record.get("bytes")
-    expected_sha256 = record.get("sha256")
-    if path.stat().st_size != expected_bytes:
-        raise PublicationError(f"protected byte count changed: {relative}")
-    if _sha256(path) != expected_sha256:
-        raise PublicationError(f"protected SHA-256 changed: {relative}")
-    return relative
+def publication_inputs(root: Path, selected: set[str]) -> set[str]:
+    """Keep validation/composition inputs even when they are not served by Pages."""
+    from mtgmeta.classifier_closure import _protected_input_fingerprints
+    paths = selected | {"configs/pages_publication.json"}
+    formats = {Path(p).parts[1] for p in selected if p.startswith("stats/") and len(Path(p).parts) > 2}
+    for format_id in sorted(formats):
+        paths.update(_protected_input_fingerprints(root, format_id))
+        meta = root / f"stats/{format_id}/mtgo/meta.json"
+        if meta.is_file():
+            # These include diagnostic reports bound by the existing product,
+            # which remain repository inputs rather than browser resources.
+            paths.update(_read_json(meta, "MTGO metadata").get("publication", {}).get("artifacts", {}))
+        catalog = root / f"stats/{format_id}/melee/index.json"
+        if catalog.is_file():
+            for event in _read_json(catalog, "Melee catalog")["events"]:
+                for kind in ("classifications", "opportunities"):
+                    paths.add(f"data/{format_id}/melee/{kind}/{event['event_id']}.json")
+    return {_safe_relative(path, "publication input") for path in paths}
 
 
-def _validate_catalog_projection(
-    document: dict[str, Any], projection: dict[str, Any]
-) -> None:
-    policy = projection.get("expansion_policy")
-    if policy not in {"allow_unselected_entries_and_volatile_root_fields", "allow_current_classification"}:
-        raise PublicationError("unsupported catalog projection expansion policy")
-    requirements = projection.get("root_requirements")
-    selection = projection.get("selection")
-    expected = projection.get("expected")
-    if not isinstance(requirements, dict) or not isinstance(selection, list) or not isinstance(expected, dict):
-        raise PublicationError("catalog projection contract is malformed")
-    for key, value in requirements.items():
-        if document.get(key) != value:
-            raise PublicationError(f"catalog projection root requirement changed: {key}")
-    current: Any = document
-    for step in selection:
-        if not isinstance(step, dict) or set(step) != {"collection", "field", "equals"}:
-            raise PublicationError("catalog projection selection is malformed")
-        collection = current.get(step["collection"]) if isinstance(current, dict) else None
-        if not isinstance(collection, list):
-            raise PublicationError("catalog projection collection is missing")
-        matches = [
-            item
-            for item in collection
-            if isinstance(item, dict) and item.get(step["field"]) == step["equals"]
-        ]
-        if len(matches) != 1:
-            raise PublicationError("catalog projection selection must match exactly once")
-        current = matches[0]
-    if policy == "allow_current_classification":
-        current = {k: v for k, v in current.items() if k not in {"matchup_compatibility", "quality_status"}}
-    if current != expected:
-        raise PublicationError("catalog projection selected value changed")
+def validate_public_consumers(root: Path, selected: set[str]) -> None:
+    """Check the actual catalog/index references, not all provenance paths."""
+    def require(relative):
+        relative = _safe_relative(relative, "consumer path")
+        if relative not in selected:
+            raise PublicationError(f"consumer file is absent from artifact: {relative}")
+        return _read_json(_source_file(root, relative), "consumer document")
 
-
-def validate_compatibility(
-    root: Path, config: dict[str, Any], selected: set[str] | None, *, sources_only: bool = False
-) -> set[str]:
-    protected: set[str] = set()
-    for manifest_relative in config["compatibility_manifests"]:
-        manifest = _read_json(
-            _source_file(root, manifest_relative), "compatibility manifest"
-        )
-        immutable = manifest.get("immutable_snapshot", {}).get("manifest")
-        if not isinstance(immutable, dict):
-            raise PublicationError("compatibility manifest lacks immutable snapshot")
-        raw_manifest_relative = _verify_record(
-            root, selected, immutable, "immutable snapshot manifest"
-        )
-        protected.add(raw_manifest_relative)
-
-        raw_manifest_path = root / raw_manifest_relative
-        raw_manifest = _read_json(raw_manifest_path, "raw snapshot manifest")
-        responses = raw_manifest.get("responses")
-        expected_count = manifest["immutable_snapshot"].get("response_count")
-        if not isinstance(responses, list) or len(responses) != expected_count:
-            raise PublicationError("raw snapshot response count changed")
-        snapshot_root = raw_manifest_path.parent
-        expected_snapshot_files = {raw_manifest_path}
-        for response in responses:
-            if not isinstance(response, dict):
-                raise PublicationError("raw snapshot response record is not an object")
-            child = _safe_relative(response.get("path"), "raw response path")
-            path = snapshot_root / child
-            expected_snapshot_files.add(path)
-            relative = path.relative_to(root).as_posix()
-            protected.add(
-                _verify_record(root, selected, {**response, "path": relative}, "raw response")
-            )
-        actual_snapshot_files = {path for path in snapshot_root.rglob("*") if path.is_file()}
-        if actual_snapshot_files != expected_snapshot_files:
-            raise PublicationError("raw snapshot file closure changed")
-
-        exact_files = manifest.get("exact_files")
-        if not isinstance(exact_files, list):
-            raise PublicationError("compatibility manifest exact_files must be a list")
-        for record in exact_files:
-            if not isinstance(record, dict):
-                raise PublicationError("compatibility exact-file record is not an object")
-            protected.add(_verify_record(root, selected, record, "exact file"))
-
-        if sources_only:
+    catalog = require("stats/catalog.json")
+    for format_ in catalog["formats"]:
+        for product in format_["products"]:
+            if product["available"]:
+                require(product["path"])
+    # Only these fields are fetched by supported browser consumers. In
+    # particular, meta.publication.artifacts is a build binding, not a URL list.
+    for relative in sorted(selected):
+        path = Path(relative)
+        if not relative.startswith("stats/") or path.suffix != ".json":
             continue
-        projections = manifest.get("catalog_projections")
-        if not isinstance(projections, list):
-            raise PublicationError("compatibility catalog_projections must be a list")
-        for projection in projections:
-            if not isinstance(projection, dict):
-                raise PublicationError("catalog projection is not an object")
-            relative = _safe_relative(projection.get("path"), "catalog projection path")
-            if relative not in selected:
-                raise PublicationError(f"catalog path is absent from the artifact: {relative}")
-            document = _read_json(_source_file(root, relative), "catalog projection")
-            _validate_catalog_projection(document, projection)
-            protected.add(relative)
-    return protected
+        if path.name not in {"index.json", "matchup_index.json", "meta.json", "current.json"}:
+            continue
+        document = _read_json(root / relative, "public index")
+        base = path.parent
+        if len(path.parts) >= 4 and path.parts[2] == "mtgo":
+            for key in ("statistics_catalog", "matchup_catalog", "hierarchy_catalog", "top8_catalog",
+                        "completeness_catalog", "pickup_catalog", "landing_document", "landing_feature_catalog"):
+                if document.get(key):
+                    require((base / _safe_relative(document[key], "MTGO catalog reference")).as_posix())
+            for collection in ("ranges", "weeks"):
+                for entry in document.get(collection, []):
+                    for key in ("file", "decks_file", "comparison_bases_file"):
+                        if entry.get(key):
+                            require((base / _safe_relative(entry[key], "MTGO index reference")).as_posix())
+            for child in document.get("data_files", {}).values():
+                require((base / _safe_relative(child, "Landing reference")).as_posix())
+        elif len(path.parts) >= 4 and path.parts[2] == "melee" and path.name == "index.json":
+            for entry in document["events"]:
+                for key in ("meta", "overview", "decks", "matchup", "quality"):
+                    require((base / _safe_relative(entry[key], "Melee consumer reference")).as_posix())
+
+
+def validate_publication(root: Path, config: dict[str, Any], selected: set[str]) -> None:
+    from mtgmeta.classifier_closure import validate_current_melee
+    from mtgmeta.mtgo.publication import inspect_publication
+    validate_public_consumers(root, selected)
+    try:
+        for relative in sorted(selected):
+            parts = Path(relative).parts
+            if len(parts) == 4 and parts[0] == "stats":
+                if parts[2:] == ("melee", "index.json"):
+                    validate_current_melee(root, parts[1])
+                elif parts[2:] == ("mtgo", "meta.json"):
+                    problems = inspect_publication(root, parts[1])
+                    if problems:
+                        raise PublicationError(f"MTGO product binding is incomplete: {parts[1]}: {problems}")
+    except (ValueError, RuntimeError) as exc:
+        raise PublicationError(f"current product/source validation failed: {exc}") from exc
 
 
 def _tracked_files(root: Path) -> list[str]:
@@ -306,7 +272,8 @@ def _tracked_files(root: Path) -> list[str]:
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
-        return sorted(item for item in result.stdout.decode("utf-8").split("\0") if item)
+        return sorted(item for item in result.stdout.decode("utf-8").split("\0")
+                      if item and (root / item).is_file())
     except (OSError, subprocess.CalledProcessError, UnicodeError) as exc:
         raise PublicationError(f"cannot measure tracked repository files: {exc}") from exc
 
@@ -374,11 +341,12 @@ def measure_artifact(root: Path, config: dict[str, Any], *, selected=None, overl
             raise PublicationError(f"generated overlay exceeds maximum_bytes: {identifier}")
         overlay_bytes[identifier] = size
     total = source_bytes + sum(overlay_bytes.values())
-    maximum = min(config["maximum_artifact_bytes"], maximum_bytes) if maximum_bytes is not None else config["maximum_artifact_bytes"]
-    if total > maximum:
+    maximum = min(config["maximum_artifact_bytes"], MAX_BYTES,
+                  maximum_bytes if maximum_bytes is not None else MAX_BYTES)
+    if total + VERSION_MARKER_BYTES > maximum:
         raise PublicationError(f"artifact would exceed maximum_artifact_bytes: {total}")
     return {"source_bytes": source_bytes, "overlay_bytes": overlay_bytes, "bytes": total,
-            "maximum_bytes": maximum,
+            "packaged_bytes": total + VERSION_MARKER_BYTES, "maximum_bytes": maximum,
             "complete": set(overlay_bytes) == set(configured)}
 
 
@@ -468,13 +436,9 @@ def build_artifact(
         require_public_representatives(root, selected)
     except (OSError, ValueError) as exc:
         raise PublicationError(str(exc)) from exc
-    protected = validate_compatibility(root, config, selected)
-    from mtgmeta.classifier_closure import validate_current_melee
-    try:
-        for catalog in sorted((root / "stats").glob("*/melee/index.json")):
-            validate_current_melee(root, catalog.parent.parent.name)
-    except (ValueError, RuntimeError) as exc:
-        raise PublicationError(f"current Melee classification is incomplete: {exc}") from exc
+    inputs = publication_inputs(root, selected)
+    before = _manifest_digest(root, inputs)
+    validate_publication(root, config, selected)
     measure_artifact(root, config, selected=selected, overlays=overlays)
 
     output.mkdir(parents=True)
@@ -489,7 +453,7 @@ def build_artifact(
     )
     artifact_paths = selected | generated | {".nojekyll"}
     artifact_bytes = _tree_bytes(output, artifact_paths)
-    if artifact_bytes > config["maximum_artifact_bytes"]:
+    if artifact_bytes + VERSION_MARKER_BYTES > config["maximum_artifact_bytes"]:
         raise PublicationError(
             f"artifact would exceed maximum_artifact_bytes: {artifact_bytes}"
         )
@@ -497,6 +461,8 @@ def build_artifact(
         if _sha256(root / relative) != _sha256(output / relative):
             raise PublicationError(f"copied artifact byte mismatch: {relative}")
 
+    if publication_inputs(root, selected) != inputs or _manifest_digest(root, inputs) != before:
+        raise PublicationError("publication inputs changed while building the artifact")
     tracked = _tracked_files(root)
     tracked_set = set(tracked)
     data_paths = {
@@ -519,10 +485,12 @@ def build_artifact(
             "files": len(artifact_paths),
             "bytes": artifact_bytes,
             "maximum_bytes": config["maximum_artifact_bytes"],
+            "packaged_bytes": artifact_bytes + VERSION_MARKER_BYTES,
+            "remaining_bytes": config["maximum_artifact_bytes"] - artifact_bytes - VERSION_MARKER_BYTES,
             "manifest_sha256": _manifest_digest(output, artifact_paths),
         },
         "boundary": {
-            "protected_files": len(protected),
+            "verified_input_files": len(inputs - selected),
             "excluded_tracked_files": len(tracked_set - selected),
             "excluded_tracked_bytes": _tree_bytes(root, tracked_set - selected),
         },
@@ -552,7 +520,7 @@ def append_summary(path: Path, report: dict[str, Any]) -> None:
         f"- Pages artifact: {artifact['files']} files, {artifact['bytes']} bytes",
         f"- Generated overlays: {report['generated_overlays']['files']} files, {report['generated_overlays']['bytes']} bytes",
         f"- Artifact manifest SHA-256: `{artifact['manifest_sha256']}`",
-        f"- Protected compatibility files: {boundary['protected_files']}",
+        f"- Verified source files: {boundary['verified_input_files']}",
         f"- Excluded tracked paths: {boundary['excluded_tracked_files']} files, {boundary['excluded_tracked_bytes']} bytes",
         "",
     ]

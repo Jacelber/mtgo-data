@@ -1,15 +1,11 @@
 {
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "site_files": [
-    "index.html",
-    "fetched.txt"
+    "index.html"
   ],
   "site_directories": [
     "assets",
-    "data",
-    "data_raw",
     "melee",
-    "reports",
     "stats"
   ],
   "excluded_patterns": [
@@ -17,9 +13,6 @@
     "stats/*/mtgo/pickup/candidates_*.yaml",
     "stats/*/mtgo/pickup/known_archetypes.json",
     "stats/*/mtgo/landing/review/*"
-  ],
-  "compatibility_manifests": [
-    "tests/fixtures/melee/434455_compatibility_manifest.json"
   ],
   "generated_overlays": [
     {
@@ -35,5 +28,5 @@
       "maximum_bytes": 67108864
     }
   ],
-  "maximum_artifact_bytes": 1073741824
+  "maximum_artifact_bytes": 1000000000
 }

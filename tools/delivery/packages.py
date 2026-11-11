@@ -19,6 +19,13 @@ PROBES = ("index.html", "melee/index.html", "stats/catalog.json")
 VERSION_FILE = ".product-version.json"
 
 
+def version_marker(content_sha256: str) -> bytes:
+    return json.dumps({"content_sha256": content_sha256}, sort_keys=True).encode() + b"\n"
+
+
+VERSION_MARKER_BYTES = len(version_marker("0" * 64))
+
+
 def sha256(path: Path) -> str:
     with path.open("rb") as handle:
         return hashlib.file_digest(handle, "sha256").hexdigest()
@@ -118,7 +125,7 @@ def prepare(site: Path, destination: Path, *, target: str, source: str) -> dict:
                         if handle.read(1):
                             raise ValueError("Site changed while packaging; prepare a stable candidate")
                         content_digest.update(relative.encode() + b"\0" + digest.hexdigest().encode() + b"\0")
-                marker = json.dumps({"content_sha256": content_digest.hexdigest()}, sort_keys=True).encode() + b"\n"
+                marker = version_marker(content_digest.hexdigest())
                 info = tarfile.TarInfo("./" + VERSION_FILE)
                 info.size, info.mode, info.mtime = len(marker), 0o644, 0
                 archive.addfile(info, io.BytesIO(marker))

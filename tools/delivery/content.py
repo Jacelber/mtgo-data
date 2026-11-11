@@ -39,7 +39,7 @@ def retain_reviewed_entry(preview, stage):
 def compose(root, preview, scope, envelopes, work):
     """Private, local-only composition. Missing resources fail without network."""
     import json
-    from build_pages_artifact import load_config, publication_paths, _copy_generated_overlays, validate_compatibility
+    from build_pages_artifact import load_config, publication_paths, _copy_generated_overlays, validate_publication
     from mtgmeta.mtgo import metadata, publication, review_submission as review
     from tools.delivery import resources
     from tools import build_landing_card_image_cache as images, build_simple_card_localization as names
@@ -141,7 +141,7 @@ def compose(root, preview, scope, envelopes, work):
     def public_site():
         current = publication_paths(stage, config)
         require_public_representatives(stage, current)
-        validate_compatibility(stage, config, current)
+        validate_publication(stage, config, current)
         for relative in sorted(current):
             copy_file(stage / relative, site / relative)
         (site / '.nojekyll').write_bytes(b'')

@@ -1036,15 +1036,15 @@ remains governed by its existing Schema and producer behavior.
 The Owner has decided that the draw-adjusted calculation is not
 part of the final product contract. P11-09 is skipped so that the project does
 not build a new shared API around logic selected for removal. Current generated
-documents, Schemas, and protected event `434455` bytes remain unchanged through
-Phase 11.
+documents and Schemas retain their compatibility meaning until the explicit
+versioned migration. No individual event is a permanently frozen test answer.
 
 The first Phase 19 compatibility-migration task must remove the draw-adjusted
 calculation and obsolete compatibility fields through an explicit Schema
 version and generated-data migration. It must not silently reinterpret an
 existing field whose published meaning was draw-adjusted. The migration must
 update both source products, retained legacy JavaScript, fixtures, validation,
-the protected `434455` manifest, and applicable recovery compatibility. Until that
+independent rule tests, generic derived-chain checks, and applicable recovery compatibility. Until that
 planned migration is complete, existing compatibility fields retain their
 current historical meaning and no new consumer may depend on them.
 

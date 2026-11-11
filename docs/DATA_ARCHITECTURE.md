@@ -1155,8 +1155,8 @@ The retained event `434455` uses legacy raw manifest `2.0.0`, which records each
 source response's method, URL, page, content metadata, byte count, SHA-256,
 request-body SHA-256 for DataTables POSTs, and applicable source round,
 participant, and decklist identity. Parsers retain read compatibility with
-stored manifest `1.0.0` fixtures. Neither legacy contract is used to regenerate
-the frozen reference event.
+stored manifest `1.0.0` fixtures. Existing retained sources are not rewritten
+to a newer snapshot format; their derived products may follow current classification.
 
 The approved successor contract uses minimized manifest `4.0.0`. Every source
 response is parsed in bounded memory before persistence. The snapshot contains
@@ -1598,8 +1598,8 @@ changing the retained mixed document shape. P9-05 compatibly extends the
 quality Schema to the same three structures. Structure conditionals require
 the exact scope set, the pure-event advancement metric, the pure Day 2
 conversion field, and the correct overall-points context flag. The committed
-mixed event `434455` has a fixed test baseline in the reference fixture;
-its current overview, decks and quality follow the confirmed taxonomy.
+mixed event `434455`, like other admitted events, follows the confirmed taxonomy.
+Independent synthetic cases cover these structures without freezing real output.
 
 The generator has a read-only default and an explicit `--execute` write path.
 It does not contact Melee or MTGO, modify any retained input, or write a
@@ -1753,22 +1753,28 @@ candidate paths. A missing, disabled, unverified, malformed, or unsupported
 entry fails before source access and has no fallback format. Manual dispatch,
 review-branch publication and source boundaries are preserved.
 
-### 11.12 Current classification and fixed reference event
+### 11.12 Current classification and independent source validation
 
-All events already admitted to a format's current data products, including
-mixed event `434455`, follow the latest Owner-confirmed classification.
-This is ordinary classification maintenance, without per-event migration
-approval. Raw match facts, statistical methods, public scope, accepted
-editorial content and historical archives retain their separate protections.
+All admitted events, including mixed event `434455`, follow the current
+Owner-confirmed classification. There is no event-specific frozen manifest or
+required reference ZIP. Historical source facts and statistical meanings retain
+their separate protections.
 
-`tests/fixtures/melee/434455_reference.zip` preserves the former fixed test
-baseline and its manifest. Tests read that fixture independently of live
-products; it is neither a publication source nor an old taxonomy constraint.
-`434455_compatibility_manifest.json` protects the retained normalized event,
-raw manifest and all 483 declared responses, and the source identity, scope
-and public route in catalogs. Current derived files are checked against their
-actual source hashes, current classifier, complete downstream chain and the
-multi-event consumer, rather than historical output hashes.
+Independent small synthetic cases exercise production parsing, normalization,
+opportunities and statistics against hand-counted expectations. Generic retained
+source checks follow each admitted event's normalized provenance: the existing
+versioned manifest and parser validate response sets, sizes, hashes and source
+contexts; assembly validates event, participant, round and match identities.
+Source corruption is invalid input, while a stale classifier or derived chain
+requires regeneration from valid retained input. Normal taxonomy updates do not
+freeze derived bytes, and registering another valid event needs no fixture edit.
+
+Classification closure checks current classifier versions, input hashes and
+paths, opportunity joins, catalog identities, public routes and artifact bindings.
+Candidate material fingerprints retain source and diagnostic inputs separately
+from the public file selection. Source integrity does not require serving source
+files from Pages. Reviewed source correction still requires its own traceable
+change; these checks do not authorize recollection or source rewriting.
 
 The existing classifier comparison reports the full retained corpus and the
 current admitted Melee event IDs. Weekly data staging synchronizes every stale
@@ -1803,13 +1809,11 @@ approved; unused account, profile, preference, duplicate identity, credential,
 cookie, and private-header fields remain prohibited.
 
 Legacy v1/v2 and completed HMAC v3 snapshots remain read-compatible and need no
-secret for downstream parsing or generation. The protected `434455` v2 bytes
-and derived compatibility result are not migrated. A classifier update may advance
-the format catalog active taxonomy while retaining this event entry and every
-protected file exactly. The compatibility fixture constrains that event entry
-and its outputs; the active taxonomy describes current events. Existing
-multi-event admission continues to reject events whose taxonomy differs from
-the active catalog. The successor writer has no
+secret for downstream parsing or generation. Existing v2 sources, including
+`434455`, are retained in their original format. Current derived results for all
+admitted events follow the active catalog taxonomy; no special event fixture
+constrains a normal classification update. Existing multi-event admission
+continues to reject taxonomy mismatches. The successor writer has no
 HMAC creation, key storage, key ID, rotation, injection, or recovery lifecycle.
 The implemented v4 writer is the current collection path; do not reintroduce
 HMAC creation for new collections. Existing supported snapshots remain readable
@@ -1869,32 +1873,25 @@ GitHub Pages serves an explicitly selected static package, independently of the
 repository root. Temporary workflow artifacts can transfer inputs or candidates
 but are not the sole durable recovery store. Complete deployment packages and
 private candidates use the GitHub-only archive described in DELIVERY.
-No new source retention, raw-path removal or history rewrite is implied.
+This boundary does not authorize source deletion or history rewriting.
 
 ### 11.17 Allowlisted Pages artifact implementation
 
-P10-07 implements the selected A+ publication boundary without changing the
-public Git archive. `configs/pages_publication.json` admits the two static entry
-points, the fetched ledger, and the `assets/`, `data/`, `data_raw/`, `melee/`,
-`reports/`, and `stats/` product trees. Before P12-15F it excludes private
-Pickup candidate, comparison-base, and known-state files while retaining
-approved Pickup history and `landing/current.json`. The P12-15F boundary also
-excludes `landing/review/` while admitting `landing/features/`.
-`build_pages_artifact.py` copies those
-paths into a new external directory, generates an empty `.nojekyll`, rejects
-unsafe paths and symbolic links, verifies every copied byte, enforces the
-one-gibibyte site ceiling, and validates the complete event `434455`
-compatibility closure before producing a size and digest report.
+`configs/pages_publication.json` selects `index.html`, `assets/`, `melee/` and
+admitted public `stats/`. `data/`, `data_raw/`, `reports/` and `fetched.txt` remain
+repository inputs and are not served by Pages. Raw download URLs are not a
+supported product. Existing review/private exclusions and historical public
+products remain intact; `stats/catalog.json` must agree with registry admission.
+Private or unregistered format outputs remain excluded.
 
-P14-02A makes `stats/` and `reports/` conditional format trees rather than
-unconditional recursive grants. Their format child must be registered and
-public, with executable MTGO capabilities and every required MTGO product.
-The source `stats/catalog.json` must agree with the registry-derived catalog
-before packaging; it is the sole global exception to the format-tree filter.
-Private and unregistered format outputs are excluded even when an explicit
-site-file entry names them. Existing review exclusions, approved raw archives,
-and the event `434455` compatibility closure remain intact. Format registry,
-catalog admission code, and pinned runtime dependencies are Pages inputs.
+`build_pages_artifact.py` verifies public consumer references, current source and
+derived bindings, required generated overlays, and input stability before
+producing the external site and report. The effective ceiling is **1,000,000,000
+bytes**, including the version marker added by the final package tool, rather
+than 1 GiB. Lower configured limits remain effective; raising the tool limit is
+not a size remedy. The complete archive format and DELIVERY recovery protocol
+are unchanged. Reports bound by MTGO metadata remain composition/validation
+inputs even though browsers do not fetch them.
 
 Cache-A adds one generated Pages overlay at `assets/card-cache/v1/`. The
 overlay is built outside the repository and is never a Git-tracked input. Its
@@ -1902,7 +1899,7 @@ Schema-governed manifest binds the exact rolling Landing subject, every
 declared image path, byte count, SHA-256, source, and feature-week use. The
 Pages packager accepts the overlay only after independently recomputing the
 subject and verifying a closed, symlink-free bundle; its bytes count toward
-both the 64-MiB overlay ceiling and the existing one-gibibyte site ceiling.
+both the 64-MiB overlay ceiling and the effective 1,000,000,000-byte package ceiling.
 Repository representative JPEGs may be referenced by the manifest but are not
 duplicated into the overlay.
 
@@ -3471,13 +3468,12 @@ bilingual identity coverage, an intentional Unknown conflict, or a material
 change to an accepted Landing result. Historical Landing and frozen Pickup
 artifacts are outside automatic closure.
 
-For a current public Melee event, closure also discovers any applicable
-protected compatibility manifest through the existing Pages publication
-configuration. A mismatch in classifier-derived exact bytes or its selected
-catalog projection is `BLOCKED_OWNER_REVIEW` until an explicitly approved
-manifest-version migration records the new exact subject. The manifest remains
-Owner-protected and is never materialized by `converge`; immutable snapshot or
-normalized-source drift is invalid rather than regenerable.
+For every admitted public Melee event, closure validates the retained manifest,
+response set, provenance and identities independently of Pages selection. Source
+corruption is `INVALID`; a stale or damaged reconstructible derived chain is
+`STALE_REGENERABLE`. Current classifiers, opportunity joins, public descriptors
+and catalogs must agree. No event-specific compatibility manifest or historical
+output hash requires a migration approval for ordinary classification updates.
 
 Inspection does not classify, generate, materialize or fetch. Those operations
 remain explicit and their results are reusable under QUALITY and DELIVERY.

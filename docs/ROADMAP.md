@@ -326,7 +326,7 @@ history or unverified compatibility entry points.
 1. Retire the draw-adjusted win-rate calculation and compatibility fields under
    a dedicated versioned contract migration. Update the statistical
    specification, Schemas, generators, fixtures, tests, public MTGO and
-   Tabletop documents, the protected `434455` manifest, legacy JavaScript, and
+   Tabletop documents, independent rule tests and generic source/derived checks, legacy JavaScript, and
    rollback evidence without silently changing an existing field's meaning.
 2. Reconcile the final list of other compatibility entry points and remove only
    those whose replacements and rollback paths are verified.

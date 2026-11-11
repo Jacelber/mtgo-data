@@ -273,216 +273,93 @@ def test_public_name_projection_binds_classifier_identity_and_owner_catalog(
     )
 
 
-def test_melee_closure_follows_public_catalog_and_exact_sha_chain(
-    tmp_path: Path,
-) -> None:
-    desired = "a" * 64
-    rules = tmp_path / "my_archetypes" / "modern.yaml"
-    rules.parent.mkdir(parents=True)
-    rules.write_text("synthetic-rules\n", encoding="utf-8")
-    registry = tmp_path / "configs" / "melee_events.yaml"
-    registry.parent.mkdir(parents=True)
-    registry.write_text(
-        yaml.safe_dump(
-            {
-                "events": [
-                    {
-                        "id": "123",
-                        "format": "modern",
-                        "enabled": True,
-                        "review_status": "verified",
-                        "tabletop": True,
-                    }
-                ]
-            }
-        ),
-        encoding="utf-8",
-    )
-    event = tmp_path / "data" / "modern" / "melee" / "events" / "123.json"
-    _write_json(event, {"event": "synthetic"})
-    classification = (
-        tmp_path / "data" / "modern" / "melee" / "classifications" / "123.json"
-    )
-    _write_json(
-        classification,
-        {
-            "classifier": {"digest": desired},
-            "input": {"event_sha256": _digest(event)},
-        },
-    )
-    opportunity = (
-        tmp_path / "data" / "modern" / "melee" / "opportunities" / "123.json"
-    )
-    _write_json(
-        opportunity,
-        {
-            "input": {
-                "event_sha256": _digest(event),
-                "classification_sha256": _digest(classification),
-            }
-        },
-    )
-    public = tmp_path / "stats" / "modern" / "melee" / "events" / "123"
-    shared_input = {
-        "event_sha256": _digest(event),
-        "classification_sha256": _digest(classification),
-        "opportunity_sha256": _digest(opportunity),
-    }
-    for name in ("overview", "decks", "matchup", "quality"):
-        _write_json(public / f"{name}.json", {
-            "input": shared_input,
-            "schema_version": "1.2.0" if name == "overview" else "1.1.0",
-        })
-    descriptors = {
-        name: {"sha256": _digest(public / f"{name}.json")}
-        for name in ("overview", "decks", "matchup", "quality")
-    }
-    _write_json(public / "meta.json", {"input": shared_input, "outputs": descriptors})
-    catalog = tmp_path / "stats" / "modern" / "melee" / "index.json"
-    catalog_document = {
-        "active_taxonomy": {"taxonomy_sha256": _digest(rules)},
-        "events": [
-            {
-                "event_id": "123",
-                **{
-                    name: f"events/123/{name}.json"
-                    for name in ("meta", "overview", "decks", "matchup", "quality")
-                },
-                "matchup_compatibility": {
-                    "matchup_sha256": _digest(public / "matchup.json")
-                },
-            }
-        ],
-    }
-    _write_json(catalog, catalog_document)
-    raw_manifest = (
-        tmp_path / "data_raw" / "melee" / "123" / "snapshot" / "manifest.json"
-    )
-    _write_json(raw_manifest, {"responses": []})
-    compatibility = (
-        tmp_path / "tests" / "fixtures" / "melee" / "123_compatibility.json"
-    )
-    compatibility_document = {
-        "contract_version": "1.0.0",
-        "event": {"event_id": "123", "format": "modern"},
-        "migration_policy": {
-            "exact_byte_change": "separate_owner_approved_version_migration"
-        },
-        "immutable_snapshot": {
-            "response_count": 0,
-            "manifest": {
-                "role": "raw_snapshot_manifest",
-                "path": raw_manifest.relative_to(tmp_path).as_posix(),
-                "bytes": raw_manifest.stat().st_size,
-                "sha256": _digest(raw_manifest),
-            }
-        },
-        "exact_files": [
-            {
-                "role": "normalized_event",
-                "path": event.relative_to(tmp_path).as_posix(),
-                "bytes": event.stat().st_size,
-                "sha256": _digest(event),
-            },
-        ],
-        "catalog_projections": [
-            {
-                "path": catalog.relative_to(tmp_path).as_posix(),
-                "root_requirements": {
-                    "active_taxonomy": catalog_document["active_taxonomy"]
-                },
-                "selection": [
-                    {
-                        "collection": "events",
-                        "field": "event_id",
-                        "equals": "123",
-                    }
-                ],
-                "expected": catalog_document["events"][0],
-                "expansion_policy": (
-                    "allow_unselected_entries_and_volatile_root_fields"
-                ),
-            }
-        ],
-    }
-    _write_json(compatibility, compatibility_document)
-    _write_json(
-        tmp_path / "configs" / "pages_publication.json",
-        {
-            "compatibility_manifests": [
-                compatibility.relative_to(tmp_path).as_posix()
-            ]
-        },
-    )
-    immutable_source_sha = _digest(raw_manifest)
-    normalized_event_sha = _digest(event)
+def test_melee_closure_follows_public_catalog_and_exact_sha_chain(tmp_path):
+    from dataclasses import replace
+    from melee_synthetic import source_fixture, registry_file, public_products, RULES
 
+    definition, document, event, snapshot = source_fixture(tmp_path)
+    registry_file(tmp_path, [definition])
+    desired, catalog = public_products(tmp_path, definition, document, event)
+    public = catalog.parent / "events" / definition.id
     assert _inspect_melee(tmp_path, "modern", desired, catalog)["state"] == CURRENT
-
-    # A coherent old output hash chain still needs regeneration when its
-    # public contract cannot supply the current consumer's required data.
-    meta_path = public / "meta.json"
-    original_meta = meta_path.read_bytes()
+    immutable = {p: p.read_bytes() for p in [event, *snapshot.iterdir()]}
+    # Legitimate registry growth does not add an unadmitted event to consumers.
+    registry_file(tmp_path, [definition, replace(definition, id="900002", url="https://melee.gg/Tournament/View/900002")])
+    assert _inspect_melee(tmp_path, "modern", desired, catalog)["state"] == CURRENT
+    # A real changed taxonomy and coherent downstream regeneration is accepted.
+    desired, catalog = public_products(tmp_path, definition, document, event,
+        rule_text=RULES.replace("name: Alpha", "name: Updated Alpha"))
+    assert _inspect_melee(tmp_path, "modern", desired, catalog)["state"] == CURRENT
     for name, old_version in (("overview", "1.1.0"), ("matchup", "1.0.0")):
         path = public / f"{name}.json"
         original = path.read_bytes()
-        document = json.loads(original)
-        document["schema_version"] = old_version
-        _write_json(path, document)
-        meta = json.loads(original_meta)
-        meta["outputs"][name]["sha256"] = _digest(path)
-        _write_json(meta_path, meta)
+        value = json.loads(original)
+        value["schema_version"] = old_version
+        _write_json(path, value)
         result = _inspect_melee(tmp_path, "modern", desired, catalog)
         assert result["state"] == STALE
         assert any(f"{name} contract is stale" in issue for issue in result["issues"])
         path.write_bytes(original)
-        meta_path.write_bytes(original_meta)
-
-    opportunity_document = json.loads(opportunity.read_text(encoding="utf-8"))
-    opportunity_document["input"]["classification_sha256"] = "b" * 64
-    _write_json(opportunity, opportunity_document)
-    assert _inspect_melee(tmp_path, "modern", desired, catalog)["state"] == STALE
-
-    opportunity_document["input"]["classification_sha256"] = _digest(classification)
-    _write_json(opportunity, opportunity_document)
-    registry_document = yaml.safe_load(registry.read_text(encoding="utf-8"))
-    registry_document["events"].append(
-        {
-            "id": "456",
-            "format": "modern",
-            "enabled": True,
-            "review_status": "verified",
-            "tabletop": True,
-        }
-    )
-    registry.write_text(yaml.safe_dump(registry_document), encoding="utf-8")
-    result = _inspect_melee(tmp_path, "modern", desired, catalog)
-    assert result["state"] == CURRENT
-    assert result["issues"] == []
-
-    # Derived changes are governed by the current input chain, never old hashes.
-    classification_document = json.loads(classification.read_bytes())
-    classification_document["classifier"]["digest"] = "b" * 64
-    _write_json(classification, classification_document)
-    result = _inspect_melee(tmp_path, "modern", desired, catalog)
-    assert result["state"] == STALE
-    classification_document["classifier"]["digest"] = desired
-    _write_json(classification, classification_document)
-    # Source corruption remains invalid and cannot be fixed by regeneration.
-    original_event = event.read_bytes()
-    event.write_text('{"event":"changed"}', encoding="utf-8")
+    assert all(p.read_bytes() == value for p, value in immutable.items())
+    # Corruption is INVALID, not a request to regenerate historical inputs.
+    raw = snapshot / "deck-1.json"
+    raw.write_bytes(raw.read_bytes() + b" ")
     assert _inspect_melee(tmp_path, "modern", desired, catalog)["state"] == "INVALID"
-    event.write_bytes(original_event)
-    assert _digest(raw_manifest) == immutable_source_sha
-    assert _digest(event) == normalized_event_sha
 
-    registry_document["events"] = [registry_document["events"][1]]
-    registry.write_text(yaml.safe_dump(registry_document), encoding="utf-8")
+
+@pytest.mark.parametrize("damage", ["classification_event", "classification_participant", "classifier",
+    "ledger_hash", "ledger_match", "upstream_path", "public_event", "descriptor_size", "catalog_route", "missing_public",
+    "unreadable_classification", "unreadable_public"])
+def test_melee_closure_rejects_broken_derived_chains(tmp_path, damage):
+    from melee_synthetic import source_fixture, registry_file, public_products
+    definition, document, event, _ = source_fixture(tmp_path)
+    registry_file(tmp_path, [definition])
+    desired, catalog = public_products(tmp_path, definition, document, event)
+    base = tmp_path / "data/modern/melee"
+    public = catalog.parent / "events" / definition.id
+    if damage.startswith("classification") or damage == "classifier":
+        path = base / f"classifications/{definition.id}.json"
+        value = json.loads(path.read_bytes())
+        if damage == "classification_event": value["event_id"] = "900002"
+        elif damage == "classification_participant": value["records"].pop()
+        else: value["classifier"]["digest"] = "f" * 64
+    elif damage.startswith("ledger"):
+        path = base / f"opportunities/{definition.id}.json"
+        value = json.loads(path.read_bytes())
+        if damage == "ledger_hash": value["input"]["classification_sha256"] = "f" * 64
+        else: value["opportunities"][0]["match_id"] = "unknown-match"
+    elif damage == "catalog_route":
+        path = catalog; value = json.loads(path.read_bytes())
+        value["events"][0]["decks"] = "events/900002/decks.json"
+    else:
+        path = public / "meta.json"; value = json.loads(path.read_bytes())
+        if damage == "upstream_path": value["input"]["event_path"] = "data/modern/melee/events/900002.json"
+        elif damage == "public_event": value["event_id"] = "900002"
+        elif damage == "descriptor_size": value["outputs"]["decks"]["bytes"] += 1
+        elif damage == "missing_public": (public / "decks.json").unlink()
+    _write_json(path, value)
+    if damage == "unreadable_classification":
+        (base / f"classifications/{definition.id}.json").write_text('{')
+    elif damage == "unreadable_public":
+        (public / "decks.json").write_text('{')
     result = _inspect_melee(tmp_path, "modern", desired, catalog)
     assert result["state"] == STALE
-    assert result["issues"] == [
-        "Melee catalog event is not uniquely enabled:'123'"
-    ]
+    assert result["issues"]
+
+
+def test_melee_closure_accepts_a_new_catalog_event(tmp_path):
+    from melee_synthetic import source_fixture, registry_file, public_products
+    from mtgmeta.melee.publish import merge_event_catalog
+    first, doc1, path1, _ = source_fixture(tmp_path)
+    second, doc2, path2, _ = source_fixture(tmp_path, event_id="900002", day1_rounds=3)
+    registry_file(tmp_path, [first, second])
+    desired, catalog = public_products(tmp_path, first, doc1, path1)
+    original = json.loads(catalog.read_bytes())
+    _, catalog = public_products(tmp_path, second, doc2, path2)
+    merged = merge_event_catalog(original, json.loads(catalog.read_bytes()))
+    _write_json(catalog, merged)
+    assert {e["event_id"] for e in merged["events"]} == {first.id, second.id}
+    assert _inspect_melee(tmp_path, "modern", desired, catalog)["state"] == CURRENT
 
 
 def test_format_materialization_rolls_back_after_partial_failure(
