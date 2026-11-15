@@ -2,12 +2,12 @@
   "schema_version": "1.1.0",
   "format": "standard",
   "source": "mtgo",
-  "classifier_digest": "c4231f049aeb7ae7c1aa601d717a8399ee9efff4361497a972f99252d3c70b4a",
+  "classifier_digest": "e5de6af4938fe1cf9c007171eea34845a9034a31d1c8930be76396450b1bc089",
   "rules_updated": "2026-11-09T22:00:44+09:00",
   "summary": {
-    "parents": 202,
-    "leaves": 221,
-    "expandable_parents": 7
+    "parents": 204,
+    "leaves": 224,
+    "expandable_parents": 8
   },
   "parents": [
     {
@@ -201,6 +201,12 @@
     {
       "id": "boros-mice",
       "name": "Boros Mice",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "boros-momo",
+      "name": "Boros Momo",
       "expandable": false,
       "subtype_ids": []
     },
@@ -579,6 +585,12 @@
       "subtype_ids": []
     },
     {
+      "id": "izzet-mission",
+      "name": "Izzet Mission",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "izzet-monument",
       "name": "Izzet Monument",
       "expandable": false,
@@ -677,8 +689,11 @@
     {
       "id": "jund-artifact-sacrifice",
       "name": "Jund Artifact Sacrifice",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "jund-artifact-sacrifice/five-color",
+        "jund-artifact-sacrifice/jund"
+      ]
     },
     {
       "id": "jund-delirium",
@@ -1538,6 +1553,14 @@
       "subtype_id": null
     },
     {
+      "id": "boros-momo",
+      "kind": "archetype",
+      "name": "Boros Momo",
+      "display_name": "Boros Momo",
+      "parent_id": "boros-momo",
+      "subtype_id": null
+    },
+    {
       "id": "boros-ponza",
       "kind": "archetype",
       "name": "Boros Ponza",
@@ -2058,6 +2081,14 @@
       "subtype_id": null
     },
     {
+      "id": "izzet-mission",
+      "kind": "archetype",
+      "name": "Izzet Mission",
+      "display_name": "Izzet Mission",
+      "parent_id": "izzet-mission",
+      "subtype_id": null
+    },
+    {
       "id": "izzet-monument",
       "kind": "archetype",
       "name": "Izzet Monument",
@@ -2186,12 +2217,20 @@
       "subtype_id": null
     },
     {
-      "id": "jund-artifact-sacrifice",
-      "kind": "archetype",
+      "id": "jund-artifact-sacrifice/five-color",
+      "kind": "subtype",
+      "name": "5-Color Artifact Sacrifice",
+      "display_name": "5-Color Artifact Sacrifice",
+      "parent_id": "jund-artifact-sacrifice",
+      "subtype_id": "five-color"
+    },
+    {
+      "id": "jund-artifact-sacrifice/jund",
+      "kind": "subtype",
       "name": "Jund Artifact Sacrifice",
       "display_name": "Jund Artifact Sacrifice",
       "parent_id": "jund-artifact-sacrifice",
-      "subtype_id": null
+      "subtype_id": "jund"
     },
     {
       "id": "jund-delirium",
