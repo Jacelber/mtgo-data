@@ -230,7 +230,8 @@
             "allOf": [{
               "if": {"anyOf": [
                 {"properties": {"matched_rules": {"minItems": 1}}},
-                {"properties": {"errors": {"minItems": 1}}},
+                {"properties": {"errors": {"minItems": 1,
+                  "not": {"const": ["deck_data:60_main_without_sideboard"]}}}},
                 {"required": ["color_diagnostics"]}
               ]},
               "then": {

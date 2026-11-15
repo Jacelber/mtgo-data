@@ -470,6 +470,59 @@ def _pin_published_landing_data(root: Path, stage: Path, format_id: str,
     return {key: target for key, _source, target in pending}
 
 
+def _restate_published_landing(root: Path, stage: Path, format_id: str, before: dict) -> None:
+    """Rebind identical published content when its private review is unavailable.
+
+    The published bytes and their original review provenance remain the source
+    of accepted prose/choices. This is not a replacement review or acceptance:
+    every public fact and selected classification must still be identical.
+    """
+    from ..classifier import classify_deck
+    from .normalize import load_rules_for_format
+    from . import landing, landing_editorial
+    from .landing_bundle import inspect_bundle
+    relative = Path("stats") / format_id / "mtgo/landing"
+    original_path = root / relative / "current.json"
+    metadata = json.loads((root / f"stats/{format_id}/mtgo/meta.json").read_bytes())
+    expected_hash = metadata["publication"]["artifacts"].get((relative / "current.json").as_posix())
+    if (expected_hash != hashlib.sha256(original_path.read_bytes()).hexdigest()
+            or before != json.loads(original_path.read_bytes())):
+        raise PublicationError("Retained Landing is not bound to the published product")
+    inspect_bundle(root, format_id)
+    _, facts = landing.build_document(stage, format_id, _admit_review=False)
+    if any(before.get(field) != facts.get(field) for field in landing.CLASSIFIER_RESTATEMENT_MATERIAL_FIELDS):
+        raise PublicationError("BLOCKED_OWNER_REVIEW: published Landing facts changed")
+    rules = load_rules_for_format(stage, format_id)
+    names = landing_editorial.load_name_catalog(stage / landing_editorial.DEFAULT_NAME_CATALOG)
+    for feature in before.get("features", {}).get("items", []):
+        deck = feature["deck"]
+        result = classify_deck(rules, {"main_deck": deck["main_deck"],
+            "sideboard": deck.get("sideboard", deck.get("side_deck", []))})
+        identity = (format_id, feature["archetype_id"], feature.get("subtype_id"))
+        display = names[identity]
+        if (result.status != "classified" or result.archetype_id != identity[1]
+                or result.subtype_id != identity[2]
+                or feature["headline"] != display):
+            raise PublicationError("BLOCKED_OWNER_REVIEW: published Feature classification or name changed")
+    after = json.loads(json.dumps(before))
+    after["classifier"] = facts["classifier"]
+    # Keep the original content hashes as provenance of the identical accepted
+    # content, updating only the classifier and its independently equal facts.
+    for key in ("classifier_digest", "machine_fact_digest"):
+        after["review_binding"][key] = facts["review_binding"][key]
+    output = stage / relative
+    after["data_files"] = landing.generate_week_data(stage, format_id, after, output)
+    landing.validate_document(after)
+    (output / "current.json").write_text(json.dumps(after, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    archive = output / "features" / f"{before['week']['id']}.json"
+    feature_document = json.loads(archive.read_bytes())
+    if feature_document["features"]["items"] != before["features"]["items"]:
+        raise PublicationError("Published Feature archive differs from the retained page")
+    feature_document["classifier_digest"] = facts["classifier"]["digest"]
+    archive.write_text(json.dumps(feature_document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    inspect_bundle(stage, format_id)
+
+
 def _restate_retained_landing(root: Path, stage: Path, format_id: str, week: str) -> None:
     """Rebind this same week's classifier without changing accepted content."""
     import shutil
@@ -491,6 +544,9 @@ def _restate_retained_landing(root: Path, stage: Path, format_id: str, week: str
         return  # Older admitted weeks retain their original pinned resources.
     desired = classifier_digest(load_rules_for_format(stage, format_id))
     if before.get("classifier", {}).get("digest") in {None, desired}:
+        return
+    if not (root / relative / "review" / f"{week}.yaml").is_file():
+        _restate_published_landing(root, stage, format_id, before)
         return
     if _inspect_landing(stage, format_id, desired)["state"] != "STALE_REGENERABLE":
         return
