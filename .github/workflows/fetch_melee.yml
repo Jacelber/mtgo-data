@@ -245,7 +245,7 @@ jobs:
         if: inputs.review_standings_round_id != ''
         shell: bash
         run: |
-          python -B -c 'import json,jsonschema,sys; jsonschema.validate(json.load(open(sys.argv[1])),json.load(open("schemas/melee-classification.schema.json")))' "data/${FORMAT}/melee/classifications/${EVENT_ID}.json"
+          python -B validate_schemas.py --manifest schemas/melee-data-manifest.json --path "data/${FORMAT}/melee/classifications/${EVENT_ID}.json"
           git add -- "data/${FORMAT}/melee/events/${EVENT_ID}.json" "data/${FORMAT}/melee/classifications/${EVENT_ID}.json"
           git diff --quiet || { echo "Review contains unexpected unstaged changes" >&2; exit 1; }
 
