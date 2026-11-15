@@ -26,14 +26,86 @@ archetypes:
       - card: Inevitable Defeat
         zone: main
         min_count: 2
+- id: boros-momo
+  name: Boros Momo
+  priority: 38015
+  color_profile: default
+  rules:
+  - id: boros-momo-primary
+    priority: 38015
+    subtype_id: null
+    conditions:
+      all:
+      - card: The Naked Time
+        zone: main
+        min_count: 1
+      - card: Momo, Friendly Flier
+        zone: main
+        min_count: 3
+      - card: Sage of the Skies
+        zone: main
+        min_count: 2
+      - card: Springleaf Drum
+        zone: main
+        min_count: 3
+    colors:
+    - white
+    - red
+  - id: boros-momo-skies-shepherd
+    priority: 38015
+    subtype_id: null
+    conditions:
+      all:
+      - card: The Naked Time
+        zone: main
+        min_count: 1
+      - card: Momo, Friendly Flier
+        zone: main
+        min_count: 1
+      - card: Sage of the Skies
+        zone: main
+        min_count: 1
+      - card: Starfield Shepherd
+        zone: main
+        min_count: 1
+    colors:
+    - white
+    - red
+- id: izzet-mission
+  name: Izzet Mission
+  priority: 78155
+  color_profile: default
+  rules:
+  - id: izzet-mission-flashback
+    priority: 78155
+    subtype_id: null
+    conditions:
+      all:
+      - card: Anthropological Mission
+        zone: main
+        min_count: 1
+      - card: Flashback
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+    - red
 - id: jund-artifact-sacrifice
   name: Jund Artifact Sacrifice
   priority: 77120
+  color_profile: default
+  card_uses:
+    Mockingbird: normal_cast
+  subtypes:
+  - id: jund
+    name: Jund Artifact Sacrifice
+  - id: five-color
+    name: 5-Color Artifact Sacrifice
   rules:
   - id: jund-artifact-sacrifice-primary
     priority: 77120
-    subtype_id: null
-    conditions:
+    subtype_id: jund
+    conditions: &standard_jund_artifact_sacrifice_core
       all:
       - card: Biotech Specialist
         zone: main
@@ -44,6 +116,16 @@ archetypes:
       - card: Obsessive Pursuit
         zone: main
         min_count: 3
+  - id: jund-artifact-sacrifice-five-color
+    priority: 77121
+    subtype_id: five-color
+    conditions: *standard_jund_artifact_sacrifice_core
+    colors:
+    - white
+    - blue
+    - black
+    - red
+    - green
 - id: dimir-faeries
   name: Dimir Faeries
   priority: 77110
@@ -356,6 +438,23 @@ archetypes:
   name: Selesnya Landfall
   priority: 71000
   rules:
+  - id: selesnya-landfall-harmonizer-hydra
+    priority: 71000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Earthbender Ascension
+        zone: main
+        min_count: 1
+      - card: Mightform Harmonizer
+        zone: main
+        min_count: 1
+      - card: Mossborn Hydra
+        zone: main
+        min_count: 1
+    colors:
+    - white
+    - green
   - id: selesnya-landfall-primary
     priority: 71000
     subtype_id: null
@@ -2975,6 +3074,21 @@ archetypes:
     priority: 41000
     subtype_id: sultai
     conditions: *standard_kona_station_route
+    colors:
+    - blue
+    - black
+    - green
+  - id: kona-omniscience-sultai-speaker
+    priority: 41000
+    subtype_id: sultai
+    conditions:
+      all:
+      - card: Uthros, Titanic Godcore
+        zone: main
+        min_count: 1
+      - card: Formidable Speaker
+        zone: main
+        min_count: 1
     colors:
     - blue
     - black
@@ -6229,6 +6343,24 @@ archetypes:
   name: Esper Midrange
   priority: 41990
   rules:
+  - id: esper-midrange-oculus-manipulator
+    priority: 41990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Abhorrent Oculus
+        zone: main
+        min_count: 1
+      - card: Kaito, Bane of Nightmares
+        zone: main
+        min_count: 1
+      - card: Dark Matter Manipulator
+        zone: main
+        min_count: 1
+    colors:
+    - white
+    - blue
+    - black
   - id: esper-midrange-pixie-kaito
     priority: 41990
     subtype_id: null

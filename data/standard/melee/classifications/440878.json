@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "c4231f049aeb7ae7c1aa601d717a8399ee9efff4361497a972f99252d3c70b4a"
+    "digest": "e5de6af4938fe1cf9c007171eea34845a9034a31d1c8930be76396450b1bc089"
   },
   "input": {
     "event_path": "data/standard/melee/events/440878.json",
@@ -18,11 +18,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/standard.yaml",
-    "rule_sha256": "272dfebb3457260f97514089d4aa78c156eb566f0ade2294724651d022fc0652",
+    "rule_sha256": "bfa9667ea860a7ac37c3b3dc1e640df06fb5633125c39717ada94a1d421c16f1",
     "rule_schema_version": "1.2.0",
-    "archetype_count": 202,
-    "rule_count": 321,
-    "subtype_count": 26
+    "archetype_count": 204,
+    "rule_count": 328,
+    "subtype_count": 28
   },
   "summary": {
     "total_records": 776,
@@ -32,8 +32,8 @@
     "invalid_decks": 0,
     "multiple_matches": 434,
     "overridden_matches": 225,
-    "selected_subtypes": 190,
-    "parent_only": 580,
+    "selected_subtypes": 232,
+    "parent_only": 538,
     "same_parent_multiple_subtype_matches": 0,
     "residual_subtype_violations": 0,
     "selected_by_parent": {
@@ -139,6 +139,7 @@
       "boros-manufacturing/boros": 1,
       "dimir-spider-man/dimir": 58,
       "dwarves/boros": 12,
+      "jund-artifact-sacrifice/jund": 42,
       "kona-omniscience/bant": 1,
       "kona-omniscience/simic": 1,
       "kona-omniscience/temur": 5,
@@ -5412,8 +5413,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -5421,8 +5422,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -5457,8 +5458,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -6923,6 +6924,49 @@
           "archetype_name": "Selesnya Landfall",
           "subtype_id": null,
           "subtype_name": null,
+          "rule_id": "selesnya-landfall-harmonizer-hydra",
+          "priority": 71000,
+          "evidence": [
+            {
+              "card": "Earthbender Ascension",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mightform Harmonizer",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mossborn Hydra",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:green,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
+        {
+          "archetype_id": "selesnya-landfall",
+          "archetype_name": "Selesnya Landfall",
+          "subtype_id": null,
+          "subtype_name": null,
           "rule_id": "selesnya-landfall-primary",
           "priority": 71000,
           "evidence": [
@@ -7067,6 +7111,49 @@
         }
       ],
       "overridden_matches": [
+        {
+          "archetype_id": "selesnya-landfall",
+          "archetype_name": "Selesnya Landfall",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "selesnya-landfall-harmonizer-hydra",
+          "priority": 71000,
+          "evidence": [
+            {
+              "card": "Earthbender Ascension",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mightform Harmonizer",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mossborn Hydra",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:green,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "selesnya-landfall",
           "archetype_name": "Selesnya Landfall",
@@ -13949,6 +14036,49 @@
           "archetype_name": "Selesnya Landfall",
           "subtype_id": null,
           "subtype_name": null,
+          "rule_id": "selesnya-landfall-harmonizer-hydra",
+          "priority": 71000,
+          "evidence": [
+            {
+              "card": "Earthbender Ascension",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mightform Harmonizer",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mossborn Hydra",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:green,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
+        {
+          "archetype_id": "selesnya-landfall",
+          "archetype_name": "Selesnya Landfall",
+          "subtype_id": null,
+          "subtype_name": null,
           "rule_id": "selesnya-landfall-primary",
           "priority": 71000,
           "evidence": [
@@ -14093,6 +14223,49 @@
         }
       ],
       "overridden_matches": [
+        {
+          "archetype_id": "selesnya-landfall",
+          "archetype_name": "Selesnya Landfall",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "selesnya-landfall-harmonizer-hydra",
+          "priority": 71000,
+          "evidence": [
+            {
+              "card": "Earthbender Ascension",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mightform Harmonizer",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mossborn Hydra",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:green,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "selesnya-landfall",
           "archetype_name": "Selesnya Landfall",
@@ -15477,8 +15650,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -15486,8 +15659,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -15522,8 +15695,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -23975,8 +24148,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -23984,8 +24157,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -24020,8 +24193,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -27025,8 +27198,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -27034,8 +27207,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -27070,8 +27243,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -28012,8 +28185,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -28021,8 +28194,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -28057,8 +28230,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -28192,8 +28365,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -28201,8 +28374,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -28237,8 +28410,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -33852,8 +34025,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -33861,8 +34034,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -33897,8 +34070,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -37668,8 +37841,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -37677,8 +37850,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -37713,8 +37886,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -39871,8 +40044,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -39880,8 +40053,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -39916,8 +40089,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -40187,8 +40360,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -40196,8 +40369,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -40232,8 +40405,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -42940,8 +43113,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -42949,8 +43122,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -42985,8 +43158,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -49338,8 +49511,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -49347,8 +49520,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -49383,8 +49556,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -52423,8 +52596,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -52432,8 +52605,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -52468,8 +52641,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -54090,8 +54263,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -54099,8 +54272,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -54135,8 +54308,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -59715,10 +59888,53 @@
         "archetype_name": "Selesnya Landfall",
         "subtype_id": null,
         "subtype_name": null,
-        "rule_id": "selesnya-landfall-primary",
+        "rule_id": "selesnya-landfall-harmonizer-hydra",
         "priority": 71000
       },
       "matched_rules": [
+        {
+          "archetype_id": "selesnya-landfall",
+          "archetype_name": "Selesnya Landfall",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "selesnya-landfall-harmonizer-hydra",
+          "priority": 71000,
+          "evidence": [
+            {
+              "card": "Earthbender Ascension",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mightform Harmonizer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mossborn Hydra",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:green,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "selesnya-landfall",
           "archetype_name": "Selesnya Landfall",
@@ -59846,6 +60062,49 @@
           "archetype_name": "Selesnya Landfall",
           "subtype_id": null,
           "subtype_name": null,
+          "rule_id": "selesnya-landfall-harmonizer-hydra",
+          "priority": 71000,
+          "evidence": [
+            {
+              "card": "Earthbender Ascension",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mightform Harmonizer",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mossborn Hydra",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:green,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
+        {
+          "archetype_id": "selesnya-landfall",
+          "archetype_name": "Selesnya Landfall",
+          "subtype_id": null,
+          "subtype_name": null,
           "rule_id": "selesnya-landfall-primary",
           "priority": 71000,
           "evidence": [
@@ -59966,7 +60225,7 @@
       ],
       "conflict_matches": [],
       "conflict_kind": null,
-      "priority_tie": false,
+      "priority_tie": true,
       "errors": [],
       "unknown_deck": null
     },
@@ -62191,8 +62450,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -62200,8 +62459,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -62236,8 +62495,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -64099,8 +64358,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -64108,8 +64367,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -64144,8 +64403,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -65103,8 +65362,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -65112,8 +65371,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -65148,8 +65407,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -65478,8 +65737,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -65487,8 +65746,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -65523,8 +65782,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -66978,8 +67237,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -66987,8 +67246,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -67023,8 +67282,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -72575,6 +72834,49 @@
           "archetype_name": "Selesnya Landfall",
           "subtype_id": null,
           "subtype_name": null,
+          "rule_id": "selesnya-landfall-harmonizer-hydra",
+          "priority": 71000,
+          "evidence": [
+            {
+              "card": "Earthbender Ascension",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mightform Harmonizer",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mossborn Hydra",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:green,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
+        {
+          "archetype_id": "selesnya-landfall",
+          "archetype_name": "Selesnya Landfall",
+          "subtype_id": null,
+          "subtype_name": null,
           "rule_id": "selesnya-landfall-primary",
           "priority": 71000,
           "evidence": [
@@ -72719,6 +73021,49 @@
         }
       ],
       "overridden_matches": [
+        {
+          "archetype_id": "selesnya-landfall",
+          "archetype_name": "Selesnya Landfall",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "selesnya-landfall-harmonizer-hydra",
+          "priority": 71000,
+          "evidence": [
+            {
+              "card": "Earthbender Ascension",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mightform Harmonizer",
+              "zone": "main",
+              "actual_count": 3,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Mossborn Hydra",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:green,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "selesnya-landfall",
           "archetype_name": "Selesnya Landfall",
@@ -73876,8 +74221,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -73885,8 +74230,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -73921,8 +74266,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -73966,8 +74311,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -73975,8 +74320,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -74011,8 +74356,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -75659,8 +76004,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -75668,8 +76013,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -75704,8 +76049,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -76721,8 +77066,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -76730,8 +77075,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -76766,8 +77111,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -89940,8 +90285,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -89949,8 +90294,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -89985,8 +90330,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -93370,8 +93715,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -93379,8 +93724,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -93415,8 +93760,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -94820,8 +95165,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -94829,8 +95174,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -94865,8 +95210,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -95284,8 +95629,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -95293,8 +95638,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -95329,8 +95674,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -95957,8 +96302,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -95966,8 +96311,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -96002,8 +96347,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -96407,8 +96752,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -96416,8 +96761,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -96452,8 +96797,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -100805,8 +101150,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -100814,8 +101159,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -100850,8 +101195,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -101909,8 +102254,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -101918,8 +102263,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -101954,8 +102299,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -102440,8 +102785,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -102449,8 +102794,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -102485,8 +102830,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -112572,8 +112917,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -112581,8 +112926,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -112617,8 +112962,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -112856,8 +113201,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -112865,8 +113210,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -112901,8 +113246,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -120212,8 +120557,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -120221,8 +120566,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -120257,8 +120602,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -125947,8 +126292,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -125956,8 +126301,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -125992,8 +126337,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -130139,8 +130484,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -130148,8 +130493,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -130184,8 +130529,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -133431,8 +133776,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -133440,8 +133785,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -133476,8 +133821,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -133747,8 +134092,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -133756,8 +134101,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -133792,8 +134137,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -133927,8 +134272,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -133936,8 +134281,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -133972,8 +134317,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -136659,8 +137004,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -136668,8 +137013,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -136704,8 +137049,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -138091,8 +138436,8 @@
       "selected": {
         "archetype_id": "jund-artifact-sacrifice",
         "archetype_name": "Jund Artifact Sacrifice",
-        "subtype_id": null,
-        "subtype_name": null,
+        "subtype_id": "jund",
+        "subtype_name": "Jund Artifact Sacrifice",
         "rule_id": "jund-artifact-sacrifice-primary",
         "priority": 77120
       },
@@ -138100,8 +138445,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
@@ -138136,8 +138481,8 @@
         {
           "archetype_id": "jund-artifact-sacrifice",
           "archetype_name": "Jund Artifact Sacrifice",
-          "subtype_id": null,
-          "subtype_name": null,
+          "subtype_id": "jund",
+          "subtype_name": "Jund Artifact Sacrifice",
           "rule_id": "jund-artifact-sacrifice-primary",
           "priority": 77120,
           "evidence": [
