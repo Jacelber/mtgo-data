@@ -89,6 +89,18 @@ def _document(
             }
             for item in page.rounds
         ]
+    elif artifact.resource_type == "participant":
+        item = page.standings[0]
+        base["participant"] = {
+            "source_participant_id": _source_participant_id(item.source_participant_id),
+            "display_name": item.display_name,
+            "status_text": item.status_text,
+        }
+        base["decklist_references"] = [
+            {"source_decklist_id": r.source_decklist_id,
+             "source_participant_id": _source_participant_id(r.source_participant_id), "url": r.url}
+            for r in page.decklist_references
+        ]
     elif artifact.resource_type == "standings":
         base["standings"] = [
             {

@@ -129,9 +129,9 @@ def _validated_snapshot_path(
 def _validate_snapshot_contents(snapshot: Path, manifest: dict[str, Any]) -> None:
     responses = manifest["responses"]
     resource_types = [item["resource_type"] for item in responses]
-    if set(resource_types) != REQUIRED_RESOURCE_TYPES:
+    if not REQUIRED_RESOURCE_TYPES <= set(resource_types) or set(resource_types) - REQUIRED_RESOURCE_TYPES - {"participant"}:
         missing = sorted(REQUIRED_RESOURCE_TYPES - set(resource_types))
-        unexpected = sorted(set(resource_types) - REQUIRED_RESOURCE_TYPES)
+        unexpected = sorted(set(resource_types) - REQUIRED_RESOURCE_TYPES - {"participant"})
         raise MeleeRetentionError(
             f"complete snapshot resource coverage is invalid: missing={missing} unexpected={unexpected}"
         )
