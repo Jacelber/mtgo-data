@@ -198,7 +198,7 @@ jobs:
         run: >-
           python -B -m mtgmeta.melee.classification
           --root . --format "$FORMAT" --event-id "$EVENT_ID"
-          --execute --strict
+          --execute --strict --retained-facts
 
       - name: Build Constructed opportunity ledger
         if: inputs.review_standings_round_id == ''

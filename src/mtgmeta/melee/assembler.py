@@ -192,6 +192,13 @@ def assemble_parsed_snapshot(
         standings_by_participant[standing.source_participant_id] = standing
     if not standings_by_participant:
         raise MeleeAssemblyError("snapshot does not contain standings participants")
+    supplemental_ids = {s.source_participant_id for page in snapshot.pages
+                        if page.artifact.resource_type == "participant" for s in page.standings}
+    ranked_source_ids = {s.source_participant_id for page in snapshot.pages
+                        if page.artifact.resource_type != "participant" for s in page.standings}
+    matched_ids = {pid for match in matches.values() for pid in match.competitor_source_ids}
+    if supplemental_ids - matched_ids or supplemental_ids & ranked_source_ids:
+        raise MeleeAssemblyError("participant supplement must identify only match participants absent from standings")
 
     if snapshot.participant_identity_scheme == "hmac-sha256-event-v1":
         participant_ids = {
