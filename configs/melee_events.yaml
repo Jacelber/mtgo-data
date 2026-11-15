@@ -1,6 +1,78 @@
 schema_version: "3.2.0"
 
 events:
+  - id: '471980'
+    url: https://melee.gg/Tournament/View/471980
+    name: 'World Championship 32 in Atlanta, USA'
+    date:
+      start: '2026-11-13'
+      end: '2026-11-15'
+    format: standard
+    series: world_championship
+    structure: mixed
+    enabled: true
+    review_status: verified
+    tabletop: true
+    team_event: false
+    mixed_format: true
+    raw_requests:
+    - id: tournament
+      resource_type: tournament
+      url: https://melee.gg/Tournament/View/471980
+      content_type: html
+    include:
+      swiss: true
+      playoffs: true
+    phases:
+    - id: day1_draft
+      stage: day1
+      round_phase: draft
+      game_format: limited
+      swiss: true
+      rounds: [1, 2, 3]
+    - id: day1_standard
+      stage: day1
+      round_phase: constructed
+      game_format: standard
+      swiss: true
+      rounds: [4, 5, 6, 7]
+    - id: day2_draft
+      stage: day2
+      round_phase: draft
+      game_format: limited
+      swiss: true
+      rounds: [8, 9, 10]
+    - id: day2_standard
+      stage: day2
+      round_phase: constructed
+      game_format: standard
+      swiss: true
+      rounds: [11, 12, 13, 14]
+    - id: top8_standard
+      stage: playoff
+      round_phase: playoff
+      game_format: standard
+      swiss: false
+      source_labels: [Quarterfinals, Semifinals, Finals]
+    advancement:
+      day2_after_round: 7
+      day2_minimum_match_points: 12
+      top8_lock_supported: true
+    reviewed_overrides: []
+    statistics:
+      default_match_scope: all_constructed_swiss
+      constructed_game_format: standard
+      include_playoffs: false
+    source_evidence:
+    - https://melee.gg/Tournament/View/471980
+    - https://magic.gg/news/world-championship-32-fact-sheet-for-competitors
+    special_handling:
+    - Draft rounds 1-3 and 8-10 are context only and excluded from Standard performance. Overall standings points combine Draft and Standard.
+    - Day 2 qualification is based on twelve overall match points after round seven, not pure Standard deck performance. Day 2 Standard results carry selection bias.
+    - Players who reach the designated win threshold before round fourteen lock Top 8 and leave subsequent Swiss pairings. Qualified results are unplayed Top 8 lock awards, not played wins.
+    - Owner requested inclusion in the week of 2026-11-09 with all work except final placing on 2026-11-15. All fourteen Swiss rounds are complete; playoffs have not started. Use completed Round 14 (1678043) for review-only retention and classification, never as final standings or a public candidate.
+    - Reuse retained decklists and Swiss matches when official final standings become available; refresh final standings through the existing tool rather than recollecting the event.
+    notes: Individual mixed Draft and Standard World Championship organized by Wizards of the Coast. Identity, official structure, 127 enrolled players and completed Swiss round selectors checked on 2026-11-15. Event remains in progress; verification here authorizes the explicitly requested review-only preparation, not completed-event publication.
   - id: '491103'
     url: https://melee.gg/Tournament/View/491103
     name: 'North American Eternal Weekend - Legacy Championship'
