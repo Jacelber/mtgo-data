@@ -4,6 +4,7 @@
   "x-schema-version": "2.0.0",
   "title": "Melee minimized persisted resource",
   "oneOf": [
+    {"$ref": "#/$defs/participantResourceV2"},
     {"$ref": "#/$defs/tournamentResource"},
     {"$ref": "#/$defs/standingsResourceV1"},
     {"$ref": "#/$defs/standingsResourceV2"},
@@ -13,6 +14,51 @@
     {"$ref": "#/$defs/decklistResourceV2"}
   ],
   "$defs": {
+    "participantResourceV2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "resource_type",
+        "participant",
+        "decklist_references"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "2.0.0"
+        },
+        "resource_type": {
+          "const": "participant"
+        },
+        "participant": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source_participant_id",
+            "display_name",
+            "status_text"
+          ],
+          "properties": {
+            "source_participant_id": {
+              "$ref": "#/$defs/positiveSourceId"
+            },
+            "display_name": {
+              "$ref": "#/$defs/nonEmptyText"
+            },
+            "status_text": {
+              "const": "Disqualified"
+            }
+          }
+        },
+        "decklist_references": {
+          "type": "array",
+          "maxItems": 1,
+          "items": {
+            "$ref": "#/$defs/decklistReferenceV2"
+          }
+        }
+      }
+    },
     "nonEmptyText": {"type": "string", "minLength": 1},
     "positiveSourceId": {"type": "string", "pattern": "^[1-9][0-9]*$"},
     "opaqueSourceId": {"type": "string", "minLength": 1},

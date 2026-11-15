@@ -48,11 +48,11 @@
         ],
         "properties": {
           "request_id": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
-          "resource_type": {"enum": ["tournament", "standings", "matches", "decklist"]},
+          "resource_type": {"enum": ["tournament", "standings", "matches", "decklist", "participant"]},
           "page": {"type": "integer", "minimum": 1},
           "url": {
             "type": "string",
-            "pattern": "^https://melee\\.gg/(Tournament/View/[1-9][0-9]*|Standing/GetRoundStandings|Match/GetRoundMatches/[1-9][0-9]*|Decklist/(View/[1-9][0-9]*|GetDecklistDetails\\?id=[0-9A-Fa-f-]{32,36}))(\\?[^#]*)?$"
+            "pattern": "^https://melee\\.gg/(Tournament/View/[1-9][0-9]*|Standing/GetRoundStandings|Player/GetPlayerDetails\\?id=[1-9][0-9]*|Match/GetRoundMatches/[1-9][0-9]*|Decklist/(View/[1-9][0-9]*|GetDecklistDetails\\?id=[0-9A-Fa-f-]{32,36}))(\\?[^#]*)?$"
           },
           "path": {"type": "string", "pattern": "^[a-z0-9_]+(?:-[a-z0-9-]+)+\\.(html|json)$"},
           "expected_content_type": {"enum": ["html", "json"]},

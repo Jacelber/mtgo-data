@@ -541,6 +541,9 @@ def _require_complete_url(url: str, event_id: str, resource_type: str, source_id
         valid = parsed.path == f"/Match/GetRoundMatches/{source_id}" and not parsed.query and bool(source_id and source_id.isdigit())
     elif resource_type == "decklist":
         valid = parsed.path == "/Decklist/GetDecklistDetails" and parse_qsl(parsed.query) == [("id", source_id or "")]
+    elif resource_type == "participant":
+        valid = (parsed.path == "/Player/GetPlayerDetails" and bool(source_id and source_id.isdigit())
+                 and parse_qsl(parsed.query) == [("id", source_id)])
     else:
         valid = False
     if not valid:
@@ -1041,7 +1044,7 @@ def fetch_complete_event(
         source_id = (
             request.source_round_id
             if request.resource_type in {"standings", "matches"}
-            else request.source_decklist_id
+            else request.source_participant_id if request.resource_type == "participant" else request.source_decklist_id
         )
         _require_complete_url(request.url, event.id, request.resource_type, source_id)
         existing = records.get(request.path)
@@ -1167,6 +1170,7 @@ def fetch_complete_event(
 
         decklists: dict[str, str] = {}
         standings_requests: list[_CompleteRequest] = []
+        standings_participants: set[str] = set()
         start = 0
         page = 1
         total: int | None = None
@@ -1204,6 +1208,7 @@ def fetch_complete_event(
             for row in rows:
                 if not isinstance(row, dict):
                     raise MeleeFetchError("standings row must be a mapping")
+                standings_participants.add(row["source_participant_id"])
             for reference in payload.get("decklist_references") or []:
                 if not isinstance(reference, dict):
                     raise MeleeFetchError("decklist reference must be a mapping")
@@ -1272,6 +1277,26 @@ def fetch_complete_event(
                     source_round_id=round_id,
                 ))
 
+        # A DQ can disappear from all standings while their historical matches
+        # remain. Read only those orphan identities, without inventing standings.
+        match_participants = set()
+        for request in match_requests:
+            payload = _json_mapping(collect(request), "matches")
+            for match in payload["matches"]:
+                match_participants.update(c["source_participant_id"] for c in match["competitors"])
+        participant_requests = []
+        for source_id in sorted(match_participants - standings_participants):
+            request = _CompleteRequest(request_id="participant", resource_type="participant", page=1,
+                url=f"https://melee.gg/Player/GetPlayerDetails?id={source_id}",
+                path=f"participant-{source_id}.json", method="GET", headers=API_HEADERS,
+                source_participant_id=source_id)
+            participant_requests.append(request)
+            payload = _json_mapping(collect(request), "participant")
+            for reference in payload["decklist_references"]:
+                previous = decklists.setdefault(reference["source_decklist_id"], source_id)
+                if previous != source_id:
+                    raise MeleeFetchError("participant decklist identity maps to multiple participants")
+
         decklist_requests: list[_CompleteRequest] = []
         for page, (decklist_id, source_participant_id) in enumerate(
             sorted(decklists.items()), 1
@@ -1293,11 +1318,12 @@ def fetch_complete_event(
             tournament_request,
             *standings_requests,
             *match_requests,
+            *participant_requests,
             *decklist_requests,
         )
         if len({request.path for request in full_plan}) != len(full_plan):
             raise MeleeArchiveError("complete-event request plan contains duplicate paths")
-        budget = complete_request_budget(
+        budget = len(participant_requests) + complete_request_budget(
             standings_total=total or 0,
             round_match_totals=tuple(value for _round_id, value in round_totals),
             decklist_count=len(decklist_requests),

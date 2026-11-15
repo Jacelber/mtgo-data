@@ -22,7 +22,7 @@ from .privacy_validation import (
 )
 
 
-SUPPORTED_RESOURCE_TYPES = frozenset({"tournament", "standings", "matches", "decklist"})
+SUPPORTED_RESOURCE_TYPES = frozenset({"tournament", "standings", "matches", "decklist", "participant"})
 SUPPORTED_CONTENT_TYPES = frozenset({"html", "json"})
 MAX_SOURCE_BYTES = 32 * 1024 * 1024
 V3_PARTICIPANT_REF_PATTERN = re.compile(r"^melee-v3-[0-9a-f]{64}$")
@@ -678,6 +678,42 @@ def _real_matches(
     )
 
 
+def _participant_details(payload: Mapping[str, Any], artifact: SourceArtifact, *, minimized=False) -> ParsedSourcePage:
+    """Retain an explicitly disqualified, unranked match participant's identity.
+
+    The nullable standing is identity context from the player endpoint, never an
+    invented official rank or score. Existing DQ normalization remains in charge
+    of excluding both sides of their matches.
+    """
+    source_id = artifact.source_participant_id
+    if not source_id or not re.fullmatch(r"[1-9][0-9]*", source_id):
+        raise MeleeSourceParseError("participant response lacks source identity")
+    if artifact.url != f"https://melee.gg/Player/GetPlayerDetails?id={source_id}":
+        raise MeleeSourceParseError("participant URL does not match manifest identity")
+    details = payload["participant"] if minimized else payload
+    if minimized and details.get("source_participant_id") != source_id:
+        raise MeleeSourceParseError("participant identity does not match manifest")
+    status = details.get("status_text" if minimized else "status")
+    if status != "Disqualified":
+        raise MeleeSourceParseError("missing standings participant is not explicitly Disqualified")
+    name = _string(details.get("display_name" if minimized else "name"), "participant.name")
+    if minimized:
+        references = _parse_decklist_references(payload["decklist_references"], "decklist_references")
+    else:
+        references = []
+        for value in _list(payload.get("decklists") or [], "participant.decklists"):
+            identifier = str(value.get("id") or "")
+            if not re.fullmatch(r"[0-9A-Fa-f-]{32,36}", identifier):
+                raise MeleeSourceParseError("invalid participant decklist identity")
+            references.append(SourceDecklistReference(identifier, source_id,
+                f"https://melee.gg/Decklist/GetDecklistDetails?id={identifier}"))
+    if len(references) > 1 or any(r.source_participant_id != source_id for r in references):
+        raise MeleeSourceParseError("ambiguous participant decklist references")
+    return ParsedSourcePage(artifact=artifact, standings=(SourceStanding(
+        f"player-details:{source_id}", source_id, name, None, None, None, status),),
+        decklist_references=tuple(references))
+
+
 def _real_decklist(payload: Mapping[str, Any], artifact: SourceArtifact) -> ParsedSourcePage:
     if artifact.source_participant_id is None or artifact.source_decklist_id is None:
         raise MeleeSourceParseError(f"{artifact.path}: decklist response lacks manifest owner context")
@@ -748,6 +784,8 @@ def parse_source_response(body: bytes, artifact: SourceArtifact) -> ParsedSource
     else:
         payload = _decode_payload(body, artifact.expected_content_type, artifact.path)
     if "resource_type" not in payload:
+        if artifact.resource_type == "participant":
+            return _participant_details(payload, artifact)
         if artifact.resource_type == "standings":
             return _real_standings(payload, artifact)
         if artifact.resource_type == "matches":
@@ -757,6 +795,8 @@ def parse_source_response(body: bytes, artifact: SourceArtifact) -> ParsedSource
         raise MeleeSourceParseError(f"{artifact.path}: real source payload is not supported")
     if payload.get("resource_type") != artifact.resource_type:
         raise MeleeSourceParseError(f"{artifact.path}: payload resource type does not match manifest")
+    if artifact.resource_type == "participant":
+        return _participant_details(payload, artifact, minimized=True)
     if artifact.resource_type == "tournament":
         payload = _fields(
             payload,
@@ -896,6 +936,8 @@ def parse_minimized_response(
     legacy_hmac = minimized_version == "1.0.0"
     if payload.get("resource_type") != artifact.resource_type:
         raise MeleeSourceParseError(f"{artifact.path}: minimized resource type does not match manifest")
+    if artifact.resource_type == "participant":
+        return _participant_details(payload, artifact, minimized=True)
     if artifact.resource_type == "tournament":
         data = _fields(payload, artifact.path, common | {"tournament", "rounds"})
         return ParsedSourcePage(

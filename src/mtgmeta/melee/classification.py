@@ -471,6 +471,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--format", required=True, dest="format_id")
     parser.add_argument("--event-id", required=True)
+    parser.add_argument("--retained-facts", action="store_true",
+                        help="Verify and reuse fixed repository card facts without refreshing shared classifier inputs")
     parser.add_argument(
         "--execute",
         action="store_true",
@@ -497,7 +499,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         f"{args.event_id}.json"
     )
     try:
-        if args.execute:
+        if args.retained_facts:
+            from ..classifier_preparation import require_facts, _names, FACTS
+            from ..classifier_cards import read_card_facts
+            require_facts(_names(json.loads(event_path.read_bytes())), read_card_facts(root / FACTS))
+        elif args.execute:
             from ..classifier_preparation import prepare_repository_facts
             prepare_repository_facts(root, [args.format_id], input_paths=[event_path])
         document = build_classification_overlay_from_paths(
