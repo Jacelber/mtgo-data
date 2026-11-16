@@ -10,9 +10,10 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from mtgmeta.melee.client import API_HEADERS, STANDINGS_COLUMNS, _datatables_body, _completed_rounds
+from mtgmeta.melee.client import HTML_HEADERS, POST_HEADERS, STANDINGS_COLUMNS, _datatables_body, _completed_rounds
 from mtgmeta.melee.config import load_melee_event_registry
-from mtgmeta.melee.parser import _real_player
+from mtgmeta.melee.parser import SourceArtifact, _real_player
+from mtgmeta.melee.privacy import minimize_source_response
 from mtgmeta.melee.stats import apply_final_standings, statistics_document_bytes
 from mtgmeta.melee.publish import _descriptor
 
@@ -26,31 +27,61 @@ def refresh(root, event_id, *, reviewed_semifinals=False, owner_final_440878=Fal
     event_path = root / "data" / definition.format / "melee/events" / f"{event_id}.json"
     event_bytes = event_path.read_bytes()
     event = json.loads(event_bytes)
-    tournament_path = next(item["path"] for item in event["provenance"]["raw_artifacts"]
-                           if item.get("source_url") == definition.url)
-    if tournament_path.endswith(".html"):
-        rounds = [{"source_round_id": identifier, "label": label}
-                  for identifier, label in _completed_rounds((root / tournament_path).read_bytes())]
-    else:
-        tournament = json.loads((root / tournament_path).read_text(encoding="utf-8"))
-        rounds = tournament.get("rounds", tournament.get("data", {}).get("rounds", []))
+    # The retained tournament predates the playoffs. Refresh only this small
+    # metadata response and official standings, keeping Swiss/decks unchanged.
+    fetched_at = datetime.now(timezone.utc)
+    snapshot = root / "data_raw/melee" / event_id / fetched_at.strftime("final-%Y%m%dT%H%M%S%fZ")
+    snapshot.mkdir(parents=True, exist_ok=False)
+    evidence = {"operation": "refresh-final-standings", "event_id": event_id,
+                "event_sha256": hashlib.sha256(event_bytes).hexdigest(),
+                "fetched_at": fetched_at.isoformat(), "responses": [], "complete": False}
+
+    def source(request, resource_type, filename, page=1, source_round_id=None):
+        with urllib.request.urlopen(request, timeout=30) as response:
+            body = response.read(32 * 1024 * 1024 + 1)
+        if len(body) > 32 * 1024 * 1024:
+            raise ValueError("Final standings response exceeded the source limit")
+        artifact = SourceArtifact(request_id=resource_type, resource_type=resource_type,
+            page=page, url=request.full_url, path=filename,
+            expected_content_type="html" if resource_type == "tournament" else "json",
+            sha256=hashlib.sha256(body).hexdigest(), bytes=len(body),
+            method=request.get_method(), source_round_id=source_round_id)
+        minimized = minimize_source_response(body, artifact, event_id=event_id)
+        target = snapshot / filename
+        target.write_bytes(minimized.body)
+        evidence["responses"].append({"path": target.relative_to(root).as_posix(),
+            "sha256": hashlib.sha256(minimized.body).hexdigest(),
+            "source_sha256": artifact.sha256, "resource_type": resource_type,
+            "source_round_id": source_round_id, "page": page})
+        (snapshot / "refresh.json").write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
+        return body
+
+    tournament_body = source(urllib.request.Request(definition.url, headers=HTML_HEADERS),
+                             "tournament", "tournament.json")
+    rounds = [{"source_round_id": identifier, "label": label}
+              for identifier, label in _completed_rounds(tournament_body)]
+    evidence["completed_rounds"] = rounds
     source_label = "Semifinals" if reviewed_semifinals else "Finals"
     finals = [item for item in rounds if item["label"].casefold() == source_label.casefold()]
     if len(finals) != 1:
         raise ValueError(f"{event_id}: no unique completed official Finals round")
     round_id = finals[0]["source_round_id"]
-    identities = {item["source_id"]: item["id"] for item in event["participants"]}
+    retained_ranks = {item["participant_id"]: item["rank"] for item in event["standings"]}
+    unranked = sorted(item["id"] for item in event["participants"]
+                      if item["status"] == "disqualified" and retained_ranks[item["id"]] is None)
+    identities = {item["source_id"]: item["id"] for item in event["participants"]
+                  if item["id"] not in unranked}
     ranks = {}
     total = None
     start = 0
     while total is None or start < total:
         request = urllib.request.Request("https://melee.gg/Standing/GetRoundStandings",
             data=_datatables_body(STANDINGS_COLUMNS, start, round_id=round_id),
-            headers=API_HEADERS, method="POST")
-        with urllib.request.urlopen(request, timeout=30) as response:
-            payload = json.load(response)
+            headers=POST_HEADERS, method="POST")
+        payload = json.loads(source(request, "standings", f"standings-{start:04d}.json",
+                                    page=start // 25 + 1, source_round_id=round_id))
         count = payload["recordsTotal"]
-        if not isinstance(count, int) or not 0 < count <= 5000 or (total is not None and total != count):
+        if type(count) is not int or not 0 < count <= 5000 or (total is not None and total != count):
             raise ValueError("Official standings count changed or exceeded the supported scope")
         total = count
         rows = payload["data"]
@@ -59,23 +90,26 @@ def refresh(root, event_id, *, reviewed_semifinals=False, owner_final_440878=Fal
         for row in rows:
             source_id, _, _ = _real_player(row["Team"], "standing.Team")
             rank = row["Rank"]
-            if not isinstance(rank, int) or rank < 1 or source_id in ranks:
+            if type(rank) is not int or rank < 1 or source_id in ranks:
                 raise ValueError("Invalid or repeated official ranking")
             ranks[source_id] = rank
         start += len(rows)
         if start < total:
             time.sleep(0.25)
-    if not identities.keys() <= ranks.keys():
-        raise ValueError("Official final standings omit retained participants")
+    if identities.keys() != ranks.keys():
+        raise ValueError("Official final standings must match all ranked retained participants exactly")
     selected = {identities[key]: ranks[key] for key in identities}
     if len(set(selected.values())) != len(selected):
         raise ValueError("Official final ranks are not unique")
     result = {"event_id": event_id, "source_url": definition.url,
         "source_round_id": round_id, "source_round_label": source_label,
         "fetched_at": datetime.now(timezone.utc).isoformat(),
-        "event_sha256": hashlib.sha256(event_bytes).hexdigest(), "ranks": selected}
+        "event_sha256": hashlib.sha256(event_bytes).hexdigest(), "ranks": selected,
+        "unranked_participant_ids": unranked, "raw_artifacts": evidence["responses"]}
     if reviewed_semifinals:
         supplement_from_semifinals(result, event, owner_final_440878=owner_final_440878)
+    evidence["complete"] = True
+    (snapshot / "refresh.json").write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
     destination = event_path.parent.parent / "final_standings" / f"{event_id}.json"
     destination.parent.mkdir(exist_ok=True)
     destination.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -150,11 +184,13 @@ def supplement_from_semifinals(result, event, *, owner_final_440878=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--event-id", required=True)
     parser.add_argument("--reviewed-semifinals", action="store_true", help="Apply the event-specific Owner-approved semifinal ranking supplement")
     parser.add_argument("--owner-final-440878", action="store_true", help="Use the explicitly reviewed Alex von Stange 2-0 final for event 440878")
     parser.add_argument("--materialize", action="store_true", help="Use the saved official source; perform no network requests")
     args = parser.parse_args()
+    ROOT = args.root.resolve()
     if args.materialize:
         definition = load_melee_event_registry(ROOT / "configs/melee_events.yaml").require_fetchable(args.event_id)
         directory = ROOT / "stats" / definition.format / "melee/events" / args.event_id
