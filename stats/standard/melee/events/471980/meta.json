@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0.0",
+  "document_type": "meta",
+  "source": "melee",
+  "product": "tabletop-major-events",
+  "event_id": "471980",
+  "format": "standard",
+  "event_structure": "mixed",
+  "event": {
+    "name": "World Championship 32 in Atlanta, USA",
+    "series": "world_championship",
+    "date": {
+      "end": "2026-11-15",
+      "start": "2026-11-13"
+    },
+    "source_url": "https://melee.gg/Tournament/View/471980"
+  },
+  "input": {
+    "event_path": "data/standard/melee/events/471980.json",
+    "event_sha256": "b6d24d55248f8320d1429ef82fb90799bb10b02442e3c08de8da7983d431f6cf",
+    "event_schema_version": "2.2.0",
+    "classification_path": "data/standard/melee/classifications/471980.json",
+    "classification_sha256": "f19314ae6ffa2f69daa6947391116b4edd7cd579b5dac395fbd2aca47d65198f",
+    "classification_schema_version": "1.1.0",
+    "opportunity_path": "data/standard/melee/opportunities/471980.json",
+    "opportunity_sha256": "7020799ec0008b3c35616682f44d6ee51dbe1633917da1a6497d26eae9f045ef",
+    "opportunity_schema_version": "1.1.0",
+    "taxonomy_path": "my_archetypes/standard.yaml",
+    "taxonomy_sha256": "bfa9667ea860a7ac37c3b3dc1e640df06fb5633125c39717ada94a1d421c16f1",
+    "taxonomy_schema_version": "1.2.0"
+  },
+  "scope_order": [
+    "day1",
+    "day2",
+    "all_constructed"
+  ],
+  "default_scope": "all_constructed",
+  "quality": {
+    "status": "warning",
+    "blocking": false,
+    "issue_codes": [
+      "disqualified_participant_matches_excluded",
+      "mixed_event_day2_selection_bias"
+    ]
+  },
+  "outputs": {
+    "overview": {
+      "path": "overview.json",
+      "schema_version": "1.2.0",
+      "bytes": 201991,
+      "sha256": "4bbeb1f94a7f82bb9d0657056217bc867b3a756c8a44d509f77f0aa0bf39a0ef"
+    },
+    "decks": {
+      "path": "decks.json",
+      "schema_version": "1.1.0",
+      "bytes": 486287,
+      "sha256": "44ad8770f629873de439a731da73a795dce18352757c10bde9c061d4b1e992df"
+    },
+    "matchup": {
+      "path": "matchup.json",
+      "schema_version": "1.1.0",
+      "bytes": 486945,
+      "sha256": "383dd64f9f6ab0c9a21389c93234d7974ea10db6e054cea0da259da0f8dff173"
+    },
+    "quality": {
+      "path": "quality.json",
+      "schema_version": "1.1.0",
+      "bytes": 2406,
+      "sha256": "23359f5337e2e93d8cb2ccb53b0b37620c2eff540cf17b522bf059ea8980555e"
+    }
+  }
+}
