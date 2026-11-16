@@ -19803,6 +19803,65 @@ data_admissions:
                 accepted_on: '2026-11-09'
                 entrypoint: file:outputs/W45-%E5%88%86%E7%B1%BB%E5%AE%A1%E9%98%85/pauper/index.html
                 submitted_digest: cbcbe230188c7d07042af32b492977ab03c54636c67c72f0725adfbcac81d21c
+      - week: 2026-W46
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857707'
+        - '12857714'
+        - '12858092'
+        - '12858097'
+        - '12858105'
+        - '12858120'
+        source_manifest_digest: ecb0ecf84ac37fbbc23d9d4020bf7656e32baff85a3dda0a41f9e542a01c689d
+        accepted_classifier_subject: f28dde264acfaecd77813ddb320f1a1414bf65af01136545f13efec21b93f507
+        classification_review_digest: 1b78c14a4e419b259107afc970b5fd77d5d14207e400ffade7d57303794d1e63
+        accepted_on: '2026-11-16'
+        evidence: 'Owner reviewed the complete Pauper W46 classification-v6 snapshot via offline ZIP v4 under the standing exception-only convention, and specified 12857707 rank 7 as 4-Color Synthesizer and 12857714 rank 19 as Dimir Splash Red Control. Both are existing approved identities and bilingual names. The only additional current-week identity change, 12857707 rank 28 Walker735, was separately delivered with all 60 main and 15 side cards in offline ZIP v5, pauper-extra-12857707-28.html; the exact card quantities match the approved rank 7 deck, and Owner explicitly answered 第28名也改为四色融合仪. The other 181 complete records retain the original classifications and diagnostics, and every original card and quantity is preserved. Cumulative impact covers 5569 MTGO and 1070 Melee records: exactly these three identity changes and one older diagnostic-only lower-priority overlap, with no new Unknown, conflict, classification loss, or unexplained differences. No Feature, publication, or maintenance completion
+          is accepted by this record.'
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pauper
+            week: 2026-W46
+            bindings:
+              event_ids:
+              - '12857707'
+              - '12857714'
+              - '12858092'
+              - '12858097'
+              - '12858105'
+              - '12858120'
+              record_count: 184
+              classifier: f28dde264acfaecd77813ddb320f1a1414bf65af01136545f13efec21b93f507
+              classification_review_digest: 1b78c14a4e419b259107afc970b5fd77d5d14207e400ffade7d57303794d1e63
+              material_digest: 524cbdd92be9df4b2faefd8f0c7ea77e0f3a7fe77b7ee4ca478d9196677f21f3
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857707'
+                - '12857714'
+                - '12858092'
+                - '12858097'
+                - '12858105'
+                - '12858120'
+                record_count: 184
+                classifier: f28dde264acfaecd77813ddb320f1a1414bf65af01136545f13efec21b93f507
+                classification_review_digest: 1b78c14a4e419b259107afc970b5fd77d5d14207e400ffade7d57303794d1e63
+            digest: 63b6fbefdc9e966d44803a275974246c63c6fad8c1361869d2838656b449f0a1
+          decisions:
+            format: pauper
+            week: 2026-W46
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: c2e2de7960b72d68d83c06db2d28d7e7f51f111147abd412c8f1fd8dbb415bf3
+                evidence: 'Owner reviewed the complete Pauper W46 classification-v6 snapshot via offline ZIP v4 under the standing exception-only convention, and specified 12857707 rank 7 as 4-Color Synthesizer and 12857714 rank 19 as Dimir Splash Red Control. Both are existing approved identities and bilingual names. The only additional current-week identity change, 12857707 rank 28 Walker735, was separately delivered with all 60 main and 15 side cards in offline ZIP v5, pauper-extra-12857707-28.html; the exact card quantities match the approved rank 7 deck, and Owner explicitly answered 第28名也改为四色融合仪. The other 181 complete records retain the original classifications and diagnostics, and every original card and quantity is preserved. Cumulative impact covers 5569 MTGO and 1070 Melee records: exactly these three identity changes and one older diagnostic-only lower-priority overlap, with no new Unknown, conflict, classification loss, or unexplained differences. No Feature, publication, or maintenance
+                  completion is accepted by this record.'
+                accepted_on: '2026-11-16'
+                entrypoint: MTGO-2026-W46-review-v4.zip:pauper/2026-W46/index.html; implemented corrections and separately approved exact additional deck:MTGO-2026-W46-review-v5.zip:pauper-extra-12857707-28.html
+                submitted_digest: 63b6fbefdc9e966d44803a275974246c63c6fad8c1361869d2838656b449f0a1
     modern:
       initial:
         kind: grandfathered_existing_public_scope
