@@ -60,6 +60,14 @@ jobs:
           BRANCH="data/melee-final-${EVENT_ID}"
           if git ls-remote --exit-code --heads origin "refs/heads/${BRANCH}" >/dev/null 2>&1; then
             git fetch --no-tags origin "refs/heads/${BRANCH}:refs/remotes/origin/${BRANCH}"
+            MERGE_BASE="$(git merge-base "$GITHUB_SHA" "refs/remotes/origin/${BRANCH}")"
+            while IFS=$'\t' read -r STATUS CHANGED_PATH REST; do
+              [[ "$STATUS" =~ ^[AM]$ && -z "$REST" ]] || { echo "Unexpected final-input deletion or rename" >&2; exit 1; }
+              case "$CHANGED_PATH" in
+                "data_raw/melee/${EVENT_ID}/"* | "data/${EVENT_FORMAT}/melee/final_standings/${EVENT_ID}.json") ;;
+                *) echo "Final-input branch changes an unauthorized path: ${CHANGED_PATH}" >&2; exit 1 ;;
+              esac
+            done < <(git diff --name-status "$MERGE_BASE" "refs/remotes/origin/${BRANCH}")
             git checkout -b "$BRANCH" "refs/remotes/origin/${BRANCH}"
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
