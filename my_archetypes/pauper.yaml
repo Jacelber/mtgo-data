@@ -1,5 +1,5 @@
 schema_version: 1.2.0
-card_facts_sha256: 3fe3b54975b5e33fd2ae45822e2574e733df02c1f28b80f3fdc8bcee5e36fc79
+card_facts_sha256: fe316ee04385fd38352d8bbc5040561a47c5ae1d6b9f3d80c4cc50455cad608c
 format: pauper
 semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
@@ -881,6 +881,9 @@ archetypes:
       - card: Snuff Out
         zone: main
         min_count: 4
+      - card: Murmuring Mystic
+        zone: main
+        min_count: 2
     colors:
     - blue
     - black
@@ -912,17 +915,20 @@ archetypes:
       all:
       - card: Baleful Strix
         zone: main
-        min_count: 4
+        min_count: 1
       - card: Counterspell
         zone: main
-        min_count: 4
+        min_count: 1
       - card: Snuff Out
         zone: main
-        min_count: 4
+        min_count: 1
       - card: Skred
         zone: main
         exact_count: 0
       - card: Terminate
+        zone: main
+        exact_count: 0
+      - card: Spellstutter Sprite
         zone: main
         exact_count: 0
     colors:
@@ -935,11 +941,6 @@ archetypes:
   - id: red-splash
     name: Dimir Splash Red Control
   color_profile: default
-  conditions:
-    all:
-    - card: Murmuring Mystic
-      zone: main
-      min_count: 2
 - id: azorius-faeries
   name: "Azorius Faeries"
   priority: 9200
@@ -1534,7 +1535,7 @@ archetypes:
         zone: main
         min_count: 3
 - id: four-color-synthesizer
-  name: "4-Color Synthesizer"
+  name: 4-Color Synthesizer
   priority: 8795
   rules:
   - id: four-color-synthesizer-blue-spells
@@ -1542,27 +1543,24 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: "Experimental Synthesizer"
+      - card: Experimental Synthesizer
         zone: main
         min_count: 3
-      - card: "Glint Hawk"
+      - card: Glint Hawk
         zone: main
         min_count: 3
-      - card: "Kor Skyfisher"
+      - card: Kor Skyfisher
         zone: main
         min_count: 3
-      - card: "Refurbished Familiar"
+      - card: Refurbished Familiar
         zone: main
         min_count: 3
-      - card: "Thoughtcast"
+      - card: Thoughtcast
         zone: main
         min_count: 3
-      - card: "Cryogen Relic"
+      - card: Cryogen Relic
         zone: main
         min_count: 2
-      - card: "Galvanic Blast"
-        zone: main
-        min_count: 3
 - id: rakdos-synthesizer
   name: "Rakdos Synthesizer"
   priority: 8785

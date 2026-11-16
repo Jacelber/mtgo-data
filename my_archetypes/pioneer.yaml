@@ -1,6 +1,6 @@
 # Owner-reviewed Pioneer classification, including remainder decisions.
 schema_version: 1.2.0
-card_facts_sha256: 3fe3b54975b5e33fd2ae45822e2574e733df02c1f28b80f3fdc8bcee5e36fc79
+card_facts_sha256: fe316ee04385fd38352d8bbc5040561a47c5ae1d6b9f3d80c4cc50455cad608c
 format: pioneer
 semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
@@ -10,6 +10,15 @@ archetypes:
   name: Lotus Scapeshift
   priority: 100
   rules:
+  - id: lotus-scapeshift-bant-primary
+    priority: 100
+    subtype_id: bant
+    conditions:
+      all: []
+    colors:
+    - white
+    - blue
+    - green
   - id: lotus-scapeshift-sultai-primary
     priority: 100
     subtype_id: sultai
@@ -38,12 +47,15 @@ archetypes:
     - black
     - green
   subtypes:
+  # Owner-reviewed names retain Lotus only in the parent family.
+  - id: bant
+    name: Bant Scapeshift
   - id: sultai
-    name: Sultai
+    name: Sultai Scapeshift
   - id: simic
-    name: Simic
+    name: Simic Scapeshift
   - id: wubg
-    name: WUBG
+    name: WUBG Scapeshift
   conditions:
     all:
     - card: Lotus Field
@@ -1019,9 +1031,18 @@ archetypes:
       - card: Momo, Friendly Flier
         zone: main
         min_count: 1
-      - card: Daydream
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Daydream
+            zone: main
+            min_count: 1
+        - all:
+          - card: Watcher of the Spheres
+            zone: main
+            min_count: 1
+          - card: Empyrean Eagle
+            zone: main
+            min_count: 1
 - id: boros-convoke
   name: Boros Convoke
   priority: 100
@@ -3258,9 +3279,15 @@ archetypes:
       - card: Ornithopter
         zone: main
         min_count: 1
-      - card: Simulacrum Synthesizer
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Simulacrum Synthesizer
+            zone: main
+            min_count: 1
+        - all:
+          - card: Pinnacle Emissary
+            zone: main
+            min_count: 1
 - id: bant-beanstalk-control
   name: Bant Bealstalk Control
   priority: 110
@@ -3388,6 +3415,69 @@ archetypes:
     colors:
     - blue
   color_profile: default
+- id: mono-white-hammer-time
+  name: Mono-White Hammer Time
+  priority: 100
+  color_profile: default
+  rules:
+  - id: mono-white-hammer-time-primary
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Colossus Hammer
+        zone: main
+        min_count: 1
+      - card: Sigarda's Aid
+        zone: main
+        min_count: 1
+    colors:
+    - white
+- id: grixis-control
+  name: Grixis Control
+  priority: 100
+  color_profile: default
+  rules:
+  - id: grixis-control-gearhulk
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Torrential Gearhulk
+        zone: main
+        min_count: 1
+      - card: Magma Opus
+        zone: main
+        min_count: 1
+      - card: Dark Intimations
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+    - black
+    - red
+- id: gruul-naked
+  name: Gruul Naked
+  priority: 100
+  color_profile: default
+  rules:
+  - id: gruul-naked-core
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: The Naked Time
+        zone: main
+        min_count: 1
+      - card: Burning-Tree Emissary
+        zone: main
+        min_count: 1
+      - card: Break Out
+        zone: main
+        min_count: 1
+    colors:
+    - red
+    - green
 - id: rakdos-madness
   name: Rakdos Madness
   priority: 110

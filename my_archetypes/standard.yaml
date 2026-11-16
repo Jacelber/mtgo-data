@@ -1,5 +1,5 @@
 schema_version: 1.2.0
-card_facts_sha256: 3fe3b54975b5e33fd2ae45822e2574e733df02c1f28b80f3fdc8bcee5e36fc79
+card_facts_sha256: fe316ee04385fd38352d8bbc5040561a47c5ae1d6b9f3d80c4cc50455cad608c
 format: standard
 semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
@@ -85,6 +85,71 @@ archetypes:
         zone: main
         min_count: 1
       - card: Flashback
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+    - red
+- id: bant-offense
+  name: Bant Offense
+  priority: 23010
+  color_profile: default
+  rules:
+  - id: bant-offense-primary
+    priority: 23010
+    subtype_id: null
+    conditions:
+      all:
+      - card: Practiced Offense
+        zone: main
+        min_count: 3
+      - card: Temple Garden
+        zone: main
+        min_count: 1
+      - card: Nature's Rhythm
+        zone: any
+        max_count: 1
+    colors:
+    - white
+    - blue
+    - green
+- id: mardu-naked
+  name: Mardu Naked
+  priority: 78156
+  color_profile: default
+  rules:
+  - id: mardu-naked-core
+    priority: 78156
+    subtype_id: null
+    conditions:
+      all:
+      - card: The Naked Time
+        zone: main
+        min_count: 1
+      - card: Weapons Manufacturing
+        zone: main
+        min_count: 1
+      - card: Rottenmouth Viper
+        zone: main
+        min_count: 1
+    colors:
+    - white
+    - black
+    - red
+- id: izzet-archaic
+  name: Izzet Archaic
+  priority: 78157
+  color_profile: default
+  rules:
+  - id: izzet-archaic-core
+    priority: 78157
+    subtype_id: null
+    conditions:
+      all:
+      - card: The Dawning Archaic
+        zone: main
+        min_count: 1
+      - card: Artist's Talent
         zone: main
         min_count: 1
     colors:
@@ -985,6 +1050,23 @@ archetypes:
   name: Boros Token
   priority: 54000
   rules:
+  - id: boros-token-triumph-rush
+    priority: 54000
+    subtype_id: null
+    conditions:
+      all:
+      - card: Political Triumph
+        zone: main
+        min_count: 1
+      - card: Frontline Rush
+        zone: main
+        min_count: 1
+      - card: Exalted Sunborn
+        zone: main
+        min_count: 1
+    colors:
+    - white
+    - red
   - id: boros-token-primary
     priority: 54000
     subtype_id: null
@@ -2197,10 +2279,36 @@ archetypes:
 - id: jeskai-artifacts
   name: Jeskai Artifacts
   priority: 28000
+  color_profile: default
+  subtypes:
+  - id: jeskai
+    name: Jeskai Artifacts
+  - id: azorius
+    name: Azorius Artifacts
   rules:
+  - id: jeskai-artifacts-azorius
+    priority: 28002
+    subtype_id: azorius
+    conditions:
+      all:
+      - card: Simulacrum Synthesizer
+        zone: main
+        min_count: 1
+      - card: Repurposing Bay
+        zone: main
+        min_count: 1
+      - card: United Battlefront
+        zone: main
+        min_count: 1
+      - card: The Fire Crystal
+        zone: any
+        exact_count: 0
+    colors:
+    - white
+    - blue
   - id: jeskai-artifacts-manufacturing-deviation
     priority: 28001
-    subtype_id: null
+    subtype_id: jeskai
     conditions:
       all:
       - card: Simulacrum Synthesizer
@@ -2217,7 +2325,7 @@ archetypes:
         min_count: 1
   - id: jeskai-artifacts-primary
     priority: 28000
-    subtype_id: null
+    subtype_id: jeskai
     conditions:
       all:
       - card: Simulacrum Synthesizer
@@ -3588,6 +3696,24 @@ archetypes:
     - blue
     - black
     - green
+  - id: sultai-midrange-echoes-value
+    priority: 65990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Avatar of Burgeoning Echoes
+        zone: main
+        min_count: 1
+      - card: Professor Dellian Fel
+        zone: main
+        min_count: 1
+      - card: The Theorist, Jace Beleren
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+    - black
+    - green
   color_profile: default
 - id: mono-white-triumph
   name: Mono-White Triumph
@@ -4259,9 +4385,6 @@ archetypes:
       - card: Springleaf Drum
         zone: main
         min_count: 3
-      - card: Steam Vents
-        zone: main
-        min_count: 2
 - id: dimir-spellementals
   name: Dimir Spellementals
   priority: 77090

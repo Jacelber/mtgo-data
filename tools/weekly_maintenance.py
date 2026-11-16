@@ -597,8 +597,25 @@ def stage_data(root, plan, resume_stage=None, previous=None):
             _generate_melee(root, f, event_ids=ids)
             completed.append({"format": f, "events": sorted(ids), "producer": "current_melee_sync",
                               "seconds": round(perf_counter() - started, 4)})
+    # A later MTGO failure may leave the complete Melee cohort current before
+    # the outer result exists. Continue its own hash/code-bound checkpoints,
+    # rather than replaying the explicit plan through a second progress ledger.
+    checkpointed = {}
+    for item in members:
+        f, event = item["format"], item["event_id"]
+        if (event not in sync_required.get(f, set())
+                and set(item["steps"]) == set(producers)
+                and root.with_name(root.name + f".melee-{f}.progress.json").is_file()):
+            checkpointed.setdefault(f, set()).add(event)
+    for f, ids in checkpointed.items():
+        started = perf_counter()
+        _generate_melee(root, f, event_ids=ids)
+        completed.append({"format": f, "events": sorted(ids), "producer": "melee_checkpoint_continuation",
+                          "seconds": round(perf_counter() - started, 4)})
     for item in members:
         if item["event_id"] in sync_required.get(item["format"], set()):
+            continue
+        if item["event_id"] in checkpointed.get(item["format"], set()):
             continue
         # Synchronize all already-admitted current consumers of this format.
         for name, producer in producers.items():

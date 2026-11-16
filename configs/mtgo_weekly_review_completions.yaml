@@ -19101,6 +19101,75 @@ data_admissions:
                 accepted_on: '2026-11-09'
                 entrypoint: file:outputs/W45-%E5%88%86%E7%B1%BB%E5%AE%A1%E9%98%85/standard/index.html
                 submitted_digest: 85030310b91e795033da743ecf715c242252f5c647265fc54068a0c83216e797
+      - week: 2026-W46
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857709'
+        - '12858074'
+        - '12858075'
+        - '12858076'
+        - '12858080'
+        - '12858085'
+        - '12858087'
+        - '12858100'
+        - '12858107'
+        - '12858123'
+        source_manifest_digest: 52534123ecf1dec1692072f149e6b5afe4b3590ffe1a10fc8c4be4cf31db8a34
+        accepted_classifier_subject: 52d1751ad1424f54352e87fceecabb0cf841d8b50c7be804260320e59b9e2b8e
+        classification_review_digest: 0efcfcc492b888a49c3dd0ac7cb17d052ff41637ccd10a2afaa53ba1134267c4
+        accepted_on: '2026-11-16'
+        evidence: Owner reviewed the complete Standard 2026-W46 classification-v3 offline snapshot, explicitly accepted all unmentioned entries, and specified the eight corrections in owner-decisions.json. Owner also confirmed Bant Offense and Azorius Artifacts English names and required reuse of existing boros-token/Boros Token. Candidate v4 implements exactly those eight identity corrections; all other 298 displayed classifications and all complete decks remain unchanged. Full 9913-record impact verified, with 172 same-name Jeskai subtype registrations and one explained overridden Bant match.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: standard
+            week: 2026-W46
+            bindings:
+              event_ids:
+              - '12857709'
+              - '12858074'
+              - '12858075'
+              - '12858076'
+              - '12858080'
+              - '12858085'
+              - '12858087'
+              - '12858100'
+              - '12858107'
+              - '12858123'
+              record_count: 306
+              classifier: 52d1751ad1424f54352e87fceecabb0cf841d8b50c7be804260320e59b9e2b8e
+              classification_review_digest: 0efcfcc492b888a49c3dd0ac7cb17d052ff41637ccd10a2afaa53ba1134267c4
+              material_digest: dcad16276d46b9f9b3a7a021dfa1d409e532ffe9405810597e49bba8e2e07390
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857709'
+                - '12858074'
+                - '12858075'
+                - '12858076'
+                - '12858080'
+                - '12858085'
+                - '12858087'
+                - '12858100'
+                - '12858107'
+                - '12858123'
+                record_count: 306
+                classifier: 52d1751ad1424f54352e87fceecabb0cf841d8b50c7be804260320e59b9e2b8e
+                classification_review_digest: 0efcfcc492b888a49c3dd0ac7cb17d052ff41637ccd10a2afaa53ba1134267c4
+            digest: b88c15835ef2b3b6f3f8e0728b88e8e3c564443496bc03b08753da48e16ed622
+          decisions:
+            format: standard
+            week: 2026-W46
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: c6efa71dd97885952464152a512480d9adf590847a4d673fc5c08671c18e07ee
+                evidence: Owner reviewed the complete Standard 2026-W46 classification-v3 offline snapshot, explicitly accepted all unmentioned entries, and specified the eight corrections in owner-decisions.json. Owner also confirmed Bant Offense and Azorius Artifacts English names and required reuse of existing boros-token/Boros Token. Candidate v4 implements exactly those eight identity corrections; all other 298 displayed classifications and all complete decks remain unchanged. Full 9913-record impact verified, with 172 same-name Jeskai subtype registrations and one explained overridden Bant match.
+                accepted_on: '2026-11-16'
+                entrypoint: MTGO-2026-W46-review.zip:standard/2026-W46/index.html; implemented corrections:MTGO-2026-W46-review-v2.zip:standard/2026-W46/index.html
+                submitted_digest: b88c15835ef2b3b6f3f8e0728b88e8e3c564443496bc03b08753da48e16ed622
     pauper:
       initial:
         kind: owner_accepted_initial_public_scope
@@ -19734,6 +19803,65 @@ data_admissions:
                 accepted_on: '2026-11-09'
                 entrypoint: file:outputs/W45-%E5%88%86%E7%B1%BB%E5%AE%A1%E9%98%85/pauper/index.html
                 submitted_digest: cbcbe230188c7d07042af32b492977ab03c54636c67c72f0725adfbcac81d21c
+      - week: 2026-W46
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857707'
+        - '12857714'
+        - '12858092'
+        - '12858097'
+        - '12858105'
+        - '12858120'
+        source_manifest_digest: ecb0ecf84ac37fbbc23d9d4020bf7656e32baff85a3dda0a41f9e542a01c689d
+        accepted_classifier_subject: f28dde264acfaecd77813ddb320f1a1414bf65af01136545f13efec21b93f507
+        classification_review_digest: 1b78c14a4e419b259107afc970b5fd77d5d14207e400ffade7d57303794d1e63
+        accepted_on: '2026-11-16'
+        evidence: 'Owner reviewed the complete Pauper W46 classification-v6 snapshot via offline ZIP v4 under the standing exception-only convention, and specified 12857707 rank 7 as 4-Color Synthesizer and 12857714 rank 19 as Dimir Splash Red Control. Both are existing approved identities and bilingual names. The only additional current-week identity change, 12857707 rank 28 Walker735, was separately delivered with all 60 main and 15 side cards in offline ZIP v5, pauper-extra-12857707-28.html; the exact card quantities match the approved rank 7 deck, and Owner explicitly answered 第28名也改为四色融合仪. The other 181 complete records retain the original classifications and diagnostics, and every original card and quantity is preserved. Cumulative impact covers 5569 MTGO and 1070 Melee records: exactly these three identity changes and one older diagnostic-only lower-priority overlap, with no new Unknown, conflict, classification loss, or unexplained differences. No Feature, publication, or maintenance completion
+          is accepted by this record.'
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pauper
+            week: 2026-W46
+            bindings:
+              event_ids:
+              - '12857707'
+              - '12857714'
+              - '12858092'
+              - '12858097'
+              - '12858105'
+              - '12858120'
+              record_count: 184
+              classifier: f28dde264acfaecd77813ddb320f1a1414bf65af01136545f13efec21b93f507
+              classification_review_digest: 1b78c14a4e419b259107afc970b5fd77d5d14207e400ffade7d57303794d1e63
+              material_digest: 524cbdd92be9df4b2faefd8f0c7ea77e0f3a7fe77b7ee4ca478d9196677f21f3
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857707'
+                - '12857714'
+                - '12858092'
+                - '12858097'
+                - '12858105'
+                - '12858120'
+                record_count: 184
+                classifier: f28dde264acfaecd77813ddb320f1a1414bf65af01136545f13efec21b93f507
+                classification_review_digest: 1b78c14a4e419b259107afc970b5fd77d5d14207e400ffade7d57303794d1e63
+            digest: 63b6fbefdc9e966d44803a275974246c63c6fad8c1361869d2838656b449f0a1
+          decisions:
+            format: pauper
+            week: 2026-W46
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: c2e2de7960b72d68d83c06db2d28d7e7f51f111147abd412c8f1fd8dbb415bf3
+                evidence: 'Owner reviewed the complete Pauper W46 classification-v6 snapshot via offline ZIP v4 under the standing exception-only convention, and specified 12857707 rank 7 as 4-Color Synthesizer and 12857714 rank 19 as Dimir Splash Red Control. Both are existing approved identities and bilingual names. The only additional current-week identity change, 12857707 rank 28 Walker735, was separately delivered with all 60 main and 15 side cards in offline ZIP v5, pauper-extra-12857707-28.html; the exact card quantities match the approved rank 7 deck, and Owner explicitly answered 第28名也改为四色融合仪. The other 181 complete records retain the original classifications and diagnostics, and every original card and quantity is preserved. Cumulative impact covers 5569 MTGO and 1070 Melee records: exactly these three identity changes and one older diagnostic-only lower-priority overlap, with no new Unknown, conflict, classification loss, or unexplained differences. No Feature, publication, or maintenance
+                  completion is accepted by this record.'
+                accepted_on: '2026-11-16'
+                entrypoint: MTGO-2026-W46-review-v4.zip:pauper/2026-W46/index.html; implemented corrections and separately approved exact additional deck:MTGO-2026-W46-review-v5.zip:pauper-extra-12857707-28.html
+                submitted_digest: 63b6fbefdc9e966d44803a275974246c63c6fad8c1361869d2838656b449f0a1
     modern:
       initial:
         kind: grandfathered_existing_public_scope
@@ -20703,6 +20831,86 @@ data_admissions:
                 accepted_on: '2026-11-10'
                 entrypoint: conversation:W45-Modern-12857682-4
                 submitted_digest: 8c6a7cf0337aeb79689dea121ef0b5c990f2a57f4769f480ebc062e32f83f787
+      - week: 2026-W46
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857704'
+        - '12857706'
+        - '12857712'
+        - '12857713'
+        - '12858077'
+        - '12858079'
+        - '12858082'
+        - '12858088'
+        - '12858098'
+        - '12858103'
+        - '12858104'
+        - '12858108'
+        - '12858112'
+        source_manifest_digest: 2aa93c24c7ce24ec4548c87a11ba2cff1578a17112808c6eff496128c4d1143d
+        accepted_classifier_subject: 44afba2644e391dae0e706a9e4542f6cc98f5b904cdcb5370f1fdeb6a8b8adab
+        classification_review_digest: bebe2cd98651b8b305243093c34b2e8ed304b34ad4e16e5e682b585064e3c348
+        accepted_on: '2026-11-16'
+        evidence: Owner reviewed the complete Modern W46 classification-v5 snapshot via offline ZIP v3 under the standing exception-only convention and specified ten entries in owner-decisions.json; 12858108 rank 25 retains its existing Rakdos Delirium identity. Owner supplied Grixis Delirium and Mardu Delirium as independent parents, Mono-White Energy and Calibrated Blast, and separately approved the new Mono-Blue Eldrazi Tron subtype English name. The only further current-week identity change, 12858108 rank 28 DragonFodder, was separately delivered with its complete 61 main/15 side deck in ZIP v4 modern-extra-12858108-28.html; Owner explicitly answered 第28名也归为红黑躁狂. The other 392 displayed classifications and every complete source deck are preserved. Full retained-corpus comparison covers 12792 MTGO and 8169 Melee records; all 60 changes are independently source-explained (35 identities including 10 in this week, 25 diagnostic-only), with no new unknown, conflict or classification loss. Three
+          current-week diagnostic-only changes retain approved identities. No Feature, publication, or maintenance completion is accepted by this record.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: modern
+            week: 2026-W46
+            bindings:
+              event_ids:
+              - '12857704'
+              - '12857706'
+              - '12857712'
+              - '12857713'
+              - '12858077'
+              - '12858079'
+              - '12858082'
+              - '12858088'
+              - '12858098'
+              - '12858103'
+              - '12858104'
+              - '12858108'
+              - '12858112'
+              record_count: 403
+              classifier: 44afba2644e391dae0e706a9e4542f6cc98f5b904cdcb5370f1fdeb6a8b8adab
+              classification_review_digest: bebe2cd98651b8b305243093c34b2e8ed304b34ad4e16e5e682b585064e3c348
+              material_digest: e9bf87ab2ba52af2c6f6e7a546ca8dfde46520e43e2ac94e410c596937a50157
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857704'
+                - '12857706'
+                - '12857712'
+                - '12857713'
+                - '12858077'
+                - '12858079'
+                - '12858082'
+                - '12858088'
+                - '12858098'
+                - '12858103'
+                - '12858104'
+                - '12858108'
+                - '12858112'
+                record_count: 403
+                classifier: 44afba2644e391dae0e706a9e4542f6cc98f5b904cdcb5370f1fdeb6a8b8adab
+                classification_review_digest: bebe2cd98651b8b305243093c34b2e8ed304b34ad4e16e5e682b585064e3c348
+            digest: a71c78a92046b1331926ac79ca09df05bad31f3ea2ccebd0726f71bfe7c3e05a
+          decisions:
+            format: modern
+            week: 2026-W46
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: 87d0b36ce7bde82c640c4b7f44280cb67a97d096a41ff07a0b27c4421ee79b5c
+                evidence: Owner reviewed the complete Modern W46 classification-v5 snapshot via offline ZIP v3 under the standing exception-only convention and specified ten entries in owner-decisions.json; 12858108 rank 25 retains its existing Rakdos Delirium identity. Owner supplied Grixis Delirium and Mardu Delirium as independent parents, Mono-White Energy and Calibrated Blast, and separately approved the new Mono-Blue Eldrazi Tron subtype English name. The only further current-week identity change, 12858108 rank 28 DragonFodder, was separately delivered with its complete 61 main/15 side deck in ZIP v4 modern-extra-12858108-28.html; Owner explicitly answered 第28名也归为红黑躁狂. The other 392 displayed classifications and every complete source deck are preserved. Full retained-corpus comparison covers 12792 MTGO and 8169 Melee records; all 60 changes are independently source-explained (35 identities including 10 in this week, 25 diagnostic-only), with no new unknown, conflict or classification loss.
+                  Three current-week diagnostic-only changes retain approved identities. No Feature, publication, or maintenance completion is accepted by this record.
+                accepted_on: '2026-11-16'
+                entrypoint: MTGO-2026-W46-review-v3.zip:modern/2026-W46/index.html; implemented ten decisions and complete additional row:MTGO-2026-W46-review-v4.zip:modern-extra-12858108-28.html
+                submitted_digest: a71c78a92046b1331926ac79ca09df05bad31f3ea2ccebd0726f71bfe7c3e05a
     pioneer:
       initial:
         kind: owner_accepted_initial_public_scope
@@ -21302,6 +21510,57 @@ data_admissions:
                 accepted_on: '2026-11-09'
                 entrypoint: file:outputs/W45-%E5%88%86%E7%B1%BB%E5%AE%A1%E9%98%85/pioneer/index.html
                 submitted_digest: fb0f1338c7664ec10c303621cefef005e575d5ef625b29eea3126df22ebbee03
+      - week: 2026-W46
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857710'
+        - '12858111'
+        - '12858121'
+        - '12858391'
+        source_manifest_digest: 9988dffff852c1b7f59cbd257e719ff620e046dbf96e612f885e01943eeb4672
+        accepted_classifier_subject: ca6f33e2bfd8157df980ca59a04b73e550cbc5b44bc2a99f730892976a147e91
+        classification_review_digest: 0691f0fd6a0b712d39e98a456ddcb3c7163d9fb18245fe5ccbe4a2f77c4a8b04
+        accepted_on: '2026-11-16'
+        evidence: Owner reviewed the complete Pioneer W46 offline classification-v4 snapshot under the standing exception-only convention, accepted the other 103 records, and specified the eleven corrections in owner-decisions.json. Owner explicitly approved Mono-White Hammer Time, Gruul Naked and Affinity, then approved Grixis Control and required parent Lotus Scapeshift with color + Scapeshift subtype names (Bant, Sultai, Simic, WUBG). All 114 original complete decks are preserved; cumulative 6087-deck impact changes exactly the eleven specified identities. Name-only continuation preserves all rule conditions and identity IDs.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pioneer
+            week: 2026-W46
+            bindings:
+              event_ids:
+              - '12857710'
+              - '12858111'
+              - '12858121'
+              - '12858391'
+              record_count: 114
+              classifier: ca6f33e2bfd8157df980ca59a04b73e550cbc5b44bc2a99f730892976a147e91
+              classification_review_digest: 0691f0fd6a0b712d39e98a456ddcb3c7163d9fb18245fe5ccbe4a2f77c4a8b04
+              material_digest: b0a4aa83ebf0f8175f9e3ae25ef832166f93edfc19fa07f9fcd44772d0cc3809
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857710'
+                - '12858111'
+                - '12858121'
+                - '12858391'
+                record_count: 114
+                classifier: ca6f33e2bfd8157df980ca59a04b73e550cbc5b44bc2a99f730892976a147e91
+                classification_review_digest: 0691f0fd6a0b712d39e98a456ddcb3c7163d9fb18245fe5ccbe4a2f77c4a8b04
+            digest: 8b73ea4e3a93a66402b78b7736fe4df642f4203eaafcc9ac89dcdef4ddac370f
+          decisions:
+            format: pioneer
+            week: 2026-W46
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: c413d77d25742530b8f35d403d76799e08fe261dc523b947573285a741f5c56d
+                evidence: Owner reviewed the complete Pioneer W46 offline classification-v4 snapshot under the standing exception-only convention, accepted the other 103 records, and specified the eleven corrections in owner-decisions.json. Owner explicitly approved Mono-White Hammer Time, Gruul Naked and Affinity, then approved Grixis Control and required parent Lotus Scapeshift with color + Scapeshift subtype names (Bant, Sultai, Simic, WUBG). All 114 original complete decks are preserved; cumulative 6087-deck impact changes exactly the eleven specified identities. Name-only continuation preserves all rule conditions and identity IDs.
+                accepted_on: '2026-11-16'
+                entrypoint: MTGO-2026-W46-review-v2.zip:pioneer/2026-W46/index.html; implemented corrections and approved names:MTGO-2026-W46-review-v3.zip:pioneer/2026-W46/index.html
+                submitted_digest: 8b73ea4e3a93a66402b78b7736fe4df642f4203eaafcc9ac89dcdef4ddac370f
     legacy:
       initial:
         kind: owner_accepted_initial_public_scope
@@ -21667,3 +21926,62 @@ data_admissions:
                 accepted_on: '2026-11-09'
                 entrypoint: file:outputs/W45-%E8%96%AA%E4%BC%A0%E5%88%86%E7%B1%BB%E5%A4%8D%E6%A0%B8/index.html
                 submitted_digest: 3960f6d563c7416e83045b687b6991f7ddfe0857a9841379be852f85cfd456da
+      - week: 2026-W46
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857715'
+        - '12858084'
+        - '12858102'
+        - '12858106'
+        - '12858114'
+        - '12858119'
+        source_manifest_digest: 69ba1c4fec2ec91a9c934ff76c1228f218de2e83dac525aed80f4b2db905cdcb
+        accepted_classifier_subject: 33a2494f3c31339904054c94786e47be5a1922d95b861f53d31f2b6a299c4d45
+        classification_review_digest: eddf554d6b273136ff6f6f2b36c29b70e63951c7696cd7ce91013115adc2539c
+        accepted_on: '2026-11-16'
+        evidence: 'Owner reviewed the complete Legacy W46 classification-v7 snapshot in offline ZIP v5 under the standing exception-only convention and specified exactly eight corrections in owner-decisions.json. Dimir Opposition and Sultai Opposition are independent parents explicitly defined by Opposition Agent plus Scheming Symmetry; Owner supplied both English names and Mono-Blue Painter, Mono-White Stax, High Tide. Existing Dimir Tempo, Stiflenought and The Epic Gamble (TEG) names are reused. All eight choices are implemented in the complete classification-v9/offline ZIP v6 material, and the other 181 displayed identities are unchanged; one current-week diagnostic-only change preserves its identity. Every original main/side card and quantity is preserved. Full original-baseline impact covers 5726 MTGO and 1050 Melee records: eight current-week identities, one older Jeskai Control to Stiflenought correction under the same Dreadnought/Thrull definition, and 33 diagnostic-only changes, with
+          no new Unknown, conflict, classification loss, or unexplained impact. Two misspelled negative Troll of Khazad-dum conditions were made canonical Troll of Khazad-dûm to satisfy pinned-fact preparation; independent source audit and final cumulative comparison show no additional retained-record effect. This record accepts full classification only, not Feature/content, publication, or maintenance completion.'
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: legacy
+            week: 2026-W46
+            bindings:
+              event_ids:
+              - '12857715'
+              - '12858084'
+              - '12858102'
+              - '12858106'
+              - '12858114'
+              - '12858119'
+              record_count: 189
+              classifier: 33a2494f3c31339904054c94786e47be5a1922d95b861f53d31f2b6a299c4d45
+              classification_review_digest: eddf554d6b273136ff6f6f2b36c29b70e63951c7696cd7ce91013115adc2539c
+              material_digest: a15bf0aaa7216c02858e0525cc01e97b7eaad9dc3433287f7b1b739149a0a0b3
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857715'
+                - '12858084'
+                - '12858102'
+                - '12858106'
+                - '12858114'
+                - '12858119'
+                record_count: 189
+                classifier: 33a2494f3c31339904054c94786e47be5a1922d95b861f53d31f2b6a299c4d45
+                classification_review_digest: eddf554d6b273136ff6f6f2b36c29b70e63951c7696cd7ce91013115adc2539c
+            digest: 27944a750f54b3e59873ab8119e7f3e83029900d3f6f969faec2327550f60954
+          decisions:
+            format: legacy
+            week: 2026-W46
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: 5abb98429b94b314748fadd276559267dceee55161f9bfbb198b8eaafdc64e64
+                evidence: 'Owner reviewed the complete Legacy W46 classification-v7 snapshot in offline ZIP v5 under the standing exception-only convention and specified exactly eight corrections in owner-decisions.json. Dimir Opposition and Sultai Opposition are independent parents explicitly defined by Opposition Agent plus Scheming Symmetry; Owner supplied both English names and Mono-Blue Painter, Mono-White Stax, High Tide. Existing Dimir Tempo, Stiflenought and The Epic Gamble (TEG) names are reused. All eight choices are implemented in the complete classification-v9/offline ZIP v6 material, and the other 181 displayed identities are unchanged; one current-week diagnostic-only change preserves its identity. Every original main/side card and quantity is preserved. Full original-baseline impact covers 5726 MTGO and 1050 Melee records: eight current-week identities, one older Jeskai Control to Stiflenought correction under the same Dreadnought/Thrull definition, and 33 diagnostic-only changes,
+                  with no new Unknown, conflict, classification loss, or unexplained impact. Two misspelled negative Troll of Khazad-dum conditions were made canonical Troll of Khazad-dûm to satisfy pinned-fact preparation; independent source audit and final cumulative comparison show no additional retained-record effect. This record accepts full classification only, not Feature/content, publication, or maintenance completion.'
+                accepted_on: '2026-11-16'
+                entrypoint: MTGO-2026-W46-review-v5.zip:legacy/2026-W46/index.html; implemented exact eight Owner decisions:MTGO-2026-W46-review-v6.zip:legacy/2026-W46/index.html
+                submitted_digest: 27944a750f54b3e59873ab8119e7f3e83029900d3f6f969faec2327550f60954

@@ -719,6 +719,13 @@ def stage_publications(
             "products": files(stage, artifact_paths(stage, format_id)),
             "rules_updated": rules_updated}, stage, [prefix + "meta.json"],
             lambda: metadata.generate_metadata(stage, format_id, rules_updated=rules_updated))
+    if (stage / "configs/archetype_mana_identities.yaml").is_file():
+        from ..mana_identity import write_rendered_mana_identities
+        progress.run("mana-identities", {
+            "config": files(stage, ["configs/archetype_mana_identities.yaml"]),
+            "code": implementation(root, ["src/mtgmeta/mana_identity.py"]),
+        }, stage, ["assets/js/phase8/archetype-visuals.js"],
+            lambda: write_rendered_mana_identities(stage))
     progress.run("catalog", {"meta": files(stage, ["stats/*/mtgo/meta.json", "stats/*/melee/index.json"]),
         "code": implementation(root, ["src/mtgmeta/catalog.py", "src/mtgmeta/config.py"]), "config": files(root, ["configs/formats.yaml"])},
         stage, ["stats/catalog.json"], lambda: write_catalog(stage))
