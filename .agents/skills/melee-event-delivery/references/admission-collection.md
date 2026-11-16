@@ -18,4 +18,6 @@ gh workflow run fetch_melee.yml --ref master -f event_id=EVENT_ID -f operation=r
 
 完整输入复用不重复 `collect-new`。空最终排名在抓对局和牌表前处理：需要用户选择 Swiss 轮次时，仅按规范进入 `review_standings_round_id` 审阅保留模式；正式最终排名补齐使用 `tools/refresh_melee_final_standings.py`。历史赛事例外不扩用于新赛事。
 
+本地无法访问 Melee 时，使用同一工作流的 `operation=refresh-final`：仅更新已完成轮次信息和官方最终排名，将最小化来源及绑定排名保留到 `data/melee-final-EVENT_ID`。不重采牌表／对局，不重建分类或公开输出。官方未列入排名的既有 DQ 选手继续无名次、无积分；其它选手必须完整覆盖。
+
 完成：原始输入、候选及失败点均有确切位置；记录运行、保存提交与输入校验值。进入覆盖核对，若本次只要求启动采集，则报告真实运行状态并停在该终点。

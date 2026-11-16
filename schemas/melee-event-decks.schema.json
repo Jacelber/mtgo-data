@@ -277,8 +277,8 @@
         "participant_status": {
           "enum": ["active", "dropped", "disqualified", "no_show"]
         },
-        "final_rank": {"type": "integer", "minimum": 1},
-        "overall_event_match_points": {"type": "integer", "minimum": 0},
+        "final_rank": {"type": ["integer", "null"], "minimum": 1},
+        "overall_event_match_points": {"type": ["integer", "null"], "minimum": 0},
         "overall_points_include_non_constructed_context": {"type": "boolean"},
         "day2_participant": {"type": "boolean"},
         "classification": {"$ref": "#/$defs/classification"},
@@ -325,7 +325,14 @@
             "all_constructed": {"$ref": "#/$defs/deck_scope"}
           }
         }
-      }
+      },
+      "allOf": [{
+        "if": {"properties": {"participant_status": {"not": {"const": "disqualified"}}}},
+        "then": {"properties": {
+          "final_rank": {"type": "integer"},
+          "overall_event_match_points": {"type": "integer"}
+        }}
+      }]
     }
   }
 }

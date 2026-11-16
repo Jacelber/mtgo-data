@@ -878,7 +878,8 @@ def _deck_documents(
     for participant_id in sorted(
         participants,
         key=lambda identifier: (
-            int(standings[identifier]["rank"]),
+            standings[identifier]["rank"] is None,
+            standings[identifier]["rank"] or 0,
             identifier,
         ),
     ):
@@ -1423,14 +1424,18 @@ def apply_final_standings(document, event_path, root):
     final, final_bytes = _read_json_object(final_path)
     ranks = final.get("ranks", {})
     decks = document["decks"]
+    unranked = {deck["participant_id"] for deck in decks
+                if deck["participant_status"] == "disqualified"
+                and deck["final_rank"] is None}
     if (final.get("event_sha256") != _sha256_bytes(event_path.read_bytes())
             or final.get("event_id") != document["event_id"]
-            or set(ranks) != {deck["participant_id"] for deck in decks}
+            or set(final.get("unranked_participant_ids", [])) != unranked
+            or set(ranks) != {deck["participant_id"] for deck in decks} - unranked
             or any(type(rank) is not int or rank < 1 for rank in ranks.values())
             or len(set(ranks.values())) != len(ranks)):
         raise MeleeStatisticsError("Official final standings do not match retained event participants")
     for deck in decks:
-        deck["final_rank"] = ranks[deck["participant_id"]]
+        deck["final_rank"] = ranks.get(deck["participant_id"])
     document["final_rank_source"] = {
         "path": _repository_relative(final_path, root),
         "sha256": _sha256_bytes(final_bytes),

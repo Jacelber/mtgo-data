@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       operation:
-        description: "Closed operation state: collect-new or resume-retained"
+        description: "collect-new, resume-retained, or refresh-final"
         required: true
         type: string
       review_standings_round_id:
@@ -30,9 +30,75 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  final-ranks:
+    name: Retain official final standings only
+    if: github.ref == 'refs/heads/master' && inputs.operation == 'refresh-final'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: src
+      EVENT_ID: ${{ inputs.event_id }}
+      REVIEW_ROUND: ${{ inputs.review_standings_round_id }}
+      EXPECTED_CHECKPOINT: ${{ inputs.retained_checkpoint }}
+    steps:
+      - uses: actions/checkout@v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6.3.0
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check -r requirements.txt
+      - name: Resolve retained event and final-rank branch
+        shell: bash
+        run: |
+          test -z "$REVIEW_ROUND"
+          test -z "$EXPECTED_CHECKPOINT"
+          EVENT_FORMAT="$(python -B -c 'from mtgmeta.melee.config import load_melee_event_registry; import sys; print(load_melee_event_registry("configs/melee_events.yaml").require_fetchable(sys.argv[1]).format)' "$EVENT_ID")"
+          test -f "data/${EVENT_FORMAT}/melee/events/${EVENT_ID}.json"
+          echo "FORMAT=$EVENT_FORMAT" >> "$GITHUB_ENV"
+          BRANCH="data/melee-final-${EVENT_ID}"
+          if git ls-remote --exit-code --heads origin "refs/heads/${BRANCH}" >/dev/null 2>&1; then
+            git fetch --no-tags origin "refs/heads/${BRANCH}:refs/remotes/origin/${BRANCH}"
+            MERGE_BASE="$(git merge-base "$GITHUB_SHA" "refs/remotes/origin/${BRANCH}")"
+            while IFS=$'\t' read -r STATUS CHANGED_PATH REST; do
+              [[ "$STATUS" =~ ^[AM]$ && -z "$REST" ]] || { echo "Unexpected final-input deletion or rename" >&2; exit 1; }
+              case "$CHANGED_PATH" in
+                "data_raw/melee/${EVENT_ID}/"* | "data/${EVENT_FORMAT}/melee/final_standings/${EVENT_ID}.json") ;;
+                *) echo "Final-input branch changes an unauthorized path: ${CHANGED_PATH}" >&2; exit 1 ;;
+              esac
+            done < <(git diff --name-status "$MERGE_BASE" "refs/remotes/origin/${BRANCH}")
+            git checkout -b "$BRANCH" "refs/remotes/origin/${BRANCH}"
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git merge --no-edit "$GITHUB_SHA"
+          else
+            git checkout -b "$BRANCH"
+          fi
+      - name: Refresh completed Finals metadata and ranks
+        run: python -B tools/refresh_melee_final_standings.py --event-id "$EVENT_ID"
+      - name: Retain fetched source even if rank validation failed
+        if: always() && env.FORMAT != ''
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -- "data_raw/melee/${EVENT_ID}/"
+          if [ -f "data/${FORMAT}/melee/final_standings/${EVENT_ID}.json" ]; then
+            git add -- "data/${FORMAT}/melee/final_standings/${EVENT_ID}.json"
+          fi
+          git diff --quiet || { echo "Unexpected changes outside final-rank inputs" >&2; exit 1; }
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: retain Melee event ${EVENT_ID} official final ranks"
+            git -c credential.helper= -c 'credential.helper=!gh auth git-credential' push origin "HEAD:refs/heads/data/melee-final-${EVENT_ID}"
+          fi
+          echo "Final-rank input: data/melee-final-${EVENT_ID} @ $(git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+
   candidate:
     name: Build one reviewable Tabletop Major Events candidate
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' && inputs.operation != 'refresh-final'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
