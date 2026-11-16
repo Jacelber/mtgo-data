@@ -1,4 +1,5 @@
-schema_version: 1.1.0
+schema_version: 1.2.0
+card_facts_sha256: fe316ee04385fd38352d8bbc5040561a47c5ae1d6b9f3d80c4cc50455cad608c
 format: legacy
 identity_policy: legacy-reviewed-v1
 archetypes:
@@ -3130,7 +3131,7 @@ archetypes:
       - card: Ashen Rider
         zone: main
         exact_count: 0
-      - card: Troll of Khazad-dum
+      - card: Troll of Khazad-dûm
         zone: main
         exact_count: 0
       - card: Grief
@@ -3409,9 +3410,18 @@ archetypes:
       - card: Nethergoyf
         zone: main
         min_count: 3
-      - card: Bilbo, Thief in the Night
-        zone: main
-        min_count: 2
+      - any:
+        - all:
+          - card: Bilbo, Thief in the Night
+            zone: main
+            min_count: 2
+        - all:
+          - card: Kaito, Bane of Nightmares
+            zone: main
+            min_count: 1
+          - card: Orcish Bowmasters
+            zone: main
+            min_count: 1
       - card: Brainstorm
         zone: main
         min_count: 3
@@ -4111,9 +4121,6 @@ archetypes:
       - card: Doorkeeper Thrull
         zone: main
         min_count: 3
-      - card: Curie, Emergent Intelligence
-        zone: main
-        min_count: 2
       - card: Brainstorm
         zone: main
         min_count: 3
@@ -8862,25 +8869,48 @@ archetypes:
       - card: Echo of Eons
         zone: main
         min_count: 2
-      - card: Birgi, God of Storytelling
-        zone: main
-        min_count: 2
       - card: Rite of Flame
-        zone: main
-        min_count: 3
-      - card: Grim Monolith
         zone: main
         min_count: 3
       - card: Burning Wish
         zone: main
         min_count: 3
-      - *id195
-      - *id196
-      - *id197
-      - *id198
-      - *id199
-      - *id200
-      - *id201
+      - card: Lion's Eye Diamond
+        zone: main
+        min_count: 3
+      - card: Doomsday
+        zone: main
+        exact_count: 0
+      - card: Omniscience
+        zone: main
+        exact_count: 0
+      - card: Balustrade Spy
+        zone: main
+        exact_count: 0
+      - card: Undercity Informer
+        zone: main
+        exact_count: 0
+      - card: Hullbreacher
+        zone: main
+        exact_count: 0
+      - card: Narset, Parter of Veils
+        zone: main
+        exact_count: 0
+      - any:
+        - all:
+          - card: Birgi, God of Storytelling
+            zone: main
+            min_count: 2
+          - card: Grim Monolith
+            zone: main
+            min_count: 3
+        - all:
+          - card: Artist's Talent
+            zone: main
+            min_count: 1
+          - card: Anthropological Mission
+            zone: main
+            min_count: 1
   - id: teg-song-echo
     priority: 100
     subtype_id: null
@@ -9107,15 +9137,21 @@ archetypes:
       - card: Time Spiral
         zone: main
         min_count: 2
-      - card: Ponder
+      - card: Doomsday
         zone: main
-        min_count: 2
-      - *id196
-      - *id197
-      - *id198
-      - *id199
-      - *id200
-      - *id201
+        exact_count: 0
+      - card: Omniscience
+        zone: main
+        exact_count: 0
+      - card: Balustrade Spy
+        zone: main
+        exact_count: 0
+      - card: Undercity Informer
+        zone: main
+        exact_count: 0
+      - card: Hullbreacher
+        zone: main
+        exact_count: 0
 - id: doomsday-storm
   name: Doomsday Storm
   priority: 100
@@ -13375,7 +13411,7 @@ archetypes:
       - card: Abhorrent Oculus
         zone: main
         max_count: 0
-      - card: Troll of Khazad-dum
+      - card: Troll of Khazad-dûm
         zone: main
         max_count: 0
       - card: Reanimate
@@ -21799,6 +21835,93 @@ archetypes:
       - {card: __classifier-semantic-any-black-spell__, zone: any, exact_count: 0}
       - {card: __classifier-semantic-any-red-spell__, zone: any, exact_count: 0}
       - {card: __classifier-semantic-any-green-spell__, zone: any, exact_count: 0}
+- id: dimir-opposition
+  name: Dimir Opposition
+  priority: 110
+  color_profile: default
+  rules:
+  - id: dimir-opposition-agent-symmetry
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Opposition Agent
+        zone: main
+        min_count: 1
+      - card: Scheming Symmetry
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+    - black
+- id: sultai-opposition
+  name: Sultai Opposition
+  priority: 110
+  color_profile: default
+  rules:
+  - id: sultai-opposition-agent-symmetry
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Opposition Agent
+        zone: main
+        min_count: 1
+      - card: Scheming Symmetry
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+    - black
+    - green
+- id: mono-blue-painter
+  name: Mono-Blue Painter
+  priority: 110
+  color_profile: default
+  rules:
+  - id: mono-blue-painter-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Painter's Servant
+        zone: main
+        min_count: 1
+      - card: Grindstone
+        zone: main
+        min_count: 1
+      - card: Transmute Artifact
+        zone: main
+        min_count: 1
+      - card: Grim Monolith
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+- id: mono-white-stax
+  name: Mono-White Stax
+  priority: 110
+  color_profile: default
+  rules:
+  - id: mono-white-stax-primary
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Archon of Emeria
+        zone: main
+        min_count: 1
+      - card: Sphere of Resistance
+        zone: main
+        min_count: 1
+      - card: Crucible of Worlds
+        zone: main
+        min_count: 1
+      - card: Wasteland
+        zone: main
+        min_count: 1
+    colors:
+    - white
 semantic_features:
   manifest_path: configs/legacy_semantic_features.yaml
   manifest_sha256: b7c4d899a40d80d8fa704aecd5f5d258c7ef6f2c1d0f882ca0480430f47bb069
