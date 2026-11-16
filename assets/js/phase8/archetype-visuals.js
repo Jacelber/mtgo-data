@@ -1272,6 +1272,14 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "The Theorist, Jace Beleren", "image": "../images/representative-cards/standard/the-theorist-jace-beleren.jpg"}),
       Object.freeze({"name": "Deadly Cover-Up", "image": "../images/representative-cards/standard/deadly-cover-up.jpg"}),
     ]),
+    "boros-momo": Object.freeze([
+      Object.freeze({"name": "The Naked Time", "image": "../images/representative-cards/standard/the-naked-time.jpg"}),
+      Object.freeze({"name": "Momo, Friendly Flier", "image": "../images/representative-cards/standard/momo-friendly-flier.jpg"}),
+    ]),
+    "izzet-mission": Object.freeze([
+      Object.freeze({"name": "Anthropological Mission", "image": "../images/representative-cards/standard/anthropological-mission.jpg"}),
+      Object.freeze({"name": "Ral, Crackling Wit", "image": "../images/representative-cards/standard/ral-crackling-wit.jpg"}),
+    ]),
   }),
   modern: Object.freeze({
     "affinity": Object.freeze([
@@ -1381,6 +1389,10 @@ const representativeCards = Object.freeze({
     "burn": Object.freeze([
       Object.freeze({"name": "Lava Spike", "image": "../images/representative-cards/modern/lava-spike.jpg"}),
       Object.freeze({"name": "Boltwave", "image": "../images/representative-cards/modern/boltwave.jpg"}),
+    ]),
+    "esper-persist": Object.freeze([
+      Object.freeze({"name": "Persist", "image": "../images/representative-cards/modern/persist.jpg"}),
+      Object.freeze({"name": "Ephemerate", "image": "../images/representative-cards/modern/ephemerate.jpg"}),
     ]),
   }),
   pauper: Object.freeze({
@@ -1610,6 +1622,22 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Baron Helmut Zemo", "image": "../images/representative-cards/pioneer/baron-helmut-zemo.jpg"}),
       Object.freeze({"name": "Nykthos, Shrine to Nyx", "image": "../images/representative-cards/pioneer/nykthos-shrine-to-nyx.jpg"}),
     ]),
+    "affinity": Object.freeze([
+      Object.freeze({"name": "Pinnacle Emissary", "image": "../images/representative-cards/pioneer/pinnacle-emissary.jpg"}),
+      Object.freeze({"name": "Weapons Manufacturing", "image": "../images/representative-cards/pioneer/weapons-manufacturing.jpg"}),
+    ]),
+    "boros-hammer": Object.freeze([
+      Object.freeze({"name": "Colossus Hammer", "image": "../images/representative-cards/pioneer/colossus-hammer.jpg"}),
+      Object.freeze({"name": "Kíli the Resourceful", "image": "../images/representative-cards/pioneer/kili-the-resourceful.jpg"}),
+    ]),
+    "rakdos-leyline": Object.freeze([
+      Object.freeze({"name": "Leyline of Resonance", "image": "../images/representative-cards/pioneer/leyline-of-resonance.jpg"}),
+      Object.freeze({"name": "Callous Sell-Sword", "image": "../images/representative-cards/pioneer/callous-sell-sword.jpg"}),
+    ]),
+    "boros-heroic": Object.freeze([
+      Object.freeze({"name": "Favored Hoplite", "image": "../images/representative-cards/pioneer/favored-hoplite.jpg"}),
+      Object.freeze({"name": "Academic Dispute", "image": "../images/representative-cards/pioneer/academic-dispute.jpg"}),
+    ]),
   }),
   legacy: Object.freeze({
     "dimir-tempo": Object.freeze([
@@ -1687,6 +1715,14 @@ const representativeCards = Object.freeze({
     "sewers": Object.freeze([
       Object.freeze({"name": "Sewer-veillance Cam", "image": "../images/representative-cards/legacy/sewer-veillance-cam.jpg"}),
       Object.freeze({"name": "Goblin Welder", "image": "../images/representative-cards/legacy/goblin-welder.jpg"}),
+    ]),
+    "azorius-tempo": Object.freeze([
+      Object.freeze({"name": "Phelia, Exuberant Shepherd", "image": "../images/representative-cards/legacy/phelia-exuberant-shepherd.jpg"}),
+      Object.freeze({"name": "Quantum Riddler", "image": "../images/representative-cards/legacy/quantum-riddler.jpg"}),
+    ]),
+    "tron": Object.freeze([
+      Object.freeze({"name": "Urza's Tower", "image": "../images/representative-cards/legacy/urzas-tower.jpg"}),
+      Object.freeze({"name": "Planar Nexus", "image": "../images/representative-cards/legacy/planar-nexus.jpg"}),
     ]),
   }),
 });
