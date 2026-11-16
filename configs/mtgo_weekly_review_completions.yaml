@@ -19101,6 +19101,75 @@ data_admissions:
                 accepted_on: '2026-11-09'
                 entrypoint: file:outputs/W45-%E5%88%86%E7%B1%BB%E5%AE%A1%E9%98%85/standard/index.html
                 submitted_digest: 85030310b91e795033da743ecf715c242252f5c647265fc54068a0c83216e797
+      - week: 2026-W46
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12857709'
+        - '12858074'
+        - '12858075'
+        - '12858076'
+        - '12858080'
+        - '12858085'
+        - '12858087'
+        - '12858100'
+        - '12858107'
+        - '12858123'
+        source_manifest_digest: 52534123ecf1dec1692072f149e6b5afe4b3590ffe1a10fc8c4be4cf31db8a34
+        accepted_classifier_subject: 52d1751ad1424f54352e87fceecabb0cf841d8b50c7be804260320e59b9e2b8e
+        classification_review_digest: 0efcfcc492b888a49c3dd0ac7cb17d052ff41637ccd10a2afaa53ba1134267c4
+        accepted_on: '2026-11-16'
+        evidence: Owner reviewed the complete Standard 2026-W46 classification-v3 offline snapshot, explicitly accepted all unmentioned entries, and specified the eight corrections in owner-decisions.json. Owner also confirmed Bant Offense and Azorius Artifacts English names and required reuse of existing boros-token/Boros Token. Candidate v4 implements exactly those eight identity corrections; all other 298 displayed classifications and all complete decks remain unchanged. Full 9913-record impact verified, with 172 same-name Jeskai subtype registrations and one explained overridden Bant match.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: standard
+            week: 2026-W46
+            bindings:
+              event_ids:
+              - '12857709'
+              - '12858074'
+              - '12858075'
+              - '12858076'
+              - '12858080'
+              - '12858085'
+              - '12858087'
+              - '12858100'
+              - '12858107'
+              - '12858123'
+              record_count: 306
+              classifier: 52d1751ad1424f54352e87fceecabb0cf841d8b50c7be804260320e59b9e2b8e
+              classification_review_digest: 0efcfcc492b888a49c3dd0ac7cb17d052ff41637ccd10a2afaa53ba1134267c4
+              material_digest: dcad16276d46b9f9b3a7a021dfa1d409e532ffe9405810597e49bba8e2e07390
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12857709'
+                - '12858074'
+                - '12858075'
+                - '12858076'
+                - '12858080'
+                - '12858085'
+                - '12858087'
+                - '12858100'
+                - '12858107'
+                - '12858123'
+                record_count: 306
+                classifier: 52d1751ad1424f54352e87fceecabb0cf841d8b50c7be804260320e59b9e2b8e
+                classification_review_digest: 0efcfcc492b888a49c3dd0ac7cb17d052ff41637ccd10a2afaa53ba1134267c4
+            digest: b88c15835ef2b3b6f3f8e0728b88e8e3c564443496bc03b08753da48e16ed622
+          decisions:
+            format: standard
+            week: 2026-W46
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: c6efa71dd97885952464152a512480d9adf590847a4d673fc5c08671c18e07ee
+                evidence: Owner reviewed the complete Standard 2026-W46 classification-v3 offline snapshot, explicitly accepted all unmentioned entries, and specified the eight corrections in owner-decisions.json. Owner also confirmed Bant Offense and Azorius Artifacts English names and required reuse of existing boros-token/Boros Token. Candidate v4 implements exactly those eight identity corrections; all other 298 displayed classifications and all complete decks remain unchanged. Full 9913-record impact verified, with 172 same-name Jeskai subtype registrations and one explained overridden Bant match.
+                accepted_on: '2026-11-16'
+                entrypoint: MTGO-2026-W46-review.zip:standard/2026-W46/index.html; implemented corrections:MTGO-2026-W46-review-v2.zip:standard/2026-W46/index.html
+                submitted_digest: b88c15835ef2b3b6f3f8e0728b88e8e3c564443496bc03b08753da48e16ed622
     pauper:
       initial:
         kind: owner_accepted_initial_public_scope
