@@ -344,6 +344,47 @@ def test_current_cohort_is_completed_even_when_plan_omits_events(tmp_path, monke
     assert len(calls) == 1
 
 
+def test_full_melee_plan_reuses_its_checkpoints_after_later_mtgo_failure(tmp_path, monkeypatch):
+    from datetime import date
+    from types import SimpleNamespace
+    from mtgmeta import classifier_closure as closure
+    from mtgmeta.melee import classification, opportunities, stats, matchup, publish
+    from mtgmeta.mtgo import publication
+    monkeypatch.setattr(workflow, "require_private_output", lambda *_: None)
+    monkeypatch.setattr(publication, "resolve_scope", lambda *_: SimpleNamespace(week=date(2026, 10, 5)))
+    member = {"format": "modern", "event_id": "434455",
+              "steps": ["classification", "opportunities", "stats", "matchup", "publish"]}
+    stale = [member]
+    workflow.write(tmp_path / "stats/modern/melee/index.json", {"events": [{"event_id": "434455"}]})
+    monkeypatch.setattr(closure, "current_melee_sync", lambda *_: list(stale))
+    monkeypatch.setattr(closure, "validate_current_melee", lambda *_: None)
+    monkeypatch.setattr(closure, "_protected_input_fingerprints", lambda *_: {"retained-source": "unchanged"})
+    generated, reused = [], []
+    def generate(root, format_id, *, event_ids):
+        checkpoint = root.with_name(root.name + f".melee-{format_id}.progress.json")
+        (reused if checkpoint.is_file() else generated).append(event_ids)
+        checkpoint.write_text("{}")
+        stale.clear()
+    monkeypatch.setattr(closure, "_generate_melee", generate)
+    def unexpected_replay(*_):
+        raise AssertionError("Completed Melee producers must continue their existing checkpoints")
+    for module in (classification, opportunities, stats, matchup, publish):
+        monkeypatch.setattr(module, "main", unexpected_replay)
+    attempts = []
+    def stage(*args, **kwargs):
+        attempts.append(True)
+        if len(attempts) == 1:
+            raise ValueError("catalog missing rendered mana")
+        return {"stage": str(tmp_path / "staged")}
+    monkeypatch.setattr(publication, "stage_publications", stage)
+    plan = {"week": "2026-W41", "mtgo_formats": ["modern"], "melee": [member]}
+    with pytest.raises(ValueError, match="catalog missing rendered mana"):
+        workflow.stage_data(tmp_path, plan)
+    result = workflow.stage_data(tmp_path, plan)
+    assert generated == [{"434455"}] and reused == [{"434455"}]
+    assert result["melee_completed"][0]["producer"] == "melee_checkpoint_continuation"
+
+
 def test_failed_generation_is_discoverable_and_resumes_without_an_output_record(tmp_path, monkeypatch):
     from types import SimpleNamespace
     root = tmp_path / "candidate"

@@ -79,6 +79,14 @@ def test_real_internal_failure_resumes_completed_statistics(tmp_path, monkeypatc
     from mtgmeta import classifier_closure, catalog
     from mtgmeta.mtgo import publication, stats, matchup, completeness, metadata, landing_editorial
     _repository(tmp_path)
+    _write(tmp_path / "configs/archetype_mana_identities.yaml", {
+        "schema_version": "1.0", "formats": {
+            "standard": {"approved": {"alpha": ["r"]}},
+            "modern": {"approved": {"alpha": ["u"]}},
+        }})
+    visuals = tmp_path / "assets/js/phase8/archetype-visuals.js"
+    visuals.parent.mkdir(parents=True)
+    visuals.write_text("// Preserve the existing representative bindings.\nconst manaIdentities = Object.freeze({\n});\n")
     _generate(tmp_path, "standard")
     calls = {"stats": 0, "matchup": 0, "completeness": 0}
     real_stats, real_matchup = stats.build_all_stats, matchup.build_all_matchups
@@ -97,7 +105,12 @@ def test_real_internal_failure_resumes_completed_statistics(tmp_path, monkeypatc
     # binding checks are real; unrelated registry/platform adapters are isolated.
     monkeypatch.setattr(subprocess, "run", lambda *a, **k: SimpleNamespace(stdout=b"", returncode=0))
     monkeypatch.setattr(metadata, "rules_last_commit_iso", lambda *a: "2025-02-03T00:00:00Z")
-    monkeypatch.setattr(catalog, "write_catalog", lambda *a: None)
+    def check_catalog(stage):
+        from mtgmeta.mana_identity import rendered_mana_identities
+        assert rendered_mana_identities(stage, "standard")["alpha"] == ("r",)
+        assert (stage / "assets/js/phase8/archetype-visuals.js").read_text().startswith(
+            "// Preserve the existing representative bindings.\n")
+    monkeypatch.setattr(catalog, "write_catalog", check_catalog)
     monkeypatch.setattr(landing_editorial, "generate_public_name_contract", lambda *a: None)
     monkeypatch.setattr(classifier_closure, "inspect_format", lambda *a: {"state": "CURRENT"})
     with pytest.raises(OSError, match="third real"):

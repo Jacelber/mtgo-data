@@ -2,6 +2,11 @@
 
 const manaIdentities = Object.freeze({
   standard: Object.freeze({
+    "bant-offense": Object.freeze(["w", "u", "g"]),
+    "mardu-naked": Object.freeze(["w", "b", "r"]),
+    "izzet-archaic": Object.freeze(["u", "r"]),
+    "jeskai-artifacts/jeskai": Object.freeze(["w", "u", "r"]),
+    "jeskai-artifacts/azorius": Object.freeze(["w", "u"]),
     "boros-token-control": Object.freeze(["w", "r"]),
     "grixis-reanimator": Object.freeze(["u", "b", "r"]),
     "lifegain/esper": Object.freeze(["w", "u", "b"]),
@@ -240,6 +245,11 @@ const manaIdentities = Object.freeze({
     "esper-toughness": Object.freeze(["w", "u", "b"]),
   }),
   modern: Object.freeze({
+    "grixis-delirium": Object.freeze(["u", "b", "r"]),
+    "mardu-delirium": Object.freeze(["w", "b", "r"]),
+    "mono-white-energy": Object.freeze(["w"]),
+    "calibrated-blast": Object.freeze(["r"]),
+    "eldrazi-tron/mono-blue": Object.freeze(["u"]),
     "titan-canopy-ramp": Object.freeze(["g"]),
     "gruul-prowess": Object.freeze(["r", "g"]),
     "rakdos-vampires": Object.freeze(["b", "r"]),
@@ -721,6 +731,10 @@ const manaIdentities = Object.freeze({
     "golgari-gardens/sultai": Object.freeze(["u", "b", "g"]),
   }),
   pioneer: Object.freeze({
+    "lotus-scapeshift/bant": Object.freeze(["w", "u", "g"]),
+    "mono-white-hammer-time": Object.freeze(["w"]),
+    "grixis-control": Object.freeze(["u", "b", "r"]),
+    "gruul-naked": Object.freeze(["r", "g"]),
     "jeskai-cauldron": Object.freeze(["w", "u", "r"]),
     "jund-delirium": Object.freeze(["b", "r", "g"]),
     "mono-green-devotion/mono-green": Object.freeze(["g"]),
@@ -873,6 +887,10 @@ const manaIdentities = Object.freeze({
     "rakdos-madness": Object.freeze(["b", "r"]),
   }),
   legacy: Object.freeze({
+    "dimir-opposition": Object.freeze(["u", "b"]),
+    "sultai-opposition": Object.freeze(["u", "b", "g"]),
+    "mono-blue-painter": Object.freeze(["u"]),
+    "mono-white-stax": Object.freeze(["w"]),
     "tron/multicolor": Object.freeze(["w", "u", "b", "r", "g"]),
     "blue-tron/multicolor": Object.freeze(["w", "u", "b", "r", "g"]),
     "blue-tron/azorius": Object.freeze(["w", "u"]),
