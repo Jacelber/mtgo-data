@@ -1,5 +1,6 @@
 """Refresh official final ranks without recollecting decklists or match results."""
 import argparse
+from copy import deepcopy
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -10,7 +11,7 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from mtgmeta.melee.client import HTML_HEADERS, POST_HEADERS, STANDINGS_COLUMNS, _datatables_body, _completed_rounds
+from mtgmeta.melee.client import HTML_HEADERS, POST_HEADERS, MATCH_COLUMNS, STANDINGS_COLUMNS, _datatables_body, _completed_rounds
 from mtgmeta.melee.config import load_melee_event_registry
 from mtgmeta.melee.parser import SourceArtifact, _real_player
 from mtgmeta.melee.privacy import minimize_source_response
@@ -21,7 +22,7 @@ from mtgmeta.melee.publish import _descriptor
 def refresh(root, event_id, *, reviewed_semifinals=False, owner_final_440878=False):
     if owner_final_440878 and (event_id != "440878" or not reviewed_semifinals):
         raise ValueError("The Owner final result requires event 440878 and reviewed Semifinals")
-    if reviewed_semifinals and event_id not in {"405588", "471573", "470109", "405591", "480317", "414849", "440878"}:
+    if reviewed_semifinals and event_id not in {"405588", "471573", "470109", "405591", "480317", "414849", "440878", "471980"}:
         raise ValueError("The reviewed Semifinals supplement is not approved for this event")
     definition = load_melee_event_registry(root / "configs/melee_events.yaml").require_fetchable(event_id)
     event_path = root / "data" / definition.format / "melee/events" / f"{event_id}.json"
@@ -36,6 +37,8 @@ def refresh(root, event_id, *, reviewed_semifinals=False, owner_final_440878=Fal
                 "event_sha256": hashlib.sha256(event_bytes).hexdigest(),
                 "fetched_at": fetched_at.isoformat(), "responses": [], "complete": False}
 
+    pages = {}
+
     def source(request, resource_type, filename, page=1, source_round_id=None):
         with urllib.request.urlopen(request, timeout=30) as response:
             body = response.read(32 * 1024 * 1024 + 1)
@@ -47,6 +50,7 @@ def refresh(root, event_id, *, reviewed_semifinals=False, owner_final_440878=Fal
             sha256=hashlib.sha256(body).hexdigest(), bytes=len(body),
             method=request.get_method(), source_round_id=source_round_id)
         minimized = minimize_source_response(body, artifact, event_id=event_id)
+        pages[filename] = minimized.page
         target = snapshot / filename
         target.write_bytes(minimized.body)
         evidence["responses"].append({"path": target.relative_to(root).as_posix(),
@@ -107,7 +111,38 @@ def refresh(root, event_id, *, reviewed_semifinals=False, owner_final_440878=Fal
         "event_sha256": hashlib.sha256(event_bytes).hexdigest(), "ranks": selected,
         "unranked_participant_ids": unranked, "raw_artifacts": evidence["responses"]}
     if reviewed_semifinals:
-        supplement_from_semifinals(result, event, owner_final_440878=owner_final_440878)
+        context = deepcopy(event)
+        # Only missing playoff context is fetched. These review objects are
+        # saved in the supplement; the retained normalized Swiss event stays fixed.
+        for label, expected in (("Quarterfinals", 4), ("Semifinals", 2), ("Finals", 1)):
+            existing_rounds = {r["id"] for r in context["rounds"]
+                               if r["source_label"] == label and r["stage"] == "playoff"}
+            existing = [m for m in context["matches"] if m["round_id"] in existing_rounds]
+            if len(existing) == expected:
+                continue
+            if existing:
+                raise ValueError("Partial retained playoff context requires explicit repair")
+            candidates = [r for r in rounds if r["label"] == label]
+            if len(candidates) != 1:
+                raise ValueError(f"Missing unique completed {label}")
+            rid = candidates[0]["source_round_id"]
+            filename = f"matches-{rid}.json"
+            request = urllib.request.Request(f"https://melee.gg/Match/GetRoundMatches/{rid}",
+                data=_datatables_body(MATCH_COLUMNS, 0), headers=POST_HEADERS, method="POST")
+            payload = json.loads(source(request, "matches", filename, source_round_id=rid))
+            if payload["recordsTotal"] != expected or len(pages[filename].matches) != expected:
+                raise ValueError(f"Incomplete decisive {label}")
+            from mtgmeta.melee.normalize import _source_result
+            context["rounds"].append({"id": rid, "source_label": label, "stage": "playoff"})
+            for match in pages[filename].matches:
+                resolved = _source_result(match, definition)
+                if resolved is None or not resolved[0]:
+                    raise ValueError(f"Unresolved played {label} result")
+                context["matches"].append({"id": match.source_match_id, "round_id": rid,
+                    "competitors": [{"participant_id": identities[c["source_participant_id"]],
+                        "result_type": c["result_type"]} for c in resolved[1]]})
+        supplement_from_semifinals(result, context, owner_final_440878=owner_final_440878)
+        result["playoff_results"] = [m for m in context["matches"] if m not in event["matches"]]
     evidence["complete"] = True
     (snapshot / "refresh.json").write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
     destination = event_path.parent.parent / "final_standings" / f"{event_id}.json"
@@ -119,7 +154,8 @@ def refresh(root, event_id, *, reviewed_semifinals=False, owner_final_440878=Fal
 def supplement_from_semifinals(result, event, *, owner_final_440878=False):
     """Apply the reviewed event exception using identities and retained playoff results."""
     ranks = result["ranks"]
-    if set(ranks.values()) != set(range(1, len(event["participants"]) + 1)):
+    if (len(ranks) + len(result.get("unranked_participant_ids", [])) != len(event["participants"])
+            or set(ranks.values()) != set(range(1, len(ranks) + 1))):
         raise ValueError("Semifinals ranks must cover all retained participants exactly once")
     rounds = {r["source_label"]: r["id"] for r in event["rounds"] if r["stage"] == "playoff"}
     matches = {label: [m for m in event["matches"] if m["round_id"] == rounds.get(label)]

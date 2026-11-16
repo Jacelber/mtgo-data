@@ -82,3 +82,43 @@ def test_unranked_dq_statistics_and_bound_final_ranks(tmp_path):
         write_json(target, altered)
         with pytest.raises(MeleeStatisticsError, match='match retained'):
             apply_final_standings(deepcopy(before), path, tmp_path)
+
+
+def test_reviewed_wc32_supplement_fetches_only_missing_playoff_context(tmp_path, monkeypatch):
+    path = tmp_path / 'data/standard/melee/events/471980.json'
+    path.parent.mkdir(parents=True)
+    event = {'participants': [{'source_id': str(i), 'id': f'p{i}', 'status': 'active'} for i in range(1, 9)]
+             + [{'source_id': '9', 'id': 'dq', 'status': 'disqualified'}],
+             'standings': [{'participant_id': f'p{i}', 'rank': i} for i in range(1, 9)]
+             + [{'participant_id': 'dq', 'rank': None}],
+             'rounds': [{'id': '14', 'source_label': 'Round 14', 'stage': 'day2'}],
+             'matches': [], 'decklists': ['preserved']}
+    path.write_text(json.dumps(event)); original = path.read_bytes()
+    definition = SimpleNamespace(format='standard', url='https://melee.gg/Tournament/View/471980')
+    monkeypatch.setattr(refresh, 'load_melee_event_registry', lambda p: SimpleNamespace(require_fetchable=lambda e: definition))
+    calls = []
+    def team(i):return {'Players': [{'ID': i, 'DisplayName': f'Player {i}'}]}
+    def match(rid, win, lose):
+        return {'Guid': f'{rid}-{win}', 'RoundId': rid, 'HasResult': True, 'ResultString': '2-0', 'GameDraws': 0,
+                'Competitors': [{'Team': team(i), 'GameWins': w} for i, w in ((win, 2), (lose, 0))]}
+    def send(request, **kwargs):
+        calls.append(request.full_url)
+        if request.get_method() == 'GET':
+            return BytesIO(('<title>Fixture | Melee</title>' + ''.join(
+                f'<button class="round-selector" data-id="{i}" data-name="{label}" data-is-completed="True"></button>'
+                for i, label in ((15, 'Quarterfinals'), (16, 'Semifinals'), (17, 'Finals')))).encode())
+        if '/Standing/' in request.full_url:
+            assert b'roundId=16' in request.data
+            return BytesIO(json.dumps({'recordsTotal': 8, 'data': [{'ID': i, 'Rank': i, 'Points': 0, 'Team': team(i)} for i in range(1, 9)]}).encode())
+        rid = request.full_url.rsplit('/', 1)[-1]
+        pairs = {'15': [(1, 5), (2, 6), (3, 7), (4, 8)], '16': [(1, 3), (2, 4)], '17': [(2, 1)]}[rid]
+        return BytesIO(json.dumps({'recordsTotal': len(pairs), 'data': [match(rid, *pair) for pair in pairs]}).encode())
+    monkeypatch.setattr(refresh.urllib.request, 'urlopen', send)
+    result = refresh.refresh(tmp_path, '471980', reviewed_semifinals=True)
+    final = json.load(open(result['path']))
+    assert final['ranks'] == {f'p{i}': (2 if i == 1 else 1 if i == 2 else i) for i in range(1, 9)}
+    assert final['base_ranks']['p1'] == 1 and final['decisive_match_id'] == '17-2'
+    assert final['unranked_participant_ids'] == ['dq']
+    assert len(final['playoff_results']) == 7 and len(calls) == 5
+    assert path.read_bytes() == original
+    assert all('/Decklist/' not in url for url in calls)

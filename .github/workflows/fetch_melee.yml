@@ -16,6 +16,11 @@ on:
         required: false
         default: ""
         type: string
+      reviewed_semifinals:
+        description: "Use the explicitly reviewed event's semifinal ranks and final result"
+        required: false
+        default: false
+        type: boolean
       retained_checkpoint:
         description: "Exact review-branch SHA required by resume-retained"
         required: false
@@ -76,7 +81,12 @@ jobs:
             git checkout -b "$BRANCH"
           fi
       - name: Refresh completed Finals metadata and ranks
-        run: python -B tools/refresh_melee_final_standings.py --event-id "$EVENT_ID"
+        env:
+          REVIEWED_SEMIFINALS: ${{ inputs.reviewed_semifinals }}
+        run: |
+          RANK_ARGS=()
+          if [ "$REVIEWED_SEMIFINALS" = "true" ]; then RANK_ARGS=(--reviewed-semifinals); fi
+          python -B tools/refresh_melee_final_standings.py --event-id "$EVENT_ID" "${RANK_ARGS[@]}"
       - name: Retain fetched source even if rank validation failed
         if: always() && env.FORMAT != ''
         shell: bash
