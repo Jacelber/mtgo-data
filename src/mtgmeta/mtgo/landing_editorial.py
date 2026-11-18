@@ -1276,7 +1276,10 @@ def validate_review_document(document: Mapping[str, Any], schema_path: str | Pat
     if len(feature_tokens) != len(set(feature_tokens)):
         raise MTGOLandingEditorialError("Landing review feature deck identity is duplicated")
     copy_tokens = copy_deck_tokens(document["review"]["top_copy"]["items"])
-    unknown = sorted(set(copy_tokens) - set(feature_tokens))
+    from .landing_tabletop import decklist_url
+    standalone = {d["token"] for d in document.get("tabletop", {}).get("decks", [])
+                  if decklist_url(d.get("decklist_url"))}
+    unknown = sorted(set(copy_tokens) - set(feature_tokens) - standalone)
     if unknown:
         raise MTGOLandingEditorialError(
             "Landing top-copy token lacks an exact selected feature: " + ", ".join(unknown)
@@ -1367,6 +1370,7 @@ def resolve_review_decks(
 
     root = Path(repository_root)
     selected = {item["destination_id"] for item in document["review"]["features"]["items"]}
+    selected.update(copy_deck_tokens(document["review"].get("top_copy", {}).get("items", [])))
     retained = {item["token"]: item for item in deck_catalog(document)}
     if mtgo_catalog is None and selected & {item["token"] for item in document["all_top8"]}:
         subject = build_top8_subject(root, str(document["format"]), document["week"]["id"])
@@ -1404,6 +1408,7 @@ def materialize_review(
 
     format_id = str(document["format"])
     from .landing_tabletop import provenance
+    feature_tokens = {item["destination_id"] for item in document["review"]["features"]["items"]}
     summary_items: list[dict[str, Any]] = []
     for item in sorted(document["review"]["top_copy"]["items"], key=lambda value: value["order"]):
         tokens = list(dict.fromkeys(DECK_TOKEN_PATTERN.findall(item["text"]["zh"])))
@@ -1415,6 +1420,7 @@ def materialize_review(
                 {
                     "order": order,
                     "token": token,
+                    **({"decklist_url": deck["decklist_url"]} if token not in feature_tokens else {}),
                     "label": {
                         "zh": f"{name['zh']} · {deck['player']} · 第{deck['final_rank']}名",
                         "en": f"{name['en']} · {deck['player']} · Rank {deck['final_rank']}",

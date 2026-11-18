@@ -1272,10 +1272,16 @@ def validate_document(document: Mapping[str, Any]) -> None:
                 raise MTGOLandingError(
                     "Landing feature destinations are missing or duplicated"
                 )
+            from .landing_tabletop import decklist_url
+            for item in summary["items"]:
+                for link in item["deck_links"]:
+                    if "decklist_url" in link and (link["deck"].get("source") != "melee"
+                            or not decklist_url(link["decklist_url"]) or link["token"] in feature_destinations):
+                        raise MTGOLandingError("Invalid standalone Melee decklist link")
             linked_destinations = {
                 link["token"]
                 for item in summary["items"]
-                for link in item["deck_links"]
+                for link in item["deck_links"] if "decklist_url" not in link
             }
             if not linked_destinations <= feature_destinations:
                 raise MTGOLandingError(

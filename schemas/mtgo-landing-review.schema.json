@@ -114,6 +114,7 @@
         "source": {"const": "melee"},
         "event_name": {"type": "string", "minLength": 1},
         "swiss_record": {"type": "object", "additionalProperties": false, "required": ["wins", "losses", "draws"], "properties": {"wins": {"type": "integer", "minimum": 0}, "losses": {"type": "integer", "minimum": 0}, "draws": {"type": "integer", "minimum": 0}}},
+        "decklist_url": {"type": "string", "pattern": "^https://melee[.]gg/Decklist/GetDecklistDetails[?]id=[a-fA-F0-9-]{36}$"},
         "reference": {"type": "string", "pattern": "^melee:[0-9]+:[0-9]+$"},
         "event_id": {"type": "string", "pattern": "^[0-9]+$"},
         "deck_id": {"type": "string", "pattern": "^[0-9a-f]{20}$"},

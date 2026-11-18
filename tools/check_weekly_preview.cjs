@@ -77,7 +77,7 @@ const { chromium } = require(process.env.WEEKLY_PLAYWRIGHT || 'playwright');
           text: p.textContent,
           cards: [...p.querySelectorAll('a.card-link')].map(a => ({text: a.textContent, href: a.getAttribute('href')})),
           decks: [...p.querySelectorAll('a.landing-deck-link')].map(a => ({
-            token: new URL(a.href).searchParams.get('feature'), text: a.textContent,
+            token: new URL(a.href).searchParams.get('feature') || a.href, text: a.textContent,
             before: a.previousSibling?.textContent || '', after: a.nextSibling?.textContent || ''
           }))
         })));

@@ -391,6 +391,7 @@
       "properties": {
         "order": {"type": "integer", "minimum": 1},
         "token": {"type": "string", "pattern": "^deck:[0-9a-f]{20}$"},
+        "decklist_url": {"type": "string", "pattern": "^https://melee[.]gg/Decklist/GetDecklistDetails[?]id=[a-fA-F0-9-]{36}$"},
         "label": {"$ref": "#/$defs/localized"},
         "deck": {"$ref": "#/$defs/summaryDeck"}
       }
