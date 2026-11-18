@@ -1,0 +1,121 @@
+name: Isolated artifact interoperability verification
+on:
+  push:
+    branches: [audit/isolated-tls-verification-2026-11-18]
+    paths: [.github/workflows/isolated-artifact-verification.yml]
+permissions:
+  contents: read
+jobs:
+  synthetic-roundtrip:
+    if: github.ref == 'refs/heads/audit/isolated-tls-verification-2026-11-18'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Generate synthetic fixtures only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import os
+          root=Path(os.environ['RUNNER_TEMP'])/'synthetic'
+          files={'plain.txt':b'fixture only\n','nested/bytes.bin':bytes(range(256)),'.hidden':b'not a secret\n','nested/.inner':b'hidden fixture\n'}
+          for name,data in files.items():
+              p=root/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(data)
+          PY
+      - name: Upload olddefault
+        id: olddefault
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: synthetic-olddefault
+          path: ${{ runner.temp }}/synthetic/
+          include-hidden-files: false
+          retention-days: 1
+          if-no-files-found: error
+      - name: Download olddefault using old
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: synthetic-olddefault
+          path: ${{ runner.temp }}/received/olddefault-old
+      - name: Download olddefault using new
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: synthetic-olddefault
+          path: ${{ runner.temp }}/received/olddefault-new
+      - name: Upload oldhidden
+        id: oldhidden
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: synthetic-oldhidden
+          path: ${{ runner.temp }}/synthetic/
+          include-hidden-files: true
+          retention-days: 1
+          if-no-files-found: error
+      - name: Download oldhidden using old
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: synthetic-oldhidden
+          path: ${{ runner.temp }}/received/oldhidden-old
+      - name: Download oldhidden using new
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: synthetic-oldhidden
+          path: ${{ runner.temp }}/received/oldhidden-new
+      - name: Upload newdefault
+        id: newdefault
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: synthetic-newdefault
+          path: ${{ runner.temp }}/synthetic/
+          include-hidden-files: false
+          retention-days: 1
+          if-no-files-found: error
+      - name: Download newdefault using old
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: synthetic-newdefault
+          path: ${{ runner.temp }}/received/newdefault-old
+      - name: Download newdefault using new
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: synthetic-newdefault
+          path: ${{ runner.temp }}/received/newdefault-new
+      - name: Upload newhidden
+        id: newhidden
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: synthetic-newhidden
+          path: ${{ runner.temp }}/synthetic/
+          include-hidden-files: true
+          retention-days: 1
+          if-no-files-found: error
+      - name: Download newhidden using old
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: synthetic-newhidden
+          path: ${{ runner.temp }}/received/newhidden-old
+      - name: Download newhidden using new
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: synthetic-newhidden
+          path: ${{ runner.temp }}/received/newhidden-new
+      - name: Verify exact layout bytes hashes and upload digest format
+        env:
+          DIGESTS: ${{ steps.olddefault.outputs.artifact-digest }} ${{ steps.oldhidden.outputs.artifact-digest }} ${{ steps.newdefault.outputs.artifact-digest }} ${{ steps.newhidden.outputs.artifact-digest }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import os,hashlib,re
+          root=Path(os.environ['RUNNER_TEMP'])
+          source=root/'synthetic'
+          for uv in ['old','new']:
+              for hidden in [False,True]:
+                  for dv in ['old','new']:
+                      name=uv+('hidden' if hidden else 'default')+'-'+dv
+                      out=root/'received'/name
+                      expected={str(p.relative_to(source)):p.read_bytes() for p in source.rglob('*') if p.is_file() and (hidden or not any(x.startswith('.') for x in p.relative_to(source).parts))}
+                      actual={str(p.relative_to(out)):p.read_bytes() for p in out.rglob('*') if p.is_file()}
+                      assert actual==expected,(name,list(actual),list(expected))
+                      print(name,'PASS',len(actual),'files', {k:hashlib.sha256(v).hexdigest() for k,v in actual.items()})
+          digests=os.environ['DIGESTS'].split()
+          assert len(digests)==4 and all(re.fullmatch('[0-9a-f]{64}',v) for v in digests),digests
+          print('Four upload service artifact digests present; normal downloads passed. Deliberate service digest corruption not exercised.')
+          PY
