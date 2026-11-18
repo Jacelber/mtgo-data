@@ -29,7 +29,7 @@ jobs:
       MTGO_TRANSIENT_EXIT_CODE: "75"
     steps:
       - name: Check out full history without persisted credentials
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
@@ -94,7 +94,7 @@ jobs:
 
       - name: Download compatible incomplete fetch checkpoint
         if: steps.previous-checkpoint.outputs.found == 'true'
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
           name: mtgo-fetch-checkpoint
           path: ${{ runner.temp }}/mtgo-fetch-resume
@@ -233,7 +233,7 @@ jobs:
             -keyopt rsa_padding_mode:oaep -keyopt rsa_oaep_md:sha256
 
       - name: Upload immutable collected inputs
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: mtgo-collection-candidate
           path: |
@@ -260,7 +260,7 @@ jobs:
 
       - name: Upload immutable resumable fetch checkpoint
         if: failure() && steps.checkpoint.outcome == 'success'
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: mtgo-fetch-checkpoint
           path: ${{ runner.temp }}/mtgo-fetch-checkpoint
@@ -296,7 +296,7 @@ jobs:
       PYTHONPATH: .:src
     steps:
       - name: Check out full history for input retention
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
@@ -311,7 +311,7 @@ jobs:
         run: python -m pip install --disable-pip-version-check -r requirements.txt
 
       - name: Download existing collected inputs
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
           name: mtgo-collection-candidate
           path: ${{ runner.temp }}/mtgo-collection-candidate
@@ -398,7 +398,7 @@ jobs:
       PYTHONPATH: .:src
     steps:
       - name: Check out the verified retained inputs
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ needs.retain.outputs.retained-commit }}
           fetch-depth: 1
@@ -441,7 +441,7 @@ jobs:
             -keyopt rsa_padding_mode:oaep -keyopt rsa_oaep_md:sha256
 
       - name: Transfer encrypted weekly handoff
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: ${{ steps.generate.outputs.artifact-name }}
           path: ${{ runner.temp }}/weekly-maintenance-readiness/readiness.cms
@@ -478,7 +478,7 @@ jobs:
     steps:
       - name: Download the private weekly handoff
         if: needs.weekly-readiness.result == 'success'
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
           name: ${{ needs.weekly-readiness.outputs.artifact-name }}
           path: ${{ runner.temp }}/weekly-maintenance-readiness
