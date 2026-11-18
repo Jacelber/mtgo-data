@@ -1,0 +1,67 @@
+name: Isolated checkout compatibility verification
+on:
+  push:
+    branches: [audit/isolated-tls-verification-2026-11-18]
+    paths: [.github/workflows/isolated-checkout-verification.yml]
+permissions:
+  contents: read
+jobs:
+  fixed-read-only-checkout:
+    if: github.ref == 'refs/heads/audit/isolated-tls-verification-2026-11-18'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout old depth 1
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          ref: 1946b4ccaa2966f265186fe2fdc23c15e13a8ef5
+          fetch-depth: 1
+          persist-credentials: false
+          path: checkout-old-1
+      - name: Checkout old depth 0
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          ref: 1946b4ccaa2966f265186fe2fdc23c15e13a8ef5
+          fetch-depth: 0
+          persist-credentials: false
+          path: checkout-old-0
+      - name: Checkout new depth 1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: 1946b4ccaa2966f265186fe2fdc23c15e13a8ef5
+          fetch-depth: 1
+          persist-credentials: false
+          path: checkout-new-1
+      - name: Checkout new depth 0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: 1946b4ccaa2966f265186fe2fdc23c15e13a8ef5
+          fetch-depth: 0
+          persist-credentials: false
+          path: checkout-new-0
+      - name: Verify fixed contents history and no persisted authentication
+        run: |
+          python - <<'PY'
+          import subprocess, pathlib, json
+          expected='1946b4ccaa2966f265186fe2fdc23c15e13a8ef5'
+          results={}
+          for ver in ['old','new']:
+              for depth in [1,0]:
+                  p=pathlib.Path(f'checkout-{ver}-{depth}')
+                  def git(*args):
+                      return subprocess.check_output(['git','-C',str(p),*args],text=True).strip()
+                  assert git('rev-parse','HEAD')==expected
+                  assert git('status','--porcelain')==''
+                  shallow=git('rev-parse','--is-shallow-repository')
+                  assert shallow==('true' if depth else 'false')
+                  count=int(git('rev-list','--count','HEAD'))
+                  assert count==1 if depth else count>1
+                  # Inspect key names only; never print credential/config values.
+                  keys=git('config','--local','--name-only','--list').lower().splitlines()
+                  assert not any('extraheader' in k or k.startswith('credential.') for k in keys), 'unexpected persisted authentication key'
+                  results[f'{ver}-{depth}']={'head':expected,'tree':git('rev-parse','HEAD^{tree}'),'count':count,'shallow':shallow}
+          assert results['old-1']==results['new-1']
+          assert results['old-0']==results['new-0']
+          print(json.dumps(results,indent=2))
+          print('Read-only shallow/full checkout parity passed; authenticated write/push paths intentionally not exercised.')
+          PY
