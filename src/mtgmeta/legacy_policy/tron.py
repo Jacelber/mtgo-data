@@ -1,4 +1,4 @@
-"""Two accepted Tron output families; recognition and payment colors stay intact."""
+"""Accepted Tron routing, with Post lands taking family precedence."""
 
 COLORS = frozenset(
     {
@@ -229,7 +229,7 @@ def audit_subtype(rules, parent, main, side):
 
 
 def route_identity(rules, parent, subtype, main, side):
-    """Resolve engine first, then source-supported colors for any Tron recognition."""
+    """Resolve the land engine before emitting a source-supported color family."""
     if parent in {"tron", "blue-tron"}:
         target = parent
     else:
@@ -240,4 +240,16 @@ def route_identity(rules, parent, subtype, main, side):
         if target not in {"tron", "blue-tron"}:
             return parent, subtype, {}
     info = audit_subtype(rules, target, main, side)
+    # Tower and Nexus occur in both engines. A broad Tron recognition must not
+    # swallow a Post build; keep the established payment audit and route its
+    # resolved color to the existing Post identities instead.
+    if main.get("Cloudpost", 0) or main.get("Glimmerpost", 0):
+        color = info["subtype"]
+        target, subtype = {
+            "mono-blue": ("blue-post", "mono-blue"),
+            "mono-green": ("green-post", "mono-green"),
+            "multicolor": ("multicolor-post", None),
+        }.get(color, (color + "-post", None))
+        info["land_engine"] = "cloudpost"
+        return target, subtype, info
     return target, info["subtype"], info

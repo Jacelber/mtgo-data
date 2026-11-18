@@ -887,6 +887,7 @@ const manaIdentities = Object.freeze({
     "rakdos-madness": Object.freeze(["b", "r"]),
   }),
   legacy: Object.freeze({
+    "multicolor-post": Object.freeze(["w", "u", "b", "r", "g"]),
     "dimir-opposition": Object.freeze(["u", "b"]),
     "sultai-opposition": Object.freeze(["u", "b", "g"]),
     "mono-blue-painter": Object.freeze(["u"]),
