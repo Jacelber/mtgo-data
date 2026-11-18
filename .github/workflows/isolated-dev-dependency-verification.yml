@@ -1,0 +1,87 @@
+name: Isolated development dependency verification
+on:
+  push:
+    branches: [audit/isolated-tls-verification-2026-11-18]
+    paths: [.github/workflows/isolated-dev-dependency-verification.yml]
+permissions:
+  contents: read
+concurrency:
+  group: isolated-dev-dependency-verification-2026-11-18
+  cancel-in-progress: false
+jobs:
+  compare:
+    if: github.repository == 'Jacelber/mtgo-data' && github.ref == 'refs/heads/audit/isolated-tls-verification-2026-11-18'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          ref: 1946b4ccaa2966f265186fe2fdc23c15e13a8ef5
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12'
+      - name: Compare unchanged runtime with isolated development dependency groups
+        run: |
+          python - <<'PY'
+          import json, os, pathlib, re, subprocess, sys
+          root = pathlib.Path(os.environ["RUNNER_TEMP"]) / "dependency-dev-verify"
+          root.mkdir()
+          source = pathlib.Path("requirements-dev.txt").read_text()
+          runtime = pathlib.Path("requirements.txt").read_text()
+          groups = {
+              "mypy": {"mypy": ("2.3.0", "2.4.1"), "ast-serialize": ("0.6.0", "0.13.1"), "librt": ("0.13.0", "0.16.0"), "mypy_extensions": ("1.1.0", "1.2.0")},
+              "pytest": {"pytest": ("9.1.1", "9.2.0"), "iniconfig": ("2.3.0", "2.3.1"), "pluggy": ("1.6.0", "1.7.0"), "Pygments": ("2.20.0", "2.21.0"), "packaging": ("26.2", "26.3")},
+              "ruff": {"ruff": ("0.15.22", "0.17.5")},
+          }
+          env = dict(os.environ, PYTHONPATH=".:src", PYTHONDONTWRITEBYTECODE="1")
+          results = {}
+          tests = ["tests/test_mtgo_fetch_recovery.py", "tests/test_validate_schemas.py", "-k", "not test_current_melee_documents_pass_both_complete_manifests"]
+          def call(args, limit=120):
+              p = subprocess.run(args, env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=limit)
+              return {"exit": p.returncode, "output": p.stdout}
+          for variant in ("baseline", "mypy", "pytest", "ruff", "combined"):
+              folder = root / variant
+              folder.mkdir()
+              changed = source
+              updates = {} if variant == "baseline" else ({k:v for g in groups.values() for k,v in g.items()} if variant == "combined" else groups[variant])
+              for package, (old, new) in updates.items():
+                  assert changed.count(package + "==" + old) == 1
+                  changed = changed.replace(package + "==" + old, package + "==" + new)
+              (folder / "requirements.txt").write_text(runtime)
+              (folder / "requirements-dev.txt").write_text(changed)
+              subprocess.run([sys.executable, "-m", "venv", str(folder / "venv")], check=True)
+              python = str(folder / "venv/bin/python")
+              subprocess.run([python, "-m", "pip", "install", "--disable-pip-version-check", "--only-binary=:all:", "-r", str(folder / "requirements-dev.txt")], check=True, timeout=180)
+              subprocess.run([python, "-m", "pip", "check"], check=True)
+              result = {"changes": updates}
+              if variant in ("baseline", "mypy", "combined"):
+                  result["mypy"] = call([python, "-m", "mypy", "--no-incremental", "--cache-dir", str(folder/"mypy-cache")])
+              if variant in ("baseline", "ruff", "combined"):
+                  result["ruff"] = call([python, "-m", "ruff", "check", "--no-cache", "--output-format", "json", "."])
+              if variant in ("baseline", "pytest", "combined"):
+                  result["pytest"] = call([python, "-m", "pytest", "-q", "--basetemp", str(folder/"pytest-temp"), *tests])
+              results[variant] = result
+              print("VARIANT", variant, json.dumps(result), flush=True)
+              (root / "results.json").write_text(json.dumps(results, indent=2))
+          baseline = results["baseline"]
+          problems = []
+          for variant, result in results.items():
+              if "mypy" in result:
+                  if result["mypy"] != baseline["mypy"]:
+                      problems.append(variant + ": mypy diagnostics changed")
+              if "ruff" in result:
+                  def stable(item):
+                      data = json.loads(item["output"])
+                      return sorted((d["filename"], d["location"]["row"], d["location"]["column"], d["code"], d["message"]) for d in data)
+                  if result["ruff"]["exit"] != baseline["ruff"]["exit"] or stable(result["ruff"]) != stable(baseline["ruff"]):
+                      problems.append(variant + ": Ruff diagnostics changed")
+              if "pytest" in result and result["pytest"]["exit"] != 0:
+                  problems.append(variant + ": selected tests did not pass")
+          print(json.dumps({"problems": problems, "note": "Existing mypy/Ruff errors are compared, not claimed as passed. Full manifest scan was deliberately excluded: unchanged whole-product data and prior baseline timeout; this test selects client and schema mechanisms only."}, indent=2))
+          assert not problems, problems
+          
+          PY
+      - name: Confirm checkout remained unchanged
+        if: always()
+        run: git diff --exit-code && test -z "$(git status --porcelain)"
