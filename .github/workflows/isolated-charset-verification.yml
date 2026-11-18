@@ -1,0 +1,63 @@
+name: Isolated charset compatibility verification
+on:
+  push:
+    branches: [audit/isolated-tls-verification-2026-11-18]
+    paths: [.github/workflows/isolated-charset-verification.yml]
+permissions:
+  contents: read
+jobs:
+  charset:
+    if: github.ref == 'refs/heads/audit/isolated-tls-verification-2026-11-18'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          ref: 1946b4ccaa2966f265186fe2fdc23c15e13a8ef5
+          persist-credentials: false
+          sparse-checkout: |
+            src
+            tests
+            configs
+            tools
+            requirements.txt
+            requirements-dev.txt
+            pyproject.toml
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12'
+      - name: Build isolated old and candidate environments
+        run: |
+          for label in old new; do
+            python -m venv "$RUNNER_TEMP/$label"
+            "$RUNNER_TEMP/$label/bin/pip" install --disable-pip-version-check -r requirements-dev.txt
+          done
+          "$RUNNER_TEMP/new/bin/pip" install --disable-pip-version-check charset-normalizer==3.5.2
+          "$RUNNER_TEMP/old/bin/pip" check
+          "$RUNNER_TEMP/new/bin/pip" check
+      - name: Test decoding and source clients without external requests
+        env:
+          PYTHONPATH: src
+        run: |
+          cat > "$RUNNER_TEMP/check_charset.py" <<'PY'
+          import requests, charset_normalizer, json
+          cases=[
+              ('ascii','{"title":"synthetic tournament"}','ascii'),
+              ('utf8-cjk-regression','{"title":"海岛旅居会员忠诚动因持续探索"}','utf-8'),
+              ('utf8-japanese','{"title":"大会の結果と参加者の情報を確認するための合成テストです"}','utf-8'),
+              ('utf16-bom','{"title":"Synthetic tournament information"}','utf-16'),
+          ]
+          for name,text,encoding in cases:
+              payload=text.encode(encoding)
+              r=requests.Response();r.status_code=200;r._content=payload;r._content_consumed=True
+              assert r.text==text,(name,charset_normalizer.__version__,r.apparent_encoding)
+              assert r.json()==json.loads(text)
+              print(charset_normalizer.__version__,name,'PASS',r.apparent_encoding)
+          print('Four bounded synthetic decoding/JSON cases passed. No external requests.')
+          PY
+          for label in old new; do
+            "$RUNNER_TEMP/$label/bin/python" "$RUNNER_TEMP/check_charset.py"
+            "$RUNNER_TEMP/$label/bin/python" -m pytest -q tests/test_mtgo_fetch_recovery.py tests/test_melee_review_collection.py
+          done
+          git diff --exit-code
