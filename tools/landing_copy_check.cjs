@@ -17,9 +17,12 @@ function checkCopy(items, language, resolve, observed) {
       errors.push(`Paragraph ${index + 1}: missing or incorrect card links`);
     }
     const deckLinks = new Map((item.deck_links || []).map(link => [link.token, link]));
-    const expectedDecks = [...text.matchAll(/deck:[0-9a-f]{20}/g)].map(([token]) => ({
-      token, text: deckLinks.get(token)?.label[language]
-    }));
+    const expectedDecks = [...text.matchAll(/deck:[0-9a-f]{20}/g)].map(match => {
+      const link = deckLinks.get(match[0]);
+      const marker = language === 'zh' ? '牌表' : 'decklist';
+      return { token: link?.decklist_url || match[0],
+        text: text.slice(0, match.index).endsWith(marker) ? marker : link?.label[language] };
+    });
     if (JSON.stringify(expectedDecks) !== JSON.stringify(actual.decks.map(({token, text}) => ({token, text})))) {
       errors.push(`Paragraph ${index + 1}: missing or incorrect deck links`);
     }

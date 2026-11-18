@@ -3,6 +3,7 @@ from copy import deepcopy
 from datetime import date, timedelta
 import hashlib
 import json
+import re
 from pathlib import Path
 
 
@@ -40,13 +41,27 @@ def retained_policy(catalog):
     raise ValueError("Unknown retained tabletop selection policy")
 
 
+def decklist_url(value):
+    if isinstance(value, str) and re.fullmatch(
+        r"https://melee\.gg/Decklist/GetDecklistDetails\?id=[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}", value
+    ):
+        return value
+    return None
+
+
 def swiss_points(item):
     scope = item.get("scopes", {}).get("all_constructed", {})
     score = swiss_record(scope.get("result_counts"))
     points = scope.get("constructed_points")
-    if score is None or type(points) is not int or points != 3 * score["wins"] + score["draws"]:
+    if score is None or type(points) is not int:
         return None
-    return points
+    selection_points = 3 * score["wins"] + score["draws"]
+    # Performance points exclude official lock exemptions. Older retained
+    # inputs can already include them in their Swiss points field.
+    lock_points = 3 * scope["result_counts"].get("awarded_win_top8_lock", 0)
+    if points not in (selection_points, selection_points - lock_points):
+        return None
+    return selection_points
 
 
 def points_boundary(event, public, format_id):
@@ -171,6 +186,9 @@ def build_catalog(root, format_id, week, event_ids, *, classification_cache=None
                 "parent_id": cls["archetype_id"], "subtype_id": cls["subtype_id"],
                 "display_name": cls["subtype_name"] or cls["archetype_name"],
                 "swiss_record": score, **zones})
+            url = decklist_url(item["decklist"].get("source_url"))
+            if url:
+                result["decks"][-1]["decklist_url"] = url
             record["eligible_count"] += 1
         result["events"].append(record)
     result["decks"].sort(key=lambda item: (item["starttime"], item["event_id"], item["final_rank"]))
@@ -191,6 +209,8 @@ def validate_retained(root, source, *, classification_cache=None):
             != [{key: item[key] for key in event_fields} for item in retained["events"]]):
         raise ValueError("Retained tabletop Feature material changed")
     selected = {item["destination_id"] for item in source.get("review", {}).get("features", {}).get("items", [])}
+    from .landing_editorial import copy_deck_tokens
+    selected.update(copy_deck_tokens(source.get("review", {}).get("top_copy", {}).get("items", [])))
     decks = {item["token"]: item for item in actual["decks"]}
     for original in retained["decks"]:
         if selected and original["token"] not in selected:

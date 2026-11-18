@@ -214,6 +214,8 @@ def test_points_cutoff_uses_lowest_qualifier_and_keeps_all_ties(tmp_path):
     add("tie", {"played_win": 8, "played_loss": 1, "intentional_draw": 3}, 99)
     add("bye", {"played_win": 8, "bye": 1, "played_loss": 3})
     add("exempt", {"played_win": 8, "awarded_win_top8_lock": 1, "played_loss": 3})
+    add("performance-exempt", {"played_win": 8, "awarded_win_top8_lock": 1, "played_loss": 3})
+    public["decks"][-1]["scopes"]["all_constructed"]["constructed_points"] = 24
     add("below", {"played_win": 8, "played_loss": 2, "intentional_draw": 2})
     add("early", {"played_win": 9})
     add("zero-two", {"played_loss": 2})
@@ -224,7 +226,7 @@ def test_points_cutoff_uses_lowest_qualifier_and_keeps_all_ties(tmp_path):
     event = result["events"][0]
     assert event["top8_min_swiss_points"] == 30
     assert event["minimum_swiss_points"] == 27
-    expected = {"p1", "three-loss", "tie", "bye", "exempt"}
+    expected = {"p1", "three-loss", "tie", "bye", "exempt", "performance-exempt"}
     assert {d["token"] for d in result["decks"]} == {
         "deck:" + landing_tabletop.digest(["melee", "123", pid])[:20] for pid in expected}
     # Candidate selection is not a different public statistics definition.

@@ -78,6 +78,7 @@ function isLandingFeatureDestination(value) {
 }
 
 function landingDeckUrl(link, weekId) {
+  if (link.decklist_url) return link.decklist_url;
   if (isLandingFeatureDestination(link.token)) {
     return landingTargetUrl({
       format: state.format,
@@ -117,13 +118,20 @@ function landingSummaryText(item, weekId) {
   const pattern = new RegExp(`(${tokens.map(token => (
     token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
   )).join("|")})`, "g");
-  return text.split(pattern).map(part => {
+  const parts = text.split(pattern);
+  return parts.map((part, index) => {
     const link = links.get(part);
-    if (!link) return landingCardText(part);
-    const featureAttributes = isLandingFeatureDestination(link.token)
+    const marker = I18n.language() === "zh" ? "牌表" : "decklist";
+    if (!link) {
+      const hasMarker = links.has(parts[index + 1]) && part.endsWith(marker);
+      return landingCardText(hasMarker ? part.slice(0, -marker.length) : part);
+    }
+    const label = localizedValue(link.label);
+    const visible = parts[index - 1]?.endsWith(marker) ? marker : label;
+    const featureAttributes = !link.decklist_url && isLandingFeatureDestination(link.token)
       ? ` data-landing-feature-destination="${escapeHtml(link.token)}" data-landing-feature-week="${escapeHtml(`${weekId}.json`)}"`
       : "";
-    return `<a class="landing-deck-link" href="${escapeHtml(landingDeckUrl(link, weekId))}"${featureAttributes}>${escapeHtml(localizedValue(link.label))}</a>`;
+    return `<a class="landing-deck-link" href="${escapeHtml(landingDeckUrl(link, weekId))}" title="${escapeHtml(label)}"${featureAttributes}>${escapeHtml(visible)}</a>`;
   }).join("");
 }
 
@@ -293,7 +301,7 @@ function landingFeatureDetail(item) {
     showEventContext: item.deck.source === "melee",
     showReference: item.deck.source !== "melee",
     performanceHtml: item.deck.source === "melee"
-      ? `<p>${I18n.language() === "zh" ? "实体大赛 · 瑞士轮" : "Tabletop · Swiss"}: ${item.deck.swiss_record.wins}-${item.deck.swiss_record.losses}-${item.deck.swiss_record.draws}</p>` : "",
+      ? `<p>Melee ${escapeHtml(item.deck.event_id)} · ${I18n.language() === "zh" ? "实体大赛 · 瑞士轮" : "Tabletop · Swiss"}: ${item.deck.swiss_record.wins}-${item.deck.swiss_record.losses}-${item.deck.swiss_record.draws}</p>` : `<p>MTGO ${escapeHtml(item.deck.event_id)}</p>`,
     closeAction: `data-landing-feature-toggle="${escapeHtml(item.destination_id)}"`,
     showDeviation: false,
     className: "deck-detail landing-feature-detail",
@@ -307,8 +315,9 @@ function landingFeatureHtml(item) {
   const category = item.category === "new_deck"
     ? t("landing.feature_new_deck")
     : t("landing.feature_new_technology");
+  const eventLabel = (item.deck.source === "melee" ? "Melee " : "MTGO ") + item.deck.event_id;
   const source = item.deck?.source === "melee"
-    ? `<span>${escapeHtml(item.deck.event_name)} · ${I18n.language() === "zh" ? "瑞士轮" : "Swiss"} ${item.deck.swiss_record.wins}-${item.deck.swiss_record.losses}-${item.deck.swiss_record.draws}</span>` : "";
+    ? `<span>${escapeHtml(eventLabel)} · ${escapeHtml(item.deck.event_name)} · ${I18n.language() === "zh" ? "瑞士轮" : "Swiss"} ${item.deck.swiss_record.wins}-${item.deck.swiss_record.losses}-${item.deck.swiss_record.draws}</span>` : `<span>${escapeHtml(eventLabel)}</span>`;
   // The toggle is a button, so show token labels without nesting card links.
   const positioning = localizedValue(item.positioning).replace(
     /\[\[card:([^\[\]|\r\n]+)(?:\|([^\[\]|\r\n]+))?\]\]/g,
