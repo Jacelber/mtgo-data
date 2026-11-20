@@ -46,7 +46,7 @@ jobs:
       REVIEW_ROUND: ${{ inputs.review_standings_round_id }}
       EXPECTED_CHECKPOINT: ${{ inputs.retained_checkpoint }}
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -119,7 +119,7 @@ jobs:
       EXPECTED_CHECKPOINT: ${{ inputs.retained_checkpoint }}
     steps:
       - name: Check out full history for candidate publication
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0
           persist-credentials: false
