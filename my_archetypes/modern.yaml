@@ -538,6 +538,26 @@ archetypes:
   priority: 638075
   color_profile: default
   rules:
+  - id: izzet-tempo-riddler-talent
+    priority: 638075
+    subtype_id: null
+    conditions:
+      all:
+      - card: Dragon's Rage Channeler
+        zone: main
+        min_count: 1
+      - card: Counterspell
+        zone: main
+        min_count: 1
+      - card: Quantum Riddler
+        zone: main
+        min_count: 1
+      - card: Stormchaser's Talent
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+    - red
   - id: izzet-tempo-primary
     priority: 638075
     subtype_id: null
@@ -3475,14 +3495,24 @@ archetypes:
       - card: Karn, the Great Creator
         zone: main
         min_count: 1
-      - card: Portent of Calamity
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Portent of Calamity
+            zone: main
+            min_count: 1
+        - all:
+          - card: Stock Up
+            zone: main
+            min_count: 1
+          - card: Devourer of Destiny
+            zone: main
+            min_count: 1
     colors:
     - blue
   color_profile: default
 - id: tron
   name: Tron
+  color_profile: default
   priority: 648100
   subtypes:
   - id: mono-green
@@ -3494,6 +3524,34 @@ archetypes:
   - id: izzet
     name: Izzet
   rules:
+  - id: tron-mono-green-nexus
+    priority: 690870
+    subtype_id: mono-green
+    conditions:
+      all:
+      - card: Urza's Mine
+        zone: main
+        min_count: 1
+      - card: Urza's Power Plant
+        zone: main
+        min_count: 1
+      - card: Urza's Tower
+        zone: main
+        min_count: 1
+      - card: Expedition Map
+        zone: main
+        min_count: 1
+      - card: Nexus of Becoming
+        zone: main
+        min_count: 1
+      - card: Eldrazi Temple
+        zone: main
+        exact_count: 0
+      - card: Ancient Stirrings
+        zone: main
+        exact_count: 0
+    colors:
+    - green
   - id: tron-mono-green-zimone
     priority: 648100
     subtype_id: mono-green
@@ -4281,6 +4339,7 @@ archetypes:
 - id: burn
   name: Burn
   priority: 206300
+  color_profile: default
   subtypes:
   - id: mono-red-cutter
     name: Mono-Red Cutter Burn
@@ -4290,7 +4349,61 @@ archetypes:
     name: Rakdos
   - id: mono-red
     name: Mono-Red
+  - id: rakdos-cutter
+    name: Rakdos Cutter Burn
+  - id: naya
+    name: Naya Burn
   rules:
+  - id: burn-rakdos-cutter
+    priority: 672920
+    subtype_id: rakdos-cutter
+    conditions:
+      all:
+      - card: Cori-Steel Cutter
+        zone: main
+        min_count: 1
+      - card: Lava Spike
+        zone: main
+        min_count: 1
+      - card: Boltwave
+        zone: main
+        min_count: 1
+      - card: Lightning Bolt
+        zone: main
+        min_count: 1
+      - card: Lava Dart
+        zone: main
+        min_count: 1
+      - card: Slickshot Show-Off
+        zone: main
+        exact_count: 0
+      - card: Mutagenic Growth
+        zone: main
+        exact_count: 0
+    colors:
+    - black
+    - red
+  - id: burn-naya
+    priority: 206310
+    subtype_id: naya
+    conditions:
+      all:
+      - card: Boltwave
+        zone: main
+        min_count: 1
+      - card: Lightning Bolt
+        zone: main
+        min_count: 1
+      - card: Lava Spike
+        zone: main
+        min_count: 1
+      - card: Boros Charm
+        zone: main
+        min_count: 1
+    colors:
+    - white
+    - red
+    - green
   # Direct-damage core with Cutter support; keep the Slickshot/Growth engine in Prowess.
   - id: burn-mono-red-cutter
     priority: 672910
@@ -10676,10 +10789,33 @@ archetypes:
   name: Titan Canopy Ramp
   priority: 690870
   color_profile: default
+  subtypes:
+  - id: mono-green
+    name: Titan Canopy Ramp
+  - id: naya
+    name: Naya Ramp
   rules:
+  - id: titan-canopy-ramp-naya
+    priority: 690871
+    subtype_id: naya
+    conditions:
+      all:
+      - card: Primeval Titan
+        zone: main
+        min_count: 2
+      - card: Roiling Canopy
+        zone: main
+        min_count: 2
+      - card: Amulet of Vigor
+        zone: main
+        exact_count: 0
+    colors:
+    - white
+    - red
+    - green
   - id: titan-canopy-ramp-primary
     priority: 690870
-    subtype_id: null
+    subtype_id: mono-green
     conditions:
       all:
       - card: Primeval Titan
@@ -10829,7 +10965,7 @@ archetypes:
     - red
     - green
 - id: kiki-chord
-  name: Kiki Chord
+  name: Kiki Combo
   priority: 681010
   rules:
   - id: kiki-chord-bell-ringer
@@ -10841,9 +10977,6 @@ archetypes:
         zone: main
         min_count: 1
       - card: Village Bell-Ringer
-        zone: main
-        min_count: 1
-      - card: Chord of Calling
         zone: main
         min_count: 1
 
@@ -10961,3 +11094,23 @@ archetypes:
           - card: Emrakul, the Promised End
             zone: main
             min_count: 1
+
+- id: simic-mission
+  name: Simic Mission
+  priority: 690990
+  color_profile: default
+  rules:
+  - id: simic-mission-primary
+    priority: 690990
+    subtype_id: null
+    conditions:
+      all:
+      - card: Anthropological Mission
+        zone: main
+        min_count: 1
+      - card: Emry, Lurker of the Loch
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+    - green

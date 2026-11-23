@@ -296,7 +296,7 @@ STANDARD_FLING_CHARM_CORE = (
 STANDARD_FLING_CHARMS = frozenset({"Poison Dart Frog", "Frog Butler", "Quintorius Kand"})
 STANDARD_SPIDER_COPY_TARGETS = frozenset({"Absolute Virtue"})
 COLOR_PROFILES = frozenset(
-    {"default", "modern-goryos", "modern-creativity", "standard-fling", "standard-spider-man", "pauper-packbeast", "pauper-battle-screech"}
+    {"default", "modern-goryos", "modern-creativity", "standard-fling", "standard-spider-man", "pauper-packbeast", "pauper-battle-screech", "pioneer-scapeshift-memorial-v1"}
 )
 PACKBEAST_RED_ROUTE = ("Lightning Bolt", "Galvanic Blast", "Holdout Settlement")
 PACKBEAST_MARDU_SOURCES = (("Mardu Devotee", 4), ("Springleaf Drum", 4))
@@ -520,6 +520,18 @@ def deck_colors(
         [(card, qty) for _, _, qty, card in rows if card is not None]
     )
     ordinary_support = set(support)
+    # Owner's Scapeshift boundary: Memorial alone does not make the optional
+    # black kicker of Tear Asunder a splash. Other black spells still count,
+    # as does the kicker when another ordinary black source supports it.
+    # This opt-in version is fingerprinted by the family's color_profile.
+    memorial_only_kicker = (
+        profile == "pioneer-scapeshift-memorial-v1"
+        and main.get("Memorial to Folly", 0) > 0
+        and "B" not in _mana_support([
+            (card, qty) for _, _, qty, card in rows
+            if card is not None and card.key != "Memorial to Folly"
+        ])
+    )
     # Reviewed Battle Screech route: chosen Gate colors support Grudge's
     # green flashback only. Do not grant green to unrelated spells or families.
     gates_grudge = (
@@ -626,6 +638,9 @@ def deck_colors(
                     face, payment_frozen, frozenset(established)
                 )
                 contribution.update(_additional_casting_colors(face, payment_frozen))
+                if memorial_only_kicker and card.key == "Tear Asunder":
+                    contribution.discard("B")
+                    reason = "pioneer-scapeshift:memorial-only-optional-kicker"
                 if use == "normal_cast":
                     contribution = set(re.findall(r"[WUBRG]", face.mana_cost)) or set(
                         face.colors

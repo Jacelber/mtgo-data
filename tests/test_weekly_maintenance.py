@@ -281,6 +281,33 @@ def test_displayed_policy_accepts_only_unchanged_visual_and_names(tmp_path, monk
     assert workflow.adopt_displayed(changed, tmp_path, **kw)["decisions"]["displayed_environment_policy"]["keys"] == []
 
 
+def test_data_generation_preserves_reviewed_facts_when_upstream_has_a_revision(tmp_path, monkeypatch):
+    from mtgmeta import classifier_closure as closure, classifier_preparation as preparation
+
+    facts = tmp_path / "src/mtgmeta/data/classifier_card_facts.json"
+    reviewed = {"version": "owner-reviewed", "card": "Hit It!"}
+    workflow.write(facts, reviewed)
+    calls = []
+
+    def prepare(root, formats, *, refresh=True):
+        calls.append((root, formats))
+        if refresh:
+            workflow.write(facts, {"version": "later-upstream-revision", "card": "Hit It!"})
+
+    monkeypatch.setattr(workflow, "require_private_output", lambda *_: None)
+    monkeypatch.setattr(preparation, "prepare_repository_facts", prepare)
+    monkeypatch.setattr(closure, "current_melee_sync", lambda *_: [])
+    monkeypatch.setattr(closure, "validate_current_melee", lambda *_: None)
+    monkeypatch.setattr(closure, "_protected_input_fingerprints", lambda *_: {})
+    plan = {"week": "2026-W47", "mtgo_formats": [], "melee": [
+        {"format": "modern", "event_id": "434455", "steps": []}]}
+
+    workflow.stage_data(tmp_path, plan)
+
+    assert calls == [(tmp_path, ["modern"])]
+    assert workflow.read(facts) == reviewed
+
+
 def test_data_wrapper_orders_existing_producers_and_binds_resume(tmp_path, monkeypatch):
     from datetime import date
     from types import SimpleNamespace

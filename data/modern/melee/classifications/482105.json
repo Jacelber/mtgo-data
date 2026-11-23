@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "4681c0ce585686742e7aa9a2b443afe8bc4b2eefb3bd60fe1d02649895e25804"
+    "digest": "dc3754726194bd63d51edfb0b390875dfad7c899b9ae3bd325931c803c817a40"
   },
   "input": {
     "event_path": "data/modern/melee/events/482105.json",
@@ -18,11 +18,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "62136c624c47751165802258a42c6f3cdab3f7e86264cfdf70c89147c866f5d1",
+    "rule_sha256": "97acbd25db82e407069761e026dc882087a330cfa59b790c5498a977213d7893",
     "rule_schema_version": "1.2.0",
-    "archetype_count": 239,
-    "rule_count": 437,
-    "subtype_count": 120
+    "archetype_count": 244,
+    "rule_count": 448,
+    "subtype_count": 125
   },
   "summary": {
     "total_records": 183,
@@ -30,8 +30,8 @@
     "unknown": 0,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 71,
-    "overridden_matches": 71,
+    "multiple_matches": 72,
+    "overridden_matches": 72,
     "selected_subtypes": 100,
     "parent_only": 83,
     "same_parent_multiple_subtype_matches": 1,
@@ -70,10 +70,11 @@
       "jeskai-ponza": 1,
       "living-end": 4,
       "mardu-blink": 1,
+      "mardu-delirium": 1,
       "mono-blue-belcher": 3,
       "mono-blue-merfolk": 1,
       "prowess": 19,
-      "rakdos-delirium": 13,
+      "rakdos-delirium": 12,
       "rakdos-through-the-breach": 1,
       "ruby-storm": 3,
       "sam-combo": 1,
@@ -93,8 +94,8 @@
       "eldrazi-ramp/golgari": 1,
       "eldrazi-ramp/gruul": 2,
       "eldrazi-tron/colorless": 2,
+      "eldrazi-tron/mono-blue": 1,
       "eldrazi-tron/mono-green": 7,
-      "eldrazi-tron/simic": 1,
       "esper-blink/esper": 11,
       "esper-goryos/esper": 7,
       "hammer-time/azorius": 1,
@@ -12546,14 +12547,81 @@
       "participant_id": "participant-5c6230cc414c7828e5067d241efbe82b991c06ec2da3bc3e1b030a7e40e13d04",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "rakdos-delirium",
-        "archetype_name": "Rakdos Delirium",
+        "archetype_id": "mardu-delirium",
+        "archetype_name": "Mardu Delirium",
         "subtype_id": null,
         "subtype_name": null,
-        "rule_id": "rakdos-delirium-manipulator",
-        "priority": 620067
+        "rule_id": "mardu-delirium-manipulator",
+        "priority": 620071
       },
       "matched_rules": [
+        {
+          "archetype_id": "mardu-delirium",
+          "archetype_name": "Mardu Delirium",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "mardu-delirium-manipulator",
+          "priority": 620071,
+          "evidence": [
+            {
+              "card": "Nethergoyf",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Moonshadow",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Dark Matter Manipulator",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blood Crypt",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hollow One",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Death's Shadow",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "colors:black,red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "rakdos-delirium",
           "archetype_name": "Rakdos Delirium",
@@ -12615,6 +12683,75 @@
       ],
       "top_priority_matches": [
         {
+          "archetype_id": "mardu-delirium",
+          "archetype_name": "Mardu Delirium",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "mardu-delirium-manipulator",
+          "priority": 620071,
+          "evidence": [
+            {
+              "card": "Nethergoyf",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Moonshadow",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Dark Matter Manipulator",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blood Crypt",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hollow One",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Death's Shadow",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "colors:black,red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
           "archetype_id": "rakdos-delirium",
           "archetype_name": "Rakdos Delirium",
           "subtype_id": null,
@@ -12673,7 +12810,6 @@
           ]
         }
       ],
-      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -32197,12 +32333,87 @@
       "selected": {
         "archetype_id": "eldrazi-tron",
         "archetype_name": "Eldrazi Tron",
-        "subtype_id": "simic",
-        "subtype_name": "Simic",
-        "rule_id": "eldrazi-tron-simic",
-        "priority": 649010
+        "subtype_id": "mono-blue",
+        "subtype_name": "Mono-Blue",
+        "rule_id": "eldrazi-tron-mono-blue-portent",
+        "priority": 649020
       },
       "matched_rules": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "archetype_name": "Eldrazi Tron",
+          "subtype_id": "mono-blue",
+          "subtype_name": "Mono-Blue",
+          "rule_id": "eldrazi-tron-mono-blue-portent",
+          "priority": 649020,
+          "evidence": [
+            {
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Eldrazi Temple",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Expedition Map",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Karn, the Great Creator",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Portent of Calamity",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
@@ -32332,6 +32543,83 @@
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",
+          "subtype_id": "mono-blue",
+          "subtype_name": "Mono-Blue",
+          "rule_id": "eldrazi-tron-mono-blue-portent",
+          "priority": 649020,
+          "evidence": [
+            {
+              "card": "Urza's Mine",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Power Plant",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Urza's Tower",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Eldrazi Temple",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Expedition Map",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Karn, the Great Creator",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Portent of Calamity",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "colors:blue",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
+          "archetype_id": "eldrazi-tron",
+          "archetype_name": "Eldrazi Tron",
           "subtype_id": "simic",
           "subtype_name": "Simic",
           "rule_id": "eldrazi-tron-simic",
@@ -32386,9 +32674,7 @@
               "exact_count": null
             }
           ]
-        }
-      ],
-      "overridden_matches": [
+        },
         {
           "archetype_id": "eldrazi-tron",
           "archetype_name": "Eldrazi Tron",

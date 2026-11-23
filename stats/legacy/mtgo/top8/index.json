@@ -1,18 +1,31 @@
 {
   "schema_version": "1.1.0",
-  "construction_digest": "3b1a4ff37af53956957edf02ce318c0c3ad1062713c5b56d5da6ad8b5cc5e5a9",
+  "construction_digest": "97d738291458d1a38c0b99440a1fd4a8abada1678b8f8a2ef04013df66cbe69c",
   "document_type": "top8_index",
   "source": "mtgo",
   "format": "legacy",
-  "classifier_digest": "88891842f5ed823af7ad750d5d34c6f24a8905ecbd6fd4cbb6b27dd405f94aa1",
-  "generated": "2026-11-09T23:08:33",
-  "latest_complete_week": "2026-11-02",
+  "classifier_digest": "59956d6689a8d8e2880f86381d12fb87198110278e1ead6d475ad7eaa57d6d98",
+  "generated": "2026-11-23T21:22:17",
+  "latest_complete_week": "2026-11-16",
   "history_policy": "source_immutable_classifier_restatement",
   "classification_impact": {
     "weeks": [
       {
         "week": "2026-10-26",
-        "previous_classifier_digest": "4631d79149650c9b76647323553a0f7eaf75aa5054c30f81df94e66a477cce3c",
+        "previous_classifier_digest": "88891842f5ed823af7ad750d5d34c6f24a8905ecbd6fd4cbb6b27dd405f94aa1",
+        "added_event_ids": [],
+        "classification_changes": [],
+        "comparison_base_changes": {
+          "added_identity_ids": [],
+          "removed_identity_ids": [],
+          "changed_identity_ids": [
+            "blue-tron/multicolor"
+          ]
+        }
+      },
+      {
+        "week": "2026-11-02",
+        "previous_classifier_digest": "88891842f5ed823af7ad750d5d34c6f24a8905ecbd6fd4cbb6b27dd405f94aa1",
         "added_event_ids": [],
         "classification_changes": [],
         "comparison_base_changes": {
@@ -22,49 +35,91 @@
         }
       },
       {
-        "week": "2026-11-02",
+        "week": "2026-11-09",
         "previous_classifier_digest": null,
         "added_event_ids": [
-          "12857422",
-          "12857661",
-          "12857681",
-          "12857685",
-          "12857693",
-          "12857698",
-          "12857730"
+          "12857715",
+          "12858084",
+          "12858102",
+          "12858106",
+          "12858114",
+          "12858119"
         ],
         "classification_changes": [],
         "comparison_base_changes": {
           "added_identity_ids": [
             "ant",
-            "azorius-stoneblade",
+            "azorius-tempo/azorius",
             "boros-energy",
-            "colorless-painter",
-            "death-and-taxes-yorion-black-white",
+            "cradle-control",
             "dimir-tempo/dimir",
             "dimir-tempo/hogaak",
-            "dimir-tempo/hogaak-g",
+            "dredge",
             "eldrazi",
             "elves",
-            "grixis-reanimator",
-            "izzet-tempo/izzet",
+            "esper-tempo",
+            "gwx-depths/selesnya",
             "jeskai-control",
             "jeskai-tempo",
             "lands",
             "mardu-energy",
-            "mono-black-reanimator",
-            "mono-white-initiative",
             "multicolor-beanstalk-control/wug",
             "multicolor-beanstalk-control/wurg",
+            "multicolor-post",
             "mystic-forge-combo/colorless",
-            "naya-energy",
-            "painter-combo",
+            "oops-all-spells",
             "saga-storm",
             "sewers/ur",
-            "sewers/wur",
             "sneak-and-show",
             "sultai-doomsday",
+            "sultai-natural-order",
+            "tes",
             "tron/colorless"
+          ],
+          "removed_identity_ids": [],
+          "changed_identity_ids": []
+        }
+      },
+      {
+        "week": "2026-11-16",
+        "previous_classifier_digest": null,
+        "added_event_ids": [
+          "12858136",
+          "12858913",
+          "12858932",
+          "12858936",
+          "12858944",
+          "12858949"
+        ],
+        "classification_changes": [],
+        "comparison_base_changes": {
+          "added_identity_ids": [
+            "affinity-stompy",
+            "aluren-tell",
+            "azorius-tempo/azorius",
+            "cephalid-breakfast",
+            "dimir-tempo/dimir",
+            "dimir-tempo/hogaak",
+            "dredge",
+            "elves",
+            "esper-tempo",
+            "grixis-reanimator",
+            "gwx-depths/selesnya",
+            "izzet-tempo/izzet",
+            "jeskai-control",
+            "jeskai-energy",
+            "jeskai-tempo",
+            "lands",
+            "mardu-energy",
+            "mono-white-initiative",
+            "multicolor-beanstalk-control/wug",
+            "multicolor-post",
+            "mystic-forge-combo/colorless",
+            "naya-initiative",
+            "sneak-and-show",
+            "sultai-doomsday",
+            "teg",
+            "tes"
           ],
           "removed_identity_ids": [],
           "changed_identity_ids": []
@@ -72,19 +127,39 @@
       }
     ],
     "summary": {
-      "retained_week_count": 2,
-      "added_event_count": 7,
+      "retained_week_count": 4,
+      "added_event_count": 12,
       "classification_change_count": 0
     }
   },
   "weeks": [
+    {
+      "file": "2026-W47.json",
+      "comparison_bases_file": "2026-W47-bases.json",
+      "start": "2026-11-16",
+      "end": "2026-11-22",
+      "event_count": 6,
+      "status": "provisional",
+      "provisional_through": "2026-11-29",
+      "seal_on": "2026-11-30"
+    },
+    {
+      "file": "2026-W46.json",
+      "comparison_bases_file": "2026-W46-bases.json",
+      "start": "2026-11-09",
+      "end": "2026-11-15",
+      "event_count": 6,
+      "status": "sealed",
+      "provisional_through": "2026-11-22",
+      "seal_on": "2026-11-23"
+    },
     {
       "file": "2026-W45.json",
       "comparison_bases_file": "2026-W45-bases.json",
       "start": "2026-11-02",
       "end": "2026-11-08",
       "event_count": 7,
-      "status": "provisional",
+      "status": "sealed",
       "provisional_through": "2026-11-15",
       "seal_on": "2026-11-16"
     },

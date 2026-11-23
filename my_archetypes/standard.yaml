@@ -90,6 +90,25 @@ archetypes:
     colors:
     - blue
     - red
+- id: izzet-kobayashi-maru
+  name: Izzet Kobayashi Maru
+  priority: 78158
+  color_profile: default
+  rules:
+  - id: izzet-kobayashi-maru-core
+    priority: 78158
+    subtype_id: null
+    conditions:
+      all:
+      - card: Kobayashi Maru Scenario
+        zone: main
+        min_count: 1
+      - card: Harmless Offering
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+    - red
 - id: bant-offense
   name: Bant Offense
   priority: 23010
@@ -2680,9 +2699,15 @@ archetypes:
       - card: Broodheart Engine
         zone: main
         min_count: 3
-      - card: Broodspinner
-        zone: main
-        min_count: 3
+      - any:
+        - all:
+          - card: Broodspinner
+            zone: main
+            min_count: 3
+        - all:
+          - card: Vaultborn Tyrant
+            zone: main
+            min_count: 1
 - id: sultai-control
   name: Sultai Control
   priority: 40010
@@ -3213,10 +3238,38 @@ archetypes:
 - id: dark-jeskai-control
   name: Four-Color Control
   priority: 56000
+  color_profile: default
+  subtypes:
+  - id: non-green
+    name: Four-Color Control
+  - id: non-white
+    name: Four-Color Control
   rules:
+  - id: dark-jeskai-control-nonwhite-jace
+    priority: 56000
+    subtype_id: non-white
+    conditions:
+      all:
+      - card: The Theorist, Jace Beleren
+        zone: main
+        min_count: 1
+      - card: Jace's Machinations
+        zone: main
+        min_count: 1
+      - card: Professor Dellian Fel
+        zone: main
+        min_count: 1
+      - card: Deadly Cover-Up
+        zone: main
+        min_count: 1
+    colors:
+    - blue
+    - black
+    - red
+    - green
   - id: dark-jeskai-control-primary
     priority: 56000
-    subtype_id: null
+    subtype_id: non-green
     conditions:
       all:
       - card: Inevitable Defeat
@@ -3233,7 +3286,7 @@ archetypes:
         max_count: 1
   - id: dark-jeskai-control-consult-revelation
     priority: 56000
-    subtype_id: null
+    subtype_id: non-green
     conditions:
       all:
       - card: Inevitable Defeat
@@ -3250,7 +3303,7 @@ archetypes:
         max_count: 1
   - id: dark-jeskai-control-defeat-chart-counters
     priority: 56000
-    subtype_id: null
+    subtype_id: non-green
     conditions:
       all:
       - card: Inevitable Defeat

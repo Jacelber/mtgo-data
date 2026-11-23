@@ -2,6 +2,9 @@
 
 const manaIdentities = Object.freeze({
   standard: Object.freeze({
+    "izzet-kobayashi-maru": Object.freeze(["u", "r"]),
+    "dark-jeskai-control/non-white": Object.freeze(["u", "b", "r", "g"]),
+    "dark-jeskai-control/non-green": Object.freeze(["w", "u", "b", "r"]),
     "bant-offense": Object.freeze(["w", "u", "g"]),
     "mardu-naked": Object.freeze(["w", "b", "r"]),
     "izzet-archaic": Object.freeze(["u", "r"]),
@@ -245,6 +248,11 @@ const manaIdentities = Object.freeze({
     "esper-toughness": Object.freeze(["w", "u", "b"]),
   }),
   modern: Object.freeze({
+    "simic-mission": Object.freeze(["u", "g"]),
+    "burn/rakdos-cutter": Object.freeze(["b", "r"]),
+    "burn/naya": Object.freeze(["w", "r", "g"]),
+    "titan-canopy-ramp/mono-green": Object.freeze(["g"]),
+    "titan-canopy-ramp/naya": Object.freeze(["w", "r", "g"]),
     "grixis-delirium": Object.freeze(["u", "b", "r"]),
     "mardu-delirium": Object.freeze(["w", "b", "r"]),
     "mono-white-energy": Object.freeze(["w"]),
@@ -664,7 +672,7 @@ const manaIdentities = Object.freeze({
     "gruul-ponza": Object.freeze(["r", "g"]),
     "gruul-ramp": Object.freeze(["r", "g"]),
     "infect": Object.freeze(["g"]),
-    "inside-out": Object.freeze(["w", "u"]),
+    "inside-out": Object.freeze(["w", "r"]),
     "izzet-control": Object.freeze(["u", "r"]),
     "izzet-faeries": Object.freeze(["u", "r"]),
     "izzet-madness": Object.freeze(["u", "r"]),
@@ -731,6 +739,10 @@ const manaIdentities = Object.freeze({
     "golgari-gardens/sultai": Object.freeze(["u", "b", "g"]),
   }),
   pioneer: Object.freeze({
+    "nine-lives-combo": Object.freeze(["w", "u"]),
+    "izzet-mission": Object.freeze(["u", "r"]),
+    "dimir-mission": Object.freeze(["u", "b"]),
+    "four-color-beanstalk": Object.freeze(["w", "u", "b", "g"]),
     "lotus-scapeshift/bant": Object.freeze(["w", "u", "g"]),
     "mono-white-hammer-time": Object.freeze(["w"]),
     "grixis-control": Object.freeze(["u", "b", "r"]),
@@ -1505,6 +1517,10 @@ const representativeCards = Object.freeze({
       Object.freeze({"name": "Sneaky Snacker", "image": "../images/representative-cards/pauper/sneaky-snacker.jpg"}),
       Object.freeze({"name": "Pursue the Past", "image": "../images/representative-cards/pauper/pursue-the-past.jpg"}),
     ]),
+    "inside-out": Object.freeze([
+      Object.freeze({"name": "Tireless Tribe", "image": "../images/representative-cards/pauper/tireless-tribe.jpg"}),
+      Object.freeze({"name": "Inside Out", "image": "../images/representative-cards/pauper/inside-out.jpg"}),
+    ]),
   }),
   pioneer: Object.freeze({
     "izzet-prowess": Object.freeze([
@@ -1638,6 +1654,10 @@ const representativeCards = Object.freeze({
     "boros-heroic": Object.freeze([
       Object.freeze({"name": "Favored Hoplite", "image": "../images/representative-cards/pioneer/favored-hoplite.jpg"}),
       Object.freeze({"name": "Academic Dispute", "image": "../images/representative-cards/pioneer/academic-dispute.jpg"}),
+    ]),
+    "dimir-mission": Object.freeze([
+      Object.freeze({"name": "Anthropological Mission", "image": "../images/representative-cards/pioneer/anthropological-mission.jpg"}),
+      Object.freeze({"name": "Thoughtseize", "image": "../images/representative-cards/pioneer/thoughtseize.jpg"}),
     ]),
   }),
   legacy: Object.freeze({

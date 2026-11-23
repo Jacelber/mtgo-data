@@ -6,6 +6,80 @@ semantic_features:
   manifest_path: configs/classifier_semantic_features.yaml
   manifest_sha256: 87120f979a4bd00e4a2aa601e3001862ce2575d12de355c3a42548b535b40b36
 archetypes:
+- id: nine-lives-combo
+  name: Nine Lives Combo
+  priority: 100
+  color_profile: default
+  rules:
+  - id: nine-lives-combo-falcon
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Nine Lives
+        zone: main
+        min_count: 1
+      - card: Coveted Falcon
+        zone: main
+        min_count: 1
+    colors: [white, blue]
+- id: izzet-mission
+  name: Izzet Mission
+  priority: 100
+  color_profile: default
+  rules:
+  - id: izzet-mission-flow-state
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Anthropological Mission
+        zone: main
+        min_count: 1
+      - card: Flow State
+        zone: main
+        min_count: 1
+    colors: [blue, red]
+- id: dimir-mission
+  name: Dimir Mission
+  priority: 100
+  color_profile: default
+  rules:
+  - id: dimir-mission-flow-state
+    priority: 100
+    subtype_id: null
+    conditions:
+      all:
+      - card: Anthropological Mission
+        zone: main
+        min_count: 1
+      - card: Flow State
+        zone: main
+        min_count: 1
+    colors: [blue, black]
+- id: four-color-beanstalk
+  name: 4-Color Beanstalk
+  priority: 110
+  color_profile: default
+  rules:
+  - id: four-color-beanstalk-deceit-wistfulness
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Up the Beanstalk
+        zone: main
+        min_count: 1
+      - card: Leyline Binding
+        zone: main
+        min_count: 1
+      - card: Deceit
+        zone: main
+        min_count: 1
+      - card: Wistfulness
+        zone: main
+        min_count: 1
+    colors: [white, blue, black, green]
 - id: lotus-scapeshift
   name: Lotus Scapeshift
   priority: 100
@@ -67,7 +141,7 @@ archetypes:
     - card: Spelunking
       zone: main
       min_count: 1
-  color_profile: default
+  color_profile: pioneer-scapeshift-memorial-v1
   require_color_subtype: true
 - id: azorius-control
   name: Azorius Control
@@ -557,9 +631,15 @@ archetypes:
       - card: Unholy Annex // Ritual Chamber
         zone: main
         min_count: 1
-      - card: Bloodtithe Harvester
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Bloodtithe Harvester
+            zone: main
+            min_count: 1
+        - all:
+          - card: Salt Vampire
+            zone: main
+            min_count: 1
       - card: Blood Crypt
         zone: main
         min_count: 1
@@ -724,6 +804,15 @@ archetypes:
       - card: Obsessive Pursuit
         zone: main
         min_count: 1
+      - any:
+        - all:
+          - card: Cauldron Familiar
+            zone: main
+            max_count: 0
+        - all:
+          - card: Witch's Oven
+            zone: main
+            max_count: 0
     colors: [black, red, green]
   - id: jund-artifact-sacrifice-dirge
     priority: 100
@@ -736,9 +825,15 @@ archetypes:
       - card: The Sackville-Bagginses
         zone: main
         min_count: 1
-      - card: Fable of the Mirror-Breaker
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Fable of the Mirror-Breaker
+            zone: main
+            min_count: 1
+        - all:
+          - card: Shrapnel Blast
+            zone: main
+            min_count: 1
       - card: Lively Dirge
         zone: main
         min_count: 1
@@ -870,9 +965,15 @@ archetypes:
       - card: Unholy Annex // Ritual Chamber
         zone: main
         min_count: 1
-      - card: Gifted Aetherborn
-        zone: main
-        min_count: 1
+      - any:
+        - all:
+          - card: Gifted Aetherborn
+            zone: main
+            min_count: 1
+        - all:
+          - card: Gix, Yawgmoth Praetor
+            zone: main
+            min_count: 1
       - card: Swamp
         zone: main
         min_count: 1
@@ -891,7 +992,29 @@ archetypes:
 - id: temur-lessons
   name: Temur Lessons
   priority: 100
+  color_profile: default
   rules:
+  - id: temur-lessons-supported-origin
+    priority: 101
+    subtype_id: null
+    conditions:
+      all:
+      - card: Gran-Gran
+        zone: main
+        min_count: 1
+      - card: Accumulate Wisdom
+        zone: main
+        min_count: 1
+      - card: Firebending Lesson
+        zone: main
+        min_count: 1
+      - card: Origin of Metalbending
+        zone: side
+        min_count: 1
+      - card: Questing Druid
+        zone: main
+        max_count: 0
+    colors: [blue, red, green]
   - id: temur-lessons-primary
     priority: 100
     subtype_id: null
