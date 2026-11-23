@@ -2,11 +2,11 @@
   "schema_version": "1.1.0",
   "format": "pioneer",
   "source": "mtgo",
-  "classifier_digest": "dff4e5b64955cd1b174d658a90168f971d3843fe9219bcee4a3ef21d696a31c9",
-  "rules_updated": "2026-11-09T22:13:51+09:00",
+  "classifier_digest": "a2f03589d27db861113648f65cd3d43e6ade29eee3de38324045dc67dd25a122",
+  "rules_updated": "2026-11-23T19:46:35+09:00",
   "summary": {
-    "parents": 141,
-    "leaves": 146,
+    "parents": 148,
+    "leaves": 154,
     "expandable_parents": 3
   },
   "parents": [
@@ -212,6 +212,12 @@
       "subtype_ids": []
     },
     {
+      "id": "dimir-mission",
+      "name": "Dimir Mission",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "dimir-ninjas",
       "name": "Dimir Ninjas",
       "expandable": false,
@@ -292,6 +298,12 @@
     {
       "id": "five-color-ramp",
       "name": "5-Color Ramp",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "four-color-beanstalk",
+      "name": "4-Color Beanstalk",
       "expandable": false,
       "subtype_ids": []
     },
@@ -380,6 +392,12 @@
       "subtype_ids": []
     },
     {
+      "id": "grixis-control",
+      "name": "Grixis Control",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "gruul-cauldron",
       "name": "Gruul Cauldron",
       "expandable": false,
@@ -388,6 +406,12 @@
     {
       "id": "gruul-creativity",
       "name": "Gruul Creativity",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "gruul-naked",
+      "name": "Gruul Naked",
       "expandable": false,
       "subtype_ids": []
     },
@@ -442,6 +466,12 @@
     {
       "id": "izzet-lotus",
       "name": "Izzet Lotus",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "izzet-mission",
+      "name": "Izzet Mission",
       "expandable": false,
       "subtype_ids": []
     },
@@ -540,6 +570,7 @@
       "name": "Lotus Scapeshift",
       "expandable": true,
       "subtype_ids": [
+        "lotus-scapeshift/bant",
         "lotus-scapeshift/simic",
         "lotus-scapeshift/sultai",
         "lotus-scapeshift/wubg"
@@ -616,6 +647,12 @@
       "subtype_ids": []
     },
     {
+      "id": "mono-white-hammer-time",
+      "name": "Mono-White Hammer Time",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "mono-white-heroic",
       "name": "Mono-White Heroic",
       "expandable": false,
@@ -630,6 +667,12 @@
     {
       "id": "mono-white-tokens",
       "name": "Mono-White Tokens",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "nine-lives-combo",
+      "name": "Nine Lives Combo",
       "expandable": false,
       "subtype_ids": []
     },
@@ -1142,6 +1185,14 @@
       "subtype_id": null
     },
     {
+      "id": "dimir-mission",
+      "kind": "archetype",
+      "name": "Dimir Mission",
+      "display_name": "Dimir Mission",
+      "parent_id": "dimir-mission",
+      "subtype_id": null
+    },
+    {
       "id": "dimir-ninjas",
       "kind": "archetype",
       "name": "Dimir Ninjas",
@@ -1251,6 +1302,14 @@
       "name": "5-Color Ramp",
       "display_name": "5-Color Ramp",
       "parent_id": "five-color-ramp",
+      "subtype_id": null
+    },
+    {
+      "id": "four-color-beanstalk",
+      "kind": "archetype",
+      "name": "4-Color Beanstalk",
+      "display_name": "4-Color Beanstalk",
+      "parent_id": "four-color-beanstalk",
       "subtype_id": null
     },
     {
@@ -1366,6 +1425,14 @@
       "subtype_id": null
     },
     {
+      "id": "grixis-control",
+      "kind": "archetype",
+      "name": "Grixis Control",
+      "display_name": "Grixis Control",
+      "parent_id": "grixis-control",
+      "subtype_id": null
+    },
+    {
       "id": "gruul-cauldron",
       "kind": "archetype",
       "name": "Gruul Cauldron",
@@ -1379,6 +1446,14 @@
       "name": "Gruul Creativity",
       "display_name": "Gruul Creativity",
       "parent_id": "gruul-creativity",
+      "subtype_id": null
+    },
+    {
+      "id": "gruul-naked",
+      "kind": "archetype",
+      "name": "Gruul Naked",
+      "display_name": "Gruul Naked",
+      "parent_id": "gruul-naked",
       "subtype_id": null
     },
     {
@@ -1451,6 +1526,14 @@
       "name": "Izzet Lotus",
       "display_name": "Izzet Lotus",
       "parent_id": "izzet-lotus",
+      "subtype_id": null
+    },
+    {
+      "id": "izzet-mission",
+      "kind": "archetype",
+      "name": "Izzet Mission",
+      "display_name": "Izzet Mission",
+      "parent_id": "izzet-mission",
       "subtype_id": null
     },
     {
@@ -1574,26 +1657,34 @@
       "subtype_id": null
     },
     {
+      "id": "lotus-scapeshift/bant",
+      "kind": "subtype",
+      "name": "Bant Scapeshift",
+      "display_name": "Bant Scapeshift Lotus Scapeshift",
+      "parent_id": "lotus-scapeshift",
+      "subtype_id": "bant"
+    },
+    {
       "id": "lotus-scapeshift/simic",
       "kind": "subtype",
-      "name": "Simic",
-      "display_name": "Simic Lotus Scapeshift",
+      "name": "Simic Scapeshift",
+      "display_name": "Simic Scapeshift Lotus Scapeshift",
       "parent_id": "lotus-scapeshift",
       "subtype_id": "simic"
     },
     {
       "id": "lotus-scapeshift/sultai",
       "kind": "subtype",
-      "name": "Sultai",
-      "display_name": "Sultai Lotus Scapeshift",
+      "name": "Sultai Scapeshift",
+      "display_name": "Sultai Scapeshift Lotus Scapeshift",
       "parent_id": "lotus-scapeshift",
       "subtype_id": "sultai"
     },
     {
       "id": "lotus-scapeshift/wubg",
       "kind": "subtype",
-      "name": "WUBG",
-      "display_name": "WUBG Lotus Scapeshift",
+      "name": "WUBG Scapeshift",
+      "display_name": "WUBG Scapeshift Lotus Scapeshift",
       "parent_id": "lotus-scapeshift",
       "subtype_id": "wubg"
     },
@@ -1702,6 +1793,14 @@
       "subtype_id": null
     },
     {
+      "id": "mono-white-hammer-time",
+      "kind": "archetype",
+      "name": "Mono-White Hammer Time",
+      "display_name": "Mono-White Hammer Time",
+      "parent_id": "mono-white-hammer-time",
+      "subtype_id": null
+    },
+    {
       "id": "mono-white-heroic",
       "kind": "archetype",
       "name": "Mono-White Heroic",
@@ -1723,6 +1822,14 @@
       "name": "Mono-White Tokens",
       "display_name": "Mono-White Tokens",
       "parent_id": "mono-white-tokens",
+      "subtype_id": null
+    },
+    {
+      "id": "nine-lives-combo",
+      "kind": "archetype",
+      "name": "Nine Lives Combo",
+      "display_name": "Nine Lives Combo",
+      "parent_id": "nine-lives-combo",
       "subtype_id": null
     },
     {

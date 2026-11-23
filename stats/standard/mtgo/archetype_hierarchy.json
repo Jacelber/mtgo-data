@@ -2,12 +2,12 @@
   "schema_version": "1.1.0",
   "format": "standard",
   "source": "mtgo",
-  "classifier_digest": "e5de6af4938fe1cf9c007171eea34845a9034a31d1c8930be76396450b1bc089",
-  "rules_updated": "2026-11-09T22:00:44+09:00",
+  "classifier_digest": "951ceab3a222131a5d0544eb7b6aaceb42b731990bb23bb7acbdcbf09e816051",
+  "rules_updated": "2026-11-23T19:18:05+09:00",
   "summary": {
-    "parents": 204,
-    "leaves": 224,
-    "expandable_parents": 8
+    "parents": 208,
+    "leaves": 230,
+    "expandable_parents": 10
   },
   "parents": [
     {
@@ -170,6 +170,12 @@
       "subtype_ids": []
     },
     {
+      "id": "bant-offense",
+      "name": "Bant Offense",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "bant-rhythm",
       "name": "Bant Rhythm",
       "expandable": false,
@@ -255,8 +261,11 @@
     {
       "id": "dark-jeskai-control",
       "name": "Four-Color Control",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "dark-jeskai-control/non-green",
+        "dark-jeskai-control/non-white"
+      ]
     },
     {
       "id": "dimir-aggro",
@@ -543,6 +552,12 @@
       "subtype_ids": []
     },
     {
+      "id": "izzet-archaic",
+      "name": "Izzet Archaic",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "izzet-artifacts",
       "name": "Izzet Artifacts",
       "expandable": false,
@@ -569,6 +584,12 @@
     {
       "id": "izzet-iron-man",
       "name": "Izzet Iron Man",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "izzet-kobayashi-maru",
+      "name": "Izzet Kobayashi Maru",
       "expandable": false,
       "subtype_ids": []
     },
@@ -629,8 +650,11 @@
     {
       "id": "jeskai-artifacts",
       "name": "Jeskai Artifacts",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "jeskai-artifacts/azorius",
+        "jeskai-artifacts/jeskai"
+      ]
     },
     {
       "id": "jeskai-control",
@@ -763,6 +787,12 @@
     {
       "id": "mardu-donation",
       "name": "Mardu Donation",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mardu-naked",
+      "name": "Mardu Naked",
       "expandable": false,
       "subtype_ids": []
     },
@@ -1489,6 +1519,14 @@
       "subtype_id": null
     },
     {
+      "id": "bant-offense",
+      "kind": "archetype",
+      "name": "Bant Offense",
+      "display_name": "Bant Offense",
+      "parent_id": "bant-offense",
+      "subtype_id": null
+    },
+    {
       "id": "bant-rhythm",
       "kind": "archetype",
       "name": "Bant Rhythm",
@@ -1617,12 +1655,20 @@
       "subtype_id": null
     },
     {
-      "id": "dark-jeskai-control",
-      "kind": "archetype",
+      "id": "dark-jeskai-control/non-green",
+      "kind": "subtype",
       "name": "Four-Color Control",
       "display_name": "Four-Color Control",
       "parent_id": "dark-jeskai-control",
-      "subtype_id": null
+      "subtype_id": "non-green"
+    },
+    {
+      "id": "dark-jeskai-control/non-white",
+      "kind": "subtype",
+      "name": "Four-Color Control",
+      "display_name": "Four-Color Control",
+      "parent_id": "dark-jeskai-control",
+      "subtype_id": "non-white"
     },
     {
       "id": "dimir-aggro",
@@ -2025,6 +2071,14 @@
       "subtype_id": null
     },
     {
+      "id": "izzet-archaic",
+      "kind": "archetype",
+      "name": "Izzet Archaic",
+      "display_name": "Izzet Archaic",
+      "parent_id": "izzet-archaic",
+      "subtype_id": null
+    },
+    {
       "id": "izzet-artifacts",
       "kind": "archetype",
       "name": "Izzet Artifacts",
@@ -2062,6 +2116,14 @@
       "name": "Izzet Iron Man",
       "display_name": "Izzet Iron Man",
       "parent_id": "izzet-iron-man",
+      "subtype_id": null
+    },
+    {
+      "id": "izzet-kobayashi-maru",
+      "kind": "archetype",
+      "name": "Izzet Kobayashi Maru",
+      "display_name": "Izzet Kobayashi Maru",
+      "parent_id": "izzet-kobayashi-maru",
       "subtype_id": null
     },
     {
@@ -2137,12 +2199,20 @@
       "subtype_id": null
     },
     {
-      "id": "jeskai-artifacts",
-      "kind": "archetype",
+      "id": "jeskai-artifacts/azorius",
+      "kind": "subtype",
+      "name": "Azorius Artifacts",
+      "display_name": "Azorius Artifacts",
+      "parent_id": "jeskai-artifacts",
+      "subtype_id": "azorius"
+    },
+    {
+      "id": "jeskai-artifacts/jeskai",
+      "kind": "subtype",
       "name": "Jeskai Artifacts",
       "display_name": "Jeskai Artifacts",
       "parent_id": "jeskai-artifacts",
-      "subtype_id": null
+      "subtype_id": "jeskai"
     },
     {
       "id": "jeskai-control",
@@ -2390,6 +2460,14 @@
       "name": "Mardu Donation",
       "display_name": "Mardu Donation",
       "parent_id": "mardu-donation",
+      "subtype_id": null
+    },
+    {
+      "id": "mardu-naked",
+      "kind": "archetype",
+      "name": "Mardu Naked",
+      "display_name": "Mardu Naked",
+      "parent_id": "mardu-naked",
       "subtype_id": null
     },
     {

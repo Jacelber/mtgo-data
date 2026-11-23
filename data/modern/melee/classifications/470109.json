@@ -6,7 +6,7 @@
   "classifier": {
     "name": "shared-rule-classifier",
     "contract_version": "1.0.0",
-    "digest": "4681c0ce585686742e7aa9a2b443afe8bc4b2eefb3bd60fe1d02649895e25804"
+    "digest": "dc3754726194bd63d51edfb0b390875dfad7c899b9ae3bd325931c803c817a40"
   },
   "input": {
     "event_path": "data/modern/melee/events/470109.json",
@@ -18,11 +18,11 @@
   },
   "taxonomy": {
     "rule_path": "my_archetypes/modern.yaml",
-    "rule_sha256": "62136c624c47751165802258a42c6f3cdab3f7e86264cfdf70c89147c866f5d1",
+    "rule_sha256": "97acbd25db82e407069761e026dc882087a330cfa59b790c5498a977213d7893",
     "rule_schema_version": "1.2.0",
-    "archetype_count": 239,
-    "rule_count": 437,
-    "subtype_count": 120
+    "archetype_count": 244,
+    "rule_count": 448,
+    "subtype_count": 125
   },
   "summary": {
     "total_records": 1183,
@@ -30,8 +30,8 @@
     "unknown": 2,
     "conflicts": 0,
     "invalid_decks": 0,
-    "multiple_matches": 473,
-    "overridden_matches": 473,
+    "multiple_matches": 475,
+    "overridden_matches": 475,
     "selected_subtypes": 720,
     "parent_only": 461,
     "same_parent_multiple_subtype_matches": 8,
@@ -70,6 +70,7 @@
       "fling-goyf": 9,
       "golgari-yawgmoth": 14,
       "grixis-control": 4,
+      "grixis-delirium": 1,
       "grixis-persist": 4,
       "grixis-tempo": 4,
       "hammer-time": 1,
@@ -84,6 +85,7 @@
       "jeskai-energy": 11,
       "jund-sagavan": 1,
       "living-end": 27,
+      "mardu-delirium": 1,
       "mardu-energy": 3,
       "mono-blue-belcher": 14,
       "mono-blue-merfolk": 2,
@@ -94,7 +96,7 @@
       "orzhov-blink": 2,
       "prowess": 127,
       "rakdos-creativity": 1,
-      "rakdos-delirium": 19,
+      "rakdos-delirium": 17,
       "rakdos-hollow-one": 1,
       "rhinos": 1,
       "ruby-storm": 35,
@@ -22959,14 +22961,81 @@
       "participant_id": "participant-1d0c2d536b176d42558541b2a587bd8657c25ec2fdb9dc48a0a1e92bab926d40",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "rakdos-delirium",
-        "archetype_name": "Rakdos Delirium",
+        "archetype_id": "mardu-delirium",
+        "archetype_name": "Mardu Delirium",
         "subtype_id": null,
         "subtype_name": null,
-        "rule_id": "rakdos-delirium-manipulator",
-        "priority": 620067
+        "rule_id": "mardu-delirium-manipulator",
+        "priority": 620071
       },
       "matched_rules": [
+        {
+          "archetype_id": "mardu-delirium",
+          "archetype_name": "Mardu Delirium",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "mardu-delirium-manipulator",
+          "priority": 620071,
+          "evidence": [
+            {
+              "card": "Nethergoyf",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Moonshadow",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Dark Matter Manipulator",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blood Crypt",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hollow One",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Death's Shadow",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "colors:black,red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "rakdos-delirium",
           "archetype_name": "Rakdos Delirium",
@@ -23028,6 +23097,75 @@
       ],
       "top_priority_matches": [
         {
+          "archetype_id": "mardu-delirium",
+          "archetype_name": "Mardu Delirium",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "mardu-delirium-manipulator",
+          "priority": 620071,
+          "evidence": [
+            {
+              "card": "Nethergoyf",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Moonshadow",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Dark Matter Manipulator",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blood Crypt",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hollow One",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Death's Shadow",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "colors:black,red,white",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
           "archetype_id": "rakdos-delirium",
           "archetype_name": "Rakdos Delirium",
           "subtype_id": null,
@@ -23086,7 +23224,6 @@
           ]
         }
       ],
-      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,
@@ -220238,14 +220375,81 @@
       "participant_id": "participant-ff4c6697f362c458fe0efbe8c168958fe3e2bbec5fa1818fea5a8b2c252ba0a9",
       "classification_status": "classified",
       "selected": {
-        "archetype_id": "rakdos-delirium",
-        "archetype_name": "Rakdos Delirium",
+        "archetype_id": "grixis-delirium",
+        "archetype_name": "Grixis Delirium",
         "subtype_id": null,
         "subtype_name": null,
-        "rule_id": "rakdos-delirium-manipulator",
-        "priority": 620067
+        "rule_id": "grixis-delirium-manipulator",
+        "priority": 620071
       },
       "matched_rules": [
+        {
+          "archetype_id": "grixis-delirium",
+          "archetype_name": "Grixis Delirium",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "grixis-delirium-manipulator",
+          "priority": 620071,
+          "evidence": [
+            {
+              "card": "Nethergoyf",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Moonshadow",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Dark Matter Manipulator",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blood Crypt",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hollow One",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Death's Shadow",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "colors:black,blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        },
         {
           "archetype_id": "rakdos-delirium",
           "archetype_name": "Rakdos Delirium",
@@ -220307,6 +220511,75 @@
       ],
       "top_priority_matches": [
         {
+          "archetype_id": "grixis-delirium",
+          "archetype_name": "Grixis Delirium",
+          "subtype_id": null,
+          "subtype_name": null,
+          "rule_id": "grixis-delirium-manipulator",
+          "priority": 620071,
+          "evidence": [
+            {
+              "card": "Nethergoyf",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Moonshadow",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Dark Matter Manipulator",
+              "zone": "main",
+              "actual_count": 4,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Blood Crypt",
+              "zone": "main",
+              "actual_count": 2,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            },
+            {
+              "card": "Hollow One",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "Death's Shadow",
+              "zone": "main",
+              "actual_count": 0,
+              "min_count": null,
+              "max_count": null,
+              "exact_count": 0
+            },
+            {
+              "card": "colors:black,blue,red",
+              "scope": "color-profile",
+              "zone": "any",
+              "actual_count": 1,
+              "min_count": 1,
+              "max_count": null,
+              "exact_count": null
+            }
+          ]
+        }
+      ],
+      "overridden_matches": [
+        {
           "archetype_id": "rakdos-delirium",
           "archetype_name": "Rakdos Delirium",
           "subtype_id": null,
@@ -220365,7 +220638,6 @@
           ]
         }
       ],
-      "overridden_matches": [],
       "conflict_matches": [],
       "conflict_kind": null,
       "priority_tie": false,

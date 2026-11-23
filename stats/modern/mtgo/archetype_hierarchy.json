@@ -2,12 +2,12 @@
   "schema_version": "1.1.0",
   "format": "modern",
   "source": "mtgo",
-  "classifier_digest": "4681c0ce585686742e7aa9a2b443afe8bc4b2eefb3bd60fe1d02649895e25804",
-  "rules_updated": "2026-11-10T21:49:38+09:00",
+  "classifier_digest": "dc3754726194bd63d51edfb0b390875dfad7c899b9ae3bd325931c803c817a40",
+  "rules_updated": "2026-11-23T20:21:52+09:00",
   "summary": {
-    "parents": 239,
-    "leaves": 329,
-    "expandable_parents": 29
+    "parents": 244,
+    "leaves": 338,
+    "expandable_parents": 30
   },
   "parents": [
     {
@@ -232,8 +232,16 @@
         "burn/boros",
         "burn/mono-red",
         "burn/mono-red-cutter",
-        "burn/rakdos"
+        "burn/naya",
+        "burn/rakdos",
+        "burn/rakdos-cutter"
       ]
+    },
+    {
+      "id": "calibrated-blast",
+      "name": "Calibrated Blast",
+      "expandable": false,
+      "subtype_ids": []
     },
     {
       "id": "chant-control",
@@ -475,6 +483,7 @@
       "subtype_ids": [
         "eldrazi-tron/colorless",
         "eldrazi-tron/mono-black",
+        "eldrazi-tron/mono-blue",
         "eldrazi-tron/mono-green",
         "eldrazi-tron/selesnya",
         "eldrazi-tron/simic"
@@ -675,6 +684,12 @@
     {
       "id": "grixis-creativity-goryos",
       "name": "Grixis Creativity Goryo's",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "grixis-delirium",
+      "name": "Grixis Delirium",
       "expandable": false,
       "subtype_ids": []
     },
@@ -991,7 +1006,7 @@
     },
     {
       "id": "kiki-chord",
-      "name": "Kiki Chord",
+      "name": "Kiki Combo",
       "expandable": false,
       "subtype_ids": []
     },
@@ -1022,6 +1037,12 @@
     {
       "id": "mardu-blink",
       "name": "Mardu Blink",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mardu-delirium",
+      "name": "Mardu Delirium",
       "expandable": false,
       "subtype_ids": []
     },
@@ -1166,6 +1187,12 @@
     {
       "id": "mono-white-blink",
       "name": "Mono-White Blink",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
+      "id": "mono-white-energy",
+      "name": "Mono-White Energy",
       "expandable": false,
       "subtype_ids": []
     },
@@ -1459,6 +1486,12 @@
       "subtype_ids": []
     },
     {
+      "id": "simic-mission",
+      "name": "Simic Mission",
+      "expandable": false,
+      "subtype_ids": []
+    },
+    {
       "id": "simic-neoform",
       "name": "Simic Neoform",
       "expandable": false,
@@ -1574,8 +1607,11 @@
     {
       "id": "titan-canopy-ramp",
       "name": "Titan Canopy Ramp",
-      "expandable": false,
-      "subtype_ids": []
+      "expandable": true,
+      "subtype_ids": [
+        "titan-canopy-ramp/mono-green",
+        "titan-canopy-ramp/naya"
+      ]
     },
     {
       "id": "tron",
@@ -1941,12 +1977,36 @@
       "subtype_id": "mono-red-cutter"
     },
     {
+      "id": "burn/naya",
+      "kind": "subtype",
+      "name": "Naya Burn",
+      "display_name": "Naya Burn",
+      "parent_id": "burn",
+      "subtype_id": "naya"
+    },
+    {
       "id": "burn/rakdos",
       "kind": "subtype",
       "name": "Rakdos",
       "display_name": "Rakdos Burn",
       "parent_id": "burn",
       "subtype_id": "rakdos"
+    },
+    {
+      "id": "burn/rakdos-cutter",
+      "kind": "subtype",
+      "name": "Rakdos Cutter Burn",
+      "display_name": "Rakdos Cutter Burn",
+      "parent_id": "burn",
+      "subtype_id": "rakdos-cutter"
+    },
+    {
+      "id": "calibrated-blast",
+      "kind": "archetype",
+      "name": "Calibrated Blast",
+      "display_name": "Calibrated Blast",
+      "parent_id": "calibrated-blast",
+      "subtype_id": null
     },
     {
       "id": "chant-control/azorius",
@@ -2397,6 +2457,14 @@
       "subtype_id": "mono-black"
     },
     {
+      "id": "eldrazi-tron/mono-blue",
+      "kind": "subtype",
+      "name": "Mono-Blue",
+      "display_name": "Mono-Blue Eldrazi Tron",
+      "parent_id": "eldrazi-tron",
+      "subtype_id": "mono-blue"
+    },
+    {
       "id": "eldrazi-tron/mono-green",
       "kind": "subtype",
       "name": "Mono-Green",
@@ -2690,6 +2758,14 @@
       "name": "Grixis Creativity Goryo's",
       "display_name": "Grixis Creativity Goryo's",
       "parent_id": "grixis-creativity-goryos",
+      "subtype_id": null
+    },
+    {
+      "id": "grixis-delirium",
+      "kind": "archetype",
+      "name": "Grixis Delirium",
+      "display_name": "Grixis Delirium",
+      "parent_id": "grixis-delirium",
       "subtype_id": null
     },
     {
@@ -3183,8 +3259,8 @@
     {
       "id": "kiki-chord",
       "kind": "archetype",
-      "name": "Kiki Chord",
-      "display_name": "Kiki Chord",
+      "name": "Kiki Combo",
+      "display_name": "Kiki Combo",
       "parent_id": "kiki-chord",
       "subtype_id": null
     },
@@ -3250,6 +3326,14 @@
       "name": "Mardu Blink",
       "display_name": "Mardu Blink",
       "parent_id": "mardu-blink",
+      "subtype_id": null
+    },
+    {
+      "id": "mardu-delirium",
+      "kind": "archetype",
+      "name": "Mardu Delirium",
+      "display_name": "Mardu Delirium",
+      "parent_id": "mardu-delirium",
       "subtype_id": null
     },
     {
@@ -3442,6 +3526,14 @@
       "name": "Mono-White Blink",
       "display_name": "Mono-White Blink",
       "parent_id": "mono-white-blink",
+      "subtype_id": null
+    },
+    {
+      "id": "mono-white-energy",
+      "kind": "archetype",
+      "name": "Mono-White Energy",
+      "display_name": "Mono-White Energy",
+      "parent_id": "mono-white-energy",
       "subtype_id": null
     },
     {
@@ -4005,6 +4097,14 @@
       "subtype_id": null
     },
     {
+      "id": "simic-mission",
+      "kind": "archetype",
+      "name": "Simic Mission",
+      "display_name": "Simic Mission",
+      "parent_id": "simic-mission",
+      "subtype_id": null
+    },
+    {
       "id": "simic-neoform",
       "kind": "archetype",
       "name": "Simic Neoform",
@@ -4181,12 +4281,20 @@
       "subtype_id": null
     },
     {
-      "id": "titan-canopy-ramp",
-      "kind": "archetype",
+      "id": "titan-canopy-ramp/mono-green",
+      "kind": "subtype",
       "name": "Titan Canopy Ramp",
       "display_name": "Titan Canopy Ramp",
       "parent_id": "titan-canopy-ramp",
-      "subtype_id": null
+      "subtype_id": "mono-green"
+    },
+    {
+      "id": "titan-canopy-ramp/naya",
+      "kind": "subtype",
+      "name": "Naya Ramp",
+      "display_name": "Naya Ramp",
+      "parent_id": "titan-canopy-ramp",
+      "subtype_id": "naya"
     },
     {
       "id": "tron/izzet",
