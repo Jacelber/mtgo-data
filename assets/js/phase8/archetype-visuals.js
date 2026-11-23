@@ -248,6 +248,11 @@ const manaIdentities = Object.freeze({
     "esper-toughness": Object.freeze(["w", "u", "b"]),
   }),
   modern: Object.freeze({
+    "simic-mission": Object.freeze(["u", "g"]),
+    "burn/rakdos-cutter": Object.freeze(["b", "r"]),
+    "burn/naya": Object.freeze(["w", "r", "g"]),
+    "titan-canopy-ramp/mono-green": Object.freeze(["g"]),
+    "titan-canopy-ramp/naya": Object.freeze(["w", "r", "g"]),
     "grixis-delirium": Object.freeze(["u", "b", "r"]),
     "mardu-delirium": Object.freeze(["w", "b", "r"]),
     "mono-white-energy": Object.freeze(["w"]),

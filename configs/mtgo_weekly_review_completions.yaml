@@ -20979,6 +20979,93 @@ data_admissions:
                 accepted_on: '2026-11-16'
                 entrypoint: MTGO-2026-W46-review-v3.zip:modern/2026-W46/index.html; implemented ten decisions and complete additional row:MTGO-2026-W46-review-v4.zip:modern-extra-12858108-28.html
                 submitted_digest: a71c78a92046b1331926ac79ca09df05bad31f3ea2ccebd0726f71bfe7c3e05a
+      - week: 2026-W47
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12858125'
+        - '12858127'
+        - '12858133'
+        - '12858134'
+        - '12858918'
+        - '12858928'
+        - '12858933'
+        - '12858934'
+        - '12858942'
+        - '12858947'
+        - '12858988'
+        source_manifest_digest: 81a8505e692cdd1996669770dcabbef5845cc7216d40543117b50b4d5e6d8eda
+        accepted_classifier_subject: dc3754726194bd63d51edfb0b390875dfad7c899b9ae3bd325931c803c817a40
+        classification_review_digest: 0c037ae7b47a8242d3481039417db0ac60aa2fe256950eefe7b7eb0cbc904556
+        accepted_on: '2026-11-23'
+        evidence: Owner reviewed the immutable W47 Modern classification-v1 full review and directed 13 ranked corrections on 2026-11-23,
+          including the category-wide rename to 奇奇组合技 / Kiki Combo. The final candidate implements these exact 13 changes; the other
+          332 classifications and every complete main/side deck remain unchanged, including both 61-card main decks. Independent
+          expected changes and frozen-pipeline comparison cover all 21306 retained MTGO/Melee decks with no unexplained changes,
+          new Unknown, new conflict or classification loss. Four pre-existing Titan Canopy Ramp decks receive a technical mono-green
+          subtype registration while preserving their approved names. Missing source event 12858938 remains deferred_incomplete
+          and is outside the fixed 11-event review; it is not recorded as a zero-result event. This records classification acceptance
+          only, not full weekly completion or publication.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: modern
+            week: 2026-W47
+            bindings:
+              event_ids:
+              - '12858125'
+              - '12858127'
+              - '12858133'
+              - '12858134'
+              - '12858918'
+              - '12858928'
+              - '12858933'
+              - '12858934'
+              - '12858942'
+              - '12858947'
+              - '12858988'
+              record_count: 345
+              classifier: dc3754726194bd63d51edfb0b390875dfad7c899b9ae3bd325931c803c817a40
+              classification_review_digest: 0c037ae7b47a8242d3481039417db0ac60aa2fe256950eefe7b7eb0cbc904556
+              material_digest: 6dddf6fb685211494a9ff1ad68b227c774d8d1c2a24343477bd83a467024d8ff
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12858125'
+                - '12858127'
+                - '12858133'
+                - '12858134'
+                - '12858918'
+                - '12858928'
+                - '12858933'
+                - '12858934'
+                - '12858942'
+                - '12858947'
+                - '12858988'
+                record_count: 345
+                classifier: dc3754726194bd63d51edfb0b390875dfad7c899b9ae3bd325931c803c817a40
+                classification_review_digest: 0c037ae7b47a8242d3481039417db0ac60aa2fe256950eefe7b7eb0cbc904556
+            digest: a4b68f9d7e92004240f312cf44e0192d79d8af29953f60036ff90984f9629d15
+          decisions:
+            format: modern
+            week: 2026-W47
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: d0b7c32c3a87999353aa14a29ab0ad9c590cf4cee5e225941a46e1a9853650c4
+                evidence: Owner reviewed the immutable W47 Modern classification-v1 full review and directed 13 ranked corrections
+                  on 2026-11-23, including the category-wide rename to 奇奇组合技 / Kiki Combo. The final candidate implements these
+                  exact 13 changes; the other 332 classifications and every complete main/side deck remain unchanged, including
+                  both 61-card main decks. Independent expected changes and frozen-pipeline comparison cover all 21306 retained
+                  MTGO/Melee decks with no unexplained changes, new Unknown, new conflict or classification loss. Four pre-existing
+                  Titan Canopy Ramp decks receive a technical mono-green subtype registration while preserving their approved names.
+                  Missing source event 12858938 remains deferred_incomplete and is outside the fixed 11-event review; it is not
+                  recorded as a zero-result event. This records classification acceptance only, not full weekly completion or publication.
+                accepted_on: '2026-11-23'
+                entrypoint: 'Original full review: http://127.0.0.1:8765/classification-v1/modern/2026-W47/index.html; directed
+                  corrections: http://127.0.0.1:8765/modern-classification-v2/index.html'
+                submitted_digest: a4b68f9d7e92004240f312cf44e0192d79d8af29953f60036ff90984f9629d15
     pioneer:
       initial:
         kind: owner_accepted_initial_public_scope
