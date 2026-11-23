@@ -734,6 +734,10 @@ const manaIdentities = Object.freeze({
     "golgari-gardens/sultai": Object.freeze(["u", "b", "g"]),
   }),
   pioneer: Object.freeze({
+    "nine-lives-combo": Object.freeze(["w", "u"]),
+    "izzet-mission": Object.freeze(["u", "r"]),
+    "dimir-mission": Object.freeze(["u", "b"]),
+    "four-color-beanstalk": Object.freeze(["w", "u", "b", "g"]),
     "lotus-scapeshift/bant": Object.freeze(["w", "u", "g"]),
     "mono-white-hammer-time": Object.freeze(["w"]),
     "grixis-control": Object.freeze(["u", "b", "r"]),
