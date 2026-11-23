@@ -289,7 +289,7 @@ def test_data_generation_preserves_reviewed_facts_when_upstream_has_a_revision(t
     workflow.write(facts, reviewed)
     calls = []
 
-    def prepare(root, formats, *, refresh=False):
+    def prepare(root, formats, *, refresh=True):
         calls.append((root, formats))
         if refresh:
             workflow.write(facts, {"version": "later-upstream-revision", "card": "Hit It!"})

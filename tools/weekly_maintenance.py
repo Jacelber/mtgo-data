@@ -567,7 +567,7 @@ def stage_data(root, plan, resume_stage=None, previous=None):
         from mtgmeta.classifier_preparation import prepare_repository_facts
         # Data generation consumes the facts already reviewed with the rules.
         # Missing facts can still be prepared; upstream revisions need review.
-        prepare_repository_facts(root, sync_formats)
+        prepare_repository_facts(root, sync_formats, refresh=False)
     before_inputs = {f: _protected_input_fingerprints(root, f) for f in sync_formats}
     generation_subject = digest({p.relative_to(root).as_posix(): p.read_text(encoding="utf-8")
         for p in (root / "src/mtgmeta").rglob("*.py")})
