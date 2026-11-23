@@ -3530,7 +3530,6 @@ archetypes:
       - {card: Brainstorm, zone: main, min_count: 3}
       - {card: Force of Will, zone: main, min_count: 3}
       - {card: Daze, zone: main, min_count: 3}
-      - {card: Wasteland, zone: main, min_count: 1}
       - {card: Faithless Looting, zone: main, max_count: 0}
       - {card: Altar of Dementia, zone: main, max_count: 0}
       - {card: Vengevine, zone: main, max_count: 0}
@@ -8232,7 +8231,32 @@ archetypes:
 - id: jeskai-energy
   name: 洁斯凯能量
   priority: 100
+  color_profile: default
   rules:
+  - id: jeskai-energy-lavinia
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Guide of Souls
+        zone: main
+        min_count: 1
+      - card: Ocelot Pride
+        zone: main
+        min_count: 1
+      - card: Ajani, Nacatl Pariah
+        zone: main
+        min_count: 1
+      - card: Amped Raptor
+        zone: main
+        min_count: 1
+      - card: Lavinia, Azorius Renegade
+        zone: main
+        min_count: 1
+    colors:
+    - white
+    - blue
+    - red
   - id: jeskai-energy-warp
     priority: 110
     subtype_id: null
@@ -9156,6 +9180,38 @@ archetypes:
   name: Doomsday Storm
   priority: 100
   rules:
+  - id: doomsday-storm-infernal-will
+    priority: 110
+    subtype_id: null
+    conditions:
+      all:
+      - card: Doomsday
+        zone: main
+        min_count: 1
+      - card: Thassa's Oracle
+        zone: main
+        min_count: 1
+      - card: Tendrils of Agony
+        zone: main
+        min_count: 1
+      - card: Gaea's Will
+        zone: main
+        min_count: 1
+      - card: Dark Ritual
+        zone: main
+        min_count: 1
+      - card: Lion's Eye Diamond
+        zone: main
+        min_count: 1
+      - any:
+        - all:
+          - card: Infernal Tutor
+            zone: main
+            min_count: 1
+        - all:
+          - card: Beseech the Mirror
+            zone: main
+            min_count: 1
   - id: doomsday-storm-gamble-echo
     priority: 110
     subtype_id: null
@@ -12991,7 +13047,7 @@ archetypes:
         min_count: 4
       - card: Wirewood Symbiote
         zone: main
-        min_count: 3
+        min_count: 1
       - card: Quirion Ranger
         zone: main
         min_count: 3
@@ -14564,9 +14620,6 @@ archetypes:
     subtype_id: null
     conditions:
       all:
-      - card: Goblin Guide
-        zone: main
-        min_count: 3
       - card: Monastery Swiftspear
         zone: main
         min_count: 3
@@ -14576,9 +14629,6 @@ archetypes:
       - card: Lava Spike
         zone: main
         min_count: 3
-      - card: Rift Bolt
-        zone: main
-        min_count: 2
       - card: Price of Progress
         zone: main
         min_count: 3
@@ -20646,9 +20696,6 @@ archetypes:
       - card: Grove of the Burnwillows
         zone: main
         min_count: 3
-      - card: Life from the Loam
-        zone: main
-        min_count: 1
       - card: Wasteland
         zone: main
         min_count: 3
