@@ -2,6 +2,9 @@
 
 const manaIdentities = Object.freeze({
   standard: Object.freeze({
+    "izzet-kobayashi-maru": Object.freeze(["u", "r"]),
+    "dark-jeskai-control/non-white": Object.freeze(["u", "b", "r", "g"]),
+    "dark-jeskai-control/non-green": Object.freeze(["w", "u", "b", "r"]),
     "bant-offense": Object.freeze(["w", "u", "g"]),
     "mardu-naked": Object.freeze(["w", "b", "r"]),
     "izzet-archaic": Object.freeze(["u", "r"]),

@@ -19170,6 +19170,74 @@ data_admissions:
                 accepted_on: '2026-11-16'
                 entrypoint: MTGO-2026-W46-review.zip:standard/2026-W46/index.html; implemented corrections:MTGO-2026-W46-review-v2.zip:standard/2026-W46/index.html
                 submitted_digest: b88c15835ef2b3b6f3f8e0728b88e8e3c564443496bc03b08753da48e16ed622
+      - week: 2026-W47
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12858130'
+        - '12858912'
+        - '12858915'
+        - '12858917'
+        - '12858925'
+        - '12858930'
+        - '12858953'
+        source_manifest_digest: f852089d1b49c7e990a0bed9a09faf788447a8742b15f334817f5a7344e943ae
+        accepted_classifier_subject: 951ceab3a222131a5d0544eb7b6aaceb42b731990bb23bb7acbdcbf09e816051
+        classification_review_digest: 4254a84c826e76b8fc3dd79a42ab0950428445e829072b17bd5a62bf97d5b270
+        accepted_on: '2026-11-23'
+        evidence: Owner accepted W47 Standard full classification under objections-only review and directed six exact corrections
+          in this conversation. The final candidate implements those six changes; 216 unmentioned records and all main/side decks
+          are unchanged. Complete 10135-record impact verified; 13 same-name Four-Color Control color registrations explained independently.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: standard
+            week: 2026-W47
+            bindings:
+              event_ids:
+              - '12858130'
+              - '12858912'
+              - '12858915'
+              - '12858917'
+              - '12858925'
+              - '12858930'
+              - '12858953'
+              record_count: 222
+              classifier: 951ceab3a222131a5d0544eb7b6aaceb42b731990bb23bb7acbdcbf09e816051
+              classification_review_digest: 4254a84c826e76b8fc3dd79a42ab0950428445e829072b17bd5a62bf97d5b270
+              material_digest: e24d7bb026ea62d8e1254573fcd98f38cfdba6f866df9b54db572c79637d6f91
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12858130'
+                - '12858912'
+                - '12858915'
+                - '12858917'
+                - '12858925'
+                - '12858930'
+                - '12858953'
+                record_count: 222
+                classifier: 951ceab3a222131a5d0544eb7b6aaceb42b731990bb23bb7acbdcbf09e816051
+                classification_review_digest: 4254a84c826e76b8fc3dd79a42ab0950428445e829072b17bd5a62bf97d5b270
+            digest: e65ce7442051533c9ab368d0213855bac135cfe8994de1193aa03f72eebc1d72
+          decisions:
+            format: standard
+            week: 2026-W47
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: 1ec6edbef41fc895af86ce0f6a967c5bf272c3fca0f97f22af24d88838211e78
+                evidence: 'Owner reviewed W47 Standard classification-v1 in this conversation on 2026-11-23 and specified six corrections:
+                  12858130 rank 2, 12858915 ranks 18 and 24, and 12858925 rank 32 as 红蓝小林丸 / Izzet Kobayashi Maru; 12858917 rank
+                  24 as 四色控制; 12858953 rank 16 as 黑绿掘坟. All 216 unmentioned records accepted under the established objections-only
+                  convention. The final candidate implements exactly these six changes; complete main/side decks and all 216 other
+                  classifications are unchanged. Full 10135-record impact explains six identity migrations plus 13 existing Four-Color
+                  Control same-name color registrations, with no unexplained impact.'
+                accepted_on: '2026-11-23'
+                entrypoint: 'http://127.0.0.1:8765/classification-v1/standard/2026-W47/index.html; owner-directed implementation:
+                  http://127.0.0.1:8765/standard-classification-v2/index.html'
+                submitted_digest: e65ce7442051533c9ab368d0213855bac135cfe8994de1193aa03f72eebc1d72
     pauper:
       initial:
         kind: owner_accepted_initial_public_scope
