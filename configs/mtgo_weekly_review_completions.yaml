@@ -21629,6 +21629,66 @@ data_admissions:
                 accepted_on: '2026-11-16'
                 entrypoint: MTGO-2026-W46-review-v2.zip:pioneer/2026-W46/index.html; implemented corrections and approved names:MTGO-2026-W46-review-v3.zip:pioneer/2026-W46/index.html
                 submitted_digest: 8b73ea4e3a93a66402b78b7736fe4df642f4203eaafcc9ac89dcdef4ddac370f
+      - week: 2026-W47
+        kind: owner_accepted_full_classification
+        event_ids:
+        - '12858131'
+        - '12858923'
+        - '12858941'
+        - '12858951'
+        source_manifest_digest: 68e50a3b93b6feae0159f81233c305a59b7e50da16ec4c77e340b6189662d5e8
+        accepted_classifier_subject: a2f03589d27db861113648f65cd3d43e6ade29eee3de38324045dc67dd25a122
+        classification_review_digest: 8a64c9bc25fbf21fcf9ca6d689faa3e83098c97d2288a450fc113065f8bf71f1
+        accepted_on: '2026-11-23'
+        evidence: Owner accepted W47 Pioneer full classification through the original 25 corrections, the corrected Four-Color Beanstalk
+          row, and the explicit additional approval of 12858941 rank 9 as Temur Lessons on 2026-11-23. All 26 changes are implemented;
+          the other 102 classifications and all complete main/side decks are unchanged. Full frozen-pipeline impact on 6215 retained
+          decks is explained, with no new Unknown, conflict, or classification loss.
+        observed_empty_weeks: []
+        classification_acceptance:
+          submission:
+            schema_version: 1.0.0
+            kind: full_classification
+            format: pioneer
+            week: 2026-W47
+            bindings:
+              event_ids:
+              - '12858131'
+              - '12858923'
+              - '12858941'
+              - '12858951'
+              record_count: 128
+              classifier: a2f03589d27db861113648f65cd3d43e6ade29eee3de38324045dc67dd25a122
+              classification_review_digest: 8a64c9bc25fbf21fcf9ca6d689faa3e83098c97d2288a450fc113065f8bf71f1
+              material_digest: 7eb73be499b6d099b7cc534b30b719bb78feec9b5b9468ee58b62d789ef76a06
+            dimensions:
+              full_classification:
+                event_ids:
+                - '12858131'
+                - '12858923'
+                - '12858941'
+                - '12858951'
+                record_count: 128
+                classifier: a2f03589d27db861113648f65cd3d43e6ade29eee3de38324045dc67dd25a122
+                classification_review_digest: 8a64c9bc25fbf21fcf9ca6d689faa3e83098c97d2288a450fc113065f8bf71f1
+            digest: 0470c111d263955297ab4e37bb2762770928a71c3ddcd038d1d8d2076a29a018
+          decisions:
+            format: pioneer
+            week: 2026-W47
+            kind: full_classification
+            decisions:
+              full_classification:
+                subject: b0f10a1d2f35a3aacef4df1e8f666a37844f46f06c7ab03090beda12b430817d
+                evidence: Owner reviewed W47 Pioneer classification-v1 and directed 25 exact changes, then clarified 12858131 rank
+                  30 as 四色豆茎 / 4-Color Beanstalk. On 2026-11-23 Owner explicitly approved the additional 12858941 rank 9 jtl005
+                  migration to 铁木尔课程. Final candidate implements exactly these 26 changes; the other 102 classifications and all
+                  main/side decks are unchanged. Complete frozen-pipeline comparison of 6215 retained decks contains no unexplained
+                  changes, new Unknown, new conflict, or classification loss. Existing distinct Jund Sacrifice and Jund Artifact
+                  Sacrifice boundaries and the scoped Memorial optional-kicker treatment are preserved as discussed.
+                accepted_on: '2026-11-23'
+                entrypoint: 'Original full review: http://127.0.0.1:8765/classification-v1/pioneer/2026-W47/index.html; implemented
+                  corrections and additional approved course entry: http://127.0.0.1:8765/pioneer-classification-v2/index.html#deck=12858941-9'
+                submitted_digest: 0470c111d263955297ab4e37bb2762770928a71c3ddcd038d1d8d2076a29a018
     legacy:
       initial:
         kind: owner_accepted_initial_public_scope
