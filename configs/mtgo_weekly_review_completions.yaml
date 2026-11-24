@@ -21054,21 +21054,19 @@ data_admissions:
         - '12858928'
         - '12858933'
         - '12858934'
+        - '12858938'
         - '12858942'
         - '12858947'
         - '12858988'
-        source_manifest_digest: 81a8505e692cdd1996669770dcabbef5845cc7216d40543117b50b4d5e6d8eda
-        accepted_classifier_subject: dc3754726194bd63d51edfb0b390875dfad7c899b9ae3bd325931c803c817a40
-        classification_review_digest: 0c037ae7b47a8242d3481039417db0ac60aa2fe256950eefe7b7eb0cbc904556
-        accepted_on: '2026-11-23'
-        evidence: Owner reviewed the immutable W47 Modern classification-v1 full review and directed 13 ranked corrections on 2026-11-23,
-          including the category-wide rename to 奇奇组合技 / Kiki Combo. The final candidate implements these exact 13 changes; the other
-          332 classifications and every complete main/side deck remain unchanged, including both 61-card main decks. Independent
-          expected changes and frozen-pipeline comparison cover all 21306 retained MTGO/Melee decks with no unexplained changes,
-          new Unknown, new conflict or classification loss. Four pre-existing Titan Canopy Ramp decks receive a technical mono-green
-          subtype registration while preserving their approved names. Missing source event 12858938 remains deferred_incomplete
-          and is outside the fixed 11-event review; it is not recorded as a zero-result event. This records classification acceptance
-          only, not full weekly completion or publication.
+        source_manifest_digest: 170cc569b3f941c346da5b41f3afd57a3fc39f779e7a8c25803483d25edec01f
+        accepted_classifier_subject: af77b040eb6686196ddeaf9c4d095511415caeee4ff02ee8b204f89ea276f65e
+        classification_review_digest: 5ef74a5e6bd62ef0823f03ae17f243451a1fbee42a9059c00f9cc0ad41e176d6
+        accepted_on: '2026-11-24'
+        evidence: 'Owner confirmed the fixed single-event 12858938 32-deck submission on 2026-11-24: 第八名为带人类学任务构筑的红蓝介刀，暂时还不想分为新类别。其他现有分类都没有问题。
+          The candidate implements only rank 8 as steel-cutter/izzet; the other 31 classifications and all 32 full decks are unchanged.
+          The previously accepted 11-event 345-deck W47 scope is reused: retained-source binding remains unchanged and the same-input
+          21338-deck MTGO/Melee comparison changes only this newly retained rank 8. This composes those existing decisions into
+          the 12-event 377-deck data admission; no new category, name, color, Landing, Feature or weekly completion is accepted.'
         observed_empty_weeks: []
         classification_acceptance:
           submission:
@@ -21086,13 +21084,14 @@ data_admissions:
               - '12858928'
               - '12858933'
               - '12858934'
+              - '12858938'
               - '12858942'
               - '12858947'
               - '12858988'
-              record_count: 345
-              classifier: dc3754726194bd63d51edfb0b390875dfad7c899b9ae3bd325931c803c817a40
-              classification_review_digest: 0c037ae7b47a8242d3481039417db0ac60aa2fe256950eefe7b7eb0cbc904556
-              material_digest: 6dddf6fb685211494a9ff1ad68b227c774d8d1c2a24343477bd83a467024d8ff
+              record_count: 377
+              classifier: af77b040eb6686196ddeaf9c4d095511415caeee4ff02ee8b204f89ea276f65e
+              classification_review_digest: 5ef74a5e6bd62ef0823f03ae17f243451a1fbee42a9059c00f9cc0ad41e176d6
+              material_digest: de9415b62698cbc272fa7320ab43df2deaf1befa5d948865bffae6f43d852ffb
             dimensions:
               full_classification:
                 event_ids:
@@ -21104,32 +21103,31 @@ data_admissions:
                 - '12858928'
                 - '12858933'
                 - '12858934'
+                - '12858938'
                 - '12858942'
                 - '12858947'
                 - '12858988'
-                record_count: 345
-                classifier: dc3754726194bd63d51edfb0b390875dfad7c899b9ae3bd325931c803c817a40
-                classification_review_digest: 0c037ae7b47a8242d3481039417db0ac60aa2fe256950eefe7b7eb0cbc904556
-            digest: a4b68f9d7e92004240f312cf44e0192d79d8af29953f60036ff90984f9629d15
+                record_count: 377
+                classifier: af77b040eb6686196ddeaf9c4d095511415caeee4ff02ee8b204f89ea276f65e
+                classification_review_digest: 5ef74a5e6bd62ef0823f03ae17f243451a1fbee42a9059c00f9cc0ad41e176d6
+            digest: 594381313960bd13ca6e68a23e868ec2280ac1b29f62eea2745f35c298f6b231
           decisions:
             format: modern
             week: 2026-W47
             kind: full_classification
             decisions:
               full_classification:
-                subject: d0b7c32c3a87999353aa14a29ab0ad9c590cf4cee5e225941a46e1a9853650c4
-                evidence: Owner reviewed the immutable W47 Modern classification-v1 full review and directed 13 ranked corrections
-                  on 2026-11-23, including the category-wide rename to 奇奇组合技 / Kiki Combo. The final candidate implements these
-                  exact 13 changes; the other 332 classifications and every complete main/side deck remain unchanged, including
-                  both 61-card main decks. Independent expected changes and frozen-pipeline comparison cover all 21306 retained
-                  MTGO/Melee decks with no unexplained changes, new Unknown, new conflict or classification loss. Four pre-existing
-                  Titan Canopy Ramp decks receive a technical mono-green subtype registration while preserving their approved names.
-                  Missing source event 12858938 remains deferred_incomplete and is outside the fixed 11-event review; it is not
-                  recorded as a zero-result event. This records classification acceptance only, not full weekly completion or publication.
-                accepted_on: '2026-11-23'
-                entrypoint: 'Original full review: http://127.0.0.1:8765/classification-v1/modern/2026-W47/index.html; directed
-                  corrections: http://127.0.0.1:8765/modern-classification-v2/index.html'
-                submitted_digest: a4b68f9d7e92004240f312cf44e0192d79d8af29953f60036ff90984f9629d15
+                subject: dd8ec203ba8445e24958fe67aa9d3eaf5b7d031c32347357f88707d131124b4d
+                evidence: 'Owner confirmed the fixed single-event 12858938 32-deck submission on 2026-11-24: 第八名为带人类学任务构筑的红蓝介刀，暂时还不想分为新类别。其他现有分类都没有问题。
+                  The candidate implements only rank 8 as steel-cutter/izzet; the other 31 classifications and all 32 full decks
+                  are unchanged. The previously accepted 11-event 345-deck W47 scope is reused: retained-source binding remains
+                  unchanged and the same-input 21338-deck MTGO/Melee comparison changes only this newly retained rank 8. This composes
+                  those existing decisions into the 12-event 377-deck data admission; no new category, name, color, Landing, Feature
+                  or weekly completion is accepted.'
+                accepted_on: '2026-11-24'
+                entrypoint: 'http://127.0.0.1:8767/index.html#classification; rank 8: #mtgo%3A12858938%3A8; prior W47 11-event admission
+                  retained in Git and previous-w47-admission.json'
+                submitted_digest: 594381313960bd13ca6e68a23e868ec2280ac1b29f62eea2745f35c298f6b231
     pioneer:
       initial:
         kind: owner_accepted_initial_public_scope
