@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import argparse
 from copy import deepcopy
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 import functools
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 import json
@@ -22,8 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT / "src")]
 from mtgmeta.mtgo import landing_editorial as editorial
 from mtgmeta.mtgo import landing
-from mtgmeta.mtgo import landing_screening as screening, stats
-from mtgmeta.mtgo.normalize import load_rules_for_format
+from mtgmeta.mtgo import landing_screening as screening
 from mtgmeta.mtgo import review_submission as submissions
 from mtgmeta.classifier_preparation import facts_preparation_batch
 from mtgmeta.mtgo.landing_bundle import digest
@@ -44,7 +43,7 @@ def write(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + ".new")
-    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     temporary.replace(path)
 
 
@@ -395,7 +394,7 @@ def finish_resources(output, *, fetch_missing=False, resource_fixture=None):
     if (output / "preview.json").exists():
         raise ValueError("Preview already fixed; use a new revision, not resources in place")
     plan, source, facts = (read(output / name) for name in ("preparation.json", "source.json", "facts.json"))
-    root, site = Path(plan["root"]), output / "site"
+    site = output / "site"
     format_id, week = scope(source)
     config = read(output / "visuals.yaml")
     page = read(site / f"stats/{format_id}/mtgo/landing/current.json")
@@ -589,7 +588,7 @@ def stage_data(root, plan, resume_stage=None, previous=None):
             raise ValueError("Invalid Melee event identity")
         if set(item["steps"]) - set(producers) or len(item["steps"]) != len(set(item["steps"])):
             raise ValueError("Unknown or duplicate Melee producer")
-    from mtgmeta.generation_progress import GenerationProgress, COMMON, files, implementation
+    from mtgmeta.generation_progress import GenerationProgress, COMMON, implementation
     progress = GenerationProgress(root.with_name(root.name + ".data-progress.json"),
                                   {"root": str(root), "plan": digest(plan)})
     completed = []

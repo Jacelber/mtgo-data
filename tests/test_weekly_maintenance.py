@@ -1,6 +1,5 @@
 from copy import deepcopy
 import json
-from pathlib import Path
 
 import pytest
 
@@ -167,6 +166,15 @@ def test_copy_on_write_preserves_base(tmp_path):
     workflow.write(candidate, {"value": 2})
     assert workflow.read(base) == {"value": 1}
     assert workflow.read(candidate) == {"value": 2}
+
+
+def test_json_write_uses_portable_line_endings(tmp_path):
+    destination = tmp_path / "content.json"
+    workflow.write(destination, {"text": "第一行\nsecond line"})
+    payload = destination.read_bytes()
+    assert b"\r\n" not in payload
+    assert payload.endswith(b"\n")
+    assert workflow.read(destination) == {"text": "第一行\nsecond line"}
 
 
 def test_submitted_directory_never_overwritten(tmp_path, monkeypatch):
